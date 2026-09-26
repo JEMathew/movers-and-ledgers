@@ -15,11 +15,11 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { className, variant = "primary", size = "default", leadingIcon: Icon, children, ...props },
+  { className, variant = "primary", size = "default", leadingIcon: Icon, children, type = "button", ...props },
   ref,
 ) {
   return (
-    <button ref={ref} className={cn("button", variant !== "primary" && variant, size === "small" && "small", className)} {...props}>
+    <button ref={ref} type={type} className={cn("button", variant !== "primary" && variant, size === "small" && "small", className)} {...props}>
       {Icon && <Icon aria-hidden="true" size={17} />}
       {children}
     </button>

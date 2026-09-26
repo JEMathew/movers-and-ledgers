@@ -8,7 +8,7 @@ import { cn } from "./utils";
 
 export type TabItem = { id: string; label: string; content: ReactNode };
 
-export function Tabs({ items, defaultTab }: { items: TabItem[]; defaultTab?: string }) {
+export function Tabs({ items, defaultTab, label = "View options" }: { items: TabItem[]; defaultTab?: string; label?: string }) {
   const groupId = useId();
   const [active, setActive] = useState(defaultTab ?? items[0]?.id);
   const move = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
@@ -18,7 +18,7 @@ export function Tabs({ items, defaultTab }: { items: TabItem[]; defaultTab?: str
     setActive(items[next].id);
     document.getElementById(`${groupId}-tab-${items[next].id}`)?.focus();
   };
-  return <div><div role="tablist" aria-label="View options" className="tabs-list">{items.map((item, index) => <button key={item.id} id={`${groupId}-tab-${item.id}`} role="tab" type="button" aria-selected={active === item.id} aria-controls={`${groupId}-panel-${item.id}`} tabIndex={active === item.id ? 0 : -1} onClick={() => setActive(item.id)} onKeyDown={(event) => move(event, index)}>{item.label}</button>)}</div>{items.map(item => <div key={item.id} id={`${groupId}-panel-${item.id}`} role="tabpanel" aria-labelledby={`${groupId}-tab-${item.id}`} hidden={active !== item.id} className="pt-4">{item.content}</div>)}</div>;
+  return <div><div role="tablist" aria-label={label} className="tabs-list">{items.map((item, index) => <button key={item.id} id={`${groupId}-tab-${item.id}`} role="tab" type="button" aria-selected={active === item.id} aria-controls={`${groupId}-panel-${item.id}`} tabIndex={active === item.id ? 0 : -1} onClick={() => setActive(item.id)} onKeyDown={(event) => move(event, index)}>{item.label}</button>)}</div>{items.map(item => <div key={item.id} id={`${groupId}-panel-${item.id}`} role="tabpanel" aria-labelledby={`${groupId}-tab-${item.id}`} hidden={active !== item.id} className="pt-4">{item.content}</div>)}</div>;
 }
 
 export function Progress({ value, label, showValue = true }: { value: number; label: string; showValue?: boolean }) {
@@ -28,5 +28,5 @@ export function Progress({ value, label, showValue = true }: { value: number; la
 
 export type Step = { label: string; description?: string };
 export function Stepper({ steps, current }: { steps: Step[]; current: number }) {
-  return <ol className="stepper" aria-label="Migration progress">{steps.map((step, index) => { const complete = index < current; const active = index === current; return <li key={step.label} aria-current={active ? "step" : undefined} className={cn(complete && "is-complete", active && "is-active")}><span className="step-marker" aria-hidden="true">{complete ? <Check size={15}/> : <Circle size={12} fill={active ? "currentColor" : "none"}/>}</span><span><strong>{step.label}</strong>{step.description && <small>{step.description}</small>}</span></li>;})}</ol>;
+  return <ol className="stepper" aria-label="Migration progress">{steps.map((step, index) => { const complete = index < current; const active = index === current; return <li key={step.label} aria-current={active ? "step" : undefined} className={cn(complete && "is-complete", active && "is-active")}><span className="step-marker" aria-hidden="true">{complete ? <Check size={15}/> : <Circle size={12} fill={active ? "currentColor" : "none"}/>}</span><span><strong>{step.label}</strong>{complete && <span className="sr-only"> — Completed</span>}{active && <span className="sr-only"> — Current step</span>}{step.description && <small>{step.description}</small>}</span></li>;})}</ol>;
 }

@@ -11,14 +11,14 @@ export function Input({ label, hint, error, className, id, ...props }: FieldProp
   const generated = useId();
   const inputId = id ?? generated;
   const helpId = `${inputId}-help`;
-  return <label className="field-label" htmlFor={inputId}><span>{label}</span><input id={inputId} className={cn("field-control", error && "field-error", className)} aria-describedby={(hint || error) ? helpId : undefined} aria-invalid={Boolean(error)} {...props}/>{(hint || error) && <span id={helpId} className={error ? "field-error-text" : "field-hint"}>{error ?? hint}</span>}</label>;
+  return <div className="field-label"><label htmlFor={inputId}>{label}</label><input id={inputId} className={cn("field-control", error && "field-error", className)} aria-describedby={(hint || error) ? helpId : undefined} aria-invalid={Boolean(error)} {...props}/>{(hint || error) && <span id={helpId} className={error ? "field-error-text" : "field-hint"}>{error ?? hint}</span>}</div>;
 }
 
-export function Select({ label, hint, children, className, id, ...props }: FieldProps & SelectHTMLAttributes<HTMLSelectElement>) {
+export function Select({ label, hint, error, children, className, id, ...props }: FieldProps & SelectHTMLAttributes<HTMLSelectElement>) {
   const generated = useId();
   const inputId = id ?? generated;
   const helpId = `${inputId}-help`;
-  return <label className="field-label" htmlFor={inputId}><span>{label}</span><select id={inputId} className={cn("field-control", className)} aria-describedby={hint ? helpId : undefined} {...props}>{children}</select>{hint && <span id={helpId} className="field-hint">{hint}</span>}</label>;
+  return <div className="field-label"><label htmlFor={inputId}>{label}</label><select id={inputId} className={cn("field-control", error && "field-error", className)} aria-describedby={(hint || error) ? helpId : undefined} aria-invalid={Boolean(error)} {...props}>{children}</select>{(hint || error) && <span id={helpId} className={error ? "field-error-text" : "field-hint"}>{error ?? hint}</span>}</div>;
 }
 
 export function Checkbox({ label, description, ...props }: InputHTMLAttributes<HTMLInputElement> & { label: string; description?: string }) {

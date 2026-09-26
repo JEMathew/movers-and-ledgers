@@ -13,7 +13,7 @@ export function FindingCard({ title, description, status, evidence }: { title: s
 }
 
 export function AgentActivityItem({ title, detail, time, complete = false }: { title: string; detail: string; time: string; complete?: boolean }) {
-  return <div className="activity-item"><span className="activity-icon">{complete ? <Check aria-hidden="true" size={16}/> : <Bot aria-hidden="true" size={16}/>}</span><div className="min-w-0"><div className="flex flex-wrap items-center justify-between gap-2"><strong className="text-sm">{title}</strong><time className="type-meta">{time}</time></div><p className="mt-1 type-body-secondary">{detail}</p></div></div>;
+  return <div className="activity-item"><span className="activity-icon">{complete ? <Check aria-hidden="true" size={16}/> : <Bot aria-hidden="true" size={16}/>}</span><div className="min-w-0"><div className="flex flex-wrap items-center justify-between gap-2"><strong className="text-sm"><span className="sr-only">{complete ? "Completed" : "In progress"}: </span>{title}</strong><time className="type-meta">{time}</time></div><p className="mt-1 type-body-secondary">{detail}</p></div></div>;
 }
 
 export function ApprovalCard({ title, impact, requestedBy, status = "REQUIRES APPROVAL" }: { title: string; impact: string; requestedBy: string; status?: ProductStatus }) {

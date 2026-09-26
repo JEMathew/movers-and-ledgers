@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { EmptyState, Progress, StatusBadge, Tabs } from "@/components/ui";
+import { AgentActivityItem, Button, EmptyState, Progress, Select, StatusBadge, Stepper, Tabs } from "@/components/ui";
 
 describe("design-system accessibility contracts", () => {
   it("renders status with icon-independent text", () => {
@@ -33,5 +33,31 @@ describe("design-system accessibility contracts", () => {
     expect(evidence).toHaveFocus();
     expect(evidence).toHaveAttribute("aria-selected", "true");
     expect(screen.getByRole("tabpanel")).toHaveTextContent("Evidence list");
+  });
+
+  it("keeps reusable buttons from submitting forms by default", () => {
+    render(<Button>Review decision</Button>);
+    expect(screen.getByRole("button", { name: "Review decision" })).toHaveAttribute("type", "button");
+  });
+
+  it("associates select errors with the invalid control", () => {
+    render(<Select label="Base currency" error="Choose a supported currency"><option>USD</option></Select>);
+    const select = screen.getByRole("combobox", { name: "Base currency" });
+    const error = screen.getByText("Choose a supported currency");
+
+    expect(select).toHaveAttribute("aria-invalid", "true");
+    expect(select).toHaveAttribute("aria-describedby", error.id);
+  });
+
+  it("announces completed and current migration steps", () => {
+    render(<Stepper steps={[{ label: "Discover" }, { label: "Assess" }]} current={1} />);
+    const [completed, current] = screen.getAllByRole("listitem");
+    expect(completed).toHaveTextContent("Discover — Completed");
+    expect(current).toHaveTextContent("Assess — Current step");
+  });
+
+  it("announces agent activity state without relying on its icon", () => {
+    render(<AgentActivityItem title="Source profile" detail="Records inspected." time="Now" complete />);
+    expect(screen.getByText(/Source profile/)).toHaveTextContent("Completed: Source profile");
   });
 });
