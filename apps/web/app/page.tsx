@@ -19,8 +19,8 @@ export default function Home() {
           Explore, simulate, plan, and validate a cloud accounting migration—with evidence at every turn and people in control.
         </p>
         <div className="mt-9 flex flex-wrap gap-3">
-          <Link href="/simulator" className="button">Try the simulator <span>→</span></Link>
-          <Link href="/learn" className="button secondary">Learn how it works</Link>
+          <Link href="/assess" className="button">Assess my migration <span>→</span></Link>
+          <Link href="/simulator" className="button secondary">Try the simulator</Link>
         </div>
       </div>
       <div className="grid-lines panel relative min-h-[520px] overflow-hidden p-8">

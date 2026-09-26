@@ -19,7 +19,13 @@ agents = ["google-adk>=1.17,<2"]
 dev = ["httpx>=0.28,<1", "pytest>=8.3,<9", "pytest-cov>=6,<7", "ruff>=0.9,<1"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["services/api/src/movebooks_api", "domain/canonical_accounting", "agents"]
+packages = [
+  "services/api/src/movebooks_api",
+  "domain/canonical_accounting",
+  "domain/discovery_assessment",
+  "agents",
+  "tools/discovery",
+]
 
 [tool.pytest.ini_options]
 pythonpath = [".", "services/api/src"]
@@ -31,4 +37,3 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
-

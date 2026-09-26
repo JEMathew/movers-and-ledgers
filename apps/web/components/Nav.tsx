@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Menu } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
-const links = [["Learn", "/learn"], ["Play", "/play"], ["Simulator", "/simulator"]];
+const links = [["Learn", "/learn"], ["Play", "/play"], ["Simulator", "/simulator"], ["Assess", "/assess"]];
 
 export function Nav() {
   return <header className="shell relative flex min-h-20 items-center justify-between py-4">

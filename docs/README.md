@@ -28,7 +28,9 @@ Use this index to find the durable decision records without turning the reposito
 ## Engineering references
 
 - [Architecture](architecture/README.md)
+- [Discover → Assess architecture](architecture/discover-assess.md)
 - [Design-system review](reviews/design-system-theme.md)
+- [Discover → Assess review](reviews/discover-assess.md)
 - [Contributing](../CONTRIBUTING.md)
 
 ## Interpretation notes

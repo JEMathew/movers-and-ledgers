@@ -228,6 +228,21 @@ button, input, select, textarea { font: inherit; }
 .trust-card { background: var(--marketing-dark); }
 .dark-section { background: var(--marketing-dark); color: var(--marketing-dark-foreground); }
 .dark-section .text-secondary { color: var(--marketing-dark-secondary); }
+.migration-orb {
+  position: relative; width: 7rem; height: 7rem; border: 1px solid var(--border);
+  border-radius: 999px; background: radial-gradient(circle at 35% 30%, var(--primary-subtle), var(--surface));
+  box-shadow: var(--shadow-md); overflow: hidden;
+}
+.migration-orb::before, .migration-orb::after, .migration-orb > span {
+  content: ""; position: absolute; inset: 1.15rem; border: 1px solid var(--primary);
+  border-radius: 999px; opacity: 0.55; animation: mb-orbit 8s linear infinite;
+}
+.migration-orb::after { inset: 2.25rem; background: var(--primary); opacity: 0.85; animation-duration: 5s; }
+.migration-orb > span { inset: 0.7rem 2.9rem; border-color: var(--agent); animation-direction: reverse; }
+.assessment-source-card { box-shadow: 0 0 0 1px var(--primary-subtle), var(--shadow-sm); }
+.finding-card { border-left: 3px solid var(--border-strong); }
+.assessment-summary { border-color: var(--primary); }
+@keyframes mb-orbit { to { transform: rotate(360deg); } }
 .mobile-nav > summary { list-style: none; }
 .mobile-nav > summary::-webkit-details-marker { display: none; }
 .mobile-nav-panel { position: absolute; z-index: 30; top: calc(100% - 0.25rem); right: 0; display: grid; min-width: 13rem; gap: 0.25rem; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-elevated); padding: 0.75rem; box-shadow: var(--shadow-md); }

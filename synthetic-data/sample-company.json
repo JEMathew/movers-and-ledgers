@@ -1,12 +1,111 @@
 {
+  "fixture_version": "northstar-supplies-v1",
+  "sample_company_id": "northstar-supplies",
+  "label": "Northstar Supplies",
+  "synthetic": true,
   "company": {
-    "legal_name": "Northstar Workshop LLC",
-    "display_name": "Northstar Workshop",
-    "base_currency": {"code": "USD"},
+    "id": "company-001",
+    "legal_name": "Northstar Supplies LLC",
+    "display_name": "Northstar Supplies",
+    "base_currency": "USD",
     "fiscal_year_start_month": 1
   },
-  "scenario": "A growing synthetic services business moving from spreadsheets to cloud accounting.",
-  "constraints": ["No production data", "No provider credentials", "Human approval before writes"],
-  "expected": {"customers": 12, "vendors": 7, "transactions": 84, "opening_balance": "42500.00"}
+  "scenario": "A synthetic office-supply distributor preparing to move into a modern accounting platform.",
+  "datasets": {
+    "customers": [
+      {
+        "id": "customer-001",
+        "display_name": "Northstar Retail Pvt Ltd",
+        "email": "accounts@northstar-retail.example"
+      },
+      {
+        "id": "customer-002",
+        "display_name": "Northstar Retail Private Limited",
+        "email": "finance@northstar-retail.example"
+      },
+      {
+        "id": "customer-003",
+        "display_name": "Acme Office Mart",
+        "email": "billing@acme-office.example"
+      }
+    ],
+    "vendors": [
+      {"id": "vendor-001", "display_name": "Paper Trail Wholesale"},
+      {"id": "vendor-002", "display_name": ""}
+    ],
+    "accounts": [
+      {
+        "id": "account-ar",
+        "code": "1100",
+        "name": "Accounts Receivable",
+        "account_type": "accounts_receivable"
+      },
+      {
+        "id": "account-sales",
+        "code": "4000",
+        "name": "Product Sales",
+        "account_type": "income"
+      },
+      {
+        "id": "account-bank",
+        "code": "1000",
+        "name": "Operating Bank",
+        "account_type": "bank"
+      }
+    ],
+    "invoices": [
+      {
+        "id": "invoice-001",
+        "customer_id": "customer-001",
+        "receivable_account_id": "account-ar",
+        "document_number": "NS-1001",
+        "total": "1250.00"
+      },
+      {
+        "id": "invoice-002",
+        "customer_id": "customer-missing",
+        "receivable_account_id": "account-ar",
+        "document_number": "NS-1002",
+        "total": "480.00"
+      }
+    ],
+    "transactions": [
+      {
+        "id": "transaction-001",
+        "transaction_date": "2026-01-15",
+        "entries": [
+          {"account_id": "account-ar", "debit": "1250.00", "credit": "0.00"},
+          {"account_id": "account-sales", "debit": "0.00", "credit": "1250.00"}
+        ]
+      },
+      {
+        "id": "transaction-002",
+        "transaction_date": "2026-01-20",
+        "entries": [
+          {"account_id": "account-bank", "debit": "700.00", "credit": "0.00"},
+          {"account_id": "account-ar", "debit": "0.00", "credit": "700.00"}
+        ]
+      }
+    ],
+    "configuration": [
+      {"id": "configuration-001", "key": "base_currency", "value": "USD"},
+      {"id": "configuration-002", "key": "fiscal_calendar", "value": "calendar_year"},
+      {
+        "id": "configuration-003",
+        "key": "inventory_valuation_method",
+        "value": "moving_average_custom"
+      }
+    ]
+  },
+  "constraints": [
+    "Synthetic data only",
+    "No provider credentials",
+    "No target writes during Discover or Assess",
+    "Human approval before consequential migration decisions"
+  ],
+  "expected_findings": {
+    "blockers": ["invalid customer reference"],
+    "warnings": ["duplicate customer candidates", "missing vendor name", "unsupported configuration"],
+    "clean_datasets": ["company", "accounts", "transactions"]
+  }
 }
-

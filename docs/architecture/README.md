@@ -32,3 +32,8 @@ No paid resource is created by this repository. Production infrastructure should
 3. **Explicit workflow state.** The orchestrator advances through guarded transitions, not free-form conversation state.
 4. **Ports and adapters.** Provider data is normalized at the edges, preventing a source or target vendor from leaking into the core.
 5. **ADK is an integration boundary.** Agent runtime code is optional during local deterministic development; financial controls do not depend on model availability.
+
+## Implemented vertical slices
+
+- [Discover → Assess](discover-assess.md) — synthetic discovery, deterministic findings,
+  evidence-backed readiness, owner-scoped ephemeral sessions, and agent activity.
