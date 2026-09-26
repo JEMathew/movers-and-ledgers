@@ -1,5 +1,7 @@
 # Trust and agent operations
 
+The responsibility and decision boundaries in the [AI and agent constitution](AI_AGENT_CONSTITUTION.md) are authoritative. This document defines the operational trace and control baseline.
+
 Every agent action should emit a trace containing the workspace revision, actor/agent identity, prompt and model configuration version, proposed action, tool inputs (redacted), tool result, evidence IDs, policy decision, token/latency data, and terminal outcome.
 
 ## Control classes
@@ -23,4 +25,3 @@ Agents must distinguish observation, inference, recommendation, and action. A mo
 - migration golden sets and reconciliation thresholds;
 - human review of high-impact failure slices;
 - canary rollout with regression and cost/latency budgets.
-
