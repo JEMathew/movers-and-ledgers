@@ -41,7 +41,7 @@ make test
 make lint
 ```
 
-See the [documentation index](docs/README.md) for product governance, architecture, trust, evaluation, metrics, release readiness, reviewer guidance, and contributing references.
+See [architecture](docs/architecture/README.md), [trust model](docs/TRUST.md), [security](docs/security/THREAT_MODEL.md), and [contributing](CONTRIBUTING.md).
 
 ## Reference Use & Intellectual Property
 
