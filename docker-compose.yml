@@ -1,0 +1,35 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports: ["3000:8080"]
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    depends_on: [api]
+  api:
+    build:
+      context: .
+      dockerfile: services/api/Dockerfile
+    ports: ["8000:8080"]
+    environment:
+      MOVEBOOKS_ENV: development
+      DATABASE_URL: postgresql://movebooks:movebooks@db:5432/movebooks
+    depends_on:
+      db: {condition: service_healthy}
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: movebooks
+      POSTGRES_USER: movebooks
+      POSTGRES_PASSWORD: movebooks
+    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U movebooks"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes: ["postgres_data:/var/lib/postgresql/data"]
+volumes:
+  postgres_data:
+

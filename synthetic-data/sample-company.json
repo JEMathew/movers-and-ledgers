@@ -1,0 +1,12 @@
+{
+  "company": {
+    "legal_name": "Northstar Workshop LLC",
+    "display_name": "Northstar Workshop",
+    "base_currency": {"code": "USD"},
+    "fiscal_year_start_month": 1
+  },
+  "scenario": "A growing synthetic services business moving from spreadsheets to cloud accounting.",
+  "constraints": ["No production data", "No provider credentials", "Human approval before writes"],
+  "expected": {"customers": 12, "vendors": 7, "transactions": 84, "opening_balance": "42500.00"}
+}
+
