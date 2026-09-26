@@ -7,11 +7,11 @@ Public web ─┐
 Protected web ─ auth boundary ─ API ─ orchestrator ─ deterministic tools
                                       │       │
                                       │       └─ approval policy / audit evidence
-                                      ├─ source adapter → canonical model → target adapter
+                                      ├─ source adapter → canonical model → governed transformation → target adapter
                                       └─ PostgreSQL | object storage | evaluation export
 ```
 
-The browser never talks directly to an accounting provider. The API issues scoped jobs; adapters translate at system boundaries; the canonical model remains provider-neutral. Agents can propose and invoke tools but cannot declare financial success, mutate policy, or manufacture evidence.
+The browser never talks directly to an accounting provider. The API issues scoped jobs; adapters translate at system boundaries; the canonical model remains provider-neutral. Governed transformations are versioned, deterministic where accounting treatment is involved, attributable to evidence and approval, and applied before the target adapter. Agents can propose and invoke tools but cannot declare financial success, mutate policy, or manufacture evidence.
 
 ## Deployment target (not provisioned)
 
@@ -32,4 +32,3 @@ No paid resource is created by this repository. Production infrastructure should
 3. **Explicit workflow state.** The orchestrator advances through guarded transitions, not free-form conversation state.
 4. **Ports and adapters.** Provider data is normalized at the edges, preventing a source or target vendor from leaking into the core.
 5. **ADK is an integration boundary.** Agent runtime code is optional during local deterministic development; financial controls do not depend on model availability.
-
