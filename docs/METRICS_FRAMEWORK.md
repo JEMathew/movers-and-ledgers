@@ -4,27 +4,29 @@
 
 ```text
 North Star
-└─ Customer Outcomes
-   └─ Product Metrics
-      └─ Business Metrics
-         └─ Migration Quality
-            └─ Agent / AI Quality
-               └─ Safety / Trust
-                  └─ Reliability / Operations
+├─ Customer outcomes
+├─ Business outcomes
+├─ Product leading indicators
+└─ Guardrails and delivery health
+   ├─ Migration and deterministic quality
+   ├─ Agent and GenAI quality
+   ├─ Safety, trust, security, and privacy
+   └─ Reliability and operations
 ```
 
-The hierarchy expresses dependency, not permission to trade away lower-level health. Every outcome metric needs safety, quality, and operational guardrails.
+The framework separates value outcomes from the signals and controls that help deliver them. Customer success is not interchangeable with business efficiency, product activity, model quality, or operational health. Every outcome metric needs safety, quality, and operational guardrails.
 
 ## Proposed North Star
 
-**Percentage of migration journeys reaching First Productive Use successfully with minimal assisted intervention.**
+**Percentage of eligible migration journeys reaching verified First Productive Use.**
 
 This is a **Proposed** definition, not a measured production result or numeric target.
 
-- **Denominator:** eligible migration journeys started in the measurement window, with exclusions defined before analysis.
+- **Denominator:** eligible migration journeys in a start-date cohort whose defined observation window has elapsed, with exclusions fixed before analysis. Also report still-open journeys separately rather than silently excluding them.
 - **Numerator:** journeys that satisfy the versioned First Productive Use contract and deterministic completion controls.
-- **Minimal assisted intervention:** no assistance, or assistance within a separately defined and reported threshold; never hide assisted journeys inside self-service success.
-- **Required segments:** journey cohort, migration complexity/risk class, source and target adapters, customer type, and assisted versus self-service.
+- **First Productive Use contract:** names the agreed productive task and acceptance criteria before execution; requires an authorized customer user to complete it in the intended target environment; links passing data, reconciliation, configuration, access, integration, onboarding, and exception-disposition controls; and records the observation time and evidence. A support operator performing the task for the customer does not satisfy the contract.
+- **Assistance treatment:** assisted and self-service journeys remain in the outcome denominator and are reported as segments. Assistance rate, intensity, reason, and cost are separate health and business measures, not conditions for counting customer success.
+- **Required segments:** journey cohort, migration complexity/risk class, source and target adapters, customer type, and assistance level.
 - **Guardrails:** no material regression in reconciliation, data loss, unsupported-item detection, policy adherence, approval integrity, security/privacy, CSAT, or cost-to-serve.
 
 ## Supporting metrics
@@ -32,9 +34,9 @@ This is a **Proposed** definition, not a measured production result or numeric t
 | Metric | Definition | Classification |
 | --- | --- | --- |
 | Migration completion | Eligible journeys satisfying the versioned migration completion contract / eligible journeys started | Lagging, outcome, product |
-| First Productive Use | Completed journeys with an observed agreed productive task / eligible journeys | Lagging, outcome, product |
+| First Productive Use | Eligible cohort journeys satisfying the versioned First Productive Use contract / eligible cohort journeys whose observation window elapsed | Lagging, outcome, customer |
 | Median time-to-value | Median elapsed time from defined journey start to First Productive Use; report paused time separately | Lagging, outcome, product/business |
-| Support-assisted migration | Journeys requiring human support beyond the declared threshold / eligible journeys | Leading and lagging, health, business/operational |
+| Support-assisted migration | Journeys requiring human support, segmented by reason and intensity / eligible journeys | Leading and lagging, health, business/operational |
 | Abandonment | Eligible journeys inactive beyond a defined window before completion / eligible journeys started | Leading, outcome, product |
 | Mapping acceptance | Recommendations approved without edit / mapping recommendations reviewed | Leading, health, product/model |
 | Mapping override | Recommendations changed or rejected / mapping recommendations reviewed | Leading, health, product/model |
@@ -55,6 +57,8 @@ This is a **Proposed** definition, not a measured production result or numeric t
 - **Outcome** metrics describe customer or business value; **health** metrics describe the system’s ability to deliver it safely and repeatedly.
 - **Product** metrics describe behavior in the journey; **model** metrics isolate probabilistic capability and must not substitute for product results.
 - **Business** metrics describe sustainable value; **operational** metrics describe service performance and intervention burden.
+
+Assistance, autonomy, recommendation acceptance, tool success, and similar activity metrics are diagnostic. They may not be optimized or presented as success without the customer outcome and guardrail view. In particular, autonomy is measured only for tasks already eligible for autonomy and must be paired with correctness, escalation, override, safety, and downstream outcome.
 
 Metric definitions must include event source, owner, formula, denominator, unit, window, exclusions, segmentation, data-quality checks, privacy/retention treatment, and known limitations. A dashboard without these contracts is exploratory, not release evidence.
 

@@ -42,6 +42,9 @@ Also record scope, assumptions, evidence gaps, and “no finding” for explicit
 | Reliability / Operations Reviewer | Are observability, idempotency, timeouts, retry, recovery, capacity, rollout, rollback, and support operations ready? |
 | Metrics Reviewer | Are outcome and guardrail metrics defined with valid denominators, segments, ownership, data quality, and non-invented evidence? |
 | Demo Reviewer | Does the demonstration reach meaningful value credibly, reliably, and without concealed manual intervention or misleading claims? |
+| Release Readiness Reviewer | Were all 17 areas considered with scope-proportionate evidence, are findings handled consistently, and is the final decision supported? |
+
+Role boundaries prevent duplicate findings: Product owns product intent and scope; Customer Outcome owns realized user/customer value and burden transfer; Metrics owns measurement validity. UX owns the coherent end-to-end experience, while Accessibility may run as a specialist depth review; consolidate overlapping evidence into one finding. Release Readiness integrates the recorded evidence and does not re-grade domain findings without new evidence.
 
 ## Internal build lenses
 

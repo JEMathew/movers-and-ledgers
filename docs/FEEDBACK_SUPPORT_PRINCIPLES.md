@@ -10,7 +10,7 @@ Feedback and support are part of the product control loop. This document defines
 
 **Internal support** should create a governed case with classification, severity, migration session ID, current migration stage, blocker/error code, failed tool or action, timestamp, affected entity count, and audit references.
 
-Do not attach raw sensitive financial data automatically. Collect the minimum necessary context; show users what will be shared; redact secrets and personal or financial content; enforce workspace authorization, retention, deletion, and audit requirements.
+Do not attach raw sensitive financial data automatically. Collect the minimum necessary context; show users what will be shared; redact secrets and personal or financial content; enforce workspace authorization, retention, deletion, and audit requirements. Case identifiers and audit references must be opaque and workspace-scoped; possession of a reference alone never grants access. Treat free text and attachments as untrusted content and apply redaction before they enter support, analytics, model, or evaluation systems.
 
 ## Closed loop
 

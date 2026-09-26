@@ -20,4 +20,4 @@ Expected flow:
 Builder → Reviewers → Findings → Prioritization → Fix → Re-review → Merge
 ```
 
-Use the role files in this directory as focused prompt addenda. Consolidate results in [`docs/reviews/TEMPLATE.md`](../docs/reviews/TEMPLATE.md).
+Use the role files in this directory as focused prompt addenda. The complete role set and role boundaries are defined in the reviewer rubrics; the absence of a dedicated addendum does not remove a required lens. Consolidate results in [`docs/reviews/TEMPLATE.md`](../docs/reviews/TEMPLATE.md).

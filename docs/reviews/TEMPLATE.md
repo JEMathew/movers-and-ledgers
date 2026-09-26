@@ -8,6 +8,7 @@ Branch / revision: `<branch and commit>`
 
 - In scope:
 - Out of scope:
+- Change risk / credible blast radius:
 - Customer problem:
 - Expected outcome:
 - Metrics expected to move (with classification and no invented results):
@@ -44,20 +45,31 @@ Branch / revision: `<branch and commit>`
 
 | Dimension | Status | Evidence | Owner / action |
 | --- | --- | --- | --- |
-| User | `GREEN/AMBER/RED/NOT ASSESSED` | | |
+| User | `GREEN/AMBER/RED/NOT APPLICABLE/NOT ASSESSED` | | |
 | Customer outcome | | | |
-| Migration / agent / AI quality | | | |
-| Safety / trust / security | | | |
-| Reliability / engineering | | | |
+| Business | | | |
+| Product | | | |
+| Migration quality | | | |
+| Agent quality | | | |
+| GenAI quality | | | |
+| Deterministic quality | | | |
+| Safety / trust | | | |
+| Security / privacy | | | |
+| Reliability / operations | | | |
+| Engineering quality | | | |
+| Evaluation maturity | | | |
 | UX / accessibility | | | |
-| Platform / evaluation | | | |
-| Feedback / support / demo | | | |
+| Platform scalability | | | |
+| Feedback / support | | | |
+| Demo readiness | | | |
+
+For each `NOT APPLICABLE` entry, record why the scope cannot affect the dimension and who reviewed that rationale. Use `NOT ASSESSED` when evidence or applicability is unknown.
 
 ## Readiness
 
 - Release readiness: `GREEN / AMBER / RED`
 - Demo readiness: `GREEN / AMBER / RED`
-- Accepted risks and accountable approver:
+- Accepted risks and accountable approver (an accepted P1 remains AMBER):
 - Rollback / recovery plan:
 - Recommended actions:
 - Merge recommendation:

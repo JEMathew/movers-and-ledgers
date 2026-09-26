@@ -4,11 +4,15 @@ Release readiness is an evidence-backed decision, not an average score. Use the 
 
 ## Decision states
 
-- **GREEN** — required evidence is current; no P0 or unresolved P1 finding remains; material P2 risks have owners and acceptable mitigations.
-- **AMBER** — no P0 exists, but evidence is incomplete or an explicitly accepted risk requires time-bound mitigation and named ownership. AMBER is not implied approval to release.
-- **RED** — a P0 exists, an unresolved P1 is not formally accepted, a required control is absent or failing, or evidence shows unacceptable customer or operational risk.
+- **GREEN** — required evidence is current; no P0 or P1 finding remains open or accepted; material P2 risks have owners and acceptable mitigations.
+- **AMBER** — no P0 exists, but required evidence is incomplete or a P1/material risk is explicitly accepted with time-bound mitigation and named ownership. AMBER is not implied approval to release.
+- **RED** — a P0 exists, an unaccepted P1 remains, a required control is absent or failing, or evidence shows unacceptable customer or operational risk.
 
-P0 blocks GREEN. An unresolved P1 normally blocks GREEN and may be accepted only by the accountable decision owner with written rationale, bounded exposure, compensating controls, expiry/review date, and rollback plan. Legal, regulatory, security, privacy, or financial-correctness requirements cannot be waived by a product reviewer alone.
+P0 blocks release and cannot be accepted through this process. A P1 may be accepted only by the accountable decision owner with written rationale, bounded exposure, compensating controls, expiry/review date, and rollback plan; an accepted P1 remains **AMBER**, not GREEN. Legal, regulatory, security, privacy, or financial-correctness requirements cannot be waived by a product reviewer alone.
+
+## Proportionate application
+
+Every review considers all 17 areas, while evidence depth follows the change's credible blast radius. Mark an area **NOT APPLICABLE** only when the change cannot affect it, with a reviewer and rationale; use **NOT ASSESSED** when applicability or evidence is unknown. A documentation-only or low-risk Beta change can be GREEN when affected areas have sufficient evidence and every unaffected area has a defensible NOT APPLICABLE rationale. New financial writes, identity or tenant boundaries, provider adapters, policy changes, or production data handling require the relevant full-depth evidence and cannot be scoped away.
 
 ## Required assessment areas
 
@@ -34,4 +38,4 @@ P0 blocks GREEN. An unresolved P1 normally blocks GREEN and may be accepted only
 
 ## Decision record
 
-Record release identifier and scope, code/config/data versions, assessment date, evidence links, status for all 17 areas, open findings by severity, accepted risks, owners, rollback/recovery plan, monitoring and support plan, approvers, and final GREEN/AMBER/RED decision. Missing assessment areas are **NOT ASSESSED**, not GREEN.
+Record release identifier and scope, code/config/data versions, assessment date, evidence links, status for all 17 areas, NOT APPLICABLE rationales, open findings by severity, accepted risks, owners, rollback/recovery plan, monitoring and support plan, approvers, and final GREEN/AMBER/RED decision. Missing assessment areas are **NOT ASSESSED**, not GREEN.

@@ -7,7 +7,10 @@ Use this scorecard for discovery, feature review, release review, and portfolio 
 - **GREEN** — evidence supports the intended outcome and no blocking risk is open.
 - **AMBER** — evidence is incomplete or a material risk has an owned, time-bound mitigation.
 - **RED** — evidence shows unacceptable outcome or risk, or a required control is absent.
+- **NOT APPLICABLE** — the dimension cannot be affected by the assessed scope; record the rationale and reviewer.
 - **NOT ASSESSED** — no defensible evidence; never treat this as GREEN.
+
+All dimensions must be considered, but evidence depth is proportional to change risk. `NOT APPLICABLE` is a reasoned scope decision; it must not be used to hide an unknown or an affected control.
 
 ## Dimensions
 
@@ -18,7 +21,7 @@ Use this scorecard for discovery, feature review, release review, and portfolio 
 | Business | Does value scale sustainably for customer and operator? | Conversion, activation, migration throughput, support deflection, cost-to-serve, retention where relevant |
 | Product | Are intended capabilities adopted through a meaningful funnel? | Adoption, funnel progression, feature completion, repeat usage where meaningful |
 | Migration Quality | Is the migration complete, correct, explicit about gaps, and recoverable? | Reconciliation success, data loss, exception rate, retry success, unsupported-item detection, recovery success |
-| Agent Quality | Does orchestration choose and execute permitted actions effectively? | Task success, tool-selection accuracy, tool execution, autonomy rate, escalation rate, recovery rate |
+| Agent Quality | Does orchestration choose and execute permitted actions effectively without optimizing autonomy over outcomes? | Task success, tool-selection accuracy, tool execution, autonomy rate with outcome/safety guardrails, escalation rate, recovery rate |
 | GenAI Quality | Are interpretations and recommendations grounded and useful? | Groundedness, recommendation accuracy, hallucination rate, explanation quality, unsupported claims |
 | Deterministic Quality | Are rules correct, stable, and repeatable? | Rule consistency, false pass, false block, reconciliation repeatability, validation accuracy |
 | Safety / Trust | Do users retain informed control and do policies prevent unsafe behavior? | Policy violations, unsafe actions prevented, human overrides, approval bypasses, confidence calibration |
@@ -29,14 +32,14 @@ Use this scorecard for discovery, feature review, release review, and portfolio 
 | UX / Accessibility | Is the experience usable across input, assistive technology, theme, and viewport? | Keyboard task completion, accessibility defects, contrast failures, responsive defects, interaction errors |
 | Platform Scalability | Can sources and targets be added without core leakage or duplication? | Adapter effort, reuse, coupling, source-specific leakage, configuration reuse |
 | Feedback / Support | Does feedback produce timely resolution and durable learning? | Feedback submission rate, helpfulness, support contact rate, first-response time, resolution time, repeat-contact rate, cases converted into regression/eval cases |
-| Demo Readiness | Can the product communicate credible value without fragile workarounds? | Demo success, manual workarounds, time to meaningful value, story clarity, failure risk |
+| Demo Readiness | Can the product communicate meaningful value in a credible 5–7 minute path without fragile workarounds? | Demo-path success, manual workarounds, time to meaningful value, story clarity, failure risk |
 
 ## Scorecard record
 
 For each dimension record:
 
 ```text
-Status: GREEN | AMBER | RED | NOT ASSESSED
+Status: GREEN | AMBER | RED | NOT APPLICABLE | NOT ASSESSED
 Question / decision:
 Evidence and measurement window:
 Metric movement expected:

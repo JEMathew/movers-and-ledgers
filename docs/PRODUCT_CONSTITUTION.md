@@ -13,7 +13,7 @@ Primary users are business owners and finance operators responsible for a migrat
 | Customer problem | User statement | Product response |
 | --- | --- | --- |
 | Conceptual uncertainty | “I do not understand migration.” | **Learn** explains the domain; **Play** makes the lifecycle tangible. |
-| Personal uncertainty | “I do not know what migration will look like for my business.” | **Simulator** and **Try Your Data** show likely scope, risk, and decisions before commitment. |
+| Personal uncertainty | “I do not know what migration will look like for my business.” | **Simulator** rehearses the journey with synthetic businesses; **Try Your Data** privately profiles a bounded customer export without target writes. |
 | Execution burden | “I do not want to manually manage a complex migration.” | **MoveBooks AI Product** combines deterministic tools, bounded agents, approvals, validation, configuration, and onboarding in one governed workflow. |
 
 The value proposition is a provider-neutral path from uncertainty to First Productive Use: users can see what will happen, understand why, control consequential decisions, and verify the accounting outcome.
@@ -22,6 +22,7 @@ The value proposition is a provider-neutral path from uncertainty to First Produ
 
 - **MoveBooks AI Product** — the governed migration workspace from discovery through First Productive Use.
 - **MoveBooks AI Simulator** — high-fidelity practice with synthetic accounting environments and controlled failure cases.
+- **Try Your Data** — a protected, read-only preview that profiles a bounded customer export before a migration workspace is started.
 - **MoveBooks AI Play** — an approachable visual introduction to migration concepts and trade-offs.
 - **MoveBooks AI Learn** — contextual education about migration, accounting, readiness, and AI trust.
 - **Trust / Agent Operations** — evidence, approvals, auditability, evaluation, policy enforcement, and operational visibility.
@@ -36,11 +37,11 @@ Learn → Play → Simulate → Try Your Data → Discover → Assess → Plan
 → Onboard → First Productive Use
 ```
 
-**First Productive Use** means the customer can perform an agreed, meaningful accounting task in the target system after validated data, configuration, access, integrations, and onboarding are in place. A successful transfer alone is not completion.
+**First Productive Use** means an authorized customer user completes an agreed, meaningful accounting task in the intended target environment after required data, configuration, access, integrations, and onboarding controls pass. The versioned journey contract must identify the task and acceptance criteria before execution, record the observation and time, link the deterministic completion evidence, and show that blocking exceptions are resolved or formally accepted. A successful transfer, a support operator performing the task for the customer, or an unverified self-report alone is not completion.
 
 ## North-star outcome
 
-**Percentage of migration journeys reaching First Productive Use successfully with minimal assisted intervention.**
+**Percentage of eligible migration journeys reaching verified First Productive Use.**
 
 This is a proposed product definition, not a claim about measured production performance. The measurement contract is defined in [Metrics framework](METRICS_FRAMEWORK.md).
 
