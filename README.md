@@ -4,6 +4,8 @@ MoveBooks AI is an independent, provider-neutral product concept from **Movers &
 
 > This repository is synthetic and independent. It does not represent or disclose the architecture, APIs, roadmap, or implementation of Intuit, QuickBooks, or any other accounting provider.
 
+**Reference implementation:** This public repository is provided primarily for demonstration, evaluation, learning, and portfolio purposes. MoveBooks AI and Movers & Ledgers remain independent product concepts. Public access to the repository does not by itself grant rights to commercially reproduce, rebrand, resell, or redistribute the product beyond the permissions explicitly provided in the repository license.
+
 ## Product surfaces
 
 - **Product** — governed migration workspaces from discovery to first productive use.
@@ -41,7 +43,24 @@ make lint
 
 See [architecture](docs/architecture/README.md), [trust model](docs/TRUST.md), [security](docs/security/THREAT_MODEL.md), and [contributing](CONTRIBUTING.md).
 
+## Reference Use & Intellectual Property
+
+MoveBooks AI is an independent product concept developed by **Movers & Ledgers**.
+
+This repository is made publicly available primarily for **demonstration, learning, portfolio, evaluation, and reference purposes**.
+
+The repository may be reviewed to understand the product concepts, architecture, agentic AI patterns, migration workflows, user experience, evaluation approaches, and engineering practices used in MoveBooks AI.
+
+Public availability of this repository should not be interpreted as a waiver of intellectual property rights or as authorization to commercially reproduce, redistribute, rebrand, resell, or create substantially derivative commercial products from MoveBooks AI unless explicitly permitted by the applicable repository license.
+
+Product names, branding, product concepts, proprietary migration intelligence, domain-specific knowledge assets, designs, documentation, datasets, and other intellectual property associated with **Movers & Ledgers** and **MoveBooks AI**remain subject to their respective intellectual property rights.
+
+MoveBooks AI is an independent synthetic product concept and does not represent, reproduce, or claim to describe the internal products, systems, APIs, architectures, roadmaps, or implementation details of Intuit, QuickBooks, or any other accounting software provider.
+
+Where third-party technologies, frameworks, libraries, trademarks, or services are referenced, those remain the property of their respective owners.
+
+For permitted use of the source code, refer to the repository's `LICENSE` file.
+
 ## Status
 
 This foundation implements contracts and a thin vertical slice, not provider integrations or autonomous financial writes. All source and target systems are adapters behind provider-neutral interfaces.
-
