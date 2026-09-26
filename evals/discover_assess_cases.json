@@ -1,0 +1,60 @@
+{
+  "suite": "discover-assess-golden-v1",
+  "description": "Deterministic golden cases derived only from the Northstar Supplies synthetic fixture.",
+  "cases": [
+    {
+      "id": "clean-dataset",
+      "variant": "clean",
+      "expected_readiness": "READY",
+      "expected_blockers": 0,
+      "expected_warnings": 0,
+      "required_rules": []
+    },
+    {
+      "id": "duplicate-customer-candidates",
+      "variant": "duplicates_only",
+      "expected_readiness": "NEEDS ATTENTION",
+      "expected_blockers": 0,
+      "expected_warnings": 1,
+      "required_rules": ["DUPLICATE_CANDIDATES"]
+    },
+    {
+      "id": "required-dataset-missing",
+      "variant": "required_dataset_missing",
+      "expected_readiness": "BLOCKED",
+      "expected_blockers": 1,
+      "expected_warnings": 0,
+      "required_rules": ["REQUIRED_DATASET_MISSING"]
+    },
+    {
+      "id": "critical-reference-failure",
+      "variant": "critical_reference",
+      "expected_readiness": "BLOCKED",
+      "expected_blockers": 1,
+      "expected_warnings": 0,
+      "required_rules": ["CRITICAL_REFERENCE_INVALID"]
+    },
+    {
+      "id": "unsupported-configuration",
+      "variant": "unsupported_configuration",
+      "expected_readiness": "NEEDS ATTENTION",
+      "expected_blockers": 0,
+      "expected_warnings": 1,
+      "required_rules": ["UNSUPPORTED_CONFIGURATION"]
+    },
+    {
+      "id": "repeatable-composite-result",
+      "variant": "fixture_as_published",
+      "expected_readiness": "BLOCKED",
+      "expected_blockers": 1,
+      "expected_warnings": 3,
+      "required_rules": [
+        "REQUIRED_FIELD_MISSING",
+        "DUPLICATE_CANDIDATES",
+        "CRITICAL_REFERENCE_INVALID",
+        "UNSUPPORTED_CONFIGURATION"
+      ],
+      "repeat": 2
+    }
+  ]
+}

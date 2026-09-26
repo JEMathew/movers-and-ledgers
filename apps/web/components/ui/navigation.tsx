@@ -27,6 +27,6 @@ export function Progress({ value, label, showValue = true }: { value: number; la
 }
 
 export type Step = { label: string; description?: string };
-export function Stepper({ steps, current }: { steps: Step[]; current: number }) {
-  return <ol className="stepper" aria-label="Migration progress">{steps.map((step, index) => { const complete = index < current; const active = index === current; return <li key={step.label} aria-current={active ? "step" : undefined} className={cn(complete && "is-complete", active && "is-active")}><span className="step-marker" aria-hidden="true">{complete ? <Check size={15}/> : <Circle size={12} fill={active ? "currentColor" : "none"}/>}</span><span><strong>{step.label}</strong>{complete && <span className="sr-only"> — Completed</span>}{active && <span className="sr-only"> — Current step</span>}{step.description && <small>{step.description}</small>}</span></li>;})}</ol>;
+export function Stepper({ steps, current, label = "Migration progress" }: { steps: Step[]; current: number; label?: string }) {
+  return <ol className="stepper" aria-label={label}>{steps.map((step, index) => { const complete = index < current; const active = index === current; return <li key={step.label} aria-current={active ? "step" : undefined} className={cn(complete && "is-complete", active && "is-active")}><span className="step-marker" aria-hidden="true">{complete ? <Check size={15}/> : <Circle size={12} fill={active ? "currentColor" : "none"}/>}</span><span><strong>{step.label}</strong>{complete && <span className="sr-only"> — Completed</span>}{active && <span className="sr-only"> — Current step</span>}{step.description && <small>{step.description}</small>}</span></li>;})}</ol>;
 }
