@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "MoveBooks AI — Migrate with evidence",
@@ -9,6 +10,15 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {
-  return <html lang="en"><body><Nav />{children}<Footer /></body></html>;
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider>
+          <Nav />
+          {children}
+          <Footer />
+        </ThemeProvider>
+      </body>
+    </html>
+  );
 }
-
