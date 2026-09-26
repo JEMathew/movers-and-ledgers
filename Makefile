@@ -15,6 +15,7 @@ dev-api:
 test:
 	.venv/bin/pytest
 	cd apps/web && npm run typecheck
+	cd apps/web && npm run test
 
 lint:
 	.venv/bin/ruff check .
