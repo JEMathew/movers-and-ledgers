@@ -79,12 +79,18 @@ class DiscoverAssessService:
             raise MigrationSessionNotFoundError(str(session_id))
         return session
 
+    @staticmethod
+    def source_for(session: MigrationSession) -> dict | None:
+        if session.source_kind == "user_upload":
+            return session.uploaded_source
+        return load_sample_company(session.sample_company_id)
+
     def discover(self, owner_subject: str, session_id: UUID) -> MigrationSession:
         session = self.get_session(owner_subject, session_id)
         if session.discovery is not None:
             return session
         original = session.model_copy(deep=True)
-        fixture = load_sample_company(session.sample_company_id)
+        fixture = self.source_for(session)
         if fixture is None:
             raise SampleCompanyNotFoundError(session.sample_company_id)
         session.events.append(
@@ -173,7 +179,7 @@ class DiscoverAssessService:
         if session.mappings:
             return session
         original = session.model_copy(deep=True)
-        fixture = load_sample_company(session.sample_company_id)
+        fixture = self.source_for(session)
         if fixture is None:
             raise SampleCompanyNotFoundError(session.sample_company_id)
         session = self.orchestrator.create_mappings(session, fixture)
@@ -197,7 +203,7 @@ class DiscoverAssessService:
         mapping = next((item for item in session.mappings if item.id == mapping_id), None)
         if mapping is None:
             raise MigrationSessionNotFoundError(str(mapping_id))
-        fixture = load_sample_company(session.sample_company_id)
+        fixture = self.source_for(session)
         if fixture is None:
             raise SampleCompanyNotFoundError(session.sample_company_id)
         record = next(
@@ -259,7 +265,7 @@ class DiscoverAssessService:
     ) -> MigrationSession:
         session = self.get_session(owner_subject, session_id)
         original = session.model_copy(deep=True)
-        fixture = load_sample_company(session.sample_company_id)
+        fixture = self.source_for(session)
         if fixture is None:
             raise SampleCompanyNotFoundError(session.sample_company_id)
         session = self.migration_orchestrator.start(session, fixture, idempotency_key)
@@ -291,7 +297,7 @@ class DiscoverAssessService:
     def retry_migration(self, owner_subject: str, session_id: UUID) -> MigrationSession:
         session = self.get_session(owner_subject, session_id)
         original = session.model_copy(deep=True)
-        fixture = load_sample_company(session.sample_company_id)
+        fixture = self.source_for(session)
         if fixture is None:
             raise SampleCompanyNotFoundError(session.sample_company_id)
         session = self.migration_orchestrator.retry(session, fixture)

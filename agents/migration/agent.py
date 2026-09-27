@@ -51,7 +51,8 @@ class MigrationAgent:
         if not isinstance(datasets, dict):
             raise ValueError("Synthetic datasets are unavailable.")
         batches = []
-        for sequence, entity in enumerate(BATCH_ORDER, start=1):
+        order = (*BATCH_ORDER, "bills") if "bills" in datasets else BATCH_ORDER
+        for sequence, entity in enumerate(order, start=1):
             records = datasets.get(entity, [])
             if not isinstance(records, list):
                 raise ValueError(f"Dataset '{entity}' is not a record collection.")

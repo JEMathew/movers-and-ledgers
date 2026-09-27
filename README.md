@@ -14,7 +14,7 @@ MoveBooks AI is an independent, provider-neutral product concept from **Movers &
 - **Learn** — contextual education about migration, accounting, readiness, and AI trust.
 - **Trust / Agent Operations** — evidence, approvals, audit records, evaluation, and observability.
 
-Public introductions and help are `/`, `/product`, `/simulator`, `/learn`, `/play`, `/trust`, `/feedback`, and `/support`. Simulator enters the existing protected `/assess` workflow; it does not replay approvals. `/try-your-data`, `/workspace`, `/assess`, `/approvals`, and `/reports` retain their authentication boundary. Development uses a clearly labelled demo session; production intentionally fails closed until a Google-compatible identity verifier is configured. Trust reads owner-scoped synthetic evidence; Feedback prepares a local, opt-in-context draft, not a submitted ticket. See [public product surfaces](docs/architecture/public-product-surfaces.md).
+Public introductions and help are `/`, `/product`, `/simulator`, `/learn`, `/play`, `/trust`, `/feedback`, and `/support`. Simulator enters protected `/assess` without approval replay. `/try-your-data` now validates controlled CSV/JSON or flat ZIP packages and hands explicitly reviewed data to the same Discovery/Assessment agents. It is for **local, de-identified test exports only**, not confidential customer data or secure hosted intake; all target operations remain synthetic. Workspace/stage routes retain authentication; demo identity fails closed in production. Trust uses a server-side payload-free projection. Feedback remains a local draft, not a submitted ticket. See [public product surfaces](docs/architecture/public-product-surfaces.md) and [Try Your Data](docs/architecture/try-your-data.md).
 
 ## Responsibility model
 

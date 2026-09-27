@@ -18,6 +18,8 @@ class MigrationSessionRepository(Protocol):
         self, original: MigrationSession, updated: MigrationSession
     ) -> MigrationSession: ...
 
+    def put_uploaded(self, session: MigrationSession, limit: int) -> MigrationSession: ...
+
 
 class InMemoryMigrationSessionRepository:
     """Stores sessions for one process; no production durability is implied."""
@@ -41,6 +43,14 @@ class InMemoryMigrationSessionRepository:
     def clear(self) -> None:
         with self._lock:
             self._sessions.clear()
+
+    def put_uploaded(self, session: MigrationSession, limit: int) -> MigrationSession:
+        with self._lock:
+            if sum(s.source_kind == "user_upload" for s in self._sessions.values()) >= limit:
+                raise ValueError(
+                    "Local uploaded workspace capacity reached; restart the local API."
+                )
+            return self.put(session)
 
     def put_if_unchanged(self, original: MigrationSession, updated: MigrationSession):
         """Atomic compare-and-swap for governed validation/configuration decisions."""

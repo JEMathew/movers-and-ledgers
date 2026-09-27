@@ -35,7 +35,7 @@ def context(session_id: UUID, principal: Principal):
         session = service.get_session(principal.subject, session_id)
     except LookupError as error:
         raise HTTPException(404, "Migration session not found") from error
-    fixture = load_sample_company(session.sample_company_id)
+    fixture = service.source_for(session)
     if fixture is None:
         raise HTTPException(409, "Source evidence is unavailable")
     return session, fixture

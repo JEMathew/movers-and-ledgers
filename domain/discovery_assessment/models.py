@@ -249,6 +249,9 @@ class MigrationSession(BaseModel):
     company_name: str
     synthetic: bool = True
     status: SessionStatus = SessionStatus.CREATED
+    source_kind: str = "synthetic_sample"
+    uploaded_source: dict | None = Field(default=None, exclude=True, repr=False)
+    intake_report: dict | None = None
     source_checksum: str | None = None
     stage: str = "discover"
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))

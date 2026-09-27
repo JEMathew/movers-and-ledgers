@@ -90,12 +90,26 @@ describe("DiscoverAssessExperience", () => {
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({sample_company_id:"harbor-light-migrate-demo"});
     expect(fetchMock.mock.calls[0][0]).toMatch(/\/v1\/migration-sessions$/);
   });
-  it("starts with one selected synthetic company and no enabled upload path", () => {
+  it("starts with a synthetic company and routes uploads through controlled intake", () => {
     render(<DiscoverAssessExperience />);
     expect(screen.getByRole("heading", { name: "Assess My Migration" })).toBeVisible();
     expect(screen.getByRole("combobox", { name: "Synthetic business" })).toHaveValue("northstar-supplies");
-    expect(screen.getByRole("button", { name: "Coming next" })).toBeDisabled();
+    expect(screen.getByRole("link", { name: "Try Your Data" })).toHaveAttribute("href", "/try-your-data");
     expect(screen.getByRole("list", { name: "Assessment progress" })).toBeVisible();
+  });
+
+  it("labels uploaded source honestly and retries failed reads without creating a sample", async () => {
+    window.history.replaceState(null, "", "?session=upload-session");
+    const fetchMock = vi.fn().mockResolvedValueOnce(jsonResponse({ detail: "Temporarily unavailable" }, 503))
+      .mockResolvedValueOnce(jsonResponse({ id: "upload-session", sample_company_id: "user-upload", discovery: { ...discovery, synthetic: false }, assessment, activity }));
+    vi.stubGlobal("fetch", fetchMock);
+    render(<DiscoverAssessExperience/>);
+    await screen.findByText("Temporarily unavailable");
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
+    await screen.findByText("Current workspace: user-provided source");
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock.mock.calls.every(call => call[0].endsWith("/migration-sessions/upload-session") && !call[1]?.method)).toBe(true);
+    expect(screen.getByRole("combobox", {name: "Synthetic business"})).toHaveValue("northstar-supplies");
   });
 
   it("runs the API-backed journey and hands off to the governed planning workspace", async () => {
