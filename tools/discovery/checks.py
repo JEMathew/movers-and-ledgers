@@ -38,7 +38,7 @@ def profile_dataset(
         id=_evidence_id(dataset, "profile_dataset"),
         tool="profile_dataset",
         dataset=dataset,
-        summary=f"Profiled {len(rows)} synthetic {dataset} record(s).",
+        summary=f"Profiled {len(rows)} source {dataset} record(s).",
         attributes={"record_count": len(rows), "missing_required_values": sum(missing.values())},
     )
     return ToolObservation(

@@ -10,6 +10,7 @@ from .auth import Principal, require_principal
 from .discover_assess import router as discover_assess_router
 from .discover_assess.onboard_fpu import router as onboard_fpu_router
 from .discover_assess.validate_configure import router as validate_configure_router
+from .intake_api import router as intake_router
 from .settings import get_settings
 
 settings = get_settings()
@@ -28,6 +29,7 @@ app.add_middleware(
 app.include_router(discover_assess_router)
 app.include_router(validate_configure_router)
 app.include_router(onboard_fpu_router)
+app.include_router(intake_router)
 
 
 @app.get("/healthz", tags=["operations"])

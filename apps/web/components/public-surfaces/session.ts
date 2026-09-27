@@ -16,7 +16,7 @@ const list = (value: unknown): RecordData[] => Array.isArray(value) ? value.map(
 const text = (value: unknown) => typeof value === "string" ? value.slice(0, 400) : "";
 const refs = (value: unknown) => Array.isArray(value) ? value.filter((x): x is string => typeof x === "string").slice(0, 12).map(x => x.slice(0, 160)) : [];
 export type TraceRow = { id: string; title: string; kind: string; status: string; time: string; actor: string; tool: string; evidence: string[] };
-export type SessionView = { id: string; status: string; phase: number; activity: TraceRow[]; decisions: TraceRow[]; checks: TraceRow[]; blockers: string[]; events: TraceRow[] };
+export type SessionView = { id: string; status: string; phase: number; sourceKind: string; activity: TraceRow[]; decisions: TraceRow[]; checks: TraceRow[]; blockers: string[]; events: TraceRow[] };
 
 // Explicit presentation projection. Never stringify a session, prompt, payload,
 // model trace, invoice, selected value or raw reconciliation amount into the UI.
@@ -40,7 +40,7 @@ export function projectSession(raw: unknown, expectedId: string): SessionView {
     ...list(object(s.onboarding).tasks).filter(t => t.status !== "COMPLETED").map(t => `Onboarding ${text(t.status)}: ${text(t.label)}`),
   ];
   const events = list(s.events).map(e => ({ id: text(e.id), title: text(e.name).replaceAll("_", " "), kind: "Lifecycle audit reference", status: "Recorded", time: text(e.occurred_at), actor: "Workflow", tool: "", evidence: [] }));
-  return { id: expectedId, status, phase, activity, decisions, checks, blockers, events };
+  return { id: expectedId, status, phase, sourceKind: s.source_kind === "user_upload" ? "User-provided data · synthetic target" : "Synthetic sample · synthetic target", activity, decisions, checks, blockers, events };
 }
 
 export function useSessionView() {
@@ -57,7 +57,7 @@ export function useSessionView() {
         const id = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session");
         if (!id) return;
         if (!isSessionId(id)) throw new Error("Invalid session reference. Start or open a synthetic session from Product.");
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"}/v1/migration-sessions/${id}`, { headers: { Authorization: "Bearer demo-user" }, signal: controller.signal });
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"}/v1/migration-sessions/${id}/intake-trust`, { headers: { Authorization: "Bearer demo-user" }, signal: controller.signal });
         if (!response.ok) throw new Error(response.status === 404 ? "Session unavailable or expired. No replacement session was created." : "Session could not be read. Check local demo access and the API, then refresh.");
         const projection = projectSession(await response.json(), id);
         if (active) setView(projection);

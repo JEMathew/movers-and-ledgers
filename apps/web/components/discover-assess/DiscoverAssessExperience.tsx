@@ -66,16 +66,21 @@ export function DiscoverAssessExperience() {
   const [planningNotice, setPlanningNotice] = useState(false);
   const [sample, setSample] = useState("northstar-supplies");
 
+  const loadExisting = (saved: string) => {
+    setError(undefined);
+    void api<{id: string; sample_company_id: string; discovery?: DiscoveryResult; assessment?: AssessmentResult; activity: AgentActivity[]}>(`/v1/migration-sessions/${saved}`).then(data => {
+      setSessionId(data.id); setDiscovery(data.discovery); setAssessment(data.assessment);
+      if (["northstar-supplies", "harbor-light-migrate-demo"].includes(data.sample_company_id)) setSample(data.sample_company_id);
+      setActivity(data.activity); setPhase(data.assessment ? "complete" : "select");
+    }).catch(caught => { setError(caught.message); setPhase("error"); });
+  };
+
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     const saved = query.get("session");
     if (!saved && query.get("sample") === "harbor-light-migrate-demo") setSample("harbor-light-migrate-demo");
     if (!saved) return;
-    void api<{id: string; sample_company_id: string; discovery?: DiscoveryResult; assessment?: AssessmentResult; activity: AgentActivity[]}>(`/v1/migration-sessions/${saved}`).then(data => {
-      setSessionId(data.id); setDiscovery(data.discovery); setAssessment(data.assessment);
-      setSample(data.sample_company_id);
-      setActivity(data.activity); setPhase(data.assessment ? "complete" : "select");
-    }).catch(caught => { setError(caught.message); setPhase("error"); });
+    loadExisting(saved);
   }, []);
 
   const startAssessment = async () => {
@@ -138,7 +143,7 @@ export function DiscoverAssessExperience() {
           <p className="eyebrow text-primary">Discover → Assess</p>
           <h1 className="type-page mt-4">Assess My Migration</h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-secondary">
-            See what is in a synthetic accounting source, what needs attention, and why—before any
+            See what is in your sample or uploaded accounting source, what needs attention, and why—before any
             plan, mapping, or target write exists.
           </p>
         </div>
@@ -163,15 +168,16 @@ export function DiscoverAssessExperience() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2 id="sample-heading" className="type-section">Choose a safe source</h2>
-            <p className="mt-2 text-secondary">No provider connection or real customer data is used.</p>
+            <p className="mt-2 text-secondary">No provider connection. Use samples or controlled, de-identified test exports only.</p>
           </div>
           {running && <LoadingState label={phase === "discovering" ? "Discovering source data" : "Calculating readiness"} />}
         </div>
+        {discovery?.synthetic === false && <Alert tone="info" title="Current workspace: user-provided source"><p>The evidence below belongs to your uploaded package, not the sample selector. Target operations remain synthetic. Starting a new sample creates a separate workspace.</p></Alert>}
         <div className="mt-5 grid gap-4 md:grid-cols-2">
           <Card className="assessment-source-card border-[var(--primary)]" aria-label="Synthetic business selection">
             <div className="flex items-start justify-between gap-4">
               <div className="metric-icon"><Database aria-hidden="true" size={18} /></div>
-              <Badge>Synthetic sample company · selected</Badge>
+              <Badge>{discovery?.synthetic === false ? "Optional new sample workspace" : "Synthetic sample company · selected"}</Badge>
             </div>
             <label className="mt-8 block font-bold">Synthetic business
               <select className="field-control mt-2 block w-full" value={sample} disabled={running} onChange={event => setSample(event.target.value)}>
@@ -187,17 +193,17 @@ export function DiscoverAssessExperience() {
               <ArrowRight aria-hidden="true" size={17} />
             </Button>
           </Card>
-          <Card className="opacity-70" aria-label="Upload your data unavailable">
+          <Card aria-label="Try Your Data entry">
             <div className="flex items-start justify-between gap-4">
               <div className="metric-icon"><Upload aria-hidden="true" size={18} /></div>
-              <Badge>Coming next</Badge>
+              <Badge>Controlled package · Local Beta</Badge>
             </div>
             <h3 className="mt-8 text-xl font-bold">Upload your data</h3>
             <p className="mt-2 text-sm leading-6 text-secondary">
-              Private source uploads and live provider connections are intentionally outside this
-              public-reference slice.
+              Validate a supported de-identified CSV/JSON package before creating a governed workspace.
+              No live provider connection or production storage is available.
             </p>
-            <Button className="mt-6" variant="secondary" disabled>Coming next</Button>
+            <Link className="button secondary mt-6" href="/try-your-data">Try Your Data</Link>
           </Card>
         </div>
       </section>
@@ -206,7 +212,10 @@ export function DiscoverAssessExperience() {
         <div className="mt-8">
           <Alert tone="error" title="Assessment stopped">
             <p className="mt-1">{error}</p>
-            <Button className="mt-3" size="small" variant="secondary" onClick={startAssessment}>Try again</Button>
+            <Button className="mt-3" size="small" variant="secondary" onClick={() => {
+              const saved = new URLSearchParams(window.location.search).get("session");
+              if (saved) loadExisting(saved); else void startAssessment();
+            }}>Try again</Button>
           </Alert>
         </div>
       )}
@@ -336,7 +345,7 @@ export function DiscoverAssessExperience() {
 
       <footer className="mt-14 flex items-start gap-3 border-t border-token py-8 text-sm text-secondary">
         <ShieldCheck aria-hidden="true" className="mt-0.5 shrink-0 text-primary" size={20} />
-        <p>This independent public-reference experience uses synthetic data and ephemeral demo storage. It does not describe or connect to any accounting provider&apos;s internal systems.</p>
+        <p>This independent local Beta uses ephemeral demo storage. Uploaded records are user-provided; sample records and all target operations remain synthetic. It does not connect to any accounting provider. No data is sent to an LLM.</p>
       </footer>
     </main>
   );

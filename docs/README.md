@@ -4,6 +4,9 @@ Use this index to find the durable decision records without turning the reposito
 
 ## Product and experience
 
+- [Try Your Data architecture](architecture/try-your-data.md) — controlled local package intake and shared lifecycle handoff.
+- [Try Your Data review](reviews/try-your-data.md) — validation, rubric findings and bounded readiness.
+
 - [Product constitution](PRODUCT_CONSTITUTION.md) — mission, users, product family, canonical journey, trust model, boundaries, and positioning.
 - [UX principles](UX_PRINCIPLES.md) — shared visual language, comprehension, accessibility, feedback, and motion.
 - [Migration principles](MIGRATION_PRINCIPLES.md) — lifecycle invariants, lineage, transformation, validation, recovery, and completion.

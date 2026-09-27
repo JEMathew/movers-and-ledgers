@@ -20,6 +20,10 @@ REQUIRED_ENTITIES = (
 )
 
 
+def entities_for(source):
+    return (*REQUIRED_ENTITIES, "bills") if "bills" in source else REQUIRED_ENTITIES
+
+
 def money(value: Any) -> Decimal:
     if isinstance(value, (bool, float)):
         raise ValueError("Financial amounts require exact decimal strings.")
@@ -93,7 +97,7 @@ def compare_record_counts(source: dict, target: dict) -> list[ValidationCheck]:
             if entity in source and entity in target
             else ["Required dataset is missing."],
         )
-        for entity in REQUIRED_ENTITIES
+        for entity in entities_for(source)
     ]
 
 
@@ -101,7 +105,7 @@ def validate_entity_completeness(source: dict, target: dict) -> ValidationCheck:
     def identities(data: dict) -> dict:
         return {
             entity: sorted(str(row.get("id", "")) for row in data.get(entity, []))
-            for entity in REQUIRED_ENTITIES
+            for entity in entities_for(source)
         }
 
     errors = []
@@ -196,7 +200,14 @@ def reconcile_accounts_payable(source: dict, target: dict) -> ValidationCheck:
         ids = [r["id"] for r in data["accounts"] if r["account_type"] == "accounts_payable"]
         if not ids:
             raise ValueError("An explicit A/P control account is required, even at zero balance.")
-        return -sum((balances[key] for key in ids), Decimal(0))
+        total = -sum((balances[key] for key in ids), Decimal(0))
+        if "bills" in data:
+            bills = sum(
+                (money(b["total"]) - money(b.get("paid", "0")) for b in data["bills"]), Decimal(0)
+            )
+            if bills != total:
+                raise ValueError("Bill subledger does not reconcile to A/P control accounts.")
+        return total
 
     return result(
         "ap",
@@ -293,9 +304,9 @@ def validate_mapping_completeness(session, source: dict) -> ValidationCheck:
 
 def validate_transformation_integrity(source: dict, envelopes: dict) -> ValidationCheck:
     errors, affected = [], []
-    if set(source) != set(REQUIRED_ENTITIES) or set(envelopes) != set(REQUIRED_ENTITIES):
+    if set(source) != set(entities_for(source)) or set(envelopes) != set(entities_for(source)):
         errors.append("Missing or unsupported dataset in the versioned reconciliation contract.")
-    for entity in REQUIRED_ENTITIES:
+    for entity in entities_for(source):
         expected = {r["id"]: r for r in source.get(entity, [])}
         for row in envelopes.get(entity, []):
             key = row.get("source_id")
