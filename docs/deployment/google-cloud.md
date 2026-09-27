@@ -1,5 +1,22 @@
 # Google Cloud preparation — no deployment performed
 
+## Authorized validation checkpoint — 2026-09-28
+
+The owner authorized bounded dev/test validation in project `movebooks-ai`, region `asia-southeast1`.
+The current Console session reports **“You need additional access”**; the project picker search
+returns no matching accessible resource. No project resources, grants or deployments were changed.
+Cloud readiness remains **AMBER**. Resolve account/project access before inventorying or creating
+resources; do not assume a denied project is empty or create a replacement.
+
+Cloud Try Your Data intake must remain disabled; this slice validates safe rejection only.
+No raw tokens or service-account keys are requested. See the
+[validation boundary](../architecture/google-cloud-validation.md) and
+[preflight evidence and blockers](../reviews/google-cloud-validation.md).
+
+Existing remote CI run 36342874463 passed all four jobs for the reviewed PR #12 head. The historical
+local-execution statements below describe that earlier checkpoint; remote CI is now verified for
+that baseline, but no live GCP or new cloud-validation commit execution is implied.
+
 Operator handoff, **not production readiness or deployment authorization**. Read the
 [architecture](../architecture/google-native-runtime.md) and [review](../reviews/google-native-runtime.md).
 Docker and real PostgreSQL gates passed locally; their remote CI execution and real cloud
