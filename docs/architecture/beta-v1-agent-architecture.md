@@ -19,8 +19,8 @@ The logical agent set is:
 | Assessment Agent | Apply readiness policy to evidence-backed findings. | Cannot redefine evidence or financial truth. |
 | Planning Agent | Propose phases, dependencies, checkpoints, and customer actions. | Cannot execute migration work. |
 | Mapping Agent | Coordinate bounded specialists and assemble mapping proposals. | Cannot approve its own proposals. |
-| Migration Agent | Invoke approved, idempotent transformation and target-write tools. | Future slice; approved manifests only. |
-| Resolution Agent | Classify exceptions and propose reversible remedies. | Future slice; cannot hide or self-accept exceptions. |
+| Migration Agent | Invoke approved, idempotent transformation and synthetic-target tools. | Approved manifests only; no provider write authority. |
+| Resolution Agent | Classify exceptions and propose reversible remedies. | Cannot hide or self-accept consequential exceptions. |
 | Validation Agent | Request and explain deterministic validation and reconciliation. | Future slice; cannot declare its own checks passed. |
 | Configuration Agent | Propose target configuration and feature alternatives. | Future slice; consequential settings require approval. |
 | Onboarding Agent | Guide role-aware adoption and operating readiness. | Future slice; cannot substitute for customer action. |
@@ -34,10 +34,10 @@ has a bounded context, tool set, structured output, evaluation set, state, and e
 
 ## Current implemented slice
 
-After the Plan → Map & Approve branch, the implemented product path is:
+The implemented product path is:
 
 ```text
-Discover ✓ → Assess ✓ → Plan ● → Map & Approve ●
+Discover ✓ → Assess ✓ → Plan ✓ → Map & Approve ✓ → Migrate ● → Resolve ●
 ```
 
 Planning produces a structured, versioned migration plan. Mapping produces evidence-backed
@@ -46,7 +46,11 @@ evidence completeness, target-field requirements, account-type rules, and approv
 deterministic. An authorized owner may approve, reject, or modify a proposal. The orchestrator stops
 at `APPROVED` and prepares a handoff; it performs no target write.
 
-The implementation runs without Gemini. `MappingRecommendationProvider` is the model integration
+Migrate → Resolve adds ordered deterministic batches, idempotent synthetic loads, checksummed
+checkpoints, controlled exceptions, bounded specialists, human-governed remediation, and safe retry.
+It stops at `MIGRATION_COMPLETE`; reconciliation and later stages are not claimed.
+
+The implementation runs without Gemini. `MappingRecommendationProvider` is one model integration
 boundary: the shipped deterministic fallback uses versioned repository knowledge and emits the same
 structured recommendation contract. A future Gemini provider may propose semantic matches and concise
 explanations, but deterministic validation and approval policy remain authoritative and raw financial
@@ -57,7 +61,7 @@ records are not required.
 The following remain architectural commitments rather than implemented behavior:
 
 ```text
-Migrate → Resolve → Validate → Configure → Onboard → Verified First Productive Use
+Validate → Configure → Onboard → Verified First Productive Use
 ```
 
 Future implementations must preserve the canonical model, owner isolation, append-only audit intent,

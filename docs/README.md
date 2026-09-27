@@ -33,9 +33,12 @@ Use this index to find the durable decision records without turning the reposito
 - [Architecture](architecture/README.md)
 - [Discover → Assess architecture](architecture/discover-assess.md)
 - [Plan → Map → Approve architecture](architecture/plan-map-approve.md)
+- [Migrate → Resolve architecture](architecture/migrate-resolve.md)
+- [Canonical agent workflows](architecture/AGENT_WORKFLOWS.md)
 - [Design-system review](reviews/design-system-theme.md)
 - [Discover → Assess review](reviews/discover-assess.md)
 - [Plan → Map → Approve review](reviews/plan-map-approve.md)
+- [Migrate → Resolve review](reviews/migrate-resolve.md)
 - [Contributing](../CONTRIBUTING.md)
 
 ## Interpretation notes

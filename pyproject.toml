@@ -24,10 +24,12 @@ packages = [
   "domain/canonical_accounting",
   "domain/discovery_assessment",
   "domain/planning_mapping",
+  "domain/migration_resolution",
   "agents",
   "tools/discovery",
   "tools/planning",
   "tools/mapping",
+  "tools/migration",
 ]
 
 [tool.pytest.ini_options]

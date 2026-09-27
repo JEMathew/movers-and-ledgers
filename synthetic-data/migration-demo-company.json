@@ -1,0 +1,67 @@
+{
+  "fixture_version": "harbor-light-migrate-v1",
+  "sample_company_id": "harbor-light-migrate-demo",
+  "label": "Harbor Light Books",
+  "synthetic": true,
+  "company": {
+    "id": "company-demo-001",
+    "legal_name": "Harbor Light Books LLC",
+    "display_name": "Harbor Light Books",
+    "base_currency": "USD",
+    "fiscal_year_start_month": 1
+  },
+  "scenario": "A reviewed synthetic manifest that demonstrates a controlled duplicate-customer failure, governed resolution, retry, and completion.",
+  "datasets": {
+    "customers": [
+      {"id": "customer-001", "display_name": "Cedar School", "email": "billing@cedar.example"},
+      {"id": "customer-002", "display_name": "Maple Library", "email": "accounts@maple.example"}
+    ],
+    "vendors": [
+      {"id": "vendor-001", "display_name": "Independent Press Distribution"}
+    ],
+    "products": [
+      {"id": "product-001", "name": "Catalog preparation", "item_type": "service"}
+    ],
+    "taxes": [
+      {"id": "tax-001", "code": "CA-SALES", "rate": "0.0725", "jurisdiction": "California"}
+    ],
+    "accounts": [
+      {"id": "account-bank", "code": "1000", "name": "Operating Bank", "account_type": "bank"},
+      {"id": "account-ar", "code": "1100", "name": "Accounts Receivable", "account_type": "accounts_receivable"},
+      {"id": "account-sales", "code": "4000", "name": "Book Sales", "account_type": "income"}
+    ],
+    "invoices": [
+      {"id": "invoice-001", "customer_id": "customer-001", "receivable_account_id": "account-ar", "document_number": "HL-1001", "total": "420.00"}
+    ],
+    "transactions": [
+      {
+        "id": "transaction-001",
+        "transaction_date": "2026-02-01",
+        "entries": [
+          {"account_id": "account-ar", "debit": "420.00", "credit": "0.00"},
+          {"account_id": "account-sales", "debit": "0.00", "credit": "420.00"}
+        ]
+      }
+    ],
+    "configuration": [
+      {"id": "configuration-001", "key": "base_currency", "value": "USD"},
+      {"id": "configuration-002", "key": "fiscal_calendar", "value": "calendar_year"}
+    ]
+  },
+  "migration_controls": {
+    "batch": "customers",
+    "failure_kind": "DUPLICATE_CUSTOMER",
+    "failures_before_success": 1
+  },
+  "constraints": [
+    "Synthetic data and synthetic target only",
+    "No provider credentials or real provider writes",
+    "Human approval before consequential resolution",
+    "Resume only from a recorded checkpoint"
+  ],
+  "expected_findings": {
+    "blockers": [],
+    "warnings": [],
+    "clean_datasets": ["company", "accounts", "customers", "vendors", "products", "taxes", "configuration", "invoices", "transactions"]
+  }
+}
