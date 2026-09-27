@@ -37,6 +37,7 @@ Use this index to find the durable decision records without turning the reposito
 - [Validate → Configure architecture](architecture/validate-configure.md)
 - [Onboard → FPU architecture](architecture/onboard-fpu.md)
 - [Integrated Beta V1 architecture](architecture/beta-v1-integration.md)
+- [Public product surfaces architecture](architecture/public-product-surfaces.md)
 - [Canonical agent workflows](architecture/AGENT_WORKFLOWS.md)
 - [Design-system review](reviews/design-system-theme.md)
 - [Discover → Assess review](reviews/discover-assess.md)
@@ -45,6 +46,7 @@ Use this index to find the durable decision records without turning the reposito
 - [Validate → Configure review](reviews/validate-configure.md)
 - [Onboard → FPU review](reviews/onboard-fpu.md)
 - [Integrated Beta V1 review](reviews/beta-v1-integration.md)
+- [Public product surfaces review](reviews/public-product-surfaces.md)
 - [Contributing](../CONTRIBUTING.md)
 
 ## Interpretation notes
