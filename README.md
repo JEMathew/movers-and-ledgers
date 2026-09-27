@@ -63,4 +63,6 @@ For permitted use of the source code, refer to the repository's `LICENSE` file
 
 ## Status
 
-This foundation implements contracts and a thin vertical slice, not provider integrations or autonomous financial writes. All source and target systems are adapters behind provider-neutral interfaces.
+This foundation implements the synthetic Discover → Assess → Plan → Map & Approve path, not
+provider integrations or autonomous financial writes. All source and target systems are adapters
+behind provider-neutral interfaces.

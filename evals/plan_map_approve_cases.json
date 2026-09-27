@@ -1,0 +1,17 @@
+{
+  "version": "plan-map-approve-golden-v1",
+  "cases": [
+    {"id": "straightforward-high-confidence", "kind": "mapping", "variant": "customer", "expected": "AUTO_ACCEPTABLE"},
+    {"id": "ambiguous-account", "kind": "mapping", "variant": "ambiguous_account", "expected": "REVIEW_REQUIRED"},
+    {"id": "tax-requires-approval", "kind": "mapping", "variant": "tax", "expected": "REVIEW_REQUIRED"},
+    {"id": "unsupported-target", "kind": "control", "variant": "unsupported_configuration", "expected": "BLOCKED"},
+    {"id": "evidence-missing", "kind": "control", "variant": "missing_evidence", "expected": "BLOCKED"},
+    {"id": "user-approves", "kind": "decision", "variant": "approve", "expected": "APPROVED"},
+    {"id": "user-rejects", "kind": "decision", "variant": "reject", "expected": "REJECTED"},
+    {"id": "user-modifies", "kind": "decision", "variant": "modify", "expected": "MODIFIED"},
+    {"id": "unsafe-account-blocked", "kind": "control", "variant": "unsafe_account", "expected": "BLOCKED"},
+    {"id": "deterministic-policy-repeat", "kind": "repeatability", "variant": "customer", "expected": "AUTO_ACCEPTABLE"},
+    {"id": "plan-respects-dependencies", "kind": "plan", "variant": "dependencies", "expected": "VALID"},
+    {"id": "incomplete-approval-stops-handoff", "kind": "handoff", "variant": "incomplete", "expected": "STOPPED"}
+  ]
+}

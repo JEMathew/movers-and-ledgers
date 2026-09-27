@@ -23,8 +23,11 @@ packages = [
   "services/api/src/movebooks_api",
   "domain/canonical_accounting",
   "domain/discovery_assessment",
+  "domain/planning_mapping",
   "agents",
   "tools/discovery",
+  "tools/planning",
+  "tools/mapping",
 ]
 
 [tool.pytest.ini_options]
