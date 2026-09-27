@@ -1,4 +1,4 @@
-"""Versioned HTTP contracts for the Discover → Assess vertical slice."""
+"""Versioned HTTP contracts for Discover → Assess → Plan → Map & Approve."""
 
 from typing import Annotated
 from uuid import UUID
@@ -6,6 +6,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
+from agents.orchestrator import WorkflowTransitionError
 from domain.discovery_assessment.models import (
     AgentActivity,
     AssessmentResult,
@@ -15,7 +16,14 @@ from domain.discovery_assessment.models import (
     ProductEvent,
     ProductEventName,
 )
+from domain.planning_mapping.models import (
+    MappingDecision,
+    MappingProposal,
+    MappingState,
+    MigrationPlan,
+)
 from movebooks_api.auth import Principal, require_principal
+from tools.mapping import MappingPolicyError
 
 from .fixtures import sample_company_catalog
 from .service import (
@@ -25,7 +33,7 @@ from .service import (
     discover_assess_service,
 )
 
-router = APIRouter(prefix="/v1", tags=["discover-assess"])
+router = APIRouter(prefix="/v1", tags=["migration-journey"])
 AuthenticatedPrincipal = Annotated[Principal, Depends(require_principal)]
 
 
@@ -38,11 +46,20 @@ class RecordProductEventRequest(BaseModel):
     attributes: dict[str, str | int | bool] = Field(default_factory=dict)
 
 
+class ModifyMappingRequest(BaseModel):
+    selected_target: str = Field(min_length=1)
+    comment: str | None = None
+
+
+class MappingCommentRequest(BaseModel):
+    comment: str | None = None
+
+
 def _not_found(error: LookupError) -> HTTPException:
     return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error))
 
 
-def _conflict(error: RuntimeError) -> HTTPException:
+def _conflict(error: Exception) -> HTTPException:
     return HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(error))
 
 
@@ -133,6 +150,158 @@ async def get_activity(session_id: UUID, principal: AuthenticatedPrincipal) -> l
         return discover_assess_service.get_session(principal.subject, session_id).activity
     except MigrationSessionNotFoundError as error:
         raise _not_found(error) from error
+
+
+@router.post("/migration-sessions/{session_id}/plan", response_model=MigrationPlan)
+async def create_plan(session_id: UUID, principal: AuthenticatedPrincipal) -> MigrationPlan:
+    try:
+        session = discover_assess_service.plan(principal.subject, session_id)
+        assert session.plan is not None
+        return session.plan
+    except MigrationSessionNotFoundError as error:
+        raise _not_found(error) from error
+    except (DiscoveryRequiredError, WorkflowTransitionError) as error:
+        raise _conflict(error) from error
+
+
+@router.get("/migration-sessions/{session_id}/plan", response_model=MigrationPlan)
+async def get_plan(session_id: UUID, principal: AuthenticatedPrincipal) -> MigrationPlan:
+    try:
+        return discover_assess_service.get_plan(principal.subject, session_id)
+    except MigrationSessionNotFoundError as error:
+        raise _not_found(error) from error
+    except DiscoveryRequiredError as error:
+        raise _conflict(error) from error
+
+
+@router.get("/migration-sessions/{session_id}/plan/status")
+async def get_plan_status(
+    session_id: UUID, principal: AuthenticatedPrincipal
+) -> dict[str, str | int]:
+    try:
+        plan = discover_assess_service.get_plan(principal.subject, session_id)
+        return {
+            "status": plan.status.value,
+            "version": plan.version,
+            "phase_count": len(plan.phases),
+        }
+    except MigrationSessionNotFoundError as error:
+        raise _not_found(error) from error
+    except DiscoveryRequiredError as error:
+        raise _conflict(error) from error
+
+
+@router.post("/migration-sessions/{session_id}/mappings", response_model=list[MappingProposal])
+async def create_mappings(
+    session_id: UUID, principal: AuthenticatedPrincipal
+) -> list[MappingProposal]:
+    try:
+        return discover_assess_service.map(principal.subject, session_id).mappings
+    except (MigrationSessionNotFoundError, SampleCompanyNotFoundError) as error:
+        raise _not_found(error) from error
+    except WorkflowTransitionError as error:
+        raise _conflict(error) from error
+
+
+@router.get("/migration-sessions/{session_id}/mappings", response_model=list[MappingProposal])
+async def get_mappings(
+    session_id: UUID, principal: AuthenticatedPrincipal
+) -> list[MappingProposal]:
+    try:
+        return discover_assess_service.get_mappings(principal.subject, session_id)
+    except MigrationSessionNotFoundError as error:
+        raise _not_found(error) from error
+    except DiscoveryRequiredError as error:
+        raise _conflict(error) from error
+
+
+@router.get(
+    "/migration-sessions/{session_id}/mappings/{mapping_id}/evidence",
+    response_model=list[str],
+)
+async def get_mapping_evidence(
+    session_id: UUID, mapping_id: UUID, principal: AuthenticatedPrincipal
+) -> list[str]:
+    mappings = await get_mappings(session_id, principal)
+    mapping = next((item for item in mappings if item.id == mapping_id), None)
+    if mapping is None:
+        raise _not_found(MigrationSessionNotFoundError(str(mapping_id)))
+    return mapping.evidence
+
+
+async def _decide_mapping(
+    session_id: UUID,
+    mapping_id: UUID,
+    decision: MappingDecision,
+    principal: Principal,
+) -> MappingProposal:
+    try:
+        session = discover_assess_service.decide_mapping(
+            principal.subject, session_id, mapping_id, decision
+        )
+        return next(item for item in session.mappings if item.id == mapping_id)
+    except MigrationSessionNotFoundError as error:
+        raise _not_found(error) from error
+    except (MappingPolicyError, WorkflowTransitionError) as error:
+        raise _conflict(error) from error
+
+
+@router.post(
+    "/migration-sessions/{session_id}/mappings/{mapping_id}/approve",
+    response_model=MappingProposal,
+)
+async def approve_mapping(
+    session_id: UUID,
+    mapping_id: UUID,
+    request: MappingCommentRequest,
+    principal: AuthenticatedPrincipal,
+) -> MappingProposal:
+    return await _decide_mapping(
+        session_id,
+        mapping_id,
+        MappingDecision(decision=MappingState.APPROVED, comment=request.comment),
+        principal,
+    )
+
+
+@router.post(
+    "/migration-sessions/{session_id}/mappings/{mapping_id}/reject",
+    response_model=MappingProposal,
+)
+async def reject_mapping(
+    session_id: UUID,
+    mapping_id: UUID,
+    request: MappingCommentRequest,
+    principal: AuthenticatedPrincipal,
+) -> MappingProposal:
+    return await _decide_mapping(
+        session_id,
+        mapping_id,
+        MappingDecision(decision=MappingState.REJECTED, comment=request.comment),
+        principal,
+    )
+
+
+@router.post(
+    "/migration-sessions/{session_id}/mappings/{mapping_id}/modify",
+    response_model=MappingProposal,
+)
+async def modify_mapping(
+    session_id: UUID,
+    mapping_id: UUID,
+    request: ModifyMappingRequest,
+    principal: AuthenticatedPrincipal,
+) -> MappingProposal:
+    return await _decide_mapping(
+        session_id,
+        mapping_id,
+        MappingDecision(
+            decision=MappingState.MODIFIED,
+            selected_target=request.selected_target,
+            comment=request.comment,
+        ),
+        principal,
+    )
 
 
 @router.post(

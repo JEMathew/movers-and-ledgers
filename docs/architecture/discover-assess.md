@@ -4,8 +4,8 @@
 
 Discover → Assess is the first working MoveBooks AI vertical slice. It profiles a versioned
 synthetic company, produces deterministic findings, and applies an explainable readiness policy.
-It performs no source mutation, mapping decision, target write, or provider integration. Plan →
-Map & Approve is a separate future phase.
+It performs no source mutation, mapping decision, target write, or provider integration. Its
+evidence feeds the separately bounded [Plan → Map → Approve](plan-map-approve.md) phase.
 
 ```text
 Protected /assess experience

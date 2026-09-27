@@ -4,7 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import { cn } from "./utils";
 
 export const statusValues = [
-  "READY", "NEEDS ATTENTION", "BLOCKED", "IN PROGRESS", "COMPLETED",
+  "READY", "NEEDS ATTENTION", "BLOCKED", "NOT STARTED", "IN PROGRESS", "COMPLETED",
   "REQUIRES APPROVAL", "AGENT ACTION", "HUMAN ACTION", "VERIFIED",
 ] as const;
 
@@ -15,6 +15,7 @@ const statusConfig: Record<ProductStatus, { icon: LucideIcon; tone: Tone }> = {
   "READY": { icon: CheckCircle2, tone: "success" },
   "NEEDS ATTENTION": { icon: TriangleAlert, tone: "warning" },
   "BLOCKED": { icon: OctagonX, tone: "error" },
+  "NOT STARTED": { icon: CircleDashed, tone: "neutral" },
   "IN PROGRESS": { icon: Clock3, tone: "info" },
   "COMPLETED": { icon: Check, tone: "success" },
   "REQUIRES APPROVAL": { icon: UserCheck, tone: "warning" },

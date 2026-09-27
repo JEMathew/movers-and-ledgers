@@ -7,6 +7,8 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
+from domain.planning_mapping.models import MappingProposal, MigrationPlan, WorkflowStatus
+
 
 class FindingCategory(StrEnum):
     BLOCKER = "BLOCKER"
@@ -59,6 +61,16 @@ class ProductEventName(StrEnum):
     ASSESSMENT_COMPLETED = "assessment_completed"
     ASSESSMENT_BLOCKED = "assessment_blocked"
     CONTINUE_TO_PLAN_SELECTED = "continue_to_plan_selected"
+    PLAN_STARTED = "plan_started"
+    PLAN_GENERATED = "plan_generated"
+    MAPPING_STARTED = "mapping_started"
+    MAPPING_PROPOSED = "mapping_proposed"
+    MAPPING_REVIEW_REQUIRED = "mapping_review_required"
+    MAPPING_APPROVED = "mapping_approved"
+    MAPPING_MODIFIED = "mapping_modified"
+    MAPPING_REJECTED = "mapping_rejected"
+    MAPPING_BLOCKED = "mapping_blocked"
+    READY_FOR_MIGRATION = "ready_for_migration"
 
 
 class EvidenceReference(BaseModel):
@@ -177,3 +189,6 @@ class MigrationSession(BaseModel):
     assessment: AssessmentResult | None = None
     activity: list[AgentActivity] = Field(default_factory=list)
     events: list[ProductEvent] = Field(default_factory=list)
+    workflow_status: WorkflowStatus = WorkflowStatus.DISCOVERED
+    plan: MigrationPlan | None = None
+    mappings: list[MappingProposal] = Field(default_factory=list)

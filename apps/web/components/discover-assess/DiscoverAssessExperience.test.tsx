@@ -70,7 +70,10 @@ function jsonResponse(body: unknown, status = 200): Response {
   });
 }
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  vi.unstubAllGlobals();
+  sessionStorage.clear();
+});
 
 describe("DiscoverAssessExperience", () => {
   it("starts with one selected synthetic company and no enabled upload path", () => {
@@ -81,7 +84,7 @@ describe("DiscoverAssessExperience", () => {
     expect(screen.getByRole("list", { name: "Assessment progress" })).toBeVisible();
   });
 
-  it("runs the API-backed journey and explains the future planning boundary", async () => {
+  it("runs the API-backed journey and hands off to the governed planning workspace", async () => {
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(jsonResponse({ id: "session-001" }, 201))
       .mockResolvedValueOnce(jsonResponse(discovery))
@@ -100,6 +103,11 @@ describe("DiscoverAssessExperience", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /Continue to Planning/ }));
     expect(screen.getByText("Planning is the next governed phase")).toBeVisible();
+    expect(screen.getByRole("link", { name: /Open Plan & Map workspace/ })).toHaveAttribute(
+      "href",
+      "/plan-map-approve",
+    );
+    expect(sessionStorage.getItem("movebooks-migration-session")).toBe("session-001");
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(5));
     expect(fetchMock.mock.calls[4][1]?.body).toContain("continue_to_plan_selected");
   });

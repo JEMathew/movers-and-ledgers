@@ -34,6 +34,9 @@ class AgentRole(StrEnum):
     VALIDATION = "validation_agent"
     CONFIGURATION = "configuration_agent"
     ONBOARDING = "onboarding_agent"
+    ACTIVATION = "first_productive_use_activation_agent"
+    TRUST_GOVERNANCE = "trust_governance_agent"
+    KNOWLEDGE = "knowledge_agent"
 
 
 class Evidence(BaseModel):

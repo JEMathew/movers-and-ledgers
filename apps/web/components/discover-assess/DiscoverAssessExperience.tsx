@@ -13,7 +13,7 @@ import {
 import { useState } from "react";
 
 import { Alert, LoadingState } from "@/components/ui/feedback";
-import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
+import { Badge, Button, Card, Link, Panel } from "@/components/ui/primitives";
 import { Stepper } from "@/components/ui/navigation";
 import { StatusBadge } from "@/components/ui/status";
 
@@ -99,6 +99,7 @@ export function DiscoverAssessExperience() {
   const continueToPlanning = async () => {
     setPlanningNotice(true);
     if (!sessionId) return;
+    sessionStorage.setItem("movebooks-migration-session", sessionId);
     try {
       await api(`/v1/migration-sessions/${sessionId}/events`, {
         method: "POST",
@@ -286,7 +287,7 @@ export function DiscoverAssessExperience() {
               <div className="flex items-center gap-3 text-sm text-secondary"><LockKeyhole aria-hidden="true" className="text-primary" size={19} /><span>No mapping, target write, or approval was performed.</span></div>
               <Button onClick={continueToPlanning}>Continue to Planning <ArrowRight aria-hidden="true" size={17} /></Button>
             </div>
-            {planningNotice && <div className="mt-5"><Alert tone="info" title="Planning is the next governed phase"><p className="mt-1">This release stops here. Resolve blockers first; Plan → Map &amp; Approve remains a future, human-governed capability.</p></Alert></div>}
+            {planningNotice && <div className="mt-5"><Alert tone="info" title="Planning is the next governed phase"><p className="mt-1">The Planning Agent will preserve every blocker and warning, then prepare evidence-backed mappings for your approval.</p><Link href="/plan-map-approve" className="mt-3 inline-flex">Open Plan &amp; Map workspace →</Link></Alert></div>}
           </Panel>
         </section>
       )}

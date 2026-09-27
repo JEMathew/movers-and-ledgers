@@ -1,0 +1,76 @@
+import type { AgentActivity, AssessmentResult, DiscoveryResult } from "@/components/discover-assess/types";
+
+export type WorkflowStatus =
+  | "DISCOVERED"
+  | "ASSESSED"
+  | "PLANNED"
+  | "MAPPING"
+  | "AWAITING_APPROVAL"
+  | "APPROVED";
+
+export type PlanPhaseStatus = "READY" | "NEEDS_ATTENTION" | "BLOCKED" | "FUTURE";
+export type MappingState =
+  | "PROPOSED"
+  | "AUTO_ACCEPTABLE"
+  | "REVIEW_REQUIRED"
+  | "APPROVED"
+  | "MODIFIED"
+  | "REJECTED"
+  | "BLOCKED";
+
+export type PlanPhase = {
+  id: string;
+  sequence: number;
+  name: string;
+  objective: string;
+  dependencies: string[];
+  status: PlanPhaseStatus;
+  risks: string[];
+  customer_action: string;
+  agent_responsible: string;
+  approval_checkpoint: string | null;
+};
+
+export type MigrationPlan = {
+  id: string;
+  version: string;
+  status: "DRAFT" | "READY_FOR_MAPPING";
+  phases: PlanPhase[];
+  blockers: string[];
+  risks: string[];
+  checkpoints: string[];
+  approvals_required: string[];
+  customer_actions: string[];
+  relative_complexity: string;
+  evidence_references: string[];
+};
+
+export type MappingProposal = {
+  id: string;
+  version: string;
+  area: string;
+  source_id: string;
+  source_label: string;
+  recommended_target: string;
+  selected_target: string;
+  confidence: number;
+  risk: "LOW" | "MEDIUM" | "HIGH";
+  evidence: string[];
+  rationale: string;
+  alternatives: string[];
+  state: MappingState;
+  approval_required: boolean;
+  policy_reasons: string[];
+  deterministic_checks: string[];
+  specialist: string;
+};
+
+export type Session = {
+  id: string;
+  workflow_status: WorkflowStatus;
+  discovery?: DiscoveryResult;
+  assessment?: AssessmentResult;
+  plan?: MigrationPlan;
+  mappings: MappingProposal[];
+  activity: AgentActivity[];
+};

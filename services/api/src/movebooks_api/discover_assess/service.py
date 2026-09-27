@@ -4,6 +4,8 @@ from uuid import UUID
 
 from agents.assessment import AssessmentAgent
 from agents.discovery import DiscoveryAgent
+from agents.mapping.specialists import records_for_area
+from agents.orchestrator import PlanMapApproveOrchestrator
 from domain.discovery_assessment.models import (
     DiscoveryResult,
     MigrationSession,
@@ -12,6 +14,14 @@ from domain.discovery_assessment.models import (
     ReadinessStatus,
     SessionStatus,
 )
+from domain.planning_mapping.models import (
+    MappingArea,
+    MappingDecision,
+    MappingProposal,
+    MigrationPlan,
+    WorkflowStatus,
+)
+from tools.mapping import MappingPolicyError
 
 from .fixtures import load_sample_company
 from .repository import InMemoryMigrationSessionRepository, MigrationSessionRepository
@@ -34,6 +44,7 @@ class DiscoverAssessService:
         self.repository = repository
         self.discovery_agent = DiscoveryAgent()
         self.assessment_agent = AssessmentAgent()
+        self.orchestrator = PlanMapApproveOrchestrator()
 
     def create_session(self, owner_subject: str, sample_company_id: str) -> MigrationSession:
         fixture = load_sample_company(sample_company_id)
@@ -72,6 +83,7 @@ class DiscoverAssessService:
         session.activity.extend(activity)
         session.stage = "assess"
         session.status = SessionStatus.DISCOVERED
+        session.workflow_status = WorkflowStatus.DISCOVERED
         session.events.append(
             ProductEvent(
                 migration_session_id=session.id,
@@ -108,6 +120,7 @@ class DiscoverAssessService:
             if assessment.readiness is ReadinessStatus.BLOCKED
             else SessionStatus.ASSESSED
         )
+        session.workflow_status = WorkflowStatus.ASSESSED
         event_name = (
             ProductEventName.ASSESSMENT_BLOCKED
             if assessment.readiness is ReadinessStatus.BLOCKED
@@ -123,6 +136,64 @@ class DiscoverAssessService:
                     "warning_count": assessment.warning_count,
                 },
             )
+        )
+        return self.repository.put(session)
+
+    def plan(self, owner_subject: str, session_id: UUID) -> MigrationSession:
+        session = self.get_session(owner_subject, session_id)
+        if session.plan is not None:
+            return session
+        session = self.orchestrator.create_plan(session)
+        return self.repository.put(session)
+
+    def get_plan(self, owner_subject: str, session_id: UUID) -> MigrationPlan:
+        session = self.get_session(owner_subject, session_id)
+        if session.plan is None:
+            raise DiscoveryRequiredError("Migration plan has not been generated")
+        return session.plan
+
+    def map(self, owner_subject: str, session_id: UUID) -> MigrationSession:
+        session = self.get_session(owner_subject, session_id)
+        if session.mappings:
+            return session
+        fixture = load_sample_company(session.sample_company_id)
+        if fixture is None:
+            raise SampleCompanyNotFoundError(session.sample_company_id)
+        session = self.orchestrator.create_mappings(session, fixture)
+        return self.repository.put(session)
+
+    def get_mappings(self, owner_subject: str, session_id: UUID) -> list[MappingProposal]:
+        session = self.get_session(owner_subject, session_id)
+        if not session.mappings:
+            raise DiscoveryRequiredError("Mapping proposals have not been generated")
+        return session.mappings
+
+    def decide_mapping(
+        self,
+        owner_subject: str,
+        session_id: UUID,
+        mapping_id: UUID,
+        decision: MappingDecision,
+    ) -> MigrationSession:
+        session = self.get_session(owner_subject, session_id)
+        mapping = next((item for item in session.mappings if item.id == mapping_id), None)
+        if mapping is None:
+            raise MigrationSessionNotFoundError(str(mapping_id))
+        fixture = load_sample_company(session.sample_company_id)
+        if fixture is None:
+            raise SampleCompanyNotFoundError(session.sample_company_id)
+        record = next(
+            (
+                item
+                for item in records_for_area(fixture, MappingArea(mapping.area))
+                if str(item.get("id") or item.get("key")) == mapping.source_id
+            ),
+            None,
+        )
+        if record is None:
+            raise MappingPolicyError("Source record for this mapping is unavailable.")
+        session = self.orchestrator.decide_mapping(
+            session, mapping_id, decision, owner_subject, record
         )
         return self.repository.put(session)
 

@@ -13,6 +13,10 @@ For the supplied scope and revision:
 5. Use P0–P3 from [`docs/reviewers/REVIEW_RUBRICS.md`](../docs/reviewers/REVIEW_RUBRICS.md). Avoid generic praise.
 6. Separate verified facts, inferences, assumptions, and evidence gaps.
 7. Do not edit production code, approve your own remediation, expose private chain-of-thought, or merge changes.
+8. Review against the complete Beta V1 architecture in
+   [`docs/architecture/beta-v1-agent-architecture.md`](../docs/architecture/beta-v1-agent-architecture.md),
+   while grading only capabilities claimed by the current implemented slice. Do not mistake future
+   agent boundaries for shipped behavior or accept a shortened slice as the complete migration.
 
 Expected flow:
 
@@ -21,3 +25,14 @@ Builder → Reviewers → Findings → Prioritization → Fix → Re-review → 
 ```
 
 Use the role files in this directory as focused prompt addenda. The complete role set and role boundaries are defined in the reviewer rubrics; the absence of a dedicated addendum does not remove a required lens. Consolidate results in [`docs/reviews/TEMPLATE.md`](../docs/reviews/TEMPLATE.md).
+
+## Canonical rubric wiring
+
+| Reviewer | Required rubric |
+| --- | --- |
+| Product Reviewer | [Product Management Rubric](../docs/rubrics/PRODUCT_MANAGEMENT_RUBRIC.md) |
+| Agentic AI Reviewer | [Agentic AI Rubric](../docs/rubrics/AGENTIC_AI_RUBRIC.md) |
+| Migration Reviewer | [Migration & Onboarding Rubric](../docs/rubrics/MIGRATION_ONBOARDING_RUBRIC.md) |
+
+Each reviewer reports criterion-level scores and evidence. Reviewers must not average the results
+into an overall vanity score.

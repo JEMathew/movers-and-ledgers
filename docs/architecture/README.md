@@ -37,3 +37,10 @@ No paid resource is created by this repository. Production infrastructure should
 
 - [Discover → Assess](discover-assess.md) — synthetic discovery, deterministic findings,
   evidence-backed readiness, owner-scoped ephemeral sessions, and agent activity.
+- [Plan → Map → Approve](plan-map-approve.md) — dependency-aware planning, specialist mapping,
+  deterministic controls, owner decisions, and a governed future-migration handoff.
+- [Beta V1 agent architecture](beta-v1-agent-architecture.md) — the complete 13-agent logical
+  architecture, the currently implemented slice, future stages, approval boundaries, and ADK seam.
+
+The current implementation ends at **Plan → Map & Approve**. Migrate through verified First
+Productive Use remains future work; the complete journey is preserved as the architectural reference.

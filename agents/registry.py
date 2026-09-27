@@ -13,6 +13,9 @@ AGENT_RESPONSIBILITIES = {
     AgentRole.VALIDATION: "Request and explain deterministic validation results.",
     AgentRole.CONFIGURATION: "Propose target configuration under policy controls.",
     AgentRole.ONBOARDING: "Guide users to first productive use.",
+    AgentRole.ACTIVATION: "Coordinate the verified First Productive Use contract and evidence.",
+    AgentRole.TRUST_GOVERNANCE: "Explain policy state and route governed escalation.",
+    AgentRole.KNOWLEDGE: "Retrieve versioned accounting, mapping, and compatibility knowledge.",
 }
 
 STAGE_OWNER = {
@@ -25,5 +28,5 @@ STAGE_OWNER = {
     LifecycleStage.VALIDATE: AgentRole.VALIDATION,
     LifecycleStage.CONFIGURE: AgentRole.CONFIGURATION,
     LifecycleStage.ONBOARD: AgentRole.ONBOARDING,
+    LifecycleStage.FIRST_PRODUCTIVE_USE: AgentRole.ACTIVATION,
 }
-

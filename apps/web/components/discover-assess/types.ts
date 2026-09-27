@@ -23,7 +23,7 @@ export type Finding = {
   affected_record_count: number | null;
   evidence: string[];
   recommended_action: string;
-  provenance: "DETERMINISTIC";
+  provenance: "DETERMINISTIC" | "AI_ML" | "GENAI" | "HUMAN";
   tool: string;
   customer_action_required: boolean;
 };

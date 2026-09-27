@@ -33,6 +33,21 @@
       {"id": "vendor-001", "display_name": "Paper Trail Wholesale"},
       {"id": "vendor-002", "display_name": ""}
     ],
+    "products": [
+      {
+        "id": "product-001",
+        "name": "Workspace setup service",
+        "item_type": "service"
+      }
+    ],
+    "taxes": [
+      {
+        "id": "tax-001",
+        "code": "CA-SALES",
+        "rate": "0.0725",
+        "jurisdiction": "California"
+      }
+    ],
     "accounts": [
       {
         "id": "account-ar",
