@@ -21,15 +21,12 @@ import { StatusBadge } from "@/components/ui/status";
 import type { DemoSession, MigrationBatch, MigrationExecution } from "./types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
-const AUTH_HEADERS = {
-  Authorization: "Bearer demo-user",
-  "Content-Type": "application/json",
-};
+import { authHeaders } from "@/lib/identity";
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE}${path}`, {
     ...init,
-    headers: { ...AUTH_HEADERS, ...init?.headers },
+    headers: { ...await authHeaders(), "Content-Type": "application/json", ...init?.headers },
   });
   if (!response.ok) {
     const body = (await response.json().catch(() => null)) as { detail?: string } | null;

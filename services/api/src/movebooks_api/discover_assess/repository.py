@@ -55,6 +55,8 @@ class InMemoryMigrationSessionRepository:
     def put_if_unchanged(self, original: MigrationSession, updated: MigrationSession):
         """Atomic compare-and-swap for governed validation/configuration decisions."""
         with self._lock:
+            if original.id != updated.id or original.owner_subject != updated.owner_subject:
+                raise ValueError("Session identity cannot change")
             current = self._sessions.get(original.id)
             if current != original:
                 raise ValueError(

@@ -34,6 +34,15 @@ make dev-web     # http://localhost:3000
 
 Or run everything with `docker compose up --build`. No Google credentials or paid cloud resources are required.
 
+### Google-native runtime foundations
+
+See the [runtime architecture](docs/architecture/google-native-runtime.md),
+[Google Cloud operator handoff](docs/deployment/google-cloud.md) and
+[review record](docs/reviews/google-native-runtime.md). Cloud SQL, Firebase identity and private
+artifact adapters are prepared without deployment or live Gemini/managed ADK activation.
+Readiness is **AMBER pending container/PostgreSQL execution gates**, not production readiness.
+Local development remains credential-free; controlled Try Your Data exports remain local-only.
+
 ## Verify
 
 ```bash

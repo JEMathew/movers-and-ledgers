@@ -20,6 +20,7 @@ from movebooks_api.discover_assess.api import AuthenticatedPrincipal
 from movebooks_api.discover_assess.fixtures import load_sample_company
 from movebooks_api.discover_assess.service import discover_assess_service as service
 from movebooks_api.intake import MAX_TOTAL, SCHEMAS, strict_json, validate_package
+from movebooks_api.settings import get_settings
 from tools.migration import stable_checksum
 
 router = APIRouter(prefix="/v1", tags=["controlled-intake"])
@@ -45,6 +46,10 @@ async def bounded_body(request):
 
 @router.post("/intake/validate")
 async def validate(request: Request, principal: AuthenticatedPrincipal):
+    if get_settings().cloud:
+        raise HTTPException(
+            503, "Controlled exports remain local-only; cloud retention is not enabled."
+        )
     body = await bounded_body(request)
     try:
         if request.headers.get("content-type", "").split(";")[0] == "application/zip":

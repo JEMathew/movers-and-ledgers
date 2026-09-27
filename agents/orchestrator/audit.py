@@ -9,6 +9,7 @@ def record_decision(session, actor, decision, stage, entity, evidence, selected=
     session.human_decisions.append(
         HumanDecisionRecord(
             actor=actor,
+            role="WORKSPACE_OWNER" if actor.startswith("firebase:") else "DEMO_WORKSPACE_OWNER",
             decision=decision,
             stage=stage,
             affected_entity=str(entity),

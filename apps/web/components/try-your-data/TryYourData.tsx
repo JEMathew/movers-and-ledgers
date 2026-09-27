@@ -3,12 +3,12 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { Alert, Button, Card, Checkbox, Input } from "@/components/ui";
 const API = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
-const auth = { Authorization: "Bearer demo-user" };
+import { authHeaders, cloudIdentity } from "@/lib/identity";
 type Issue = { file: string; row: number | null; severity: string; message: string; why: string; action: string; can_continue: boolean };
 type Report = { package_id: string; status: string; files: { name: string; type: string; rows: number; schema_status: string; ignored_fields: string[] }[]; issues: Issue[]; activity: string[] };
 const names = ["customers.csv", "vendors.csv", "accounts.csv", "products.csv", "invoices.csv", "bills.csv", "transactions.csv", "configuration.json"];
 async function request(path: string, init?: RequestInit) {
-  const response = await fetch(`${API}/v1${path}`, { ...init, headers: { ...auth, ...init?.headers } });
+  const response = await fetch(`${API}/v1${path}`, { ...init, headers: { ...await authHeaders(), ...init?.headers } });
   if (!response.ok) throw new Error(response.status === 429 ? "Local capacity reached. Discard a package or restart the local API." : response.status === 404 ? "Package expired. Validate your files again." : "Request failed. Check local API access, limits and format, then retry. No downstream stage was authorized.");
   return response;
 }
@@ -37,6 +37,7 @@ export function TryYourData() {
   async function validate() {
     setBusy(true); setError(""); setReviewed(false); setSession(undefined);
     try {
+      if (cloudIdentity()) throw new Error("Try Your Data remains local-only. Cloud upload retention is not enabled; no files were sent.");
       if (!privacy) throw new Error("Confirm the local Beta notice before uploading.");
       if (!files.length || files.length > 9 || files.reduce((n, f) => n + f.size, 0) > 2 * 1024 * 1024 || files.some(f => f.size > (f.name.endsWith(".zip") ? 2 * 1024 * 1024 : 256 * 1024))) throw new Error("Choose up to 9 files, at most 256 KiB each and 2 MiB total, or one ZIP up to 2 MiB.");
       await discard(); setReport(undefined);

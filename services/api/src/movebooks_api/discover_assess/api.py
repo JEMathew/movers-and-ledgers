@@ -80,7 +80,7 @@ def _conflict(error: Exception) -> HTTPException:
 
 
 @router.get("/sample-companies")
-async def list_sample_companies(principal: AuthenticatedPrincipal) -> list[dict[str, str | bool]]:
+def list_sample_companies(principal: AuthenticatedPrincipal) -> list[dict[str, str | bool]]:
     del principal
     return sample_company_catalog()
 
@@ -88,7 +88,7 @@ async def list_sample_companies(principal: AuthenticatedPrincipal) -> list[dict[
 @router.post(
     "/migration-sessions", response_model=MigrationSession, status_code=status.HTTP_201_CREATED
 )
-async def create_migration_session(
+def create_migration_session(
     request: CreateMigrationSessionRequest, principal: AuthenticatedPrincipal
 ) -> MigrationSession:
     try:
@@ -98,7 +98,7 @@ async def create_migration_session(
 
 
 @router.get("/migration-sessions/{session_id}", response_model=MigrationSession)
-async def get_migration_session(
+def get_migration_session(
     session_id: UUID, principal: AuthenticatedPrincipal
 ) -> MigrationSession:
     try:
@@ -108,7 +108,7 @@ async def get_migration_session(
 
 
 @router.post("/migration-sessions/{session_id}/discovery", response_model=DiscoveryResult)
-async def run_discovery(session_id: UUID, principal: AuthenticatedPrincipal) -> DiscoveryResult:
+def run_discovery(session_id: UUID, principal: AuthenticatedPrincipal) -> DiscoveryResult:
     try:
         session = discover_assess_service.discover(principal.subject, session_id)
         assert session.discovery is not None
@@ -120,7 +120,7 @@ async def run_discovery(session_id: UUID, principal: AuthenticatedPrincipal) -> 
 
 
 @router.get("/migration-sessions/{session_id}/discovery", response_model=DiscoveryResult)
-async def get_discovery(session_id: UUID, principal: AuthenticatedPrincipal) -> DiscoveryResult:
+def get_discovery(session_id: UUID, principal: AuthenticatedPrincipal) -> DiscoveryResult:
     try:
         return discover_assess_service.get_discovery(principal.subject, session_id)
     except MigrationSessionNotFoundError as error:
@@ -130,7 +130,7 @@ async def get_discovery(session_id: UUID, principal: AuthenticatedPrincipal) -> 
 
 
 @router.get("/migration-sessions/{session_id}/findings", response_model=list[Finding])
-async def get_findings(session_id: UUID, principal: AuthenticatedPrincipal) -> list[Finding]:
+def get_findings(session_id: UUID, principal: AuthenticatedPrincipal) -> list[Finding]:
     try:
         return discover_assess_service.get_discovery(principal.subject, session_id).findings
     except MigrationSessionNotFoundError as error:
@@ -140,7 +140,7 @@ async def get_findings(session_id: UUID, principal: AuthenticatedPrincipal) -> l
 
 
 @router.post("/migration-sessions/{session_id}/assessment", response_model=AssessmentResult)
-async def run_assessment(session_id: UUID, principal: AuthenticatedPrincipal) -> AssessmentResult:
+def run_assessment(session_id: UUID, principal: AuthenticatedPrincipal) -> AssessmentResult:
     try:
         session = discover_assess_service.assess(principal.subject, session_id)
         assert session.assessment is not None
@@ -152,7 +152,7 @@ async def run_assessment(session_id: UUID, principal: AuthenticatedPrincipal) ->
 
 
 @router.get("/migration-sessions/{session_id}/assessment", response_model=AssessmentResult)
-async def get_assessment(session_id: UUID, principal: AuthenticatedPrincipal) -> AssessmentResult:
+def get_assessment(session_id: UUID, principal: AuthenticatedPrincipal) -> AssessmentResult:
     try:
         session = discover_assess_service.get_session(principal.subject, session_id)
     except MigrationSessionNotFoundError as error:
@@ -163,7 +163,7 @@ async def get_assessment(session_id: UUID, principal: AuthenticatedPrincipal) ->
 
 
 @router.get("/migration-sessions/{session_id}/activity", response_model=list[AgentActivity])
-async def get_activity(session_id: UUID, principal: AuthenticatedPrincipal) -> list[AgentActivity]:
+def get_activity(session_id: UUID, principal: AuthenticatedPrincipal) -> list[AgentActivity]:
     try:
         return discover_assess_service.get_session(principal.subject, session_id).activity
     except MigrationSessionNotFoundError as error:
@@ -171,7 +171,7 @@ async def get_activity(session_id: UUID, principal: AuthenticatedPrincipal) -> l
 
 
 @router.post("/migration-sessions/{session_id}/plan", response_model=MigrationPlan)
-async def create_plan(session_id: UUID, principal: AuthenticatedPrincipal) -> MigrationPlan:
+def create_plan(session_id: UUID, principal: AuthenticatedPrincipal) -> MigrationPlan:
     try:
         session = discover_assess_service.plan(principal.subject, session_id)
         assert session.plan is not None
@@ -183,7 +183,7 @@ async def create_plan(session_id: UUID, principal: AuthenticatedPrincipal) -> Mi
 
 
 @router.get("/migration-sessions/{session_id}/plan", response_model=MigrationPlan)
-async def get_plan(session_id: UUID, principal: AuthenticatedPrincipal) -> MigrationPlan:
+def get_plan(session_id: UUID, principal: AuthenticatedPrincipal) -> MigrationPlan:
     try:
         return discover_assess_service.get_plan(principal.subject, session_id)
     except MigrationSessionNotFoundError as error:
@@ -193,7 +193,7 @@ async def get_plan(session_id: UUID, principal: AuthenticatedPrincipal) -> Migra
 
 
 @router.get("/migration-sessions/{session_id}/plan/status")
-async def get_plan_status(
+def get_plan_status(
     session_id: UUID, principal: AuthenticatedPrincipal
 ) -> dict[str, str | int]:
     try:
@@ -210,7 +210,7 @@ async def get_plan_status(
 
 
 @router.post("/migration-sessions/{session_id}/mappings", response_model=list[MappingProposal])
-async def create_mappings(
+def create_mappings(
     session_id: UUID, principal: AuthenticatedPrincipal
 ) -> list[MappingProposal]:
     try:
@@ -222,7 +222,7 @@ async def create_mappings(
 
 
 @router.get("/migration-sessions/{session_id}/mappings", response_model=list[MappingProposal])
-async def get_mappings(
+def get_mappings(
     session_id: UUID, principal: AuthenticatedPrincipal
 ) -> list[MappingProposal]:
     try:
@@ -237,17 +237,17 @@ async def get_mappings(
     "/migration-sessions/{session_id}/mappings/{mapping_id}/evidence",
     response_model=list[str],
 )
-async def get_mapping_evidence(
+def get_mapping_evidence(
     session_id: UUID, mapping_id: UUID, principal: AuthenticatedPrincipal
 ) -> list[str]:
-    mappings = await get_mappings(session_id, principal)
+    mappings = get_mappings(session_id, principal)
     mapping = next((item for item in mappings if item.id == mapping_id), None)
     if mapping is None:
         raise _not_found(MigrationSessionNotFoundError(str(mapping_id)))
     return mapping.evidence
 
 
-async def _decide_mapping(
+def _decide_mapping(
     session_id: UUID,
     mapping_id: UUID,
     decision: MappingDecision,
@@ -268,13 +268,13 @@ async def _decide_mapping(
     "/migration-sessions/{session_id}/mappings/{mapping_id}/approve",
     response_model=MappingProposal,
 )
-async def approve_mapping(
+def approve_mapping(
     session_id: UUID,
     mapping_id: UUID,
     request: MappingCommentRequest,
     principal: AuthenticatedPrincipal,
 ) -> MappingProposal:
-    return await _decide_mapping(
+    return _decide_mapping(
         session_id,
         mapping_id,
         MappingDecision(decision=MappingState.APPROVED, comment=request.comment),
@@ -286,13 +286,13 @@ async def approve_mapping(
     "/migration-sessions/{session_id}/mappings/{mapping_id}/reject",
     response_model=MappingProposal,
 )
-async def reject_mapping(
+def reject_mapping(
     session_id: UUID,
     mapping_id: UUID,
     request: MappingCommentRequest,
     principal: AuthenticatedPrincipal,
 ) -> MappingProposal:
-    return await _decide_mapping(
+    return _decide_mapping(
         session_id,
         mapping_id,
         MappingDecision(decision=MappingState.REJECTED, comment=request.comment),
@@ -304,13 +304,13 @@ async def reject_mapping(
     "/migration-sessions/{session_id}/mappings/{mapping_id}/modify",
     response_model=MappingProposal,
 )
-async def modify_mapping(
+def modify_mapping(
     session_id: UUID,
     mapping_id: UUID,
     request: ModifyMappingRequest,
     principal: AuthenticatedPrincipal,
 ) -> MappingProposal:
-    return await _decide_mapping(
+    return _decide_mapping(
         session_id,
         mapping_id,
         MappingDecision(
@@ -327,7 +327,7 @@ async def modify_mapping(
     response_model=ProductEvent,
     status_code=status.HTTP_201_CREATED,
 )
-async def record_product_event(
+def record_product_event(
     session_id: UUID, request: RecordProductEventRequest, principal: AuthenticatedPrincipal
 ) -> ProductEvent:
     if request.name is not ProductEventName.CONTINUE_TO_PLAN_SELECTED:
@@ -350,7 +350,7 @@ async def record_product_event(
     response_model=MigrationSession,
     status_code=status.HTTP_201_CREATED,
 )
-async def create_migration_demo_session(
+def create_migration_demo_session(
     principal: AuthenticatedPrincipal,
 ) -> MigrationSession:
     """Load a synthetic manifest whose earlier approvals are part of the demo fixture."""
@@ -361,7 +361,7 @@ async def create_migration_demo_session(
     "/migration-sessions/{session_id}/migration/start",
     response_model=MigrationExecution,
 )
-async def start_migration(
+def start_migration(
     session_id: UUID,
     principal: AuthenticatedPrincipal,
     idempotency_key: Annotated[str, Header(alias="Idempotency-Key", min_length=1)],
@@ -382,7 +382,7 @@ async def start_migration(
     "/migration-sessions/{session_id}/migration",
     response_model=MigrationExecution,
 )
-async def get_migration(session_id: UUID, principal: AuthenticatedPrincipal) -> MigrationExecution:
+def get_migration(session_id: UUID, principal: AuthenticatedPrincipal) -> MigrationExecution:
     try:
         return discover_assess_service.get_execution(principal.subject, session_id)
     except MigrationSessionNotFoundError as error:
@@ -392,10 +392,10 @@ async def get_migration(session_id: UUID, principal: AuthenticatedPrincipal) -> 
 
 
 @router.get("/migration-sessions/{session_id}/migration/progress")
-async def get_migration_progress(
+def get_migration_progress(
     session_id: UUID, principal: AuthenticatedPrincipal
 ) -> dict[str, str | int | bool | None]:
-    execution = await get_migration(session_id, principal)
+    execution = get_migration(session_id, principal)
     return {
         "status": execution.status.value,
         "progress_percent": execution.progress_percent,
@@ -410,27 +410,27 @@ async def get_migration_progress(
     "/migration-sessions/{session_id}/migration/batches",
     response_model=list[MigrationBatch],
 )
-async def get_migration_batches(
+def get_migration_batches(
     session_id: UUID, principal: AuthenticatedPrincipal
 ) -> list[MigrationBatch]:
-    return (await get_migration(session_id, principal)).batches
+    return (get_migration(session_id, principal)).batches
 
 
 @router.get(
     "/migration-sessions/{session_id}/migration/failures",
     response_model=list[MigrationFailure],
 )
-async def get_migration_failures(
+def get_migration_failures(
     session_id: UUID, principal: AuthenticatedPrincipal
 ) -> list[MigrationFailure]:
-    return (await get_migration(session_id, principal)).failures
+    return (get_migration(session_id, principal)).failures
 
 
 @router.get(
     "/migration-sessions/{session_id}/migration/resolutions",
     response_model=list[ResolutionProposal],
 )
-async def get_migration_resolutions(
+def get_migration_resolutions(
     session_id: UUID, principal: AuthenticatedPrincipal
 ) -> list[ResolutionProposal]:
     try:
@@ -445,7 +445,7 @@ async def get_migration_resolutions(
     "/migration-sessions/{session_id}/migration/resolutions/{resolution_id}/decision",
     response_model=MigrationExecution,
 )
-async def decide_resolution(
+def decide_resolution(
     session_id: UUID,
     resolution_id: UUID,
     request: ResolutionDecisionRequest,
@@ -470,7 +470,7 @@ async def decide_resolution(
     "/migration-sessions/{session_id}/migration/retry",
     response_model=MigrationExecution,
 )
-async def retry_migration(
+def retry_migration(
     session_id: UUID, principal: AuthenticatedPrincipal
 ) -> MigrationExecution:
     try:
@@ -487,15 +487,15 @@ async def retry_migration(
     "/migration-sessions/{session_id}/migration/resume",
     response_model=MigrationExecution,
 )
-async def resume_migration(
+def resume_migration(
     session_id: UUID, principal: AuthenticatedPrincipal
 ) -> MigrationExecution:
     """Resume a retry-pending execution from its recorded checkpoint."""
-    return await retry_migration(session_id, principal)
+    return retry_migration(session_id, principal)
 
 
 @router.get("/migration-sessions/{session_id}/migration/target")
-async def get_synthetic_target(
+def get_synthetic_target(
     session_id: UUID, principal: AuthenticatedPrincipal
 ) -> dict[str, list[dict[str, object]]]:
-    return (await get_migration(session_id, principal)).target_state
+    return (get_migration(session_id, principal)).target_state
