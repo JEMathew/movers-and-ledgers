@@ -16,10 +16,10 @@ See [deployment gates](../deployment/google-cloud.md) and [review evidence](../r
 | Next.js/TypeScript/Tailwind frontend, FastAPI API | IMPLEMENTED | Existing journey and shared design system; no alternative lifecycle. |
 | Environment validation, demo identity, memory state | IMPLEMENTED | Credential-free local/test execution. |
 | Firebase Authentication browser/ID-token verification | CLOUD-READY | SDK-backed adapters; no live identity project/account verified here. |
-| Cloud SQL PostgreSQL application state | CLOUD-READY | SQLAlchemy transactional snapshot adapter; offline SQLite contract exercised; PostgreSQL CI gate added, not locally executed. |
+| Cloud SQL PostgreSQL application state | CLOUD-READY | SQLAlchemy snapshots verified against real PostgreSQL 17, including rollback, concurrent CAS and container restart; live Cloud SQL/IAM remains unverified. |
 | Cloud Storage | INTERFACE-READY | Private bucket adapter and owner-authorized artifact service; no upload persistence endpoint activated. |
 | Secret Manager | INTERFACE-READY | Allowlisted version-alias lookup, safe unavailable errors; no current runtime secret required. |
-| Cloud Run images/health/shutdown | CLOUD-READY, validation pending | Dockerfiles and CI smoke gates; no local Docker executable/daemon available. |
+| Cloud Run images/health/shutdown | LOCAL RUNTIME VERIFIED | Production images built and exercised on Linux ARM64; supplied ports, probes, non-root/read-only execution and SIGTERM passed. Live Cloud Run is unverified. |
 | Cloud Logging | IMPLEMENTED application boundary | Allowlisted JSON stdout; platform sink, retention and access policy not provisioned. |
 | Cloud Monitoring / BigQuery | INTERFACE-READY | Contracts below; no dashboards, datasets, measured rates or active analytics emitter. |
 | Artifact Registry / deploy pipeline | PLANNED | CI builds without cloud credentials; no push/deploy workflow or resources. |
@@ -54,7 +54,9 @@ authentication, bounded pooling and connection timeouts. Repository factories im
 in cloud mode. SQLite is a **test-only contract harness**, not a second configured application store.
 Fourteen integrated golden journeys run with a fresh DB engine on every read, covering restart-style
 reload, failure approval, checkpoint resume, duplicate actions, no-stage-bypass, exact reconciliation
-and verified FPU. PostgreSQL parity must pass in CI before cloud readiness is accepted.
+and verified FPU. Real PostgreSQL parity and a four-container restart journey have now passed locally;
+see the [runtime validation record](../reviews/runtime-validation-gates.md). CI repeats these gates;
+neither direct PostgreSQL nor a test identity proves Cloud SQL IAM or Firebase integration.
 
 ## Environments, identity and UX
 
@@ -63,6 +65,9 @@ staging/production. Local/test select memory + demo; cloud requires Cloud SQL + 
 HTTPS CORS origins, structured logs, all resource identifiers, and demo disabled. A Cloud Run `K_SERVICE`
 environment rejects forgotten local defaults. Firebase emulator bypass is forbidden in cloud mode.
 See the [variable matrix](../deployment/google-cloud.md#configuration).
+Generic `DATABASE_URL` is deliberately unsupported and rejected without logging its value; the
+production store uses explicit Cloud SQL/IAM settings. Only the isolated test harness accepts
+`MOVEBOOKS_TEST_DATABASE_URL`; it is not a deployable application mode.
 
 Firebase Authentication with its Google provider is the Beta identity choice. Browser SDK uses
 session persistence; the API verifies ID tokens with signature/audience/issuer/time checks supplied
@@ -202,4 +207,5 @@ targets, bounded secret patterns, whitespace, PostgreSQL contracts and both Dock
 No Google credentials, deploy permissions or model API calls are needed in PR CI.
 
 Publication/deployment is human-owned. Current execution evidence and unresolved validation gates are
-in the [review](../reviews/google-native-runtime.md); architecture intent is not a passed release gate.
+in the [foundation review](../reviews/google-native-runtime.md) and subsequent
+[runtime validation review](../reviews/runtime-validation-gates.md); architecture intent is not a passed release gate.

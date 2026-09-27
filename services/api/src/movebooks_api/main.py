@@ -26,7 +26,8 @@ async def lifespan(app):
     repository = discover_assess_service.repository
     if hasattr(repository, "engine"):
         repository.engine.dispose()
-        repository.connector.close()
+        if hasattr(repository, "connector"):
+            repository.connector.close()
 
 
 app = FastAPI(

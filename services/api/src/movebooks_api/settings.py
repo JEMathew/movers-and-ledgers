@@ -34,6 +34,10 @@ class Settings(BaseSettings):
     def safe_modes(self):
         import os
 
+        if os.environ.get("DATABASE_URL"):
+            raise ValueError(
+                "DATABASE_URL is unsupported; configure the explicit Cloud SQL settings instead"
+            )
         if os.environ.get("K_SERVICE") and not self.cloud:
             raise ValueError("Cloud Run requires explicit cloud configuration; demo is forbidden")
         if self.cloud:

@@ -2,8 +2,10 @@
 
 Operator handoff, **not production readiness or deployment authorization**. Read the
 [architecture](../architecture/google-native-runtime.md) and [review](../reviews/google-native-runtime.md).
-Docker and PostgreSQL CI gates are pending; real cloud smoke/IAM/identity verification is also required
-before exposure. Only synthetic workspaces are eligible. The inherited dependency advisory remains a hosting gate.
+Docker and real PostgreSQL gates passed locally; their remote CI execution and real cloud
+smoke/IAM/identity verification remain required before exposure. See the
+[runtime validation record](../reviews/runtime-validation-gates.md). Only synthetic workspaces are
+eligible. The inherited dependency advisory remains a hosting gate.
 
 ## Configuration
 
@@ -37,6 +39,8 @@ Missing cloud configuration fails closed. `K_SERVICE` with local defaults is rej
 emulators in cloud and model-assisted activation. Use attached service-account ADC; never key files
 or secrets in build args. Tests never need Google credentials. Frontend/backend configs must be deployed
 as a matched pair; the frontend cannot enable a backend capability.
+Generic `DATABASE_URL` is unsupported and fails startup without echoing its value. Configure the
+explicit Cloud SQL fields above; do not expect a URL to activate persistence or fall back to memory.
 
 ## Identity and ingress
 
@@ -116,11 +120,27 @@ Probe timeout must accommodate bounded DB/bucket checks. Process state is not du
 SIGTERM reaches Uvicorn via exec, with eight-second graceful drain. Source: [Cloud Run container
 contract](https://cloud.google.com/run/docs/container-contract).
 
-PR CI builds both images, boots credential-free smoke containers, checks health/readiness, fixture-backed
-session creation and production demo-auth denial. It verifies forgotten Cloud Run config cannot start.
-A PostgreSQL 17 service reruns all runtime contracts including fourteen integrated golden journeys.
-These newly added CI jobs are **not claimed passed** before publication/execution. No Docker executable
-or daemon is available on the local host, so Docker builds were not run locally.
+PR CI builds both images, boots credential-free smoke containers, checks supplied ports, non-root and
+read-only execution, health/readiness, assets, synthetic sessions, production demo-auth denial and
+fail-closed configuration. A PostgreSQL 17 service runs rollback, connection termination, simultaneous
+CAS and fourteen golden journeys. A separate test-only image runs the real API/repository through
+four application containers against one database, preserving approval/checkpoint/FPU state and
+owner isolation; it also tests DB outage/recovery and in-flight graceful drain.
+
+These gates executed successfully locally on Linux ARM64 using an isolated Docker VM with no host
+mounts. Remote GitHub Actions and Linux AMD64 execution are not claimed. To reproduce from a clean checkout:
+
+```sh
+docker build -f services/api/Dockerfile -t movebooks-api:validation .
+docker build -f apps/web/Dockerfile -t movebooks-web:validation .
+python3 scripts/container_smoke.py
+```
+
+The script creates and removes only its uniquely named disposable containers/network/volumes.
+It accepts `--docker` for a standalone CLI and respects `DOCKER_HOST`. No cloud credentials are needed.
+The test-only image under `tests/runtime_harness` substitutes synthetic principals and direct PostgreSQL
+connectivity; its identity/fault hooks are absent from both production images. Never deploy that image.
+`MOVEBOOKS_TEST_DATABASE_URL` is exclusively a test input, not production configuration.
 
 ## Before any cloud exposure
 
