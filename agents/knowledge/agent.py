@@ -57,6 +57,13 @@ class KnowledgeAgent:
     role = AgentRole.KNOWLEDGE
     source = "versioned-repository"
 
+    def lookup_activation(self, task: str) -> str:
+        from tools.onboarding.checks import TASKS
+
+        if task not in TASKS:
+            raise ValueError("No grounded onboarding policy for this task.")
+        return f"knowledge:onboarding-v1:{task}"
+
     def lookup_configuration(self, area: str) -> ResolutionKnowledge:
         from tools.configuration.controls import AREAS, SENSITIVE
 

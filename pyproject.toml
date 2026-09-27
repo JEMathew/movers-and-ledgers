@@ -26,6 +26,7 @@ packages = [
   "domain/planning_mapping",
   "domain/migration_resolution",
   "domain/validation_configuration",
+  "domain/onboarding_fpu",
   "agents",
   "tools/discovery",
   "tools/planning",
@@ -33,6 +34,8 @@ packages = [
   "tools/migration",
   "tools/validation",
   "tools/configuration",
+  "tools/onboarding",
+  "tools/activation",
 ]
 
 [tool.pytest.ini_options]

@@ -8,6 +8,7 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, Field
 
 from domain.migration_resolution.models import MigrationExecution
+from domain.onboarding_fpu.models import OnboardingState
 from domain.planning_mapping.models import MappingProposal, MigrationPlan, WorkflowStatus
 from domain.validation_configuration.models import (
     ConfigurationPlan,
@@ -108,6 +109,22 @@ class ProductEventName(StrEnum):
     CONFIGURATION_APPLIED = "configuration_applied"
     CONFIGURATION_COMPLETED = "configuration_completed"
     READY_FOR_ONBOARDING = "ready_for_onboarding"
+    ONBOARDING_STARTED = "onboarding_started"
+    ONBOARDING_TASK_COMPLETED = "onboarding_task_completed"
+    ONBOARDING_BLOCKED = "onboarding_blocked"
+    ONBOARDING_COMPLETED = "onboarding_completed"
+    ONBOARDING_DECISION = "onboarding_decision"
+    FPU_READY = "fpu_ready"
+    FPU_STARTED = "fpu_started"
+    FPU_FAILED = "fpu_failed"
+    FPU_BLOCKED = "fpu_blocked"
+    FPU_REMEDIATION_REQUIRED = "fpu_remediation_required"
+    FPU_REMEDIATED = "fpu_remediated"
+    FPU_CONTRACT_PROPOSED = "fpu_contract_proposed"
+    FPU_DECISION = "fpu_decision"
+    FPU_POSTED = "fpu_posted"
+    FPU_VERIFIED = "fpu_verified"
+    FIRST_PRODUCTIVE_USE_COMPLETED = "first_productive_use_completed"
 
 
 class EvidenceReference(BaseModel):
@@ -234,3 +251,4 @@ class MigrationSession(BaseModel):
     validation_repairs: list[ValidationRepair] = Field(default_factory=list)
     configuration: ConfigurationPlan | None = None
     configuration_history: list[ConfigurationPlan] = Field(default_factory=list)
+    onboarding: OnboardingState | None = None

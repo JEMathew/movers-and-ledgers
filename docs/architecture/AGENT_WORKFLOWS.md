@@ -19,9 +19,12 @@ Implemented workflows:
 - [Plan → Map → Approve](plan-map-approve.md)
 - [Migrate → Resolve](migrate-resolve.md)
 - [Validate → Configure](validate-configure.md)
+- [Onboard → Verified First Productive Use](onboard-fpu.md)
 
 `MIGRATION_COMPLETE` permits Validation only when all batches complete and unresolved migration
 exceptions equal zero. Validation must be VERIFIED with no blocking discrepancies before
-configuration. `CONFIGURED` permits a future Onboarding handoff only with unchanged verification
-evidence, all eight settings applied, and attributable required approvals. Onboarding and verified
-First Productive Use remain unimplemented; none of these earlier states implies either outcome.
+configuration. `CONFIGURED` permits Onboarding only with unchanged verification evidence, all eight
+settings applied, and attributable required approvals. Onboarding requires ten prerequisite checks
+and explicit consequential decisions. First Productive Use requires a separately approved invoice,
+successful synthetic posting, deterministic accounting checks, and bound audit evidence. None of
+the earlier states implies verified First Productive Use or production readiness.
