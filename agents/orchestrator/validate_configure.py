@@ -283,13 +283,18 @@ class ValidateConfigureOrchestrator:
         return plan
 
     def can_handoff(self, session, fixture: dict) -> bool:
+        return session.workflow_status is State.CONFIGURED and self.has_configured_evidence(
+            session, fixture
+        )
+
+    def has_configured_evidence(self, session, fixture: dict) -> bool:
+        """Reusable evidence gate for later lifecycle stages; does not change workflow state."""
         try:
             report = self.require_verified(session, fixture)
             plan = session.configuration
             if (
                 plan is None
                 or plan.validation_id != report.id
-                or session.workflow_status is not (State.CONFIGURED)
             ):
                 return False
             if any(p.state is not ConfigurationState.APPLIED for p in plan.proposals):

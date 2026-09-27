@@ -12,6 +12,18 @@ class CapabilityRoute:
 
 
 CAPABILITY_ROUTES = {
+    "onboarding_guidance": CapabilityRoute(
+        "onboarding_guidance",
+        "google-adk-compatible",
+        "gemini-2.5-flash",
+        "Optional grounded guidance only; deterministic fallback remains available.",
+    ),
+    "productive_use_verification": CapabilityRoute(
+        "productive_use_verification",
+        "deterministic",
+        None,
+        "Financial execution and verification cannot be delegated to model judgment.",
+    ),
     "financial_reconciliation": CapabilityRoute(
         "financial_reconciliation",
         "deterministic",
