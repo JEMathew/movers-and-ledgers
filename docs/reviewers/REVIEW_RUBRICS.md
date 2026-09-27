@@ -2,6 +2,16 @@
 
 Reviewers challenge evidence and expose risk; they do not provide generic praise. Reviewers are advisory by default and do not modify production code. The accountable builder and decision owner prioritize findings, implement changes, and request re-review.
 
+The three canonical depth rubrics are:
+
+- [Product Management Rubric](../rubrics/PRODUCT_MANAGEMENT_RUBRIC.md) for the Product Reviewer;
+- [Agentic AI Rubric](../rubrics/AGENTIC_AI_RUBRIC.md) for the Agentic AI Reviewer;
+- [Migration & Onboarding Rubric](../rubrics/MIGRATION_ONBOARDING_RUBRIC.md) for the Migration
+  Reviewer.
+
+They use criterion-level 0–4 scoring with evidence and gaps. They must not be averaged into a vanity
+score, and their numeric scores do not replace the P0–P3 severity decision.
+
 ## Severity
 
 | Severity | Meaning |

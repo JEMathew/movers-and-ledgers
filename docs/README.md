@@ -22,6 +22,9 @@ Use this index to find the durable decision records without turning the reposito
 - [Metrics framework](METRICS_FRAMEWORK.md) — proposed North Star, hierarchy, metric contracts, and guardrails.
 - [Release readiness](RELEASE_READINESS.md) — GREEN/AMBER/RED policy across 17 required areas.
 - [Reviewer rubrics](reviewers/REVIEW_RUBRICS.md) — reviewer lenses, finding contract, severity, and internal build rubrics.
+- [Product Management Rubric](rubrics/PRODUCT_MANAGEMENT_RUBRIC.md) — product intent, outcome, scope, trust, measurement, and coherence criteria.
+- [Agentic AI Rubric](rubrics/AGENTIC_AI_RUBRIC.md) — agent boundaries, orchestration, authority, evidence, governance, resilience, and evaluation criteria.
+- [Migration & Onboarding Rubric](rubrics/MIGRATION_ONBOARDING_RUBRIC.md) — migration correctness, approval, lineage, recovery, onboarding, and FPU continuity criteria.
 - [Review template](reviews/TEMPLATE.md) — reusable consolidated review record.
 - [Advisory reviewer prompts](../reviewers/README.md) — lightweight role definitions; no reviewer runtime.
 

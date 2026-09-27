@@ -156,6 +156,67 @@ deterministic outcomes, decision attribution, event provenance, or Discover → 
 These follow-ups are non-blocking for the synthetic public-reference Beta slice and remain blockers
 for any unsupported production claim where applicable.
 
+## Canonical rubric verification
+
+The post-implementation governance audit found one additional issue:
+
+| ID | Reviewer | Finding | Severity | Remediation and status |
+| --- | --- | --- | --- | --- |
+| RV-001 | Product / Agentic AI / Migration | The three canonical depth rubrics and explicit reviewer mappings were absent, so the declared reviewers had no stable criterion-level scoring contract. | P1 | Added all three canonical rubrics with the required seven-field criterion contract, wired each reviewer explicitly, indexed the documents, and applied every relevant criterion below. **Resolved.** |
+
+Scores below are evidence summaries per criterion. They are intentionally not averaged or converted
+into an overall vanity score. `None` in the severity column means the criterion produced no finding
+for the declared synthetic Beta scope.
+
+### Product Management Rubric application
+
+| Criterion | Score | Evidence | Gap | Why it matters to MoveBooks AI | Why it matters to the end user | Severity | Remediation |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Problem significance and target user | 3 | The review and slice architecture name the migration owner, the pre-write mapping decision, and the bounded outcome. | No representative customer research validates frequency or magnitude. | Keeps the product centered on consequential migration decisions. | Ensures planning and approvals reduce real uncertainty rather than add ceremony. | P3 | Validate the problem and decision model with representative migration owners before production prioritization. |
+| Canonical journey and outcome alignment | 4 | The ten-stage stepper, guarded workflow states, seven-phase plan, and future-agent handoff preserve Discover through verified FPU. | None for the declared slice. | Maintains one coherent product journey and agent architecture. | Prevents preparation from being mistaken for completed migration or FPU. | None | Preserve the same state and completion contracts in later slices. |
+| Scope, non-goals, and beta boundary | 4 | Architecture, UI, review record, and tests explicitly state synthetic data, no provider connection, no target write, and no production-readiness claim. | None for the declared slice. | Prevents accidental commitments and scope inflation. | Makes capability and risk understandable before a user authorizes anything. | None | Continue enforcing truthful status language in PR review. |
+| User value and actionability | 3 | Plan cards answer sequence, dependency, customer action, and checkpoint; mapping cards expose rationale, confidence, evidence, and decisions; mobile/keyboard/error paths were verified. | No representative usability or comprehension study exists. | Turns agent output into governed progress rather than passive analysis. | Users can decide, defer, or stop with context. | P3 | Run task-based usability and comprehension tests before production UX sign-off. |
+| Progressive trust and decision ownership | 4 | Every proposal requires an owner decision; sensitive, low-confidence, invalid, rejected, and blocked states stop handoff; decisions are attributed and revalidated server-side. | None for the declared slice. | Implements the product's progressive-trust differentiation. | Keeps accounting treatment under human control. | None | Retain approval isolation and adversarial bypass tests as execution is added. |
+| Metrics and evidence discipline | 2 | Versioned product events support plan, review, decision, escalation, and handoff measures; the review explicitly avoids measured-result claims. | Instrumentation, owners, denominators, baselines, privacy review, and data-quality monitoring are absent. | Prevents activity and recommendation acceptance from replacing customer outcomes. | Keeps correctness, burden, and FPU visible when metrics are introduced. | P3 | Define production metric contracts and ownership before using event data for product decisions. |
+| Product coherence, business fit, and truthful demo | 3 | The new route reuses the design system, session, canonical journey, provider-neutral contracts, and deterministic fallback; the browser run reaches meaningful governed decisions without credentials. | Strategic/customer value and cost-to-serve are not validated outside the reference implementation. | Avoids a disconnected demo or model-dependent cost structure. | Produces a consistent experience without hidden manual intervention. | P3 | Add customer and operating-cost evidence before commercial or adoption claims. |
+
+### Agentic AI Rubric application
+
+| Criterion | Score | Evidence | Gap | Why it matters to MoveBooks AI | Why it matters to the end user | Severity | Remediation |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Agent necessity and ownership | 3 | The canonical 13-agent model distinguishes implemented/future agents; four specialists have distinct areas, tools, structured outputs, evidence, confidence, and escalations; deterministic checks remain tools. | Specialist quality is covered by synthetic cases rather than representative live-model evaluations. | Avoids agent-count theatre and competing ownership. | Makes responsibility and escalation behavior predictable. | P3 | Expand per-specialist evaluation sets before enabling Gemini recommendations. |
+| Orchestration and workflow state | 4 | One orchestrator enforces `ASSESSED → PLANNED → MAPPING → AWAITING_APPROVAL → APPROVED`, rejects out-of-order work, and requires clear blockers plus completed decisions. | None for the declared slice. | Makes agent activity reproducible and governable. | Prevents skipped stages and premature migration readiness. | None | Preserve single-owner transitions in Migrate → Resolve. |
+| Tool authority and least privilege | 4 | Plan dependencies, target compatibility, account types, required fields, evidence, duplicates, and approval policy are server-side deterministic controls with bypass regressions. | None for the declared slice. | Keeps financial constraints outside probabilistic reasoning. | Prevents unsupported mappings even if a client or future model proposes them. | None | Require approved manifests and scoped write tools in the next execution slice. |
+| Evidence, provenance, confidence, and explanations | 3 | Proposals expose confidence, risk, rationale, evidence, policy reasons, specialist, provenance, and decision attribution without chain-of-thought. | Plan-wide assessment evidence is broader than the ideal proposal-specific context. | Enables defensible reviews and later quality evaluation. | Helps users understand why a proposal is safe, ambiguous, or blocked. | P3 | Rank and display the smallest relevant evidence set as the corpus grows. |
+| Human governance and escalation | 4 | High-risk, sensitive, low-confidence, incomplete, and unsupported proposals require review or block; agents cannot self-approve; approve/modify/reject actions are audited. | None for the declared slice. | Enforces human ownership of consequential financial choices. | Gives users control and a safe stop when automation is uncertain. | None | Add delegated-role authorization tests when production identity is introduced. |
+| Failure handling, idempotency, and safe stopping | 2 | Repeated plan/mapping creation is locally idempotent, errors surface as stopped UI state, and incomplete/rejected/blocked proposals prevent handoff. | No durable jobs, idempotency keys, retry/timeout policy, concurrency control, or recovery testing. | Prevents duplicate or divergent migration actions as the platform scales. | Allows recovery without hidden or repeated financial changes. | P2 | Add durable workflow execution and recovery controls before production writes. |
+| Security, privacy, and auditability | 2 | Synthetic-only data, owner-scoped sessions, minimized events, browser-event restrictions, decision attribution, and secret scans pass. | Demo identity and process-local audit records are not production-grade or immutable. | Financial migrations require defensible isolation and evidence. | Protects records and prevents decisions being exposed or falsely attributed. | P2 | Add production identity, durable append-only audit storage, retention, and independent authorization tests. |
+| Evaluation, fallback, and runtime portability | 3 | Twelve executable golden cases cover normal, ambiguous, unsafe, decision, repeatability, plan, and handoff behavior; deterministic fallback works without Gemini; ADK remains an adapter boundary. | No live Gemini quality set, drift monitoring, or continuous representative evaluation exists. | Keeps product safety independent of model/runtime availability. | Provides predictable behavior during model outage or change. | P3 | Gate Gemini activation on representative quality, calibration, safety, and fallback evaluations. |
+
+### Migration & Onboarding Rubric application
+
+| Criterion | Score | Evidence | Gap | Why it matters to MoveBooks AI | Why it matters to the end user | Severity | Remediation |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Source, target, and canonical boundaries | 3 | The implementation reads a versioned synthetic fixture, uses canonical mapping areas and provider-neutral targets, and performs no source mutation or target write. | No representative source/target adapter pair has validated the canonical boundary. | Preserves extensibility beyond one accounting provider. | Reduces the chance that provider quirks silently change accounting meaning. | P3 | Validate the canonical contracts with representative adapters before provider claims. |
+| Readiness, planning, and dependencies | 4 | Assessment findings become versioned plan blockers/risks; seven phases have ordered dependencies, customer actions, owners, and checkpoints; dependency and premature-handoff tests pass. | None for the declared slice. | Converts evidence into a governed execution strategy. | Shows what must happen, why, and what still blocks progress. | None | Preserve blocker lineage as resolution capabilities are added. |
+| Mapping and accounting compatibility | 4 | Accounts, customers, vendors, products/services, tax, and configuration use versioned schema, required-field, canonical-target, account-type, evidence, duplicate, sensitivity, and jurisdiction controls. | None for the declared synthetic fixture. | Mapping correctness is central to migration quality. | Prevents misclassification of financial and operational records. | None | Expand golden coverage with more complex accounting and tax variants before production. |
+| Human approval and migration handoff | 4 | Every mapping has an attributable approve/modify/reject path; modifications are revalidated; blocked/rejected/pending states stop; approved handoff performs no write. | None for the declared slice. | Separates recommendation, authorization, and future execution. | Makes exactly what was authorized visible before data movement. | None | Carry the immutable approved manifest into the next slice. |
+| Blockers, unsupported items, and exception ownership | 3 | Missing fields and unsupported configuration produce visible blocked or review states and named customer actions; they cannot silently progress. | The current workspace cannot repair a blocked source field or deep-link to a dedicated resolution workflow. | Prevents false readiness and silent loss. | Users need a clear route from detection to correction. | P2 | Add explicit remediation ownership/deep links in the appropriate Resolve workflow, not this branch. |
+| Lineage, evidence, and audit integrity | 2 | Plans and mappings retain evidence IDs, policy versions, actor, time, comments, events, and activity provenance. | Storage is process-local and audit immutability/recovery are not implemented. | Makes accounting decisions reproducible and defensible. | Lets users reconstruct what changed, why, and by whom. | P2 | Introduce durable append-only evidence and audit persistence before production use. |
+| Execution, validation, and recovery boundary | 3 | The plan names future execution, validation, checkpoints, and authorization; the current orchestrator stops at a clean approved handoff and never claims a write or reconciliation. | Execution, reconciliation, exceptions, and rollback are intentionally unimplemented. | A truthful boundary is safer than partial financial execution. | Users are not told a migration succeeded before deterministic validation. | None | Implement these controls only in the future Migrate → Resolve and Validate slices. |
+| Onboarding and verified First Productive Use continuity | 2 | The canonical journey and seven-phase plan retain Configure, Onboard, and verified FPU checkpoints and explicitly reject training-only completion. | Only the future boundary exists; configuration, onboarding, and FPU evidence are not implemented. | Keeps ultimate customer value visible beyond data movement. | Ensures eventual success means an authorized user can perform the intended task. | P3 | Preserve the versioned FPU contract through later slices; do not claim completion early. |
+
+### Rubric verification outcome
+
+- Canonical rubric structures: **verified**
+- Product Reviewer → Product Management Rubric: **verified**
+- Agentic AI Reviewer → Agentic AI Rubric: **verified**
+- Migration Reviewer → Migration & Onboarding Rubric: **verified**
+- Aggregate vanity score: **not created**
+- Unresolved rubric P0: **0**
+- Unresolved rubric P1: **0**
+- **RUBRIC VERIFICATION: GREEN**
+
 ## Product scorecard assessment
 
 Statuses apply to this synthetic public-reference slice, not production migration readiness or
@@ -192,7 +253,8 @@ measured customer impact.
 | TypeScript / typecheck | PASS |
 | Frontend tests | PASS — 16 tests |
 | Production frontend build | PASS — Next.js 15.5.26; `/plan-map-approve` generated successfully |
-| Markdown local links | PASS — 74 Markdown files checked |
+| Canonical rubric schema and reviewer wiring | PASS — 23 criteria across 3 rubrics |
+| Markdown local links | PASS — 77 Markdown files checked |
 | Whitespace / `git diff --check` | PASS |
 | Secret scan | PASS — no credential/private-key patterns in source outside lockfile integrity hashes |
 | Live desktop / mobile journey | PASS |

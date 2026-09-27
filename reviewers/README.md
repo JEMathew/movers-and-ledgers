@@ -25,3 +25,14 @@ Builder → Reviewers → Findings → Prioritization → Fix → Re-review → 
 ```
 
 Use the role files in this directory as focused prompt addenda. The complete role set and role boundaries are defined in the reviewer rubrics; the absence of a dedicated addendum does not remove a required lens. Consolidate results in [`docs/reviews/TEMPLATE.md`](../docs/reviews/TEMPLATE.md).
+
+## Canonical rubric wiring
+
+| Reviewer | Required rubric |
+| --- | --- |
+| Product Reviewer | [Product Management Rubric](../docs/rubrics/PRODUCT_MANAGEMENT_RUBRIC.md) |
+| Agentic AI Reviewer | [Agentic AI Rubric](../docs/rubrics/AGENTIC_AI_RUBRIC.md) |
+| Migration Reviewer | [Migration & Onboarding Rubric](../docs/rubrics/MIGRATION_ONBOARDING_RUBRIC.md) |
+
+Each reviewer reports criterion-level scores and evidence. Reviewers must not average the results
+into an overall vanity score.

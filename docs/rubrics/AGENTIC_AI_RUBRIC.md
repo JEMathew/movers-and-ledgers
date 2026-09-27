@@ -1,0 +1,32 @@
+# Agentic AI Rubric
+
+## Purpose
+
+The Agentic AI Reviewer uses this canonical rubric to assess whether agents are necessary, bounded,
+evidence-driven, governable, and resilient while deterministic software remains authoritative for
+financial constraints and completion checks.
+
+Every criterion must be reported with: **Criterion**, **What good looks like**, **Why it matters to
+MoveBooks AI**, **Why it matters to the end user**, **Failure mode if missing**, **Evidence / metric**,
+and a **0–4 scoring scale**. Scores are criterion-level evidence summaries, not an overall score.
+
+## Criteria
+
+| Criterion | What good looks like | Why it matters to MoveBooks AI | Why it matters to the end user | Failure mode if missing | Evidence / metric | 0–4 scoring scale |
+| --- | --- | --- | --- | --- | --- | --- |
+| Agent necessity and ownership | Each agent has an independently justified reasoning context, tools, structured output, state, evaluation, escalation, and clear parent owner. | Avoids agent-count theatre and preserves understandable system boundaries. | Users see consistent ownership and fewer unpredictable handoffs. | Deterministic lookups are renamed as agents or multiple agents compete for authority. | Agent registry; contracts; tool lists; state owner; specialist evaluations. | **0:** no ownership; **1:** labels only; **2:** partial contracts; **3:** justified bounded agents; **4:** boundaries validated across failure and handoff scenarios. |
+| Orchestration and workflow state | A single orchestrator enforces explicit transitions, prerequisites, terminal states, and downstream handoffs. | Makes the migration reproducible, inspectable, and recoverable. | Users cannot accidentally skip required stages or approvals. | Free-form agent behavior advances state out of order or claims completion prematurely. | State model; transition tests; precondition failures; handoff contract. | **0:** implicit/uncontrolled; **1:** advisory state; **2:** incomplete guards; **3:** enforced and tested; **4:** enforced under concurrency/retry/recovery conditions. |
+| Tool authority and least privilege | Tools are typed, bounded, deny-by-default, and authoritative for deterministic constraints; agents receive only necessary capabilities. | Protects accounting correctness from model variability. | Financial rules do not change because a model is persuasive or uncertain. | An agent bypasses validation, policy, identity, or write controls. | Tool contracts; allowlists; server-side validation; forbidden-action tests; permission scopes. | **0:** unrestricted; **1:** prompt-only restrictions; **2:** mixed enforcement; **3:** deterministic enforcement with tests; **4:** adversarially validated and operationally monitored. |
+| Evidence, provenance, confidence, and explanations | Outputs cite attributable evidence, distinguish provenance, calibrate confidence, expose uncertainty, and avoid chain-of-thought. | Enables trustworthy review and future evaluation of model contributions. | Users can understand why a recommendation needs approval or is blocked. | Unsupported explanations or confidence create false trust. | Evidence completeness; provenance fields; calibration sets; explanation usefulness; unsupported-claim rate. | **0:** fabricated/opaque; **1:** ungrounded labels; **2:** partial evidence; **3:** structured attributable evidence; **4:** calibrated and validated with representative cases. |
+| Human governance and escalation | Consequential decisions require the right human, ambiguous/high-risk work escalates, and agents cannot self-approve or escalate privilege. | Implements the product responsibility model. | Users retain authority and receive help when automation is unsafe. | Sensitive mappings progress silently or approvals are cosmetic. | Approval policy; actor attribution; escalation rate/accuracy; override/reject tests. | **0:** autonomous harm path; **1:** optional approval; **2:** incomplete coverage; **3:** enforced and audited; **4:** validated against adversarial, delegation, and recovery cases. |
+| Failure handling, idempotency, and safe stopping | Errors are classified, retries bounded, repeated requests safe, partial progress recoverable, and uncertain outcomes stop visibly. | Prevents duplicate or contradictory migration actions. | Users can recover without hidden writes or duplicated decisions. | Retries amplify damage, state diverges, or errors are presented as success. | Idempotency tests; retry policy; timeout/recovery evidence; safe-stop UI; duplicate-event rate. | **0:** unsafe failure; **1:** generic retry; **2:** partial local safety; **3:** bounded and tested for declared scope; **4:** durable, concurrency-tested operational recovery. |
+| Security, privacy, and auditability | Identity and owner isolation are enforced; data and egress are minimized; actions are attributable; internal events cannot be forged. | Financial migration demands defensible control and privacy boundaries. | Users' records and approvals are not exposed, mixed, or falsely attributed. | Cross-tenant access, secret/raw-data leakage, or mutable audit history. | Authorization tests; data-flow review; secret scan; audit integrity; retention controls. | **0:** material exposure; **1:** trust-by-convention; **2:** local controls with production gaps; **3:** enforced for declared scope; **4:** production-grade controls validated independently. |
+| Evaluation, fallback, and runtime portability | Golden cases cover normal, ambiguous, unsafe, repeated, and unavailable-model behavior; fallback preserves controls; runtime adapters do not own policy. | Keeps product value and safety independent of a single model/runtime. | Users receive predictable safe behavior when AI services fail or change. | Model outage blocks the journey or runtime migration changes financial rules. | Golden evals; deterministic repeatability; fallback tests; provider/ADK interface; quality thresholds. | **0:** unevaluated/model-dependent; **1:** happy-path examples; **2:** partial eval/fallback; **3:** executable cases and controlled fallback; **4:** continuous representative evaluation with monitored drift. |
+
+## Interpretation
+
+- Agent sophistication never compensates for missing deterministic financial controls.
+- A `4` requires representative or operational validation beyond interface design.
+- Never average criteria into a vanity score. Report each score with its evidence, gap, severity, and
+  remediation.
+- Use P0–P3 from [Reviewer Rubrics](../reviewers/REVIEW_RUBRICS.md).
