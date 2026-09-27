@@ -129,8 +129,10 @@ def run(mode):
                 company_name="Synthetic adapter probe",
             )
         )
+        report("synthetic-session-inserted")
         assert repository.get(original.id, OWNER) == original
         assert repository.get(original.id, "different-owner") is None
+        report("synthetic-session-read-and-owner-filter")
         reject(lambda: repository.put(original), ValueError)
         report("persistence-owner-isolation-duplicate-rejection")
         updated = original.model_copy(deep=True)
@@ -230,5 +232,13 @@ if __name__ == "__main__":
         run(mode)
     except Exception as error:
         # No exception message/traceback: SDK errors may contain records or credentials.
-        print(json.dumps({"severity": "ERROR", "probe": "failed", "type": type(error).__name__}))
+        diagnostic = {"severity": "ERROR", "probe": "failed", "type": type(error).__name__}
+        if isinstance(error, DBAPIError):
+            # pg8000 exposes SQLSTATE in its structured driver fields. Never log
+            # SQL, parameters, exception messages, detail or connection values.
+            fields = error.orig.args[0] if error.orig.args else None
+            code = fields.get("C") if isinstance(fields, dict) else None
+            if isinstance(code, str) and len(code) == 5 and code.isalnum():
+                diagnostic["sqlstate"] = code
+        print(json.dumps(diagnostic))
         sys.exit(1)

@@ -4,7 +4,7 @@ import hashlib
 import json
 
 from sqlalchemy import Column, MetaData, String, Table, Text, insert, select, update
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import DatabaseError, IntegrityError
 
 from domain.discovery_assessment.models import MigrationSession
 
@@ -67,7 +67,14 @@ class SqlSessionRepository:
                         snapshot=encoded,
                     )
                 )
-        except IntegrityError as error:
+        except DatabaseError as error:
+            # The Cloud SQL connector uses pg8000.dbapi rather than pg8000's
+            # legacy connection. Its unique violation is a plain DatabaseError.
+            # Classify only the structured SQLSTATE, never localized error text.
+            fields = error.orig.args[0] if error.orig.args else None
+            unique_violation = isinstance(fields, dict) and fields.get("C") == "23505"
+            if not isinstance(error, IntegrityError) and not unique_violation:
+                raise
             raise ValueError("Session already exists; refresh before retrying.") from error
         return session.model_copy(deep=True)
 
