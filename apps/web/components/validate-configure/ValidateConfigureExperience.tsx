@@ -7,13 +7,14 @@ import { Alert } from "@/components/ui/feedback";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
 import type { Check, Proposal, Snapshot } from "./types";
+import { authHeaders } from "@/lib/identity";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 const STORAGE_KEY = "movebooks-validation-session";
 
 async function request(path: string, body?: object, method = "POST"): Promise<Snapshot> {
   const response = await fetch(`${API_BASE}/v1${path}`, {
-    method, headers: { Authorization: "Bearer demo-user", "Content-Type": "application/json" },
+    method, headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: body ? JSON.stringify(body) : undefined,
   });
   if (!response.ok) {

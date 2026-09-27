@@ -15,6 +15,8 @@ jobs:
       - run: pip install -e '.[dev]'
       - run: ruff check .
       - run: pytest --cov --cov-report=term-missing
+      - run: python scripts/repository_checks.py
+      - run: git diff --check
   web:
     runs-on: ubuntu-latest
     defaults: {run: {working-directory: apps/web}}
@@ -27,3 +29,41 @@ jobs:
       - run: npm run typecheck
       - run: npm run test
       - run: npm run build
+  postgres-contract:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: contract
+          POSTGRES_PASSWORD: ephemeral-ci-only
+          POSTGRES_DB: contract
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U contract"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -e '.[dev,cloud]'
+      - run: pytest tests/test_google_runtime.py -q
+        env:
+          MOVEBOOKS_TEST_DATABASE_URL: postgresql+pg8000://contract:ephemeral-ci-only@localhost:5432/contract
+  containers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -f services/api/Dockerfile -t movebooks-api:ci .
+      - run: docker build -f apps/web/Dockerfile -t movebooks-web:ci .
+      - name: Container smoke checks (no cloud credentials)
+        run: |
+          docker run -d --name api -p 18080:8080 movebooks-api:ci
+          docker run -d --name web -p 18081:8080 movebooks-web:ci
+          trap 'docker stop api web' EXIT
+          curl --retry 20 --retry-connrefused --retry-delay 1 --fail http://localhost:18080/healthz
+          curl --fail http://localhost:18080/readyz
+          curl --retry 20 --retry-connrefused --retry-delay 1 --fail http://localhost:18081/healthz
+          curl --fail -H 'Authorization: Bearer demo-user' -H 'Content-Type: application/json' -d '{"sample_company_id":"harbor-light-migrate-demo"}' http://localhost:18080/v1/migration-sessions
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:18081/api/auth/demo)" = 404
+          if docker run --rm -e K_SERVICE=ci movebooks-api:ci; then exit 1; fi

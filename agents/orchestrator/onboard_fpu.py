@@ -142,6 +142,7 @@ class OnboardFpuOrchestrator:
             raise ValueError("Choose an explicitly supported onboarding option.")
         decision = Decision(
             actor=actor,
+            role="WORKSPACE_OWNER" if actor.startswith("firebase:") else "DEMO_WORKSPACE_OWNER",
             action=request.action,
             selection=selection,
             evidence_hash=state.context_hash,
@@ -214,6 +215,7 @@ class OnboardFpuOrchestrator:
         task.decisions.append(
             Decision(
                 actor=actor,
+                role="WORKSPACE_OWNER" if actor.startswith("firebase:") else "DEMO_WORKSPACE_OWNER",
                 action=request.action,
                 selection="POST_SYNTHETIC_INVOICE",
                 evidence_hash=task.contract_hash,

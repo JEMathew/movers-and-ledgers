@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { authHeaders } from "@/lib/identity";
 
 export const isSessionId = (value: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
 export function phaseFor(status: string): number | null {
@@ -57,7 +58,7 @@ export function useSessionView() {
         const id = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session");
         if (!id) return;
         if (!isSessionId(id)) throw new Error("Invalid session reference. Start or open a synthetic session from Product.");
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"}/v1/migration-sessions/${id}/intake-trust`, { headers: { Authorization: "Bearer demo-user" }, signal: controller.signal });
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"}/v1/migration-sessions/${id}/intake-trust`, { headers: await authHeaders(), signal: controller.signal });
         if (!response.ok) throw new Error(response.status === 404 ? "Session unavailable or expired. No replacement session was created." : "Session could not be read. Check local demo access and the API, then refresh.");
         const projection = projectSession(await response.json(), id);
         if (active) setView(projection);

@@ -27,11 +27,14 @@ from domain.planning_mapping.models import (
     MigrationPlan,
     WorkflowStatus,
 )
+from movebooks_api.runtime.persistence import session_repository as make_repository
+from movebooks_api.settings import get_settings
 from tools.mapping import MappingPolicyError
 from tools.migration import stable_checksum
 
 from .fixtures import load_sample_company
-from .repository import InMemoryMigrationSessionRepository, MigrationSessionRepository
+from .repository import InMemoryMigrationSessionRepository as InMemoryMigrationSessionRepository
+from .repository import MigrationSessionRepository
 
 
 class MigrationSessionNotFoundError(LookupError):
@@ -304,5 +307,5 @@ class DiscoverAssessService:
         return self.repository.put_if_unchanged(original, session)
 
 
-session_repository = InMemoryMigrationSessionRepository()
+session_repository = make_repository(get_settings())
 discover_assess_service = DiscoverAssessService(session_repository)
