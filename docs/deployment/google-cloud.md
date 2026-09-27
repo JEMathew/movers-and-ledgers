@@ -1,8 +1,40 @@
-# Google Cloud preparation — no deployment performed
+# Google Cloud dev/test deployment and validation
 
 ## Authorized validation checkpoint — 2026-09-28
 
 The owner authorized bounded dev/test validation in project `movebooks-ai`, region `asia-southeast1`.
+Minimum provisioning is now approved with a US$10/four-hour operating target (not a hard cap).
+The window begins 2026-09-27 20:37 UTC and ends 2026-09-28 00:37 UTC. Stop compute earlier
+when checks finish; retain and disclose storage only. The latest execution ledger in the
+[review](../reviews/google-cloud-validation.md) supersedes the initial preflight below.
+
+**Current checkpoint: AMBER; compute stopped at approximately 2026-09-27 21:01 UTC.**
+The actual resource inventory, image digests, role grants, probes and limitations are recorded in
+the review. Encrypted IAM SQL transport, private synthetic artifact operations and scoped secret
+retrieval/denial passed. Schema bootstrap and real Firebase identity remain blocked. Do not count
+transport probes as a canonical migration or restart/resume test.
+
+### Stopped-resource handoff
+
+- `movebooks-beta-api` and `movebooks-beta-web`: `--scaling=0` (manual mode), not merely min=0.
+- `movebooks-beta-pg`: `--activation-policy=NEVER`, observed STOPPED; update operation DONE.
+- Both one-shot jobs completed with zero running tasks; no scheduler was created.
+- `movebooks-beta-schema` service account disabled; synthetic secret version 1 disabled.
+- Local Cloud Shell service-proxy process stopped. No production service or live model was enabled.
+- Retained SQL 10 GB disk/network allocation, regional images, private bucket with seven-day
+  soft-deleted synthetic marker, disabled secret, logs and definitions can incur ongoing charges.
+  No customer records were stored. Account-wide credits do not establish this run's actual cost.
+
+Before restarting: resolve Firebase Blaze/temporary public ingress confirmation and DBA-scoped
+bootstrap permissions, then confirm the continuation still fits the approved window/budget.
+No `cloudsqlsuperuser` permission was granted; never replace that blocked step with another admin
+credential path. Runtime must remain table-only. Re-enable the schema identity only for authorized
+bootstrap; disable it again immediately afterward. Rebuild the frontend with approved Firebase
+configuration, validate two real identities and deployed intake rejection, then execute the remaining
+canonical/recovery/security gates. Do not enable customer uploads, Gemini or managed ADK.
+
+### Initial preflight (historical)
+
 The earlier access denial is resolved. Console and normally authorized Cloud Shell confirm ACTIVE
 project `movebooks-ai`, number `411600344727`, with billing enabled. No service accounts or buckets
 exist in the returned inventory. Required runtime APIs are not yet enabled (details in the review).

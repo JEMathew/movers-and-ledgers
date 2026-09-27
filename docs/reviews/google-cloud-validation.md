@@ -1,10 +1,146 @@
-# Google Cloud validation — preflight and security checkpoint
+# Google Cloud validation — bounded live execution checkpoint
 
 Date: 2026-09-28. Branch: `feature/google-cloud-validation`.
 Baseline: `41b73cea100e166bb7e3ea661c33650264755cec` (merged PR #12).
 Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test only.
 
-**AMBER. Live application validation has not executed; project access is now verified.**
+**AMBER. Bounded transport validation completed; compute stopped. Required application evidence is incomplete.**
+
+## Approved live execution ledger — 2026-09-28
+
+The owner approved minimum dev/test provisioning, dedicated least-privilege identities, and
+a US$10/four-hour cost target, explicitly not a guaranteed cap. Window: 2026-09-27 20:37 UTC
+through 2026-09-28 00:37 UTC. Compute was stopped at approximately 21:01 UTC, well before the
+deadline. No production, customer data, providers, Gemini or managed ADK.
+
+Enabled Run, SQL Admin, Artifact Registry, Secret Manager, IAM, IAM Credentials, Firebase and
+Identity Toolkit APIs. Cloud Build was not enabled: builds use normally authenticated Cloud
+Shell Docker. Initial Run/SQL/registry/secret inventories were empty.
+
+| Resource | Configuration / current evidence |
+| --- | --- |
+| `movebooks-beta-pg` | PostgreSQL 17, ENTERPRISE `db-f1-micro`, zonal asia-southeast1, 10 GB SSD, no auto-grow/backups. IAM auth, ENCRYPTED_ONLY and REQUIRED connector enforcement observed; no authorized networks. Database `movebooks` and API/schema IAM users created. Finally STOPPED with activation policy NEVER. |
+| `movebooks-beta` | Regional Docker Artifact Registry repository created. |
+| `movebooks-ai-beta-artifacts` | asia-southeast1; uniform access true, public access prevention enforced; default 604800-second soft-delete retention. |
+| `movebooks-beta-api` | Dedicated service account; SQL Client and Instance User conditional on the named SQL instance; custom `firebaseauth.users.get`; custom bucket-only get/create/read/delete; Secret Accessor only on the named synthetic probe. No user-managed keys returned. |
+| `movebooks-beta-web` | Dedicated service account; no project data roles granted. |
+| `movebooks-beta-schema` | Temporary dedicated identity with conditional SQL Client/Instance User; no Owner/Editor or elevated database role. Bootstrap permissions unresolved; identity disabled at shutdown. |
+| `movebooks-beta-probe` secret | One regional Secret Manager version containing only a synthetic non-credential marker; no customer data, key or token. Version 1 disabled at shutdown. |
+| `movebooks-beta-api` / `movebooks-beta-web` Run services | Private invoker policy; dedicated identities; one CPU each, 512/256 MiB respectively; maximum one instance. Both finally set to manual scaling with zero instances. |
+| `movebooks-beta-probe` / `movebooks-beta-denied` Run jobs | One task, zero retries, bounded 120/60-second timeouts. Both completed successfully; zero running tasks. No scheduler. |
+
+Source archive is clean committed `4eacc8d295905820ba8cdbb591d141013de93761`, SHA-256
+`7b7657608e35d27f5a4edd47f760c3ab344ebde5a3a63774d79de3a93fbd71cc`, matched in Cloud Shell.
+Native file-picker upload succeeded after the extension file-upload permission error; no extension
+security setting was changed. Backend/frontend Linux image builds passed. Frontend is intentionally
+fail-closed until Firebase configuration is authorized and available; no demo fallback.
+
+An immediate bucket custom-role binding initially failed during role propagation; retry succeeded
+with the same four permissions, without broadening access. Default bucket legacy project-owner,
+editor and viewer groups were observed and removed. Removal also removed the human owner's
+implicit bucket-policy access; a custom three-permission bucket-policy role, conditional on this
+one bucket, restored that narrower operator capability. Final bucket policy contains only the API
+artifact binding. The original human project Owner binding was not modified.
+
+API activation automatically created the default Compute service account with project Editor.
+The audit detected it and removed Editor before using that identity; no validation workload uses
+the default account. Google-managed service-agent bindings are not application workload roles.
+
+Exact application grants: API and schema identities each have `roles/cloudsql.client` and
+`roles/cloudsql.instanceUser` conditioned on
+`projects/movebooks-ai/instances/movebooks-beta-pg`. API additionally has custom
+`movebooksBetaIdentity` (`firebaseauth.users.get` only), bucket-bound `movebooksBetaArtifacts`
+(`storage.buckets.get`, `storage.objects.create/get/delete`) and
+`roles/secretmanager.secretAccessor` on `movebooks-beta-probe` only. Web has no data roles.
+Custom `movebooksBetaBucketPolicy` restores the existing human operator's
+`storage.buckets.get/getIamPolicy/setIamPolicy` only on this named bucket. No workload impersonation,
+Owner, Editor or static key was granted. The disabled schema identity retains its two narrow IAM
+bindings; re-enabling it is a separate operator action, not automatic cleanup reversal.
+
+Cloud SQL reached RUNNABLE. A proposed `cloudsqlsuperuser` grant for the temporary schema identity
+was rejected by the approval safeguard and was not executed or bypassed. Database bootstrap now
+requires narrowly scoped DBA-issued CONNECT/USAGE/CREATE grants, or explicit approval for the
+temporary broader role and immediate revocation. No database-admin success is assumed.
+
+The initial API image audit found 12 advisory entries (including aliases/duplicates) in base-image
+pip 25.0.1, and no reported application-package findings. The repository package is not published
+on PyPI and is explicitly unauditable there. Dockerfile now upgrades pip to 26.2.1 from PyPI before
+installing the application. The rebuilt image passed `pip check` and `pip-audit` with no known
+dependency vulnerabilities; the unpublished application package is still explicitly skipped.
+The scanner ran only in an ephemeral container, not by adding a scanner to the production image.
+The first audit invocation used
+an unsupported flag and was corrected, not counted as a pass. This is a Python dependency audit,
+not an operating-system image scan.
+
+Frontend revision `movebooks-beta-web-00001-5b4` reports Ready under the dedicated frontend
+identity. Authenticated CLI proxy and unauthenticated HTTP probes returned platform 404 responses;
+external reachability is not counted as a health pass. No public invoker grant was applied.
+
+Firebase Console confirms Firebase is not attached. Confirming its Blaze pricing plan was blocked
+by the approval safeguard; no alternative activation path was attempted. Explicit approval for
+that billing activation and temporary public app endpoints was requested. Neither is assumed.
+The initial preflight below is historical, not a statement that this approved run made no changes.
+
+### Deployed artifacts and actual live evidence
+
+| Artifact | Immutable identifier |
+| --- | --- |
+| Initial API image, retained but not selected for the service | `sha256:09790e8b4f001e73468093fe08031bb9cac1d37c5ca463b65f2e8140481dd3d6` |
+| Patched API image (`api:pip2621`) | `sha256:4f9feb6d93ee0ad9528255d5a4a1b9dfbbd424b51daa93aafcc551c495acad45` |
+| Frontend image (`web:4eacc8d`) | `sha256:85c292a2e3c2cc597e8d4524e2ba08f7042103c407ba85495edd29d85e6bcca3` |
+| Backend revision | `movebooks-beta-api-00001-ct2` — NOT READY; startup readiness failed closed |
+| Frontend revision | `movebooks-beta-web-00001-5b4` — platform Ready, HTTP route unverified |
+| Transport job execution | `movebooks-beta-probe-nxsx4` — completed, one successful task |
+| Denial job execution | `movebooks-beta-denied-bgwg6` — completed, one successful task |
+
+Both jobs used the patched image and attached identities, never exported credentials. The bounded
+probe source is [cloud_validation_probe.py](../../scripts/cloud_validation_probe.py); only its
+`transport` and `denied` modes ran. Its schema, persistence and resume modes are prepared but
+**not executed**, and none is an authenticated product journey.
+
+| Required gate | Evidence / result from this live run |
+| --- | --- |
+| Cloud Run | PARTIAL: image builds/pushes, identities/configuration and frontend platform startup verified. Backend starts Uvicorn but `/readyz` returns 503/UNAVAILABLE because the schema is absent; the platform rejects that revision. Health checks were not weakened. Frontend numeric/hash URLs and authenticated CLI proxy returned platform 404, not an app-health pass. |
+| Cloud SQL transport | PASS: actual IAM-authenticated encrypted connector, current_user matches API IAM DB user, SELECT 1 succeeds. Live application schema/persistence/rollback/CAS/concurrency/owner isolation remain blocked. |
+| Identity | BLOCKED: Firebase not attached; Blaze activation needs confirmation. No real sign-in, two-user denial, revocation or HITL attribution claim. No emulator, demo fallback or synthetic-principal bypass deployed. |
+| GCS | PARTIAL: private policy and real scoped synthetic marker create/read/duplicate rejection/delete/missing-object failure pass. Real workspace authorization is not yet proved. No customer package persisted. |
+| Secret Manager | PASS for adapter scope: runtime retrieval, redacted representation, missing/unallowlisted secret rejection; actual frontend workload access denied. Only a non-credential marker was used. |
+| IAM | Dedicated identities and narrow conditional/resource grants inspected. Frontend workload actually denied GCS and secret access. Automatically added default Compute Editor removed. No workload Owner/Editor remains; no static keys created. |
+| Logging / Monitoring | PARTIAL: four job PASS records visible in Cloud Logging at 20:57:35–20:57:46 UTC, without payloads. Backend request/readiness records show safe 503/UNAVAILABLE. Full auth/storage/database/runtime failure visibility and Monitoring/alerts not validated. |
+| Canonical E2E | NOT RUN: no live authenticated workspace through Discover → verified First Productive Use; no cloud audit/HITL/reconciliation receipt. |
+| Restart/resume | NOT RUN: no durable application state yet; stopping infrastructure is not restart/resume proof. Uvicorn shutdown-complete/server-exit records observed at 20:59:08 UTC; graceful in-flight work preservation unverified. |
+| Failure modes | PASS only for missing/disallowed secret, denied workload storage/secret access, duplicate/missing synthetic GCS object and unready database schema. Database outage/recovery, stale writes, duplicate product requests, replay and invalid lifecycle events untested live. |
+| Cloud Try Your Data | Disabled in source/configuration, fresh local HTTP 503 and durable-write rejection tests pass. Authenticated deployed intake rejection remains BLOCKED; no upload was attempted or persisted. |
+| CI / security | Fresh backend 252 passed/5 skipped (local PostgreSQL-only gates require a configured test DB); focused runtime/fault checks 62 passed; Ruff/link/whitespace/secret-pattern checks pass. Fresh Linux images build; patched Python dependency audit passes. Fresh frontend 76 tests/lint/typecheck/build pass; prior npm audit passes. New remote branch CI and OS-image scan remain outstanding. |
+
+### Shutdown and retained charges
+
+Both Run services report `scalingMode: manual`, `manualInstanceCount: 0`. Cloud SQL reports
+`state: STOPPED`, `activationPolicy: NEVER`; the stop UPDATE completed without error at
+2026-09-27 21:01:39.662 UTC. Both job executions report running count zero and succeeded count
+one. All three dedicated identities returned zero user-managed keys. Temporary schema identity
+and secret version 1 disabled. The local Cloud Shell service-proxy
+process was stopped. No production compute exists in this validation setup.
+
+Retained: SQL 10 GB disk and allocated networking, image repository/images (including the old
+pip image for traceability), private bucket plus a soft-deleted tiny synthetic marker retained for
+seven days, disabled synthetic secret version, logs, Run/job definitions and IAM/API configuration.
+Only the disposable marker object was deleted, with seven-day soft-delete recovery. No repository
+content, schema or customer data was deleted. Storage/network retention may keep accruing charges;
+stopped compute is not a zero-cost project or a guaranteed US$10 cap.
+
+Current project-specific billed spend is **unavailable**: the Billing report's project selector
+returns no match for `movebooks`, although project billing is enabled. Account-wide data is not
+attributed to this run. Planning estimate for this roughly 25-minute provisioning/validation period:
+**US$0.10–US$1**, not a measured invoice or cap, excluding future retained storage/network costs,
+taxes and without assuming free credits. The small SQL tier, two bounded single-CPU services and
+two short tasks underpin this deliberately broad estimate; exact regional SKU usage is not yet
+reconciled. Refer to [Cloud SQL pricing](https://cloud.google.com/sql/pricing) and
+[Cloud Run pricing](https://cloud.google.com/run/pricing), and reconcile the actual project report
+when delayed usage appears. Reconfirm a bounded window before a later restart.
+
+## Historical preflight checkpoint (superseded by the live ledger above)
+
 User authorization identifies the target, and normal Console/Cloud Shell authentication now succeeds.
 No resources, IAM,
 APIs, secrets, deployments or billing settings were changed. No replacement project was created.
@@ -26,7 +162,7 @@ No unrelated listed project was selected. Local `gcloud` is unavailable on PATH;
 also found no standard local ADC/configuration or configured project/region environment variables.
 No credential stores or process credentials were accessed, and no token was copied or reused.
 
-## Resumed live preflight — 2026-09-28
+## Historical resumed preflight — 2026-09-28, before provisioning approval
 
 Console shows the intended MoveBooks AI project. Cloud Shell was authorized through its normal
 Google prompt; no service-account key, raw token, alternate account or credential export was used.
@@ -69,7 +205,7 @@ security-sensitive grant, public exposure or API activation has been performed.
 | Cloud Try Your Data | Remains disabled in code; fresh local rejection test passes. Deployed rejection is unverified. No uploaded data was retained. |
 | CI | Prior relevant remote run passed; no new run was triggered for this documentation checkpoint. |
 
-## Fresh local checks and remote CI evidence
+## Earlier local checks and baseline remote CI evidence
 
 The following command executed successfully: **19 passed**, with the inherited Starlette test-client
 deprecation warning. Tests use local configuration overrides, SQLite/repository fixtures and SDK
@@ -123,28 +259,38 @@ assumption. Cloud security and criterion-level rubric sign-off await provisioned
 | --- | --- |
 | Product / Customer Outcome / Demo | AMBER: cloud continuity to verified FPU untested; keep local versus cloud claims explicit. |
 | Agentic AI / FinTech Trust | Existing deterministic and HITL contracts retained; actual cloud attribution/recovery not verified. No live-model activation. |
-| Architecture | Existing topology retained; no fallback store or test identity introduced. Access resolved; finish inventory and approve scoped provisioning. |
-| Security | Actual IAM, identity, private storage, secrets, log redaction and hosted dependency risk require live review. Do not guess grants or weaken auth to proceed. |
+| Architecture | Existing topology retained; no fallback store or test identity introduced. Transport provisioned/exercised; schema and real Firebase path still blocked. |
+| Security | Narrow IAM, private artifact/secret transport and safe startup logs verified in the exercised scope. Real identity, full failure visibility and OS-image audit still outstanding. Do not weaken auth to proceed. |
 | Metrics | Log/monitoring contracts are not measured visibility. No fabricated SLOs, outcomes or successful cloud checks. |
 | Accessibility | No UI changes; no new accessibility certification or live protected-route UX claim. |
 | Release Readiness | AMBER: required runtime evidence absent. Product Management, Agentic AI and Migration rubric cloud assessments remain pending, without aggregate scores. |
 
-Remaining prior follow-ups: fresh image and remote verification of the dependency remediation,
-broader dependency/image review, production operational hardening (P2), and the
+Remaining follow-ups: fresh remote CI for the remediated dependencies, OS-image review,
+production operational hardening (P2), and the
 Starlette warning (P3). Severity of undiscovered live issues is unknown; these prior classifications
 do not authorize exposing a vulnerable or misconfigured service. No live P0/P1 clearance is claimed.
 
 ## Exact blockers and continuation
 
-1. Approve the specific workload permissions/API setup and the billable resource budget/lifetime.
-   Project access is resolved; no credentials or keys should be supplied in conversation.
-2. Complete resource inventory after approved API enablement, then create/reuse bounded dev/test
-   resources. Real Firebase setup and two authorized test identities still need verification.
-3. Verify the remediated dependency tree in fresh images and remote CI, then build/push/deploy only the bounded dev/test
-   environment and collect all live evidence above, including two real authorized test identities.
-4. Run relevant remote CI for any implementation changes; finish security/rubric review and fix all
-   P0/P1 before declaring GREEN. Keep cloud uploads rejected and models inactive throughout.
+1. Explicitly confirm Firebase's Blaze activation and the proposed temporary public Cloud Run
+   app endpoints (application Firebase auth remains mandatory), or have the owner configure the
+   approved identity path. Those actions were not silently included in generic provisioning approval.
+2. Have a DBA grant both API/schema identities CONNECT on database `movebooks` and USAGE on
+   schema `public`, with CREATE only for the temporary schema identity. It grants runtime access
+   only to its newly created table, not database ownership or a database-wide grant option.
+   The broader `cloudsqlsuperuser` proposal was blocked; no alternative admin route was used.
+   Re-enable the temporary identity only for approved bootstrap, then disable it again.
+3. Bootstrap schema, grant API only CONNECT/USAGE/SELECT/INSERT/UPDATE, resolve the frontend
+   route/configuration and configure two authorized real test identities. Rebuild frontend with
+   approved public Firebase configuration; do not expose the intentionally incomplete image.
+4. In a bounded authorized continuation, rerun actual persistence, rollback, CAS, owner isolation,
+   restart/outage, auth, intake rejection, replay/lifecycle, monitoring and canonical FPU checks.
+5. Run fresh remote CI and OS-image security gates, complete cloud rubric/security review and fix
+   every P0/P1 before GREEN. Existing CI triggers only PRs/main, not this unpublished feature head;
+   no PR, push, merge or CI configuration expansion was performed in this run.
 
-The immediate next step is **provisioning approval**, not Gemini/ADK activation. See the
-[validation boundary](../architecture/google-cloud-validation.md). This documentation checkpoint
-does not represent completion of the requested cloud validation.
+The immediate next step is **resolve the specific identity/ingress and database-bootstrap approvals**,
+not restart compute or activate Gemini/ADK. Keep the stopped resources stopped until those blockers
+are resolved; reconfirm the spending window if resuming after the approved deadline. See the
+[validation boundary](../architecture/google-cloud-validation.md). This checkpoint is not completion
+of the requested Google Cloud Beta runtime validation and does not assert P0=0/P1=0 clearance.
