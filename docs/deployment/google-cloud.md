@@ -2,36 +2,74 @@
 
 ## Authorized validation checkpoint — 2026-09-28
 
+### Resumed bootstrap procedure (supersedes the earlier bootstrap blocker)
+
+The owner explicitly approved the existing built-in PostgreSQL administrator for one-time,
+narrow bootstrap. The operator imported [the reviewed SQL](../../scripts/cloud_bootstrap_grants.sql)
+into database `movebooks` as `postgres`; no administrator password, token or key was exported.
+The SQL grants CONNECT and public-schema USAGE to the API and schema IAM DB users, and CREATE
+only to the dedicated schema user. Neither gets database ownership or `cloudsqlsuperuser`.
+
+The schema job then created `migration_sessions` and granted the API only SELECT/INSERT/UPDATE.
+The operator imported [the cleanup SQL](../../scripts/cloud_bootstrap_revoke.sql), revoking the
+schema identity's explicit CONNECT/USAGE/CREATE grants, and disabled its service account. This
+revokes explicit bootstrap grants; it does not claim to remove privileges inherited from PUBLIC.
+The disabled account retains ownership of its table for future explicitly approved migrations.
+
+Import access was restricted to the exact object
+`operator/cloud_bootstrap_grants.sql` in the private validation bucket. The managed Cloud SQL
+instance service agent temporarily received only `storage.objects.get`; the human operator
+received create/get/delete only for that object. No bucket listing permission was added when
+the CLI upload requested it: an exact-object SDK upload used normal Cloud Shell authentication.
+After both imports completed, the object was soft-deleted and both conditional bindings removed.
+The custom role definitions alone do not confer access. Bucket public-access prevention remained
+enforced throughout. No runtime privilege was widened to fix the duplicate-write driver issue.
+
+Firebase Blaze, Google sign-in provider, a dev/test web app and the numeric frontend Run domain
+are now configured. Analytics, Firebase Hosting, Gemini and managed ADK were not enabled.
+Public Firebase browser configuration belongs in build arguments, not a private credential file.
+Configuration is not proof of actual user sign-in; consult the latest review for exercised gates.
+
+The first live duplicate-write probe exposed a difference between pg8000's legacy facade and
+the Cloud SQL connector's DB-API connection. Commit `ce5ad30` handles structured SQLSTATE 23505
+as duplicate rejection without swallowing other database failures. CI tests both driver paths.
+Do not weaken duplicate/stale-write tests or retry an ambiguous write automatically.
+
 The owner authorized bounded dev/test validation in project `movebooks-ai`, region `asia-southeast1`.
 Minimum provisioning is now approved with a US$10/four-hour operating target (not a hard cap).
 The window begins 2026-09-27 20:37 UTC and ends 2026-09-28 00:37 UTC. Stop compute earlier
 when checks finish; retain and disclose storage only. The latest execution ledger in the
 [review](../reviews/google-cloud-validation.md) supersedes the initial preflight below.
 
-**Current checkpoint: AMBER; compute stopped at approximately 2026-09-27 21:01 UTC.**
+**Current checkpoint: AMBER; compute stopped again at approximately 2026-09-27 21:47 UTC.**
 The actual resource inventory, image digests, role grants, probes and limitations are recorded in
 the review. Encrypted IAM SQL transport, private synthetic artifact operations and scoped secret
-retrieval/denial passed. Schema bootstrap and real Firebase identity remain blocked. Do not count
-transport probes as a canonical migration or restart/resume test.
+retrieval/denial passed. Schema bootstrap, rollback, concurrency, duplicate rejection and durable
+adapter restart/owner-isolation checks now pass. Real Firebase browser identity and canonical
+cloud FPU remain unverified. Completed image scans fail the High gate (API 50, web 9 matches);
+dependency-only audit success is not image clearance. Do not count adapter probes as a canonical
+migration or interrupted-journey restart/resume test.
 
 ### Stopped-resource handoff
 
 - `movebooks-beta-api` and `movebooks-beta-web`: `--scaling=0` (manual mode), not merely min=0.
 - `movebooks-beta-pg`: `--activation-policy=NEVER`, observed STOPPED; update operation DONE.
-- Both one-shot jobs completed with zero running tasks; no scheduler was created.
+- Latest one-shot probe executions completed with zero running tasks; no scheduler was created.
 - `movebooks-beta-schema` service account disabled; synthetic secret version 1 disabled.
 - Local Cloud Shell service-proxy process stopped. No production service or live model was enabled.
 - Retained SQL 10 GB disk/network allocation, regional images, private bucket with seven-day
   soft-deleted synthetic marker, disabled secret, logs and definitions can incur ongoing charges.
   No customer records were stored. Account-wide credits do not establish this run's actual cost.
 
-Before restarting: resolve Firebase Blaze/temporary public ingress confirmation and DBA-scoped
-bootstrap permissions, then confirm the continuation still fits the approved window/budget.
-No `cloudsqlsuperuser` permission was granted; never replace that blocked step with another admin
-credential path. Runtime must remain table-only. Re-enable the schema identity only for authorized
-bootstrap; disable it again immediately afterward. Rebuild the frontend with approved Firebase
-configuration, validate two real identities and deployed intake rejection, then execute the remaining
-canonical/recovery/security gates. Do not enable customer uploads, Gemini or managed ADK.
+Before restarting: triage/remediate the failed image gate without suppressions, obtain the pending
+action-time confirmation for minimum temporary Run invoker exposure, and confirm the continuation
+fits the approved window/budget. Do not expose the current images while security clearance is open.
+The schema already exists: do not re-enable bootstrap merely to restart the runtime. No
+`cloudsqlsuperuser` or database ownership was granted to workloads; runtime remains table-only.
+The rebuilt frontend already contains Firebase configuration. Validate two real identities, deployed
+intake rejection, the complete canonical journey and recovery/failure observability next. Do not
+enable customer uploads, Gemini or managed ADK. The latest review lists all grants/removals,
+exact execution/image identifiers, retained resources and the non-billing cost estimate.
 
 ### Initial preflight (historical)
 

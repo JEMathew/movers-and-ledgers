@@ -4,9 +4,164 @@ Date: 2026-09-28. Branch: `feature/google-cloud-validation`.
 Baseline: `41b73cea100e166bb7e3ea661c33650264755cec` (merged PR #12).
 Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test only.
 
-**AMBER. Bounded transport validation completed; compute stopped. Required application evidence is incomplete.**
+**AMBER. Schema and durable adapter gates pass; identity/E2E remain incomplete and image gates fail. Keep the environment stopped and private.**
 
-## Approved live execution ledger — 2026-09-28
+## Resumed live validation — 2026-09-28
+
+This section supersedes the historical checkpoints below. The same authorized project, region,
+US$10 operating target and four-hour window apply. SQL was restarted around 21:09 UTC. All data
+is synthetic; cloud intake, provider integrations, Gemini, managed ADK and production remain off.
+
+Times in this continuation are **2026-09-27 UTC** (2026-09-28 local time). Compute was stopped
+again at approximately 21:47 UTC, within the approved window.
+
+### Identity configuration and narrow bootstrap
+
+Following explicit owner approval, Firebase was attached on Blaze, Analytics disabled, Google
+sign-in enabled, and a dev/test web app registered. Its authorized frontend domain is
+`movebooks-beta-web-411600344727.asia-southeast1.run.app`. No Firebase Hosting, email/password
+or anonymous provider was activated. Two owner-authorized test accounts are available, but their
+addresses are deliberately not repeated in this public record. Configuration is not sign-in proof.
+
+The owner separately approved use of the **existing built-in PostgreSQL administrator** for the
+reviewed one-time grants, without exporting a credential. Import
+`188fd48b-cd66-4891-ab9c-4eaf00000031` completed at 21:29:47.806 UTC. SQL is preserved in
+[cloud_bootstrap_grants.sql](../../scripts/cloud_bootstrap_grants.sql): CONNECT on `movebooks`
+and USAGE on `public` for API/schema identities; CREATE on `public` only for the schema identity.
+No workload received database ownership, `cloudsqlsuperuser`, Owner or Editor.
+
+Schema execution `movebooks-beta-schema-jstn5` passed at 21:33:15 UTC. It created schema v1 and
+granted API SELECT/INSERT/UPDATE on `migration_sessions`, not DELETE or DDL. Revocation import
+`8879061f-904f-42a2-95dc-59b000000031` completed at 21:34:20.569 UTC using
+[cloud_bootstrap_revoke.sql](../../scripts/cloud_bootstrap_revoke.sql). The schema account was
+disabled, its explicit CONNECT/USAGE/CREATE grants revoked, and its narrow existing IAM bindings
+left attached to the disabled account. Explicit revocation does not claim to revoke inherited
+PUBLIC permissions; disabling the identity is an additional control.
+
+Temporary import access was limited to one non-sensitive object:
+`gs://movebooks-ai-beta-artifacts/operator/cloud_bootstrap_grants.sql`.
+Custom `movebooksBetaSqlImport` gave the managed SQL instance service agent only
+`storage.objects.get`. Custom `movebooksBetaBootstrapUpload` gave the existing human operator
+create/get/delete only. Both bucket bindings used an exact-object condition. CLI upload initially
+requested list permission; that permission was **not granted**. An exact-object SDK upload with
+normal Cloud Shell authentication succeeded. Both conditional bindings were removed after cleanup;
+the bootstrap/revocation object was soft-deleted with seven-day recovery. Final bucket policy again
+contains only the API artifact binding. Role definitions without bindings confer no access.
+
+### Live finding and remediation
+
+**P1 — cloud DB-API duplicate rejection classification**: the first persistence execution
+`movebooks-beta-probe-8jmcg` failed. A redacted diagnostic (`movebooks-beta-probe-57m6p`) identified
+SQLSTATE `23505` without printing SQL, parameters, records, credentials or driver messages.
+The Google connector returns `pg8000.dbapi.Connection`, while SQLAlchemy's ordinary pg8000 URL
+uses its legacy facade. The connector path reports this unique violation as `DatabaseError`,
+not the `IntegrityError` expected by the repository. PostgreSQL's
+[SQLSTATE reference](https://www.postgresql.org/docs/current/errcodes-appendix.html) identifies
+23505 as a unique violation and recommends code-based classification over message matching.
+
+Commit `ce5ad3015ae94777ed1a38f209b855072c6ea2c5` narrowly classifies that structured code as
+duplicate rejection. Other database errors still propagate to the existing safe failure boundary.
+No automatic retry, overwrite, identity bypass or permission expansion was introduced. Added
+redaction/non-duplicate tests and PostgreSQL coverage for both legacy and DB-API connections.
+Fresh live execution `movebooks-beta-probe-vdbkl` passed all runtime assertions after rebuilding.
+This finding is resolved in the exercised adapter scope; full cloud P0/P1 clearance is not inferred.
+
+Operator command failures (incompatible job flags, a diagnostic quoting error/empty diagnostic
+execution, and a Monitoring quoting error) are not successful checks. They made no product-data
+or IAM bypass. Only the named successful executions and explicit PASS records count below.
+
+### Current evidence
+
+| Gate | Actual evidence and limits |
+| --- | --- |
+| Run | Backend `movebooks-beta-api-00003-v42` and frontend `movebooks-beta-web-00002-2tf` are platform Ready. Backend startup/liveness JSON records return 200. Private CLI proxy `/healthz` still returns platform 404, so external HTTP/browser reachability is not a pass. |
+| Cloud SQL | Schema, attached IAM identity, no runtime schema CREATE/row DELETE, insert/read, repository owner filtering, duplicate rejection, actual transaction rollback, simultaneous CAS single winner, stale write rejection, killed-connection rollback/pool recovery all PASS in `movebooks-beta-probe-vdbkl`. |
+| GCS | Actual ArtifactService operations PASS: consented synthetic safe-summary put/read/delete, cross-owner denial, controlled-package rejection and missing-object failure. Bucket remains private. This is repository/adapter authorization, not real browser-user proof. |
+| Secret Manager | Actual runtime marker retrieval/redaction and unavailable/unallowlisted-secret safe failure PASS. Prior web-identity denial remains valid; no project-wide secret access added. |
+| Restart | Cloud SQL restart `f3440c74-7ce8-4597-92f7-8e8900000031` DONE at 21:43:00.941 UTC. New execution `movebooks-beta-probe-fvwsc` recovered the persisted sentinel. Read-only execution `movebooks-beta-probe-n7szq` then passed owner isolation and verified no runtime database ownership, no runtime cloudsqlsuperuser membership and no effective schema-identity CREATE. This proves adapter state survival, not interrupted canonical journey recovery. |
+| Identity / canonical E2E | NOT VERIFIED: no Firebase browser sign-in, cross-user HTTP denial, approval attribution, canonical cloud FPU receipt or authenticated intake rejection. No fake/emulator principal deployed. |
+| Logging / Monitoring | Safe structured startup, readiness and probe records inspected. Monitoring API returned HTTP 200 and eight instance-count series covering both Run services. Full auth/database/storage failure visibility and alert delivery remain unverified. No financial payload, prompt, token or secret was printed by the successful probes. |
+| CI | [Fresh run 36352554377](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36352554377) SUCCESS on `ce5ad30`; all four jobs, including both PostgreSQL driver paths, container restart smoke and npm production audit. Earlier fresh run 36351177147 passed on `1978e9b`. Draft [PR #13](https://github.com/JEMathew/movers-and-ledgers/pull/13) remains unmerged. |
+| Local checks | Ruff PASS; focused runtime/fault/config suite 65 passed; full backend 255 passed/10 PostgreSQL-only skips with inherited Starlette warning; 83 Markdown/318 text files, zero findings; whitespace PASS. Remote PostgreSQL CI covers the locally skipped database gates. |
+| Image security | Grype v0.119.0 completed against both rebuilt image archives. Both failed the High threshold (exit 2): API 50 High / 58 Medium / 9 Low / 45 Negligible; web 9 High / 7 Medium / 1 Low. No Critical matches returned. Dependency-only audits do not supersede these image failures. |
+
+Rebuilt image identities:
+
+- API with DB-API remediation: `sha256:36c2cb038691ef2c6005519bc90590922bc71048e1567ab4ef26fccdeac6eec3`.
+- Firebase-configured frontend: `sha256:598c7817dac46c4ee8f0f035deda1a13e5dc5a2aaf60a868faa7f470784846d1`.
+- Remediation source transfer SHA-256: `0cc74e5163d500558e2a3cc350137d6d757cf06bff6339658e8fbb2f26d9c051`.
+
+Both registry pushes encountered a transient connection refusal and succeeded on retry. No
+credential workaround was used. Public Firebase client configuration is build-time configuration,
+not a service-account key; its value is not included in this record.
+
+### Image-security triage — not cleared
+
+The official scanner image was pinned to
+`anchore/grype@sha256:8c2c9234a345577a6d321a4753aa3ee1276d8975c8452d2344a56b57733ecad3`.
+It ran without a Docker socket, host credentials or ADC mounts, with capabilities dropped and
+no-new-privileges. Initial archive-permission failures were corrected; only completed scans count.
+Cloud Shell reports are `/tmp/movebooks-api-grype.json` and `/tmp/movebooks-web-grype.json`;
+these are ephemeral operator evidence, not durable CI artifacts.
+
+Eight web High matches are under `/usr/local/lib/node_modules/npm/node_modules`, not the
+standalone application's dependency tree: ip-address 10.1.0, brace-expansion 2.0.2,
+pacote 19.0.2/20.0.1, picomatch 4.0.3 and sigstore 3.1.0. The ninth is Alpine zlib 1.3.2-r0
+(`CVE-2026-85091`). Node runs `server.js` directly; npm is not the application entrypoint.
+Removing unused package-manager tooling is a candidate runtime-image hardening, not a completed
+remediation or proof that these findings are unreachable.
+
+API High matches include Debian runtime packages (perl-base, ncurses, libc, util-linux/libmount,
+libacl, zlib) and a Python match (`CVE-2026-82049`). Many have vendor `not-fixed`/`wont-fix`
+status; that is **not** a risk acceptance. A source search found no direct application tarfile,
+Perl or gzprintf usage, but indirect/native reachability remains unreviewed. Do not equate
+50 package/advisory matches to 50 distinct product P1s or waive them based on a string search.
+Preserve the High gate, retain the exact digests, assess vendor/version applicability and reachable
+paths, then rebuild/rescan supported images. No blind major runtime upgrade or suppression was made.
+
+One observed application P1 (duplicate classification) is resolved. No P0 was observed in the
+exercised checks; **final P0/P1 clearance is incomplete**, especially image applicability and the
+unexercised authenticated application path. The overall validation checkpoint remains AMBER,
+not permission to expose or release these images.
+
+### Shutdown, retained resources and cost
+
+Verified after shutdown: SQL `STOPPED` / activation policy `NEVER`; both Run services manual
+instance count `0` and Ready; latest probe executions running count `0`; schema service account
+disabled; `movebooks-beta-probe` secret version 1 disabled; local service proxy exited. Both Run
+IAM policies remain without `allUsers`. No public invoker grant was applied. A read against a
+mistyped secret name returned NOT_FOUND; the actual named probe was then verified DISABLED.
+
+New resources in this continuation: Firebase attachment/Google provider/web-app configuration,
+two narrow custom role definitions, schema and synthetic rows in the existing database, new image
+versions/revisions, and one-shot execution records. No additional SQL instance, bucket or static key.
+Temporary exact-object import/upload bindings were removed; the bootstrap SQL object was
+soft-deleted and is recoverable within the bucket's seven-day retention. The schema identity's
+explicit bootstrap grants were revoked and its account disabled. Normal API privileges did not grow.
+
+Retained: 10 GB SQL disk and network allocation, synthetic probe rows, old/new registry images,
+private GCS artifacts/soft-deleted objects, disabled synthetic secret, logs, IAM/resource definitions,
+Firebase configuration, and Cloud Shell source/image archives and scanner cache. Storage/network
+allocation may continue to charge while compute is stopped. No project-specific actual spend was
+available; the prior delayed billing card is not evidence of zero cost. Planning estimate for this
+bounded session is roughly **US$0.20–$2**, not a billing measurement, excluding continuing retained
+storage, taxes and unmeasured network charges; the US$10 target is not a hard cap.
+
+### Remaining release gates
+
+The action-time confirmation for temporary `allUsers` Run Invoker on **only** the API and web
+services remains pending. Both service IAM policies were inspected and contain no public binding.
+Do not conflate network ingress `all` with anonymous invocation authorization. Protected data
+must still require Firebase tokens and owner checks when the temporary endpoints are enabled.
+Even if that confirmation arrives, do not expose the current images before security triage.
+
+Required remaining evidence: actual frontend reachability and two-user Firebase sign-in; protected
+versus public routes; cross-user denial and approval actor attribution; one canonical synthetic
+workspace through verified FPU; authenticated cloud-intake rejection; in-journey restart/replay/
+lifecycle checks; full failure observability; image security and final criterion-level cloud review.
+No production readiness, compliance, provider connectivity, customer intake or live-model claim.
+
+## Historical first live execution ledger — 2026-09-28
 
 The owner approved minimum dev/test provisioning, dedicated least-privilege identities, and
 a US$10/four-hour cost target, explicitly not a guaranteed cap. Window: 2026-09-27 20:37 UTC

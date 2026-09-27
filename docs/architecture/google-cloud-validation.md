@@ -1,6 +1,6 @@
 # Google Cloud Beta validation boundary
 
-Status: **AMBER — bounded transport validation complete; compute stopped**, 2026-09-28.
+Status: **AMBER — durable adapter validation passed; identity/E2E incomplete and image gates failed; compute stopped**, 2026-09-28.
 This is a validation plan and evidence boundary, not a success claim.
 See the [review evidence](../reviews/google-cloud-validation.md) and
 [operator handoff](../deployment/google-cloud.md).
@@ -14,8 +14,9 @@ See the [review evidence](../reviews/google-cloud-validation.md) and
 - No Gemini, managed ADK, accounting-provider connectivity or production customer-data persistence.
 - Owner approved minimum provisioning and a US$10/four-hour operating target, not a hard cap.
   Window starts 2026-09-27 20:37 UTC; compute must stop by 2026-09-28 00:37 UTC or earlier.
-  Retained storage may continue charging. Temporary public app ingress and Firebase Blaze
-  activation are separate pending decisions; buckets/database must never be publicly accessible.
+  Retained storage may continue charging. Firebase Blaze is now authorized and configured;
+  temporary public application invocation still awaits action-time confirmation. Buckets/database
+  must never be publicly accessible. Failed image gates also block public exposure.
 
 Rules verify. AI predicts. GenAI reasons. Agents orchestrate and act. Humans govern consequential decisions.
 The existing [runtime architecture](google-native-runtime.md) remains authoritative; no product,
@@ -60,12 +61,27 @@ the application image. Adapter checks cannot substitute for real Firebase identi
 E2E, HITL attribution or a verified FPU receipt. Exact evidence and resource disposition belong
 in the review record.
 
-Actual Cloud Run jobs passed encrypted IAM SQL SELECT, private synthetic artifact transport,
-Secret Manager transport and frontend-identity denial for artifacts/secrets. The backend revision
-failed startup readiness with safe 503/UNAVAILABLE logs because schema bootstrap is blocked;
-the frontend revision is platform Ready but its HTTP route was not verified. Firebase activation
-and temporary public app ingress require separate confirmation. No authenticated journey, cloud
-workspace isolation, persisted lifecycle or verified FPU success is claimed.
+The initial schema blocker is resolved using the owner-authorized built-in administrator for
+one-time CONNECT/USAGE and schema-identity CREATE only. The dedicated schema job created the table
+and granted API SELECT/INSERT/UPDATE. Explicit bootstrap grants and exact-object import bindings
+were removed, the object soft-deleted, and the schema identity disabled. No workload received
+cloudsqlsuperuser or database ownership. Runtime DDL/DELETE remain prohibited.
+
+Actual Cloud Run jobs now pass schema-backed IAM persistence, duplicate/stale-write rejection,
+rollback, concurrent CAS, interrupted-connection recovery, private owner-scoped ArtifactService
+operations and scoped secret retrieval/failure. A Cloud SQL restart and new job preserved a
+synthetic sentinel; a subsequent read-only check confirmed owner isolation and absence of runtime
+admin privileges. This is adapter evidence, not a canonical journey or real two-user HTTP proof.
+
+The live duplicate-write probe exposed a pg8000 DB-API classification difference. The narrow
+SQLSTATE 23505 fix is covered by both legacy and connector-style PostgreSQL CI tests; unrelated
+database failures still propagate. No write replay, overwrite or permission bypass was introduced.
+
+Both rebuilt Run revisions are platform Ready. The private CLI proxy still returned platform 404,
+so external HTTP reachability is not passed. Firebase Google sign-in/web-app configuration exists,
+but actual browser sign-in, approval attribution, cross-user HTTP denial and cloud FPU are unverified.
+Safe startup/probe logs and real Run instance-count Monitoring series were inspected; full failure
+signal coverage and alert delivery remain unverified.
 
 At the checkpoint both services use manual scaling zero, Cloud SQL is STOPPED/activation NEVER,
 jobs have zero running tasks, and the temporary bootstrap identity/secret probe version are disabled.
@@ -87,8 +103,11 @@ Local mocked configuration tests are supporting evidence, not live cloud evidenc
 
 The reported npm PostCSS advisory has been remediated locally with a targeted Next.js dependency
 override; audit, tests and production build pass. Fresh Linux images build and the API's pip
-remediation passes a Python dependency audit. Fresh remote CI and OS-image review remain required
-before exposure. Public reachability,
+remediation passes a Python dependency audit. Fresh remote CI passed on `ce5ad30`, but completed
+Grype image scans failed the High threshold: API 50 High matches, web 9. These are package/advisory
+matches, not automatically distinct product P1s; vendor/version/reachability triage and supported
+image hardening remain mandatory. Do not weaken the gate or infer clearance from dependency-only
+audits. Public reachability,
 resource costs and new security-sensitive grants must be reviewed before applying them. GREEN is
 restricted to the actually exercised Beta environment with no open P0/P1; production, compliance,
 provider, customer-data, Gemini/ADK and production SLA/SLO claims remain excluded.
