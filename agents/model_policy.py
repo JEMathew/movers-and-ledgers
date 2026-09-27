@@ -12,6 +12,18 @@ class CapabilityRoute:
 
 
 CAPABILITY_ROUTES = {
+    "financial_reconciliation": CapabilityRoute(
+        "financial_reconciliation",
+        "deterministic",
+        None,
+        "Only exact versioned checks may assert financial verification.",
+    ),
+    "configuration_recommendation": CapabilityRoute(
+        "configuration_recommendation",
+        "google-adk-compatible",
+        "gemini-2.5-flash",
+        "Advisory explanations; rules and human approval remain authoritative.",
+    ),
     "migration_execution": CapabilityRoute(
         "migration_execution",
         "deterministic",

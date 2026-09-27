@@ -64,5 +64,8 @@ For permitted use of the source code, refer to the repository's `LICENSE` file
 ## Status
 
 This foundation implements the synthetic Discover → Assess → Plan → Map & Approve → Migrate →
-Resolve path, not provider integrations, reconciliation, or autonomous financial writes. All source
-and target systems are adapters behind provider-neutral interfaces.
+Resolve → Validate → Configure path, including exact synthetic reconciliation and governed
+configuration. It does not implement provider integrations, production reconciliation, autonomous
+financial writes, Onboarding, or verified First Productive Use. All source and target systems are
+adapters behind provider-neutral interfaces. See the [Validate → Configure architecture](docs/architecture/validate-configure.md)
+and [review record](docs/reviews/validate-configure.md).

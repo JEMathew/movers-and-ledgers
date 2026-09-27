@@ -22,6 +22,7 @@ PLAN_PHASES = (
 )
 
 ALLOWED_ACCOUNT_TARGETS: dict[str, tuple[str, ...]] = {
+    "accounts_payable": ("Accounts Payable",),
     "accounts_receivable": ("Accounts Receivable",),
     "income": ("Sales Income", "Other Income"),
     "bank": ("Bank Account",),

@@ -9,6 +9,11 @@ from pydantic import BaseModel, Field
 
 from domain.migration_resolution.models import MigrationExecution
 from domain.planning_mapping.models import MappingProposal, MigrationPlan, WorkflowStatus
+from domain.validation_configuration.models import (
+    ConfigurationPlan,
+    ValidationRepair,
+    ValidationReport,
+)
 
 
 class FindingCategory(StrEnum):
@@ -89,6 +94,20 @@ class ProductEventName(StrEnum):
     MIGRATION_RESUMED = "migration_resumed"
     MIGRATION_COMPLETED = "migration_completed"
     MIGRATION_BLOCKED = "migration_blocked"
+    VALIDATION_STARTED = "validation_started"
+    VALIDATION_CHECK_COMPLETED = "validation_check_completed"
+    VALIDATION_FAILED = "validation_failed"
+    VALIDATION_BLOCKED = "validation_blocked"
+    VALIDATION_VERIFIED = "validation_verified"
+    CONFIGURATION_STARTED = "configuration_started"
+    CONFIGURATION_PROPOSED = "configuration_proposed"
+    CONFIGURATION_REVIEW_REQUIRED = "configuration_review_required"
+    CONFIGURATION_APPROVED = "configuration_approved"
+    CONFIGURATION_MODIFIED = "configuration_modified"
+    CONFIGURATION_REJECTED = "configuration_rejected"
+    CONFIGURATION_APPLIED = "configuration_applied"
+    CONFIGURATION_COMPLETED = "configuration_completed"
+    READY_FOR_ONBOARDING = "ready_for_onboarding"
 
 
 class EvidenceReference(BaseModel):
@@ -211,3 +230,7 @@ class MigrationSession(BaseModel):
     plan: MigrationPlan | None = None
     mappings: list[MappingProposal] = Field(default_factory=list)
     execution: MigrationExecution | None = None
+    validation_reports: list[ValidationReport] = Field(default_factory=list)
+    validation_repairs: list[ValidationRepair] = Field(default_factory=list)
+    configuration: ConfigurationPlan | None = None
+    configuration_history: list[ConfigurationPlan] = Field(default_factory=list)

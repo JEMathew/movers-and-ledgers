@@ -5,6 +5,7 @@ from datetime import UTC, datetime
 from agents.contracts import AgentRole
 from agents.knowledge import KnowledgeAgent
 from domain.migration_resolution.models import (
+    ExceptionKind,
     MigrationExecution,
     MigrationFailure,
     ResolutionDecision,
@@ -24,6 +25,10 @@ class ResolutionAgent:
         self.knowledge_agent = KnowledgeAgent()
 
     def propose(self, failure: MigrationFailure) -> ResolutionProposal:
+        if failure.kind is ExceptionKind.VALIDATION_DISCREPANCY:
+            from tools.validation.repair import propose_validation_restoration
+
+            return propose_validation_restoration(failure)
         policy = FAILURE_POLICIES[failure.kind]
         specialist = SPECIALISTS[str(policy["specialist"])]
         result = specialist.propose(failure)

@@ -21,8 +21,8 @@ The logical agent set is:
 | Mapping Agent | Coordinate bounded specialists and assemble mapping proposals. | Cannot approve its own proposals. |
 | Migration Agent | Invoke approved, idempotent transformation and synthetic-target tools. | Approved manifests only; no provider write authority. |
 | Resolution Agent | Classify exceptions and propose reversible remedies. | Cannot hide or self-accept consequential exceptions. |
-| Validation Agent | Request and explain deterministic validation and reconciliation. | Future slice; cannot declare its own checks passed. |
-| Configuration Agent | Propose target configuration and feature alternatives. | Future slice; consequential settings require approval. |
+| Validation Agent | Request and explain deterministic validation and reconciliation. | Only deterministic results establish verification. |
+| Configuration Agent | Propose target configuration and feature alternatives. | Consequential settings require approval. |
 | Onboarding Agent | Guide role-aware adoption and operating readiness. | Future slice; cannot substitute for customer action. |
 | First Productive Use / Activation Agent | Coordinate the versioned activation contract and evidence. | Future slice; cannot self-declare First Productive Use. |
 | Trust & Governance Agent | Explain policy, surface control state, and route escalation. | Advisory; deterministic policy remains authoritative. |
@@ -37,7 +37,7 @@ has a bounded context, tool set, structured output, evaluation set, state, and e
 The implemented product path is:
 
 ```text
-Discover ✓ → Assess ✓ → Plan ✓ → Map & Approve ✓ → Migrate ● → Resolve ●
+Discover ✓ → Assess ✓ → Plan ✓ → Map & Approve ✓ → Migrate ✓ → Resolve ✓ → Validate ● → Configure ●
 ```
 
 Planning produces a structured, versioned migration plan. Mapping produces evidence-backed
@@ -48,7 +48,9 @@ at `APPROVED` and prepares a handoff; it performs no target write.
 
 Migrate → Resolve adds ordered deterministic batches, idempotent synthetic loads, checksummed
 checkpoints, controlled exceptions, bounded specialists, human-governed remediation, and safe retry.
-It stops at `MIGRATION_COMPLETE`; reconciliation and later stages are not claimed.
+Its execution stage stops at `MIGRATION_COMPLETE`. [Validate → Configure](validate-configure.md)
+adds exact synthetic reconciliation, approved record restoration, revalidation, and eight governed
+configuration areas. `CONFIGURED` is not Onboarding or First Productive Use.
 
 The implementation runs without Gemini. `MappingRecommendationProvider` is one model integration
 boundary: the shipped deterministic fallback uses versioned repository knowledge and emits the same
@@ -61,7 +63,7 @@ records are not required.
 The following remain architectural commitments rather than implemented behavior:
 
 ```text
-Validate → Configure → Onboard → Verified First Productive Use
+Onboard → Verified First Productive Use
 ```
 
 Future implementations must preserve the canonical model, owner isolation, append-only audit intent,

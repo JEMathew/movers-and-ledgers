@@ -279,7 +279,7 @@ export function MigrateResolveExperience() {
           <Panel className="mt-4">
             <div className="flex items-start gap-4">
               <div className="activity-icon"><ShieldCheck aria-hidden="true" size={19} /></div>
-              <div><h2 className="type-card">Future Validate handoff is safe</h2><p className="mt-2 text-sm text-secondary">Validation is intentionally not implemented in this branch.</p></div>
+              <div><h2 className="type-card">Ready for migration validation</h2><p className="mt-2 text-sm text-secondary">Compare source and target evidence before configuring the environment.</p><a className="button mt-4" href={`/validate-configure?session=${session?.id}`}>Continue to Validate → Configure</a></div>
             </div>
           </Panel>
         </section>
