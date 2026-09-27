@@ -39,8 +39,11 @@ No paid resource is created by this repository. Production infrastructure should
   evidence-backed readiness, owner-scoped ephemeral sessions, and agent activity.
 - [Plan → Map → Approve](plan-map-approve.md) — dependency-aware planning, specialist mapping,
   deterministic controls, owner decisions, and a governed future-migration handoff.
+- [Migrate → Resolve](migrate-resolve.md) — synthetic deterministic execution, checkpoints,
+  controlled exceptions, governed remediation, retry, and a safe future-Validation gate.
+- [Canonical agent workflows](AGENT_WORKFLOWS.md) — stage ownership and handoff invariants.
 - [Beta V1 agent architecture](beta-v1-agent-architecture.md) — the complete 13-agent logical
   architecture, the currently implemented slice, future stages, approval boundaries, and ADK seam.
 
-The current implementation ends at **Plan → Map & Approve**. Migrate through verified First
+The current implementation ends at **Migrate → Resolve**. Validate through verified First
 Productive Use remains future work; the complete journey is preserved as the architectural reference.

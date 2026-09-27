@@ -1,0 +1,16 @@
+[
+  {"id": "clean-success", "expected": "MIGRATION_COMPLETE"},
+  {"id": "retryable-transient", "expected": "RETRY_PENDING"},
+  {"id": "duplicate-conflict", "expected": "duplicate_resolution_specialist"},
+  {"id": "referential-integrity", "expected": "referential_integrity_specialist"},
+  {"id": "tax-configuration", "expected": "tax_configuration_resolution_specialist"},
+  {"id": "user-approves", "expected": "RETRY_PENDING"},
+  {"id": "user-rejects", "expected": "MIGRATION_BLOCKED"},
+  {"id": "retry-succeeds", "expected": "MIGRATION_COMPLETE"},
+  {"id": "retry-limit", "expected": "MIGRATION_BLOCKED"},
+  {"id": "non-retryable", "expected": "MIGRATION_BLOCKED"},
+  {"id": "duplicate-execution", "expected": "prevented"},
+  {"id": "deterministic-policy", "expected": "identical"},
+  {"id": "resume-checkpoint", "expected": "preserved"},
+  {"id": "unresolved-handoff", "expected": "denied"}
+]

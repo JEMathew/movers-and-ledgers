@@ -1,9 +1,9 @@
-"""Versioned HTTP contracts for Discover → Assess → Plan → Map & Approve."""
+"""Versioned HTTP contracts for the implemented migration journey."""
 
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, Header, HTTPException, status
 from pydantic import BaseModel, Field
 
 from agents.orchestrator import WorkflowTransitionError
@@ -15,6 +15,13 @@ from domain.discovery_assessment.models import (
     MigrationSession,
     ProductEvent,
     ProductEventName,
+)
+from domain.migration_resolution.models import (
+    MigrationBatch,
+    MigrationExecution,
+    MigrationFailure,
+    ResolutionDecision,
+    ResolutionProposal,
 )
 from domain.planning_mapping.models import (
     MappingDecision,
@@ -52,6 +59,11 @@ class ModifyMappingRequest(BaseModel):
 
 
 class MappingCommentRequest(BaseModel):
+    comment: str | None = None
+
+
+class ResolutionDecisionRequest(BaseModel):
+    approve: bool
     comment: str | None = None
 
 
@@ -323,3 +335,159 @@ async def record_product_event(
         )
     except MigrationSessionNotFoundError as error:
         raise _not_found(error) from error
+
+
+@router.post(
+    "/migration-demo-sessions",
+    response_model=MigrationSession,
+    status_code=status.HTTP_201_CREATED,
+)
+async def create_migration_demo_session(
+    principal: AuthenticatedPrincipal,
+) -> MigrationSession:
+    """Load a synthetic manifest whose earlier approvals are part of the demo fixture."""
+    return discover_assess_service.create_migration_demo_session(principal.subject)
+
+
+@router.post(
+    "/migration-sessions/{session_id}/migration/start",
+    response_model=MigrationExecution,
+)
+async def start_migration(
+    session_id: UUID,
+    principal: AuthenticatedPrincipal,
+    idempotency_key: Annotated[str, Header(alias="Idempotency-Key", min_length=1)],
+) -> MigrationExecution:
+    try:
+        session = discover_assess_service.start_migration(
+            principal.subject, session_id, idempotency_key
+        )
+        assert session.execution is not None
+        return session.execution
+    except (MigrationSessionNotFoundError, SampleCompanyNotFoundError) as error:
+        raise _not_found(error) from error
+    except (WorkflowTransitionError, ValueError) as error:
+        raise _conflict(error) from error
+
+
+@router.get(
+    "/migration-sessions/{session_id}/migration",
+    response_model=MigrationExecution,
+)
+async def get_migration(session_id: UUID, principal: AuthenticatedPrincipal) -> MigrationExecution:
+    try:
+        return discover_assess_service.get_execution(principal.subject, session_id)
+    except MigrationSessionNotFoundError as error:
+        raise _not_found(error) from error
+    except DiscoveryRequiredError as error:
+        raise _conflict(error) from error
+
+
+@router.get("/migration-sessions/{session_id}/migration/progress")
+async def get_migration_progress(
+    session_id: UUID, principal: AuthenticatedPrincipal
+) -> dict[str, str | int | bool | None]:
+    execution = await get_migration(session_id, principal)
+    return {
+        "status": execution.status.value,
+        "progress_percent": execution.progress_percent,
+        "current_batch_id": execution.current_batch_id,
+        "current_agent": execution.current_agent,
+        "safe_to_validate": execution.safe_to_validate,
+        "unresolved_blocking_failures": execution.unresolved_blocking_failures,
+    }
+
+
+@router.get(
+    "/migration-sessions/{session_id}/migration/batches",
+    response_model=list[MigrationBatch],
+)
+async def get_migration_batches(
+    session_id: UUID, principal: AuthenticatedPrincipal
+) -> list[MigrationBatch]:
+    return (await get_migration(session_id, principal)).batches
+
+
+@router.get(
+    "/migration-sessions/{session_id}/migration/failures",
+    response_model=list[MigrationFailure],
+)
+async def get_migration_failures(
+    session_id: UUID, principal: AuthenticatedPrincipal
+) -> list[MigrationFailure]:
+    return (await get_migration(session_id, principal)).failures
+
+
+@router.get(
+    "/migration-sessions/{session_id}/migration/resolutions",
+    response_model=list[ResolutionProposal],
+)
+async def get_migration_resolutions(
+    session_id: UUID, principal: AuthenticatedPrincipal
+) -> list[ResolutionProposal]:
+    try:
+        return discover_assess_service.get_resolutions(principal.subject, session_id)
+    except MigrationSessionNotFoundError as error:
+        raise _not_found(error) from error
+    except DiscoveryRequiredError as error:
+        raise _conflict(error) from error
+
+
+@router.post(
+    "/migration-sessions/{session_id}/migration/resolutions/{resolution_id}/decision",
+    response_model=MigrationExecution,
+)
+async def decide_resolution(
+    session_id: UUID,
+    resolution_id: UUID,
+    request: ResolutionDecisionRequest,
+    principal: AuthenticatedPrincipal,
+) -> MigrationExecution:
+    try:
+        session = discover_assess_service.decide_resolution(
+            principal.subject,
+            session_id,
+            resolution_id,
+            ResolutionDecision(approve=request.approve, comment=request.comment),
+        )
+        assert session.execution is not None
+        return session.execution
+    except (MigrationSessionNotFoundError, LookupError) as error:
+        raise _not_found(error) from error
+    except (WorkflowTransitionError, ValueError) as error:
+        raise _conflict(error) from error
+
+
+@router.post(
+    "/migration-sessions/{session_id}/migration/retry",
+    response_model=MigrationExecution,
+)
+async def retry_migration(
+    session_id: UUID, principal: AuthenticatedPrincipal
+) -> MigrationExecution:
+    try:
+        session = discover_assess_service.retry_migration(principal.subject, session_id)
+        assert session.execution is not None
+        return session.execution
+    except (MigrationSessionNotFoundError, SampleCompanyNotFoundError) as error:
+        raise _not_found(error) from error
+    except (WorkflowTransitionError, ValueError) as error:
+        raise _conflict(error) from error
+
+
+@router.post(
+    "/migration-sessions/{session_id}/migration/resume",
+    response_model=MigrationExecution,
+)
+async def resume_migration(
+    session_id: UUID, principal: AuthenticatedPrincipal
+) -> MigrationExecution:
+    """Resume a retry-pending execution from its recorded checkpoint."""
+    return await retry_migration(session_id, principal)
+
+
+@router.get("/migration-sessions/{session_id}/migration/target")
+async def get_synthetic_target(
+    session_id: UUID, principal: AuthenticatedPrincipal
+) -> dict[str, list[dict[str, object]]]:
+    return (await get_migration(session_id, principal)).target_state

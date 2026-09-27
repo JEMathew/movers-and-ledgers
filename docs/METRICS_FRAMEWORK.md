@@ -51,6 +51,27 @@ This is a **Proposed** definition, not a measured production result or numeric t
 | Groundedness | Evaluated claims supported by cited, valid evidence / evaluated factual claims | Leading, health, model |
 | CSAT | Responses to a versioned satisfaction question, with response rate and context reported | Lagging, outcome, customer |
 
+### Migrate → Resolve future metric contracts
+
+These are uninstrumented contracts, not measured results. Every rate requires the stated eligible
+denominator, and every production implementation still requires an owner, observation window,
+privacy/retention review, baseline, target, segments, and data-quality checks.
+
+| Metric | Future definition |
+| --- | --- |
+| Migration completion | Eligible executions reaching the versioned completion contract / eligible executions started. |
+| Migration duration | Elapsed start-to-completion time, with paused and human-wait time separately reported. |
+| Batch success rate | Batches completed without a failed attempt / eligible batches started. |
+| Exception rate | Classified exceptions / relevant records or batches processed, segmented by kind and severity. |
+| Auto-resolution rate | Policy-eligible low-risk exceptions resolved without human action / exceptions eligible for auto-resolution. |
+| Human-resolution rate | Exceptions closed by an attributable human-approved remediation / exceptions requiring human approval. |
+| Retry success | Failed retry-eligible batches completing within policy / retry-eligible failed batches. |
+| Blocked migration rate | Executions reaching a blocked terminal state / eligible executions started. |
+| Recovery time | Elapsed failure-to-success time, separating system work from customer wait time. |
+| Escalation rate | Correct escalations / exceptions requiring escalation, paired with unnecessary-escalation rate. |
+| Duplicate execution prevented | Conflicting or repeated execution attempts rejected or safely replayed, reported as a count with request context. |
+| Customer intervention count | Attributable customer decisions per execution, segmented by reason and risk; diagnostic only. |
+
 ## Classification rules
 
 - **Leading** metrics expose conditions likely to affect a later outcome; **lagging** metrics confirm the outcome after it occurs.

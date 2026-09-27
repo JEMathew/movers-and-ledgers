@@ -5,7 +5,7 @@ from uuid import UUID
 from agents.assessment import AssessmentAgent
 from agents.discovery import DiscoveryAgent
 from agents.mapping.specialists import records_for_area
-from agents.orchestrator import PlanMapApproveOrchestrator
+from agents.orchestrator import MigrateResolveOrchestrator, PlanMapApproveOrchestrator
 from domain.discovery_assessment.models import (
     DiscoveryResult,
     MigrationSession,
@@ -14,10 +14,16 @@ from domain.discovery_assessment.models import (
     ReadinessStatus,
     SessionStatus,
 )
+from domain.migration_resolution.models import (
+    MigrationExecution,
+    ResolutionDecision,
+    ResolutionProposal,
+)
 from domain.planning_mapping.models import (
     MappingArea,
     MappingDecision,
     MappingProposal,
+    MappingState,
     MigrationPlan,
     WorkflowStatus,
 )
@@ -45,6 +51,7 @@ class DiscoverAssessService:
         self.discovery_agent = DiscoveryAgent()
         self.assessment_agent = AssessmentAgent()
         self.orchestrator = PlanMapApproveOrchestrator()
+        self.migration_orchestrator = MigrateResolveOrchestrator()
 
     def create_session(self, owner_subject: str, sample_company_id: str) -> MigrationSession:
         fixture = load_sample_company(sample_company_id)
@@ -213,6 +220,65 @@ class DiscoverAssessService:
         session.events.append(event)
         self.repository.put(session)
         return event
+
+    def create_migration_demo_session(self, owner_subject: str) -> MigrationSession:
+        """Create a reviewed, synthetic manifest for the Migrate → Resolve demonstration."""
+        session = self.create_session(owner_subject, "harbor-light-migrate-demo")
+        session = self.discover(owner_subject, session.id)
+        session = self.assess(owner_subject, session.id)
+        session = self.plan(owner_subject, session.id)
+        session = self.map(owner_subject, session.id)
+        for mapping in list(session.mappings):
+            session = self.decide_mapping(
+                owner_subject,
+                session.id,
+                mapping.id,
+                MappingDecision(
+                    decision=MappingState.APPROVED,
+                    comment="Reviewed synthetic demonstration manifest",
+                ),
+            )
+        return session
+
+    def start_migration(
+        self, owner_subject: str, session_id: UUID, idempotency_key: str
+    ) -> MigrationSession:
+        session = self.get_session(owner_subject, session_id)
+        fixture = load_sample_company(session.sample_company_id)
+        if fixture is None:
+            raise SampleCompanyNotFoundError(session.sample_company_id)
+        session = self.migration_orchestrator.start(session, fixture, idempotency_key)
+        return self.repository.put(session)
+
+    def get_execution(self, owner_subject: str, session_id: UUID) -> MigrationExecution:
+        session = self.get_session(owner_subject, session_id)
+        if session.execution is None:
+            raise DiscoveryRequiredError("Migration execution has not started")
+        return session.execution
+
+    def decide_resolution(
+        self,
+        owner_subject: str,
+        session_id: UUID,
+        resolution_id: UUID,
+        decision: ResolutionDecision,
+    ) -> MigrationSession:
+        session = self.get_session(owner_subject, session_id)
+        session = self.migration_orchestrator.decide_resolution(
+            session, resolution_id, decision, owner_subject
+        )
+        return self.repository.put(session)
+
+    def get_resolutions(self, owner_subject: str, session_id: UUID) -> list[ResolutionProposal]:
+        return self.get_execution(owner_subject, session_id).resolutions
+
+    def retry_migration(self, owner_subject: str, session_id: UUID) -> MigrationSession:
+        session = self.get_session(owner_subject, session_id)
+        fixture = load_sample_company(session.sample_company_id)
+        if fixture is None:
+            raise SampleCompanyNotFoundError(session.sample_company_id)
+        session = self.migration_orchestrator.retry(session, fixture)
+        return self.repository.put(session)
 
 
 session_repository = InMemoryMigrationSessionRepository()

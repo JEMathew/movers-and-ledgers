@@ -239,6 +239,11 @@ button, input, select, textarea { font: inherit; }
 }
 .migration-orb::after { inset: 2.25rem; background: var(--primary); opacity: 0.85; animation-duration: 5s; }
 .migration-orb > span { inset: 0.7rem 2.9rem; border-color: var(--agent); animation-direction: reverse; }
+.migration-orb.is-running { border-color: var(--primary); box-shadow: 0 0 0 0.35rem var(--primary-subtle), var(--shadow-md); }
+.migration-orb.is-running::before, .migration-orb.is-running::after { animation-duration: 1.8s; }
+.migration-orb.is-reasoning { border-color: var(--agent); background: radial-gradient(circle at 35% 30%, var(--agent-subtle), var(--surface)); }
+.migration-orb.is-reasoning::before, .migration-orb.is-reasoning > span { animation-duration: 3.2s; }
+.migration-orb.is-retrying::after { animation-duration: 1.2s; }
 .assessment-source-card { box-shadow: 0 0 0 1px var(--primary-subtle), var(--shadow-sm); }
 .finding-card { border-left: 3px solid var(--border-strong); }
 .assessment-summary { border-color: var(--primary); }

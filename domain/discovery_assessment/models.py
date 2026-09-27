@@ -7,6 +7,7 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
+from domain.migration_resolution.models import MigrationExecution
 from domain.planning_mapping.models import MappingProposal, MigrationPlan, WorkflowStatus
 
 
@@ -43,8 +44,10 @@ class SessionStatus(StrEnum):
 
 
 class ActivityStatus(StrEnum):
+    IN_PROGRESS = "IN_PROGRESS"
     COMPLETED = "COMPLETED"
     FAILED = "FAILED"
+    PAUSED = "PAUSED"
 
 
 class RiskLevel(StrEnum):
@@ -71,6 +74,21 @@ class ProductEventName(StrEnum):
     MAPPING_REJECTED = "mapping_rejected"
     MAPPING_BLOCKED = "mapping_blocked"
     READY_FOR_MIGRATION = "ready_for_migration"
+    MIGRATION_STARTED = "migration_started"
+    BATCH_STARTED = "batch_started"
+    BATCH_COMPLETED = "batch_completed"
+    BATCH_FAILED = "batch_failed"
+    MIGRATION_PAUSED = "migration_paused"
+    RESOLUTION_STARTED = "resolution_started"
+    RESOLUTION_PROPOSED = "resolution_proposed"
+    RESOLUTION_APPROVED = "resolution_approved"
+    RESOLUTION_APPLIED = "resolution_applied"
+    RETRY_STARTED = "retry_started"
+    RETRY_SUCCEEDED = "retry_succeeded"
+    RETRY_FAILED = "retry_failed"
+    MIGRATION_RESUMED = "migration_resumed"
+    MIGRATION_COMPLETED = "migration_completed"
+    MIGRATION_BLOCKED = "migration_blocked"
 
 
 class EvidenceReference(BaseModel):
@@ -192,3 +210,4 @@ class MigrationSession(BaseModel):
     workflow_status: WorkflowStatus = WorkflowStatus.DISCOVERED
     plan: MigrationPlan | None = None
     mappings: list[MappingProposal] = Field(default_factory=list)
+    execution: MigrationExecution | None = None
