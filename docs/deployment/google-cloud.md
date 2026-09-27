@@ -3,10 +3,11 @@
 ## Authorized validation checkpoint — 2026-09-28
 
 The owner authorized bounded dev/test validation in project `movebooks-ai`, region `asia-southeast1`.
-The current Console session reports **“You need additional access”**; the project picker search
-returns no matching accessible resource. No project resources, grants or deployments were changed.
-Cloud readiness remains **AMBER**. Resolve account/project access before inventorying or creating
-resources; do not assume a denied project is empty or create a replacement.
+The earlier access denial is resolved. Console and normally authorized Cloud Shell confirm ACTIVE
+project `movebooks-ai`, number `411600344727`, with billing enabled. No service accounts or buckets
+exist in the returned inventory. Required runtime APIs are not yet enabled (details in the review).
+No project resources, grants, APIs or deployments were changed. Cloud readiness remains **AMBER**:
+confirm the proposed least-privilege setup and spending/lifetime limit before provisioning.
 
 Cloud Try Your Data intake must remain disabled; this slice validates safe rejection only.
 No raw tokens or service-account keys are requested. See the
@@ -22,7 +23,8 @@ Operator handoff, **not production readiness or deployment authorization**. Read
 Docker and real PostgreSQL gates passed locally; their remote CI execution and real cloud
 smoke/IAM/identity verification remain required before exposure. See the
 [runtime validation record](../reviews/runtime-validation-gates.md). Only synthetic workspaces are
-eligible. The inherited dependency advisory remains a hosting gate.
+eligible. The inherited npm PostCSS findings are now resolved locally by a tested dependency override;
+fresh image/remote verification and the broader cloud security review remain hosting gates.
 
 ## Configuration
 
@@ -162,7 +164,7 @@ connectivity; its identity/fault hooks are absent from both production images. N
 ## Before any cloud exposure
 
 1. Pass both container builds/smokes and PostgreSQL concurrency/reload tests; review dependency findings.
-2. Resolve inherited Next.js/PostCSS advisories in a separate tested change, not an unreviewed major upgrade.
+2. Verify the tested Next.js/PostCSS override in fresh images and remote CI; do not apply an unreviewed major upgrade.
 3. Under new human authorization, provision isolated synthetic cloud-dev resources and verify IAM/identity/CORS/private bucket controls.
 4. Test restart/two-instance CAS, token revocation/cross-owner rejection, secret rotation/unavailability, bucket denial with real SDKs.
 5. Verify backups/restore, retention/deletion, schema rollback, log exclusions and incident ownership; measure actual baselines.

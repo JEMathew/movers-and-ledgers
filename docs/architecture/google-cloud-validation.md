@@ -1,6 +1,6 @@
 # Google Cloud Beta validation boundary
 
-Status: **AMBER — live validation blocked at project access**, 2026-09-28.
+Status: **AMBER — project access verified; provisioning approvals pending**, 2026-09-28.
 This is a validation plan and observed preflight record, not a deployment or success claim.
 See the [review evidence](../reviews/google-cloud-validation.md) and
 [operator handoff](../deployment/google-cloud.md).
@@ -17,7 +17,7 @@ Rules verify. AI predicts. GenAI reasons. Agents orchestrate and act. Humans gov
 The existing [runtime architecture](google-native-runtime.md) remains authoritative; no product,
 storage, identity or lifecycle architecture is replaced by this validation slice.
 
-## Intended validation topology — not provisioned or inspected
+## Intended validation topology — not provisioned
 
 The existing deployable frontend uses Firebase sign-in and the backend verifies Firebase identity.
 The API uses Cloud SQL PostgreSQL snapshots through the IAM connector, owner-scoped private GCS
@@ -29,6 +29,18 @@ Before provisioning, inventory existing services, enabled APIs, registry, databa
 Firebase configuration, service identities, grants, billing/cost boundaries and deployment settings.
 Reuse equivalent resources. Do not infer an empty project from an access-denied response. Do not
 select a similarly named project or create a replacement without confirming the intended target.
+
+Live preflight now confirms project number `411600344727`, ACTIVE state and enabled billing.
+No service accounts or storage buckets were returned by their list APIs. Logging and Monitoring
+APIs are enabled; Cloud Run, SQL Admin, Artifact Registry, Secret Manager, Firebase and Identity
+Toolkit APIs were absent from the enabled list. Other service inventories remain unqueried until
+their APIs can be enabled; their absence is not inferred solely from disabled APIs.
+
+The next proposed setup uses dedicated backend/frontend identities, no workload Owner/Editor,
+IAM SQL connectivity plus table-only runtime grants, a single private scoped-artifact bucket,
+one synthetic test secret and repository-scoped image access. Specific security grants and a
+billable resource spending/lifetime boundary require approval before applying them. No public
+invoker grant is implied. The human owner binding remains unchanged to avoid lockout.
 
 ## Required evidence before GREEN
 
@@ -44,7 +56,9 @@ Cloud intake validation is a negative check: the browser must not send the selec
 the API must reject intake, and the durable repository must reject uploaded workspace persistence.
 Local mocked configuration tests are supporting evidence, not live cloud evidence.
 
-The documented dependency hosting gate must be cleared before exposure. Public reachability,
+The reported npm PostCSS advisory has been remediated locally with a targeted Next.js dependency
+override; audit, tests and production build pass. Fresh image and remote CI verification for that
+change remain required before exposure. Public reachability,
 resource costs and new security-sensitive grants must be reviewed before applying them. GREEN is
 restricted to the actually exercised Beta environment with no open P0/P1; production, compliance,
 provider, customer-data, Gemini/ADK and production SLA/SLO claims remain excluded.
