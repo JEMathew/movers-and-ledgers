@@ -28,6 +28,7 @@ from domain.planning_mapping.models import (
     WorkflowStatus,
 )
 from tools.mapping import MappingPolicyError
+from tools.migration import stable_checksum
 
 from .fixtures import load_sample_company
 from .repository import InMemoryMigrationSessionRepository, MigrationSessionRepository
@@ -61,6 +62,7 @@ class DiscoverAssessService:
             owner_subject=owner_subject,
             sample_company_id=sample_company_id,
             company_name=str(fixture["company"]["display_name"]),
+            source_checksum=stable_checksum(fixture["datasets"]),
         )
         session.events.append(
             ProductEvent(
@@ -79,6 +81,9 @@ class DiscoverAssessService:
 
     def discover(self, owner_subject: str, session_id: UUID) -> MigrationSession:
         session = self.get_session(owner_subject, session_id)
+        if session.discovery is not None:
+            return session
+        original = session.model_copy(deep=True)
         fixture = load_sample_company(session.sample_company_id)
         if fixture is None:
             raise SampleCompanyNotFoundError(session.sample_company_id)
@@ -106,7 +111,7 @@ class DiscoverAssessService:
             )
             for finding in discovery.findings
         )
-        return self.repository.put(session)
+        return self.repository.put_if_unchanged(original, session)
 
     def get_discovery(self, owner_subject: str, session_id: UUID) -> DiscoveryResult:
         session = self.get_session(owner_subject, session_id)
@@ -116,6 +121,9 @@ class DiscoverAssessService:
 
     def assess(self, owner_subject: str, session_id: UUID) -> MigrationSession:
         session = self.get_session(owner_subject, session_id)
+        if session.assessment is not None:
+            return session
+        original = session.model_copy(deep=True)
         if session.discovery is None:
             raise DiscoveryRequiredError("Run discovery before assessment")
         assessment, activity = self.assessment_agent.run(session.id, session.discovery)
@@ -144,14 +152,15 @@ class DiscoverAssessService:
                 },
             )
         )
-        return self.repository.put(session)
+        return self.repository.put_if_unchanged(original, session)
 
     def plan(self, owner_subject: str, session_id: UUID) -> MigrationSession:
         session = self.get_session(owner_subject, session_id)
         if session.plan is not None:
             return session
+        original = session.model_copy(deep=True)
         session = self.orchestrator.create_plan(session)
-        return self.repository.put(session)
+        return self.repository.put_if_unchanged(original, session)
 
     def get_plan(self, owner_subject: str, session_id: UUID) -> MigrationPlan:
         session = self.get_session(owner_subject, session_id)
@@ -163,11 +172,12 @@ class DiscoverAssessService:
         session = self.get_session(owner_subject, session_id)
         if session.mappings:
             return session
+        original = session.model_copy(deep=True)
         fixture = load_sample_company(session.sample_company_id)
         if fixture is None:
             raise SampleCompanyNotFoundError(session.sample_company_id)
         session = self.orchestrator.create_mappings(session, fixture)
-        return self.repository.put(session)
+        return self.repository.put_if_unchanged(original, session)
 
     def get_mappings(self, owner_subject: str, session_id: UUID) -> list[MappingProposal]:
         session = self.get_session(owner_subject, session_id)
@@ -183,6 +193,7 @@ class DiscoverAssessService:
         decision: MappingDecision,
     ) -> MigrationSession:
         session = self.get_session(owner_subject, session_id)
+        original = session.model_copy(deep=True)
         mapping = next((item for item in session.mappings if item.id == mapping_id), None)
         if mapping is None:
             raise MigrationSessionNotFoundError(str(mapping_id))
@@ -202,7 +213,7 @@ class DiscoverAssessService:
         session = self.orchestrator.decide_mapping(
             session, mapping_id, decision, owner_subject, record
         )
-        return self.repository.put(session)
+        return self.repository.put_if_unchanged(original, session)
 
     def add_event(
         self,
@@ -211,14 +222,17 @@ class DiscoverAssessService:
         name: ProductEventName,
         attributes: dict[str, str | int | bool],
     ) -> ProductEvent:
+        if name is not ProductEventName.CONTINUE_TO_PLAN_SELECTED:
+            raise ValueError("Only customer navigation events may be submitted")
         session = self.get_session(owner_subject, session_id)
+        original = session.model_copy(deep=True)
         event = ProductEvent(
             migration_session_id=session.id,
             name=name,
             attributes=attributes,
         )
         session.events.append(event)
-        self.repository.put(session)
+        self.repository.put_if_unchanged(original, session)
         return event
 
     def create_migration_demo_session(self, owner_subject: str) -> MigrationSession:
@@ -244,11 +258,12 @@ class DiscoverAssessService:
         self, owner_subject: str, session_id: UUID, idempotency_key: str
     ) -> MigrationSession:
         session = self.get_session(owner_subject, session_id)
+        original = session.model_copy(deep=True)
         fixture = load_sample_company(session.sample_company_id)
         if fixture is None:
             raise SampleCompanyNotFoundError(session.sample_company_id)
         session = self.migration_orchestrator.start(session, fixture, idempotency_key)
-        return self.repository.put(session)
+        return self.repository.put_if_unchanged(original, session)
 
     def get_execution(self, owner_subject: str, session_id: UUID) -> MigrationExecution:
         session = self.get_session(owner_subject, session_id)
@@ -264,21 +279,23 @@ class DiscoverAssessService:
         decision: ResolutionDecision,
     ) -> MigrationSession:
         session = self.get_session(owner_subject, session_id)
+        original = session.model_copy(deep=True)
         session = self.migration_orchestrator.decide_resolution(
             session, resolution_id, decision, owner_subject
         )
-        return self.repository.put(session)
+        return self.repository.put_if_unchanged(original, session)
 
     def get_resolutions(self, owner_subject: str, session_id: UUID) -> list[ResolutionProposal]:
         return self.get_execution(owner_subject, session_id).resolutions
 
     def retry_migration(self, owner_subject: str, session_id: UUID) -> MigrationSession:
         session = self.get_session(owner_subject, session_id)
+        original = session.model_copy(deep=True)
         fixture = load_sample_company(session.sample_company_id)
         if fixture is None:
             raise SampleCompanyNotFoundError(session.sample_company_id)
         session = self.migration_orchestrator.retry(session, fixture)
-        return self.repository.put(session)
+        return self.repository.put_if_unchanged(original, session)
 
 
 session_repository = InMemoryMigrationSessionRepository()

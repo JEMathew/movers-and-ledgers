@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   Upload,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Alert, LoadingState } from "@/components/ui/feedback";
 import { Badge, Button, Card, Link, Panel } from "@/components/ui/primitives";
@@ -64,6 +64,17 @@ export function DiscoverAssessExperience() {
   const [activity, setActivity] = useState<AgentActivity[]>([]);
   const [error, setError] = useState<string>();
   const [planningNotice, setPlanningNotice] = useState(false);
+  const [sample, setSample] = useState("northstar-supplies");
+
+  useEffect(() => {
+    const saved = new URLSearchParams(window.location.search).get("session");
+    if (!saved) return;
+    void api<{id: string; sample_company_id: string; discovery?: DiscoveryResult; assessment?: AssessmentResult; activity: AgentActivity[]}>(`/v1/migration-sessions/${saved}`).then(data => {
+      setSessionId(data.id); setDiscovery(data.discovery); setAssessment(data.assessment);
+      setSample(data.sample_company_id);
+      setActivity(data.activity); setPhase(data.assessment ? "complete" : "select");
+    }).catch(caught => { setError(caught.message); setPhase("error"); });
+  }, []);
 
   const startAssessment = async () => {
     setError(undefined);
@@ -72,9 +83,11 @@ export function DiscoverAssessExperience() {
       setPhase("discovering");
       const session = await api<{ id: string }>("/v1/migration-sessions", {
         method: "POST",
-        body: JSON.stringify({ sample_company_id: "northstar-supplies" }),
+        body: JSON.stringify({ sample_company_id: sample }),
       });
       setSessionId(session.id);
+      sessionStorage.setItem("movebooks-migration-session", session.id);
+      window.history.replaceState(null, "", `?session=${encodeURIComponent(session.id)}`);
       const discovered = await api<DiscoveryResult>(
         `/v1/migration-sessions/${session.id}/discovery`,
         { method: "POST" },
@@ -153,18 +166,22 @@ export function DiscoverAssessExperience() {
           {running && <LoadingState label={phase === "discovering" ? "Discovering source data" : "Calculating readiness"} />}
         </div>
         <div className="mt-5 grid gap-4 md:grid-cols-2">
-          <Card className="assessment-source-card border-[var(--primary)]" aria-label="Northstar Supplies selected">
+          <Card className="assessment-source-card border-[var(--primary)]" aria-label="Synthetic business selection">
             <div className="flex items-start justify-between gap-4">
               <div className="metric-icon"><Database aria-hidden="true" size={18} /></div>
               <Badge>Synthetic sample company · selected</Badge>
             </div>
-            <h3 className="mt-8 text-xl font-bold">Northstar Supplies</h3>
+            <label className="mt-8 block font-bold">Synthetic business
+              <select className="field-control mt-2 block w-full" value={sample} disabled={running} onChange={event => setSample(event.target.value)}>
+                <option value="northstar-supplies">Northstar Supplies — readiness blockers</option>
+                <option value="harbor-light-migrate-demo">Harbor Light Books — complete governed journey</option>
+              </select>
+            </label>
             <p className="mt-2 text-sm leading-6 text-secondary">
-              A deliberately imperfect office-supply distributor with duplicates, a missing value,
-              an invalid relationship, and an unsupported setting.
+              {sample === "northstar-supplies" ? "A deliberately imperfect office-supply distributor with duplicates, a missing value, an invalid relationship, and an unsupported setting." : "One synthetic business from discovery to verified first use. You approve key decisions; a controlled migration exception demonstrates safe recovery."}
             </p>
             <Button className="mt-6" onClick={startAssessment} disabled={running}>
-              {phase === "complete" ? "Run assessment again" : "Assess this migration"}
+              {phase === "complete" ? "Start a new assessment" : "Assess this migration"}
               <ArrowRight aria-hidden="true" size={17} />
             </Button>
           </Card>
@@ -287,7 +304,7 @@ export function DiscoverAssessExperience() {
               <div className="flex items-center gap-3 text-sm text-secondary"><LockKeyhole aria-hidden="true" className="text-primary" size={19} /><span>No mapping, target write, or approval was performed.</span></div>
               <Button onClick={continueToPlanning}>Continue to Planning <ArrowRight aria-hidden="true" size={17} /></Button>
             </div>
-            {planningNotice && <div className="mt-5"><Alert tone="info" title="Planning is the next governed phase"><p className="mt-1">The Planning Agent will preserve every blocker and warning, then prepare evidence-backed mappings for your approval.</p><Link href="/plan-map-approve" className="mt-3 inline-flex">Open Plan &amp; Map workspace →</Link></Alert></div>}
+            {planningNotice && <div className="mt-5"><Alert tone="info" title="Planning is the next governed phase"><p className="mt-1">The Planning Agent will preserve every blocker and warning, then prepare evidence-backed mappings for your approval.</p><Link href={`/plan-map-approve?session=${sessionId}`} className="mt-3 inline-flex">Open Plan &amp; Map workspace →</Link></Alert></div>}
           </Panel>
         </section>
       )}

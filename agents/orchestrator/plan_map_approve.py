@@ -47,9 +47,7 @@ class PlanMapApproveOrchestrator:
         session.events.append(
             ProductEvent(migration_session_id=session.id, name=ProductEventName.PLAN_STARTED)
         )
-        plan, activity = self.planning_agent.run(
-            session.id, session.assessment, session.discovery
-        )
+        plan, activity = self.planning_agent.run(session.id, session.assessment, session.discovery)
         session.plan = plan
         session.activity.append(activity)
         session.workflow_status = WorkflowStatus.PLANNED
@@ -115,8 +113,17 @@ class PlanMapApproveOrchestrator:
         )
         if index is None:
             raise LookupError(str(mapping_id))
-        decided = apply_mapping_decision(
-            session.mappings[index], decision, actor, source_record
+        decided = apply_mapping_decision(session.mappings[index], decision, actor, source_record)
+        from .audit import record_decision
+
+        record_decision(
+            session,
+            actor,
+            decided.state.value,
+            "map_approve",
+            decided.id,
+            decided.evidence,
+            decided.selected_target,
         )
         session.mappings[index] = decided
         event_name = {
@@ -130,9 +137,7 @@ class PlanMapApproveOrchestrator:
                 migration_session_id=session.id,
                 name=event_name,
                 attributes={
-                    key: value
-                    for key, value in audit.items()
-                    if isinstance(value, (str, bool))
+                    key: value for key, value in audit.items() if isinstance(value, (str, bool))
                 },
             )
         )

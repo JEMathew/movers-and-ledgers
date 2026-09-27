@@ -38,7 +38,7 @@ export function OnboardFpuExperience() {
     setProduct(data.onboarding?.fpu?.inputs.product_id ?? data.products[0]?.id ?? "");
   }
   useEffect(() => {
-    const id = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem(STORAGE);
+    const id = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session") ?? sessionStorage.getItem(STORAGE);
     if (!id) return;
     let active = true;
     request(`/migration-sessions/${encodeURIComponent(id)}/onboarding`, undefined, "GET").then(data => { if (active) accept(data); }).catch(() => { if (active) setError("Saved session unavailable. Start a new synthetic scenario."); });
@@ -49,6 +49,7 @@ export function OnboardFpuExperience() {
     try {
       const data = await request(path, body, "POST", key); accept(data);
       sessionStorage.setItem(STORAGE, data.session_id);
+      sessionStorage.setItem("movebooks-migration-session", data.session_id);
       window.history.replaceState(null, "", `?session=${encodeURIComponent(data.session_id)}`);
       setReview(undefined); return data;
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Action not completed."); }

@@ -23,8 +23,8 @@ The logical agent set is:
 | Resolution Agent | Classify exceptions and propose reversible remedies. | Cannot hide or self-accept consequential exceptions. |
 | Validation Agent | Request and explain deterministic validation and reconciliation. | Only deterministic results establish verification. |
 | Configuration Agent | Propose target configuration and feature alternatives. | Consequential settings require approval. |
-| Onboarding Agent | Guide role-aware adoption and operating readiness. | Future slice; cannot substitute for customer action. |
-| First Productive Use / Activation Agent | Coordinate the versioned activation contract and evidence. | Future slice; cannot self-declare First Productive Use. |
+| Onboarding Agent | Guide role-aware adoption and operating readiness. | Implemented synthetic checks; cannot substitute for customer action. |
+| First Productive Use / Activation Agent | Coordinate the versioned activation contract and evidence. | Implemented deterministic synthetic invoice verification; cannot self-declare success. |
 | Trust & Governance Agent | Explain policy, surface control state, and route escalation. | Advisory; deterministic policy remains authoritative. |
 | Knowledge Agent | Retrieve versioned mapping, migration, compatibility, and canonical definitions. | Retrieved material is reference evidence, not authorization. |
 
@@ -37,7 +37,7 @@ has a bounded context, tool set, structured output, evaluation set, state, and e
 The implemented product path is:
 
 ```text
-Discover ✓ → Assess ✓ → Plan ✓ → Map & Approve ✓ → Migrate ✓ → Resolve ✓ → Validate ● → Configure ●
+Discover → Assess → Plan → Map & Approve → Migrate → Resolve → Validate → Configure → Onboard → Verified FPU
 ```
 
 Planning produces a structured, versioned migration plan. Mapping produces evidence-backed
@@ -58,13 +58,12 @@ structured recommendation contract. A future Gemini provider may propose semanti
 explanations, but deterministic validation and approval policy remain authoritative and raw financial
 records are not required.
 
-## Future slices
+## Integrated Beta and future production work
 
-The following remain architectural commitments rather than implemented behavior:
-
-```text
-Onboard → Verified First Productive Use
-```
+All stages above are implemented for the synthetic public-reference Beta. The
+[integrated architecture](beta-v1-integration.md) documents one-session execution without demo
+loaders; [Onboard → FPU](onboard-fpu.md) specifies the productive invoice contract.
+Live providers, durable operational state, real identity, live Gemini and managed ADK remain future.
 
 Future implementations must preserve the canonical model, owner isolation, append-only audit intent,
 versioned policy, safe stopping, deterministic reconciliation, scoped approvals, and verified First

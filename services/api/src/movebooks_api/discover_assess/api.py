@@ -4,7 +4,7 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Header, HTTPException, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from agents.orchestrator import WorkflowTransitionError
 from domain.discovery_assessment.models import (
@@ -30,7 +30,6 @@ from domain.planning_mapping.models import (
     MigrationPlan,
 )
 from movebooks_api.auth import Principal, require_principal
-from tools.mapping import MappingPolicyError
 
 from .fixtures import sample_company_catalog
 from .service import (
@@ -45,24 +44,29 @@ AuthenticatedPrincipal = Annotated[Principal, Depends(require_principal)]
 
 
 class CreateMigrationSessionRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     sample_company_id: str = Field(min_length=1)
 
 
 class RecordProductEventRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     name: ProductEventName
     attributes: dict[str, str | int | bool] = Field(default_factory=dict)
 
 
 class ModifyMappingRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     selected_target: str = Field(min_length=1)
     comment: str | None = None
 
 
 class MappingCommentRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     comment: str | None = None
 
 
 class ResolutionDecisionRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     approve: bool
     comment: str | None = None
 
@@ -111,6 +115,8 @@ async def run_discovery(session_id: UUID, principal: AuthenticatedPrincipal) -> 
         return session.discovery
     except (MigrationSessionNotFoundError, SampleCompanyNotFoundError) as error:
         raise _not_found(error) from error
+    except ValueError as error:
+        raise _conflict(error) from error
 
 
 @router.get("/migration-sessions/{session_id}/discovery", response_model=DiscoveryResult)
@@ -141,7 +147,7 @@ async def run_assessment(session_id: UUID, principal: AuthenticatedPrincipal) ->
         return session.assessment
     except MigrationSessionNotFoundError as error:
         raise _not_found(error) from error
-    except DiscoveryRequiredError as error:
+    except (DiscoveryRequiredError, ValueError) as error:
         raise _conflict(error) from error
 
 
@@ -172,7 +178,7 @@ async def create_plan(session_id: UUID, principal: AuthenticatedPrincipal) -> Mi
         return session.plan
     except MigrationSessionNotFoundError as error:
         raise _not_found(error) from error
-    except (DiscoveryRequiredError, WorkflowTransitionError) as error:
+    except (DiscoveryRequiredError, ValueError) as error:
         raise _conflict(error) from error
 
 
@@ -211,7 +217,7 @@ async def create_mappings(
         return discover_assess_service.map(principal.subject, session_id).mappings
     except (MigrationSessionNotFoundError, SampleCompanyNotFoundError) as error:
         raise _not_found(error) from error
-    except WorkflowTransitionError as error:
+    except ValueError as error:
         raise _conflict(error) from error
 
 
@@ -254,7 +260,7 @@ async def _decide_mapping(
         return next(item for item in session.mappings if item.id == mapping_id)
     except MigrationSessionNotFoundError as error:
         raise _not_found(error) from error
-    except (MappingPolicyError, WorkflowTransitionError) as error:
+    except ValueError as error:
         raise _conflict(error) from error
 
 
@@ -335,6 +341,8 @@ async def record_product_event(
         )
     except MigrationSessionNotFoundError as error:
         raise _not_found(error) from error
+    except ValueError as error:
+        raise _conflict(error) from error
 
 
 @router.post(

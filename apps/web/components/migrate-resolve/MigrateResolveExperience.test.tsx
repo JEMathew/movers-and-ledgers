@@ -28,6 +28,17 @@ beforeAll(() => {
 });
 
 describe("MigrateResolveExperience", () => {
+  it("resumes the same paused session without loading or executing a demo", async () => {
+    window.history.replaceState(null, "", "/migrate-resolve?session=session-1");
+    const fetchMock = vi.spyOn(globalThis,"fetch").mockImplementation(() => jsonResponse({...session,execution:resolving}));
+    render(<MigrateResolveExperience />);
+    expect(await screen.findByText("Migration paused safely")).toBeVisible();
+    expect(screen.queryByRole("button", {name:/load reviewed manifest/i})).not.toBeInTheDocument();
+    const step = screen.getByText("Migrate", {selector:"strong"}).closest("li");
+    expect(step).not.toHaveClass("is-complete");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock.mock.calls[0][1]?.method).toBeUndefined();
+  });
   it("shows the synthetic-only scope and journey before execution", () => {
     render(<MigrateResolveExperience />);
     expect(screen.getByRole("heading", { name: /execute visibly/i })).toBeInTheDocument();
@@ -48,5 +59,7 @@ describe("MigrateResolveExperience", () => {
     expect(screen.getByRole("dialog", { name: /review proposed resolution/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /approve resolution/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/25% migration progress/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", {name:"Close dialog"}));
+    await waitFor(() => expect(screen.getByRole("heading", {name:/execute visibly/i})).toHaveFocus());
   });
 });

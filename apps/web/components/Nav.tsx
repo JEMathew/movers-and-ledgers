@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Menu } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
-const links = [["Learn", "/learn"], ["Play", "/play"], ["Simulator", "/simulator"], ["Assess", "/assess"], ["Plan & Map", "/plan-map-approve"], ["Migrate", "/migrate-resolve"]];
+const links = [["Learn", "/learn"], ["Play", "/play"], ["Simulator", "/simulator"], ["Assess", "/assess"], ["Plan & Map", "/plan-map-approve"], ["Migrate", "/migrate-resolve"], ["Verify", "/validate-configure"], ["Start", "/onboard-fpu"]];
 
 export function Nav() {
   return <header className="shell relative flex min-h-20 items-center justify-between py-4">
@@ -11,12 +11,12 @@ export function Nav() {
       <span>MoveBooks <span className="font-semibold text-primary">AI</span></span>
     </Link>
     <div className="flex items-center gap-2">
-      <nav aria-label="Primary navigation" className="hidden items-center gap-7 text-sm font-semibold md:flex">
+      <nav aria-label="Primary navigation" className="hidden items-center gap-5 text-sm font-semibold xl:flex">
         {links.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}
         <Link href="/workspace" className="button small">Open workspace <span aria-hidden="true">↗</span></Link>
       </nav>
       <ThemeToggle />
-      <details className="mobile-nav md:hidden">
+      <details className="mobile-nav xl:hidden">
         <summary className="button ghost icon-button" aria-label="Open navigation">
           <Menu aria-hidden="true" size={19} />
         </summary>

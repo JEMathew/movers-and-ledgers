@@ -79,4 +79,5 @@ export type DemoSession = {
   company_name: string;
   workflow_status: string;
   activity: AgentActivity[];
+  execution?: MigrationExecution | null;
 };

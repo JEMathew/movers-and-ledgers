@@ -217,6 +217,17 @@ class ValidateConfigureOrchestrator:
         if proposal is None:
             raise LookupError("Configuration proposal not found.")
         decide_configuration(proposal, decision, actor)
+        from .audit import record_decision
+
+        record_decision(
+            session,
+            actor,
+            decision.action,
+            "configure",
+            proposal.id,
+            proposal.evidence,
+            proposal.selected_value,
+        )
         event = {
             "approve": Event.CONFIGURATION_APPROVED,
             "modify": Event.CONFIGURATION_MODIFIED,
@@ -271,7 +282,7 @@ class ValidateConfigureOrchestrator:
                 {
                     "configuration_id": str(plan.id),
                     "validation_id": str(report.id),
-                    "onboarding_implemented": False,
+                    "onboarding_implemented": True,
                 },
             )
         self.activity(
@@ -292,10 +303,7 @@ class ValidateConfigureOrchestrator:
         try:
             report = self.require_verified(session, fixture)
             plan = session.configuration
-            if (
-                plan is None
-                or plan.validation_id != report.id
-            ):
+            if plan is None or plan.validation_id != report.id:
                 return False
             if any(p.state is not ConfigurationState.APPLIED for p in plan.proposals):
                 return False
@@ -417,6 +425,17 @@ class ValidateConfigureOrchestrator:
             actor,
         )
         # This bounded deterministic copy is the only repair supported by this Beta contract.
+        from .audit import record_decision
+
+        record_decision(
+            session,
+            actor,
+            "approve",
+            "validate",
+            proposal.id,
+            proposal.evidence,
+            f"restore:{binding.entity}:{binding.record_id}",
+        )
         restore_approved_source_payload(row, source, binding, proposal)
         proposal.state = ResolutionState.APPLIED
         next(f for f in execution.failures if f.id == proposal.failure_id).resolved = True

@@ -264,6 +264,24 @@ def validate_mapping_completeness(session, source: dict) -> ValidationCheck:
     )
     if current_hash != session.execution.manifest_checksum:
         errors.append("The executed manifest differs from the current approved manifest.")
+    if session.execution.plan_id != session.plan.id:
+        errors.append("The executed plan identity differs from the approved plan.")
+    for mapping in session.mappings:
+        expected_binding = {
+            "mapping_id": str(mapping.id),
+            "selected_target": mapping.selected_target,
+        }
+        if (
+            session.execution.mapping_bindings.get(f"{mapping.area.value}:{mapping.source_id}")
+            != expected_binding
+        ):
+            errors.append("Executed mapping bindings differ from approved selections.")
+        for row in session.execution.target_state.get(datasets[mapping.area.value], []):
+            if (
+                row.get("source_id") == mapping.source_id
+                and row.get("approved_mapping") != expected_binding
+            ):
+                errors.append("Target mapping lineage differs from the approved selection.")
     return result(
         "mappings",
         "Mapping completeness",

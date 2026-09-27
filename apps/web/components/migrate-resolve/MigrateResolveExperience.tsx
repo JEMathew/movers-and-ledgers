@@ -9,7 +9,7 @@ import {
   RefreshCw,
   ShieldCheck,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { AgentActivity } from "@/components/discover-assess/types";
 import { Dialog } from "@/components/ui/dialog";
@@ -51,12 +51,22 @@ function batchStatus(batch: MigrationBatch) {
 }
 
 export function MigrateResolveExperience() {
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const [session, setSession] = useState<DemoSession>();
   const [execution, setExecution] = useState<MigrationExecution>();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [activity, setActivity] = useState<AgentActivity[]>([]);
+
+  useEffect(() => {
+    const saved = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session");
+    if (!saved) return;
+    void api<DemoSession>(`/v1/migration-sessions/${saved}`).then(data => {
+      setSession(data); setExecution(data.execution ?? undefined); setActivity(data.activity);
+      window.history.replaceState(null, "", `?session=${encodeURIComponent(data.id)}`);
+    }).catch(caught => setError(caught.message));
+  }, []);
 
   const proposal = execution?.resolutions.at(-1);
   const failure = execution?.failures.find((item) => item.id === proposal?.failure_id);
@@ -70,6 +80,9 @@ export function MigrateResolveExperience() {
     try {
       const created = await api<DemoSession>("/v1/migration-demo-sessions", { method: "POST" });
       setSession(created);
+      setExecution(undefined);
+      sessionStorage.setItem("movebooks-migration-session", created.id);
+      window.history.replaceState(null, "", `?session=${encodeURIComponent(created.id)}`);
       setActivity(created.activity);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "The synthetic manifest could not load.");
@@ -148,7 +161,7 @@ export function MigrateResolveExperience() {
       <header className="grid items-end gap-8 lg:grid-cols-[1fr_auto]">
         <div className="max-w-3xl">
           <p className="eyebrow text-primary">Migrate → Resolve</p>
-          <h1 className="type-page mt-4">Execute visibly. Pause safely. Resolve with evidence.</h1>
+          <h1 ref={headingRef} tabIndex={-1} className="type-page mt-4">Execute visibly. Pause safely. Resolve with evidence.</h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-secondary">
             Run an approved synthetic migration, inspect every batch, and keep consequential
             remediation under your control. No accounting-provider writes occur in this Beta slice.
@@ -165,15 +178,15 @@ export function MigrateResolveExperience() {
       <div className="mt-10">
         <Stepper
           label="Complete migration journey"
-          current={resolving || retryPending ? 5 : 4}
+          current={complete ? 6 : resolving || retryPending ? 5 : 4}
           steps={[
             { label: "Discover", description: "Complete" },
             { label: "Assess", description: "Complete" },
             { label: "Plan", description: "Complete" },
             { label: "Map & Approve", description: session ? "Complete" : "Required" },
-            { label: "Migrate", description: complete ? "Complete" : "Current" },
+            { label: "Migrate", complete, description: complete ? "Complete" : resolving || retryPending ? "Paused safely" : "Current" },
             { label: "Resolve", description: resolving || retryPending ? "Current" : "As needed" },
-            { label: "Validate", description: complete ? "Future handoff" : "Locked" },
+            { label: "Validate", description: complete ? "Next: verify your numbers" : "Locked" },
             { label: "Configure" },
             { label: "Onboard" },
             { label: "First Productive Use" },
@@ -196,8 +209,8 @@ export function MigrateResolveExperience() {
             <div>
               <h2 className="type-section">Approved synthetic manifest</h2>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-secondary">
-                Harbor Light Books is a provider-neutral fixture with recorded synthetic mapping
-                approvals and one controlled duplicate-customer exception.
+                Continue with your approved business session. Standalone demo loading replays prior
+                approvals in a new session; it is not evidence of completing the full journey.
               </p>
             </div>
           </div>
@@ -303,6 +316,7 @@ export function MigrateResolveExperience() {
       )}
 
       <Dialog
+        fallbackFocusRef={headingRef}
         open={dialogOpen && Boolean(proposal)}
         onClose={() => setDialogOpen(false)}
         title="Review proposed resolution"
