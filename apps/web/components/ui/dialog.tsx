@@ -1,7 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
-import { cloneElement, useEffect, useId, useRef } from "react";
+import { cloneElement, useId, useLayoutEffect, useRef } from "react";
 import type { KeyboardEvent, ReactElement, ReactNode, RefObject } from "react";
 
 import { IconButton } from "./primitives";
@@ -11,7 +11,9 @@ export function Dialog({ open, onClose, title, description, children, fallbackFo
   const returnFocus = useRef<HTMLElement | null>(null);
   const titleId = useId();
   const descriptionId = useId();
-  useEffect(() => {
+  // Native modal state and focus must match the committed review state before
+  // paint; a passive effect leaves an open-requested dialog temporarily hidden.
+  useLayoutEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
     if (open && !dialog.open) {
