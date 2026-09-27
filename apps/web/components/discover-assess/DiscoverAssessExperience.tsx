@@ -67,7 +67,9 @@ export function DiscoverAssessExperience() {
   const [sample, setSample] = useState("northstar-supplies");
 
   useEffect(() => {
-    const saved = new URLSearchParams(window.location.search).get("session");
+    const query = new URLSearchParams(window.location.search);
+    const saved = query.get("session");
+    if (!saved && query.get("sample") === "harbor-light-migrate-demo") setSample("harbor-light-migrate-demo");
     if (!saved) return;
     void api<{id: string; sample_company_id: string; discovery?: DiscoveryResult; assessment?: AssessmentResult; activity: AgentActivity[]}>(`/v1/migration-sessions/${saved}`).then(data => {
       setSessionId(data.id); setDiscovery(data.discovery); setAssessment(data.assessment);

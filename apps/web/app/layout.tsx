@@ -3,6 +3,7 @@ import "./globals.css";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { WorkflowHelp } from "@/components/public-surfaces/WorkflowHelp";
 
 export const metadata: Metadata = {
   title: "MoveBooks AI — Migrate with evidence",
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: Readonly<{children: React.React
         <ThemeProvider>
           <Nav />
           {children}
+          <WorkflowHelp />
           <Footer />
         </ThemeProvider>
       </body>
