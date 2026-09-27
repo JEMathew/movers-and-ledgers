@@ -47,10 +47,10 @@ def build_migration_plan(
             "Authorized mapping approval",
         ),
         (
-            "Prepare an approved, versioned manifest for the future Migration Agent.",
+            "Prepare an approved, versioned manifest for the Migration Agent.",
             ["review-mappings"],
             PlanPhaseStatus.FUTURE,
-            ["Execution controls and target adapter are not implemented in this slice."],
+            ["Only the synthetic target adapter is enabled; no real provider writes."],
             "Confirm execution window, owners, and rollback checkpoint.",
             "Migration Orchestrator",
             "Execution authorization",
@@ -59,8 +59,8 @@ def build_migration_plan(
             "Execute the approved manifest through idempotent target-write tools.",
             ["prepare-migration"],
             PlanPhaseStatus.FUTURE,
-            ["Target writes are intentionally outside the current slice."],
-            "Authorize the future migration run.",
+            ["Real provider writes are outside the synthetic Beta."],
+            "Start the approved synthetic migration run.",
             "Migration Agent",
             "Consequential target-write approval",
         ),
@@ -123,7 +123,7 @@ def build_migration_plan(
         dependencies={phase.id: phase.dependencies for phase in phases},
         prerequisites=prerequisites,
         blockers=blockers,
-        risks=warnings + ["Target execution is not implemented in this slice."],
+        risks=warnings + ["Synthetic target only; production operations are not implemented."],
         checkpoints=[
             phase.approval_checkpoint
             for phase in phases
@@ -131,7 +131,7 @@ def build_migration_plan(
         ],
         approvals_required=[
             "All mapping proposals reviewed by the authenticated workspace owner",
-            "Future execution authorization before any target write",
+            "Explicit start of the approved manifest before synthetic target writes",
         ],
         customer_actions=list(dict.fromkeys(phase.customer_action for phase in phases)),
         relative_complexity=complexity,

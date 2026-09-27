@@ -120,6 +120,8 @@ class MigrationExecution(BaseModel):
     manifest_version: str
     manifest_checksum: str
     approved_mapping_ids: list[UUID]
+    plan_id: UUID | None = None
+    mapping_bindings: dict[str, dict[str, str]] = Field(default_factory=dict)
     status: ExecutionStatus = ExecutionStatus.READY
     idempotency_key: str
     batches: list[MigrationBatch]

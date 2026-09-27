@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 
 
 class WorkflowStatus(StrEnum):
+    CREATED = "CREATED"
     DISCOVERED = "DISCOVERED"
     ASSESSED = "ASSESSED"
     PLANNED = "PLANNED"

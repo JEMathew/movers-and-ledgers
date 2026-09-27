@@ -148,6 +148,17 @@ class OnboardFpuOrchestrator:
             comment=request.comment,
         )
         state.decisions.setdefault(task_id, []).append(decision)
+        from .audit import record_decision
+
+        record_decision(
+            session,
+            actor,
+            request.action,
+            "onboard",
+            task_id,
+            [f"context:{state.context_hash}"],
+            selection,
+        )
         # Any changed setup decision revokes an unexecuted invoice approval.
         if state.fpu:
             state.fpu_history.append(state.fpu.model_copy(deep=True))
@@ -210,6 +221,17 @@ class OnboardFpuOrchestrator:
             )
         )
         task.status = "APPROVED" if request.action == "approve" else "REJECTED"
+        from .audit import record_decision
+
+        record_decision(
+            session,
+            actor,
+            request.action,
+            "first_productive_use",
+            task.id,
+            [f"contract:{task.contract_hash}"],
+            "POST_SYNTHETIC_INVOICE",
+        )
         self.event(
             session,
             Event.FPU_DECISION,
@@ -392,6 +414,17 @@ class OnboardFpuOrchestrator:
         if not state or not state.faults or request.action != "approve":
             raise ValueError("Explicit approval of a declared synthetic fault repair is required.")
         before = list(state.faults)
+        from .audit import record_decision
+
+        record_decision(
+            session,
+            actor,
+            request.action,
+            "onboard",
+            "synthetic-fault-repair",
+            [f"context:{state.context_hash}", *before],
+            "clear declared faults",
+        )
         state.faults = []
         state.fault_history.append(
             {

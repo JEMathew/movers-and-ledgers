@@ -76,10 +76,24 @@ afterEach(() => {
 });
 
 describe("DiscoverAssessExperience", () => {
+  it("creates Harbor Light from discovery rather than a reviewed demo loader", async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(jsonResponse({id:"session-harbor"},201))
+      .mockResolvedValueOnce(jsonResponse(discovery))
+      .mockResolvedValueOnce(jsonResponse(assessment))
+      .mockResolvedValueOnce(jsonResponse(activity));
+    vi.stubGlobal("fetch",fetchMock);
+    render(<DiscoverAssessExperience />);
+    fireEvent.change(screen.getByRole("combobox",{name:"Synthetic business"}),{target:{value:"harbor-light-migrate-demo"}});
+    fireEvent.click(screen.getByRole("button",{name:"Assess this migration"}));
+    await screen.findByRole("heading",{name:"Migration readiness"});
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({sample_company_id:"harbor-light-migrate-demo"});
+    expect(fetchMock.mock.calls[0][0]).toMatch(/\/v1\/migration-sessions$/);
+  });
   it("starts with one selected synthetic company and no enabled upload path", () => {
     render(<DiscoverAssessExperience />);
     expect(screen.getByRole("heading", { name: "Assess My Migration" })).toBeVisible();
-    expect(screen.getByLabelText("Northstar Supplies selected")).toBeVisible();
+    expect(screen.getByRole("combobox", { name: "Synthetic business" })).toHaveValue("northstar-supplies");
     expect(screen.getByRole("button", { name: "Coming next" })).toBeDisabled();
     expect(screen.getByRole("list", { name: "Assessment progress" })).toBeVisible();
   });
@@ -105,7 +119,7 @@ describe("DiscoverAssessExperience", () => {
     expect(screen.getByText("Planning is the next governed phase")).toBeVisible();
     expect(screen.getByRole("link", { name: /Open Plan & Map workspace/ })).toHaveAttribute(
       "href",
-      "/plan-map-approve",
+      "/plan-map-approve?session=session-001",
     );
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe("session-001");
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(5));

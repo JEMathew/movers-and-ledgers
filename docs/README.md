@@ -35,12 +35,16 @@ Use this index to find the durable decision records without turning the reposito
 - [Plan → Map → Approve architecture](architecture/plan-map-approve.md)
 - [Migrate → Resolve architecture](architecture/migrate-resolve.md)
 - [Validate → Configure architecture](architecture/validate-configure.md)
+- [Onboard → FPU architecture](architecture/onboard-fpu.md)
+- [Integrated Beta V1 architecture](architecture/beta-v1-integration.md)
 - [Canonical agent workflows](architecture/AGENT_WORKFLOWS.md)
 - [Design-system review](reviews/design-system-theme.md)
 - [Discover → Assess review](reviews/discover-assess.md)
 - [Plan → Map → Approve review](reviews/plan-map-approve.md)
 - [Migrate → Resolve review](reviews/migrate-resolve.md)
 - [Validate → Configure review](reviews/validate-configure.md)
+- [Onboard → FPU review](reviews/onboard-fpu.md)
+- [Integrated Beta V1 review](reviews/beta-v1-integration.md)
 - [Contributing](../CONTRIBUTING.md)
 
 ## Interpretation notes

@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { MigrateResolveExperience } from "./MigrateResolveExperience";
@@ -28,6 +28,17 @@ beforeAll(() => {
 });
 
 describe("MigrateResolveExperience", () => {
+  it("resumes the same paused session without loading or executing a demo", async () => {
+    window.history.replaceState(null, "", "/migrate-resolve?session=session-1");
+    const fetchMock = vi.spyOn(globalThis,"fetch").mockImplementation(() => jsonResponse({...session,execution:resolving}));
+    render(<MigrateResolveExperience />);
+    expect(await screen.findByText("Migration paused safely")).toBeVisible();
+    expect(screen.queryByRole("button", {name:/load reviewed manifest/i})).not.toBeInTheDocument();
+    const step = screen.getByText("Migrate", {selector:"strong"}).closest("li");
+    expect(step).not.toHaveClass("is-complete");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock.mock.calls[0][1]?.method).toBeUndefined();
+  });
   it("shows the synthetic-only scope and journey before execution", () => {
     render(<MigrateResolveExperience />);
     expect(screen.getByRole("heading", { name: /execute visibly/i })).toBeInTheDocument();
@@ -48,5 +59,70 @@ describe("MigrateResolveExperience", () => {
     expect(screen.getByRole("dialog", { name: /review proposed resolution/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /approve resolution/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/25% migration progress/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", {name:"Close dialog"}));
+    await waitFor(() => expect(screen.getByRole("heading", {name:/execute visibly/i})).toHaveFocus());
+  });
+
+  it.each([true, false])("keeps evidence governed while activity is pending and records approval=%s before any retry", async (approve) => {
+    let finishActivity!: (response: Response) => void;
+    const activityResponse = new Promise<Response>(resolve => { finishActivity = resolve; });
+    const decided = {
+      ...resolving,
+      status: approve ? "RETRY_PENDING" : "BLOCKED",
+      failures: resolving.failures.map(failure => ({ ...failure, resolved: approve })),
+      resolutions: resolving.resolutions.map(proposal => ({ ...proposal, state: approve ? "APPROVED" : "REJECTED" })),
+    };
+    const fetchMock = vi.spyOn(globalThis, "fetch")
+      .mockImplementationOnce(() => jsonResponse(session))
+      .mockImplementationOnce(() => jsonResponse(resolving))
+      .mockImplementationOnce(() => activityResponse)
+      .mockImplementationOnce(() => jsonResponse(decided))
+      .mockImplementationOnce(() => jsonResponse([]))
+      .mockImplementationOnce(() => jsonResponse({ ...decided, status: "MIGRATION_COMPLETE", progress_percent: 100 }))
+      .mockImplementationOnce(() => jsonResponse([]));
+    render(<MigrateResolveExperience />);
+    fireEvent.click(screen.getByRole("button", { name: /load reviewed manifest/i }));
+    fireEvent.click(await screen.findByRole("button", { name: /start migration/i }));
+    const dialog = await screen.findByRole("dialog", { name: /review proposed resolution/i });
+    expect(dialog).toBeVisible();
+    expect(within(dialog).getByText("Compare evidence and preserve lineage.")).toBeVisible();
+    expect(within(dialog).getByText(/batch:customers/)).toBeVisible();
+    expect(within(dialog).getByRole("button", { name: "Approve resolution" })).toBeDisabled();
+    expect(within(dialog).getByRole("button", { name: "Reject and block" })).toBeDisabled();
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+
+    // Closing or Escape is not a decision, and a late read must not reopen it.
+    fireEvent(dialog, new Event("cancel", { cancelable: true, bubbles: true }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /execute visibly/i })).toHaveFocus();
+    await act(async () => { finishActivity(await jsonResponse([])); });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(screen.getByText("Migration paused safely")).toBeVisible();
+
+    fireEvent.click(screen.getByRole("button", { name: "Review Resolution Agent proposal" }));
+    const reopened = screen.getByRole("dialog", { name: /review proposed resolution/i });
+    const decision = within(reopened).getByRole("button", { name: approve ? "Approve resolution" : "Reject and block" });
+    expect(decision).toBeEnabled();
+    fireEvent.click(decision);
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(fetchMock.mock.calls[3][0]).toContain("/migration/resolutions/resolution-1/decision");
+    expect(fetchMock.mock.calls[3][1]?.method).toBe("POST");
+    expect(JSON.parse(fetchMock.mock.calls[3][1]?.body as string)).toMatchObject({ approve });
+    expect(fetchMock).toHaveBeenCalledTimes(5);
+
+    if (approve) {
+      const retry = screen.getByRole("button", { name: /retry failed batch/i });
+      await waitFor(() => expect(retry).toBeEnabled());
+      fireEvent.click(retry);
+      expect(await screen.findByText("Synthetic migration complete")).toBeVisible();
+      expect(fetchMock.mock.calls[5][0]).toContain("/migration/resume");
+      expect(fetchMock.mock.calls[5][1]?.method).toBe("POST");
+      expect(fetchMock).toHaveBeenCalledTimes(7);
+    } else {
+      expect(screen.queryByRole("button", { name: /retry failed batch/i })).not.toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Review Resolution Agent proposal" })).toBeDisabled();
+      expect(screen.queryByText("Synthetic migration complete")).not.toBeInTheDocument();
+    }
   });
 });

@@ -47,5 +47,7 @@ No paid resource is created by this repository. Production infrastructure should
 - [Beta V1 agent architecture](beta-v1-agent-architecture.md) — the complete 13-agent logical
   architecture, the currently implemented slice, future stages, approval boundaries, and ADK seam.
 
-The current implementation ends at **Validate → Configure**. Onboard through verified First
-Productive Use remains future work; the complete journey is preserved as the architectural reference.
+The implemented synthetic journey now reaches **Verified First Productive Use**:
+[Onboard → FPU](onboard-fpu.md) and [integrated Beta V1 hardening](beta-v1-integration.md).
+Older slice documents describe their original release boundaries. The integrated reference is
+authoritative for current cross-stage continuity; none of this establishes production readiness.

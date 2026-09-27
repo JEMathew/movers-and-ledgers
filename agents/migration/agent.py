@@ -75,6 +75,13 @@ class MigrationAgent:
                 }
             ),
             approved_mapping_ids=[mapping.id for mapping in approved_mappings],
+            mapping_bindings={
+                f"{mapping.area.value}:{mapping.source_id}": {
+                    "mapping_id": str(mapping.id),
+                    "selected_target": mapping.selected_target,
+                }
+                for mapping in approved_mappings
+            },
             idempotency_key=idempotency_key,
             batches=batches,
         )
@@ -116,6 +123,20 @@ class MigrationAgent:
             batch.attempt_count += 1
             records = extract_batch(fixture, batch)
             transformed = transform_batch(records, batch)
+            areas = {
+                "accounts": "chart_of_accounts",
+                "products": "products_services",
+                "taxes": "tax_configuration",
+                "configuration": "general_configuration",
+                "customers": "customers",
+                "vendors": "vendors",
+            }
+            for row in transformed:
+                binding = execution.mapping_bindings.get(
+                    f"{areas.get(batch.entity, batch.entity)}:{row['source_id']}"
+                )
+                if binding:
+                    row["approved_mapping"] = dict(binding)
             errors = validate_transformation(transformed, batch)
             if errors:
                 raise ValueError(" ".join(errors))

@@ -230,6 +230,18 @@ class ProductEvent(BaseModel):
     attributes: dict[str, str | int | bool] = Field(default_factory=dict)
 
 
+class HumanDecisionRecord(BaseModel):
+    id: UUID = Field(default_factory=uuid4)
+    actor: str
+    role: str = "DEMO_WORKSPACE_OWNER"
+    occurred_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    decision: str
+    evidence: list[str]
+    stage: str
+    affected_entity: str
+    selected_value: str | None = None
+
+
 class MigrationSession(BaseModel):
     id: UUID = Field(default_factory=uuid4)
     owner_subject: str = Field(exclude=True, repr=False)
@@ -237,13 +249,15 @@ class MigrationSession(BaseModel):
     company_name: str
     synthetic: bool = True
     status: SessionStatus = SessionStatus.CREATED
+    source_checksum: str | None = None
     stage: str = "discover"
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     discovery: DiscoveryResult | None = None
     assessment: AssessmentResult | None = None
     activity: list[AgentActivity] = Field(default_factory=list)
     events: list[ProductEvent] = Field(default_factory=list)
-    workflow_status: WorkflowStatus = WorkflowStatus.DISCOVERED
+    human_decisions: list[HumanDecisionRecord] = Field(default_factory=list)
+    workflow_status: WorkflowStatus = WorkflowStatus.CREATED
     plan: MigrationPlan | None = None
     mappings: list[MappingProposal] = Field(default_factory=list)
     execution: MigrationExecution | None = None

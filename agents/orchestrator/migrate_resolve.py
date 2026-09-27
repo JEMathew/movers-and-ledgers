@@ -4,6 +4,7 @@ from typing import Any
 from uuid import NAMESPACE_URL, UUID, uuid5
 
 from agents.contracts import AgentRole
+from agents.mapping.specialists import records_for_area
 from agents.migration import MigrationAgent
 from agents.resolution import ResolutionAgent
 from domain.discovery_assessment.models import (
@@ -23,7 +24,11 @@ from domain.migration_resolution.models import (
     ResolutionState,
 )
 from domain.planning_mapping.models import MappingState, WorkflowStatus
+from tools.mapping.controls import lookup_mapping_rule, validate_mapping_compatibility
+from tools.migration import stable_checksum
+from tools.validation.checks import validate_mapping_completeness
 
+from .audit import record_decision
 from .plan_map_approve import WorkflowTransitionError
 
 
@@ -35,6 +40,46 @@ class MigrateResolveOrchestrator:
     def __init__(self) -> None:
         self.migration_agent = MigrationAgent()
         self.resolution_agent = ResolutionAgent()
+
+    @staticmethod
+    def require_manifest(session, fixture):
+        """Recheck the actual approved evidence before every load/resume, not only validation."""
+        if session.source_checksum and session.source_checksum != stable_checksum(
+            fixture["datasets"]
+        ):
+            raise WorkflowTransitionError("Source evidence changed since session creation.")
+        if not session.plan or session.plan.blockers or not session.assessment:
+            raise WorkflowTransitionError("A clear assessed plan is required.")
+        if session.assessment.blocker_count:
+            raise WorkflowTransitionError("Readiness blockers prevent migration.")
+        if validate_mapping_completeness(session, fixture["datasets"]).status != "VERIFIED":
+            raise WorkflowTransitionError("The approved manifest is incomplete or changed.")
+        if session.execution.plan_id != session.plan.id:
+            raise WorkflowTransitionError("The approved plan identity changed.")
+        for mapping in session.mappings:
+            records = records_for_area(fixture, mapping.area)
+            source = next((r for r in records if r.get("id") == mapping.source_id), None)
+            if (
+                source is None
+                or mapping.decided_by != session.owner_subject
+                or not mapping.decided_at
+                or validate_mapping_compatibility(mapping, source)
+            ):
+                raise WorkflowTransitionError(
+                    "Mapping approval or deterministic evidence is invalid."
+                )
+            if mapping.area.value in {"general_configuration", "products_services"} and (
+                mapping.selected_target != lookup_mapping_rule(mapping.area, source)["target"]
+            ):
+                raise WorkflowTransitionError(
+                    "This synthetic identity adapter cannot apply a changed product or "
+                    "configuration treatment. A separately reviewed transformation is required."
+                )
+        for batch in session.execution.batches:
+            if stable_checksum(fixture["datasets"][batch.entity]) != batch.source_checksum:
+                raise WorkflowTransitionError(
+                    "Approved source evidence changed; resume is blocked."
+                )
 
     @staticmethod
     def _event(
@@ -104,6 +149,8 @@ class MigrateResolveOrchestrator:
         session.execution = self.migration_agent.create_execution(
             fixture, session.plan.version, idempotency_key, session.mappings
         )
+        session.execution.plan_id = session.plan.id
+        self.require_manifest(session, fixture)
         session.workflow_status = WorkflowStatus.MIGRATION_READY
         session.stage = "migrate"
         self._event(
@@ -111,6 +158,7 @@ class MigrateResolveOrchestrator:
             ProductEventName.MIGRATION_STARTED,
             {
                 "execution_id": str(session.execution.id),
+                "plan_id": str(session.plan.id),
                 "manifest_version": session.plan.version,
                 "manifest_checksum": session.execution.manifest_checksum,
                 "synthetic_target": True,
@@ -280,6 +328,15 @@ class MigrateResolveOrchestrator:
         if proposal.state is not ResolutionState.AWAITING_APPROVAL:
             raise WorkflowTransitionError("This resolution is not awaiting a decision.")
         self.resolution_agent.decide(proposal, decision, actor)
+        record_decision(
+            session,
+            actor,
+            "approve" if decision.approve else "reject",
+            "resolve",
+            proposal.id,
+            proposal.evidence,
+            proposal.action,
+        )
         self._activity(
             session,
             self.role.value,
@@ -320,6 +377,7 @@ class MigrateResolveOrchestrator:
         execution = session.execution
         if execution is None or execution.status is not ExecutionStatus.RETRY_PENDING:
             raise WorkflowTransitionError("An applied resolution is required before retry.")
+        self.require_manifest(session, fixture)
         self._event(session, ProductEventName.RETRY_STARTED)
         self._event(session, ProductEventName.MIGRATION_RESUMED)
         session.stage = "migrate"

@@ -49,7 +49,7 @@ export function ValidateConfigureExperience() {
   const [comment, setComment] = useState("");
 
   useEffect(() => {
-    const id = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem(STORAGE_KEY);
+    const id = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session") ?? sessionStorage.getItem(STORAGE_KEY);
     if (!id) return;
     let active = true;
     request(`/migration-sessions/${encodeURIComponent(id)}/validation-configuration`, undefined, "GET")
@@ -64,6 +64,7 @@ export function ValidateConfigureExperience() {
       const data = await request(path, body);
       setSnapshot(data);
       sessionStorage.setItem(STORAGE_KEY, data.session_id);
+      sessionStorage.setItem("movebooks-migration-session", data.session_id);
       window.history.replaceState(null, "", `?session=${encodeURIComponent(data.session_id)}`);
       if (close) setDialog(undefined);
       return data;

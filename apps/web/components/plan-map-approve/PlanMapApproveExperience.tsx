@@ -10,7 +10,7 @@ import {
   MessageCircleQuestion,
   ShieldCheck,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { AgentActivity } from "@/components/discover-assess/types";
 import { Alert, LoadingState } from "@/components/ui/feedback";
@@ -69,22 +69,26 @@ export function PlanMapApproveExperience() {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [modifications, setModifications] = useState<Record<string, string>>({});
 
+  useEffect(() => {
+    const saved = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session");
+    if (!saved) return;
+    void api<{id: string; plan?: MigrationPlan; mappings: MappingProposal[]; activity: AgentActivity[]}>(`/v1/migration-sessions/${saved}`).then(data => {
+      setSessionId(data.id); setPlan(data.plan ?? undefined); setMappings(data.mappings); setActivity(data.activity);
+      if (data.plan) setPhase("review");
+    }).catch(caught => { setError(caught.message); setPhase("error"); });
+  }, []);
+
   const preparePlan = async () => {
     setError(undefined);
     try {
       setPhase("planning");
-      let activeSession = sessionStorage.getItem("movebooks-migration-session");
+      const activeSession = sessionId ?? new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session");
       if (!activeSession) {
-        const created = await api<{ id: string }>("/v1/migration-sessions", {
-          method: "POST",
-          body: JSON.stringify({ sample_company_id: "northstar-supplies" }),
-        });
-        activeSession = created.id;
-        await api(`/v1/migration-sessions/${activeSession}/discovery`, { method: "POST" });
-        await api(`/v1/migration-sessions/${activeSession}/assessment`, { method: "POST" });
+        throw new Error("Start with Discover → Assess, then continue with the same business session.");
       }
       setSessionId(activeSession);
       sessionStorage.setItem("movebooks-migration-session", activeSession);
+      window.history.replaceState(null, "", `?session=${encodeURIComponent(activeSession)}`);
       const generatedPlan = await api<MigrationPlan>(
         `/v1/migration-sessions/${activeSession}/plan`,
         { method: "POST" },
@@ -151,9 +155,9 @@ export function PlanMapApproveExperience() {
           label="Complete migration journey"
           current={phase === "idle" ? 2 : phase === "planning" ? 2 : 3}
           steps={[
-            { label: "Discover", description: "Complete" },
-            { label: "Assess", description: "Complete" },
-            { label: "Plan", description: phase === "idle" ? "Next" : "Current" },
+            { label: "Discover", complete: Boolean(sessionId), description: sessionId ? "Complete" : "Required" },
+            { label: "Assess", complete: Boolean(sessionId), description: sessionId ? "Complete" : "Required" },
+            { label: "Plan", description: plan ? "Prepared" : "Next" },
             { label: "Map & Approve", description: phase === "review" ? "Current" : "Next" },
             { label: "Migrate" },
             { label: "Resolve" },
@@ -177,7 +181,7 @@ export function PlanMapApproveExperience() {
               </p>
             </div>
           </div>
-          <Button onClick={preparePlan} disabled={running || Boolean(plan)}>
+          <Button onClick={preparePlan} disabled={running || Boolean(mappings.length)}>
             {plan ? "Plan and mappings prepared" : "Build migration plan"}
             <ArrowRight aria-hidden="true" size={17} />
           </Button>
@@ -249,7 +253,8 @@ export function PlanMapApproveExperience() {
           </div>
           <div className="mt-6">
             <Alert tone={handoffReady ? "success" : "warning"} title={handoffReady ? "Approved manifest ready for handoff" : "Migration remains stopped"}>
-              <p className="mt-1">{handoffReady ? "All proposals are approved or modified and prerequisites are clear. No target writes were performed; the future Migration Agent receives the versioned handoff." : decisionsComplete ? "Mapping decisions are complete, but deterministic assessment blockers must be resolved before migration handoff." : "Every proposal must reach an approved or modified state. Blocked, rejected, or pending decisions prevent migration handoff."}</p>
+              <p className="mt-1">{handoffReady ? "Your approved mappings and plan will be used by migration in this same business session. No target writes have occurred yet." : decisionsComplete ? "Mapping decisions are complete, but deterministic assessment blockers must be resolved before migration handoff." : "Every proposal must reach an approved or modified state. Blocked, rejected, or pending decisions prevent migration handoff."}</p>
+              {handoffReady && <a className="mt-3 inline-block font-semibold underline" href={`/migrate-resolve?session=${sessionId}`}>Continue to Migrate → Resolve</a>}
             </Alert>
           </div>
         </section>
