@@ -25,11 +25,14 @@ packages = [
   "domain/discovery_assessment",
   "domain/planning_mapping",
   "domain/migration_resolution",
+  "domain/validation_configuration",
   "agents",
   "tools/discovery",
   "tools/planning",
   "tools/mapping",
   "tools/migration",
+  "tools/validation",
+  "tools/configuration",
 ]
 
 [tool.pytest.ini_options]

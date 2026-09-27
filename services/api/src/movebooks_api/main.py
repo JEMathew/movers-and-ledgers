@@ -8,6 +8,7 @@ from agents.registry import AGENT_RESPONSIBILITIES
 
 from .auth import Principal, require_principal
 from .discover_assess import router as discover_assess_router
+from .discover_assess.validate_configure import router as validate_configure_router
 from .settings import get_settings
 
 settings = get_settings()
@@ -24,6 +25,7 @@ app.add_middleware(
     allow_headers=["Authorization", "Content-Type", "Idempotency-Key"],
 )
 app.include_router(discover_assess_router)
+app.include_router(validate_configure_router)
 
 
 @app.get("/healthz", tags=["operations"])

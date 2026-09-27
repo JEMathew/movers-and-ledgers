@@ -14,6 +14,10 @@ class MigrationSessionRepository(Protocol):
 
     def get(self, session_id: UUID, owner_subject: str) -> MigrationSession | None: ...
 
+    def put_if_unchanged(
+        self, original: MigrationSession, updated: MigrationSession
+    ) -> MigrationSession: ...
+
 
 class InMemoryMigrationSessionRepository:
     """Stores sessions for one process; no production durability is implied."""
@@ -37,3 +41,13 @@ class InMemoryMigrationSessionRepository:
     def clear(self) -> None:
         with self._lock:
             self._sessions.clear()
+
+    def put_if_unchanged(self, original: MigrationSession, updated: MigrationSession):
+        """Atomic compare-and-swap for governed validation/configuration decisions."""
+        with self._lock:
+            current = self._sessions.get(original.id)
+            if current != original:
+                raise ValueError(
+                    "Session changed concurrently; refresh and review before retrying."
+                )
+            return self.put(updated)

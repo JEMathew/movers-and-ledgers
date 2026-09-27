@@ -42,8 +42,10 @@ No paid resource is created by this repository. Production infrastructure should
 - [Migrate → Resolve](migrate-resolve.md) — synthetic deterministic execution, checkpoints,
   controlled exceptions, governed remediation, retry, and a safe future-Validation gate.
 - [Canonical agent workflows](AGENT_WORKFLOWS.md) — stage ownership and handoff invariants.
+- [Validate → Configure](validate-configure.md) — exact reconciliation, bounded repair,
+  revalidation, approved configuration, and a future-Onboarding gate.
 - [Beta V1 agent architecture](beta-v1-agent-architecture.md) — the complete 13-agent logical
   architecture, the currently implemented slice, future stages, approval boundaries, and ADK seam.
 
-The current implementation ends at **Migrate → Resolve**. Validate through verified First
+The current implementation ends at **Validate → Configure**. Onboard through verified First
 Productive Use remains future work; the complete journey is preserved as the architectural reference.

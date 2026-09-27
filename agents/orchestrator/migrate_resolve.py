@@ -269,6 +269,8 @@ class MigrateResolveOrchestrator:
         decision: ResolutionDecision,
         actor: str,
     ) -> MigrationSession:
+        if any(r.resolution_id == resolution_id for r in session.validation_repairs):
+            raise WorkflowTransitionError("Validation repairs require the revalidation-bound path.")
         execution = session.execution
         if execution is None:
             raise WorkflowTransitionError("Migration execution has not been created.")

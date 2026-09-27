@@ -1,5 +1,5 @@
 {
-  "fixture_version": "harbor-light-migrate-v1",
+  "fixture_version": "harbor-light-validate-v2",
   "sample_company_id": "harbor-light-migrate-demo",
   "label": "Harbor Light Books",
   "synthetic": true,
@@ -26,9 +26,10 @@
       {"id": "tax-001", "code": "CA-SALES", "rate": "0.0725", "jurisdiction": "California"}
     ],
     "accounts": [
-      {"id": "account-bank", "code": "1000", "name": "Operating Bank", "account_type": "bank"},
-      {"id": "account-ar", "code": "1100", "name": "Accounts Receivable", "account_type": "accounts_receivable"},
-      {"id": "account-sales", "code": "4000", "name": "Book Sales", "account_type": "income"}
+      {"id": "account-bank", "code": "1000", "name": "Operating Bank", "account_type": "bank", "opening_balance": "1000.00"},
+      {"id": "account-ar", "code": "1100", "name": "Accounts Receivable", "account_type": "accounts_receivable", "opening_balance": "0.00"},
+      {"id": "account-sales", "code": "4000", "name": "Book Sales", "account_type": "income", "opening_balance": "-1000.00"},
+      {"id": "account-ap", "code": "2100", "name": "Accounts Payable", "account_type": "accounts_payable", "opening_balance": "0.00"}
     ],
     "invoices": [
       {"id": "invoice-001", "customer_id": "customer-001", "receivable_account_id": "account-ar", "document_number": "HL-1001", "total": "420.00"}
@@ -41,12 +42,30 @@
           {"account_id": "account-ar", "debit": "420.00", "credit": "0.00"},
           {"account_id": "account-sales", "debit": "0.00", "credit": "420.00"}
         ]
+      },
+      {
+        "id": "transaction-002",
+        "transaction_date": "2026-02-02",
+        "entries": [
+          {"account_id": "account-bank", "debit": "125.00", "credit": "0.00"},
+          {"account_id": "account-ap", "debit": "0.00", "credit": "125.00"}
+        ]
       }
     ],
     "configuration": [
       {"id": "configuration-001", "key": "base_currency", "value": "USD"},
       {"id": "configuration-002", "key": "fiscal_calendar", "value": "calendar_year"}
     ]
+  },
+  "configuration_profile": {
+    "fiscal_year": "1",
+    "base_currency": "USD",
+    "tax_setup": "CA-SALES",
+    "payment_terms": "NET_30",
+    "inventory": "WEIGHTED_AVERAGE",
+    "invoice_preferences": "HL-",
+    "user_roles": "FINANCE_REVIEWER",
+    "integrations": "DISABLED"
   },
   "migration_controls": {
     "batch": "customers",

@@ -7,9 +7,10 @@ The orchestrator owns state and delegation; specialist agents own bounded reason
 The canonical [Beta V1 agent architecture](../docs/architecture/beta-v1-agent-architecture.md)
 defines the complete logical team: Migration Orchestrator, Discovery, Assessment, Planning, Mapping,
 Migration, Resolution, Validation, Configuration, Onboarding, First Productive Use / Activation,
-Trust & Governance, and Knowledge. Repository code currently implements Discover through Resolve.
-Validate and later agents remain explicit future boundaries, not implied capabilities of the current
-slice.
+Trust & Governance, and Knowledge. Repository code currently implements Discover through Configure.
+Onboarding and First Productive Use remain explicit future boundaries. Validation uses deterministic
+reconciliation tools; Configuration uses grounded proposals and approval-gated synthetic settings.
+See [Validate → Configure](../docs/architecture/validate-configure.md).
 
 Mapping uses bounded Account, Tax, Entity, and Configuration specialists because those areas have
 different evidence, confidence, compatibility, and escalation requirements. Planning dependencies

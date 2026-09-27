@@ -18,7 +18,10 @@ Implemented workflows:
 - [Discover → Assess](discover-assess.md)
 - [Plan → Map → Approve](plan-map-approve.md)
 - [Migrate → Resolve](migrate-resolve.md)
+- [Validate → Configure](validate-configure.md)
 
-Validate onward remains a future contract. `MIGRATION_COMPLETE` permits a future Validation Agent
-handoff only when all batches complete and unresolved blocking exceptions equal zero. It does not
-mean reconciliation, configuration, onboarding, or First Productive Use has occurred.
+`MIGRATION_COMPLETE` permits Validation only when all batches complete and unresolved migration
+exceptions equal zero. Validation must be VERIFIED with no blocking discrepancies before
+configuration. `CONFIGURED` permits a future Onboarding handoff only with unchanged verification
+evidence, all eight settings applied, and attributable required approvals. Onboarding and verified
+First Productive Use remain unimplemented; none of these earlier states implies either outcome.

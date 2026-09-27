@@ -57,5 +57,18 @@ class KnowledgeAgent:
     role = AgentRole.KNOWLEDGE
     source = "versioned-repository"
 
+    def lookup_configuration(self, area: str) -> ResolutionKnowledge:
+        from tools.configuration.controls import AREAS, SENSITIVE
+
+        if area not in AREAS:
+            raise ValueError("No grounded configuration policy for this area.")
+        return ResolutionKnowledge(
+            f"knowledge:configuration-v1:{area}",
+            f"Preserve supported source {AREAS[area][0].lower()} in the synthetic target.",
+            "Attributable human approval is required; unsupported treatments remain blocked."
+            if area in SENSITIVE
+            else "Only unchanged, reversible source preferences may auto-apply.",
+        )
+
     def lookup_resolution(self, kind: ExceptionKind) -> ResolutionKnowledge:
         return _CATALOG[kind]
