@@ -7,7 +7,26 @@ See the [review evidence](../reviews/google-cloud-validation.md) and
 
 ## Authorized scope
 
-### 2026-09-28 preserved-workspace continuation (latest, stopped)
+### 2026-09-28 reconsideration-enabled deployment (latest, stopped/private)
+
+Published `a7e0b17` includes the explicit, audit-preserving reconsideration flow. Fresh clean
+production builds and scans passed with zero High/Critical/ignored matches. New API/web revisions
+became Ready on their verified scanned platform digests; runtime specs, workload identities and
+private SQL/GCS/Secret Manager boundaries are unchanged. No schema/bootstrap grant was added.
+The new bounded compute window began 16:37:55 UTC, with cutoff 20:37:55 UTC and US$10 working
+target, not a guaranteed cap. See the [review](../reviews/google-cloud-validation.md) for exact
+digest, CI, timing and rollback evidence.
+
+Temporary public invoker was blocked by the action-time confirmation check and was not granted.
+No browser recovery or workspace mutation occurred. Requesting reconsideration and approving it
+remain separate human-governed steps; original rejection/history must never be overwritten.
+The same preserved session must be reused after explicit endpoint-exposure confirmation, and the
+operator must stop for the owner's approval in the UI. The earlier missing implementation is
+resolved, but **live reconsideration/FPU and final cloud P0/P1 clearance remain unverified**.
+Shutdown began 16:52:13 UTC: both Run manual counts are zero, SQL STOPPED/NEVER, jobs idle,
+and both service IAM policies remain empty. No new permissions or public bindings were granted.
+
+### 2026-09-28 preserved-workspace continuation (previous checkpoint, stopped)
 
 Published/local `80dbf1e` and its six green CI jobs were confirmed before resumption. The owner
 authorized the five outstanding synthetic mappings. Four were recorded through the authenticated

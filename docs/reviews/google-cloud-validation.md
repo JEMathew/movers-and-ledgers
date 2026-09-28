@@ -6,7 +6,80 @@ Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test on
 
 **AMBER. Image-security gates pass; live approval attribution/isolation and canonical cloud E2E remain incomplete. Keep the environment stopped and private.**
 
-## Local reconsideration implementation — latest code checkpoint, not deployed
+## Reconsideration deployment — 2026-09-28 (latest, AMBER)
+
+Preflight confirmed branch `feature/google-cloud-validation`, local/published source
+`a7e0b17298fed48ec68ae5de08bc06c9f2a07892`, PR #13 draft/open/unmerged and all six jobs
+successful in [run 36447214846](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36447214846).
+Only unrelated `apps/web/package-lock.json` metadata edits were present; they were preserved
+and excluded by building a fresh clone of the published source in authenticated Cloud Shell.
+The previously unpublished documentation chain is published; no duplicate commit was created.
+
+The owner authorized a new four-hour dev/test window and US$10 working target (not a hard cap).
+SQL start was requested at **16:37:55 UTC**, establishing **20:37:55 UTC** as the unchanged
+cutoff. Both services initially had empty IAM bindings and manual count zero; SQL was
+STOPPED/NEVER. No new service, database, bucket, account or job was provisioned.
+
+Both clean replacement builds passed unsuppressed Grype scans: **0 High, 0 Critical, 0 ignored**,
+exit zero. Existing Medium counts are six API/four web. Report hashes, image IDs, index digests
+and the transient registry push retry are recorded in the [image review](google-cloud-image-security.md).
+
+| Service | Ready revision | Deployed Linux AMD64 digest (SHA-256) | Ready at UTC |
+| --- | --- | --- | --- |
+| API | `movebooks-beta-api-00005-dh7` | `bfe13905dc614c2d9c276514a2316c677b5b39c764bd14298c5b02cb1e23920a` | 16:49:04.903124 |
+| Web | `movebooks-beta-web-00004-xtb` | `abde805e4b93de8ce66ba31d697b08fe16286ef8db436af06e4ff6badfe1a7ac` | 16:39:57.012114 |
+
+Both Ready revisions received 100% traffic. Registry index membership and config-digest
+comparisons link those platform digests to the exact scanned image IDs, rather than incorrectly
+equating an OCI index digest with its platform manifest. Runtime specs excluding the container
+image compare equal before/after for both services: environment, probes, command, resource
+limits and workload identity were preserved. SQL became RUNNABLE before the API deployment.
+No schema migration or extra database privilege was needed or granted.
+
+The action-time safety check blocked the temporary public-invoker command pending explicit
+confirmation. A subsequent read verified **empty IAM bindings on both services**. No public
+binding was added, no authenticated browser request was made in this continuation, and the
+preserved session `efbf72e9-aff5-489c-b17e-d2edced3237b` was not mutated. The original final
+Catalog preparation rejection remains the last verified state; its new reconsideration flow
+has not yet been exercised live. No replacement workspace or Discover restart was attempted.
+
+Fresh focused local regression: **97 passed** (reconsideration, mapping/approval, Google runtime
+and runtime faults); Ruff passed; repository checks passed across **85 Markdown / 325 text**
+files with zero findings. The inherited Starlette test-client warning remains. Existing six-job
+CI success is distinguished from these fresh local checks; no new full frontend run is claimed.
+
+Final cloud P0/P1 clearance remains **unassessed**, not zero by assumption. Reconsideration,
+exact live actor/anti-spoofing, stale/conflicting review, User B approval-POST denial, canonical
+FPU, execution checkpoint/replay restart and complete failure-monitoring evidence remain open.
+Prior A/B sign-in, read/plan/audit isolation, pre-migration restart and authenticated browser
+intake rejection evidence is retained and not promoted to those stronger claims.
+
+A bounded startup-log check covered **16 entries** for the new API revision: 12 INFO and four
+without severity, no HTTP request-status records, zero bearer-value and JWT-shaped markers.
+This is counts-only startup evidence, not authenticated request/failure-path coverage or proof
+that every retained log is secret-free. No user data or credential values were exported.
+
+Mandatory shutdown began **16:52:13 UTC**, without waiting out the authorized window while
+confirmation remained outstanding. Verification found both services at **manual count 0** with
+empty IAM bindings and the new revisions retained; SQL **STOPPED/NEVER**; nine historical job
+executions with zero running; no local scanner/build container running. No temporary public
+invoker was ever granted, so no removal was necessary. The schema identity remains disabled,
+probe-secret version 1 DISABLED, bucket uniform access/PAP enforced, and there are no project
+public bindings or MoveBooks workload Owner/Editor grants. No workload/database privilege changed.
+
+Retained resources: the existing SQL disk and synthetic workspace/audit state; private GCS
+objects/retention; registry images including the new pair; revisions and idle job/service
+definitions; disabled probe secret/bootstrap identity; build/scan evidence and logs. Storage,
+registry and logging charges may continue. Actual billing/monetary session estimate is unavailable;
+compute resume to shutdown request was about fourteen minutes, not a claim of a guaranteed cost.
+
+**Exact next step:** obtain the requested action-time confirmation for temporary invoker on the
+two app services only, resume minimum compute within the still-valid window (or obtain a new
+window after 20:37:55 UTC), and request reconsideration in the preserved workspace. Then stop
+for the owner to approve/reject in the UI. Do not redeploy old images, repeat Discover, assume
+approval, or promote PR #13 from draft based on this deployment-only checkpoint.
+
+## Local reconsideration implementation — previous code checkpoint
 
 The owner authorized the narrow audit-preserving recovery implementation after `fe498ad`.
 The final mapping rejection is not bypassed: an explicit request creates a linked REVIEW_REQUIRED

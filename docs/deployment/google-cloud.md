@@ -2,7 +2,34 @@
 
 ## Authorized validation checkpoint — 2026-09-28
 
-### Reconsideration code ready locally (latest; not deployed)
+### Reconsideration images deployed (latest; stopped/private, live recovery not exercised)
+
+Source `a7e0b17298fed48ec68ae5de08bc06c9f2a07892` is published and all six CI jobs pass.
+Both production images were rebuilt from a clean Cloud Shell clone, scanned with the unchanged
+High threshold (zero High/Critical/ignored matches), and published to the existing private registry.
+Ready revisions are API `movebooks-beta-api-00005-dh7` and web `movebooks-beta-web-00004-xtb`.
+The [review](../reviews/google-cloud-validation.md) records their exact deployed platform digests
+and the [image review](../reviews/google-cloud-image-security.md) links them to scanned image IDs.
+Environment, workload identities, probes and application resource settings are unchanged.
+
+SQL resume at 16:37:55 UTC began a new authorized four-hour window; cutoff remains 20:37:55 UTC.
+Service-only public invoker was blocked pending action-time confirmation and neither grant was
+applied. Do not assume the application is browser-reachable just because the revisions were Ready.
+No preserved-workspace mutation or reconsideration request was made. Overall cloud readiness
+remains AMBER and PR #13 stays draft/unmerged. No new schema permission or bootstrap is needed.
+Shutdown began 16:52:13 UTC and was verified: both Run manual counts zero, both service IAM
+policies empty, SQL STOPPED/NEVER, no running job/scanner container. New images/revisions,
+existing SQL/GCS state, logs and scan evidence remain retained; storage/logging costs may continue.
+No public grant or extra workload/database privilege was introduced. Actual session cost is unknown.
+
+Next continuation: confirm temporary `allUsers` / `roles/run.invoker` on **only** the two app
+services, resume minimum compute within the valid authorized window, verify Ready/scanned digests,
+then open the same preserved session. Request Catalog preparation → Service reconsideration with
+a reason, inspect the preserved original rejection and **stop for the owner to approve/reject in
+the UI**. Do not auto-approve or create a replacement workspace. Complete the remaining live
+gates and mandatory private/zero/SQL-stopped rollback. Reconfirm the window if the cutoff expired.
+
+### Reconsideration code ready locally (previous checkpoint; before deployment)
 
 The requested narrow reconsideration flow is implemented and locally verified on the same branch.
 See [review and operator sequence](../reviews/mapping-reconsideration.md). Cloud state was not

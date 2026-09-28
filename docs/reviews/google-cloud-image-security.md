@@ -6,10 +6,39 @@ Overall Google Cloud validation remains **AMBER**: authenticated browser identit
 the other live gates in the [cloud review](google-cloud-validation.md) remain incomplete.
 
 This author-run assessment supersedes the earlier tentative classifications; it is not an
-independent approval, production-readiness claim or vulnerability waiver. No Cloud Run service,
-Cloud SQL instance, Firebase flow, public endpoint, Gemini or managed ADK was started or changed.
+independent approval, production-readiness claim or vulnerability waiver. The original image-only
+remediation did not start or change cloud application resources. Subsequent authorized deployment
+checkpoints are explicitly separated below and in the cloud review; Gemini/managed ADK stay disabled.
 
 ## Reproducible before/after evidence
+
+### Reconsideration deployment candidate — 2026-09-28
+
+Published source `a7e0b17298fed48ec68ae5de08bc06c9f2a07892` was cloned into a clean
+Cloud Shell checkout, excluding the unrelated local lockfile edits. Both production images
+were rebuilt with `--pull --no-cache`; the web uses the existing public Firebase configuration.
+The unchanged pinned Grype scanner above (database v6.1.9, built `2026-09-28T06:42:30Z`,
+valid) scanned the final image archives with `--fail-on high`. Both exited **0**, with
+**0 High, 0 Critical and 0 ignored matches**. API retains six Medium matches; web retains four.
+No suppression, threshold change or dependency/implementation edit was introduced for deployment.
+
+| Evidence | API | Web |
+| --- | --- | --- |
+| Published image index digest | `b85828b63e8cea05e3da2b29eaf8f7bdde82a7153d5e5961e719add248feaa1a` | `88e16b89053a83e5ffb1b4d86f1def5893a4493b37dc22e42ccf4d2e60ae8674` |
+| Scanned image ID | `4d9703ddfbc8d1a8188e0a70b9abb86ea460ec7bc1b7e2b51f72034f7e7bdaeb` | `a556acfad55374f6122b868d6c167bf03cd69cb5dad4f04499f5914cac2da04b` |
+| Image archive SHA-256 | `de05b6653946aa5a66cdb1f7366276fb04e0056045100d18f974dfdfcc8735ca` | `5ab074d5893bb2f4806481aff940c66ebb9080ee8480caca2e788061ac84312f` |
+| Raw Grype JSON SHA-256 | `2515ef0aa073505212818b10a516fdd76961e54e38ffec4a1f57b3242e72e1af` | `2b2423c8e79792a030dd46a0897b09a4aeee3083d7bf64cd88959e34ea90a7c0` |
+
+Tags are `api:reconsideration-a7e0b17` and `web:reconsideration-a7e0b17` in the existing
+`asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta` registry. The first API push
+encountered a transient TCP connection refusal; retry through the same normal credential
+helper succeeded without network/IAM changes. Raw reports and build logs are retained in
+Cloud Shell under `/home/jeasom/movebooks-reconsideration-evidence-a7e0b17`.
+All six published jobs in [run 36447214846](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36447214846)
+passed. This image gate does not certify the remaining authenticated cloud journey; deployment
+and live evidence are tracked separately in the [cloud review](google-cloud-validation.md).
+
+### Earlier hardening baseline
 
 The baseline is commit `a97d710`, [CI run 36401805324](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36401805324).
 The remediated source is `c80c920b4d6bc3a493162ee2f238b33eed6c04cd`
