@@ -1,13 +1,31 @@
 # Google Cloud Beta validation boundary
 
-Status: **AMBER — image gates and durable adapter validation passed; live approval/E2E gates incomplete; compute stopped**, 2026-09-28.
+Status: **AMBER — separate live reconsideration request recorded; human review and downstream gates pending**,
+2026-09-28. The latest bounded window is active pending human review; shutdown is not yet complete.
 This is a validation plan and evidence boundary, not a success claim.
 See the [review evidence](../reviews/google-cloud-validation.md) and
 [operator handoff](../deployment/google-cloud.md).
 
 ## Authorized scope
 
-### 2026-09-28 reconsideration-enabled deployment (latest, stopped/private)
+### 2026-09-28 live request and human-review pause (latest)
+
+Explicit endpoint confirmation allowed service-only public invoker on the two app services.
+After a same-digest API-only restart recovered transient startup/no-instance failures, actual
+readiness returned 200 and anonymous workspace access returned 401. The same preserved workspace
+loaded with ten completed mappings and the original Catalog preparation rejection unchanged.
+The deployed explicit request action created a separate REVIEW_REQUIRED record. The original
+decision reference, actor, both history/projection timestamps, reason and nineteen evidence
+references remained visible. No direct overwrite, stage bypass or replacement workspace occurred.
+
+The operator stopped for human UI approval; no new approval is claimed. Existing schemas, image
+contents, authentication, private storage and workload privileges are unchanged. Temporary Run
+access/compute and SQL remain active during this pause, with a cleanup-only local safeguard at
+20:30 UTC before the unchanged 20:37:55 UTC cutoff. Completion must still verify rollback; a
+scheduled safeguard is not completed shutdown evidence. See the [review](../reviews/google-cloud-validation.md)
+for timestamps, request reference, remaining gates and operational caveats.
+
+### 2026-09-28 reconsideration-enabled deployment (previous, stopped/private)
 
 Published `a7e0b17` includes the explicit, audit-preserving reconsideration flow. Fresh clean
 production builds and scans passed with zero High/Critical/ignored matches. New API/web revisions

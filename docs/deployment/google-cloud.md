@@ -2,7 +2,30 @@
 
 ## Authorized validation checkpoint — 2026-09-28
 
-### Reconsideration images deployed (latest; stopped/private, live recovery not exercised)
+### Live reconsideration requested (latest; awaiting human UI review)
+
+The owner confirmed temporary service-only public invoker for both app services. Compute resumed
+at 17:00:04 UTC within the existing window. A bounded API-only fresh revision on the same scanned
+digest (`movebooks-beta-api-resume-1710`) recovered startup/no-instance failures without changes
+to probes, limits, identity or source code. Real readiness is 200 and anonymous workspace access
+401. Web remains `movebooks-beta-web-00004-xtb`; SQL/GCS/Secret Manager privacy is unchanged.
+
+The same preserved workspace now has separate reconsideration request
+`c9e06084-6517-4c64-8f13-a1e2208e159d` in **REVIEW_REQUIRED**. Original rejection/history is
+intact; no approval was submitted. **Next action is the owner's Approve reconsideration or
+Reject reconsideration click in the existing User A Chrome tab**, not another request, new
+workspace or Discover/Plan run. The previous User B tab is unavailable and later isolation testing
+requires a separate human-controlled sign-in again. Do not extract credentials or fake a principal.
+
+During this explicit review pause both service invoker grants and manual count one remain active;
+SQL is RUNNABLE/ALWAYS. This is not completed rollback. A local one-time cleanup safeguard is
+scheduled for 20:30 UTC (02:00 Asia/Kolkata September 29), before the unchanged 20:37:55 UTC
+cutoff; keep the local host available. Complete the mandated private/zero/SQL-stopped checks
+earlier when validation completes. No new cloud scheduler, workload identity or IAM role was
+created. The [review](../reviews/google-cloud-validation.md) distinguishes verified evidence,
+pending checks and the startup caveat. PR #13 stays draft/unmerged and cloud readiness AMBER.
+
+### Reconsideration images deployed (previous; stopped/private, live recovery not exercised)
 
 Source `a7e0b17298fed48ec68ae5de08bc06c9f2a07892` is published and all six CI jobs pass.
 Both production images were rebuilt from a clean Cloud Shell clone, scanned with the unchanged

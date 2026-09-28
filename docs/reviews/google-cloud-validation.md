@@ -4,9 +4,96 @@ Date: 2026-09-28. Branch: `feature/google-cloud-validation`.
 Baseline: `41b73cea100e166bb7e3ea661c33650264755cec` (merged PR #12).
 Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test only.
 
-**AMBER. Image-security gates pass; live approval attribution/isolation and canonical cloud E2E remain incomplete. Keep the environment stopped and private.**
+**AMBER. Image-security gates pass; the separate live reconsideration request awaits human review.
+Temporary dev/test access is active only within the authorized window; rollback is still required.**
 
-## Reconsideration deployment — 2026-09-28 (latest, AMBER)
+## Live reconsideration request — 2026-09-28 (human review pending)
+
+The owner explicitly confirmed the two service-level temporary public-invoker grants after the
+previous stopped checkpoint. Local branch remained `feature/google-cloud-validation` at `39da55e`
+(documentation-only, not yet published); PR #13 remained draft/open/unmerged at published
+`a7e0b17`, with all six jobs successful. Unrelated lockfile edits were preserved. This continuation
+uses the existing deadline **20:37:55 UTC**, not a new four-hour clock.
+
+Compute resume was requested at **17:00:04 UTC**. SQL became RUNNABLE; web Ready at
+17:00:22.957575 UTC on unchanged `movebooks-beta-web-00004-xtb`. Its temporary service-only
+`allUsers` / `roles/run.invoker` grant was requested at **17:00:58 UTC**. The API's existing
+revision became Ready at 17:06:03.389352 UTC and its grant was requested at **17:06:40 UTC**.
+Bucket uniform access/PAP remained enforced; no project public principal or public probe-secret
+binding existed. Cloud SQL connector enforcement remained REQUIRED. No workload/database
+privilege, image content, application code, schema or protected-route policy was changed.
+
+### Startup recovery evidence, not an authentication pass
+
+Initial external API probes returned **429**, with three platform log records identifying no
+available instance. The browser failed to fetch the preserved session. These results are **not**
+counted as successful readiness or anonymous-auth rejection. Sanitized logs showed cancellation
+and timeout symptoms, no out-of-memory signal, and no bearer/JWT-shaped markers in the bounded
+sample. Two failed fresh-start requests reported 23,227 and 58,150 ms before cancellation.
+The root cause of the transient startup behavior is not established by these observations.
+
+An API-only fresh revision was requested at **17:08:28 UTC**, using the identical scanned index
+digest and unchanged runtime configuration/limits/probes: `movebooks-beta-api-resume-1710`.
+It became healthy at 17:11:57.991589 UTC and the service became Ready at 17:12:02.931618 UTC.
+No probe was weakened, capacity limit increased, or new credential/permission introduced.
+Subsequent actual HTTP checks returned **200** with `ready`/`cloud-dev` and **401** for anonymous
+access to the preserved workspace. Treat the initial startup instability as a runtime follow-up,
+not as evidence that retries/recovery or all failure-monitoring gates have passed.
+
+### Original rejection and separate request
+
+Reload under the existing User A session recovered the same preserved workspace
+`efbf72e9-aff5-489c-b17e-d2edced3237b`, ten completed mappings and the final Catalog preparation
+→ Service rejection. No Discover/Plan action, replacement workspace or direct database edit was
+used. The original rejection was visible before request submission:
+
+- Decision reference: `25cd2d75-6907-4042-a64f-b5d3015a5af5`.
+- Original mapping decision time: `2026-09-28T13:18:09.130310Z`.
+- Original human-history entry time: `2026-09-28T13:18:09.130447Z`.
+- Reason: `Rejected for review`.
+- Actor: the same authenticated User A subject. Its SHA-256 fingerprint is
+  `63ce343e618824dc9d5379e9348b70a60f91c94cada6b4ca4e9346d09bb73d77`;
+  the raw Firebase subject is not published here.
+- Nineteen original evidence references, inspected before the request, remain in its prior
+  snapshot, including `mapping-rule:mapping-policy-v1:products_services:product-001`.
+
+The request button was disabled with an empty reason. Entering a reason enabled the explicit
+request action. The submitted reason asks to reconsider this synthetic mapping while retaining
+the original rejection and requiring separate human review. The new request is
+`c9e06084-6517-4c64-8f13-a1e2208e159d`, recorded at **2026-09-28T17:14:48.473826Z**.
+Its requesting actor matches the original owner; the endpoint derives it from authenticated
+`principal.subject`, not a form actor field. This does not replace the still-required live
+forged-actor POST test.
+
+The deployed UI displays the original history unchanged, a separate reconsideration record,
+new proposed mapping, requesting actor/time and **REVIEW_REQUIRED**, with distinct Approve and
+Reject reconsideration buttons. Focus moves to the prior-history heading. The assistant did
+**not** click either review button and explicitly paused for the owner's UI decision. Migration
+remains blocked until that decision. No approved reconsideration/FPU/restart completion or final
+cloud P0/P1 clearance is claimed at this checkpoint.
+
+### Human-present pause, not completed validation
+
+At the pause the two app services have their explicitly approved service-only public invoker
+bindings, manual count one, and SQL is RUNNABLE/ALWAYS. They are **not** claimed shut down.
+The owner must click Approve reconsideration or Reject reconsideration in the existing User A
+Chrome tab. The request remains REVIEW_REQUIRED; no approval/rejection was submitted by the
+assistant. The previous User B browser tab is no longer available, so its separate authenticated
+session must be re-established with the owner's participation before the outstanding mutation test.
+
+A one-time local Codex cleanup safeguard is scheduled for **20:30 UTC on 2026-09-28**
+(02:00 Asia/Kolkata on September 29), before the 20:37:55 UTC cutoff. It is cleanup-only and
+must verify both grants removed, zero Run scaling, SQL STOPPED/NEVER and no running jobs. It does
+not authorize another live window or make cleanup a completed fact. Normal completion should
+perform cleanup earlier; keep the local host available for the safeguard. No cloud scheduler,
+new workload identity, static key or additional IAM role was created for this handoff.
+
+Final cloud P0/P1 counts remain unassessed. Original rejection preservation and creation of a
+separate request are now live evidence; subsequent human approval, forged/stale/conflicting
+requests, User B approval mutation denial, full FPU, execution restart and complete monitoring
+remain open. PR #13 remains draft and unmerged. No Gemini/ADK, provider or cloud intake activation.
+
+## Reconsideration deployment — 2026-09-28 (previous, AMBER)
 
 Preflight confirmed branch `feature/google-cloud-validation`, local/published source
 `a7e0b17298fed48ec68ae5de08bc06c9f2a07892`, PR #13 draft/open/unmerged and all six jobs
