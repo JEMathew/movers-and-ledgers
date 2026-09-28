@@ -8,7 +8,66 @@ Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test on
 Live negative authorization/actor-spoofing and lifecycle/replay monitoring evidence remain incomplete;
 this is not final cloud release clearance.**
 
-## Verified FPU and restart — 2026-09-28, latest acceptance evidence
+## Negative-path continuation — 2026-09-28, authenticated test-client blocker
+
+Preflight verified published `1e802159e2844ccb504d1c37fd3107b5bb431be0`, draft/unmerged
+PR #13, and all six successful jobs in
+[CI run 36476245003](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36476245003).
+The API/web immutable image digests remain unchanged and retain their zero High/Critical gates.
+Both services were private/manual-zero, SQL STOPPED/NEVER, with zero active executions among
+19 job records. The unrelated local web lockfile change is preserved and excluded.
+
+A newly authorized four-hour / US$10-target window began with SQL resume at **20:17:07 UTC**.
+Its hard cutoff is 00:17:07 UTC September 29; the cleanup safeguard was moved to 00:00 UTC
+(05:30 Asia/Kolkata). The existing web service was briefly set to manual one, still private;
+the API remained manual zero. No public invoker binding was added, no workload privilege or
+Firebase setting was changed, and no workspace request/mutation was submitted.
+
+The remaining tests require valid human Firebase identities on actual HTTP POSTs, not fake
+principals or a workload service account. The ordinary UI hides the forbidden approval controls.
+A normal Google CLI-to-Firebase sign-in compatibility check was rejected with HTTP 400,
+INVALID_IDP_RESPONSE/audience mismatch. Credentials stayed inside the requesting process;
+only safe error categories were emitted. This is not a failed MoveBooks authorization test and
+does not justify adding OAuth audiences or weakening authentication. A read-only Identity
+Platform configuration call returned 403; the existing Firebase console confirmed localhost
+is already an authorized domain. No Identity Platform upgrade/domain change was made.
+
+An ephemeral localhost Firebase-SDK test client was proposed to issue only fixed requests against
+the preserved workspace, with origin checks and no credential logging/disk persistence. The
+execution security review **blocked its creation**, because receiving and holding Firebase ID
+tokens in memory needed explicit approval under the user's credential-handling restriction.
+No client was created or run, and the rejection was not bypassed. The operator requested an
+explicit decision on this narrow in-memory client or an existing approved authenticated client.
+No password, MFA code, token or cookie was requested from the human.
+
+Therefore User B approval mutation, live actor-spoof rejection, post-restart cross-user isolation
+and the missing negative-path monitoring gates remain **NOT EXERCISED / AMBER**. No new P0/P1
+product finding was observed, but final P0/P1 clearance remains incomplete. The last verified
+FPU/posting-count-one evidence below remains the baseline; no fresh database-state verification
+is claimed by this attempt. Fresh local integrated-journey/owner/runtime regression: **39 passed**,
+one inherited Starlette deprecation warning; these are not substituted for live acceptance.
+
+Rollback began at 20:22:54 UTC: web was returned to manual zero. SQL startup operation
+`4b630024-c70e-45c6-a253-d5d700000031` completed at 20:28:34.775Z; only then was NEVER/stop
+requested. Final read-back is recorded below.
+No invoice, approval, audit record, application source or deployment image was changed.
+
+Final SQL read-back reports **STOPPED / NEVER** after the stop operation started at
+20:28:54.087Z. Both application endpoints remained private throughout this attempt; there
+were no temporary invoker grants to remove. The mandatory stopped/private state is restored.
+
+Independent rollback checks confirmed empty API/web service IAM bindings, invoker IAM checks
+enabled, both manual counts zero, no public project bindings and no active executions among
+19 job records. GCS public-access prevention is enforced with uniform bucket access and no
+public IAM members. The probe Secret Manager resource has no public binding. SQL retains
+connector enforcement REQUIRED, encrypted-only transport and no authorized public networks.
+No new resources, workload identities, keys, auth domains or permissions were created.
+Existing disk/artifact/image/log retention is unchanged and can still incur storage charges;
+current session cost is unavailable. The proposed client was never created; its empty local
+temporary directory was removed. Final repository/link/credential-pattern scan: 85 Markdown /
+326 text files, zero findings; whitespace check passed.
+
+## Verified FPU and restart — 2026-09-28, latest successful acceptance evidence
 
 The same preserved workspace `efbf72e9-aff5-489c-b17e-d2edced3237b` reached
 **VERIFIED_FIRST_PRODUCTIVE_USE** through the authenticated browser. No workspace was created,

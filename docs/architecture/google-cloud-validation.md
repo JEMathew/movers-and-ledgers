@@ -8,6 +8,18 @@ See the [review evidence](../reviews/google-cloud-validation.md) and
 
 ## Authorized scope
 
+### Negative-path test boundary
+
+The successful FPU workspace must not be reset to make denied-action controls visible. Live
+mutation-denial tests require actual Firebase user authentication and safe before/after evidence;
+local dependency overrides and service-account identities are not substitutes. The deployed UI
+hides non-owner approval controls. An isolated authenticated HTTP test client is a validation
+tool, not a reason to add production debug routes or broaden OAuth audiences.
+The proposed localhost client was blocked before creation pending explicit approval for normal
+in-memory Firebase credential handling. No credential extraction, new auth domain, backend
+impersonation or authentication weakening is authorized by that blocker. See the current review
+for the AMBER continuation and rollback evidence.
+
 ### Authenticated FPU acceptance (latest)
 
 The preserved workspace reached Verified First Productive Use at 19:42:50 UTC after separate

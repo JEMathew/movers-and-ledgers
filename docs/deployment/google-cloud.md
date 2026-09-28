@@ -2,6 +2,24 @@
 
 ## Authorized validation checkpoint — 2026-09-28
 
+### Negative-path continuation: test-client authorization required
+
+Published `1e80215` and all six jobs in CI run 36476245003 were green at preflight. Images are
+unchanged. A new bounded window began at 20:17:07 UTC, with hard cutoff 00:17:07 UTC September
+29 and cleanup at 00:00 UTC. API was not started and neither service received public invoker.
+Web briefly resumed privately, then returned to manual zero when the test-client blocker arose.
+
+The blocked step is explicit authorization of an ephemeral authenticated HTTP test client (or
+provision of an existing approved one). Normal Google CLI credentials fail Firebase's audience
+check; do not broaden allowed audiences or use a workload identity to simulate either human.
+The proposed client would use ordinary Firebase Google sign-in and in-memory identity only;
+its creation was denied by the execution security review, so it was not run. Do not ask the
+human to paste tokens, cookies or MFA codes. No approvals or invoice requests were sent.
+Use the [current review](../reviews/google-cloud-validation.md) for final shutdown verification.
+Rollback is verified: API/web manual zero with empty IAM policies, SQL STOPPED/NEVER,
+zero active executions among 19 records, no project public binding. No new cloud resource or
+permission was created. Keep compute stopped while the test-client authorization is unresolved.
+
 ### Verified FPU continuation (latest; cloud validation AMBER)
 
 The preserved workspace `efbf72e9-aff5-489c-b17e-d2edced3237b` has reached Verified First
