@@ -2,7 +2,20 @@
 
 ## Authorized validation checkpoint — 2026-09-28
 
-### Preserved-workspace handoff (current, AMBER)
+### Reconsideration code ready locally (latest; not deployed)
+
+The requested narrow reconsideration flow is implemented and locally verified on the same branch.
+See [review and operator sequence](../reviews/mapping-reconsideration.md). Cloud state was not
+changed: services remain at the prior stopped/private checkpoint and the preserved workspace
+still has its final rejection. Do not expect the old deployed images to expose the new controls.
+Publish normally, pass fresh CI, rebuild and scan both images, then deploy in an authorized bounded
+window. No schema bootstrap or extra database/IAM privilege is required. Request reconsideration
+for Catalog preparation → Service on the same session, then explicitly approve it in the new
+review action; keep the original rejection visible. Do not create a replacement workspace or
+auto-apply the owner's prior authorization. Overall cloud readiness remains AMBER until the
+remaining live gates pass. Preserve final private-endpoint rollback and compute shutdown.
+
+### Preserved-workspace handoff (previous live checkpoint, AMBER)
 
 The latest 13:38–14:05 UTC continuation used the same hardened digests and preserved session
 `efbf72e9-aff5-489c-b17e-d2edced3237b`. Local and published `80dbf1e` are synchronized; all six

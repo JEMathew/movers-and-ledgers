@@ -6,6 +6,23 @@ Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test on
 
 **AMBER. Image-security gates pass; live approval attribution/isolation and canonical cloud E2E remain incomplete. Keep the environment stopped and private.**
 
+## Local reconsideration implementation — latest code checkpoint, not deployed
+
+The owner authorized the narrow audit-preserving recovery implementation after `fe498ad`.
+The final mapping rejection is not bypassed: an explicit request creates a linked REVIEW_REQUIRED
+record, and a separate owner review creates a new approved/rejected decision. Original rejection,
+actor, timestamp, reason/evidence and audit history remain. Legacy snapshot encoding stays
+compatible without rewriting the preserved row. See the [focused review](mapping-reconsideration.md)
+and [architecture](../architecture/plan-map-approve.md).
+
+Local reconsideration readiness is **GREEN**: 275 backend tests passed (10 existing database-only
+skips), 82 frontend tests passed, Ruff/lint/typecheck/build passed. No unresolved local P0/P1
+finding. These results do not certify the remaining live gates. Cloud resources were not started,
+no new images were deployed and the preserved workspace remains unchanged. The former missing
+reconsideration capability is addressed locally; live recovery still requires fresh CI/image
+scans, bounded deployment and separate human request/review on that same workspace. Overall
+cloud validation stays **AMBER**, PR #13 draft/unmerged, final cloud P0/P1 clearance unassessed.
+
 ## Preserved-workspace continuation — 2026-09-28, 13:38–14:05 UTC (latest, AMBER)
 
 Preflight confirmed local/published `80dbf1eebc8078901b0a0220928aca54363d010c`, PR #13

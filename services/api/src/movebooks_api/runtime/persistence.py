@@ -29,6 +29,11 @@ def encode(session):
         "owner": session.owner_subject,
         "session": session.model_dump(mode="json"),
     }
+    # Keep pre-reconsideration snapshots byte-compatible for optimistic CAS. Old
+    # rows have no empty list field; decoding supplies it without a schema rewrite.
+    for mapping in payload["session"]["mappings"]:
+        if not mapping["reconsiderations"]:
+            mapping.pop("reconsiderations")
     encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"))
     if len(encoded.encode()) > 16 * 1024 * 1024:
         raise ValueError("Session evidence capacity reached; no state was committed.")

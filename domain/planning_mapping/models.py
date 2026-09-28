@@ -2,9 +2,10 @@
 
 from datetime import UTC, datetime
 from enum import StrEnum
+from typing import Literal
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class WorkflowStatus(StrEnum):
@@ -104,6 +105,41 @@ class MigrationPlan(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
+class ReconsiderationRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+    request_id: UUID
+    prior_decision_id: UUID
+    reason: str = Field(min_length=1, max_length=1000)
+    proposed_target: str = Field(min_length=1, max_length=256)
+
+
+class ReconsiderationReview(BaseModel):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+    action: Literal["approve", "reject"]
+    comment: str = Field(default="", max_length=1000)
+
+
+class MappingReconsideration(BaseModel):
+    model_config = ConfigDict(validate_assignment=True)
+    id: UUID
+    mapping_id: UUID
+    prior_decision_id: UUID
+    prior_actor: str
+    prior_timestamp: datetime
+    prior_reason: str | None
+    prior_evidence: list[str]
+    prior_target: str
+    requested_by: str
+    requested_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    reason: str
+    proposed_target: str
+    state: Literal["REVIEW_REQUIRED", "APPROVED", "REJECTED"] = "REVIEW_REQUIRED"
+    reviewed_by: str | None = None
+    reviewed_at: datetime | None = None
+    review_comment: str | None = None
+    decision_id: UUID | None = None
+
+
 class MappingProposal(BaseModel):
     id: UUID = Field(default_factory=uuid4)
     version: str
@@ -126,6 +162,7 @@ class MappingProposal(BaseModel):
     decided_by: str | None = None
     decided_at: datetime | None = None
     decision_comment: str | None = None
+    reconsiderations: list[MappingReconsideration] = Field(default_factory=list)
 
 
 class MappingDecision(BaseModel):
