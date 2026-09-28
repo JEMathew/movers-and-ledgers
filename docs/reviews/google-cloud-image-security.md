@@ -97,8 +97,14 @@ getfacl/setfacl/chacl in the inspected paths. Privilege-bearing mount/umount and
 executables remain installed. CapEff/CapPrm were zero and NoNewPrivs was 1 in this deliberately
 restricted inspection container; these flags do **not** prove the deployed Cloud Run configuration.
 The tooling-module absence narrows applicability but does not clear the remaining native runtime
-or privileged-tooling findings. The raw repeat API scan must be retained and reviewed before
-image clearance. No package finding is hidden by this evidence.
+or privileged-tooling findings. The completed repeat scan of the unchanged exact API image exited
+**2: 50 High, 58 Medium, 9 Low, 45 Negligible, no Critical**. Its thirteen-advisory match counts
+agree with every API row above. This is a new scan, not an API remediation/rebuild claim.
+Raw `api-grype.json` is retained beside the web report; SHA-256:
+`1a24b31fb6249be70cf06c91abf1cb390088485fb7db276e968526440e2e9daf`.
+Both scanner containers completed and were automatically removed; final `docker ps` showed no
+running containers. An earlier attempt to summarize the still-empty API report failed JSON parsing
+and was not counted as a scan result. No package finding is hidden by this evidence.
 
 Findings have separate package severity and product exposure decisions. Any unclosed applicability
 or remediation row blocks **image-security clearance** for this validation. The rebuilt image must

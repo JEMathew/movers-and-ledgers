@@ -25,7 +25,10 @@ public invoker grant, schema grant, live-model activation or customer-data handl
 - An exact-image web derivative was rebuilt and its non-root health/HTML smoke passed. Completed
   Grype rescan: **1 High / 3 Medium / 0 Critical**, down from nine High by physical npm removal.
   Residual zlib CVE-2026-85091 remains unresolved. This image was not pushed or deployed, and
-  this is not a full-source CI rebuild. API native/tooling applicability remains unclosed.
+  this is not a full-source CI rebuild. A completed repeat scan of the unchanged exact API image
+  confirms **50 High / 58 Medium / 9 Low / 45 Negligible / 0 Critical** (exit 2); all thirteen
+  advisory counts agree with the ledger. Raw reports and SHA-256 digests are retained. API
+  native/tooling applicability remains unclosed, not waived.
 - Fresh local Ruff and the runtime/configuration/fault backend selection pass (**65 tests**).
   Frontend lint and TypeScript pass. The first suite run exposed one focus-effect assertion race
   (75/76 pass); the test now awaits the same observable focus requirement with `waitFor`, without
@@ -57,7 +60,8 @@ Read-only live preflight confirmed SQL STOPPED/NEVER and both Run services manua
 Final readback again showed `manualInstanceCount=0` for both services and zero service IAM bindings
 (no public invoker grant).
 No additional cloud resources or permissions were created in this continuation. The local web
-smoke container was stopped. Retained SQL disk/network allocation, registry images, private
+smoke container was stopped; both scanners completed and final Docker running-container list was
+empty. Retained SQL disk/network allocation, registry images, private
 bucket/soft-deleted synthetic objects, disabled secret, logs and definitions remain as described
 below. New non-sensitive scan/image evidence is retained in Cloud Shell home. No current billed
 cost was obtained; earlier planning estimates are not a current spend measurement or hard cap.
