@@ -4,10 +4,186 @@ Date: 2026-09-28. Branch: `feature/google-cloud-validation`.
 Baseline: `41b73cea100e166bb7e3ea661c33650264755cec` (merged PR #12).
 Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test only.
 
-**AMBER. The published owner-role fix is image-scanned and deployed Ready. Preserved approval
-metadata is verified read-only; authenticated browser recognition and invoice/FPU acceptance remain open.**
+**AMBER overall. Authenticated canonical synthetic FPU and post-FPU restart persistence passed.
+Live negative authorization/actor-spoofing and lifecycle/replay monitoring evidence remain incomplete;
+this is not final cloud release clearance.**
+
+## Verified FPU and restart — 2026-09-28, latest acceptance evidence
+
+The same preserved workspace `efbf72e9-aff5-489c-b17e-d2edced3237b` reached
+**VERIFIED_FIRST_PRODUCTIVE_USE** through the authenticated browser. No workspace was created,
+no onboarding approval was repeated, and no prior decision/history was overwritten. The published
+owner-role correction recognizes all ten prerequisites and the five approval categories, retaining
+all six historical onboarding records (two belong to Opening balances).
+
+The human recorded two invoice approvals at 19:39:08.347663Z and 19:42:08.035299Z. Both retain
+the authenticated owner, WORKSPACE_OWNER role, approve action and matching contract fingerprint.
+Both are preserved; this is distinct from repeating onboarding approvals or posting twice.
+After the explicit `invoice approved` handoff, the agent submitted **Post and verify invoice once**.
+Invoice `7cd5ca8c-8091-4402-8e3c-c6eab2c31c72` was posted at 19:42:50.865226Z and verified
+at 19:42:50.869825Z. There is one invoice, one journal, one posting event and one posting attempt.
+
+### Deterministic financial acceptance
+
+The application and a separately executed read-only workload probe used deterministic Decimal checks,
+not model judgment. All six checks passed: customer/product/mapping/tax, totals, posting,
+accounting impact, audit and approval. All ten onboarding prerequisites remained complete.
+
+| Synthetic contract / journal | Verified amount (USD) |
+| --- | ---: |
+| One service line, quantity 1 × 100.00 | 100.00 |
+| CA-SALES, 0.0725 | 7.25 |
+| Invoice total / A/R debit | 107.25 |
+| Sales credit | 100.00 |
+| Tax-payable credit | 7.25 |
+| Total debits = total credits | 107.25 |
+
+Account balances changed exactly as expected: A/R 420.00 → 527.25, sales -1420.00 → -1520.00,
+tax control 0.00 → -7.25; bank 1125.00 and A/P -125.00 remained unchanged. This is a synthetic
+target transaction, not a real-provider posting, tax-advice or production-readiness claim.
+
+### Post-FPU restart and immutable history
+
+API-only redeploy reached Ready at 19:47:41.559431Z on
+`movebooks-beta-api-fpu-resume-1947`, with 100% traffic. It uses the same hardened API index
+`sha256:1849f94c8f4eaf34e5aab7c32789cb8196ea559c48dac39eaff2ae95db2d09cb`;
+no environment, workload identity, application source or privilege change was requested.
+Web remains on the previously scanned image. Authenticated browser reload retained Verified FPU,
+all ten prerequisites and attempt count one. No second execute request was submitted.
+
+Read-only job `movebooks-beta-probe-sgcnn` passed before restart at 19:46:29 UTC;
+`movebooks-beta-probe-khkx6` passed after restart at 19:49:59 UTC (Completed at 19:50:03 UTC).
+They verified identical whole-snapshot and component fingerprints:
+
+| Evidence | SHA-256, identical before/after restart |
+| --- | --- |
+| Whole persisted snapshot | `dcfc15905ea345eb5a8aa70581c5292a26ac290daa340fb6e4503eeb9a5b6e94` |
+| Invoice | `d3731d3930c8cbeacd77c8d53aa7ee288a8d6b690e477afbddee7835958143d1` |
+| Journal | `a11ce7b34b72b8c89c7c8926eb9e0827ba025c0b5dedfbfdbfc9a88514952e15` |
+| Events | `702dc1e5e1f909df4020525d99eb51d19ddf27b38dacc4e04bb42b768ae1674f` |
+| Both invoice approvals | `acb6c86c28c388edccc0e3ccaba769ab2e5abc6a274657c7d2f20949867f1ea3` |
+| Six onboarding decisions | `41e4392ff6be0c26d736df18e7c010a47607cc6a4d35246143d32325ed394845` |
+| Corresponding onboarding audit | `54556b87fb2a604494d3f76f6ad87895eaf3c3b72885a9c0f2fd9b194d46c11c` |
+
+An initial read-only diagnostic incorrectly assumed one invoice approval and failed its assertion.
+A subsequent safe diagnostic identified the two preserved human records; the verifier was corrected
+to validate both plus the latest applicable decision. No application logic/test was weakened and
+neither diagnostic wrote to the database. These workload reads prove durable evidence, not User B
+HTTP mutation denial or live client-actor spoof rejection.
+
+### Monitoring, security and final gate
+
+A fresh bounded API structured-log query from 19:30 UTC returned 51 records (limit 500):
+50 status 200 and one 401. All had action `request`; keys were only action, latency_ms, request_id
+and status. Zero bearer/JWT/private-key marker matches occurred, and no payload-bearing fields
+were present in this sample. Earlier bounded evidence below covers persistence/readiness failures.
+This is sampled evidence, not an exhaustive absence-of-leakage or complete failure-coverage claim.
+
+Published head `e8659f1` still has all six CI jobs successful in run 36470160345, including
+production dependency checks, full frontend/backend checks, PostgreSQL contracts, container tests
+and both unchanged image gates. Deployed immutable API/web images retain their same-day scans:
+zero High/Critical, zero ignored matches. No implementation or image contents changed in this
+continuation. The owner-role P1 is now resolved in the real authenticated journey.
+
+New observed P0: **0**. New observed P1: **0**. Final overall P0/P1 clearance is **not complete**:
+the following acceptance evidence remains required, so PR #13 stays draft/unmerged and AMBER:
+
+- Real User B approval POST against User A's workspace, with denial and no partial state/audit write.
+- Authenticated client-actor spoof POST rejection; source/local checks do not replace live proof.
+- Post-restart cross-user HTTP isolation (owner/snapshot persistence passed, not this negative test).
+- Explicit live lifecycle-invalid and duplicate/replay failure attempts with attributable safe logs;
+  one persisted posting and unchanged hashes prove no duplication in this journey, not those attacks.
+- Remaining storage-failure/log-safety coverage must be tied to actual exercised evidence before
+  declaring the full monitoring gate complete. Authenticated intake rejection remains the earlier
+  browser pre-transmission result, not a claimed authenticated backend upload POST.
+
+Do not repost the verified invoice, repeat decisions or restart Discover to fill these gaps.
+Use the same preserved workspace and a bounded, human-present negative-validation session only.
+
+### Completed shutdown / retained resources
+
+Rollback began at **19:50:44 UTC**. Read-back from 19:51:29 UTC confirmed both API and web
+service IAM bindings empty, both manual instance counts zero, SQL STOPPED with activation NEVER,
+and **zero active executions among 19 job records**. Project IAM has no allUsers or
+allAuthenticatedUsers binding. Anonymous requests to the stopped services returned 503, not
+application data; privacy evidence is the restored IAM policy, not a claimed 403 response.
+Both temporary service-level invoker grants were removed. No other permission was added, and no
+temporary identity, secret, static key or bootstrap access was created in this continuation.
+Invoker IAM enforcement remains enabled on both services; the SQL stop operation was DONE
+at 19:51:38.873Z without an error. Final image read-back matches the retained hardened digests.
+Shutdown completed before the existing cleanup deadline; the safeguard is not the evidence.
+
+Retained: private SQL disk with the completed workspace and immutable history; private GCS
+artifacts/soft-delete retention; Artifact Registry images; zero-scaled Run revisions; probe job
+definition/completed executions; existing Secret Manager definitions; Cloud Logging and Cloud
+Shell evidence. Storage/logging retention can still incur charges. The dashboard displayed INR
+0.00 estimated September charges, but that lagging, unrefreshed summary is **not session spend**;
+an authoritative current/session cost is unavailable. The US$10 target is not a hard billing cap.
+
+Fresh final focused regression: **53 passed**, one inherited Starlette deprecation warning.
+Final repository scan: 85 Markdown / 326 text files, zero findings; whitespace check passed.
+Only cloud evidence documents are changed; the unrelated web lockfile edit is preserved/excluded.
 
 ## Published owner-role fix: deployment and preserved evidence — 2026-09-28
+
+### Subsequent human-present continuation preflight
+
+Documentation checkpoint `e8659f1459d5d27c44f11b73b3838d30518e4571` was published through
+normal GitHub Desktop push after terminal authentication was unavailable. No duplicate commit
+was created. All six jobs in [CI run 36470160345](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36470160345)
+passed, including both unchanged image-security gates. PR #13 remains draft/unmerged.
+The existing unrelated `apps/web/package-lock.json` change remains excluded.
+Fresh focused onboarding/cloud-owner/runtime-fault regression: **53 passed**; the inherited
+Starlette warning remains. Repository checks: 85 Markdown / 326 text, zero findings; whitespace pass.
+
+Before resumption, both services retained the exact scanned image digests below, manual count
+zero and empty IAM bindings; SQL was STOPPED/NEVER. Project IAM contained no public principal.
+SQL encrypted connector-only access and GCS enforced public-access prevention remained intact.
+SQL activation was requested at 19:12:38 UTC and its operation completed at 19:24:27 UTC.
+DONE and RUNNABLE were confirmed together before requesting one instance of each existing
+application service. This continuation does not extend the original 20:37:55 UTC cutoff.
+At the temporary-access confirmation checkpoint both service IAM policies remained empty.
+Both services subsequently reported Ready on their retained hardened digests, with manual count one.
+No onboarding decision, invoice contract, invoice approval or posting was submitted.
+This is an in-progress human-present handoff, not completed shutdown or final release clearance;
+the existing cleanup-only safeguard remains scheduled for 20:30 UTC.
+
+A bounded failure-only API log query since 12:00 UTC returned 78 records, below its 100-record
+limit: status 401 × 3, 404 × 5, 500 × 48 and 503 × 22. Actions were request × 67 and persistence
+× 11. No credential-marker matches or unexpected structured keys occurred in this sample.
+These are existing authentication/route and persistence/readiness signals, not new user-isolation,
+duplicate/replay or lifecycle-failure proof. The broader query was canceled without producing
+usable evidence. No log bodies, credentials or customer payloads were printed.
+
+### Human invoice-approval checkpoint — 19:34 UTC
+
+Following explicit owner confirmation, service-only `allUsers` / `roles/run.invoker` was added
+to API and web at 19:30:22 UTC (previous policies: empty). No project, database, storage or
+secret permission was changed. Web and API readiness returned 200; anonymous protected
+onboarding access returned 401. The authenticated browser resumed the same preserved workspace
+and displayed **10/10 completed prerequisites**, without any repeated onboarding decision.
+
+Read-only execution `movebooks-beta-probe-hnskb` succeeded. The full six-record onboarding
+history and corresponding audit fingerprints still match the values below; actor attribution
+is unchanged. At that read, invoice/journal counts were both zero and no FPU draft existed.
+The first prepare POST returned 401 at the HTTP boundary and the UI reported Failed to fetch.
+An authenticated reload and the probe confirmed no write; after successful preflight, a single
+draft-only retry succeeded. No authentication/IAM weakening or automatic decision was used.
+The precise cause of that transient first POST rejection is not established.
+
+The browser now shows READY FOR FIRST PRODUCTIVE USE / REQUIRES APPROVAL: Cedar School,
+Catalog preparation, quantity 1, unit price USD 100.00; deterministic contract subtotal 100.00,
+CA-SALES tax 7.25 at 0.0725, total **107.25**, NET_30. Accounts: `account-ar`, `account-sales`,
+`fpu-tax-payable`. Checkpoint DRAFT, posting attempts 0/3, Post and verify disabled.
+The Review productive transaction dialog is open for the human owner's **Confirm approve**
+action. No invoice approval or posting was submitted by the agent. Final FPU, financial posting,
+restart, complete monitoring and P0/P1 release clearance remain pending: **AMBER**.
+
+This is an active, bounded human-approval pause, not completed cleanup. Both temporary invoker
+grants and manual-one services remain active; SQL is running. Remove grants, set manual zero,
+stop SQL and verify no active jobs at completion, before the existing 20:30 UTC cleanup deadline.
+
+### Earlier deployment evidence
 
 Published PR head `4f4e138b626547677dea402400769003c9fa10b8` was confirmed on draft/unmerged
 PR #13. All six jobs in [CI run 36464584457](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36464584457)

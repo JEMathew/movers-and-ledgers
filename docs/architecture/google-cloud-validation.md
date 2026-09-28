@@ -1,14 +1,32 @@
 # Google Cloud Beta validation boundary
 
-Status: **AMBER — owner-role correction published, scanned and deployed Ready; live FPU pending**,
-2026-09-28. Stored approval metadata has been inspected without replaying decisions.
+Status: **AMBER overall — authenticated synthetic FPU and post-FPU persistence passed;
+negative authorization and monitoring acceptance remain incomplete**, 2026-09-28.
 This is a validation plan and evidence boundary, not a success claim.
 See the [review evidence](../reviews/google-cloud-validation.md) and
 [operator handoff](../deployment/google-cloud.md).
 
 ## Authorized scope
 
-### Published correction and preserved-history verification (latest)
+### Authenticated FPU acceptance (latest)
+
+The preserved workspace reached Verified First Productive Use at 19:42:50 UTC after separate
+human invoice approval and exactly one posting submission. All ten prerequisites were recognized
+without repeating onboarding decisions. Six deterministic checks passed: contract references,
+totals, posting, accounting impact, audit and approval. The synthetic invoice totals USD 107.25
+(100.00 plus 7.25 tax); debits and credits both equal 107.25, with expected A/R, sales and tax
+control deltas. No model determines financial truth.
+
+An API-only same-image redeploy to `movebooks-beta-api-fpu-resume-1947` and authenticated reload
+retained Verified FPU. Read-only before/after probes verified identical whole snapshot, invoice,
+journal, event and approval hashes: one invoice, one journal, one posting event, attempt one.
+All six historical onboarding records and both human invoice approvals remain unchanged.
+The successful journey does not substitute for live User B approval-mutation denial, actor-spoof
+rejection, post-restart cross-user denial or explicit lifecycle/replay failure-log evidence.
+Those acceptance gaps keep cloud validation AMBER and PR #13 draft. See the current review for
+fingerprints, safe log sampling, rollback and the bounded next step. Do not post the invoice again.
+
+### Published correction and preserved-history verification (previous checkpoint)
 
 The exact published `4f4e138` API image passed the unchanged image-security gate and reached
 Cloud Run Ready. Runtime environment, identities, probes, limits and concurrency are unchanged.

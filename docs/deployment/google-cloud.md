@@ -2,7 +2,33 @@
 
 ## Authorized validation checkpoint — 2026-09-28
 
-### Published fixed-image continuation (latest; cloud validation AMBER)
+### Verified FPU continuation (latest; cloud validation AMBER)
+
+The preserved workspace `efbf72e9-aff5-489c-b17e-d2edced3237b` has reached Verified First
+Productive Use. **Do not prepare/post another invoice, repeat approvals or load a new scenario.**
+Invoice `7cd5ca8c-8091-4402-8e3c-c6eab2c31c72` is posted and deterministically verified at
+USD 107.25 with balanced journal, expected deltas and one attempt. An authenticated reload after
+API redeploy retained success; read-only snapshot/invoice/journal/event/approval hashes match.
+
+Retain API `movebooks-beta-api-fpu-resume-1947` on index digest
+`sha256:1849f94c8f4eaf34e5aab7c32789cb8196ea559c48dac39eaff2ae95db2d09cb`
+and the unchanged web `movebooks-beta-web-00004-xtb` image. Both retain their same-day zero
+High/Critical scans. The existing probe now performs narrow read-only FPU/approval verification;
+its successful post-restart execution is `movebooks-beta-probe-khkx6`. No new privilege or identity
+was granted and no schema/application change was made.
+
+Shutdown started at 19:50:44 UTC, before the original 20:30 cleanup/20:37:55 cutoff. Read-back
+confirmed empty service IAM bindings, manual zero for both services, SQL STOPPED/NEVER,
+zero active executions among 19 records and no project public bindings. Stopped endpoints
+returned 503 without application data. See the [latest review](../reviews/google-cloud-validation.md)
+for financial fingerprints and retained storage/cost caveats.
+The next session is only for missing live User B approval-POST denial, actor anti-spoofing,
+post-restart cross-user denial and lifecycle/replay/storage failure monitoring evidence.
+It requires human-present account access; never extract tokens or synthesize a user principal.
+Preserve the existing completed workspace and disabled cloud intake/Gemini/managed ADK boundaries.
+PR #13 remains draft; successful FPU alone is not complete cloud-release security clearance.
+
+### Published fixed-image continuation (previous; cloud validation AMBER)
 
 `4f4e138` is published, with six green CI jobs. API tag `ownerfix-4f4e138` was rebuilt/scanned
 at 0 High/Critical and deployed as `movebooks-beta-api-ownerfix-ready-1853`; retain the unchanged
