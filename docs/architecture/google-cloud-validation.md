@@ -1,13 +1,35 @@
 # Google Cloud Beta validation boundary
 
-Status: **AMBER — image gates and durable adapter validation passed; live identity/E2E incomplete; compute stopped**, 2026-09-28.
+Status: **AMBER — image gates and durable adapter validation passed; live approval/E2E gates incomplete; compute stopped**, 2026-09-28.
 This is a validation plan and evidence boundary, not a success claim.
 See the [review evidence](../reviews/google-cloud-validation.md) and
 [operator handoff](../deployment/google-cloud.md).
 
 ## Authorized scope
 
-### 2026-09-28 authenticated continuation (latest, stopped)
+### 2026-09-28 preserved-workspace continuation (latest, stopped)
+
+Published/local `80dbf1e` and its six green CI jobs were confirmed before resumption. The owner
+authorized the five outstanding synthetic mappings. Four were recorded through the authenticated
+deployed UI and survived reload: the preserved session now has ten approved mappings and one
+rejection. Catalog preparation → Service remains rejected, with disabled UI controls and a
+backend final-decision guard. There is no existing governed reconsideration transition; new
+authorization alone cannot safely overwrite the historic rejection. No new workspace, stage
+bypass or direct data edit was used. Canonical FPU and execution restart/replay remain blocked.
+
+The authenticated selected-file browser test now passes explicit cloud rejection before sending
+the synthetic payload. A bounded log scan found no intake requests/canary/token-shaped markers.
+This is not a claim that an authenticated backend intake POST was exercised. Exact persisted
+actor/anti-spoofing and User B approval-POST denial remain open. Source/local tests do not replace
+those live gates. Fresh focused tests: 77 passed; Ruff passed; final live P0/P1 clearance unassessed.
+
+Rollback began 14:05:33 UTC: both public invoker bindings removed, both Run services manual zero,
+SQL STOPPED/NEVER, jobs idle. No architecture or implementation was changed. The immediate next
+decision is authorization of a narrow audit-preserving mapping supersession/reconsideration flow,
+not weakening immutable decisions or starting a replacement journey. See the latest
+[review evidence](../reviews/google-cloud-validation.md). Earlier checkpoints below are historical.
+
+### 2026-09-28 authenticated continuation (previous checkpoint, stopped)
 
 Real Google sign-in completed for the two authorized users in separate browser sessions. User A
 created one durable synthetic workspace and completed Discover/Assess/Plan. Anonymous workspace

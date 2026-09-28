@@ -2,7 +2,44 @@
 
 ## Authorized validation checkpoint — 2026-09-28
 
-### Authenticated continuation handoff (current, AMBER)
+### Preserved-workspace handoff (current, AMBER)
+
+The latest 13:38–14:05 UTC continuation used the same hardened digests and preserved session
+`efbf72e9-aff5-489c-b17e-d2edced3237b`. Local and published `80dbf1e` are synchronized; all six
+published CI jobs pass and PR #13 remains draft/open/unmerged. No manual push is needed for the
+older documentation chain. A new documentation-only evidence commit follows this checkpoint.
+
+Four explicitly authorized mapping approvals returned HTTP 200 and survived reload. There are
+now ten approvals and one final Catalog preparation rejection. Both frontend and backend prohibit
+changing that rejected decision; no supported reopen transition exists. **Do not restart compute
+just to retry the same approval.** First obtain authorization for a narrow audit-preserving
+reconsideration/supersession implementation, retaining the original rejection and requiring a
+new attributable decision. Do not directly edit SQL, weaken final-decision checks or replace the
+workspace. Canonical migration/FPU and execution restart/replay remain unverified.
+
+The manually selected synthetic file was explicitly rejected by the signed-in deployed browser
+before transmission. A bounded 120-entry scan found no intake POST, canary, bearer-value or
+JWT-shaped marker. User B's audit view remains denied; approval-POST denial and exact persisted
+actor/anti-spoofing still require live evidence. Complete failure-path monitoring remains open.
+Fresh focused regression: 77 tests and Ruff pass; final live P0/P1 clearance is unassessed.
+
+Rollback began **14:05:33 UTC** within the unchanged original deadline. Public invoker bindings
+were removed from both services; both manual counts are zero; SQL is STOPPED/NEVER; jobs idle.
+No SQL/GCS/Secret Manager public access or additional workload/database privilege was introduced.
+Final read-only checks found empty service IAM policies, no project public-principal binding or
+MoveBooks workload Owner/Editor grant, schema identity disabled, probe-secret version 1 DISABLED,
+and bucket uniform access/public-access prevention enforced. Ordinary service-root probes returned
+503 `text/html` after shutdown; the IAM policies, not the HTTP code alone, prove private invocation.
+The hardened image digests below remain deployed and unchanged. The old-image probe job was not
+executed. Cloud intake, Gemini, managed ADK, provider integrations and production remain disabled.
+
+Retain the synthetic session/audit evidence, SQL disk, registry images, private bucket objects
+and soft-delete retention, logs, disabled secret and service/job definitions. These can incur
+storage/logging charges; actual session cost is unavailable. No new resources were provisioned.
+An unrelated local `apps/web/package-lock.json` change is preserved and excluded from the evidence
+commit. Keep PR #13 draft and compute stopped until the recovery scope is explicitly authorized.
+
+### Authenticated continuation handoff (previous checkpoint, AMBER)
 
 The 12:48–13:25 UTC resumption completed real Google sign-in for Users A/B, User A synthetic
 Discover/Assess/Plan, anonymous 401 checks, User B workspace-read/plan-mutation 404 checks,

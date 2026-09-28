@@ -4,7 +4,104 @@ Date: 2026-09-28. Branch: `feature/google-cloud-validation`.
 Baseline: `41b73cea100e166bb7e3ea661c33650264755cec` (merged PR #12).
 Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test only.
 
-**AMBER. Image-security gates now pass; authenticated identity/cloud E2E remain incomplete. Keep the environment stopped and private.**
+**AMBER. Image-security gates pass; live approval attribution/isolation and canonical cloud E2E remain incomplete. Keep the environment stopped and private.**
+
+## Preserved-workspace continuation — 2026-09-28, 13:38–14:05 UTC (latest, AMBER)
+
+Preflight confirmed local/published `80dbf1eebc8078901b0a0220928aca54363d010c`, PR #13
+draft/open/unmerged and mergeable, and all six CI jobs successful in run `36429130279`.
+The previously unpublished documentation chain is now published; no duplicate commit or
+credential workaround is needed. The preserved session remains
+`efbf72e9-aff5-489c-b17e-d2edced3237b`. Discover was not repeated and no replacement workspace
+was created. The original 15:29:14 UTC deadline was not reset.
+
+SQL start was requested at 13:38:11 UTC, and RUNNABLE/ALWAYS was verified before API startup.
+Web became Ready at 13:39:11.828338 UTC. Its service-only public invoker grant was requested
+at 13:40:34 UTC. API manual count one was requested after SQL readiness; the unchanged hardened
+revision became Ready at 14:03:05.840881 UTC and its service-only grant was requested at
+14:03:37 UTC. No database, bucket, secret, workload-role or authentication boundary was broadened.
+
+### Mapping decisions and exact journey blocker
+
+The owner explicitly authorized all five outstanding synthetic targets. Four available approvals
+were submitted through User A's authenticated deployed UI and returned HTTP 200 at
+14:04:04.036592, 14:04:04.597608, 14:04:05.177929 and 14:04:05.670007 UTC:
+Independent Press Distribution → Vendor; CA-SALES → California sales tax; base_currency → USD;
+fiscal_calendar → Calendar Year. Reload recovered **ten completed mappings and one rejection**.
+The existing six approvals were not replayed.
+
+**Catalog preparation → Service could not be submitted.** Its earlier rejection is a final
+`REJECTED` decision, displayed as BLOCKED. The frontend disables all further decision controls
+for rejected proposals. Independently, `tools/mapping/controls.py::apply_mapping_decision`
+rejects any decision on APPROVED, MODIFIED or REJECTED proposals with
+`Mapping proposal already has a final decision.` This is not a timing, authentication or database
+outage, and the new human authorization does not provide an existing recovery transition.
+
+No disabled control was bypassed, no direct database edit was made, and no decision/history was
+overwritten. A governed superseding/reopen workflow is outside this evidence-only continuation.
+The same session remains AWAITING_APPROVAL; migration, resolution, validation, configuration,
+onboarding and Verified FPU were not run. Consequently migration checkpoint recovery,
+completed-journey restart/idempotency and replay checks remain unverified. The earlier
+pre-migration restart evidence remains valid but is not promoted to those stronger claims.
+
+User B's audit view remained denied after this restart/resumption and the four new approvals.
+The specific User B approval POST and persisted Firebase actor/forged-actor checks remain
+unexercised; owner-scoped read/plan denial and source/local tests are not substitutes.
+The ordinary UI does not expose another owner's approval controls or unredacted actor fields.
+No test-auth override, token extraction or production validation harness was introduced.
+
+### Authenticated selected-file rejection and log safety
+
+The owner manually selected the known synthetic `customers.csv` canary (67 bytes), without
+changing browser file-security settings. With User B signed in and consent checked, clicking
+Validate package displayed: **Try Your Data remains local-only. Cloud upload retention is not
+enabled; no files were sent.** No package ticket, validation-success result or workspace was
+created by this action. The frontend cloud guard runs before reading/encoding/sending file data.
+This establishes the deployed authenticated **browser rejection**, not an authenticated backend
+POST result: the independent backend cloud-rejection route was not invoked by this guard.
+
+A bounded counts-only scan of 120 API/web log entries since 13:38 UTC found **zero intake
+validation requests, zero canary markers, zero bearer-value markers and zero JWT-shaped markers**.
+The four successful approval POSTs are present. The no-transmission guard plus absent intake
+request is evidence against payload persistence/partial intake state for this tested action;
+no independent database or bucket content sweep is claimed. This limited heuristic does not
+prove every retained log is secret-free. Full persistence/storage/lifecycle/replay failure-path
+monitoring remains incomplete; earlier auth/owner/readiness failure evidence is retained.
+
+### Release checks and shutdown
+
+Fresh relevant local checks: **77 tests passed** across `test_google_runtime.py`,
+`test_runtime_faults.py` and `test_plan_map_approve.py`; Ruff passed. The existing Starlette
+test-client deprecation warning remains. Published CI still has six successful jobs, including
+both unsuppressed image-security gates and the production dependency gate. The exact hardened
+digests below were unchanged; their prior zero-High/zero-Critical scan evidence remains valid
+for those bytes. No fresh deployed-image rescan or full local frontend run is claimed here.
+Repository checks passed across 84 Markdown files and 320 text files, with zero findings;
+whitespace checks passed. The locally created disposable canary CSV was removed after testing.
+
+Mandatory rollback began **14:05:33 UTC**, well before the original cutoff. Both service-only
+public invoker bindings were removed, both Cloud Run manual counts returned to **0**, SQL was
+verified **STOPPED/NEVER**, and no validation jobs were running. SQL retained REQUIRED connector
+enforcement and ENCRYPTED_ONLY; no authorized networks were added. Final least-privilege checks
+and retained-resource details are recorded in the deployment handoff.
+
+An unrelated local `apps/web/package-lock.json` modification was discovered after the clean
+preflight. It was preserved, not deployed, reverted or included in the documentation commit.
+Only the three cloud-validation documents were changed by this continuation.
+
+**AMBER: no new confirmed P0/P1 defect, but final live P0/P1 counts/clearance remain unassessed,
+not certified zero.** The concrete immediate blocker is the immutable rejected mapping in the
+required preserved session. Further blockers remain approval-POST owner isolation, live actor
+attribution/anti-spoofing, canonical FPU, execution restart/replay and full negative-path monitoring.
+Next: authorize a narrowly scoped, audit-preserving mapping reconsideration/supersession change
+before another live run; retain the rejected decision and require a new attributable approval.
+Do not relax final-decision checks, overwrite the rejection, or silently create another workspace.
+PR #13 remains draft and unmerged. Cloud intake, Gemini and managed ADK remain disabled.
+
+Retained SQL synthetic evidence/disk, registry images, private bucket/soft-deleted objects,
+disabled secret, logs and service/job definitions may continue to incur storage costs.
+Session-attributable billed cost is unavailable; the US$10 target is not asserted as verified.
+
 
 ## Human-present resumption — 2026-09-28, 12:48–13:25 UTC (stopped, AMBER)
 
