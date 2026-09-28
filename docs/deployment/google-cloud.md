@@ -2,7 +2,40 @@
 
 ## Authorized validation checkpoint — 2026-09-28
 
-### Hardened deployment and stopped handoff (current)
+### Authenticated continuation handoff (current, AMBER)
+
+The 12:48–13:25 UTC resumption completed real Google sign-in for Users A/B, User A synthetic
+Discover/Assess/Plan, anonymous 401 checks, User B workspace-read/plan-mutation 404 checks,
+audit-view denial, and pre-migration API restart persistence/isolation. The preserved session is
+`efbf72e9-aff5-489c-b17e-d2edced3237b`; do not restart discovery in the next continuation.
+Six approvals and one rejection survive restart, but five mappings still await approval.
+
+The safety reviewer requires explicit authorization of the exact remaining synthetic decisions:
+Independent Press Distribution → Vendor; Catalog preparation → Service; CA-SALES → California
+sales tax; base_currency → USD; fiscal_calendar → Calendar Year. Do not circumvent that hold.
+Chrome extension file-URL access also blocked the synthetic intake-canary selection before
+upload; resolve the documented browser prerequisite or coordinate user-controlled selection.
+
+No full cloud FPU, migration checkpoint recovery, live actor-spoofing/approval-POST denial or
+authenticated intake rejection success is claimed. The Trust projection displays a generic
+"Workspace owner" actor; inspecting that label alone does not prove the persisted Firebase actor.
+The [review](../reviews/google-cloud-validation.md) distinguishes exercised gates from code/local
+test evidence and records bounded log-marker findings. Final live P0/P1 clearance is unassessed.
+
+Shutdown began 13:25:16 UTC. Both Run services now have no public IAM binding and manual count
+zero; SQL is STOPPED/NEVER; jobs have no running tasks; schema identity and probe-secret version
+remain disabled. The exact hardened revisions/digests below are unchanged. The retained legacy
+probe job still references an older image: **do not execute it without image review/update**.
+No workload privileges were added and SQL/GCS/Secret Manager remained private.
+
+Fresh focused regression: 53 runtime/fault/security tests and Ruff pass. Published `1fa818e`
+retains six green CI jobs; PR #13 remains draft/unmerged. The local documentation chain remains
+unpublished because normal terminal authentication is blocked; use normal Desktop/manual push.
+Retained SQL synthetic state/disk, images, bucket objects, disabled secret and logs may charge;
+session-attributable billed cost is unavailable. Resume only after the two human prerequisites
+are resolved and a bounded human-present window is available. Preserve mandatory final rollback.
+
+### Hardened deployment and stopped handoff (previous checkpoint)
 
 The 2026-09-28 live window began 11:29:14 UTC (deadline 15:29:14 UTC); rollback began at
 11:59:19 UTC while awaiting human Google consent. Compute is stopped again. Overall **AMBER**,

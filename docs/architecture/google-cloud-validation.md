@@ -7,7 +7,28 @@ See the [review evidence](../reviews/google-cloud-validation.md) and
 
 ## Authorized scope
 
-### 2026-09-28 hardened deployment and stopped handoff (current)
+### 2026-09-28 authenticated continuation (latest, stopped)
+
+Real Google sign-in completed for the two authorized users in separate browser sessions. User A
+created one durable synthetic workspace and completed Discover/Assess/Plan. Anonymous workspace
+and activity GETs returned 401; User B's workspace GET and plan POST returned owner-scoped 404,
+and the private audit view remained unavailable. After API scale-zero/restart on the same hardened
+revision, User A's six approval events, one rejection and original timestamps persisted; User B
+remained denied. This is pre-migration persistence evidence, not migration checkpoint/FPU proof.
+
+The remaining five synthetic mapping approvals await explicit human authorization following a
+safety-review rejection; no workaround was used. Exact Firebase actor/anti-spoofing and approval-
+POST isolation remain unverified. The cloud-intake canary test was blocked before upload by the
+browser extension's file-access setting. Cloud intake, Gemini and managed ADK stayed disabled.
+The live release gate remains **AMBER**, with final P0/P1 clearance unassessed.
+
+Mandatory rollback began 13:25:16 UTC: both public invoker bindings removed, both services manual
+zero, SQL STOPPED/NEVER, jobs idle, schema identity and secret probe disabled. No architecture,
+application code, workload privilege or private-storage boundary changed. See the
+[latest review](../reviews/google-cloud-validation.md) for exact evidence and remaining gates;
+older checkpoints below are historical, not a request to repeat completed discovery checks.
+
+### 2026-09-28 hardened deployment and stopped handoff (previous checkpoint)
 
 The exact scanned API and Firebase-configured web images were published and deployed to Ready
 revisions `movebooks-beta-api-00004-n92` and `movebooks-beta-web-00003-ngl`, with 100% traffic.
