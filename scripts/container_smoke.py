@@ -161,7 +161,8 @@ def run(gate):
         web,
         "node",
         "-e",
-        "const fs=require('fs'); for(const p of ['/app/tests','/app/.env','/app/.git']) "
+        "const fs=require('fs'); for(const p of ['/app/tests','/app/.env','/app/.git',"
+        "'/usr/local/lib/node_modules/npm','/usr/local/bin/npm','/usr/local/bin/npx']) "
         "{if(fs.existsSync(p)) process.exit(1)}",
     )
     assert (

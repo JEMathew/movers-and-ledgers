@@ -16,6 +16,9 @@ CMD ["npm", "run", "dev", "--", "--hostname", "0.0.0.0", "--port", "8080"]
 
 FROM node:22-alpine AS runtime
 ENV NODE_ENV=production PORT=8080 HOSTNAME=0.0.0.0 NEXT_TELEMETRY_DISABLED=1
+# The standalone server invokes Node directly; package installation stays in build.
+# Remove npm's unused dependency tree rather than waive its image findings.
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
 WORKDIR /app
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
