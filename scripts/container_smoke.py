@@ -140,7 +140,10 @@ def run(gate):
     )
     for name, base in [(api, api_url), (web, web_url)]:
         until(lambda base=base: request(base, "/healthz"))
-        assert gate.cli("exec", name, "id", "-u") != "0"
+        if name == api:
+            assert gate.cli("exec", name, "python", "-c", "import os; print(os.getuid())") != "0"
+        else:
+            assert gate.cli("exec", name, "node", "-p", "process.getuid()") != "0"
     assert request(api_url, "/readyz")["status"] == "ready"
     request(
         api_url,
@@ -162,7 +165,8 @@ def run(gate):
         "node",
         "-e",
         "const fs=require('fs'); for(const p of ['/app/tests','/app/.env','/app/.git',"
-        "'/usr/local/lib/node_modules/npm','/usr/local/bin/npm','/usr/local/bin/npx']) "
+        "'/usr/local/lib/node_modules/npm','/usr/local/bin/npm','/usr/local/bin/npx',"
+        "'/usr/lib/node_modules/npm','/usr/bin/npm','/usr/bin/npx']) "
         "{if(fs.existsSync(p)) process.exit(1)}",
     )
     assert (
@@ -171,7 +175,9 @@ def run(gate):
             api,
             "python",
             "-c",
-            "from pathlib import Path; assert not Path('/validation').exists(); "
+            "from pathlib import Path; import importlib.util; "
+            "assert importlib.util.find_spec('pip') is None; "
+            "assert not Path('/bin/sh').exists(); assert not Path('/validation').exists(); "
             "assert not Path('/app/tests').exists(); assert not Path('/app/.env').exists(); "
             "assert Path('/app/synthetic-data').is_dir(); print('runtime-files-ok')",
         )
