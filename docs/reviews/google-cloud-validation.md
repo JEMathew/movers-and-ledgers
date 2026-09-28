@@ -4,8 +4,41 @@ Date: 2026-09-28. Branch: `feature/google-cloud-validation`.
 Baseline: `41b73cea100e166bb7e3ea661c33650264755cec` (merged PR #12).
 Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test only.
 
-**AMBER. Image-security gates pass; the separate live reconsideration request awaits human review.
+**AMBER. Reconsideration is approved; migration is paused for separate human resolution review.
 Temporary dev/test access is active only within the authorized window; rollback is still required.**
+
+## Reconsideration approved; governed migration pause — 2026-09-28
+
+After the owner reported approval, the deployed UI showed a separate APPROVED decision
+`8992183a-829a-40c3-88ad-02ffb0ad9113`, human-history time
+`2026-09-28T17:31:39.087757Z`, and reconsideration review time
+`2026-09-28T17:31:39.088302Z`. Its actor matches the original User A subject fingerprint below.
+The original rejection `25cd2d75-6907-4042-a64f-b5d3015a5af5`, both original timestamps,
+reason and nineteen evidence references remain visible and unchanged. Request
+`c9e06084-6517-4c64-8f13-a1e2208e159d` remains a distinct record with its original reason,
+requesting actor and timestamp. This verifies visible separate attribution, not yet the live
+forged-actor/stale/conflicting POST cases or post-execution restart persistence.
+
+The assistant followed the same-session Migrate → Resolve link and started the approved
+synthetic manifest once. No demo-session loader or new workspace was used. The UI reached
+29% progress: Accounts completed (four records, one attempt), Customers blocked (two records,
+one attempt), later batches unstarted. The controlled `DUPLICATE_CUSTOMER` failure and safe
+checkpoint boundary are visible. Retry count is zero; the Resolution Agent proposes
+`record_duplicate_disposition_and_retry` under `resolution-policy-v1` with batch/checksum,
+fixture and knowledge evidence. Prior completed checkpoints are reported intact.
+
+The accessible `dialog` named **Review proposed resolution** opened with focus on Close dialog,
+and separate **Reject and block** / **Approve resolution** controls. This medium-risk action
+requires another explicit human decision; the assistant has not submitted it or retried the
+batch. Validate remains locked. The owner is asked to review and click Approve resolution
+in the current dialog if accepting the synthetic proposal.
+
+This is a human-present pause within the unchanged **20:37:55 UTC** cutoff, not completed
+validation or shutdown. The 20:30 UTC cleanup safeguard remains scheduled. Both temporary
+service-level grants and live compute remain pending mandatory rollback. User B approval-POST
+denial, live anti-spoofing/conflicting review, canonical FPU, execution restart and complete
+monitoring remain open; final cloud P0/P1 clearance is not yet established. Image/source content
+is unchanged, and the prior zero High/Critical scans remain the applicable image evidence.
 
 ## Live reconsideration request — 2026-09-28 (human review pending)
 
