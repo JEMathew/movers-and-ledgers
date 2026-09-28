@@ -1,6 +1,7 @@
 FROM cgr.dev/chainguard/python:latest-dev@sha256:87729167739190d9309588120a8ac0ffbf2eb95dd895abb9bada6bb9ecbf5a04 AS build
 USER root
-ENV PATH=/opt/venv/bin:$PATH
+# Build-time download timeout only; preserve TLS verification and resolver failures.
+ENV PATH=/opt/venv/bin:$PATH PIP_DEFAULT_TIMEOUT=60
 RUN python -m venv /opt/venv
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PORT=8080 PYTHONPATH=/app:/app/services/api/src
 WORKDIR /app
