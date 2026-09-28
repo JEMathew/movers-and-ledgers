@@ -1,6 +1,6 @@
 from decimal import ROUND_HALF_UP, Decimal
 
-from domain.onboarding_fpu.models import FpuCheck
+from domain.onboarding_fpu.models import FpuCheck, owner_decision_role
 from tools.migration import stable_checksum
 from tools.onboarding.checks import (
     operating_context,
@@ -194,7 +194,7 @@ def verification_checks(session):
             "approval": bool(
                 approval
                 and approval.actor == session.owner_subject
-                and approval.role == "DEMO_WORKSPACE_OWNER"
+                and approval.role == owner_decision_role(session.owner_subject)
                 and approval.action == "approve"
                 and approval.evidence_hash == task.contract_hash
             ),

@@ -1,7 +1,7 @@
 from copy import deepcopy
 from decimal import Decimal
 
-from domain.onboarding_fpu.models import OnboardingTask
+from domain.onboarding_fpu.models import OnboardingTask, owner_decision_role
 from tools.migration import stable_checksum
 from tools.validation.checks import ledger, validate_opening_balances
 
@@ -144,7 +144,7 @@ def verify_onboarding_prerequisites(session):
         approved = bool(
             decision
             and decision.actor == session.owner_subject
-            and decision.role == "DEMO_WORKSPACE_OWNER"
+            and decision.role == owner_decision_role(session.owner_subject)
             and decision.evidence_hash == evidence_hash
             and decision.action in {"approve", "modify"}
             and decision.selection in choices

@@ -1,14 +1,33 @@
 # Google Cloud Beta validation boundary
 
-Status: **AMBER — separate live reconsideration request recorded; human review and downstream gates pending**,
-2026-09-28. The latest bounded window is active pending human review; shutdown is not yet complete.
+Status: **AMBER — live onboarding found owner-role validation mismatch; local correction tested**,
+2026-09-28. Live execution is stopped pending a corrected, scanned deployment.
 This is a validation plan and evidence boundary, not a success claim.
 See the [review evidence](../reviews/google-cloud-validation.md) and
 [operator handoff](../deployment/google-cloud.md).
 
 ## Authorized scope
 
-### 2026-09-28 live request and human-review pause (latest)
+### 2026-09-28 onboarding owner-role parity (latest)
+
+The preserved workspace progressed through separately approved reconsideration, controlled
+migration recovery, seventeen deterministic reconciliation checks and approved configuration.
+All five human onboarding approvals persisted with server-derived `WORKSPACE_OWNER` attribution,
+but the readiness predicate still required the local-only `DEMO_WORKSPACE_OWNER` label. The
+same mismatch existed in final invoice verification; related FPU/remediation audit fields also
+hard-coded the local role. This is a P1 cloud-journey blocker, not missing human consent.
+
+The bounded correction shares the existing server-subject-to-role convention across decision
+creation, onboarding readiness, pre-posting authorization, invoice verification and audit fields.
+It requires the exact role for the verified owner, not either role indiscriminately. Workspace
+ownership, current evidence hashes, explicit decisions and supported selections remain required.
+No API accepts a client actor or role. No historical decision, timestamp or audit record is
+rewritten; existing cloud approvals can be re-evaluated normally after deployment. Preparing an
+invoice still requires separate approval before posting. No schema, IAM, provider, Gemini/ADK
+or cloud intake change is needed. Local parity/rejection/codec/idempotency tests pass; deployed
+verification and final cloud P0/P1 clearance remain pending. See the latest review evidence.
+
+### 2026-09-28 live request and human-review pause (previous)
 
 Explicit endpoint confirmation allowed service-only public invoker on the two app services.
 After a same-digest API-only restart recovered transient startup/no-instance failures, actual

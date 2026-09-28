@@ -2,7 +2,25 @@
 
 ## Authorized validation checkpoint — 2026-09-28
 
-### Live reconsideration requested (latest; awaiting human UI review)
+### Owner-role correction (latest; local only, live validation AMBER)
+
+Do not ask the owner to repeat the five onboarding approvals: they are already persisted.
+The live build incorrectly compares their `WORKSPACE_OWNER` role to a demo-only label.
+The bounded local correction aligns readiness, invoice authorization/verification and new
+audit attribution; it does not migrate, replace or delete historical decisions.
+
+Next: publish the same-branch correction normally, pass fresh CI, rebuild and scan the API
+image with unchanged thresholds, then deploy only in an explicitly authorized bounded window.
+Do not use the previous image scan to claim the new source/image is cleared. Retain the existing
+web image unless a build/configuration reason requires replacement. Resume the preserved
+workspace `efbf72e9-aff5-489c-b17e-d2edced3237b` at onboarding; do not load a scenario or start
+Discover again. Verify the five existing decisions now satisfy readiness without rewriting
+history, prepare the synthetic invoice and stop for separate human invoice approval. Complete
+the remaining live owner-mutation/anti-spoofing, FPU, restart and monitoring gates, then shut down.
+No new bootstrap, workload privilege, schema or static key is required. PR #13 remains draft.
+See the [review](../reviews/google-cloud-validation.md) for final rollback verification and checks.
+
+### Live reconsideration requested (previous; human UI review pause)
 
 The owner confirmed temporary service-only public invoker for both app services. Compute resumed
 at 17:00:04 UTC within the existing window. A bounded API-only fresh revision on the same scanned

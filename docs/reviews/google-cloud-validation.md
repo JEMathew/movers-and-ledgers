@@ -4,8 +4,79 @@ Date: 2026-09-28. Branch: `feature/google-cloud-validation`.
 Baseline: `41b73cea100e166bb7e3ea661c33650264755cec` (merged PR #12).
 Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test only.
 
-**AMBER. Configuration applied after human approval; onboarding awaits separate human decisions.
-Temporary dev/test access is active only within the authorized window; rollback is still required.**
+**AMBER. Human onboarding approvals are preserved; a cloud-owner role mismatch blocked readiness.
+The narrow local correction passes regression checks but is not yet deployed or image-scanned.**
+
+## Live P1: valid cloud onboarding approvals not recognized — 2026-09-28
+
+At 18:10 UTC the preserved workspace displayed all five separate onboarding approvals by the
+authenticated User A owner, role `WORKSPACE_OWNER`: CONFIRM_AS_VALIDATED,
+SYNTHETIC_INVOICE_OPERATOR, USE_CONFIGURED, CONFIRM_SYNTHETIC_TAX_CONTROL and OFFLINE_DEMO.
+Their activity records were present, but all five tasks still showed REVIEW_REQUIRED,
+prerequisite completion stayed 4/10, and Prepare invoice contract remained disabled. No invoice
+was prepared or posted. No approval was replayed, rewritten or bypassed to proceed.
+
+Root cause: `verify_onboarding_prerequisites` accepted only `DEMO_WORKSPACE_OWNER` despite the
+orchestrator recording `WORKSPACE_OWNER` for Firebase subjects. The same predicate mismatch
+also affected final invoice verification, with demo-only labels in FPU/remediation audit fields.
+This is one P1 root-cause finding with related readiness/verification/attribution effects.
+The local regression reproduced the Firebase failure while the demo-owner case passed.
+
+The minimal correction uses one shared server-owner role convention in decision creation,
+onboarding readiness, pre-posting role authorization, final verification and new audit fields.
+It checks the exact role for the server-verified workspace owner; it does not broadly accept
+either role. Owner equality, fresh evidence, explicit approval, allowed selections and all
+deterministic checks remain mandatory. Existing persisted approval records are unchanged and
+are recognized on re-evaluation. No API/body identity trust, schema migration, IAM change,
+history rewrite or automatic invoice approval was introduced.
+
+### Local verification, not live acceptance
+
+- New focused role-parity tests: **15 passed**, including demo/Firebase FPU, preserved decisions
+  through the persistence codec, idempotent completion, cross-owner denial, wrong-role rejection,
+  stale evidence/rejection/read-only decisions, correct new audit role labels, and recovery of
+  the old pending projection without replaying approvals or changing prior history.
+- Focused onboarding, runtime, fault and reconsideration regression: **121 passed**.
+- Full backend: **290 passed, 10 PostgreSQL-only tests skipped**, inherited Starlette warning.
+- Ruff: pass. Relevant frontend onboarding tests: **6 passed**; lint, typecheck and build: pass.
+- Repository checks: **85 Markdown / 326 text**, zero findings; whitespace: pass.
+- No frontend implementation/dependency change. The pre-existing unrelated lockfile edit is
+  preserved and excluded. No new full frontend-suite run or live PostgreSQL retest is claimed.
+
+P0 observed in this investigation: 0. P1 found: 1, corrected locally but **not cleared in the
+deployed environment**. Final cloud P0/P1 clearance remains pending. Existing deployed image
+scans were 0 High/Critical; they do not cover the new correction. Fresh publication/CI and a
+rebuilt, scanned API image are required before another bounded live continuation. PR #13 stays
+draft/unmerged. No Gemini/ADK, provider, production or cloud-intake activation occurred.
+Fresh read-back confirmed published PR head remains `a7e0b17` with six successful jobs in run
+36447214846. This source correction and the intervening local evidence commits are unpublished;
+those successful remote jobs do not validate this new commit.
+
+### Shutdown and retained evidence
+
+Live activity was stopped upon identifying the blocker. Normal Cloud Shell reported removal of
+both service-level public invoker bindings, both manual-zero updates and the SQL NEVER patch
+at approximately **18:12 UTC**. After reconnection, Cloud Shell account selection and metadata
+credential refresh failed during read-back; those failed commands are not verification evidence.
+Authenticated Cloud Console independently showed both services paused at manual instance count
+zero and Require authentication / IAM selected, without an allUsers warning after rollback.
+Its API security page briefly presented an allUsers removal control; that removal was invoked
+and the subsequent authentication state verified. SQL Console showed the instance **Stopped**.
+All three job histories were inspected: seven probe executions, one denied-probe execution
+and one schema execution, all terminal with end times; no new or running execution was present.
+No compute was restarted and no corrected image was deployed.
+
+Existing SQL disk/workspace/approval/audit state, GCS objects/soft-delete retention, registry
+images, inactive revisions, logs and secret definitions remain retained; storage/logging charges
+may continue. No new identity, static key or project-level role was created. Actual session cost
+is unavailable; the Console's period-to-date INR 0.00 display is not a reliable real-time session
+cost. The original four-hour deadline was not extended. The cleanup-only safeguard may verify
+the already-stopped state; it must not start resources.
+
+Exact next step: publish the same-branch correction, pass fresh CI/image security, deploy only
+inside an authorized window, and resume this workspace at onboarding using the existing
+approvals. Stop for the owner's separate invoice approval. User B approval-POST denial, live
+anti-spoofing/stale conflicts, FPU, post-execution restart and complete monitoring remain open.
 
 ## Configuration applied; onboarding review pending — 2026-09-28
 
