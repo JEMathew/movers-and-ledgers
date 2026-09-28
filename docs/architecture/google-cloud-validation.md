@@ -7,6 +7,20 @@ See the [review evidence](../reviews/google-cloud-validation.md) and
 
 ## Authorized scope
 
+### 2026-09-28 live-resumption preflight
+
+The owner renewed the bounded dev/test task. Published head `1fa818e` passes all six CI jobs,
+but read-only preflight confirms the stopped Run revisions still use the old images. Image-gate
+closure applies to tested replacements, not those deployed digests. Rebuild the frontend with
+its approved public Firebase configuration, scan the exact result, and deploy hardened images
+before any temporary exposure. No application code or architecture changes are required by this
+preflight. Firebase configuration is present, but real sign-in remains unverified.
+
+Application compute remains stopped; no temporary invoker grant has been applied and the renewed
+application-compute window has not begun. Minimum endpoint exposure still requires action-time
+confirmation. See the latest [review checkpoint](../reviews/google-cloud-validation.md) for the
+exact deployed-image discrepancy, private-resource checks and remaining authenticated gates.
+
 ### 2026-09-28 security continuation
 
 The image-only continuation closes the High gate for source `c80c920`: both clean image scans

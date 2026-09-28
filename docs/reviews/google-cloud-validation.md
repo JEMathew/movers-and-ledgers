@@ -6,6 +6,88 @@ Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test on
 
 **AMBER. Image-security gates now pass; authenticated identity/cloud E2E remain incomplete. Keep the environment stopped and private.**
 
+## Live-resumption preflight — 2026-09-28, after 10:13 UTC
+
+The owner renewed the dev/test continuation in `movebooks-ai` / `asia-southeast1` with the
+US$10/four-hour operating target, not a hard cap. Branch head `1fa818e` was clean and published;
+PR #13 was draft, open and unmerged. All six jobs in
+[CI run 36406806226](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36406806226)
+passed, including both unsuppressed image-security gates. No source/runtime behavior was changed
+in this continuation. The operating window for application compute has not started.
+
+Read-only live preflight found an important distinction: **CI-cleared images are not the deployed
+images**. API revision `movebooks-beta-api-00003-v42` still references digest
+`36c2cb038691ef2c6005519bc90590922bc71048e1567ab4ef26fccdeac6eec3`; web revision
+`movebooks-beta-web-00002-2tf` references
+`598c7817dac46c4ee8f0f035deda1a13e5dc5a2aaf60a868faa7f470784846d1`.
+These are the older images, not the hardened replacements. The discrepancy was reported before
+deployment/exposure. Replace them with the scanned hardened images before browser validation;
+the frontend must also include the approved public Firebase build configuration.
+
+Verified without starting application compute:
+
+- Both Run services: manual instance count zero, no service IAM bindings/public invoker grant.
+- SQL: STOPPED, activation NEVER, connector enforcement REQUIRED, ENCRYPTED_ONLY, no authorized
+  networks. Its existing IAM-connector public IP is not anonymous database access.
+- Firebase: Google provider enabled; registered dev/test web app; expected numeric frontend Run
+  domain authorized; anonymous sign-in not enabled. This is configuration, not sign-in evidence.
+- API: Firebase identity, demo identity false, cloud-sql/GCS backends, explicit frontend CORS,
+  structured logging and deterministic-only model provider. Dedicated runtime identity retained.
+- Bucket: uniform access and public-access prevention enforced, seven-day soft-delete retention.
+- Schema identity and probe secret version 1 remain disabled; no validation job has running tasks.
+- Workload project bindings remain limited to named-instance Cloud SQL client/instanceUser and
+  the API's custom Firebase lookup role; no workload Owner/Editor binding was present. Bucket
+  policy contains only the API artifact role, and the named secret grants only API accessor.
+- Console billing summary displayed estimated INR 0.00 for September 1–28. This may lag actual
+  usage and is neither a measured validation-window cost nor a guaranteed spending cap.
+
+No public IAM grant, database privilege, secret activation, Cloud Run/SQL startup, production
+deployment, Gemini/ADK activation or customer-data handling occurred. Actual browser sign-in,
+two-user read/mutate/approve/audit denial, persisted approval attribution, canonical cloud FPU,
+active-journey restart/resume, authenticated intake rejection and live failure-signal coverage
+remain **unverified**. No new P0/P1 defect was established in preflight; final live P0/P1 counts
+remain **not assessed**, not zero. Overall readiness stays **AMBER**, and PR #13 stays draft.
+
+### Prepared replacement images (not deployed)
+
+Using normal authenticated Cloud Shell, public source was fetched and checked out at `1fa818e`.
+Its application/build sources are unchanged from `c80c920`; the difference is documentation.
+The exact previously tested API image was retained and freshly rescanned. The frontend was rebuilt
+with `--no-cache` and approved Firebase public configuration obtained through the normal SDK;
+no token, private key or service credential was printed or copied into the image. Build/lint/type
+checks passed. An isolated, network-disabled smoke container verified UID 65532, read-only
+filesystem, embedded expected project/auth/API domains and HTTP 200 for the Google sign-in page,
+with no demo entry. This is not a Firebase sign-in or deployed-path success claim.
+
+| Evidence | API | Firebase-configured frontend |
+| --- | --- | --- |
+| Local image index SHA-256 | `854cee81ce688cb1a853b4e690925762d3038ab23c74e26d0b45c82ecfff6a56` | `eab08023f3ffd8385436e939a4c86db75dc54bef9da01966ddaf680ee80c5ede` |
+| Fresh Grype High / Critical | 0 / 0 | 0 / 0 |
+| Medium / ignored matches | 6 / 0 | 4 / 0 |
+| Raw report SHA-256 | `bf602f662818f34e889a70e1ecfa191fce3499a2d260ae553675dc9a363b3c71` | `4b84f97b84cb7a9f35374b54e996ed5aca9244aa995dce1a3c83a99f5bec0797` |
+
+Frontend archive SHA-256: `ecda611a56a207c22282d37e28decfb4523f693dd33549f1b2c890328c4cdb9d`.
+Raw evidence is retained in Cloud Shell under `movebooks-image-security-evidence-90479d5`:
+`api-grype-live-preflight.json`, `web-firebase-grype-1fa818e.json`,
+`web-firebase-1fa818e.tar`, and `web-firebase-build-1fa818e.log`.
+An initial frontend scan could not read the mode-0600 public image archive and did not catalog
+packages. Making that non-secret archive readable resolved the tool-input error; the full scan
+then ran with the same pinned Grype image, read-only archive mount and unchanged `--fail-on high`.
+No suppression or cloud permission change was used. Residual Medium findings retain the existing
+[image-ledger](google-cloud-image-security.md) disposition.
+
+Neither replacement was published to Artifact Registry or deployed. No new GCP resource or role
+was created. Test/scanner containers completed and stopped; only image/report/cache storage was
+added in Cloud Shell. Retained billable GCP resources remain the SQL disk/network allocation,
+registry images, private bucket/soft-deleted synthetic objects, disabled secret, logs and resource
+definitions. Their continuing storage cost is not measured by this preflight.
+
+Next access-changing step requires action-time confirmation for temporary application invocation
+on only `movebooks-beta-api` and `movebooks-beta-web`. Application Firebase authentication and
+owner checks must remain enforced; SQL/GCS/Secret Manager stay private. Remove those service-only
+grants and stop compute at the end of the bounded window. The authorized users must complete any
+Google password/MFA prompts themselves; no tokens or credentials belong in evidence or chat.
+
 ## Image-only closure — 2026-09-28
 
 This checkpoint supersedes the image-security/publication blockers below, not the remaining live

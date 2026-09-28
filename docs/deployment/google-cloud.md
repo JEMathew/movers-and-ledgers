@@ -2,7 +2,36 @@
 
 ## Authorized validation checkpoint — 2026-09-28
 
-### Image-only gate closure (current)
+### Live-resumption preflight (current)
+
+Published source `1fa818e` passes all six jobs in
+[CI run 36406806226](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36406806226).
+The owner renewed the US$10/four-hour dev/test task. Application compute has not restarted and
+the new compute window has not begun. Minimum temporary service exposure awaits action-time
+confirmation; do not infer an invoker grant from the general continuation request.
+
+Read-only preflight confirms the stopped API/web services still reference the older images:
+`movebooks-beta-api-00003-v42` and `movebooks-beta-web-00002-2tf`. **Do not expose those revisions
+on the basis of the replacement images' successful scans.** Prepare and scan the Firebase-configured
+frontend, retain the exact hardened API image, and deploy the replacement digests before validation.
+Preserve existing runtime identities and fail-closed configuration. The schema exists and its
+bootstrap identity remains disabled; no new schema/admin grant is needed.
+
+Both services remain manual-zero with no public invoker binding; SQL is STOPPED/NEVER; the bucket
+has uniform access/public-access prevention; the probe secret remains disabled and no cloud job
+is running. The current revision template allows up to 20 instances: reduce to a one-instance
+dev/test bound on resumption, rather than relying on the previous default autoscaling ceiling.
+The [latest review](../reviews/google-cloud-validation.md) records evidence and remaining gates.
+
+Prepared Cloud Shell tags are `movebooks-api:validation` (unchanged tested API) and
+`movebooks-web:firebase-1fa818e` (fresh no-cache Firebase-configured frontend). Both fresh scans
+have zero High/Critical, with six/four Medium respectively and zero ignores. The configured
+frontend's isolated non-root/read-only HTTP sign-in smoke passed. Exact image/report/archive hashes
+are in the review. These images have **not** been pushed to Artifact Registry or deployed; do not
+confuse their local index digests with the older deployed digests. No authenticated live gate is
+closed by these preparation checks.
+
+### Image-only gate closure (previous checkpoint)
 
 Source `c80c920` passes both clean production-image scans and all six jobs in
 [CI run 36405067750](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36405067750).
