@@ -6,7 +6,69 @@ Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test on
 
 **AMBER. Schema and durable adapter gates pass; identity/E2E remain incomplete and image gates fail. Keep the environment stopped and private.**
 
-## Resumed live validation — 2026-09-28
+## Latest security continuation — 2026-09-28, after 08:42 UTC
+
+This section supersedes the earlier checkpoints where their status differs. **AMBER**, not ready
+for merge or public runtime validation. The prior four-hour window expired; renewal and temporary
+endpoint action-time confirmation were requested, not assumed. No SQL/Run compute restart,
+public invoker grant, schema grant, live-model activation or customer-data handling occurred.
+
+### Publication, remediation and verified checks
+
+- Prior documentation commit `05dc580` reached PR #13. Fresh
+  [CI run 36399079607](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36399079607)
+  passed all four existing jobs. This is evidence for that head only.
+- Security commit `54bb635` removes runtime npm/npx and adds unsuppressed High image gates with
+  raw artifact retention. See the [per-advisory ledger](google-cloud-image-security.md) for all
+  thirteen API advisories (50 matches) and eight web advisories (nine matches), their exploit
+  preconditions, evidence gaps and remediation. No blanket waiver, severity downgrade or ignore.
+- An exact-image web derivative was rebuilt and its non-root health/HTML smoke passed. Completed
+  Grype rescan: **1 High / 3 Medium / 0 Critical**, down from nine High by physical npm removal.
+  Residual zlib CVE-2026-85091 remains unresolved. This image was not pushed or deployed, and
+  this is not a full-source CI rebuild. API native/tooling applicability remains unclosed.
+- Fresh local Ruff and the runtime/configuration/fault backend selection pass (**65 tests**).
+  Frontend lint and TypeScript pass. The first suite run exposed one focus-effect assertion race
+  (75/76 pass); the test now awaits the same observable focus requirement with `waitFor`, without
+  an arbitrary sleep or product behavior change. Focused identity suite **9 pass**, complete
+  frontend suite **76 pass**, production build **PASS**. No tests skipped or assertions weakened.
+  Fresh production npm audit reports **zero vulnerabilities**; repository checks cover **84
+  Markdown / 319 text files with zero findings**, and whitespace checks pass. This does not clear
+  OS/native image findings.
+- New security changes still require publication and fresh remote CI. Normal CLI Git authentication
+  is unavailable; Desktop's stale/inconsistent window did not yield a verified push of `54bb635`.
+  No token extraction or alternate credential access was attempted.
+
+### Remaining required evidence
+
+| Gate | Disposition |
+| --- | --- |
+| Image security | OPEN: web zlib and API native/tooling findings need supported fixes or complete narrow applicability evidence; preserve raw scans and rerun production images. |
+| Google sign-in / public-protected routes | Configured, not exercised with the authorized browser users. No public protected-data access is authorized. |
+| Two-user isolation / approval attribution | Adapter owner isolation passed previously; real User B HTTP denial and persistent User A approval attribution remain unverified. |
+| Canonical E2E / financial truth / FPU | No authenticated cloud journey to verified FPU receipt. Local/synthetic success does not close this gate. |
+| Restart/resume | Prior SQL sentinel/adapter persistence passes; real journey checkpoints, approvals, owner isolation and duplicate-execution protection across redeploy remain unverified. |
+| Cloud intake | Remains disabled; authenticated deployed rejection and payload-free logging still unverified. |
+| Monitoring/security | Existing safe startup/probe evidence retained; actual auth, persistence, storage, readiness, lifecycle and replay failure visibility across the full live path remains incomplete. |
+| P0/P1 | Prior DB-API P1 is resolved; no new product P0 was observed in these checks. Final live P0=0/P1=0 clearance is **not established**. CVE match counts are not product finding counts. |
+
+### Resources, permissions, cost and next step
+
+Read-only live preflight confirmed SQL STOPPED/NEVER and both Run services manually scaled to zero.
+Final readback again showed `manualInstanceCount=0` for both services and zero service IAM bindings
+(no public invoker grant).
+No additional cloud resources or permissions were created in this continuation. The local web
+smoke container was stopped. Retained SQL disk/network allocation, registry images, private
+bucket/soft-deleted synthetic objects, disabled secret, logs and definitions remain as described
+below. New non-sensitive scan/image evidence is retained in Cloud Shell home. No current billed
+cost was obtained; earlier planning estimates are not a current spend measurement or hard cap.
+
+Next: publish the committed security/docs changes through normal GitHub authentication, finish
+unsuppressed API/web image clearance, then obtain the renewed bounded compute window and minimum
+temporary endpoint confirmation. Only then perform the authorized two-user browser/canonical FPU,
+restart and negative-path checks, remove temporary endpoint grants and stop compute again.
+PR #13 must stay draft/unmerged until all required evidence and P0/P1 clearance are complete.
+
+## Earlier resumed live validation — 2026-09-28 local time
 
 This section supersedes the historical checkpoints below. The same authorized project, region,
 US$10 operating target and four-hour window apply. SQL was restarted around 21:09 UTC. All data

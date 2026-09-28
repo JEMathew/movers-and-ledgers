@@ -7,6 +7,16 @@ See the [review evidence](../reviews/google-cloud-validation.md) and
 
 ## Authorized scope
 
+### 2026-09-28 security continuation
+
+The previous four-hour window has expired. Application compute remains stopped while image
+findings are investigated; a renewed bounded window and action-time endpoint confirmation are
+required before live browser testing. The [per-advisory image ledger](../reviews/google-cloud-image-security.md)
+distinguishes tooling from runtime reachability without suppressing findings. Runtime npm removal
+and an unsuppressed CI image gate do not alter product architecture or authorize public exposure.
+Real two-user identity, attributed approvals, canonical cloud FPU and interrupted-journey recovery
+remain required and must not be inferred from adapter tests.
+
 - Project ID: `movebooks-ai`; primary region: `asia-southeast1`.
 - Dev/test only; synthetic migration sessions and permitted non-sensitive artifacts only.
 - Normal Google Console, Cloud Shell or gcloud authentication; no service-account keys or raw tokens.

@@ -2,6 +2,23 @@
 
 ## Authorized validation checkpoint — 2026-09-28
 
+### Latest image-security continuation
+
+The earlier documentation head `05dc580` was published to draft PR #13. Its
+[CI run](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36399079607) passed all four
+existing jobs. This is not a result for the subsequent security changes.
+
+Commit `54bb635` removes unused npm/npx from the final web runtime and adds a separate production
+image scan matrix with retained raw JSON and an unsuppressed High threshold. Review the
+[per-advisory ledger](../reviews/google-cloud-image-security.md) before resuming; no ignore rules,
+test identities or auth bypasses are approved. Do not deploy an image merely because npm audit
+passes. Raw scan output must survive the operator session and be tied to the exact image.
+
+The prior operating window expired at 2026-09-28 00:37 UTC. A renewed window and the pending
+action-time confirmation for temporary minimum Run invoker exposure are required. SQL and both
+Run services remain stopped; no additional IAM/database grants were made in this continuation.
+Firebase configuration does not substitute for real browser sign-in or two-user isolation.
+
 ### Resumed bootstrap procedure (supersedes the earlier bootstrap blocker)
 
 The owner explicitly approved the existing built-in PostgreSQL administrator for one-time,
