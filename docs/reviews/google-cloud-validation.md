@@ -4,8 +4,114 @@ Date: 2026-09-28. Branch: `feature/google-cloud-validation`.
 Baseline: `41b73cea100e166bb7e3ea661c33650264755cec` (merged PR #12).
 Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test only.
 
-**AMBER. Human onboarding approvals are preserved; a cloud-owner role mismatch blocked readiness.
-The narrow local correction passes regression checks but is not yet deployed or image-scanned.**
+**AMBER. The published owner-role fix is image-scanned and deployed Ready. Preserved approval
+metadata is verified read-only; authenticated browser recognition and invoice/FPU acceptance remain open.**
+
+## Published owner-role fix: deployment and preserved evidence — 2026-09-28
+
+Published PR head `4f4e138b626547677dea402400769003c9fa10b8` was confirmed on draft/unmerged
+PR #13. All six jobs in [CI run 36464584457](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36464584457)
+passed. The unrelated local web lockfile edit remains excluded. A fresh focused local rerun
+passed all 15 owner-role tests; repository checks passed (85 Markdown / 326 text, zero findings).
+
+The API was rebuilt from the exact clean published source and scanned: 0 High, 0 Critical,
+0 ignored; unchanged policy. See [image provenance](google-cloud-image-security.md).
+API index `1849f94c8f4eaf34e5aab7c32789cb8196ea559c48dac39eaff2ae95db2d09cb` resolves to
+platform digest `22b67843b3e27580413f15c11ded3eb438edf6bb10d0ced730a2ed4c7a37d802`.
+Fresh revision `movebooks-beta-api-ownerfix-ready-1853` became Ready at 18:53:35 UTC.
+Web remains `movebooks-beta-web-00004-xtb` on its unchanged scanned digest.
+Pre/post fingerprints of environment, service account, resource limits, probes and concurrency
+match: API `30707cea4843e1ff27f71f21e9e4e966a89c1107cc787aa7044ab0ac2a871575`,
+web `d5bd8ebff557258714fd8feab74f26366bcb0850135dd091b546a7d2a7d495c4`.
+
+### Startup sequencing evidence
+
+SQL activation began at 18:39:35 UTC and completed at 18:50:43 UTC. An early RUNNABLE
+projection was followed by MAINTENANCE while the update operation still ran. Starting the
+API before operation completion caused readiness timeouts and a failed revision; the first
+read-only probe also timed out. Both services were paused while SQL finished. A fresh revision
+on the same image subsequently became Ready without changing probes, capacity, IAM or code.
+Future resumes must verify both SQL operation DONE and RUNNABLE before starting application
+compute. Failed startup/probe attempts are not successful persistence or acceptance evidence.
+
+### Preserved onboarding records, not repeated approvals
+
+The existing validation job used the scanned API image, existing API workload identity and
+an explicit PostgreSQL READ ONLY transaction to inspect only the preserved workspace.
+No authentication override, fake browser principal, write, new workspace or approval was used.
+This is deployed workload/storage evidence, not a substitute for authenticated browser/HTTP tests.
+
+The initial probe incorrectly assumed five total historical decisions. Actual preserved state
+contains **five categories and six records**, including two earlier Opening balances records.
+The diagnostic was corrected to inspect the latest decision per category and fingerprint every
+historical record; no record was deleted, consolidated or changed. Execution
+`movebooks-beta-probe-c8kn2` exited 0 and verified the following at 18:55:09 UTC:
+
+| Category | Latest approval timestamp (UTC) | Audit reference |
+| --- | --- | --- |
+| Opening balances | 2026-09-28 18:08:58.763026 | `346f46fc-65d5-4446-9ff8-77ea089dd541` |
+| Synthetic invoice access | 2026-09-28 18:09:11.014722 | `f5d044e0-43d2-4813-bcb4-f0dfedda6677` |
+| Invoice preferences | 2026-09-28 18:09:21.350597 | `2d68666b-ee29-45ea-bec8-05fbbd3495e8` |
+| Tax and liability control | 2026-09-28 18:09:29.609285 | `93210068-006d-4f4e-b5dc-b2d433fb5faf` |
+| Synthetic bank setup | 2026-09-28 18:09:45.610272 | `8cd17f80-4f4d-42fb-9388-354f06ed99f2` |
+
+All latest decisions are approve / WORKSPACE_OWNER, with nonempty audit evidence and matching
+stored owner attribution. Actor SHA-256:
+`63ce343e618824dc9d5379e9348b70a60f91c94cada6b4ca4e9346d09bb73d77`.
+Full onboarding decision-history SHA-256:
+`41e4392ff6be0c26d736df18e7c010a47607cc6a4d35246143d32325ed394845`.
+Corresponding audit-history SHA-256:
+`54556b87fb2a604494d3f76f6ad87895eaf3c3b72885a9c0f2fd9b194d46c11c`.
+Workflow remains ONBOARDING, FPU absent, operational invoice/journal counts both zero.
+No onboarding approval has been submitted in this continuation.
+
+Execution `movebooks-beta-probe-5h9d2` subsequently ran the fixed image's actual
+`verify_onboarding_prerequisites` against the decoded preserved SQL snapshot under the same
+read-only boundary. It exited 0 at 18:57 UTC with **all 10 prerequisites COMPLETED**, including
+all five human-review categories. The full decision/audit hashes above were identical across
+the two successful reads. This verifies fixed-rule recognition of real persisted cloud state;
+it does not claim authenticated browser acceptance, change workflow state, prepare a contract
+or post an invoice.
+
+### Monitoring and readiness limits
+
+A bounded 1,000-entry API log sample from 18:39 UTC contained structured application keys
+`action`, `latency_ms`, `request_id`, `status`, with 14 status-200 and 13 status-500 entries.
+Startup/readiness timeouts and graceful-shutdown cancellation were visible during SQL maintenance,
+followed by successful readiness. No Bearer/JWT/private-key markers matched the sampled entries.
+This heuristic, limit-capped sample is not exhaustive log-safety certification or complete
+auth/owner/lifecycle/storage failure coverage. No invoice payload or model prompt was submitted.
+
+P0 observed in this continuation: 0. New P1 introduced: 0 observed. The previous role-mismatch
+P1 now passes deployed-code/persisted-state recognition, but final browser/FPU acceptance and
+cloud P0/P1 clearance remain pending; do not report the overall release as GREEN.
+
+Temporary service exposure awaits action-time confirmation. No new public invoker grant was
+made in this continuation. Browser recognition, separate human invoice approval, posting,
+deterministic financial acceptance, Verified FPU and complete final monitoring/P0/P1 clearance
+remain pending. Existing broader live mutation-denial/anti-spoofing/restart gaps remain open.
+No Gemini/ADK, cloud intake, provider or production activation occurred.
+
+### Mandatory shutdown at this pause
+
+By 18:59 UTC, normal authenticated Cloud Shell read-back verified both API and web at manual
+instance count **0**, both service IAM bindings empty, SQL **STOPPED / NEVER**, and **14 total
+job executions with zero active**. Project IAM had no allUsers/allAuthenticatedUsers grant.
+No public invoker was introduced, so there was no new grant to revoke. SQL/GCS/Secret Manager
+privacy and workload privileges were not broadened; no temporary identity, secret or key was
+created. The fixed Ready revision is retained but paused, not rolled back to an older image.
+
+Retained resources include the SQL disk with the same workspace/approval/audit history, private
+GCS objects and soft-delete retention, registry images, paused revisions, terminal job records,
+Cloud Logging and the Cloud Shell scan/build evidence. Storage/logging costs can continue.
+Actual session spend is unavailable; no claim is made that the Console's period-to-date INR 0.00
+display establishes current cost. The original deadline remains unchanged.
+
+Exact next step: obtain temporary endpoint-access confirmation for a bounded human-present
+resumption, wait for SQL operation completion, resume the fixed image, verify browser recognition
+without any new onboarding decisions, prepare the existing workspace's synthetic invoice and
+stop for separate human invoice approval. Only then post and deterministically verify FPU.
+PR #13 remains draft/unmerged; this documentation-only checkpoint is not a completed cloud gate.
 
 ## Live P1: valid cloud onboarding approvals not recognized — 2026-09-28
 

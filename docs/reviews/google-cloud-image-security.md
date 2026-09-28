@@ -12,6 +12,36 @@ checkpoints are explicitly separated below and in the cloud review; Gemini/manag
 
 ## Reproducible before/after evidence
 
+### Onboarding owner-role deployment candidate — 2026-09-28
+
+Published source `4f4e138b626547677dea402400769003c9fa10b8` was built from a clean
+Cloud Shell checkout with `--pull --no-cache`, excluding the unrelated local lockfile edit.
+The API-only role correction requires no web rebuild. All six jobs in
+[CI run 36464584457](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36464584457)
+passed for this exact published commit; PR #13 remains draft and unmerged.
+
+The freshly built API archive passed the unchanged digest-pinned Grype scanner and
+`--fail-on high`: exit **0**, **0 High / 0 Critical / 0 ignored**, six Medium matches.
+Database v6.1.9, built `2026-09-28T06:42:30Z`, was valid. An initial scanner invocation
+could not traverse its mounted temporary directory and produced an empty report; it was
+not counted as a scan pass. Mounting the readable archive file directly resolved the
+scanner I/O failure without changing the image, thresholds, privileges or suppressions.
+
+| Evidence | Fixed API |
+| --- | --- |
+| Tag | `api:ownerfix-4f4e138` |
+| Published index digest | `1849f94c8f4eaf34e5aab7c32789cb8196ea559c48dac39eaff2ae95db2d09cb` |
+| Cloud Run-resolved platform digest | `22b67843b3e27580413f15c11ded3eb438edf6bb10d0ced730a2ed4c7a37d802` |
+| Scanned image ID | `bbce6f4be4ddf279b30d247f6894d3da0ab4b727d761feeb5cbeb47a2d9f722c` |
+| Image archive SHA-256 | `cd774167bee3928d1952efba752b384640e403893230ba9061f25dbc09b3feba` |
+| Successful raw Grype JSON SHA-256 | `58bacef1ecda1e4d393f5b032e43d960afed3f33a044a0a34fa0e5317239fe61` |
+
+The existing web index `88e16b89053a83e5ffb1b4d86f1def5893a4493b37dc22e42ccf4d2e60ae8674`
+and its prior same-day 0 High/Critical scan remain unchanged. This is fresh API image-security
+evidence, not proof that deployment readiness, preserved approvals or cloud FPU have passed.
+Raw successful/failed scanner reports and build logs are retained in Cloud Shell at
+`/home/jeasom/movebooks-ownerfix-evidence-4f4e138`; the failed empty report is not evidence of zero findings.
+
 ### Reconsideration deployment candidate — 2026-09-28
 
 Published source `a7e0b17298fed48ec68ae5de08bc06c9f2a07892` was cloned into a clean

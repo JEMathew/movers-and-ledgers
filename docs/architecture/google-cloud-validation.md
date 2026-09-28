@@ -1,14 +1,30 @@
 # Google Cloud Beta validation boundary
 
-Status: **AMBER — live onboarding found owner-role validation mismatch; local correction tested**,
-2026-09-28. Live execution is stopped pending a corrected, scanned deployment.
+Status: **AMBER — owner-role correction published, scanned and deployed Ready; live FPU pending**,
+2026-09-28. Stored approval metadata has been inspected without replaying decisions.
 This is a validation plan and evidence boundary, not a success claim.
 See the [review evidence](../reviews/google-cloud-validation.md) and
 [operator handoff](../deployment/google-cloud.md).
 
 ## Authorized scope
 
-### 2026-09-28 onboarding owner-role parity (latest)
+### Published correction and preserved-history verification (latest)
+
+The exact published `4f4e138` API image passed the unchanged image-security gate and reached
+Cloud Run Ready. Runtime environment, identities, probes, limits and concurrency are unchanged.
+SQL startup must be gated on operation completion as well as RUNNABLE: its early RUNNABLE
+projection preceded maintenance completion and caused premature API readiness timeouts.
+
+Read-only inspection found five approval categories with six historical records (Opening balances
+has two earlier decisions), not five total records. All latest approvals retain owner attribution,
+timestamps and audit references. All history is fingerprinted and preserved; no deduplication or
+new approval is permitted as a way to advance the journey. Storage/workload evidence does not
+replace authenticated browser recognition, explicit invoice approval or deterministic FPU proof.
+The fixed image's prerequisite function evaluated the preserved cloud snapshot read-only:
+all ten checks completed with identical full approval/audit hashes across successful reads.
+See the latest [review checkpoint](../reviews/google-cloud-validation.md) for evidence and open gates.
+
+### 2026-09-28 onboarding owner-role parity (previous local checkpoint)
 
 The preserved workspace progressed through separately approved reconsideration, controlled
 migration recovery, seventeen deterministic reconciliation checks and approved configuration.

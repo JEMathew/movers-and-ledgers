@@ -2,7 +2,31 @@
 
 ## Authorized validation checkpoint — 2026-09-28
 
-### Owner-role correction (latest; local only, live validation AMBER)
+### Published fixed-image continuation (latest; cloud validation AMBER)
+
+`4f4e138` is published, with six green CI jobs. API tag `ownerfix-4f4e138` was rebuilt/scanned
+at 0 High/Critical and deployed as `movebooks-beta-api-ownerfix-ready-1853`; retain the unchanged
+web image. See [image digests and hashes](../reviews/google-cloud-image-security.md).
+Before starting Cloud Run after a SQL stop, wait for the SQL activation operation to finish
+and then confirm RUNNABLE. An early RUNNABLE value alone did not establish readiness here.
+
+The preserved workspace has five approval categories and six historical decision records,
+including two Opening balances entries. Do not repeat or consolidate them. The read-only
+workload probe verified latest owner/role/timestamp/audit attribution and zero posted invoices;
+the fixed prerequisite function also passed all ten checks against that same durable snapshot.
+full history fingerprints are in the [review](../reviews/google-cloud-validation.md).
+The existing `movebooks-beta-probe` job now uses the fixed scanned image and a narrowly scoped
+read-only approval-evidence command; no new identity, database privilege or IAM grant was added.
+Do not run its previous vulnerable image or bootstrap command.
+
+Browser recognition and the separate human invoice approval/posting/FPU steps remain pending.
+No public invoker was added in this continuation; temporary exposure still requires the pending
+action-time confirmation. The original 20:37:55 UTC cutoff is not extended by this checkpoint.
+At the pause, read-back verified both services private/manual-zero, SQL STOPPED/NEVER and
+zero active executions among all 14 job records. Retain the fixed image and workspace; do not
+restart compute while awaiting the human-present continuation. No invoice has been posted.
+
+### Owner-role correction (previous local-only checkpoint)
 
 Do not ask the owner to repeat the five onboarding approvals: they are already persisted.
 The live build incorrectly compares their `WORKSPACE_OWNER` role to a demo-only label.
