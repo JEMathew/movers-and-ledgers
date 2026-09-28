@@ -4,8 +4,32 @@ Date: 2026-09-28. Branch: `feature/google-cloud-validation`.
 Baseline: `41b73cea100e166bb7e3ea661c33650264755cec` (merged PR #12).
 Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test only.
 
-**AMBER. Governed migration and deterministic validation passed; configuration awaits human review.
+**AMBER. Configuration applied after human approval; onboarding awaits separate human decisions.
 Temporary dev/test access is active only within the authorized window; rollback is still required.**
+
+## Configuration applied; onboarding review pending — 2026-09-28
+
+The deployed UI verified all five consequential configuration decisions as APPROVED by the
+same authenticated User A subject before enabling Apply reviewed configuration. Applying
+once produced CONFIGURED, all eight areas APPLIED, integrations DISABLED, and a same-session
+Onboard → First Productive Use link. The onboarding activity view retains five separate human
+configuration approvals, their application, validation success, migration completion and the
+earlier controlled failure/resolution. No new scenario or workspace was created.
+
+Start onboarding from configured evidence produced ONBOARDING, four of ten prerequisites
+complete. Five explicit reviews remain: opening balances, synthetic invoice access, invoice
+preferences, tax/liability control and synthetic bank setup. The aggregate checklist is also
+pending; Prepare invoice contract remains disabled. Migrated Cedar School and Catalog
+preparation are the displayed default invoice entities, quantity one and unit price USD 100.00.
+No invoice contract or posting has yet been created.
+
+The assistant opened Review onboarding decision for opening balances, displaying
+CONFIRM_AS_VALIDATED and REQUEST_REVIEW choices and configuration reference
+`c8e54614-4fbb-4d8d-b5a2-b077efc435a2`, but submitted no onboarding approval. The owner is
+asked to review the five separate choices in the UI, keeping bank setup synthetic/offline.
+Prior configuration approval is not treated as onboarding or invoice approval. Live negative
+authorization/anti-spoofing, post-execution restart, final FPU and complete monitoring gates
+remain open. The original cutoff, cleanup safeguard and pending rollback are unchanged.
 
 ## Resolution approved; migration and validation passed — 2026-09-28
 
