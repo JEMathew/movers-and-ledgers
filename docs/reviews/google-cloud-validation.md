@@ -4,8 +4,40 @@ Date: 2026-09-28. Branch: `feature/google-cloud-validation`.
 Baseline: `41b73cea100e166bb7e3ea661c33650264755cec` (merged PR #12).
 Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test only.
 
-**AMBER. Reconsideration is approved; migration is paused for separate human resolution review.
+**AMBER. Governed migration and deterministic validation passed; configuration awaits human review.
 Temporary dev/test access is active only within the authorized window; rollback is still required.**
+
+## Resolution approved; migration and validation passed — 2026-09-28
+
+After the owner reported resolution approval, the same deployed workspace showed
+`Recorded human resolution decision: approved`, the proposal review disabled, and a separate
+Retry failed batch action. The assistant invoked that resume action once. All eight batches
+completed at 100%; Accounts remained at one attempt, Customers advanced from one to two,
+and each later batch completed in one attempt. The controlled failure remains visible. This
+is live evidence of bounded recovery without re-executing the prior Accounts batch, not yet
+the independent duplicate/replay POST or post-execution restart acceptance cases.
+
+Following the same-session Validate → Configure link recovered MIGRATION COMPLETE. Run
+validation produced **17 VERIFIED checks, zero discrepancies, USD**, report reference
+`136f6899-7b9d-4cdf-b472-3dfe6541ddd6`. Inspected source/target results include A/R 420.00,
+A/P 125.00, identical per-account trial balances and opening balances, exact entity IDs/counts,
+valid references, mapping completeness and transformation lineage. No tolerance, write-off,
+new scenario or replacement workspace was used. All values are synthetic.
+
+Continue to configuration prepared eight areas: three unchanged low-risk preferences
+(fiscal year, payment terms, invoice prefix) auto-applied under existing policy. Five remain
+REVIEW_REQUIRED: base currency USD, tax setup CA-SALES, inventory valuation WEIGHTED_AVERAGE,
+user roles FINANCE_REVIEWER, integrations DISABLED. Apply reviewed configuration is disabled.
+The assistant opened the Base currency review dialog, with source/report/policy/knowledge
+references, but did not click Confirm approve. The owner must review each consequential choice;
+the earlier mapping/resolution approvals are not reused as configuration approval.
+
+A bounded Cloud Logging sample after 17:31 UTC contained 51 entries, including 21 HTTP 200
+records, and zero bearer/JWT-shaped markers under the documented heuristic. This does not
+prove complete log safety or satisfy the still-open negative-path monitoring cases. No source
+or image content changed. Final cloud P0/P1 clearance and FPU remain unverified. This is another
+human-present pause within the original 20:37:55 UTC cutoff, with the 20:30 UTC cleanup
+safeguard unchanged; shutdown/public-invoker rollback has not yet occurred.
 
 ## Reconsideration approved; governed migration pause — 2026-09-28
 
