@@ -2,7 +2,52 @@
 
 ## Authorized validation checkpoint — 2026-09-28
 
-### Live-resumption preflight (current)
+### Hardened deployment and stopped handoff (current)
+
+The 2026-09-28 live window began 11:29:14 UTC (deadline 15:29:14 UTC); rollback began at
+11:59:19 UTC while awaiting human Google consent. Compute is stopped again. Overall **AMBER**,
+PR #13 draft/unmerged; do not treat frontend reachability as real Firebase sign-in success.
+
+The existing regional registry now contains these exact deployed, previously scanned images:
+
+| Service / revision | Tag | Deployed image index digest |
+| --- | --- | --- |
+| `movebooks-beta-api` / `00004-n92` | `api:hardened-c80c920` | `sha256:854cee81ce688cb1a853b4e690925762d3038ab23c74e26d0b45c82ecfff6a56` |
+| `movebooks-beta-web` / `00003-ngl` | `web:firebase-hardened-1fa818e` | `sha256:eab08023f3ffd8385436e939a4c86db75dc54bef9da01966ddaf680ee80c5ede` |
+
+Registry: `asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta`.
+Both revisions became Ready with 100% traffic; no old-image fallback. Config/identity/probe
+snapshots compared equal. Manual instance counts are now **0**, with maximum **1** retained.
+Cloud SQL is **STOPPED/NEVER**, no validation jobs are running, schema identity and synthetic
+secret version 1 are disabled. No bootstrap/runtime database privilege was added.
+
+Only the two Run services temporarily received the explicitly confirmed public invoker binding.
+Both bindings were removed at 11:59 UTC and final service policies contain no bindings. Ordinary
+web/API routes displayed **Service is disabled** (503). Health-path 404 responses are recorded
+separately, not counted as application-auth denials. SQL, GCS and Secret Manager stayed private.
+Exact IAM timestamps, deployment evidence and HTTP-probe limitations are in the
+[review record](../reviews/google-cloud-validation.md).
+
+Next operator action: coordinate a human-present resumption within an agreed budget/window;
+User A must click **Continue** on Google's **Sign in to movebooks-ai.firebaseapp.com** consent
+page and handle any Google password/MFA prompt directly. Never copy credentials/tokens into
+evidence. Until compute resumes the app may return 503. Then complete User B HTTP denial,
+approval attribution, canonical synthetic FPU, restart/resume, authenticated disabled-intake
+rejection and full negative-path/log-safety evidence. Remove public bindings and stop compute
+again regardless of result. Do not reactivate schema bootstrap, Gemini, ADK or cloud intake.
+
+Published `1fa818e` retains six green CI jobs. Fresh local checks pass: 255 backend tests
+(10 database-only skips), 76 frontend tests, Ruff/lint/typecheck/build, zero-vulnerability
+production npm audit. Exact deployed images retain zero High/Critical; no rescan is claimed
+for this deployment-only continuation. Final live P0/P1 counts remain unassessed.
+
+Normal terminal push failed authentication. Preserve documentation commit `03659c2` and its
+follow-up; publish through GitHub Desktop/manual normal push without duplicate commits or force.
+Retained SQL disk/network, registry images, private bucket/soft-delete objects, disabled secret,
+logs and definitions may charge. Session-attributable billed cost is unavailable; US$10 is a
+working target, not a guaranteed cap. No production/customer/provider data was used.
+
+### Live-resumption preflight (historical)
 
 Published source `1fa818e` passes all six jobs in
 [CI run 36406806226](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36406806226).

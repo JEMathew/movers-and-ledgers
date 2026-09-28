@@ -7,7 +7,32 @@ See the [review evidence](../reviews/google-cloud-validation.md) and
 
 ## Authorized scope
 
-### 2026-09-28 live-resumption preflight
+### 2026-09-28 hardened deployment and stopped handoff (current)
+
+The exact scanned API and Firebase-configured web images were published and deployed to Ready
+revisions `movebooks-beta-api-00004-n92` and `movebooks-beta-web-00003-ngl`, with 100% traffic.
+Environment, workload identities, commands and probes were unchanged. The dev/test instance
+ceiling was reduced to one. Image digests, report hashes and timestamps are recorded in the
+[review checkpoint](../reviews/google-cloud-validation.md).
+
+Following the owner's explicit confirmation, only these two services temporarily received
+`allUsers` / `roles/run.invoker`. The frontend loaded and Google consent for User A was reached,
+but the required human **Continue** action was not completed. This is not authenticated identity
+or backend owner-isolation evidence. The external HTTP probe aborted on a non-JSON response;
+platform readiness/internal health probes must not be substituted for external route validation.
+
+Both public bindings were removed at 11:59 UTC. Run manual counts are zero, Cloud SQL is
+STOPPED/NEVER, jobs are idle, and temporary schema/secret identities remain disabled. Private
+SQL/GCS/Secret Manager boundaries and runtime privileges were preserved throughout. Only new
+image versions/revisions and evidence were added; product architecture and financial truth did
+not change. Cloud intake, Gemini and managed ADK remain disabled.
+
+Real two-user HTTP isolation, attributed approvals, canonical cloud FPU, journey restart/resume,
+authenticated intake rejection and complete failure/log-safety coverage remain unverified.
+Final live P0/P1 counts are not assessed, not zero. Overall readiness remains **AMBER**. Resume
+only for a coordinated human-present bounded window, retaining shutdown/rollback obligations.
+
+### 2026-09-28 live-resumption preflight (historical)
 
 The owner renewed the bounded dev/test task. Published head `1fa818e` passes all six CI jobs,
 but read-only preflight confirms the stopped Run revisions still use the old images. Image-gate

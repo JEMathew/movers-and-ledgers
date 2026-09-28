@@ -6,7 +6,134 @@ Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test on
 
 **AMBER. Image-security gates now pass; authenticated identity/cloud E2E remain incomplete. Keep the environment stopped and private.**
 
-## Live-resumption preflight — 2026-09-28, after 10:13 UTC
+## Hardened-image deployment continuation — 2026-09-28, after 11:22 UTC
+
+The owner explicitly confirmed the two service-only temporary `allUsers` / `roles/run.invoker`
+grants requested at the previous handoff, to be applied only after hardened revisions are Ready.
+No project-level public grant, private-data authorization bypass, live model or production access
+is authorized. The US$10 working target remains a target, not a metered hard cap. The live window
+started **11:29:14 UTC** and its maximum end is **15:29:14 UTC**; stop earlier on completion/blocker.
+
+Local `03659c2` was clean and preserved on the requested branch. Published PR head remained
+`1fa818e`, draft/open/unmerged, with all six CI jobs successful. Normal CLI push was attempted:
+after the sandbox network retry, normal Git authentication failed (`unable to get password from
+user`). No credential extraction, duplicate commit or force push was attempted; Desktop/manual
+publication is required unless normal Git authentication is restored. This does not block the
+authorized live checks because unpublished changes are documentation only.
+
+Cloud Shell recycled its ephemeral Docker cache and needed normal session authorization again.
+After that authorization, the retained archives restored the exact prepared image digests and
+the report/archive hashes matched the prior checkpoint. Initial Docker registry connections were
+refused; ordinary HTTPS returned the expected unauthenticated 401 and normal retries succeeded.
+No network security setting, alternate credential source or IAM permission was changed.
+
+Published to the existing regional Artifact Registry repository:
+
+- API `api:hardened-c80c920`, index digest
+  `sha256:854cee81ce688cb1a853b4e690925762d3038ab23c74e26d0b45c82ecfff6a56`.
+- Frontend `web:firebase-hardened-1fa818e`, index digest
+  `sha256:eab08023f3ffd8385436e939a4c86db75dc54bef9da01966ddaf680ee80c5ede`.
+
+Registry prefix: `asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta`.
+Both pushes exited zero. They are the previously scanned bytes, not new unscanned builds.
+Images add retained registry storage; no repository or workload identity was created.
+
+Preflight reconfirmed Firebase Google provider/domain configuration, dedicated workload identities,
+scoped Cloud SQL/custom Firebase roles, manual-zero services, empty service IAM policies and
+SQL STOPPED/NEVER with required encrypted IAM connector transport. Non-secret environment,
+identity, command and probe snapshots were retained for post-deployment comparison.
+
+Fresh local regression: Ruff PASS; backend **255 passed / 10 database-only skips**, with the
+existing Starlette test-client deprecation warning; frontend **76 passed**; lint/typecheck/build
+PASS; production npm audit **zero vulnerabilities**. The passing remote PostgreSQL/container
+jobs cover real database contracts; local skips are not live SQL success evidence.
+
+### Deployment, browser handoff and completed rollback
+
+Both exact hardened digests above were deployed with 100% traffic to their new revisions:
+
+| Service | Hardened revision | Ready timestamp (UTC) |
+| --- | --- | --- |
+| API | `movebooks-beta-api-00004-n92` | 2026-09-28 11:48:05.521029 |
+| Web | `movebooks-beta-web-00003-ngl` | 2026-09-28 11:29:32.287339 |
+
+Before/after snapshots of environment, identity, command, arguments and probes compared equal
+for each service. Dedicated identities and Firebase/durable-storage/deterministic-only settings
+were preserved. The previous template maximum of 20 instances was reduced to one; live manual
+count was one, and final manual count is zero. No traffic fallback to an older image occurred.
+Cloud SQL start operation `304fee66-d0da-43f7-b10c-e20d00000031` completed without a reported
+error at 11:40:35.701 UTC, after starting at 11:29:16.009 UTC. An earlier bounded wait timed out
+while startup continued; it was not a failed database operation. No schema privilege changed.
+
+The previous service IAM policies contained no bindings. Audit records show the only temporary
+application exposure and its completed rollback, all on 2026-09-28 UTC:
+
+| Service | `allUsers` / `roles/run.invoker` added | Binding removed |
+| --- | --- | --- |
+| `movebooks-beta-api` | 11:48:54.874042 | 11:59:20.585726 |
+| `movebooks-beta-web` | 11:48:58.574038 | 11:59:25.067527 |
+
+These were service-level grants only, in `movebooks-ai` / `asia-southeast1`. No project-wide
+public grant or SQL/GCS/Secret Manager access expansion occurred. Final policies again contain
+no service IAM bindings. Pre-exposure policy and deployment snapshots plus image push logs are
+retained in Cloud Shell's `movebooks-image-security-evidence-90479d5` directory.
+
+The deployed frontend sign-in page loaded in a real browser after exposure. The Google account
+chooser opened, and selecting authorized User A reached **Sign in to movebooks-ai.firebaseapp.com**
+with the Google **Continue** consent button. The operator stopped and requested the human action.
+Consent was still pending when rollback began; no password, MFA code, token or cookie was
+requested, extracted or recorded. **Google/Firebase sign-in success is not verified.** No new
+workspace was created by this attempt. Compute was stopped rather than left live during the wait.
+
+An external HTTP probe attempted health/readiness/runtime and anonymous/invalid-auth cases,
+but aborted on a non-JSON response before recording per-case results. Those assertions are
+**not passed**. Future probes must record status and content type before parsing JSON. After
+shutdown the ordinary web sign-in and API runtime routes displayed **Service is disabled** / 503;
+health URLs returned non-JSON 404s. A 404 is not evidence of a successful application auth check.
+Platform Ready and internal probe success likewise do not prove external route behavior; see
+[Cloud Run troubleshooting](https://docs.cloud.google.com/run/docs/troubleshooting).
+
+Scoped Cloud Logging showed structured request/status-200 probe events and startup/shutdown
+messages on the new API revision. This is limited probe evidence, not a complete log-content
+leakage audit or proof of auth, owner-denial, persistence, storage, readiness, lifecycle and
+replay-failure monitoring. Full negative-path coverage remains open.
+
+Final read-only shutdown verification:
+
+- Both Run services: hardened revision retained, manual count **0**, maximum **1**, no public binding.
+- Cloud SQL: **STOPPED**, activation **NEVER**. No validation job has running tasks.
+- Schema service account and synthetic secret version 1 remain disabled.
+- Bucket uniform access and public-access prevention remain enforced. Runtime/database roles
+  were not expanded; no workload Owner/Editor or new bootstrap grant was introduced.
+- No Gemini, managed ADK, provider integration, customer data or cloud intake was enabled.
+
+Retained resources include the SQL 10 GB disk/network allocation, existing and new registry
+image versions, private bucket/soft-deleted synthetic objects, disabled secret, logs and resource
+definitions. Non-sensitive Cloud Shell archives/reports/cache also remain. Session-attributable
+billed cost was unavailable; no zero-cost or hard-cap claim is made. Compute was shut down roughly
+half an hour after the 11:29 UTC start, well before the four-hour deadline; storage/logging can
+continue charging.
+
+**Final live readiness: AMBER; PR #13 remains draft and unmerged.** Image security remains GREEN
+for the exact deployed image bytes (zero High/Critical, no suppressions; reports were verified by
+hash, not rescanned in this deployment continuation). Published CI remains six successful jobs
+at `1fa818e`; unpublished documentation is not covered by a new remote run.
+
+Still unverified: real sign-in, two-user HTTP read/mutate/approve/audit denial, anonymous protected
+API denial, persistent/spoof-resistant approval attribution, canonical cloud verified FPU,
+active-journey restart/checkpoint/approval/owner-isolation recovery, authenticated payload-free
+intake rejection, and full failure/log-safety coverage. Prior adapter/CI results do not close them.
+No new confirmed P0/P1 product defect was established in this attempt; final live P0/P1 counts
+are **not assessed**, not zero, and release clearance cannot be granted.
+
+Next: coordinate a human-present bounded resumption, then have User A click **Continue** in the
+Google consent popup and complete any Google password/MFA prompt directly. The stopped app may
+show 503 until resumption. Independently authenticate User B and complete the outstanding HTTP,
+journey, recovery and monitoring gates before declaring GREEN. Preserve and publish `03659c2`
+and this documentation update via normal GitHub Desktop/manual push; terminal authentication
+remains blocked. Do not duplicate commits or merge PR #13.
+
+## Earlier live-resumption preflight — 2026-09-28, after 10:13 UTC
 
 The owner renewed the dev/test continuation in `movebooks-ai` / `asia-southeast1` with the
 US$10/four-hour operating target, not a hard cap. Branch head `1fa818e` was clean and published;
