@@ -2,7 +2,30 @@
 
 ## Authorized validation checkpoint — 2026-09-28
 
-### Latest image-security continuation
+### Image-only gate closure (current)
+
+Source `c80c920` passes both clean production-image scans and all six jobs in
+[CI run 36405067750](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36405067750).
+API High findings reduced 50 to zero; web one to zero (historically nine before npm removal).
+The [image ledger](../reviews/google-cloud-image-security.md) records immutable base/image IDs,
+all advisory classifications, vendor patch/native-call evidence, raw report hashes and six API /
+four web residual Medium matches. No threshold weakening or suppression was used.
+
+API image now uses matching digest-pinned Chainguard Python 3.14 development/minimal stages.
+The final image contains no shell or pip: use the existing explicit Python schema command when
+separately authorized, not `sh -c`. The shell-free entrypoint preserves supplied PORT and graceful
+shutdown. Runtime remains UID 65532. A separate test stage must never be deployed. Web remains
+Node 22, installed as pinned `nodejs-22-minimal` on a pinned Wolfi base; its glibc Node builder
+preserves the Sharp native-module ABI. Rebuild/rescan when updating any pin; never silently switch
+to public `latest` Python/Node major versions. Frontend Firebase public configuration remains
+build-time configuration; these validation builds are not a deployment or live identity test.
+
+Keep services/SQL stopped and PR #13 draft/unmerged. No endpoints, IAM, Firebase or cloud data
+were touched during this image-only task. Overall cloud readiness remains AMBER. Human review
+of image closure comes next; a separately resumed bounded live window is required for remaining
+identity/E2E/recovery/monitoring checks. No blanket readiness claim follows from a scanner pass.
+
+### Earlier image-security continuation (historical)
 
 The earlier documentation head `05dc580` was published to draft PR #13. Its
 [CI run](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36399079607) passed all four

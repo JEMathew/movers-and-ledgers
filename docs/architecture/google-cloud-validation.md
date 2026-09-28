@@ -1,6 +1,6 @@
 # Google Cloud Beta validation boundary
 
-Status: **AMBER — durable adapter validation passed; identity/E2E incomplete and image gates failed; compute stopped**, 2026-09-28.
+Status: **AMBER — image gates and durable adapter validation passed; live identity/E2E incomplete; compute stopped**, 2026-09-28.
 This is a validation plan and evidence boundary, not a success claim.
 See the [review evidence](../reviews/google-cloud-validation.md) and
 [operator handoff](../deployment/google-cloud.md).
@@ -8,6 +8,13 @@ See the [review evidence](../reviews/google-cloud-validation.md) and
 ## Authorized scope
 
 ### 2026-09-28 security continuation
+
+The image-only continuation closes the High gate for source `c80c920`: both clean image scans
+and all six CI jobs pass. API uses a matched digest-pinned, shell/pip-free Python 3.14 runtime;
+web retains Node 22 with vendor-patched Wolfi libraries and a glibc-compatible builder. Product
+architecture, deterministic controls, identity and lifecycle behavior are unchanged. See the
+[per-advisory record](../reviews/google-cloud-image-security.md) for patch/applicability proof
+and residual Medium findings. This does not authorize deployment or prove live browser identity.
 
 The previous four-hour window has expired. Application compute remains stopped while image
 findings are investigated; a renewed bounded window and action-time endpoint confirmation are

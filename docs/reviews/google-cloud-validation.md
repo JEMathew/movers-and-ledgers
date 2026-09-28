@@ -4,9 +4,37 @@ Date: 2026-09-28. Branch: `feature/google-cloud-validation`.
 Baseline: `41b73cea100e166bb7e3ea661c33650264755cec` (merged PR #12).
 Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test only.
 
-**AMBER. Schema and durable adapter gates pass; identity/E2E remain incomplete and image gates fail. Keep the environment stopped and private.**
+**AMBER. Image-security gates now pass; authenticated identity/cloud E2E remain incomplete. Keep the environment stopped and private.**
 
-## Latest security continuation — 2026-09-28, after 08:42 UTC
+## Image-only closure — 2026-09-28
+
+This checkpoint supersedes the image-security/publication blockers below, not the remaining live
+cloud gates. Source `c80c920` was published normally on this branch. Fresh
+[CI run 36405067750](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36405067750)
+passed all six jobs, including both clean production-image Grype High gates, real PostgreSQL
+contracts (59 tests), and the production-container restart/resume/FPU journey. The replacement
+Python 3.14 suite passed 255 tests with the same ten database-only skips; the separate database
+job and container journey actually exercise persistence. Frontend: 76 tests, lint, TypeScript,
+production build and zero-vulnerability production npm audit pass.
+
+API High: **50 → 0**; frontend High: **1 → 0** (originally nine before runtime npm removal).
+No Critical findings, no ignored matches, unchanged `--fail-on high` policy. Six API and four web
+Medium matches remain recorded, not waived or claimed fixed. The
+[image-security evidence ledger](google-cloud-image-security.md) contains all thirteen API
+advisory classifications, prior npm/zlib findings, actual package versions, patch/applicability
+evidence, image IDs, report hashes and CI artifact retention. A deprecated glibc DNS-printer
+finding is classified by exact-image symbol/source inspection, not a blanket vendor waiver.
+
+**Image-security: GREEN for these tested synthetic Beta images. Overall cloud validation: AMBER.**
+No Cloud Run/SQL restart, endpoint exposure, Firebase interaction, IAM/schema change, deployment,
+Gemini or ADK activation occurred. Temporary Docker test/scanner processes completed and stopped;
+only non-sensitive image/report evidence and caches remain in Cloud Shell. Existing stopped GCP
+resources and retained storage were not modified. No new cloud spending estimate is claimed.
+PR #13 remains draft/unmerged. Next is human review of this image-only closure; real authenticated
+two-user isolation, approval attribution, canonical cloud FPU, cloud restart/resume, authenticated
+intake rejection and failure monitoring still require a separately resumed bounded live slice.
+
+## Earlier security continuation — 2026-09-28, after 08:42 UTC
 
 This section supersedes the earlier checkpoints where their status differs. **AMBER**, not ready
 for merge or public runtime validation. The prior four-hour window expired; renewal and temporary
