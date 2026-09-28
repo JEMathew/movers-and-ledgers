@@ -12,6 +12,7 @@ Rules verify. AI predicts. GenAI reasons. Agents orchestrate and act. Humans gov
 | `/` | Business-first landing; Explore Beta → Product; See How It Works → five-phase overview. No invented progress or measured results. |
 | `/product` | Public introduction, sample entry and read-only continuation of the existing local session. |
 | `/workspace` | Same Product entry component behind the existing demo authentication boundary; no duplicate workflow. |
+| `/guide` | Beta V1.0 User Guide: twelve anchored sections (A–L) with a contents nav, native disclosure for technical detail and links to existing routes and Learn topics. Static, no requests. |
 | `/simulator` | Public Harbor Light Books introduction, decisions, synthetic limitations and outcome definition. |
 | `/learn` | Ten short native disclosure modules with stable topic anchors and phase entry links. |
 | `/play` | Three-choice-step educational exercise; isolated component state, no API, storage or financial actions. |
@@ -19,7 +20,7 @@ Rules verify. AI predicts. GenAI reasons. Agents orchestrate and act. Humans gov
 | `/feedback` | Structured, validated local draft with optional safe context and explicit download; never a submitted ticket. |
 | `/support` | Contextual self-help, Learn, workflow and Report Issue links; never executes recovery or approvals. |
 
-Navigation prioritizes Product, Simulator, Learn, Play, Trust, Feedback and Support, with a workspace
+Navigation prioritizes Product, Guide, Simulator, Learn, Play, Trust, Feedback and Support, with a workspace
 shortcut. Existing stage handoffs and session continuity remain intact. A shared contextual-help
 aside links workflow stages to relevant Learn topics, Trust and Support; no stage algorithm changes.
 
