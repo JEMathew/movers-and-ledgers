@@ -100,7 +100,9 @@ extraction are part of the adapter. Region and SDK base URL are pinned to the re
 endpoint. Ambient Gemini keys/endpoint overrides and configured OTLP export endpoints are rejected.
 SDK content capture flags are forced off and SDK debug payload logging is suppressed process-wide.
 Only allowlisted application scalar telemetry is intended for use. No Secret Manager/IAM changes
-are required by the code, and none were made; actual Vertex API/IAM availability is still unverified.
+are required by the code, and none were made. Read-only Cloud Shell preflight on 2026-09-29 verified
+normal ADC for `movebooks-ai`, but Service Usage reports `aiplatform.googleapis.com` **DISABLED**.
+API enablement awaits approval; actual inference permission is not yet proven.
 
 ## Measurement contract
 
@@ -124,6 +126,32 @@ payloads, actors and exception messages are excluded from logs.
 | Customer outcome | Future comprehension/decision-burden study; neither model usage nor acceptance substitutes for verified FPU |
 
 ## Bounded validation runbook
+
+### Pricing and model preflight (2026-09-29)
+
+Google's [model specification](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/2-5-flash)
+lists `gemini-2.5-flash`, structured output and `asia-southeast1`. Its
+[lifecycle table](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions)
+lists retirement of the 2.5 Pro / Flash / Flash-Lite family on 2026-10-20. Recheck before any later
+run; do not silently substitute a successor model. No live route configuration has been activated.
+
+Published [standard text pricing](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing),
+USD per million tokens, excluding separate paid tools:
+
+| Documented model | Input | Output including reasoning | Actual use in this preflight |
+| --- | --- | --- | --- |
+| Gemini 2.5 Flash | 0.30 | 2.50 | None |
+| Gemini 2.5 Pro, input at most 200K tokens | 1.25 | 10.00 | None |
+| Gemini 2.5 Flash-Lite | 0.10 | 0.40 | None |
+
+These are reference rates, not a project billing read-back or a measured call cost. Actual model
+access, usage reporting, latency, structured responses and semantic grounding remain unverified
+because the Vertex AI API is disabled. Preflight made zero model calls, so its model-call spend is
+US$0. Before invoking, bound total input/output exposure for all six requested representative cases
+and one failure case against the US$1 session target, including possible second ADK calls and any
+diagnostic retries. Do not expand testing automatically.
+
+### Execution prerequisites
 
 Offline: `python scripts/live_reasoning_eval.py`. Thirteen synthetic cases exercise host contracts,
 not model reasoning quality. Backend tests separately exercise the real ADK runner with offline

@@ -39,11 +39,21 @@ This record does not inherit live-model evidence from PR #13's deterministic clo
 ## Live preflight and exact blocker
 
 User authorized project `movebooks-ai`, region `asia-southeast1`, a **US$1 model-call operating
-target**, no Cloud Run or SQL startup. Normal SDK ADC discovery returned unavailable; no credential
-content was printed or extracted. Local `gcloud` is absent from PATH. An attempt to locate existing
-Chrome/Cloud Shell also failed twice because browser control could not initialize its request
-policy. No Cloud Shell command was run. Neither finding establishes a project API/IAM defect:
-actual Vertex API availability, permissions, model availability and current prices remain unchecked.
+target**, no Cloud Run or SQL startup. The initial local preflight could not discover ADC or use
+browser control. A subsequent read-only preflight on 2026-09-29 at implementation commit `847a5b9`
+successfully used authenticated Chrome Cloud Shell and normal Google SDK ADC refresh:
+
+- `adc_valid: true`, project `movebooks-ai`; no credential content printed or extracted.
+- Enabled-services query returned no Vertex AI entry. A direct authenticated Service Usage GET
+  confirmed HTTP **200**, service `aiplatform.googleapis.com`, state **DISABLED**.
+- No service was enabled and no IAM binding was changed. Enabling this API is the next approval
+  checkpoint; any required IAM expansion must be separately identified and approved.
+- Published Google documentation lists `gemini-2.5-flash` and `asia-southeast1`. This establishes
+  documented support, **not** successful access, quota or inference permission in this project.
+  Current documented prices and lifecycle notes are recorded in the architecture document.
+
+**Immediate blocker: Vertex AI API disabled; approval to enable it is pending.** Actual Gemini
+inference, per-capability live routing, live ADK execution and live failure paths remain unexercised.
 
 **Live agents activated: none. Paid model calls: zero. Model-call spend from this work: US$0.**
 No live latency, token usage, quality or cost estimate is fabricated from offline timings. Cloud Run,
@@ -51,11 +61,13 @@ SQL, Firebase, IAM, GCS, Secret Manager, production images and the preserved com
 were not changed or started. No approvals repeated and no invoice posted. This is an unchanged-cloud
 statement, not a fresh independent shutdown verification. No temporary cloud access was granted.
 
-Next prerequisite: establish normal ADC in an authorized test process or restore authenticated
-Cloud Shell control; do not paste tokens or export browser credentials. Then verify Vertex API,
-model availability/prices and least-privilege access. Report additional API/IAM requirements before
-changing them. Run the bounded five-capability smoke and claim-level quality assessment only after
-local checks remain green. Do not resume cloud runtime validation or start Cloud Run/SQL.
+Next prerequisite: obtain approval to enable only `aiplatform.googleapis.com` in `movebooks-ai`,
+then verify least-privilege inference access and actual selected-model availability. Do not paste
+tokens or export browser credentials. Run the requested six representative cases across five
+capabilities and one bounded failure case only after prerequisites pass. The current harness admits
+at most five selected cases per invocation; account for the entire session budget across invocations.
+Do not resume cloud runtime validation or start Cloud Run/SQL. No fresh live release-review clearance
+is claimed; prior local P0/P1 findings remain scoped to the inspected local implementation.
 
 ## Review findings and remediation
 
@@ -117,8 +129,9 @@ They are not an average, activation permission or production-readiness score.
 
 ## Remaining owned gaps
 
-- **P2, release owner:** normal authenticated live process plus verified API/permissions/model IDs and
-  prices; then bounded invocation/orchestration/structured-output smoke. This is the immediate blocker.
+- **P2, release owner:** Cloud Shell ADC now works, but Vertex AI API is confirmed disabled. Obtain
+  approval for API enablement, verify inference permissions/model access, then run bounded live
+  invocation/orchestration/structured-output and failure-path checks. This is the immediate blocker.
 - **P2, GenAI/Product owners:** representative semantic correctness, grounding, usefulness and live
   tool/escalation quality; no quality score exists yet. An offline canned result is not a substitute.
 - **P2, engineering/release:** optional ADK image compatibility/security and durable live runtime
