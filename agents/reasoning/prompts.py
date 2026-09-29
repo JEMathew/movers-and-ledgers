@@ -41,5 +41,9 @@ def instruction(capability):
         "otherwise say the policy is not provided. The 0.8 instruction above concerns advisor "
         "self-confidence and escalation only, not mapping eligibility or execution authorization. "
         "Distinguish supplied candidate confidence from your own uncalibrated advice confidence. "
+        "For duplicate failures, never propose new batches, new identifiers, or resetting identity "
+        "as a workaround. Preserve checkpoints and use only supplied permitted remedies; "
+        "if none are supplied, request human investigation, not a speculative retry procedure. "
+        "A pending approval calls for human review, not a predetermined approval outcome. "
         "Return only the structured Advice schema. Do not add approval or financial-result fields."
     )

@@ -60,6 +60,7 @@ async def run_advisor(context, model, settings, *, llm=None):
     calls, reads = 0, 0
     input_tokens, output_tokens, usage_reports = 0, 0, 0
     response_shape = {}
+    finish_reason = None
     client = None
     if llm is None:
         # Explicit normal ADC; no API keys, browser credentials or secret material in prompts.
@@ -94,7 +95,11 @@ async def run_advisor(context, model, settings, *, llm=None):
                     declaration.parameters_json_schema = WireAdvice.model_json_schema()
 
     def after_model(callback_context, llm_response):
-        nonlocal input_tokens, output_tokens, usage_reports, response_shape
+        nonlocal input_tokens, output_tokens, usage_reports, response_shape, finish_reason
+        # Enum membership only: never forward arbitrary provider error messages/codes.
+        known_reasons = {reason.value for reason in types.FinishReason}
+        observed = llm_response.finish_reason or llm_response.error_code
+        finish_reason = observed if observed in known_reasons else None
         usage = llm_response.usage_metadata
         if usage:
             usage_reports += 1
@@ -149,7 +154,22 @@ async def run_advisor(context, model, settings, *, llm=None):
         )
         output = session.state.get("advice")
         if output is None:
-            raise ValueError("No structured final output")
+            raise ProviderFailure(
+                ProviderResult(
+                    "",
+                    calls,
+                    reads,
+                    input_tokens if usage_reports else None,
+                    output_tokens if usage_reports else None,
+                    validation_issues=[
+                        {"path": "$", "rule": "missing", "reason": "No structured final output"}
+                    ],
+                    response_shape=response_shape or {"$": "missing"},
+                    usage_status="partial" if usage_reports else "unknown",
+                    finish_reason=finish_reason,
+                ),
+                "missing_output",
+            )
         return ProviderResult(
             json.dumps(output) if isinstance(output, dict) else output,
             calls,
@@ -157,6 +177,7 @@ async def run_advisor(context, model, settings, *, llm=None):
             input_tokens if usage_reports else None,
             output_tokens if usage_reports else None,
             response_shape=response_shape,
+            finish_reason=finish_reason,
             usage_status=(
                 "complete" if usage_reports == calls else "partial" if usage_reports else "unknown"
             ),
@@ -171,6 +192,7 @@ async def run_advisor(context, model, settings, *, llm=None):
                 output_tokens if usage_reports else None,
                 validation_issues=safe_validation_issues(error),
                 response_shape=response_shape,
+                finish_reason=finish_reason,
                 usage_status="partial" if usage_reports else "unknown",
             )
         ) from None

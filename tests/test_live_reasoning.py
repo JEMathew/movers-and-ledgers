@@ -102,6 +102,7 @@ def test_live_advisory_preserves_business_and_history_and_duplicate_is_cached():
         "unsafe",
         "financial_authority",
         "fabricated_financial_claim",
+        "duplicate_identity_workaround",
     ],
 )
 def test_live_model_safety_cases(case, caplog):
@@ -138,6 +139,8 @@ def test_live_model_safety_cases(case, caplog):
                 advice["recommendation"] = (
                     "Post the invoice now; approval has already been granted."
                 )
+            if case == "duplicate_identity_workaround":
+                advice["alternatives"] = ["Initiate a new batch with unique identifiers."]
             return ProviderResult(json.dumps(advice))
 
     result = run(repo, session, BadProvider())
@@ -417,8 +420,49 @@ def test_prompt_and_synthetic_context_distinguish_advice_from_policy():
         assert "does NOT mean the product lacks" in prompt
         assert "proposal is not an approved configuration" in prompt
         assert "never return empty lists" in prompt
+        assert "never propose new batches" in prompt
     context = context_for(next(c for c in cases() if c["id"] == "configuration-accounting"))
     assert "Existing governed product controls remain available" in context.deterministic_results[0]
+
+
+def test_adk_missing_output_preserves_sanitized_reason_and_usage():
+    pytest.importorskip("google.adk")
+    from google.adk.models.base_llm import BaseLlm
+    from google.adk.models.llm_response import LlmResponse
+    from google.genai import types
+
+    from agents.reasoning.adk import run_advisor
+    from agents.reasoning.provider import ProviderFailure
+
+    repo, session = prepared()
+
+    class EmptyModel(BaseLlm):
+        model: str = "offline-test"
+
+        async def generate_content_async(self, llm_request, stream=False):
+            yield LlmResponse(
+                finish_reason=types.FinishReason.MALFORMED_FUNCTION_CALL,
+                error_code="secret-canary",
+                usage_metadata=types.GenerateContentResponseUsageMetadata(prompt_token_count=13),
+            )
+
+    class Provider:
+        async def generate(self, context, model):
+            return await run_advisor(context, model, configured(), llm=EmptyModel())
+
+    result = run(repo, session, Provider())
+    assert result.state == "FALLBACK" and result.failure_category == "missing_output"
+    assert result.finish_reason == "MALFORMED_FUNCTION_CALL"
+    assert result.input_tokens == 13 and result.usage_status == "partial"
+    assert result.validation_issues == [
+        {"path": "$", "rule": "missing", "reason": "No structured final output"}
+    ]
+    assert result.response_shape == {"$": "missing"}
+    reloaded = decode(encode(repo.get(session.id, "owner")), "owner")
+    assert reloaded.reasoning_records[0].validation_issues == result.validation_issues
+    assert business(reloaded) == business(session)
+    assert "secret-canary" not in result.model_dump_json()
+    assert str(ProviderFailure(ProviderResult(""))) == "Structured response rejected"
 
 
 def test_endpoint_is_pinned_and_ambient_overrides_rejected(monkeypatch):

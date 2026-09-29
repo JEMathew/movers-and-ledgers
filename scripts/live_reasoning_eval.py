@@ -78,6 +78,7 @@ async def evaluate(settings, selected, live=False):
                 "validation_issues": usage.validation_issues,
                 "response_shape": usage.response_shape,
                 "usage_status": usage.usage_status,
+                "finish_reason": usage.finish_reason,
                 "grounding_reference_check": True if error is None else None,
                 "escalated": advice.next_action == "ESCALATE",
                 "model_calls": usage.model_calls,

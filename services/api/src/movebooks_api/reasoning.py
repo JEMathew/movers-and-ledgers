@@ -43,6 +43,7 @@ def safe_telemetry(record):
                 "validation_issues": record.validation_issues,
                 "response_shape": record.response_shape,
                 "usage_status": record.usage_status,
+                "finish_reason": record.finish_reason,
                 "cost_known": record.estimated_cost_usd is not None,
                 "fallback_used": record.state == "FALLBACK",
                 "human_review_required": True,
@@ -136,6 +137,7 @@ async def request_advice(
     saved.validation_issues = usage.validation_issues
     saved.response_shape = usage.response_shape
     saved.usage_status = usage.usage_status
+    saved.finish_reason = usage.finish_reason
     saved.state = (
         "FALLBACK"
         if error

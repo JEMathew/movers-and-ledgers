@@ -21,6 +21,7 @@ class ProviderResult:
     validation_issues: list[dict[str, str]] = field(default_factory=list)
     response_shape: dict[str, str] = field(default_factory=dict)
     usage_status: str = "unknown"
+    finish_reason: str | None = None
 
 
 def safe_shape(value):
@@ -78,9 +79,10 @@ def safe_validation_issues(error):
 
 
 class ProviderFailure(Exception):
-    def __init__(self, result):
+    def __init__(self, result, category="schema_validation"):
         super().__init__("Structured response rejected")
         self.result = result
+        self.category = category
 
 
 class ReasoningProvider(Protocol):
@@ -129,7 +131,8 @@ def validate_advice(raw: str, context: ReasoningInput) -> Advice:
         r"balances?.{0,40}reconcil|journal.{0,40}balanc|"
         r"(?:fpu|first productive use).{0,40}(?:verified|complete)|"
         r"(?:verified|completed).{0,40}(?:fpu|first productive use)|"
-        r"approval.{0,40}(?:granted|given)|post .{0,40}invoice",
+        r"approval.{0,40}(?:granted|given)|post .{0,40}invoice|"
+        r"(?:initiate|create|start).{0,30}new.{0,20}batch|unique identifiers",
         text,
     ):
         raise ValueError("Unsafe output")
@@ -154,7 +157,7 @@ async def reason(context, model, provider, timeout):
         except (ValueError, TypeError):
             return fallback(context), result, "invalid_output"
     except ProviderFailure as error:
-        return fallback(context), error.result, "schema_validation"
+        return fallback(context), error.result, error.category
     except TimeoutError:
         return fallback(context), ProviderResult(""), "timeout"
     except Exception:
