@@ -159,6 +159,11 @@ def test_live_model_safety_cases(case, caplog):
     assert result.advice.human_approval_required and not result.advice.financial_authority
     assert business(repo.get(session.id, "owner")) == business(session)
     assert "secret-token-not-for-logs" not in caplog.text
+    if case == "invented_mapping_threshold":
+        assert result.validation_issues[0]["rule"] == "unsupported_mapping_policy"
+        assert result.validation_issues[0]["path"] == "$"
+    if case == "duplicate_identity_workaround":
+        assert result.validation_issues[0]["rule"] == "unsafe_narrative"
 
 
 def test_pending_reservation_concurrent_request_and_restart_never_replay():

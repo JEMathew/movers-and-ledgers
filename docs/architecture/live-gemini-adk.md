@@ -1,7 +1,8 @@
 # Bounded Gemini / Google ADK reasoning
 
-Status: implemented locally and exercised through authenticated Gemini/ADK; **AMBER: resolution and
-onboarding structured output and semantic gaps remain**. This is an
+Status: implemented locally and exercised through authenticated Gemini/ADK; **AMBER: targeted
+resolution/onboarding schema reruns pass, but mapping semantic acceptance remains blocked**. See the
+[targeted remediation record](../reviews/live-gemini-adk-targeted-remediation.md). This is an
 opt-in synthetic dev/test advisory path, not a replacement for stage agents or financial tools.
 Cloud Run, Cloud SQL, Firebase, IAM and the preserved cloud workspace were not changed.
 
@@ -53,6 +54,16 @@ and forces escalation for low confidence or deterministic blockers. ADK's wire s
 because its function converter cannot encode boolean literals; the stricter host schema revalidates
 them. Versioned per-capability prompts specify tools, prohibited actions, untrusted-input treatment,
 stopping rules and human boundaries. Prompts are not authorization controls.
+
+Targeted correction: ADK's response-tool converter loses Pydantic Field constraints when it uses
+annotations alone. The before-model callback now supplies the full wire JSON Schema for that tool;
+the host contract is not loosened. Safe diagnostics retain canonical rejected paths/rules and JSON
+kinds, never raw input/context/error messages. Usage captured before ADK output validation survives
+schema and missing-output failures as partial evidence. Allowlisted finish reasons and explicit
+unknowns distinguish missing output from a valid answer. Prompt v4 and narrow narrative guards
+distinguish advisor limits from product functionality, reject invented mapping-policy thresholds
+and speculative new-identifier duplicate remedies. Conservative false positives remain possible;
+safe fallback is not semantic acceptance. No automatic retries were added.
 
 Reference membership is **not semantic grounding**. A conservative narrative rejection filter catches
 known approval-bypass and false financial/completion claims, including reviewer adversarial examples.

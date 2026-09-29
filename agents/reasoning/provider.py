@@ -85,6 +85,12 @@ class ProviderFailure(Exception):
         self.category = category
 
 
+class AdviceRejection(ValueError):
+    def __init__(self, path, rule, reason):
+        super().__init__(reason)
+        self.issue = {"path": path, "rule": rule, "reason": reason}
+
+
 class ReasoningProvider(Protocol):
     async def generate(self, context: ReasoningInput, model: str) -> ProviderResult: ...
 
@@ -117,11 +123,11 @@ def fallback(context: ReasoningInput) -> Advice:
 
 def validate_advice(raw: str, context: ReasoningInput) -> Advice:
     if len(raw.encode()) > 16000:
-        raise ValueError("Output capacity exceeded")
+        raise AdviceRejection("$", "capacity", "Output capacity exceeded")
     advice = Advice.model_validate_json(raw)
     allowed = {f.reference for f in context.facts}
     if not set(advice.evidence_references) <= allowed:
-        raise ValueError("Untraceable evidence")
+        raise AdviceRejection("evidence_references", "reference_membership", "Untraceable evidence")
     # Defense in depth for narrative text; authority is enforced by absence of write tools
     # and by never feeding this record into a business-state decision.
     text = json.dumps(advice.model_dump()).lower()
@@ -133,7 +139,7 @@ def validate_advice(raw: str, context: ReasoningInput) -> Advice:
     ):
         # No generic approval/automation threshold is part of this advisory contract.
         # Reject the response rather than rewriting its reasoning into a purported model pass.
-        raise ValueError("Unsupported mapping policy claim")
+        raise AdviceRejection("$", "unsupported_mapping_policy", "Unsupported mapping policy claim")
     if re.search(
         r"bypass|ignore (?:the )?(?:approval|policy|rules)|auto.?approve|"
         r"mark .{0,30}(?:verified|complete)|api[_ -]?key|bearer\s|"
@@ -144,7 +150,9 @@ def validate_advice(raw: str, context: ReasoningInput) -> Advice:
         r"(?:initiate|create|start).{0,30}new.{0,20}batch|unique identifiers",
         text,
     ):
-        raise ValueError("Unsafe output")
+        raise AdviceRejection(
+            "$", "unsafe_narrative", "Narrative violates advisory authority boundary"
+        )
     if context.requires_escalation or advice.confidence < 0.8:
         advice.next_action = "ESCALATE"
     return advice
@@ -163,6 +171,9 @@ async def reason(context, model, provider, timeout):
             except (ValueError, TypeError):
                 result.response_shape = {"$": "invalid_json"}
             return fallback(context), result, "schema_validation"
+        except AdviceRejection as error:
+            result.validation_issues = [error.issue]
+            return fallback(context), result, "invalid_output"
         except (ValueError, TypeError):
             return fallback(context), result, "invalid_output"
     except ProviderFailure as error:
