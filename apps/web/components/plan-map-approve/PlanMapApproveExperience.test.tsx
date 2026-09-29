@@ -180,4 +180,35 @@ describe("PlanMapApproveExperience", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("Policy unavailable");
     expect(screen.queryByRole("heading", { name: "Review mapping proposals" })).not.toBeInTheDocument();
   });
+
+  it("resumes a rejected mapping and wires a separate request and review without creating a workspace", async () => {
+    window.history.replaceState(null, "", "/plan-map-approve?session=session-001");
+    const rejection = {id: "prior-001", affected_entity: proposal.id, decision: "REJECTED", actor: "firebase:owner-a", occurred_at: "2026-09-28T13:00:00Z", selected_value: "Customer"};
+    const rejected = {...proposal, state: "REJECTED", decided_by: rejection.actor, decided_at: rejection.occurred_at, decision_comment: "Original rejection"};
+    const pending = {...rejected, reconsiderations: [{id: "request-001", prior_decision_id: rejection.id, prior_actor: rejection.actor, prior_timestamp: rejection.occurred_at, prior_reason: rejected.decision_comment, prior_evidence: proposal.evidence, prior_target: "Customer", requested_by: rejection.actor, requested_at: "2026-09-28T14:00:00Z", reason: "Explicit reconsideration", proposed_target: "Customer", state: "REVIEW_REQUIRED"}]};
+    const approved = {...pending, state: "APPROVED", reconsiderations: [{...pending.reconsiderations[0], state: "APPROVED", decision_id: "new-001", reviewed_by: rejection.actor, reviewed_at: "2026-09-28T14:01:00Z"}]};
+    const snapshot = (mapping: unknown) => ({id: "session-001", plan, mappings: [mapping], activity, human_decisions: [rejection]});
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(jsonResponse(snapshot(rejected)))
+      .mockResolvedValueOnce(jsonResponse(pending))
+      .mockResolvedValueOnce(jsonResponse(snapshot(pending)))
+      .mockResolvedValueOnce(jsonResponse(approved))
+      .mockResolvedValueOnce(jsonResponse({...snapshot(approved), human_decisions: [rejection, {...rejection, id: "new-001", decision: "APPROVED"}]}));
+    vi.stubGlobal("fetch", fetchMock);
+    render(<PlanMapApproveExperience />);
+    await screen.findByRole("button", {name: "Request reconsideration"});
+    expect(screen.getByRole("button", {name: "Approve"})).toBeDisabled();
+    fireEvent.change(screen.getByLabelText("Reason for reconsideration"), {target: {value: "Explicit reconsideration"}});
+    fireEvent.click(screen.getByRole("button", {name: "Request reconsideration"}));
+    const approveReview = await screen.findByRole("button", {name: "Approve reconsideration"});
+    expect(screen.queryByRole("link", {name: "Continue to Migrate → Resolve"})).not.toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    fireEvent.click(approveReview);
+    expect(await screen.findByRole("link", {name: "Continue to Migrate → Resolve"})).toBeVisible();
+    expect(screen.getByText("Original reason: Original rejection", {exact: true})).toBeVisible();
+    expect(fetchMock.mock.calls[1][0]).toContain("/mappings/mapping-001/reconsiderations");
+    expect(fetchMock.mock.calls[3][0]).toContain("/reconsiderations/request-001/review");
+    expect(fetchMock.mock.calls.filter(([, init]) => init.method === "POST")).toHaveLength(2);
+    expect(fetchMock.mock.calls.every(([url]) => String(url).includes("/migration-sessions/session-001"))).toBe(true);
+  });
 });

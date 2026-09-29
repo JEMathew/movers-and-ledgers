@@ -1,5 +1,50 @@
 # Plan → Map → Approve architecture
 
+## Governed reconsideration of a final rejection (2026-09-28)
+
+The preserved synthetic cloud workspace contains a final Catalog preparation rejection. A later
+human change of intent must not erase that decision or require a new workspace. Reconsideration
+is therefore an explicit, owner-only, pre-execution workflow; it is not an agent override or a
+relaxation of `apply_mapping_decision`'s final-decision guard.
+
+- The mapping remains `REJECTED` while a separate reconsideration record is `REVIEW_REQUIRED`.
+- Requesting emits `mapping_reconsideration_requested`; it does not approve or unlock migration.
+- A separate human review creates a **new** mapping decision, resulting in `APPROVED` or
+  `REJECTED`. It emits `mapping_reconsideration_reviewed` and either
+  `mapping_reconsideration_approved` or `mapping_reconsideration_rejected`, in addition to the
+  existing mapping-decision event. A further reconsideration must reference the latest rejection.
+- Only `AWAITING_APPROVAL` sessions without execution are eligible. Approved mappings and
+  execution manifests cannot be reopened. Existing deterministic compatibility/evidence checks
+  run on the requested target and again before approval; ordinary stage/handoff gates remain.
+
+The request record links mapping ID, latest prior human-decision ID, original actor/time/comment/
+target/evidence, requesting actor/time, required reason and proposed target. Review adds reviewer,
+time, outcome/comment and the new human-decision ID. Original `human_decisions` and product events
+remain untouched and in order. Original projection fields are copied into the linked record
+before the current mapping projection can change. This is application-level append-preserving
+history in the existing durable snapshot, not a new tamper-proof/WORM storage claim.
+
+Both HTTP actions resolve the workspace through the authenticated server principal. Request
+models forbid extra fields, including client-supplied actor identity. No agent/model or browser
+event submission may authorize or fabricate these events. The same owner may request and review;
+this slice requires two explicit actions, not a newly introduced two-person approval policy.
+
+`POST /v1/migration-sessions/{session}/mappings/{mapping}/reconsiderations` requires a UUID
+`request_id`, `prior_decision_id`, nonblank bounded `reason`, and `proposed_target`.
+`POST .../reconsiderations/{request_id}/review` requires `action: approve|reject` and optional
+bounded `comment`. Identical retries return the recorded result without another decision/event;
+changed payload/key reuse, conflicting reviews and concurrent pending requests fail closed.
+Snapshot compare-and-swap commits record/projection/audit changes together; a stale write leaves
+no partial audit or decision. Existing rows load an empty reconsideration list by default. Empty
+lists are omitted from persistence encoding to preserve legacy snapshot hashes on the first
+write; no schema bootstrap, data rewrite or elevated privilege is needed.
+
+The existing mapping card gains a required reason, Request reconsideration, prior decision
+history and separate Approve/Reject reconsideration controls. The minimal UI requests the
+displayed target, uses labeled native controls and live status/error text, and moves focus to
+history after the review state changes. Prior rejection evidence stays visible after approval.
+See the [focused review](../reviews/mapping-reconsideration.md) for verified scope and limits.
+
 ## Purpose and boundary
 
 This slice turns deterministic Discover → Assess evidence into a dependency-aware migration plan

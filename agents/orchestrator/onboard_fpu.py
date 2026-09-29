@@ -6,7 +6,13 @@ from agents.activation import FirstProductiveUseAgent
 from agents.onboarding import OnboardingAgent
 from agents.orchestrator.validate_configure import ValidateConfigureOrchestrator
 from domain.discovery_assessment.models import ProductEventName as Event
-from domain.onboarding_fpu.models import Decision, FpuCheck, FpuTask, OnboardingState
+from domain.onboarding_fpu.models import (
+    Decision,
+    FpuCheck,
+    FpuTask,
+    OnboardingState,
+    owner_decision_role,
+)
 from domain.planning_mapping.models import WorkflowStatus as State
 from tools.activation.invoice import (
     calculate_fpu_status,
@@ -142,7 +148,7 @@ class OnboardFpuOrchestrator:
             raise ValueError("Choose an explicitly supported onboarding option.")
         decision = Decision(
             actor=actor,
-            role="WORKSPACE_OWNER" if actor.startswith("firebase:") else "DEMO_WORKSPACE_OWNER",
+            role=owner_decision_role(actor),
             action=request.action,
             selection=selection,
             evidence_hash=state.context_hash,
@@ -215,7 +221,7 @@ class OnboardFpuOrchestrator:
         task.decisions.append(
             Decision(
                 actor=actor,
-                role="WORKSPACE_OWNER" if actor.startswith("firebase:") else "DEMO_WORKSPACE_OWNER",
+                role=owner_decision_role(actor),
                 action=request.action,
                 selection="POST_SYNTHETIC_INVOICE",
                 evidence_hash=task.contract_hash,
@@ -240,7 +246,7 @@ class OnboardFpuOrchestrator:
             {
                 **record_fpu_event(task),
                 "actor": actor,
-                "role": "DEMO_WORKSPACE_OWNER",
+                "role": task.decisions[-1].role,
                 "action": request.action,
             },
         )
@@ -290,6 +296,7 @@ class OnboardFpuOrchestrator:
             if (
                 not decision
                 or decision.actor != actor
+                or decision.role != owner_decision_role(session.owner_subject)
                 or decision.action != "approve"
                 or decision.evidence_hash != task.contract_hash
             ):
@@ -432,7 +439,7 @@ class OnboardFpuOrchestrator:
             {
                 "faults": before,
                 "actor": actor,
-                "role": "DEMO_WORKSPACE_OWNER",
+                "role": owner_decision_role(actor),
                 "at": datetime.now(UTC).isoformat(),
                 "decision": "approve",
                 "context_hash": state.context_hash,

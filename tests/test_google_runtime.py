@@ -26,7 +26,8 @@ from movebooks_api.runtime.storage import (
 )
 from movebooks_api.settings import Settings
 from pydantic import ValidationError
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
+from sqlalchemy.exc import DatabaseError
 from test_beta_v1_integration import CASES
 from test_beta_v1_integration import test_integrated_golden as run_golden
 
@@ -153,6 +154,33 @@ def test_durable_insert_cannot_overwrite(durable):
         repo.put(session)
     with pytest.raises(ValueError):
         decode(encode(session), "other-owner")
+
+
+@pytest.mark.parametrize(
+    "fields", [{"C": "23505", "D": "private-driver-detail"}, {"C": "42501"}, "23505"]
+)
+def test_cloud_dbapi_duplicate_classification_is_narrow_and_redacted(durable, fields):
+    repo, _ = durable
+    session = sample()
+    driver_error = DatabaseError("private-sql", None, Exception(fields))
+
+    def fail_insert(conn, cursor, statement, parameters, context, executemany):
+        if statement.lstrip().startswith("INSERT INTO migration_sessions"):
+            raise driver_error
+
+    event.listen(repo.engine, "before_cursor_execute", fail_insert)
+    try:
+        if isinstance(fields, dict) and fields.get("C") == "23505":
+            with pytest.raises(ValueError, match="Session already exists") as raised:
+                repo.put(session)
+            assert "private" not in str(raised.value)
+        else:
+            with pytest.raises(DatabaseError) as raised:
+                repo.put(session)
+            assert raised.value is driver_error
+    finally:
+        event.remove(repo.engine, "before_cursor_execute", fail_insert)
+    assert repo.get(session.id, session.owner_subject) is None
 
 
 def test_concurrent_independent_connections(durable):
