@@ -1,13 +1,158 @@
 # Public Beta connectivity and release gate
 
-**GREEN — ready to merge for the exercised V1.0 synthetic public-reference Beta
-scope. P0 blockers: 0. P1 blockers: 0. Human merge authorization is still required.**
-Branch `release/public-beta`, based on `v1.0.0` / `76cebca`.
+**LIVE / AMBER — MoveBooks AI V1.0 bounded synthetic public Beta.** The deployed
+runtime smoke is GREEN, but final go-live closure is held on a newly observed
+post-merge CI test-fixture failure. No new product P0/P1 defect is established.
+PR [#18](https://github.com/JEMathew/movers-and-ledgers/pull/18) merged
+`release/public-beta` into `main` at
+`3e1a1f85ffbb7dd37140dbdb772228c08fcd430d`; the release branch remains at
+`3d0960822fcd9f814a638df97c96916c40c0c325`.
 Project `movebooks-ai`; region `asia-southeast1`.
 
-## Final release closure — 30 September 2026 IST
+## Go-live closure checkpoint — 30 September 2026 IST
 
-This is the authoritative current assessment. The dated checkpoints below retain
+This is the authoritative current assessment; the earlier merge-readiness result
+below is historical. Read-only cloud drift verification and smoke began at
+2026-09-29 19:43–19:47 UTC (30 September IST). No application/UX changes,
+redeployment, IAM/Firebase/network/SQL/secret changes, Google user sign-in,
+workspace creation, approvals, invoice posting or other business writes occurred.
+The main tree exactly matches the approved release branch tree. Both current
+revisions and immutable images match the artifact table below and each serves
+100% of its service traffic. No deployment/configuration drift was found.
+
+### Final non-destructive smoke
+
+| Check | Fresh result |
+| --- | --- |
+| Public routes | HTTP 200 for `/`, `/product`, `/workspace`, `/sign-in`, `/simulator`, `/learn`, `/trust`, `/play`, `/guide`, `/feedback`, `/support` |
+| Preserved FPU route, anonymous | HTML shell 200; no saved company or account identity exposed; anonymous protected onboarding request through web proxy returns 401 |
+| Referenced static assets | All 26 unique referenced assets returned 200; no missing referenced scripts/styles/images |
+| External API readiness | Normal developer Cloud Run IAM token, held only in memory in `X-Serverless-Authorization`: `/readyz` returns application JSON 200, `status=ready` |
+| Application identity enforcement | Cloud Run IAM without Firebase: `/v1/identity` and preserved onboarding GET return application JSON 401 |
+| Anonymous API | `/readyz` and `/v1/identity` return Google edge 403 |
+| Traffic/access | Exact API/web revisions at 100%; web public, API IAM-private; no new grants |
+| Logs/startup | 85 entries inspected in a 30-minute current-revision window: zero ERROR-or-higher/5xx entries; additional 45-minute inspection of 338 entries found no startup/uncaught-exception pattern |
+| Jobs | 19 historical executions inspected; zero unfinished executions |
+
+The 200 FPU shell is not anonymous workspace access or a new FPU execution. The
+previous manual Safari A/B identity, ownership and sign-out results remain
+owner-reported historical evidence; no automatic user authentication was attempted.
+The historical exact 107.25 / one-invoice evidence remains unchanged, not recounted.
+Public sample-business copy is not protected workspace evidence.
+
+Logs also contain historical 404s for browser/crawler defaults (`/favicon.ico`,
+`/apple-touch-icon.png`, `/apple-touch-icon-precomposed.png`, `/robots.txt`) and
+owner-denied workspace requests. The default-file omissions are non-blocking polish,
+not missing referenced application assets or evidence of a runtime crash. No claim
+of exhaustive external-link crawling or replay of every browser interaction is made.
+
+### CI closure hold — exact failure and disposition
+
+PR #18's seven pre-merge checks passed. The subsequent
+[main CI run 36620174487](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36620174487)
+on `3e1a1f85ffbb7dd37140dbdb772228c08fcd430d` is **failed**: six jobs pass
+(agents, Python, PostgreSQL contract, containers, API image security, web image
+security), but the web job's `npm run test` reports **164 passed / 1 failed**.
+Lint, typecheck and production dependency audit passed before the failed test;
+the web job's later production build was not run. Prior successful builds are
+historical evidence, not a substitute for this failed main gate.
+
+Failing test: `apps/web/lib/server/proxy-auth.test.ts:35`,
+`rejects altered signatures and emulator unsigned tokens`.
+The fixture replaces the signature's first character with `x`. When the generated
+valid signature already starts with `x`, this operation does not alter the token,
+so correct signature verification resolves instead of rejecting. A bounded local
+synthetic diagnostic reproduced this unchanged-token collision; a separate 100-case
+check rejected all 100 actual signature-byte mutations using the installed JOSE
+verifier. This isolates a randomized negative-test construction defect, not evidence
+that a modified signature bypasses authentication. The actual failed CI token was
+not recorded or recovered, so its first character is inferred from the test and
+reproduction, not claimed as a captured CI secret.
+
+**Product/security findings: P0 = 0; P1 = 0 observed. Go-live closure gate: held.**
+The test reliability defect is P2, but its failed remote security regression gate
+must not be waived or described as GREEN. Next action is an authorized test-only
+correction that guarantees a byte mutation and retains unsigned-token rejection,
+followed by focused/full frontend checks and remote CI. No application-auth change,
+test weakening, blind retry-until-green or redeployment is justified by this finding.
+
+### Operations, accepted boundaries and V1.1 handoff
+
+- Both Cloud Run services use automatic request-based scaling, min 0/max 1,
+  concurrency 8. This is an available low-volume Beta, not a shutdown/manual-zero
+  state. Cold starts and limited throughput are accepted limitations.
+- Cloud SQL is RUNNABLE/ALWAYS, zonal `db-f1-micro`, 10 GiB SSD, encrypted connector
+  access with IAM database authentication and zero authorized networks. It retains
+  a public IP; this is not a private-IP/VPC claim. Automated backups remain disabled.
+- Service/configuration/SQL fingerprints match the prior approved checkpoint.
+  Project IAM remains unchanged; no public project or workload Owner/Editor grants
+  were introduced. GCS/Secret Manager access was not broadened.
+- Exact deployed-image prior scan hashes still match: API 0 Critical/0 High/6 Medium;
+  web 0 Critical/0 High/4 Medium. The post-merge remote image-security jobs also pass.
+  No new scan of the deployed digests or universal vulnerability-free claim is made.
+- Cloud Logging is available; only safe status/revision/count summaries were retained.
+  A short clean log window is not an availability SLO or a complete monitoring system.
+- The unchanged [cost model](#cost-model--29-september-2026) remains a **US$14–22/month
+  planning estimate**, not an actual bill or newly verified SQL price quote. Its
+  SQL compute/storage components are approximately US$10.73/US$2.38 monthly. Cloud Run
+  remains request-billed ([current pricing](https://cloud.google.com/run/pricing)).
+  Soft target US$25; escalation ceiling US$35; alerts/max instances are not hard caps.
+  SQL/storage, registry images, GCS artifacts, secrets, logs and network usage can
+  continue to incur charges. No new recurring resource was introduced.
+
+**Accepted Beta limitations:** synthetic business/data only; no production customer
+data or real accounting-provider integrations; cloud uploads disabled/local-only;
+deployed reasoning deterministic-only; Gemini and managed ADK not activated; no
+production/compliance-readiness claim; no production-grade backup/recovery promise.
+Backup/restore hardening, Medium advisory updates, cost/abuse monitoring, optional
+private-IP networking and default browser/crawler assets are V1.1 follow-ups unless
+new evidence establishes immediate material risk. They do not authorize changes here.
+
+Rollback follows the [reviewed revert/image-rollback procedure](google-cloud.md#local-development-and-rollback):
+obtain explicit operator authorization, select a previously validated compatible
+immutable revision/image, preserve IAM/configuration and schema compatibility,
+verify readiness and identity/owner-denial gates, and retain audit/business data.
+Never reset public history, drop data, replay approvals or repost invoices. A code
+rollback cannot recover lost SQL data while backups remain disabled. No rollback
+or deployment was performed during this checkpoint.
+
+**V1.0 scope is frozen:** no new features or UX redesign; product fixes only for
+P0/P1 defects. The separately proposed test-only correction repairs release evidence,
+not product scope. UX simplification belongs on a V1.1 branch: begin with a concise
+journey/navigation usability review while retaining explicit human approvals,
+identity visibility, deterministic verification and audit history. Final
+`LIVE / GREEN` closure awaits the CI gate above.
+
+### Prepared release metadata — not published
+
+An existing [v1.0.0 release](https://github.com/JEMathew/movers-and-ledgers/releases/tag/v1.0.0)
+already points to `76cebca5805b7d77e47f6e94a2d21a962f4474f6` and explicitly separates
+public-Beta deployment from acceptance. It was not moved, replaced or deleted.
+No `v1.0.0-beta` tag/release was created: a later prerelease after existing `v1.0.0`
+would make version ordering ambiguous, and final CI closure is pending. The owner
+should select release-metadata treatment after the gate passes; any new artifact
+must explicitly identify the intended merged commit, not an inferred moving branch.
+
+Prepared title: **MoveBooks AI V1.0 bounded synthetic public Beta — go-live**.
+Prepared notes, held until CI closure:
+
+- Demonstrates Discover → Assess → Plan → Map & Approve → Migrate → Resolve →
+  Validate → Configure → Onboard → Verified First Productive Use using synthetic data.
+- Rules verify; AI predicts; GenAI reasons; agents orchestrate and act; humans govern
+  consequential decisions. Financial truth, lifecycle, approval enforcement,
+  retry/idempotency and productive-use verification remain deterministic. Live
+  reasoning capability in source does not imply deployed model activation.
+- Firebase/Google identity, shared readiness-aware first-click popup flow, verified
+  identity display, private API/public web proxy and owner isolation were validated.
+- Mapping reconsideration preserves prior rejection/audit history; controlled
+  failure/recovery, configuration/onboarding approvals and one synthetic invoice
+  reaching verified FPU are preserved historical evidence, not rerun transactions.
+- Deployment artifacts, scan hashes, limitations, cost posture and rollback reference
+  are recorded here. This release does not claim production/compliance readiness.
+
+## Historical pre-merge release closure — 30 September 2026 IST
+
+This was the pre-merge assessment. The dated checkpoints below retain
 the earlier AMBER findings, superseded image revisions and their remediation
 history; they are not current unresolved gates. The deployed application source
 is exactly `af0642677ca4cd507d85b6d37355a0f6768f536d`. This closure changes only this
