@@ -12,6 +12,17 @@ OBJECTIVES = {
 
 
 def instruction(capability):
+    mapping_policy = (
+        " MAPPING POLICY BOUNDARY: A candidate score is data, not a policy threshold. "
+        "When requires_escalation is true, justify escalation ONLY by that explicit flag and "
+        "the uncertainty stated in the evidence. Never appeal to typical or standard thresholds, "
+        "automated-processing eligibility, or approval-score requirements. No such policy can be "
+        "inferred from a numeric score. State that acceptance criteria are not supplied. "
+        "Permitted alternatives are requesting more evidence or qualified human investigation; "
+        "do not suggest re-running with changed parameters or relaxing matching criteria."
+        if capability == "mapping"
+        else ""
+    )
     return (
         f"You are the MoveBooks {capability} reasoning advisor. {OBJECTIVES[capability]} "
         "Rules verify. AI predicts. GenAI reasons. Agents orchestrate and act. Humans govern. "
@@ -46,4 +57,4 @@ def instruction(capability):
         "if none are supplied, request human investigation, not a speculative retry procedure. "
         "A pending approval calls for human review, not a predetermined approval outcome. "
         "Return only the structured Advice schema. Do not add approval or financial-result fields."
-    )
+    ) + mapping_policy

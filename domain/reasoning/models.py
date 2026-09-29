@@ -5,7 +5,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-PROMPT_VERSION = "bounded-reasoning-v3"
+PROMPT_VERSION = "bounded-reasoning-v4"
 
 
 class Capability(StrEnum):

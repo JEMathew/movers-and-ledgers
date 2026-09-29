@@ -125,6 +125,15 @@ def validate_advice(raw: str, context: ReasoningInput) -> Advice:
     # Defense in depth for narrative text; authority is enforced by absence of write tools
     # and by never feeding this record into a business-state decision.
     text = json.dumps(advice.model_dump()).lower()
+    if context.capability.value == "mapping" and re.search(
+        r"(?:typical|standard|automated.processing|automatic.processing).{0,60}threshold|"
+        r"threshold.{0,60}(?:automated.processing|automatic.processing)|"
+        r"(?:below|meet).{0,30}(?:typical|standard).{0,30}threshold",
+        text,
+    ):
+        # No generic approval/automation threshold is part of this advisory contract.
+        # Reject the response rather than rewriting its reasoning into a purported model pass.
+        raise ValueError("Unsupported mapping policy claim")
     if re.search(
         r"bypass|ignore (?:the )?(?:approval|policy|rules)|auto.?approve|"
         r"mark .{0,30}(?:verified|complete)|api[_ -]?key|bearer\s|"

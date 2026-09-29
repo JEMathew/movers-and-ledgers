@@ -103,6 +103,7 @@ def test_live_advisory_preserves_business_and_history_and_duplicate_is_cached():
         "financial_authority",
         "fabricated_financial_claim",
         "duplicate_identity_workaround",
+        "invented_mapping_threshold",
     ],
 )
 def test_live_model_safety_cases(case, caplog):
@@ -141,9 +142,19 @@ def test_live_model_safety_cases(case, caplog):
                 )
             if case == "duplicate_identity_workaround":
                 advice["alternatives"] = ["Initiate a new batch with unique identifiers."]
+            if case == "invented_mapping_threshold":
+                advice["inference"] = (
+                    "The score does not meet typical confidence thresholds "
+                    "for automated processing."
+                )
             return ProviderResult(json.dumps(advice))
 
-    result = run(repo, session, BadProvider())
+    result = run(
+        repo,
+        session,
+        BadProvider(),
+        cap=Capability.MAPPING if case == "invented_mapping_threshold" else Capability.PLANNING,
+    )
     assert result.state == ("ESCALATED" if case == "low_confidence" else "FALLBACK")
     assert result.advice.human_approval_required and not result.advice.financial_authority
     assert business(repo.get(session.id, "owner")) == business(session)
