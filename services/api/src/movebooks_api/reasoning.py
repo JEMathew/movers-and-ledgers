@@ -40,6 +40,10 @@ def safe_telemetry(record):
                 "input_token_count": record.input_tokens,
                 "output_token_count": record.output_tokens,
                 "failure_category": record.failure_category,
+                "validation_issues": record.validation_issues,
+                "response_shape": record.response_shape,
+                "usage_status": record.usage_status,
+                "cost_known": record.estimated_cost_usd is not None,
                 "fallback_used": record.state == "FALLBACK",
                 "human_review_required": True,
                 "estimated_cost_usd": record.estimated_cost_usd,
@@ -129,6 +133,9 @@ async def request_advice(
     saved.model_calls, saved.tool_calls = usage.model_calls, usage.tool_calls
     saved.input_tokens, saved.output_tokens = usage.input_tokens, usage.output_tokens
     saved.failure_category = error
+    saved.validation_issues = usage.validation_issues
+    saved.response_shape = usage.response_shape
+    saved.usage_status = usage.usage_status
     saved.state = (
         "FALLBACK"
         if error

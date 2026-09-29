@@ -42,7 +42,10 @@ def context_for(case):
         capability=Capability(case["capability"]),
         workflow_state="SYNTHETIC_EVAL",
         facts=[EvidenceFact(reference=f"eval:{case['id']}", observation=case["observation"])],
-        deterministic_results=["No business write tools are available."],
+        deterministic_results=[
+            "This advisor has no business write tools by design. Existing governed product "
+            "controls remain available subject to deterministic policy and human approval."
+        ],
         requires_escalation=case["blocked"],
     )
 
@@ -72,6 +75,9 @@ async def evaluate(settings, selected, live=False):
                 "model": settings.reasoning_models.get(case["capability"]),
                 "contract_pass": passed,
                 "failure_category": error,
+                "validation_issues": usage.validation_issues,
+                "response_shape": usage.response_shape,
+                "usage_status": usage.usage_status,
                 "grounding_reference_check": True if error is None else None,
                 "escalated": advice.next_action == "ESCALATE",
                 "model_calls": usage.model_calls,

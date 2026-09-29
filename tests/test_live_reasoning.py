@@ -333,6 +333,94 @@ def test_timeout_is_bounded_and_cancels_provider():
     assert error == "timeout" and provider.cancelled
 
 
+@pytest.mark.parametrize("capability", [Capability.RESOLUTION, Capability.ONBOARDING])
+@pytest.mark.parametrize(
+    "field,value,rule",
+    [
+        ("uncertainty", [], "too_short"),
+        ("alternatives", None, "list_type"),
+        ("next_action", "secret-canary-invalid", "literal_error"),
+    ],
+)
+def test_adk_schema_failure_is_sanitized_and_preserves_partial_usage(
+    capability, field, value, rule, caplog
+):
+    pytest.importorskip("google.adk")
+    from google.adk.models.base_llm import BaseLlm
+    from google.adk.models.llm_response import LlmResponse
+    from google.genai import types
+
+    from agents.reasoning.adk import run_advisor
+    from scripts.live_reasoning_eval import cases, context_for
+
+    case = next(c for c in cases() if c["capability"] == capability.value)
+    context = context_for(case)
+    before = context.model_dump_json()
+    response = fallback(context).model_dump()
+    response[field] = value
+    response["secret-canary-key"] = "secret-canary-value"
+
+    class InvalidModel(BaseLlm):
+        model: str = "offline-test"
+
+        async def generate_content_async(self, llm_request, stream=False):
+            declarations = [
+                d for t in llm_request.config.tools or [] for d in t.function_declarations or []
+            ]
+            response_tool = next(d for d in declarations if d.name == "set_model_response")
+            schema = response_tool.parameters_json_schema
+            assert response_tool.parameters is None
+            assert schema["properties"]["uncertainty"]["minItems"] == 1
+            assert schema["properties"]["alternatives"]["maxItems"] == 6
+            assert schema["additionalProperties"] is False
+            yield LlmResponse(
+                content=types.Content(
+                    role="model",
+                    parts=[
+                        types.Part(
+                            function_call=types.FunctionCall(
+                                name="set_model_response", args=response
+                            )
+                        )
+                    ],
+                ),
+                usage_metadata=types.GenerateContentResponseUsageMetadata(
+                    prompt_token_count=11, candidates_token_count=22, thoughts_token_count=3
+                ),
+            )
+
+    class Provider:
+        async def generate(self, context, model):
+            return await run_advisor(context, model, configured(), llm=InvalidModel())
+
+    advice, usage, error = asyncio.run(reason(context, "offline-test", Provider(), 10))
+    assert error == "schema_validation"
+    assert any(i["path"] == field and i["rule"] == rule for i in usage.validation_issues)
+    assert usage.input_tokens == 11 and usage.output_tokens == 25
+    assert usage.model_calls == 1 and usage.usage_status == "partial"
+    assert usage.response_shape[field] in {"array", "null", "string"}
+    assert "secret-canary" not in json.dumps(usage.validation_issues)
+    assert "secret-canary" not in json.dumps(usage.response_shape)
+    assert "secret-canary" not in caplog.text
+    assert advice.human_approval_required and not advice.financial_authority
+    assert before == context.model_dump_json()
+
+
+def test_prompt_and_synthetic_context_distinguish_advice_from_policy():
+    from agents.reasoning.prompts import instruction
+    from scripts.live_reasoning_eval import cases, context_for
+
+    for capability in Capability:
+        prompt = instruction(capability.value)
+        assert "Do not invent automatic-processing thresholds" in prompt
+        assert "not mapping eligibility or execution authorization" in prompt
+        assert "does NOT mean the product lacks" in prompt
+        assert "proposal is not an approved configuration" in prompt
+        assert "never return empty lists" in prompt
+    context = context_for(next(c for c in cases() if c["id"] == "configuration-accounting"))
+    assert "Existing governed product controls remain available" in context.deterministic_results[0]
+
+
 def test_endpoint_is_pinned_and_ambient_overrides_rejected(monkeypatch):
     pytest.importorskip("google.adk")
     import google.auth

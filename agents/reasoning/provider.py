@@ -3,8 +3,10 @@
 import asyncio
 import json
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Protocol
+
+from pydantic import ValidationError
 
 from domain.reasoning.models import Advice, ReasoningInput
 
@@ -16,6 +18,69 @@ class ProviderResult:
     tool_calls: int | None = None
     input_tokens: int | None = None
     output_tokens: int | None = None
+    validation_issues: list[dict[str, str]] = field(default_factory=list)
+    response_shape: dict[str, str] = field(default_factory=dict)
+    usage_status: str = "unknown"
+
+
+def safe_shape(value):
+    """Schema field names and JSON kinds only; never values or untrusted keys."""
+    if not isinstance(value, dict):
+        return {"$": "non_object"}
+    kinds = {
+        str: "string",
+        bool: "boolean",
+        int: "number",
+        float: "number",
+        list: "array",
+        dict: "object",
+        type(None): "null",
+    }
+    result = {
+        name: kinds.get(type(value[name]), "other") if name in value else "missing"
+        for name in Advice.model_fields
+    }
+    if set(value) - set(Advice.model_fields):
+        result["$extra"] = "present"
+    return result
+
+
+def safe_validation_issues(error):
+    """Only canonical paths and allowlisted rules; Pydantic messages can contain payloads."""
+    allowed = {
+        "missing",
+        "too_short",
+        "too_long",
+        "string_type",
+        "string_too_short",
+        "string_too_long",
+        "list_type",
+        "literal_error",
+        "float_parsing",
+        "float_type",
+        "finite_number",
+        "greater_than_equal",
+        "less_than_equal",
+        "bool_parsing",
+        "bool_type",
+        "extra_forbidden",
+        "json_invalid",
+        "model_type",
+    }
+    issues = []
+    for item in error.errors(include_input=False, include_context=False, include_url=False)[:16]:
+        loc = item.get("loc", ())
+        root = loc[0] if loc and loc[0] in Advice.model_fields else "$"
+        path = root + ("[]" if len(loc) > 1 and isinstance(loc[1], int) else "")
+        rule = item["type"] if item["type"] in allowed else "schema_violation"
+        issues.append({"path": path, "rule": rule, "reason": "Response violates Advice contract"})
+    return issues
+
+
+class ProviderFailure(Exception):
+    def __init__(self, result):
+        super().__init__("Structured response rejected")
+        self.result = result
 
 
 class ReasoningProvider(Protocol):
@@ -79,8 +144,17 @@ async def reason(context, model, provider, timeout):
         result = await asyncio.wait_for(provider.generate(context, model), timeout=timeout)
         try:
             return validate_advice(result.text, context), result, None
+        except ValidationError as error:
+            result.validation_issues = safe_validation_issues(error)
+            try:
+                result.response_shape = safe_shape(json.loads(result.text))
+            except (ValueError, TypeError):
+                result.response_shape = {"$": "invalid_json"}
+            return fallback(context), result, "schema_validation"
         except (ValueError, TypeError):
             return fallback(context), result, "invalid_output"
+    except ProviderFailure as error:
+        return fallback(context), error.result, "schema_validation"
     except TimeoutError:
         return fallback(context), ProviderResult(""), "timeout"
     except Exception:

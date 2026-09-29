@@ -5,7 +5,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-PROMPT_VERSION = "bounded-reasoning-v1"
+PROMPT_VERSION = "bounded-reasoning-v2"
 
 
 class Capability(StrEnum):
@@ -66,6 +66,9 @@ class ReasoningRecord(StrictModel):
     evidence: list[EvidenceFact] = Field(default_factory=list)
     deterministic_results: list[str] = Field(default_factory=list)
     failure_category: str | None = None
+    validation_issues: list[dict[str, str]] = Field(default_factory=list)
+    response_shape: dict[str, str] = Field(default_factory=dict)
+    usage_status: Literal["unknown", "partial", "complete"] = "unknown"
     reserved_model_calls: int = 0
     model_calls: int | None = None
     tool_calls: int | None = None

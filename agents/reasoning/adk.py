@@ -5,8 +5,10 @@ import logging
 import os
 from uuid import uuid4
 
+from pydantic import ValidationError
+
 from .prompts import instruction
-from .provider import ProviderResult
+from .provider import ProviderFailure, ProviderResult, safe_shape, safe_validation_issues
 
 
 def protect_sdk_telemetry():
@@ -56,6 +58,8 @@ async def run_advisor(context, model, settings, *, llm=None):
         financial_authority: bool
 
     calls, reads = 0, 0
+    input_tokens, output_tokens, usage_reports = 0, 0, 0
+    response_shape = {}
     client = None
     if llm is None:
         # Explicit normal ADC; no API keys, browser credentials or secret material in prompts.
@@ -81,6 +85,32 @@ async def run_advisor(context, model, settings, *, llm=None):
         calls += 1
         if calls > 2:
             raise ValueError("Model call budget exceeded")
+        # ADK's generated response tool uses field annotations only, dropping Field
+        # constraints. Send the full strict wire schema instead; never relax host validation.
+        for tool in llm_request.config.tools or []:
+            for declaration in tool.function_declarations or []:
+                if declaration.name == "set_model_response":
+                    declaration.parameters = None
+                    declaration.parameters_json_schema = WireAdvice.model_json_schema()
+
+    def after_model(callback_context, llm_response):
+        nonlocal input_tokens, output_tokens, usage_reports, response_shape
+        usage = llm_response.usage_metadata
+        if usage:
+            usage_reports += 1
+            input_tokens += usage.prompt_token_count or 0
+            output_tokens += (usage.candidates_token_count or 0) + (usage.thoughts_token_count or 0)
+        # Inspect in memory before ADK validates/saves the final result. Retain shape only.
+        parts = llm_response.content.parts if llm_response.content else []
+        for part in parts or []:
+            if part.function_call and part.function_call.name == "set_model_response":
+                response_shape = safe_shape(part.function_call.args)
+        text = "".join(p.text for p in parts or [] if p.text and not p.thought)
+        if text and len(text.encode()) <= 16000:
+            try:
+                response_shape = safe_shape(json.loads(text))
+            except ValueError:
+                response_shape = {"$": "invalid_json"}
 
     agent = LlmAgent(
         name=f"movebooks_{context.capability.value}_advisor",
@@ -92,6 +122,7 @@ async def run_advisor(context, model, settings, *, llm=None):
         disallow_transfer_to_parent=True,
         disallow_transfer_to_peers=True,
         before_model_callback=before_model,
+        after_model_callback=after_model,
         generate_content_config=types.GenerateContentConfig(
             temperature=0,
             max_output_tokens=2048,
@@ -104,20 +135,15 @@ async def run_advisor(context, model, settings, *, llm=None):
         app_name="movebooks_reasoning", user_id=user_id, session_id=session_id
     )
     runner = Runner(app_name="movebooks_reasoning", agent=agent, session_service=sessions)
-    input_tokens, output_tokens, usage_seen = 0, 0, False
     try:
         message = types.Content(role="user", parts=[types.Part(text=context.model_dump_json())])
-        async for event in runner.run_async(
+        async for _event in runner.run_async(
             user_id=user_id,
             session_id=session_id,
             new_message=message,
             run_config=RunConfig(max_llm_calls=2),
         ):
-            if event.usage_metadata:
-                usage_seen = True
-                input_tokens += event.usage_metadata.prompt_token_count or 0
-                output_tokens += event.usage_metadata.candidates_token_count or 0
-                output_tokens += event.usage_metadata.thoughts_token_count or 0
+            pass
         session = await sessions.get_session(
             app_name="movebooks_reasoning", user_id=user_id, session_id=session_id
         )
@@ -128,9 +154,26 @@ async def run_advisor(context, model, settings, *, llm=None):
             json.dumps(output) if isinstance(output, dict) else output,
             calls,
             reads,
-            input_tokens if usage_seen else None,
-            output_tokens if usage_seen else None,
+            input_tokens if usage_reports else None,
+            output_tokens if usage_reports else None,
+            response_shape=response_shape,
+            usage_status=(
+                "complete" if usage_reports == calls else "partial" if usage_reports else "unknown"
+            ),
         )
+    except ValidationError as error:
+        raise ProviderFailure(
+            ProviderResult(
+                "",
+                calls,
+                reads,
+                input_tokens if usage_reports else None,
+                output_tokens if usage_reports else None,
+                validation_issues=safe_validation_issues(error),
+                response_shape=response_shape,
+                usage_status="partial" if usage_reports else "unknown",
+            )
+        ) from None
     finally:
         await sessions.delete_session(
             app_name="movebooks_reasoning", user_id=user_id, session_id=session_id
