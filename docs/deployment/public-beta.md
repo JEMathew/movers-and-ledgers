@@ -1,9 +1,121 @@
 # Public Beta connectivity and release gate
 
-**AMBER — deployed first-click Google sign-in defect and User B identity ambiguity;
-local authentication fix tested, not deployed. User B cross-owner check pending.**
+**GREEN — ready to merge for the exercised V1.0 synthetic public-reference Beta
+scope. P0 blockers: 0. P1 blockers: 0. Human merge authorization is still required.**
 Branch `release/public-beta`, based on `v1.0.0` / `76cebca`.
 Project `movebooks-ai`; region `asia-southeast1`.
+
+## Final release closure — 30 September 2026 IST
+
+This is the authoritative current assessment. The dated checkpoints below retain
+the earlier AMBER findings, superseded image revisions and their remediation
+history; they are not current unresolved gates. The deployed application source
+is exactly `af0642677ca4cd507d85b6d37355a0f6768f536d`. This closure changes only this
+document, not the deployed application. No rebuild, redeployment, merge or tag was
+performed during closure.
+
+| Component | Serving revision (100% traffic each) | Immutable image digest | Prior fresh scan |
+| --- | --- | --- | --- |
+| API | `movebooks-beta-api-00012-z5n` | `sha256:925d5d218b925e2324ca03352aeea07db428485663989cfb5d0f1b0041bf5411` | 0 Critical / 0 High; 6 Medium |
+| Web | `movebooks-beta-web-00007-bsj` | `sha256:98955962636ddcc19095a80492bacce34992aeda822048f801ae08de27337862` | 0 Critical / 0 High; 4 Medium |
+
+Registry prefix: `asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/`.
+The exact-source archives were built without cache; published image configuration
+and root filesystem identities were checked against the scanned archives. Scan
+reports were rechecked at closure, not represented as a new scan: Grype 0.119.0,
+valid database built 2026-09-29 06:32:31 UTC, no threshold weakening/suppression.
+Report SHA-256:
+
+- API: `0c9cdd05fcae29f7e168f2ffd2e9b14b29920f961e8c470246fc09402adaf5a4`
+- Web: `5c84a5f688f6cf0489210f05c57f432e8a64b6c1ab4aac7e5e80c0fc70baeaf3`
+
+### Manual Safari evidence — owner-reported
+
+The human owner supplied the following results after deployment of the
+authentication fix. These are manual acceptance results, not an agent-performed
+Google sign-in or automated Safari replay. The owner reports that manual Safari
+authentication/isolation checks passed, including first-enabled-click Google
+authentication after the popup/initialization fix, without requiring a second
+click. The earlier automated browser observation separately verified controls
+disabled while preparing and enabled once ready; it did not click Google sign-in.
+
+- **User A (`jeasom@gmail.com`):** authenticated email displayed correctly; the
+  preserved User A workspace opened; Harbor Light Books / Verified First
+  Productive Use state was visible; refresh/navigation preserved access.
+- **User B (`jemathew14@gmail.com`):** authenticated email displayed correctly;
+  the same preserved User A session was unavailable/denied; no User A workspace
+  or business data was exposed.
+- **Anonymous after sign-out:** the preserved User A session was unavailable and
+  protected workspace state was not exposed. This verifies normal browser
+  session clearing/access denial, not immediate global revocation of every
+  previously issued Firebase ID token. API revocation checks remain enforced.
+
+The workspace was reused; no business data was mutated during this security
+validation. No new scenarios, approvals, invoice posts or business actions were
+performed. The prior deterministic 107.25 / one-invoice verification is preserved
+historical evidence; this closure does not claim a fresh production database-wide
+invoice recount or repeat the financial task.
+
+### Focused release audit and fresh checks
+
+Fresh cloud read-back at 2026-09-29 19:14–19:16 UTC confirms exact revisions/images,
+web public/API private, unchanged service accounts/configuration/IAM, min 0/max 1,
+concurrency 8, and unchanged SQL RUNNABLE/ALWAYS. Project IAM fingerprint remains
+`e504eb9dfc8467ebd2e8a52e9cd654aafd9afb131b7efa2dc2b7bdf21e3781a5`.
+There are no public project grants, workload Owner/Editor grants or unfinished job
+executions. GCS public-access prevention/uniform access remain enforced with no
+public bucket grants; checked Secret Manager policy has no public grant. No secret
+contents, credentials, tokens or cookies were collected for evidence.
+
+| Release check | Evidence / result |
+| --- | --- |
+| Authentication and display | Owner's Safari pass; shared readiness/first-click/verified-identity frontend regressions pass; display uses API-verified subject/email, not approval actors |
+| Authorization, ownership, isolation | Owner A access/B denial; backend verified-principal owner gates and immutable owner persistence tests pass; proxy verifies Firebase before obtaining workload credentials |
+| Sign-out | Owner reports protected denial afterward; sign-out success/failure, stale-response and navigation regressions pass; no claim of global token revocation |
+| API privacy | No public invoker; only web workload has service-level invoker; fresh anonymous readiness/identity/protected GETs return Google edge 403 |
+| Missing application identity | Run-IAM-authenticated identity/protected GETs without Firebase return application 401; no workspace data disclosed |
+| Startup/readiness | Revisions Ready; authenticated external `/readyz` returns application 200 `ready`; direct-container native `/healthz` liveness succeeded |
+| Secrets/IAM drift | Repository credential-pattern checks pass; cloud configuration fingerprints unchanged; no broad workload/public project grants |
+| Image vulnerabilities | Exact deployed digests match scanned artifacts; 0 High/Critical; residual Medium triage retained below |
+| Mutation, approval/posting safeguards | Read-only live closure; local isolated tests cover spoofing, owner approval gates, historical decisions, concurrency, stale manifests, governed recovery and duplicate posting |
+| Public routes | Fresh unauthenticated GETs to `/`, `/product`, `/simulator`, `/learn`, `/play`, `/guide`, `/trust`, `/feedback`, `/support`, plus `/workspace` and `/sign-in`, all return 200 |
+| Browser runtime | Fresh public home/workspace browser smoke shows normal rendering and sign-in controls; no observed console errors/warnings; deployed revision startup checks previously passed |
+
+Focused regression results on the unchanged application source:
+
+- **81 frontend tests passed** across `google-identity-runtime`, `google-sign-in`,
+  `runtime-identity`, `public-routing`, `private-api-proxy`, and `proxy-auth`.
+- **118 backend tests passed** across `test_identity_display`, `test_google_runtime`,
+  `test_runtime_faults`, `test_onboard_cloud_owner`, `test_mapping_reconsideration`,
+  `test_beta_v1_integration`, and `test_controls`. The existing Starlette test-client
+  deprecation warning remains. These use local isolated fixtures, not cloud business
+  writes; no live PostgreSQL restart or new live mutation test is claimed.
+- Repository/link/credential-pattern and whitespace checks pass. Application
+  lint/typecheck/build were not rerun for documentation-only changes; the exact
+  deployed source's previous green checks and fresh production image build are
+  retained evidence. No fresh remote CI run is claimed by this local closure.
+
+**Finding classification: P0 blocker = 0; P1 blocker = 0.** Non-blocking follow-ups:
+track the 6 API/4 web Medium base-runtime matches and vendor fixes; plan backup/
+restore hardening (SQL automated backups remain disabled); improve cost/abuse
+monitoring within the approved budget; evaluate private-IP networking later;
+address the Starlette test-client deprecation; improve generic unavailable-session
+copy without exposing whether another owner's workspace exists. None authorizes
+new scope or is waived as universally safe.
+
+Limitations remain locked: synthetic/dev-test public-reference Beta only; no
+production customer data, real provider integrations, production or compliance
+readiness claim. Cloud Try Your Data uploads remain disabled/local-only. Deployed
+model routing remains deterministic-only; no Gemini or managed ADK activation.
+Existing financial verification, lifecycle, HITL, audit and retry/idempotency
+controls are unchanged. SQL remains running for authorized Beta availability;
+retained SQL/image/GCS/log/secret resources incur costs under the existing soft
+US$25 target/US$35 escalation ceiling, not a hard cap. No shutdown is claimed.
+
+**Release decision: GREEN — ready to merge for this bounded Beta scope.** Stop
+after the documentation commit and wait for explicit merge authorization. Normal
+PR review/required CI must still be satisfied at merge time; no automatic merge,
+tag or additional deployment is authorized by this assessment.
 
 ## Approved boundary
 
@@ -48,7 +160,7 @@ explicit operator configuration; do not silently enable model spend or managed A
 | Run scaling | Request billing, automatic scaling, min 0/max 1 each, initial bounded concurrency 8 |
 | SQL availability | Existing tier/disk, RUNNABLE / ALWAYS for the authorized public-Beta gate checks |
 
-Current **manual zero** is a shutdown setting, not available autoscaling. Public
+The earlier **manual zero** was a shutdown setting, not available autoscaling. Public
 Beta needs automatic scaling/min 0 so requests can start an instance. Preserve
 existing connector, identities and backend settings. Deploy freshly scanned immutable
 digests, not historical cloud-validation images as a substitute for merged V1.
@@ -85,7 +197,7 @@ Sources: [SQL](https://cloud.google.com/sql/pricing),
 [service authentication](https://docs.cloud.google.com/run/docs/authenticating/service-to-service),
 [Firebase verification](https://firebase.google.com/docs/auth/admin/verify-id-tokens).
 
-## Evidence and remaining gates
+## Historical evidence and then-outstanding gates
 
 Fresh preflight **2026-09-29 15:19:43 UTC**: API/web public bindings empty, manual 0 /
 max 1; SQL STOPPED/NEVER, pending operations 0; unfinished job executions 0 (3 inactive
@@ -231,7 +343,7 @@ Grype pinned image:
 | --- | --- | --- |
 | API | `sha256:d7219fb2e30836ccc33d2c36082ed16127c24200c104547e93f636a9d9efaea5` | `9d4a9a5ec7c9a3a9a259eb16801522ca22848ad69356873a4dc1bb08b62d2a71` |
 | Web, initial `7e4a82c` (superseded) | `sha256:2153a75d6ccd942dfb475c8ce025a846ab70a544c31b1495324d15fd6366dfd8` | `902b12e2187e738e93f050e5733419762395ae89404d1ab8a23e370f2f658858` |
-| Web, current `14c7693` | `sha256:1b5da27a78f8bb0e899111f29ce2419454d62d8277169f7cdc9f45daca00545e` | `54dacc0d9158378e926a3b74b5be84246cf7cbe8d0df0299879c3fcb00d54eea` |
+| Web, `14c7693` (superseded) | `sha256:1b5da27a78f8bb0e899111f29ce2419454d62d8277169f7cdc9f45daca00545e` | `54dacc0d9158378e926a3b74b5be84246cf7cbe8d0df0299879c3fcb00d54eea` |
 
 Copy-corrected source archive SHA-256:
 `b3418d1fd17eb70eb36efe9d9a178c1503895a50f938c65e62066b167c706f85`.
@@ -264,7 +376,7 @@ These are preliminary reachability conclusions from scanner advisory description
 Dockerfiles and application source search, not proof of zero dependency risk. The
 existing High/Critical gate passes; Medium base-runtime updates remain a follow-up.
 
-## Release assessment at human sign-in handoff
+## Historical release assessment at human sign-in handoff
 
 **AMBER; not yet cleared for public sharing.** No new P0/P1 defect observed in the
 completed local, image, public-route, anonymous-denial and IAM checks. Final P0/P1
@@ -349,3 +461,75 @@ and real Safari cold-load first-click, header/workspace, displayed A/B identity,
 sign-out/anonymous denial and cross-owner denial checks. Deploy the backwards-compatible
 API identity endpoint before the matching web build when separately authorized;
 without the new API endpoint the new display intentionally fails closed.
+
+## Historical API edge/probe diagnosis — 30 September 2026 IST
+
+This checkpoint supersedes the local-only deployment status above. Exact source
+`af0642677ca4cd507d85b6d37355a0f6768f536d` was built and scanned: API 0 High /
+0 Critical (6 Medium); web 0 High / 0 Critical (4 Medium). API revision
+`movebooks-beta-api-00012-z5n` serves 100% of traffic using
+`sha256:925d5d218b925e2324ca03352aeea07db428485663989cfb5d0f1b0041bf5411`.
+Web remains unchanged at `movebooks-beta-web-00006-5hx`; its freshly scanned image
+`sha256:98955962636ddcc19095a80492bacce34992aeda822048f801ae08de27337862`
+has not been deployed.
+
+**Root cause classification: validation-probe construction issue caused by
+path-specific Cloud Run edge behavior, not an application routing/startup failure.**
+The failed URL was
+`https://movebooks-beta-api-33s3hhbhua-as.a.run.app/healthz`, with a normal developer
+Cloud Run ID token in `X-Serverless-Authorization`. The hostname is the actual
+canonical service URL; the alternate regional hostname is
+`https://movebooks-beta-api-411600344727.asia-southeast1.run.app`.
+The external `/healthz` request returned Google HTML 404, without an application
+request ID or matching request/container log. Changing the IAM header to
+`Authorization` produced the same edge result. Do not infer an audience or IAM
+failure from this path: the same token, hostname and header successfully reached
+other application routes.
+
+Cloud Run native probes call the container directly on port 8080. System logs for
+this exact revision confirm startup `/readyz` succeeded at
+2026-09-29 18:42:20.044 UTC and liveness `/healthz` succeeded at
+18:42:20.052 UTC. Application startup completed with no observed import/runtime
+error. The image command remains `python /app/services/api/start.py`, binding
+Uvicorn to `0.0.0.0:8080`; no command override or framework base-path is configured.
+
+Corrected non-destructive external validation uses **`GET /readyz`**, not
+`/healthz`, together with native liveness evidence. Health paths do not require
+Firebase inside the application, but external access still requires Cloud Run IAM.
+`/readyz` checks database/storage readiness and returns 200
+`{"status":"ready","mode":"cloud-dev"}` (503 when unavailable).
+Native `/healthz` returns 200 `{"status":"ok","service":"movebooks-api"}`.
+There is no root `/` route; its application JSON 404 is expected.
+
+Read-only diagnostics and corrected smoke beginning 2026-09-29 18:48 UTC:
+
+| Request | Credentials | Result |
+| --- | --- | --- |
+| `/healthz` | Cloud Run IAM | Google edge HTML 404; not an app health result |
+| `/readyz` | Cloud Run IAM | Application 200, `ready` |
+| `/v1/runtime` | Cloud Run IAM | Application 200; Firebase, Cloud SQL, deterministic-only, production-ready false |
+| `/` | Cloud Run IAM | Application JSON 404 with request ID and correlated log |
+| `/v1/identity` | Cloud Run IAM, no Firebase | Application 401 with correlated request/application logs |
+| Preserved workspace onboarding GET | Cloud Run IAM, no Firebase | Application 401; no workspace data returned |
+| `/readyz`, `/v1/runtime`, `/v1/identity`, preserved workspace GET | None | Google edge 403 |
+
+The protected identity route requires the existing verified Firebase principal;
+Cloud Run IAM alone cannot access it. No user-token sign-in, workspace write,
+approval, scenario creation or invoice posting was performed. Request logs did not
+provide an authenticated principal to attribute safely; no principal is inferred
+from workspace history. Tokens stayed in process memory and were not recorded.
+
+The corrected probe preserves authentication separation: use normal authenticated
+gcloud developer credentials in `X-Serverless-Authorization`, leaving Firebase
+`Authorization` absent for the negative check. The web workload uses an ID token
+whose audience is its configured API origin, independently of the Firebase token.
+See [Google developer authentication](https://docs.cloud.google.com/run/docs/authenticating/developers)
+and [separate service authentication header](https://docs.cloud.google.com/run/docs/authenticating/service-to-service).
+This evidence establishes only the observed `/healthz` edge behavior; it does not
+claim that every path ending in `z` is blocked (`/readyz` was verified working).
+
+API ingress remains `all` with IAM required, no public invoker, min 0 / max 1 and
+concurrency 8. No API redeployment, IAM/network/SQL/auth-policy/business-logic
+change was required for the diagnostic correction. Recommendation: proceed to the
+separately authorized web deployment and then manual Safari verification. Overall
+release remains **AMBER** until those gates pass; no merge occurred.
