@@ -17,6 +17,6 @@ export const topics = [
   { id: "recovery", title: "What happens when migration fails", body: "Work pauses at a safe boundary, preserving completed checkpoints and failure evidence. Review the proposed remedy. Consequential recovery needs your approval; retry only when the workflow permits it.", question: "What completed, what failed, and what will retry do?", phase: 2 },
   { id: "business-ready", title: "What Business Ready · Verified means", body: "Required data, setup, access and onboarding checks pass, then an authorized user completes an agreed task with verified evidence. In this Beta that is a synthetic invoice—not proof of production readiness. The formal outcome is Verified First Productive Use.", question: "Has the productive task been verified, not merely posted?", phase: 4 },
 ] as const;
-export const publicLinks = [["Product", "/product"], ["Simulator", "/simulator"], ["Learn", "/learn"], ["Play", "/play"], ["Trust", "/trust"], ["Feedback", "/feedback"], ["Support", "/support"]] as const;
+export const publicLinks = [["Product", "/product"], ["Guide", "/guide"], ["Simulator", "/simulator"], ["Learn", "/learn"], ["Play", "/play"], ["Trust", "/trust"], ["Feedback", "/feedback"], ["Support", "/support"]] as const;
 export const sampleEntry = "/assess?sample=harbor-light-migrate-demo";
 export const scope = "Synthetic Data · Public Reference · Beta. No live provider migration or production readiness claim.";
