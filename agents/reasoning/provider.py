@@ -131,15 +131,39 @@ def validate_advice(raw: str, context: ReasoningInput) -> Advice:
     # Defense in depth for narrative text; authority is enforced by absence of write tools
     # and by never feeding this record into a business-state decision.
     text = json.dumps(advice.model_dump()).lower()
-    if context.capability.value == "mapping" and re.search(
+    mapping_policy_pattern = (
         r"(?:typical|standard|automated.processing|automatic.processing).{0,60}threshold|"
         r"threshold.{0,60}(?:automated.processing|automatic.processing)|"
-        r"(?:below|meet).{0,30}(?:typical|standard).{0,30}threshold",
-        text,
-    ):
+        r"(?:below|meet).{0,30}(?:typical|standard).{0,30}threshold"
+    )
+    if context.capability.value == "mapping":
         # No generic approval/automation threshold is part of this advisory contract.
-        # Reject the response rather than rewriting its reasoning into a purported model pass.
-        raise AdviceRejection("$", "unsupported_mapping_policy", "Unsupported mapping policy claim")
+        # Only the complete, observed uncertainty statement is exempt: no blanket
+        # negation bypass, substring removal, or rewriting of the model response.
+        policy_scan = advice.model_dump()
+        policy_scan["uncertainty"] = [
+            item
+            for item in advice.uncertainty
+            if " ".join(item.lower().split())
+            != "the policy for acceptable confidence thresholds for automated processing "
+            "is not provided."
+        ]
+        for field_name, value in policy_scan.items():
+            for item in value if isinstance(value, list) else [value]:
+                if not isinstance(item, str):
+                    continue
+                normalized = " ".join(item.lower().split())
+                if re.search(mapping_policy_pattern, normalized):
+                    path = field_name + ("[]" if isinstance(value, list) else "")
+                    raise AdviceRejection(
+                        path, "unsupported_mapping_policy", "Unsupported mapping policy claim"
+                    )
+        # Retain the existing cross-field check as well; the only removed input
+        # is the complete uncertainty statement above, in a scan-only copy.
+        if re.search(mapping_policy_pattern, json.dumps(policy_scan).lower()):
+            raise AdviceRejection(
+                "$", "unsupported_mapping_policy", "Unsupported mapping policy claim"
+            )
     if re.search(
         r"bypass|ignore (?:the )?(?:approval|policy|rules)|auto.?approve|"
         r"mark .{0,30}(?:verified|complete)|api[_ -]?key|bearer\s|"

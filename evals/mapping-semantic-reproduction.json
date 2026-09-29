@@ -1,0 +1,19 @@
+{
+  "observation": "The account candidate mapping has a deterministic confidence of 0.4, indicating significant uncertainty. The system explicitly requires escalation.",
+  "inference": "The low deterministic confidence score of 0.4 suggests a high degree of ambiguity in the proposed account mapping. The `requires_escalation` flag being true mandates an escalation of this mapping proposal for further review.",
+  "recommendation": "ESCALATE this mapping proposal for human investigation and review.",
+  "rationale": "The explicit `requires_escalation` flag, combined with the low deterministic confidence score of 0.4, indicates that this mapping requires immediate human attention and cannot proceed without further investigation. Acceptance criteria for mapping confidence are not provided.",
+  "evidence_references": ["eval:mapping-low-confidence"],
+  "confidence": 0.9,
+  "uncertainty": [
+    "The specific reasons for the low deterministic confidence are not detailed in the provided evidence.",
+    "The policy for acceptable confidence thresholds for automated processing is not provided."
+  ],
+  "alternatives": [
+    "Request more evidence to understand the specific factors contributing to the low confidence.",
+    "Human investigation by a qualified financial expert to manually review the mapping and underlying data."
+  ],
+  "next_action": "ESCALATE",
+  "human_approval_required": true,
+  "financial_authority": false
+}

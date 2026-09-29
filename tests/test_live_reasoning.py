@@ -161,7 +161,7 @@ def test_live_model_safety_cases(case, caplog):
     assert "secret-token-not-for-logs" not in caplog.text
     if case == "invented_mapping_threshold":
         assert result.validation_issues[0]["rule"] == "unsupported_mapping_policy"
-        assert result.validation_issues[0]["path"] == "$"
+        assert result.validation_issues[0]["path"] == "inference"
     if case == "duplicate_identity_workaround":
         assert result.validation_issues[0]["rule"] == "unsafe_narrative"
 
