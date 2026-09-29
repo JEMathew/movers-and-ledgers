@@ -53,9 +53,64 @@ Regression cases cover exact output preservation, invented threshold assertions,
 and unsupported claims, independent evidence membership rejection, low-confidence/explicit-flag
 escalation, unchanged context, safe fallback/diagnostics and unchanged human/financial authority.
 
-Live rerun and final gates pending at this checkpoint: remain AMBER until verified.
+Ruff and repository/link/whitespace checks pass: 91 Markdown / 351 text files at the code
+checkpoint, zero findings. These local gates completed before the paid acceptance rerun.
 
 Diagnostic transfer archive SHA-256:
 `a2701f3d000a78e49c7875990c717df2df7b695bbd772b740d702be96f94a4f3`.
 Rates rechecked at [Google pricing](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing):
 USD 0.30/M text input and 2.50/M output including reasoning. Estimates are not billing read-back.
+
+## Targeted live acceptance: GREEN
+
+One post-fix Mapping call only, source `a0831806f749408fbef4849e2e1e99a43ae4274b`, unchanged
+prompt v4, model/region/context as above. No other capability was rerun.
+
+| Attempt | UTC 2026-09-29 | Latency ms | Input/output tokens | Estimated USD | Result |
+| --- | --- | ---: | --- | ---: | --- |
+| Diagnostic, before fix | 11:54:35.606842 | 3907 | 836 / 355 | 0.0011383 | False-positive rejection; safe fallback |
+| Acceptance, after fix | 11:59:20.015726 | 4434 | 836 / 355 | 0.0011383 | Accepted original advice, ESCALATE, no fallback |
+
+Both calls reported complete usage, one generation / zero evidence-tool calls and STOP finish.
+Session total: two requests, two observed model calls (four maximum reserved attempts),
+1672 input / 710 output tokens, **USD 0.0022766 estimated**. Previous ledgers remain separate,
+including their unknown usage; this is not a claim that all historical spend is fully observed.
+
+The accepted output is identical to the retained synthetic fixture, not regenerated host prose.
+All 11 strict schema fields validate; `validation_issues=[]`, `error=null`, `fallback=false`.
+Evidence membership and semantic inspection pass: ambiguity is grounded in the supplied observation,
+and escalation in the explicit flag. Self-confidence 0.9 does not authorize mapping; human review
+remains required, financial authority false. No acceptance threshold is asserted. Input hash and
+post-call context are unchanged. No workspace was read or written, approval repeated, or invoice posted.
+
+Fixed transfer archive SHA-256 (verified locally and in Cloud Shell):
+`abd19d39335d6f0da871dfac5ff99429538ae34e1c3815e75c8ee973444909c0`.
+
+## Scoped release review
+
+- **P0=0 / P1=0** on this reviewed Mapping-only diff; the observed P2 false positive is fixed.
+- Product/AI quality: correct advisory escalation, no invented policy, source reference and
+  explicit uncertainty retained. This is one synthetic case, not representative accuracy evidence.
+- Security/trust: strict authority booleans, evidence membership, unsafe-narrative gate and
+  low-confidence escalation retained. Rejected claims still fall back with sanitized diagnostics.
+- Architecture: only Mapping narrative screening changes; no business tool, deterministic
+  compatibility, financial, lifecycle, auth/IAM, routing, SDK or schema change.
+- Release: local gates and bounded live Mapping acceptance pass. This is the primary agent's scoped
+  review, not independent human approval, deployed-image certification or remote-CI verification.
+- Remaining non-blocking limitation: other safe phrasings can still conservatively fall back.
+  The exception is intentionally exact, not a general natural-language policy verifier. Model
+  self-confidence is uncalibrated, and response usefulness outside this case is not established.
+
+**GREEN for the exercised Mapping semantic correction and bounded synthetic advisory live gate**,
+not production, compliance, provider-connectivity or managed-ADK readiness. Cloud Try Your Data
+remains disabled. Recommend publish the branch for remote CI and human review; do not merge or deploy.
+
+## Final read-only cloud boundary check
+
+After the two foreground model processes exited, service descriptions/IAM read-back showed both
+`movebooks-beta-api` and `movebooks-beta-web` in manual scaling with instance count 0 and empty
+public bindings. `movebooks-beta-pg` remained STOPPED / activationPolicy NEVER. Shell `jobs -pr`
+returned no running background processes. No Cloud Run/SQL startup, deployment, endpoint exposure,
+IAM modification, managed runtime activation or business-state mutation was performed.
+Temporary source archives/extracted synthetic code remain in Cloud Shell; no credentials were
+exported, copied or printed. This read-back is not a new project-wide IAM or running-cloud-jobs audit.

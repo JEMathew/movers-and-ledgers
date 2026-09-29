@@ -1,8 +1,10 @@
 # Bounded Gemini / Google ADK reasoning
 
-Status: implemented locally and exercised through authenticated Gemini/ADK; **AMBER: targeted
-resolution/onboarding schema reruns pass, but mapping semantic acceptance remains blocked**. See the
-[targeted remediation record](../reviews/live-gemini-adk-targeted-remediation.md). This is an
+Status: implemented locally and exercised through authenticated Gemini/ADK; **GREEN for the
+exercised bounded synthetic advisory live gate**, including accepted Mapping escalation after its
+exact semantic false-positive correction. See the
+[Mapping evidence](../reviews/live-gemini-adk-mapping.md) and
+[earlier targeted remediation record](../reviews/live-gemini-adk-targeted-remediation.md). This is an
 opt-in synthetic dev/test advisory path, not a replacement for stage agents or financial tools.
 Cloud Run, Cloud SQL, Firebase, IAM and the preserved cloud workspace were not changed.
 
@@ -27,7 +29,9 @@ provides structured, provider-neutral advisory inference without changing those 
 | Onboarding / Knowledge | Current governed checklist only; no external knowledge retrieval | Explicit `reasoning_models.onboarding`; a faster model may suffice for bounded guidance | Existing onboarding controls; unsupported requests escalate |
 
 There is **no default live model ID**. The bounded 2026-09-29 run explicitly selected
-`gemini-2.5-flash` for all five routes; three capabilities produced accepted outputs. The existing
+`gemini-2.5-flash` for all five routes; the initial run accepted three capabilities, and subsequent
+targeted remediation supplied accepted resolution/onboarding and Mapping escalation evidence.
+This is not representative model-quality or production certification. The existing
 legacy `route_for` suggested model table is not the live selector. `live_route` accepts only these
 five capabilities; financial/reconciliation/execution routes cannot be selected. Each request has
 a 30-second default deadline (operator range 1–60), at most two model calls, two evidence reads and

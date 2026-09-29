@@ -2,9 +2,11 @@
 
 Date: 2026-09-29. Branch: `feature/live-gemini-adk`, based on merged main
 `6ddf7db997409721ecbde6185ed851c275aa93dd`. Scope: five optional owner-requested synthetic reasoning
-advisors. **Overall AMBER: authenticated live generation works; targeted resolution/onboarding
-schema reruns pass, but mapping semantic acceptance remains blocked.** Current fixes/results are in
-the [targeted remediation record](live-gemini-adk-targeted-remediation.md). The record below retains
+advisors. **GREEN for the exercised bounded synthetic advisory live gate: the final Mapping
+semantic false positive is corrected and its live result is accepted with human escalation.**
+See the [Mapping correction and final evidence](live-gemini-adk-mapping.md), following the
+[earlier targeted remediation record](live-gemini-adk-targeted-remediation.md). Remote CI/image
+certification and human release approval are separate pending gates. The record below retains
 the initial review history, not the latest unresolved-finding list. See the complete
 [2026-09-29 live attempt ledger](live-gemini-adk-2026-09-29-evidence.md).
 This record does not inherit live-model evidence from PR #13's deterministic cloud validation.

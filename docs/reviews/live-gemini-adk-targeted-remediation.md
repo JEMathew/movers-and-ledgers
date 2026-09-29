@@ -3,6 +3,10 @@
 Branch: `feature/live-gemini-adk`. Prior evidence is retained unchanged in the
 [first live ledger](live-gemini-adk-2026-09-29-evidence.md). No business controls are changed.
 
+**Historical checkpoint:** this record retains the initial targeted AMBER outcome. The subsequent
+[Mapping-only correction and live acceptance](live-gemini-adk-mapping.md) closes the final semantic
+blocker with P0=0/P1=0 for the bounded synthetic advisory live gate; failures below are not erased.
+
 ## Diagnosis and minimal correction
 
 The first live run did not retain raw failing responses or rejected fields. Their exact historical
