@@ -1,2 +1,2 @@
-import { ProductEntry } from "@/components/public-surfaces/ProductEntry";
-export default function Page() { return <ProductEntry/>; }
+import { WorkspaceEntry } from "@/components/WorkspaceEntry";
+export default function Page() { return <WorkspaceEntry/>; }

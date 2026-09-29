@@ -1,5 +1,9 @@
 # Google Cloud dev/test deployment and validation
 
+Public-Beta connectivity is a separate approved release slice; see the
+[public-Beta deployment gate](public-beta.md). The stopped checkpoints below are
+historical validation evidence, not a claim that the public release is deployed.
+
 ## Final bounded checkpoint — 2026-09-29, stopped/private
 
 **GREEN for the exercised synthetic Google Cloud Beta runtime; P0=0, P1=0.**

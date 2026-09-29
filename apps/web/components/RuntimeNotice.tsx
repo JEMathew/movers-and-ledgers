@@ -1,18 +1,17 @@
 "use client";
-import Link from "next/link";
-import { cloudIdentity, firebaseAuth } from "@/lib/identity";
+import { cloudIdentity } from "@/lib/identity";
+import { GoogleSignIn, IdentityFeedback } from "./IdentityEntry";
+import { useIdentity } from "./IdentityProvider";
 
-export function RuntimeNotice() {
-  if (!cloudIdentity()) return null;
-  async function signOut() {
-    try {
-      const { signOut } = await import("firebase/auth");
-      await signOut(await firebaseAuth());
-      for (const key of ["movebooks-migration-session", "movebooks-validation-session", "movebooks-onboarding-session"]) sessionStorage.removeItem(key);
-      window.location.assign("/sign-in");
-    } catch { window.location.assign("/sign-in"); }
-  }
+function CloudNotice() {
+  const { identity, busy, hasSession, signOut } = useIdentity();
   return <aside aria-label="Runtime scope" className="shell py-3 text-sm text-secondary">
-    Cloud foundation Beta: synthetic workspaces use durable storage. Try Your Data remains local-only. Not production-ready. Approval identity is verified by the API. <Link className="underline" href="/sign-in">Sign in</Link> · <button className="underline" onClick={signOut}>Sign out</button>
+    Cloud foundation Beta: synthetic workspaces use durable storage. Try Your Data remains local-only. Not production-ready. Approval identity is verified by the API.
+    <div className="mt-2 flex flex-wrap items-center gap-2">
+      {identity ? <span role="status" className="break-all">Signed in as {identity.email}</span> : <GoogleSignIn compact />}
+      {hasSession && <><span aria-hidden="true">·</span><button className="underline" disabled={busy} onClick={signOut}>Sign out</button></>}
+    </div>
+    <IdentityFeedback />
   </aside>;
 }
+export function RuntimeNotice() { return cloudIdentity() ? <CloudNotice /> : null; }

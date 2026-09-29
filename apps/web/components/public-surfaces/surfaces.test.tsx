@@ -39,6 +39,8 @@ describe("public surface contracts", () => {
     const nav = screen.getByRole("navigation", { name: "Explore MoveBooks AI" });
     for (const [label, href] of publicLinks) expect(within(nav).getByRole("link", { name: label })).toHaveAttribute("href", href);
     expect(screen.queryByText(/62%/)).not.toBeInTheDocument();
+    expect(screen.getByText(/Live Gemini advice requires explicit deployment configuration/)).toBeVisible();
+    expect(screen.queryByText(/Google identity, live Gemini/)).not.toBeInTheDocument();
   });
   it("preserves Product, workspace and all public navigation on desktop and mobile", () => {
     render(<Nav/>);
@@ -59,6 +61,8 @@ describe("public surface contracts", () => {
     render(<Simulator/>);
     expect(screen.getByRole("link", { name: "Start Harbor Light Books" })).toHaveAttribute("href", sampleEntry);
     expect(screen.getByText(/We never pre-approve/)).toBeVisible();
+    expect(screen.getByText(/Cloud mode uses real Google sign-in and durable synthetic workspaces/)).toBeVisible();
+    expect(screen.queryByText(/Sessions expire when the API restarts/)).not.toBeInTheDocument();
     expect(fetch).not.toHaveBeenCalled();
   });
   it("preselects Harbor Light without creating a session or running a demo loader", async () => {
@@ -73,6 +77,8 @@ describe("public surface contracts", () => {
     render(<ProductEntry/>);
     expect(await screen.findByText(/No session selected/)).toBeVisible();
     expect(screen.getByRole("link", { name: "Explore Sample Business" })).toHaveAttribute("href", sampleEntry);
+    expect(screen.getByText(/Configured cloud mode uses Google sign-in and durable synthetic workspaces/)).toBeVisible();
+    expect(screen.queryByText(/Production identity and durable sessions are not available/)).not.toBeInTheDocument();
     expect(fetch).not.toHaveBeenCalled();
   });
   it("continues the existing authoritative stage using a read-only request", async () => {
