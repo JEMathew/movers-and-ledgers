@@ -8,6 +8,39 @@ Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test on
 Live negative authorization/actor-spoofing and lifecycle/replay monitoring evidence remain incomplete;
 this is not final cloud release clearance.**
 
+## Negative-path resumption preflight — 2026-09-29, browser-input blocker
+
+At 06:16 UTC, local and published head were
+`a534e2c77fdd2f348c6518c334f107652b6fd92a` on the expected branch. PR #13 was
+open, draft and unmerged. All six jobs in
+[CI run 36480555538](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36480555538)
+passed, including both unsuppressed image-security gates. The recorded deployed-image
+scans remain 0 High / 0 Critical; no new deployed-image scan was run in this preflight.
+The unrelated local `apps/web/package-lock.json` edit remains excluded and untouched.
+
+The operator supplied a verified shutdown checkpoint: both services manual-zero and
+private, no public invoker bindings, SQL STOPPED/NEVER, no running jobs, and the temporary
+client terminated. This is operator-provided evidence, not a new independent cloud
+read-back by this attempt. Local process/listener inspection independently found no
+temporary validation client and no listener on port 8765.
+
+Before starting billable resources, a harmless terminal keyboard test failed with
+`Keyboard focus root is no longer available`. Cloud Shell content remained readable,
+but automated command submission and reliable rollback could not be established.
+No resource was started, no endpoint exposed, no IAM setting changed, and no authenticated
+workspace request submitted. No new validation window was opened and no client restarted.
+
+User B approval-mutation denial, actor-spoof rejection, post-restart cross-user isolation,
+and the related negative-path monitoring evidence remain **NOT EXERCISED / AMBER**.
+The previously proven Verified FPU and single invoice posting remain historical evidence;
+this attempt made no workspace mutation and does not claim a fresh posting-count read.
+No new product P0/P1 finding was observed; final P0/P1 clearance remains **incomplete**.
+
+Next step: restore a working human-present authenticated browser/Cloud Shell input path,
+then independently reconfirm stopped/private state before opening a new bounded window.
+Do not resume compute while the control/rollback path is unreliable. Existing SQL storage,
+artifact images, retained objects and logs may still incur storage/retention charges.
+
 ## Negative-path continuation — 2026-09-28, authenticated test-client blocker
 
 Preflight verified published `1e802159e2844ccb504d1c37fd3107b5bb431be0`, draft/unmerged
