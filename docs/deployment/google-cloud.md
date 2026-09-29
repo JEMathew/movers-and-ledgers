@@ -1,5 +1,38 @@
 # Google Cloud dev/test deployment and validation
 
+## Final bounded checkpoint — 2026-09-29, stopped/private
+
+**GREEN for the exercised synthetic Google Cloud Beta runtime; P0=0, P1=0.**
+PR #13 remains draft/unmerged for human review. Do not restart resources, post another invoice,
+repeat approvals, create a replacement workspace or enable cloud intake/Gemini/managed ADK.
+
+The explicit two-user localhost Firebase negative tests passed: User B approval/read/plan/audit
+denial, owner actor-spoof rejection, invalid lifecycle/replay rejection, and post-restart isolation.
+The preserved workspace remains Verified FPU with one invoice/journal/posting attempt and unchanged
+snapshot/approval/audit hashes. See the [final review](../reviews/google-cloud-validation.md) and
+[sanitized request evidence](../reviews/google-cloud-negative-validation-2026-09-29.json).
+
+Latest API revision: `movebooks-beta-api-negative-resume-0702`, Ready at 07:02:59 UTC with
+the same hardened API index `sha256:1849f94c8f4eaf34e5aab7c32789cb8196ea559c48dac39eaff2ae95db2d09cb`.
+Web image remains `sha256:88e16b89053a83e5ffb1b4d86f1def5893a4493b37dc22e42ccf4d2e60ae8674`.
+No environment, Firebase, schema or workload privilege change was made. Existing recorded image
+scans remain 0 High/Critical; six published CI jobs pass. No fresh scanner-DB result is claimed.
+
+Rollback started 07:05:28 UTC; independent read-back at 07:06 UTC verified both services private,
+invoker IAM checks enabled, manual/min counts zero, SQL STOPPED/NEVER, no pending SQL operation,
+no running job and no public project/broad workload IAM. GCS remains private with enforced public
+access prevention; Secret Manager remains private. The memory-only localhost client was cleared
+and terminated, with no listener left on port 8765. The scheduled cleanup is a fallback, not the
+evidence for this shutdown. No additional live run is authorized by this completed checkpoint.
+
+Retain the SQL disk/workspace/history, private GCS retention, registry images, inactive revisions,
+job definitions, disabled probe secret/bootstrap identity and logs. Retention/storage charges can
+continue; actual session cost was unavailable. The run stayed within its four-hour maximum.
+Production alert/support/retention hardening remains maintainer-owned follow-up before broader use.
+Next: publish the documentation evidence normally, then human review of PR #13; do not auto-merge.
+
+Historical checkpoints below are retained for chronology and do not supersede this final status.
+
 ## Authorized validation checkpoint — 2026-09-28
 
 ### Negative-path continuation: test-client authorization required
@@ -20,7 +53,7 @@ Rollback is verified: API/web manual zero with empty IAM policies, SQL STOPPED/N
 zero active executions among 19 records, no project public binding. No new cloud resource or
 permission was created. Keep compute stopped while the test-client authorization is unresolved.
 
-### Verified FPU continuation (latest; cloud validation AMBER)
+### Verified FPU continuation (historical; then AMBER)
 
 The preserved workspace `efbf72e9-aff5-489c-b17e-d2edced3237b` has reached Verified First
 Productive Use. **Do not prepare/post another invoice, repeat approvals or load a new scenario.**

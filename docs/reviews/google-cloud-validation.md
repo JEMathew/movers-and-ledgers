@@ -1,12 +1,157 @@
 # Google Cloud validation — bounded live execution checkpoint
 
-Date: 2026-09-28. Branch: `feature/google-cloud-validation`.
+Latest assessment: 2026-09-29. Branch: `feature/google-cloud-validation`.
 Baseline: `41b73cea100e166bb7e3ea661c33650264755cec` (merged PR #12).
 Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test only.
 
-**AMBER overall. Authenticated canonical synthetic FPU and post-FPU restart persistence passed.
-Live negative authorization/actor-spoofing and lifecycle/replay monitoring evidence remain incomplete;
-this is not final cloud release clearance.**
+**GREEN for Google Cloud Beta runtime validation in the exercised synthetic dev/test scope.
+Final unresolved P0: 0; P1: 0. PR #13 remains draft/unmerged, ready for human review.
+This is not production readiness, provider connectivity, compliance, customer-data intake,
+Gemini or managed ADK runtime clearance.**
+
+## Final negative-path acceptance — 2026-09-29
+
+This checkpoint supersedes the earlier AMBER blockers below; those historical records are retained.
+Published head `a534e2c77fdd2f348c6518c334f107652b6fd92a` remains green in all six jobs of
+[CI run 36480555538](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36480555538).
+Local preflight head was `6b35c27`, two documentation-only commits ahead. No application code,
+dependency, Firebase setting, schema, workload privilege or image content changed in this run.
+The unrelated local web lockfile edit was excluded and preserved.
+
+### Authorized client and live requests
+
+The human explicitly authorized service-level public invoker for API/web and a localhost-only
+Firebase client. The run began at 06:38:54 UTC; SQL activation was requested at 06:39:00 UTC.
+SQL reached RUNNABLE with zero pending operations before API resume at 07:00:20 UTC.
+Web resumed at manual one; API resumed only after that database check. No other service/job ran.
+SQL connector enforcement/no authorized networks, private GCS and private Secret Manager remained
+unchanged. API readiness returned 200 and anonymous protected-workspace access returned 401.
+
+Both humans completed normal Google sign-in in the localhost client. Fresh Firebase identities
+were verified against their authorized accounts, with the owner subject checked by fingerprint.
+Credentials existed only in browser/process memory: no token extraction, credential file, token
+output or request-body logging. The client was restarted once at the user's request, clearing its
+previous memory; both users then signed in again. Client source fingerprint:
+`8438dd84a26661d00502ed5a9c5df9af12ad376ce0fd7a22e75e5a584820ebd3`.
+
+The owner performed read-only baseline requests against the SAME preserved workspace. Each fixed
+negative request was followed by a complete owner snapshot comparison; any unexpected status or
+changed fingerprint would stop the harness. All eleven requests passed:
+
+| Check | Before restart | After restart | Preserved-state result |
+| --- | --- | --- | --- |
+| User B workspace / plan / audit GET | 404 each | 404 each | Identical full snapshot |
+| User B valid-shaped approval POST | 404 | 404 | No approval, audit change or partial write |
+| User A POST with alternate client `actor` | 422 | Not repeated | Extra actor rejected; original attribution unchanged |
+| User A forged `migration_completed` lifecycle event | 422 | Not repeated | No stage change or event appended |
+| User A FPU execution with a different, invalid idempotency key | 409 | Not repeated | Rejected before execution; no new posting/attempt |
+
+The spoof test exercised strict request-schema rejection, not a claim that arbitrary ignored
+fields are safe. Approval creation still derives its actor from the verified server principal.
+The replay test used an intentionally wrong key, never the original valid posting key. No valid
+approval was repeated, no invoice was reposted, and no replacement workspace was created.
+
+Safe request IDs, timestamps, hashes and statuses are in the
+[sanitized evidence](google-cloud-negative-validation-2026-09-29.json). No credentials or raw
+financial records are included. Baseline and every subsequent owner read retained:
+
+- `VERIFIED_FIRST_PRODUCTIVE_USE`; invoice count 1, journal count 1, posting attempts 1;
+- all deterministic financial checks passing and original authenticated approval attribution;
+- whole API snapshot SHA-256 `85f2f131ca67053e96c7b4619276d33426c9c2b24be5ca08c7f77d4d9962ce7b`;
+- six onboarding-decision SHA-256 `41e4392ff6be0c26d736df18e7c010a47607cc6a4d35246143d32325ed394845`;
+- FPU SHA-256 `b4805d61a8b7e9a2a51b6150c129c545e786bc760ae74b1d979c93556d9643b4`;
+- combined event/activity SHA-256 `b9f95f92daa2c679e00e4f8ea17cff46f0de812544fb7aac53baf7b8fb38d517`.
+
+API serialization excludes internal owner fields, so this API hash is not the historical raw
+database snapshot hash. Equality is assessed within each representation, not between them.
+
+### Restart, monitoring and security evidence
+
+API-only same-digest revision `movebooks-beta-api-negative-resume-0702` became Ready at
+07:02:59.642843 UTC with 100% traffic. The runtime specification fingerprint before/after is
+`71faff891499e43565a144b9244e9ea8d4f82be49d8daf78e0cbbe76afccab2e`.
+Environment, identities and application configuration were unchanged. Post-restart requests ran
+at 07:03:29–07:03:35 UTC with the same owner/FPU/history evidence and all four User B denials.
+
+Cloud Logging query for API revisions from 06:38:00 inclusive to 07:05:28 exclusive returned
+93 records, including 41 structured request entries: 200 × 29, 404 × 8, 409 × 1, 422 × 2, 401 × 1.
+All eleven negative request IDs correlated to their expected status and pre/post-restart revision.
+Structured fields were only action, latency_ms, request_id and status. The full bounded sample
+had zero bearer/JWT/private-key/credential-field pattern matches; no payload-bearing structured
+fields were present. Canonicalized raw-sample SHA-256:
+`c279274df1813a3007270eb4173a8e8a1ab4d905b1a2169cfb2c1e94bd88494d`.
+This is bounded sampled evidence, not an assertion that every retained log is secret-free.
+
+Read-only retained-log inspection also found 13 actual `persistence` / `UNAVAILABLE` / 503 records,
+with only action/error_code/status fields (sample SHA-256
+`5137164c9d7807c1aebe432042019c83feaddc1d0f0659f71a14ba601be507d2`). Existing readiness-failure
+records remain as documented below. Explicit historical query of `movebooks-beta-probe-vdbkl`
+recovered its 2026-09-27 21:41:55–21:41:57 UTC PASS records for real transaction rollback,
+terminated-connection recovery, concurrent CAS/stale-write rejection, owner/duplicate rejection,
+private-GCS scoped/cross-owner/package/missing-object rejection and safe unavailable-secret handling.
+These are retained adapter-probe results, not freshly injected outages or HTTP storage tests.
+Storage, secret and observability source files are unchanged from that probe's `ce5ad30` source.
+No new outage was injected into the completed workspace. Production alert delivery, automated
+incident response and exhaustive log-retention assurance remain operational follow-ups.
+
+The immutable images remain API index
+`sha256:1849f94c8f4eaf34e5aab7c32789cb8196ea559c48dac39eaff2ae95db2d09cb` and web index
+`sha256:88e16b89053a83e5ffb1b4d86f1def5893a4493b37dc22e42ccf4d2e60ae8674`.
+Their recorded scans are 0 High / 0 Critical / 0 ignored, and both current published CI image
+gates pass. No new image was built or new vulnerability-database scan claimed in this run.
+Fresh focused integration/owner/runtime regression: 39 passed, one inherited Starlette warning.
+
+### Scoped release review
+
+Security, FinTech Trust, Migration, Reliability and Release Readiness lenses were applied using
+the repository severity definitions. Final P0: **0**; final P1: **0** for this bounded synthetic
+Beta runtime. No new implementation remediation was needed. No aggregate/vanity score is used.
+
+| Assessment area | Evidence / disposition for this validation slice |
+| --- | --- |
+| User | Previously authenticated journey completed; fresh two-user checks pass. |
+| Customer outcome | Verified FPU remains intact with exactly one productive synthetic task. |
+| Business | Bounded dev/test only; compute stopped; actual session charge unavailable. |
+| Product | Locked Beta scope retained; no new feature/provider/production claim. |
+| Migration correctness | Prior canonical reconciliation/recovery evidence retained; unchanged snapshot. |
+| Agent behavior | Prior deterministic orchestration retained; denied requests cannot override decisions. |
+| GenAI quality | NOT APPLICABLE to this run: Gemini/managed ADK remain disabled; no model output. |
+| Deterministic quality | All persisted financial checks pass; one journal/invoice/attempt. |
+| Safety / trust | No repeated approval or bypass; actor-spoof/lifecycle rejection and audit preservation pass. |
+| Security / privacy | Real two-user POST denial, server identity, anonymous denial and rollback pass. |
+| UX / accessibility | No product UI change; prior UI evidence retained, no new accessibility certification. |
+| Reliability | Same-image restart, cross-user denial, replay rejection and correlated safe logs pass. |
+| Engineering quality | Six published CI jobs green; 39 focused tests; docs-only evidence change. |
+| Platform architecture | Existing private SQL/GCS/secrets and dedicated identities unchanged. |
+| Evaluation | Live negative cases plus prior canonical/probe evidence; no simulated human identity. |
+| Feedback / support | Operator can correlate request IDs without payloads; production support remains P2. |
+| Demo readiness | Preserved synthetic journey reaches real verified FPU; manual sign-in/approvals disclosed. |
+
+P2 follow-ups are owned by repository maintainer JEMathew before any broader/production cloud
+rollout: production monitoring/alert/support operations, exhaustive retention/log assurance and
+durable operational hardening. Mitigation here is synthetic-only data, disabled cloud intake,
+private endpoints and stopped compute outside explicitly bounded runs. Inherited Starlette warning
+is P3. These do not waive any failing security gate or authorize production exposure.
+
+### Mandatory shutdown — VERIFIED
+
+Rollback began 07:05:28 UTC. Independent read-back beginning 07:06:11 UTC confirmed both services
+private, invoker IAM checks enabled, manual/min/revision-min counts zero; SQL STOPPED/NEVER,
+zero pending SQL operations, zero running jobs, no public project IAM and no workload Owner/Editor.
+GCS public-access prevention remains enforced with uniform access; the secret has no public grant.
+Both temporary invoker bindings were removed successfully. The client confirmed identities cleared,
+was terminated, and process/listener checks found no remaining validation client on port 8765.
+No temporary key, identity, secret, job execution or persistent credential was created.
+
+Retained resources: private SQL disk and preserved workspace/history; private GCS artifacts and
+soft-delete retention; Artifact Registry images; inactive Run revisions/job definitions; disabled
+probe-secret/bootstrap identity; logs and evidence. Storage/log retention can still incur charges.
+No attributable billed cost was available; the US$10 operating target is not a guaranteed cap.
+The compute window ended well within four hours. Keep resources stopped.
+
+Next: publish the same-branch documentation evidence through the normal authorized Git path and
+have the human review PR #13. The GitHub connector's earlier metadata-edit 403 remains a tooling
+limitation; this run did not change PR metadata, mark it ready, or merge it.
 
 ## Negative-path resumption preflight — 2026-09-29, browser-input blocker
 

@@ -1,12 +1,32 @@
 # Google Cloud Beta validation boundary
 
-Status: **AMBER overall — authenticated synthetic FPU and post-FPU persistence passed;
-negative authorization and monitoring acceptance remain incomplete**, 2026-09-28.
-This is a validation plan and evidence boundary, not a success claim.
+Status: **GREEN for the exercised Google Cloud synthetic Beta runtime**, 2026-09-29.
+Final P0: 0; P1: 0. This is not production, compliance, real-provider, customer-intake,
+Gemini or managed ADK readiness. PR #13 remains draft/unmerged for human review.
 See the [review evidence](../reviews/google-cloud-validation.md) and
 [operator handoff](../deployment/google-cloud.md).
 
 ## Authorized scope
+
+### Completed negative-path acceptance
+
+The explicitly approved localhost client used fresh normal Firebase Google sign-in with credentials
+only in browser/process memory. Real User B workspace/plan/audit reads and approval POST returned
+404 before and after an API-only same-image restart. Owner requests with a spoofed actor and invalid
+lifecycle event returned 422; a different idempotency key returned 409 before execution. Every
+request retained an identical full API snapshot, approval/FPU/audit fingerprints, Verified FPU,
+one invoice, one journal and one posting attempt. No successful decision was repeated or overwritten.
+
+All eleven negative requests correlated to safe structured Cloud Logging entries. Retained earlier
+adapter failure probes and persistence/readiness records were inspected without injecting a new
+outage. These results close the bounded validation gaps, not production observability/alerting.
+No source/runtime architecture changed. Cloud intake, Gemini and managed ADK remain disabled.
+
+API revision `movebooks-beta-api-negative-resume-0702` retains the scanned immutable image and
+identical runtime specification. Both services are private/manual-zero, SQL STOPPED/NEVER,
+no jobs running, and the temporary client/credentials are terminated/cleared. No broad IAM remains.
+The detailed [acceptance and shutdown record](../reviews/google-cloud-validation.md) supersedes
+the historical checkpoints below. Further live work needs a separately bounded authorization.
 
 ### Negative-path test boundary
 
@@ -15,12 +35,11 @@ mutation-denial tests require actual Firebase user authentication and safe befor
 local dependency overrides and service-account identities are not substitutes. The deployed UI
 hides non-owner approval controls. An isolated authenticated HTTP test client is a validation
 tool, not a reason to add production debug routes or broaden OAuth audiences.
-The proposed localhost client was blocked before creation pending explicit approval for normal
-in-memory Firebase credential handling. No credential extraction, new auth domain, backend
-impersonation or authentication weakening is authorized by that blocker. See the current review
-for the AMBER continuation and rollback evidence.
+The initially blocked client was subsequently explicitly authorized and exercised as recorded above.
+That authorization did not permit credential extraction, new auth domains, backend impersonation,
+disk-persisted credentials or authentication weakening. Historical AMBER records below are retained.
 
-### Authenticated FPU acceptance (latest)
+### Authenticated FPU acceptance (historical checkpoint)
 
 The preserved workspace reached Verified First Productive Use at 19:42:50 UTC after separate
 human invoice approval and exactly one posting submission. All ten prerequisites were recognized
