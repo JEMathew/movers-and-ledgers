@@ -5,6 +5,7 @@ import { Nav } from "@/components/Nav";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { WorkflowHelp } from "@/components/public-surfaces/WorkflowHelp";
 import { RuntimeNotice } from "@/components/RuntimeNotice";
+import { IdentityProvider } from "@/components/IdentityProvider";
 
 export const metadata: Metadata = {
   title: "MoveBooks AI — Migrate with evidence",
@@ -16,11 +17,13 @@ export default function RootLayout({ children }: Readonly<{children: React.React
     <html lang="en" suppressHydrationWarning>
       <body>
         <ThemeProvider>
+          <IdentityProvider>
           <Nav />
           <RuntimeNotice />
           {children}
           <WorkflowHelp />
           <Footer />
+          </IdentityProvider>
         </ThemeProvider>
       </body>
     </html>

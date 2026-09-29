@@ -1,7 +1,7 @@
 # Public Beta connectivity and release gate
 
-**AMBER — public web/private API deployed; User A SSO/access/sign-out passed;
-User B cross-owner check pending.**
+**AMBER — deployed first-click Google sign-in defect and User B identity ambiguity;
+local authentication fix tested, not deployed. User B cross-owner check pending.**
 Branch `release/public-beta`, based on `v1.0.0` / `76cebca`.
 Project `movebooks-ai`; region `asia-southeast1`.
 
@@ -280,3 +280,72 @@ later private-IP networking if warranted. Preserve synthetic-only scope, disable
 cloud uploads and deterministic-only deployment routing. No remote CI for the
 unpublished public-Beta commits is claimed. After live gates pass: publish branch,
 open PR, run CI and obtain human review; do not automatically merge/tag.
+
+## First-click authentication remediation — local only, 29 September 2026
+
+The owner reproduced Safari first-click failure followed by second-click success
+on the deployed public Beta. Source inspection confirms `IdentityEntry` awaited
+Firebase module loading, persistence setup and `authStateReady()` inside the click
+handler **before** `signInWithPopup`. The header used a separate navigation-only
+link, and every popup/initialization error was collapsed into one message. The cold
+asynchronous path explains loss of user activation on Safari; the exact original
+Firebase error code was not captured, so popup blocking is a supported diagnosis,
+not a fabricated live error trace. The installed SDK proactively initializes its
+popup resolver for Safari/mobile during auth initialization.
+
+Local remediation:
+
+- One root identity provider starts and caches initialization before interaction,
+  subscribes to Firebase token/session changes, and enables sign-in only when ready.
+  Header, `/workspace` and `/sign-in` use the same supported popup action. The ready
+  click invokes `signInWithPopup` without application-level imports/awaits beforehand.
+  A shared in-flight guard prevents duplicate popup requests, and listener callbacks
+  cannot race popup completion into cancelling the first successful navigation.
+- Google receives `prompt=select_account`. The display reads **Signed in as email**
+  from a new authenticated, no-store `GET /v1/identity` response. The API uses the
+  existing Firebase verifier, including revocation checks, and returns only its
+  principal subject/email. The client checks the subject against the SDK user.
+  No approval actor, client-supplied email/owner or inferred workspace identity is used.
+  Only this GET is added to the existing proxy allowlist; it performs no business write.
+- Popup blocked, closed, competing popup, network, unauthorized-domain, storage and
+  initialization failures have distinct sanitized messages. No raw provider exception
+  is displayed/logged. Failures never introduce a demo identity or automatically retry.
+- Sign-out clears identity UI and selected-session references, preserves workspace
+  data, and navigates only after SDK success. Failure explicitly says sign-out is
+  unconfirmed. Late verification cannot restore a stale identity after sign-out.
+  Internal return destinations reject control-character/protocol-relative redirects.
+- Browser session persistence remains tab-scoped. The verified identity indicator
+  is therefore intentionally visible in each tab; a different tab's account is not
+  evidence for the current tab.
+
+Popup remains the only supported initiation path. No automatic redirect fallback
+or manual blank-window workaround is introduced. Firebase's redirect helper has
+additional cross-origin storage requirements on Safari; changing `authDomain` or
+adding auth-helper hosting is outside this fix. See
+[Firebase dependency initialization](https://firebase.google.com/docs/auth/web/custom-dependencies)
+and [redirect browser requirements](https://firebase.google.com/docs/auth/web/redirect-best-practices).
+User-blocked popups still require the user to allow this site's popup and explicitly
+retry; the fix removes the cold-initialization double-click requirement, not browser
+security controls.
+
+Local evidence: **165 frontend tests passed** (35 more than the prior 130), including
+first-click synchronous invocation, shared header/workspace behavior, readiness,
+duplicate prevention, error focus/messages, restored/changed identity, sign-out
+success/failure, stale responses and proxy verification. **348 backend tests passed;
+10 PostgreSQL-only tests skipped** without a running database. Existing owner/mutation
+isolation, actor-spoof, revocation, deterministic/lifecycle and recovery suites pass;
+8 new backend tests cover verified identity, invalid/demo credentials and read-only
+behavior. The fuller existing Python environment was used so optional SDK tests ran;
+the minimal environment initially reported 336 passed / 22 skipped. Existing
+Starlette test-client deprecation warning remains. Thirteen offline advisory evals
+passed with zero live model calls. Frontend lint/typecheck, Ruff, repository/link and
+whitespace checks passed. Production build passed for the final cloud-mode source.
+
+No dependency/lockfile, IAM, Firebase configuration, runtime configuration, agent,
+financial control or preserved-workspace change. No deployment, merge or live
+authentication test of this fix. Local review found no new unresolved P0/P1;
+**release remains AMBER** pending deployment approval, freshly scanned images/CI,
+and real Safari cold-load first-click, header/workspace, displayed A/B identity,
+sign-out/anonymous denial and cross-owner denial checks. Deploy the backwards-compatible
+API identity endpoint before the matching web build when separately authorized;
+without the new API endpoint the new display intentionally fails closed.

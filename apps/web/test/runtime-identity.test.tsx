@@ -1,9 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { NextRequest } from "next/server";
 import { authHeaders, safeDestination } from "@/lib/identity";
 import { IdentityEntry } from "@/components/IdentityEntry";
 import { RuntimeNotice } from "@/components/RuntimeNotice";
+import { IdentityProvider } from "@/components/IdentityProvider";
 import { GET } from "@/app/api/auth/demo/route";
 
 afterEach(() => vi.unstubAllEnvs());
@@ -28,12 +29,12 @@ describe("truthful runtime identity", () => {
   });
   it("labels cloud scope without claiming successful sign-in", () => {
     vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "firebase");
-    render(<><IdentityEntry destination="/workspace" /><RuntimeNotice /></>);
-    expect(screen.getByRole("button", {name:"Sign in with Google"})).toBeInTheDocument();
+    render(<IdentityProvider><IdentityEntry destination="/workspace" /><RuntimeNotice /></IdentityProvider>);
+    expect(screen.getAllByRole("button", {name:"Preparing Google sign-in…"})).toHaveLength(2);
     expect(screen.queryByRole("link", {name:/enter local demo/i})).not.toBeInTheDocument();
     expect(screen.getByRole("complementary", {name:"Runtime scope"})).toHaveTextContent(/local-only/);
   });
-  it.each(["//evil.example", "/\\evil.example", "https://evil.example"])("rejects redirect %s", value => {
+  it.each(["//evil.example", "/\\evil.example", "https://evil.example", "/\n/evil.example", "/\t/evil.example"])("rejects redirect %s", value => {
     expect(safeDestination(value)).toBe("/workspace");
   });
   it("preserves internal stage and scenario references", () => {
@@ -41,8 +42,9 @@ describe("truthful runtime identity", () => {
   });
   it("focuses a visible error when cloud sign-in is unavailable", async () => {
     vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "firebase");
-    render(<IdentityEntry destination="/workspace" />);
-    fireEvent.click(screen.getByRole("button", {name:"Sign in with Google"}));
+    render(<IdentityProvider><IdentityEntry destination="/workspace" /><RuntimeNotice /></IdentityProvider>);
+    // Initialization fails before any click, not after losing user activation.
+    expect(screen.getAllByRole("button", {name:"Preparing Google sign-in…"})[0]).toBeDisabled();
     const alert = await screen.findByRole("alert");
     // Focus is applied by an effect after the error node is committed.
     await waitFor(() => expect(alert).toHaveFocus());

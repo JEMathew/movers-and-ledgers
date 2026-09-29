@@ -110,6 +110,15 @@ async def agents() -> dict[str, str]:
     return {role.value: purpose for role, purpose in AGENT_RESPONSIBILITIES.items()}
 
 
+@app.get("/v1/identity", tags=["identity"])
+async def identity(principal: Annotated[Principal, Depends(require_principal)]):
+    """Read-only display identity; the existing verified principal remains authoritative."""
+    return JSONResponse(
+        content={"subject": principal.subject, "email": principal.email},
+        headers={"Cache-Control": "no-store, private"},
+    )
+
+
 @app.post("/v1/workspaces", tags=["migration"], response_model=WorkflowState)
 async def create_workspace(
     principal: Annotated[Principal, Depends(require_principal)],

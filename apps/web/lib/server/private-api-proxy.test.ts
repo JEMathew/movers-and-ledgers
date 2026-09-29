@@ -15,6 +15,18 @@ beforeEach(() => {
 });
 
 describe("private API proxy", () => {
+  it("exposes only authenticated read-only identity, with no client owner headers or cache", async () => {
+    const response = await proxyRequest(request("/api/v1/identity", { headers: { "X-Email": "spoof", "X-Owner": "spoof" } }), config, dependencies);
+    expect(response.status).toBe(200);
+    expect(dependencies.verifyUser).toHaveBeenCalledWith(token, config.projectId);
+    const [url, init] = vi.mocked(dependencies.fetch).mock.calls[0];
+    expect(url).toBe(`${config.upstream}/v1/identity`);
+    expect(new Headers(init?.headers).has("x-email")).toBe(false);
+    expect(new Headers(init?.headers).has("x-owner")).toBe(false);
+    expect(response.headers.get("cache-control")).toContain("no-store");
+    expect(allowedRoute("POST", "/v1/identity")).toBe(false);
+    expect((await proxyRequest(request("/api/v1/identity", { headers: { Authorization: "" } }), config, dependencies)).status).toBe(401);
+  });
   it("separates workload and Firebase credentials and strips all unapproved headers", async () => {
     const response = await proxyRequest(request(path, { headers: { Cookie: "not-forwarded", "X-Serverless-Authorization": "spoof", "X-Owner": "spoof", "X-Forwarded-Host": "evil.example" } }), config, dependencies);
     expect(response.status).toBe(200);
