@@ -1,7 +1,10 @@
 # Public product surfaces
 
-Scope: local synthetic public-reference Beta. No production readiness, hosted service, provider
-affiliation, customer-data ingestion, live Google identity, Gemini or managed ADK claim.
+Scope: synthetic public-reference Beta. The original public surfaces targeted local development;
+the User Guide also describes the subsequently [validated cloud dev/test mode](google-cloud-validation.md),
+including real Google sign-in and persisted synthetic workspaces. This is not an always-on hosted
+service, production readiness, provider affiliation or customer-data intake claim. Cloud uploads,
+Gemini and managed ADK remain disabled.
 The [integrated architecture](beta-v1-integration.md) remains authoritative for workflow truth.
 Rules verify. AI predicts. GenAI reasons. Agents orchestrate and act. Humans govern consequential decisions.
 
@@ -70,7 +73,15 @@ Rule-backed agent actions are distinguished from AI recommendations, determinist
 human decisions. The Beta uses deterministic fallback; no live model quality or confidence claim.
 Trust never calls approve, retry, repair, transition or event-submission routes.
 
-## Learn and Play
+## Guide, Learn and Play
+
+Guide (`/guide`) is the getting-started/how-to surface; Learn remains concept learning, not a second
+guide. Section F documents merged mapping reconsideration during pre-execution review: enter a
+reason, request reconsideration, then explicitly approve/reject as the authenticated workspace owner.
+The prior rejection, actor, timestamp, reason and evidence are retained alongside the new decision.
+The temporary rollout qualifier is removed now that PR #13 is merged into `main` (`2c62b22`).
+No workflow, authorization or cloud runtime behavior is changed by this guide update. Local memory
+and cloud persistence/sign-in are distinguished; cloud Try Your Data remains disabled even after sign-in.
 
 Learn covers migration purpose, scope, mappings, reconciliation, approvals, confidence, evidence,
 deterministic financial truth, recovery and business-ready meaning. Native details/summary provides

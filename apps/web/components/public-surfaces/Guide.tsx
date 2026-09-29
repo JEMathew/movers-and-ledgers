@@ -24,7 +24,7 @@ type SectionId = (typeof guideSections)[number]["id"];
 const startPaths = [
   { Icon: Gamepad2, title: "Just curious", copy: "Try three quick decisions in Play. About five minutes, no sign-in, nothing saved.", cta: "Open Play", href: "/play" },
   { Icon: Compass, title: "See the real workflow", copy: "Rehearse the full journey with Harbor Light Books, a synthetic sample business.", cta: "Open Simulator", href: "/simulator" },
-  { Icon: Upload, title: "Check a test export", copy: "Validate a de-identified test package, then continue in the same governed journey.", cta: "Try Your Data", href: "/try-your-data" },
+  { Icon: Upload, title: "Check a test export", copy: "In local development, validate a de-identified test package, then continue in the same governed journey. Cloud uploads are disabled.", cta: "Try Your Data", href: "/try-your-data" },
 ];
 
 const stageActions = [
@@ -75,7 +75,7 @@ export function Guide() {
         <Section id="start-here">
           <p className="text-secondary">Pick the path that fits how much time you have.</p>
           <ol className="grid gap-4 md:grid-cols-3">{startPaths.map(({ Icon, title, copy, cta, href }) => <li key={href} className="card flex flex-col p-5"><Icon aria-hidden="true" className="text-primary" size={22}/><h3 className="type-card mt-4">{title}</h3><p className="mt-2 flex-1 text-sm text-secondary">{copy}</p><Link className="mt-4" href={href}>{cta} <span aria-hidden="true">→</span></Link></li>)}</ol>
-          <p className="text-sm text-muted">Workflow pages use local demo access in this Beta. Opening a page never approves anything; your decisions control progress.</p>
+          <p className="text-sm text-muted">Local development uses demo access. An authorized cloud dev/test environment uses Google sign-in and owner-protected workspaces; it is not an always-on public service. Production builds without configured identity disable sign-in. Opening a page never approves anything; your decisions control progress.</p>
         </Section>
 
         <Section id="journey">
@@ -88,7 +88,7 @@ export function Guide() {
           <p className="text-secondary">Anything that changes accounting meaning, access or business operations waits for a person.</p>
           <Bullets items={[
             "You approve mappings, recovery remedies, configuration, onboarding decisions and the first productive task.",
-            "You can always approve, reject or stop. Rejecting is a valid, recorded decision.",
+            "When a decision is offered, approve or reject it; stop if you are unsure. Rejecting is a valid, recorded decision.",
             "Each decision records who made it, when, and the evidence it was based on.",
             "An agent cannot approve its own proposal, and nothing is pre-approved when you enter a workflow.",
             "An approval can never turn a failed check into a pass.",
@@ -108,26 +108,26 @@ export function Guide() {
             ["Retry", "Retry failed batch appears only after the required decision. It resumes from the failed batch."],
           ].map(([title, copy], i) => <li key={title} className="card p-4"><p className="font-bold"><span className="text-primary">{i + 1}.</span> {title}</p><p className="mt-1 text-sm text-secondary">{copy}</p></li>)}</ol>
           <p className="text-secondary">If Verify finds a mismatch, it blocks progress until a permitted repair is made and the checks are rerun.</p>
-          <More summary="Technical detail: retries and checkpoints"><p>Each batch has a retry limit. Retries are governed, so a remedy must be decided before retry is enabled.</p><p>The first productive task resumes from its own posting checkpoint with the original request key, so an invoice is never posted twice.</p><p>This Beta keeps sessions in local memory. If the local API restarts, synthetic work expires — start a new session.</p></More>
+          <More summary="Technical detail: retries and checkpoints"><p>Each batch has a retry limit. Retries are governed, so a remedy must be decided before retry is enabled.</p><p>The first productive task resumes from its own posting checkpoint with the original request key to prevent duplicate posting in the same workspace.</p><p>Local demo sessions use memory and can expire when the local API restarts. The validated cloud dev/test environment persists synthetic workspaces, approvals and checkpoints across restarts. Reopen the same workspace with its owner account; do not repeat approvals or repost a completed invoice.</p></More>
           <Next links={[["Get help with a blocker", "/support"], ["What happens when migration fails", "/learn#recovery"]]}/>
         </Section>
 
         <Section id="reconsideration">
-          <p className="text-secondary">Changed your mind about a rejected mapping? You can ask for it to be reconsidered — without rewriting history.</p>
+          <p className="text-secondary">Changed your mind about a rejected mapping? During mapping review, before migration starts, you can ask for it to be reconsidered — without rewriting history. This does not undo an executed migration.</p>
           <Bullets items={[
-            "On a rejected mapping, choose Request reconsideration and give a reason.",
-            "The original rejection, its reason and evidence stay on record alongside your request.",
+            "On a final rejected mapping, review the displayed proposed mapping, enter a reason, then choose Request reconsideration.",
+            "Prior decision history keeps the original rejection, actor, timestamp, reason and evidence alongside the new request.",
             "The request itself approves nothing and does not allow migration to continue.",
-            "A separate, explicit review then approves or rejects the reconsideration. Only the workspace owner can request or review.",
+            "The workspace owner then chooses Approve reconsideration or Reject reconsideration in a separate, explicit review. Only the authenticated owner can request or review.",
+            "Approval records a new decision; it never overwrites the original rejection or bypasses the remaining checks. Rejection leaves the mapping blocked, with both decisions retained.",
           ]}/>
-          <Alert tone="info" title="Rolling out in Beta"><p>If a rejected mapping does not show Request reconsideration, your build does not include it yet. Tell us through Feedback if you need it.</p></Alert>
         </Section>
 
         <Section id="simulator">
           <p className="text-secondary">Simulator runs the real Beta workflow with Harbor Light Books, a synthetic business with accounts, customers, suppliers, products and transactions.</p>
           <ol className="list-decimal space-y-2 pl-5 text-secondary">
             <li>Open Simulator and choose <strong className="text-[var(--foreground)]">Start Harbor Light Books</strong>.</li>
-            <li>Sign in with local demo access, then start discovery yourself.</li>
+            <li>Use local demo access in development, or Google sign-in in an authorized cloud dev/test environment, then start discovery yourself.</li>
             <li>Work through the five stages, making each decision. Expect a controlled duplicate-customer failure to practise recovery.</li>
             <li>You finish when the first invoice is verified: Business Ready · Verified in the synthetic environment.</li>
           </ol>
@@ -144,7 +144,7 @@ export function Guide() {
         </Section>
 
         <Section id="try-your-data">
-          <p className="text-secondary">Try Your Data checks a de-identified test package against a fixed template, then hands the reviewed data to the same discovery and assessment used by Simulator. All target operations stay synthetic.</p>
+          <p className="text-secondary">In local development, Try Your Data checks a de-identified test package against a fixed template, then hands the reviewed data to the same discovery and assessment used by Simulator. All target operations stay synthetic. Cloud Try Your Data uploads remain disabled, including for signed-in users.</p>
           <ol className="list-decimal space-y-2 pl-5 text-secondary">
             <li>Download the synthetic package template and shape your test export to match it.</li>
             <li>Add your files, confirm the local Beta notice and validate.</li>
@@ -184,9 +184,11 @@ export function Guide() {
           <div className="grid gap-4 md:grid-cols-2">
             <Card><h3 className="type-card">What this Beta is not</h3><div className="mt-3 text-sm"><Bullets items={[
               "Not production-ready, and not a live migration to any accounting provider.",
-              "Target systems, identity and invoice posting are synthetic.",
-              "Sign-in is local demo access; sessions can expire when the local API restarts.",
+              "Target systems and invoice posting are synthetic; cloud Google sign-in uses real authenticated identities.",
+              "Local demo sessions can expire on restart. Cloud dev/test workspaces persist, but cloud access is limited to authorized validation windows.",
+              "Cloud Try Your Data uploads remain disabled. Test exports are for local development only.",
               "AI suggestions are policy-based; no live model is active.",
+              "Gemini and managed ADK remain disabled.",
               "Not accounting, tax or legal advice.",
             ]}/></div></Card>
             <Card><h3 className="type-card">Keep your data safe</h3><div className="mt-3 text-sm"><Bullets items={[

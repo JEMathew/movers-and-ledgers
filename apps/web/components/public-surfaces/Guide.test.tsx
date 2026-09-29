@@ -48,4 +48,22 @@ describe("User Guide", () => {
     expect(publicLinks).toContainEqual(["Guide", "/guide"]);
     expect(middleware(new NextRequest("http://localhost/guide")).headers.get("location")).toBeNull();
   });
+  it("explains merged pre-execution reconsideration without suggesting an approval bypass", () => {
+    render(<Guide/>);
+    const section = within(screen.getByRole("region", { name: "Reconsidering a decision" }));
+    expect(section.getByText(/before migration starts/)).toBeVisible();
+    expect(section.getByText(/enter a reason, then choose Request reconsideration/)).toBeVisible();
+    expect(section.getByText(/original rejection, actor, timestamp, reason and evidence/)).toBeVisible();
+    expect(section.getByText(/Only the authenticated owner can request or review/)).toBeVisible();
+    expect(section.getByText(/never overwrites the original rejection or bypasses the remaining checks/)).toBeVisible();
+    expect(screen.queryByText(/Rolling out in Beta|your build does not include it yet/)).not.toBeInTheDocument();
+  });
+  it("distinguishes local and cloud identity, persistence and intake without activating either", () => {
+    render(<Guide/>);
+    expect(screen.getByText(/Production builds without configured identity disable sign-in/)).toBeVisible();
+    expect(screen.getByText(/cloud Google sign-in uses real authenticated identities/)).toBeVisible();
+    expect(screen.getByText(/persists synthetic workspaces, approvals and checkpoints across restarts/)).toBeInTheDocument();
+    expect(screen.getByText(/uploads remain disabled, including for signed-in users/)).toBeVisible();
+    expect(screen.getByText("Gemini and managed ADK remain disabled.")).toBeVisible();
+  });
 });
