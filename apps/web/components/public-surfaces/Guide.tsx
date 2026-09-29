@@ -185,7 +185,7 @@ export function Guide() {
             <Card><h3 className="type-card">What this Beta is not</h3><div className="mt-3 text-sm"><Bullets items={[
               "Not production-ready, and not a live migration to any accounting provider.",
               "Target systems and invoice posting are synthetic; cloud Google sign-in uses real authenticated identities.",
-              "Local demo sessions can expire on restart. Cloud dev/test workspaces persist, but cloud access is limited to authorized validation windows.",
+              "Local demo sessions can expire on restart. Cloud synthetic workspaces persist; availability follows the current deployment status, without a production uptime guarantee.",
               "Cloud Try Your Data uploads remain disabled. Test exports are for local development only.",
               "AI suggestions are advisory, never approval or financial verification.",
               "Gemini guidance is disabled by default and limited to explicitly configured synthetic dev/test advice. Managed ADK remains disabled.",

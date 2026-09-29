@@ -64,6 +64,8 @@ describe("User Guide", () => {
     expect(screen.getByText(/cloud Google sign-in uses real authenticated identities/)).toBeVisible();
     expect(screen.getByText(/persists synthetic workspaces, approvals and checkpoints across restarts/)).toBeInTheDocument();
     expect(screen.getByText(/uploads remain disabled, including for signed-in users/)).toBeVisible();
+    expect(screen.getByText(/availability follows the current deployment status/)).toBeVisible();
+    expect(screen.queryByText(/cloud access is limited to authorized validation windows/)).not.toBeInTheDocument();
     expect(screen.getByText("Gemini guidance is disabled by default and limited to explicitly configured synthetic dev/test advice. Managed ADK remains disabled.")).toBeVisible();
   });
 });
