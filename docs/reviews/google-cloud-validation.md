@@ -41,6 +41,14 @@ then independently reconfirm stopped/private state before opening a new bounded 
 Do not resume compute while the control/rollback path is unreliable. Existing SQL storage,
 artifact images, retained objects and logs may still incur storage/retention charges.
 
+The subsequent request also authorized refreshing PR #13's description. Read-back confirmed
+that it still contained stale failing-image-security and unverified-FPU statements. A corrected
+description was prepared, retaining AMBER and all outstanding live gates, but the authenticated
+GitHub connector rejected the metadata update with HTTP 403, `Resource not accessible by
+integration`. The PR description was therefore **not updated**; an owner-authorized manual edit
+is required. A repeated harmless Cloud Shell input check still failed before command submission.
+No cloud startup, workspace request, new approval, invoice posting or IAM change occurred.
+
 ## Negative-path continuation — 2026-09-28, authenticated test-client blocker
 
 Preflight verified published `1e802159e2844ccb504d1c37fd3107b5bb431be0`, draft/unmerged
