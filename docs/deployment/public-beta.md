@@ -206,6 +206,22 @@ tokens, cookies, passwords or MFA codes should be copied into tools or evidence.
 
 ### Fresh image evidence — source `7e4a82c`
 
+User B handoff follow-up: the inspected tabs did not establish an unambiguous
+second-account session. One tab remained signed out; a separate workspace tab
+loaded the preserved owner workspace. The UI does not display the current signed-in
+account, and `browserSessionPersistence` makes tab context relevant. This is **not**
+counted as cross-owner denial or as proof of an isolation defect; the authenticated
+account must be confirmed through the normal Google UI before either conclusion.
+No credentials were extracted and no business actions were taken. User B isolation
+and final security clearance remain open.
+
+Fresh cloud read-back **2026-09-29 17:10:19 UTC**: API private, web public only as
+authorized, both Ready with automatic/default min 0 and max 1; SQL RUNNABLE/ALWAYS,
+pending operations 0; no unfinished jobs; unchanged project IAM hash; no project
+public grants or workload Owner/Editor; GCS public access prevention enforced and
+uniform access enabled; bucket/secret public bindings empty. No cloud changes were
+made in this follow-up. This is public-Beta availability, not a shutdown claim.
+
 Source archive SHA-256:
 `54c53819875e7fd3f7da13ee3ece0d49930e6cf55f9356c89cd56c7b42e31fad`.
 Grype pinned image:
