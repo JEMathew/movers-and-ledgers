@@ -1,6 +1,7 @@
 # Public Beta connectivity and release gate
 
-**AMBER — public web/private API deployed; public-origin SSO/owner checks pending.**
+**AMBER — public web/private API deployed; User A SSO/access/sign-out passed;
+User B cross-owner check pending.**
 Branch `release/public-beta`, based on `v1.0.0` / `76cebca`.
 Project `movebooks-ai`; region `asia-southeast1`.
 
@@ -119,12 +120,16 @@ Image preparation and remaining gates:
 3. Public HTTPS, real Firebase SSO on that origin, A access/navigation/sign-out denial,
    anonymous denial, B owner denial. No preserved approvals/invoice repeated.
 4. Nine public surfaces/responsive themes/focus passed on the first deployed image;
-   minimal authenticated synthetic entry/read-only workspace smoke remains pending.
+   authenticated read-only preserved-workspace smoke passed on the current image.
 5. Fresh image, IAM/privacy/runtime/cost read-back and final P0/P1 clearance.
 
-Preserved FPU workspace/invoice untouched by this attempt. The previous successful
-FPU and single posting are historical evidence until authenticated read-back; no
-new workspace, approvals or financial writes were performed. No merge, release tag
+Preserved FPU workspace/invoice untouched by this attempt. Authenticated User A
+read-back confirms VERIFIED FIRST PRODUCTIVE USE, 10/10 completed prerequisites,
+the 107.25 invoice contract, VERIFIED checkpoint and one posting attempt. Original
+approval actors and posting/verification timestamps remain visible. This is a
+read-only smoke, not a repeated posting or a fresh database-wide invoice count;
+the prior one-invoice verification remains historical evidence. No new workspace,
+approvals or financial writes were performed. No merge, release tag
 or custom domain. The web URL is publicly reachable but **not yet cleared for
 sharing**. Local success does not clear live gates. Keep the authorized runtime
 available for human-present sign-in; if validation is abandoned or a security gate
@@ -177,9 +182,27 @@ target; do not reuse the expired earlier one-shot negative-validation cleanup wi
   credentials were not changed. No temporary localhost auth client was started.
 
 Public URL: `https://movebooks-beta-web-411600344727.asia-southeast1.run.app`.
-Human next step: User A signs in normally, opens the preserved workspace read-only,
-then verifies navigation/sign-out denial; User B verifies cross-owner denial. No
+Human next step: User B signs in normally and verifies cross-owner denial. No
 tokens, cookies, passwords or MFA codes should be copied into tools or evidence.
+
+### Public-origin User A checkpoint — 29 September 2026
+
+- Human completed normal Google sign-in on the public web origin. The preserved
+  synthetic workspace loaded through the deployed web proxy/private API; no
+  localhost acceptance transport or extracted browser credentials were used.
+- Navigate to Guide and return to the same preserved workspace: protected state
+  loads again with VERIFIED FIRST PRODUCTIVE USE, original approvals and the
+  one-attempt VERIFIED invoice checkpoint. No business-action button was used.
+- Keyboard activation of Sign out returned to the sign-in surface. Reopening the
+  protected workspace no longer displayed protected state and reported the generic
+  "Saved session unavailable" error. A separate unauthenticated HTTP request to the
+  deployed protected proxy returned **401** with the Google sign-in requirement.
+- UI automation pointer activation did not reliably activate controls in this
+  browser; keyboard activation completed sign-out. Do not infer a product defect
+  or a successful invoice-detail disclosure from the pointer attempts.
+- User B sign-in/cross-owner denial remains outstanding. No new cloud/IAM change
+  was made for this checkpoint. The existing authorized public-Beta runtime remains
+  available for human-present testing; no new final cloud read-back is claimed.
 
 ### Fresh image evidence — source `7e4a82c`
 
@@ -229,10 +252,11 @@ existing High/Critical gate passes; Medium base-runtime updates remain a follow-
 
 **AMBER; not yet cleared for public sharing.** No new P0/P1 defect observed in the
 completed local, image, public-route, anonymous-denial and IAM checks. Final P0/P1
-clearance is withheld until real User A access/navigation/sign-out and User B owner
-isolation pass through the new proxy. Historical V1/live-cloud evidence is not a
-substitute for these deployment-specific gates. No public-origin authenticated
-synthetic smoke or fresh FPU-count read-back is claimed yet.
+clearance is withheld until User B owner isolation passes through the new proxy
+and final read-back is complete. User A access/navigation/sign-out and anonymous
+denial passed as recorded above. Historical V1/live-cloud evidence is not a
+substitute for the remaining deployment-specific gate. The authenticated FPU
+screen was read back; no new posting or database-wide invoice-count test is claimed.
 
 Remaining non-blocking hardening: Medium base-runtime advisories above, currently
 disabled SQL backups, low-volume cost/abuse monitoring (not a hard spend cap), and
