@@ -13,7 +13,15 @@ Protected web ─ auth boundary ─ API ─ orchestrator ─ deterministic tools
 
 The browser never talks directly to an accounting provider. The API issues scoped jobs; adapters translate at system boundaries; the canonical model remains provider-neutral. Governed transformations are versioned, deterministic where accounting treatment is involved, attributable to evidence and approval, and applied before the target adapter. Agents can propose and invoke tools but cannot declare financial success, mutate policy, or manufacture evidence.
 
-## Deployment target (not provisioned)
+## Deployment target and validated subset
+
+The list below is the architectural target, not a statement that every component is deployed.
+The synthetic dev/test subset has now been provisioned and exercised: see
+[Google Cloud validation](google-cloud-validation.md) and its
+[bounded live evidence](../reviews/google-cloud-validation.md). Optional Gemini reasoning through
+bounded ADK runners is separately implemented and validated in
+[live Gemini / ADK](live-gemini-adk.md); this is not managed ADK runtime activation.
+Separate workers, BigQuery analytics, production operations and public deployment are not implied.
 
 - Separate Cloud Run services for web, API, migration workers, and evaluation jobs.
 - Artifact Registry for immutable images and workload identity federation for CI.
@@ -23,7 +31,10 @@ The browser never talks directly to an accounting provider. The API issues scope
 - Vertex AI Gemini for reasoning through ADK; Secret Manager for configuration.
 - Cloud Logging/Trace for correlated request, workflow, agent, and tool telemetry.
 
-No paid resource is created by this repository. Production infrastructure should be added as reviewed IaC with deletion protection, least-privilege service accounts, private connectivity where justified, and environment isolation.
+Cloning or running the default local demo does not provision paid resources. Authorized dev/test
+validation created resources that can retain storage/logging charges after compute shutdown.
+Production infrastructure requires separately reviewed IaC with deletion protection, least-privilege
+service accounts, private connectivity where justified, and environment isolation.
 
 ## Key decisions
 
