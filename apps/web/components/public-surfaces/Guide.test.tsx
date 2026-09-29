@@ -37,7 +37,7 @@ describe("User Guide", () => {
     render(<Guide/>);
     expect(document.querySelectorAll("details > summary").length).toBeGreaterThanOrEqual(4);
     expect(screen.getByText(/Not production-ready, and not a live migration/)).toBeInTheDocument();
-    expect(screen.getByText("AI suggestions are policy-based; no live model is active.")).toBeInTheDocument();
+    expect(screen.getByText("AI suggestions are advisory, never approval or financial verification.")).toBeInTheDocument();
     expect(screen.getByText(/The request itself approves nothing/)).toBeVisible();
     expect(screen.queryByText(/QuickBooks|Intuit/i)).not.toBeInTheDocument();
   });
@@ -64,6 +64,6 @@ describe("User Guide", () => {
     expect(screen.getByText(/cloud Google sign-in uses real authenticated identities/)).toBeVisible();
     expect(screen.getByText(/persists synthetic workspaces, approvals and checkpoints across restarts/)).toBeInTheDocument();
     expect(screen.getByText(/uploads remain disabled, including for signed-in users/)).toBeVisible();
-    expect(screen.getByText("Gemini and managed ADK remain disabled.")).toBeVisible();
+    expect(screen.getByText("Gemini guidance is disabled by default and limited to explicitly configured synthetic dev/test advice. Managed ADK remains disabled.")).toBeVisible();
   });
 });

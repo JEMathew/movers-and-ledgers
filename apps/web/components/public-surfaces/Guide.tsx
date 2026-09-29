@@ -95,7 +95,7 @@ export function Guide() {
           ]}/>
           <h3 className="type-card">Who does what</h3>
           <dl className="grid gap-3 sm:grid-cols-2">{roles.map(([role, copy]) => <div key={role} className="card p-4"><dt className="font-bold">{role}</dt><dd className="mt-1 text-sm text-secondary">{copy}</dd></div>)}</dl>
-          <More summary="How AI is used in this Beta"><p>Recommendations and explanations currently come from versioned, policy-based suggestions — no live model is active. Treat confidence as a statement of uncertainty, not a guarantee or permission to act.</p><p>Financial truth is deterministic: the same inputs and rule versions always give the same result.</p></More>
+          <More summary="How AI is used in this Beta"><p>Versioned policy-based suggestions are the default. Optional synthetic dev/test guidance may use explicitly configured Gemini; the workflow labels live guidance and fallback separately. Treat confidence as uncalibrated uncertainty, not a guarantee or permission to act.</p><p>Financial truth is deterministic: the same inputs and rule versions always give the same result.</p></More>
           <Next links={[["Why approvals matter", "/learn#approvals"], ["What confidence means", "/learn#confidence"]]}/>
         </Section>
 
@@ -187,8 +187,8 @@ export function Guide() {
               "Target systems and invoice posting are synthetic; cloud Google sign-in uses real authenticated identities.",
               "Local demo sessions can expire on restart. Cloud dev/test workspaces persist, but cloud access is limited to authorized validation windows.",
               "Cloud Try Your Data uploads remain disabled. Test exports are for local development only.",
-              "AI suggestions are policy-based; no live model is active.",
-              "Gemini and managed ADK remain disabled.",
+              "AI suggestions are advisory, never approval or financial verification.",
+              "Gemini guidance is disabled by default and limited to explicitly configured synthetic dev/test advice. Managed ADK remains disabled.",
               "Not accounting, tax or legal advice.",
             ]}/></div></Card>
             <Card><h3 className="type-card">Keep your data safe</h3><div className="mt-3 text-sm"><Bullets items={[

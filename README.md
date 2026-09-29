@@ -38,10 +38,18 @@ Or run everything with `docker compose up --build`. No Google credentials or pai
 
 See the [runtime architecture](docs/architecture/google-native-runtime.md),
 [Google Cloud operator handoff](docs/deployment/google-cloud.md) and
-[review record](docs/reviews/google-native-runtime.md). Cloud SQL, Firebase identity and private
-artifact adapters are prepared without deployment or live Gemini/managed ADK activation.
-Readiness is **AMBER pending container/PostgreSQL execution gates**, not production readiness.
+[foundation review record](docs/reviews/google-native-runtime.md). The later
+[cloud validation record](docs/reviews/google-cloud-validation.md) supersedes the foundation's
+historical pending runtime gates for its bounded synthetic scope; it is not production readiness.
 Local development remains credential-free; controlled Try Your Data exports remain local-only.
+
+### Optional Gemini / ADK reasoning
+
+[Five bounded advisory capabilities](docs/architecture/live-gemini-adk.md) preserve deterministic
+financial truth and human approvals. Default behavior remains deterministic. Optional ADK execution
+is locally tested; **live activation remains AMBER pending authenticated model validation**.
+No managed ADK hosting or production deployment is enabled. See the
+[current evidence and limitations](docs/reviews/live-gemini-adk.md).
 
 ## Verify
 

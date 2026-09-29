@@ -34,6 +34,8 @@ def encode(session):
     for mapping in payload["session"]["mappings"]:
         if not mapping["reconsiderations"]:
             mapping.pop("reconsiderations")
+    if not payload["session"]["reasoning_records"]:
+        payload["session"].pop("reasoning_records")
     encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"))
     if len(encoded.encode()) > 16 * 1024 * 1024:
         raise ValueError("Session evidence capacity reached; no state was committed.")
