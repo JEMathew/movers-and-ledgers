@@ -46,14 +46,23 @@ successfully used authenticated Chrome Cloud Shell and normal Google SDK ADC ref
 - `adc_valid: true`, project `movebooks-ai`; no credential content printed or extracted.
 - Enabled-services query returned no Vertex AI entry. A direct authenticated Service Usage GET
   confirmed HTTP **200**, service `aiplatform.googleapis.com`, state **DISABLED**.
-- No service was enabled and no IAM binding was changed. Enabling this API is the next approval
-  checkpoint; any required IAM expansion must be separately identified and approved.
+- After explicit user approval, `gcloud services enable aiplatform.googleapis.com` succeeded
+  (exit 0); enabled-services read-back includes that API. Project IAM bindings compared equal before
+  and after enablement. No IAM-change command was issued; further IAM changes still require approval.
 - Published Google documentation lists `gemini-2.5-flash` and `asia-southeast1`. This establishes
   documented support, **not** successful access, quota or inference permission in this project.
   Current documented prices and lifecycle notes are recorded in the architecture document.
 
-**Immediate blocker: Vertex AI API disabled; approval to enable it is pending.** Actual Gemini
-inference, per-capability live routing, live ADK execution and live failure paths remain unexercised.
+An authenticated regional `gemini-2.5-flash:countTokens` request with a seven-token synthetic planning
+sentence returned **HTTP 200 / totalTokens 7**. This verifies authenticated token-count endpoint
+access, not generation permission, ADK execution or model response quality. No generation call ran.
+
+The reviewed source archive could not be uploaded to Cloud Shell because Chrome's ChatGPT extension
+does not have file-URL access. No browser permission was changed. The archive contains only tracked
+advisory source, settings and synthetic cases from `937a278`, not credentials or workspace data:
+SHA-256 `c1df71aadee2accbe99a99b711dd28fff0de6a7cd283b34f75b564915849df1c`.
+**Live inference remains blocked on transferring the reviewed source into the authenticated process.**
+Per-capability live routing, live ADK execution and live failure paths remain unexercised.
 
 **Live agents activated: none. Paid model calls: zero. Model-call spend from this work: US$0.**
 No live latency, token usage, quality or cost estimate is fabricated from offline timings. Cloud Run,
@@ -61,8 +70,8 @@ SQL, Firebase, IAM, GCS, Secret Manager, production images and the preserved com
 were not changed or started. No approvals repeated and no invoice posted. This is an unchanged-cloud
 statement, not a fresh independent shutdown verification. No temporary cloud access was granted.
 
-Next prerequisite: obtain approval to enable only `aiplatform.googleapis.com` in `movebooks-ai`,
-then verify least-privilege inference access and actual selected-model availability. Do not paste
+Next prerequisite: make the reviewed source available in Cloud Shell through an authorized upload
+or published source checkout, then verify inference access through the bounded runner. Do not paste
 tokens or export browser credentials. Run the requested six representative cases across five
 capabilities and one bounded failure case only after prerequisites pass. The current harness admits
 at most five selected cases per invocation; account for the entire session budget across invocations.
@@ -129,9 +138,9 @@ They are not an average, activation permission or production-readiness score.
 
 ## Remaining owned gaps
 
-- **P2, release owner:** Cloud Shell ADC now works, but Vertex AI API is confirmed disabled. Obtain
-  approval for API enablement, verify inference permissions/model access, then run bounded live
-  invocation/orchestration/structured-output and failure-path checks. This is the immediate blocker.
+- **P2, release owner:** Cloud Shell ADC and the regional token-count endpoint now work; Vertex AI
+  API is enabled with approval. Transfer the reviewed source into the authenticated process, then
+  verify inference through bounded live orchestration/structured-output and failure-path checks.
 - **P2, GenAI/Product owners:** representative semantic correctness, grounding, usefulness and live
   tool/escalation quality; no quality score exists yet. An offline canned result is not a substitute.
 - **P2, engineering/release:** optional ADK image compatibility/security and durable live runtime

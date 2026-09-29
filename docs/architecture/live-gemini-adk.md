@@ -102,7 +102,10 @@ SDK content capture flags are forced off and SDK debug payload logging is suppre
 Only allowlisted application scalar telemetry is intended for use. No Secret Manager/IAM changes
 are required by the code, and none were made. Read-only Cloud Shell preflight on 2026-09-29 verified
 normal ADC for `movebooks-ai`, but Service Usage reports `aiplatform.googleapis.com` **DISABLED**.
-API enablement awaits approval; actual inference permission is not yet proven.
+The user subsequently approved enabling only that API; enablement succeeded and project IAM bindings
+were unchanged in the immediate before/after read-back. No IAM-change command was run. A regional
+`gemini-2.5-flash:countTokens` request returned HTTP 200 with seven synthetic input tokens. Actual
+generation permission and ADK execution are not yet proven.
 
 ## Measurement contract
 
@@ -145,9 +148,11 @@ USD per million tokens, excluding separate paid tools:
 | Gemini 2.5 Flash-Lite | 0.10 | 0.40 | None |
 
 These are reference rates, not a project billing read-back or a measured call cost. Actual model
-access, usage reporting, latency, structured responses and semantic grounding remain unverified
-because the Vertex AI API is disabled. Preflight made zero model calls, so its model-call spend is
-US$0. Before invoking, bound total input/output exposure for all six requested representative cases
+generation access, usage reporting, latency, structured responses and semantic grounding remain
+unverified. The API is now enabled; transfer of the reviewed source into Cloud Shell is blocked by
+the browser extension's file-upload permission. Preflight made zero generation calls; no generation
+spend was incurred. Token counting is not a generation/ADK quality result. Before invoking, bound
+total input/output exposure for all six requested representative cases
 and one failure case against the US$1 session target, including possible second ADK calls and any
 diagnostic retries. Do not expand testing automatically.
 
