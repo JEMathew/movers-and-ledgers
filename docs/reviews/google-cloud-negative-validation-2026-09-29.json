@@ -1,0 +1,152 @@
+{
+  "scope": "Synthetic dev/test negative-path validation only; no valid approval or invoice posting submitted",
+  "project": "movebooks-ai",
+  "region": "asia-southeast1",
+  "source_commit": "4f4e138b626547677dea402400769003c9fa10b8",
+  "published_head": "a534e2c77fdd2f348c6518c334f107652b6fd92a",
+  "workspace_id": "efbf72e9-aff5-489c-b17e-d2edced3237b",
+  "runtime_spec_sha256_before_after": "71faff891499e43565a144b9244e9ea8d4f82be49d8daf78e0cbbe76afccab2e",
+  "restart_revision": "movebooks-beta-api-negative-resume-0702",
+  "restart_ready_utc": "2026-09-29T07:02:59.642843Z",
+  "monitoring": {
+    "start_inclusive_utc": "2026-09-29T06:38:00Z",
+    "end_exclusive_utc": "2026-09-29T07:05:28Z",
+    "records": 93,
+    "structured_records": 41,
+    "correlated_negative_requests": 11,
+    "missing_request_ids": [],
+    "status_counts": {"200": 29, "404": 8, "409": 1, "422": 2, "401": 1},
+    "sensitive_marker_counts": {"bearer": 0, "jwt": 0, "private_key": 0, "credential_fields": 0},
+    "unexpected_payload_keys": [],
+    "raw_sample_sha256": "c279274df1813a3007270eb4173a8e8a1ab4d905b1a2169cfb2c1e94bd88494d",
+    "limits": "Bounded sample and retained adapter failure evidence; not exhaustive log assurance or production alert delivery."
+  },
+  "requests_and_preservation": [
+    {
+      "check": "read_only_baseline",
+      "snapshot_sha256": "85f2f131ca67053e96c7b4619276d33426c9c2b24be5ca08c7f77d4d9962ce7b",
+      "invoice_count": 1,
+      "journal_count": 1,
+      "workflow_status": "VERIFIED_FIRST_PRODUCTIVE_USE",
+      "approvals_sha256": "41e4392ff6be0c26d736df18e7c010a47607cc6a4d35246143d32325ed394845",
+      "fpu_sha256": "b4805d61a8b7e9a2a51b6150c129c545e786bc760ae74b1d979c93556d9643b4",
+      "posting_attempts": 1,
+      "financial_checks_pass": true,
+      "approval_attribution_pass": true,
+      "audit_sha256": "b9f95f92daa2c679e00e4f8ea17cff46f0de812544fb7aac53baf7b8fb38d517"
+    },
+    {
+      "phase": "negative",
+      "check": "B owner read",
+      "status": 404,
+      "expected": 404,
+      "request_id": "eb9780be-380a-4ef0-872a-af44f0684e5c",
+      "state_unchanged": true,
+      "utc": "2026-09-29T07:01:44Z"
+    },
+    {
+      "phase": "negative",
+      "check": "B plan read",
+      "status": 404,
+      "expected": 404,
+      "request_id": "29d15462-692f-4988-ad49-6f6c180a34b5",
+      "state_unchanged": true,
+      "utc": "2026-09-29T07:01:45Z"
+    },
+    {
+      "phase": "negative",
+      "check": "B audit read",
+      "status": 404,
+      "expected": 404,
+      "request_id": "3ebc961c-a89a-4155-94f1-94d9fbfb3f26",
+      "state_unchanged": true,
+      "utc": "2026-09-29T07:01:46Z"
+    },
+    {
+      "phase": "negative",
+      "check": "B approval mutation",
+      "status": 404,
+      "expected": 404,
+      "request_id": "287f203c-7339-4aa8-b8e6-507cc3a9be1c",
+      "state_unchanged": true,
+      "utc": "2026-09-29T07:01:47Z"
+    },
+    {
+      "phase": "negative",
+      "check": "A actor spoof",
+      "status": 422,
+      "expected": 422,
+      "request_id": "654a2e1b-f95c-46b4-8ae1-1f2f67bcd3c7",
+      "state_unchanged": true,
+      "utc": "2026-09-29T07:01:48Z"
+    },
+    {
+      "phase": "negative",
+      "check": "A invalid lifecycle",
+      "status": 422,
+      "expected": 422,
+      "request_id": "70c0eb21-0eb0-4167-9035-c9ccf69a2f04",
+      "state_unchanged": true,
+      "utc": "2026-09-29T07:01:50Z"
+    },
+    {
+      "phase": "negative",
+      "check": "A wrong-key replay",
+      "status": 409,
+      "expected": 409,
+      "request_id": "e0675d16-4a5d-4cda-8ab3-f7c67c9b7d01",
+      "state_unchanged": true,
+      "utc": "2026-09-29T07:01:51Z"
+    },
+    {
+      "phase": "post_restart",
+      "check": "B owner read",
+      "status": 404,
+      "expected": 404,
+      "request_id": "42255eff-c236-4869-88f8-77669b02c140",
+      "state_unchanged": true,
+      "utc": "2026-09-29T07:03:29Z"
+    },
+    {
+      "phase": "post_restart",
+      "check": "B plan read",
+      "status": 404,
+      "expected": 404,
+      "request_id": "00fea346-01e0-465b-95b3-ca20763a211c",
+      "state_unchanged": true,
+      "utc": "2026-09-29T07:03:31Z"
+    },
+    {
+      "phase": "post_restart",
+      "check": "B audit read",
+      "status": 404,
+      "expected": 404,
+      "request_id": "9267ef10-b573-48d9-b61c-40581a1aaee9",
+      "state_unchanged": true,
+      "utc": "2026-09-29T07:03:33Z"
+    },
+    {
+      "phase": "post_restart",
+      "check": "B approval mutation",
+      "status": 404,
+      "expected": 404,
+      "request_id": "469a5791-f89b-49a4-89d2-c0765c1d2579",
+      "state_unchanged": true,
+      "utc": "2026-09-29T07:03:35Z"
+    }
+  ],
+  "shutdown": {
+    "readback_utc": "2026-09-29T07:06:11.733654Z",
+    "api_private": true,
+    "web_private": true,
+    "api_manual_instances": 0,
+    "web_manual_instances": 0,
+    "sql_state": "STOPPED",
+    "sql_activation_policy": "NEVER",
+    "pending_sql_operations": 0,
+    "running_jobs": 0,
+    "project_public_bindings": 0,
+    "broad_workload_bindings": 0,
+    "client_terminated": true
+  }
+}

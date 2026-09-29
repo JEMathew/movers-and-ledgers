@@ -19,7 +19,8 @@ import { Stepper } from "@/components/ui/navigation";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
 
-import type { MappingProposal, MappingState, MigrationPlan } from "./types";
+import { MappingReconsideration } from "./MappingReconsideration";
+import type { MappingHistoryDecision, MappingProposal, MappingState, MigrationPlan } from "./types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 import { authHeaders } from "@/lib/identity";
@@ -61,6 +62,7 @@ export function PlanMapApproveExperience() {
   const [sessionId, setSessionId] = useState<string>();
   const [plan, setPlan] = useState<MigrationPlan>();
   const [mappings, setMappings] = useState<MappingProposal[]>([]);
+  const [history, setHistory] = useState<MappingHistoryDecision[]>([]);
   const [activity, setActivity] = useState<AgentActivity[]>([]);
   const [error, setError] = useState<string>();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -69,8 +71,9 @@ export function PlanMapApproveExperience() {
   useEffect(() => {
     const saved = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session");
     if (!saved) return;
-    void api<{id: string; plan?: MigrationPlan; mappings: MappingProposal[]; activity: AgentActivity[]}>(`/v1/migration-sessions/${saved}`).then(data => {
+    void api<{id: string; plan?: MigrationPlan; mappings: MappingProposal[]; activity: AgentActivity[]; human_decisions?: MappingHistoryDecision[]}>(`/v1/migration-sessions/${saved}`).then(data => {
       setSessionId(data.id); setPlan(data.plan ?? undefined); setMappings(data.mappings); setActivity(data.activity);
+      setHistory(data.human_decisions ?? []);
       if (data.plan) setPhase("review");
     }).catch(caught => { setError(caught.message); setPhase("error"); });
   }, []);
@@ -124,6 +127,10 @@ export function PlanMapApproveExperience() {
       );
       setMappings((current) => current.map((item) => (item.id === updated.id ? updated : item)));
       setActivity(await api<AgentActivity[]>(`/v1/migration-sessions/${sessionId}/activity`));
+      if (decision === "reject") {
+        const snapshot = await api<{human_decisions: MappingHistoryDecision[]}>(`/v1/migration-sessions/${sessionId}`);
+        setHistory(snapshot.human_decisions);
+      }
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "The mapping decision was not recorded.");
     }
@@ -245,6 +252,11 @@ export function PlanMapApproveExperience() {
                     <Button size="small" onClick={() => decide(item, "approve")} disabled={item.state === "BLOCKED" || ["APPROVED", "MODIFIED", "REJECTED"].includes(item.state)}>Approve</Button>
                   </div>
                 </div>
+                <MappingReconsideration mapping={item} history={history} submit={async (path, body) => {
+                  await api(`/v1/migration-sessions/${sessionId}/mappings/${item.id}${path}`, {method: "POST", body: JSON.stringify(body)});
+                  const snapshot = await api<{mappings: MappingProposal[]; human_decisions: MappingHistoryDecision[]; activity: AgentActivity[]}>(`/v1/migration-sessions/${sessionId}`);
+                  setMappings(snapshot.mappings); setHistory(snapshot.human_decisions); setActivity(snapshot.activity);
+                }} />
               </Card>
             ))}
           </div>

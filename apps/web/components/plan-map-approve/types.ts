@@ -63,6 +63,37 @@ export type MappingProposal = {
   policy_reasons: string[];
   deterministic_checks: string[];
   specialist: string;
+  decided_by?: string | null;
+  decided_at?: string | null;
+  decision_comment?: string | null;
+  reconsiderations?: MappingReconsideration[];
+};
+
+export type MappingReconsideration = {
+  id: string;
+  prior_decision_id: string;
+  prior_actor: string;
+  prior_timestamp: string;
+  prior_reason: string | null;
+  prior_evidence: string[];
+  prior_target: string;
+  requested_by: string;
+  requested_at: string;
+  reason: string;
+  proposed_target: string;
+  state: "REVIEW_REQUIRED" | "APPROVED" | "REJECTED";
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  decision_id: string | null;
+};
+
+export type MappingHistoryDecision = {
+  id: string;
+  affected_entity: string;
+  decision: string;
+  actor: string;
+  occurred_at: string;
+  selected_value: string | null;
 };
 
 export type Session = {

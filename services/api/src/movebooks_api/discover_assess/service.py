@@ -25,6 +25,8 @@ from domain.planning_mapping.models import (
     MappingProposal,
     MappingState,
     MigrationPlan,
+    ReconsiderationRequest,
+    ReconsiderationReview,
     WorkflowStatus,
 )
 from movebooks_api.runtime.persistence import session_repository as make_repository
@@ -223,6 +225,43 @@ class DiscoverAssessService:
             session, mapping_id, decision, owner_subject, record
         )
         return self.repository.put_if_unchanged(original, session)
+
+    def reconsider_mapping(
+        self,
+        owner_subject: str,
+        session_id: UUID,
+        mapping_id: UUID,
+        request: ReconsiderationRequest | ReconsiderationReview,
+        reconsideration_id: UUID | None = None,
+    ) -> MigrationSession:
+        from agents.orchestrator.mapping_reconsideration import (
+            request_reconsideration,
+            review_reconsideration,
+        )
+
+        session = self.get_session(owner_subject, session_id)
+        original = session.model_copy(deep=True)
+        mapping = next((m for m in session.mappings if m.id == mapping_id), None)
+        if mapping is None:
+            raise MigrationSessionNotFoundError(str(mapping_id))
+        fixture = self.source_for(session)
+        if fixture is None:
+            raise SampleCompanyNotFoundError(session.sample_company_id)
+        source = next(
+            (r for r in records_for_area(fixture, mapping.area)
+             if str(r.get("id") or r.get("key")) == mapping.source_id),
+            None,
+        )
+        if source is None:
+            raise MappingPolicyError("Source record for this mapping is unavailable.")
+        if reconsideration_id is None:
+            changed = request_reconsideration(session, mapping, request, owner_subject, source)
+        else:
+            changed = review_reconsideration(
+                session, mapping, reconsideration_id, request,
+                owner_subject, source, self.orchestrator,
+            )
+        return self.repository.put_if_unchanged(original, session) if changed else session
 
     def add_event(
         self,

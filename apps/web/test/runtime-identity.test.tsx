@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { NextRequest } from "next/server";
 import { authHeaders, safeDestination } from "@/lib/identity";
 import { IdentityEntry } from "@/components/IdentityEntry";
@@ -43,7 +43,9 @@ describe("truthful runtime identity", () => {
     vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "firebase");
     render(<IdentityEntry destination="/workspace" />);
     fireEvent.click(screen.getByRole("button", {name:"Sign in with Google"}));
-    expect(await screen.findByRole("alert")).toHaveFocus();
+    const alert = await screen.findByRole("alert");
+    // Focus is applied by an effect after the error node is committed.
+    await waitFor(() => expect(alert).toHaveFocus());
     expect(screen.getByRole("alert")).toHaveTextContent(/No demo sign-in occurred/);
   });
 });

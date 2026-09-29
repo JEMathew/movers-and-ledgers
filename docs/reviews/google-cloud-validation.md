@@ -1,0 +1,1842 @@
+# Google Cloud validation — bounded live execution checkpoint
+
+Latest assessment: 2026-09-29. Branch: `feature/google-cloud-validation`.
+Baseline: `41b73cea100e166bb7e3ea661c33650264755cec` (merged PR #12).
+Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test only.
+
+**GREEN for Google Cloud Beta runtime validation in the exercised synthetic dev/test scope.
+Final unresolved P0: 0; P1: 0. PR #13 remains draft/unmerged, ready for human review.
+This is not production readiness, provider connectivity, compliance, customer-data intake,
+Gemini or managed ADK runtime clearance.**
+
+## Final negative-path acceptance — 2026-09-29
+
+This checkpoint supersedes the earlier AMBER blockers below; those historical records are retained.
+Published head `a534e2c77fdd2f348c6518c334f107652b6fd92a` remains green in all six jobs of
+[CI run 36480555538](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36480555538).
+Local preflight head was `6b35c27`, two documentation-only commits ahead. No application code,
+dependency, Firebase setting, schema, workload privilege or image content changed in this run.
+The unrelated local web lockfile edit was excluded and preserved.
+
+### Authorized client and live requests
+
+The human explicitly authorized service-level public invoker for API/web and a localhost-only
+Firebase client. The run began at 06:38:54 UTC; SQL activation was requested at 06:39:00 UTC.
+SQL reached RUNNABLE with zero pending operations before API resume at 07:00:20 UTC.
+Web resumed at manual one; API resumed only after that database check. No other service/job ran.
+SQL connector enforcement/no authorized networks, private GCS and private Secret Manager remained
+unchanged. API readiness returned 200 and anonymous protected-workspace access returned 401.
+
+Both humans completed normal Google sign-in in the localhost client. Fresh Firebase identities
+were verified against their authorized accounts, with the owner subject checked by fingerprint.
+Credentials existed only in browser/process memory: no token extraction, credential file, token
+output or request-body logging. The client was restarted once at the user's request, clearing its
+previous memory; both users then signed in again. Client source fingerprint:
+`8438dd84a26661d00502ed5a9c5df9af12ad376ce0fd7a22e75e5a584820ebd3`.
+
+The owner performed read-only baseline requests against the SAME preserved workspace. Each fixed
+negative request was followed by a complete owner snapshot comparison; any unexpected status or
+changed fingerprint would stop the harness. All eleven requests passed:
+
+| Check | Before restart | After restart | Preserved-state result |
+| --- | --- | --- | --- |
+| User B workspace / plan / audit GET | 404 each | 404 each | Identical full snapshot |
+| User B valid-shaped approval POST | 404 | 404 | No approval, audit change or partial write |
+| User A POST with alternate client `actor` | 422 | Not repeated | Extra actor rejected; original attribution unchanged |
+| User A forged `migration_completed` lifecycle event | 422 | Not repeated | No stage change or event appended |
+| User A FPU execution with a different, invalid idempotency key | 409 | Not repeated | Rejected before execution; no new posting/attempt |
+
+The spoof test exercised strict request-schema rejection, not a claim that arbitrary ignored
+fields are safe. Approval creation still derives its actor from the verified server principal.
+The replay test used an intentionally wrong key, never the original valid posting key. No valid
+approval was repeated, no invoice was reposted, and no replacement workspace was created.
+
+Safe request IDs, timestamps, hashes and statuses are in the
+[sanitized evidence](google-cloud-negative-validation-2026-09-29.json). No credentials or raw
+financial records are included. Baseline and every subsequent owner read retained:
+
+- `VERIFIED_FIRST_PRODUCTIVE_USE`; invoice count 1, journal count 1, posting attempts 1;
+- all deterministic financial checks passing and original authenticated approval attribution;
+- whole API snapshot SHA-256 `85f2f131ca67053e96c7b4619276d33426c9c2b24be5ca08c7f77d4d9962ce7b`;
+- six onboarding-decision SHA-256 `41e4392ff6be0c26d736df18e7c010a47607cc6a4d35246143d32325ed394845`;
+- FPU SHA-256 `b4805d61a8b7e9a2a51b6150c129c545e786bc760ae74b1d979c93556d9643b4`;
+- combined event/activity SHA-256 `b9f95f92daa2c679e00e4f8ea17cff46f0de812544fb7aac53baf7b8fb38d517`.
+
+API serialization excludes internal owner fields, so this API hash is not the historical raw
+database snapshot hash. Equality is assessed within each representation, not between them.
+
+### Restart, monitoring and security evidence
+
+API-only same-digest revision `movebooks-beta-api-negative-resume-0702` became Ready at
+07:02:59.642843 UTC with 100% traffic. The runtime specification fingerprint before/after is
+`71faff891499e43565a144b9244e9ea8d4f82be49d8daf78e0cbbe76afccab2e`.
+Environment, identities and application configuration were unchanged. Post-restart requests ran
+at 07:03:29–07:03:35 UTC with the same owner/FPU/history evidence and all four User B denials.
+
+Cloud Logging query for API revisions from 06:38:00 inclusive to 07:05:28 exclusive returned
+93 records, including 41 structured request entries: 200 × 29, 404 × 8, 409 × 1, 422 × 2, 401 × 1.
+All eleven negative request IDs correlated to their expected status and pre/post-restart revision.
+Structured fields were only action, latency_ms, request_id and status. The full bounded sample
+had zero bearer/JWT/private-key/credential-field pattern matches; no payload-bearing structured
+fields were present. Canonicalized raw-sample SHA-256:
+`c279274df1813a3007270eb4173a8e8a1ab4d905b1a2169cfb2c1e94bd88494d`.
+This is bounded sampled evidence, not an assertion that every retained log is secret-free.
+
+Read-only retained-log inspection also found 13 actual `persistence` / `UNAVAILABLE` / 503 records,
+with only action/error_code/status fields (sample SHA-256
+`5137164c9d7807c1aebe432042019c83feaddc1d0f0659f71a14ba601be507d2`). Existing readiness-failure
+records remain as documented below. Explicit historical query of `movebooks-beta-probe-vdbkl`
+recovered its 2026-09-27 21:41:55–21:41:57 UTC PASS records for real transaction rollback,
+terminated-connection recovery, concurrent CAS/stale-write rejection, owner/duplicate rejection,
+private-GCS scoped/cross-owner/package/missing-object rejection and safe unavailable-secret handling.
+These are retained adapter-probe results, not freshly injected outages or HTTP storage tests.
+Storage, secret and observability source files are unchanged from that probe's `ce5ad30` source.
+No new outage was injected into the completed workspace. Production alert delivery, automated
+incident response and exhaustive log-retention assurance remain operational follow-ups.
+
+The immutable images remain API index
+`sha256:1849f94c8f4eaf34e5aab7c32789cb8196ea559c48dac39eaff2ae95db2d09cb` and web index
+`sha256:88e16b89053a83e5ffb1b4d86f1def5893a4493b37dc22e42ccf4d2e60ae8674`.
+Their recorded scans are 0 High / 0 Critical / 0 ignored, and both current published CI image
+gates pass. No new image was built or new vulnerability-database scan claimed in this run.
+Fresh focused integration/owner/runtime regression: 39 passed, one inherited Starlette warning.
+
+### Scoped release review
+
+Security, FinTech Trust, Migration, Reliability and Release Readiness lenses were applied using
+the repository severity definitions. Final P0: **0**; final P1: **0** for this bounded synthetic
+Beta runtime. No new implementation remediation was needed. No aggregate/vanity score is used.
+
+| Assessment area | Evidence / disposition for this validation slice |
+| --- | --- |
+| User | Previously authenticated journey completed; fresh two-user checks pass. |
+| Customer outcome | Verified FPU remains intact with exactly one productive synthetic task. |
+| Business | Bounded dev/test only; compute stopped; actual session charge unavailable. |
+| Product | Locked Beta scope retained; no new feature/provider/production claim. |
+| Migration correctness | Prior canonical reconciliation/recovery evidence retained; unchanged snapshot. |
+| Agent behavior | Prior deterministic orchestration retained; denied requests cannot override decisions. |
+| GenAI quality | NOT APPLICABLE to this run: Gemini/managed ADK remain disabled; no model output. |
+| Deterministic quality | All persisted financial checks pass; one journal/invoice/attempt. |
+| Safety / trust | No repeated approval or bypass; actor-spoof/lifecycle rejection and audit preservation pass. |
+| Security / privacy | Real two-user POST denial, server identity, anonymous denial and rollback pass. |
+| UX / accessibility | No product UI change; prior UI evidence retained, no new accessibility certification. |
+| Reliability | Same-image restart, cross-user denial, replay rejection and correlated safe logs pass. |
+| Engineering quality | Six published CI jobs green; 39 focused tests; docs-only evidence change. |
+| Platform architecture | Existing private SQL/GCS/secrets and dedicated identities unchanged. |
+| Evaluation | Live negative cases plus prior canonical/probe evidence; no simulated human identity. |
+| Feedback / support | Operator can correlate request IDs without payloads; production support remains P2. |
+| Demo readiness | Preserved synthetic journey reaches real verified FPU; manual sign-in/approvals disclosed. |
+
+P2 follow-ups are owned by repository maintainer JEMathew before any broader/production cloud
+rollout: production monitoring/alert/support operations, exhaustive retention/log assurance and
+durable operational hardening. Mitigation here is synthetic-only data, disabled cloud intake,
+private endpoints and stopped compute outside explicitly bounded runs. Inherited Starlette warning
+is P3. These do not waive any failing security gate or authorize production exposure.
+
+### Mandatory shutdown — VERIFIED
+
+Rollback began 07:05:28 UTC. Independent read-back beginning 07:06:11 UTC confirmed both services
+private, invoker IAM checks enabled, manual/min/revision-min counts zero; SQL STOPPED/NEVER,
+zero pending SQL operations, zero running jobs, no public project IAM and no workload Owner/Editor.
+GCS public-access prevention remains enforced with uniform access; the secret has no public grant.
+Both temporary invoker bindings were removed successfully. The client confirmed identities cleared,
+was terminated, and process/listener checks found no remaining validation client on port 8765.
+No temporary key, identity, secret, job execution or persistent credential was created.
+
+Retained resources: private SQL disk and preserved workspace/history; private GCS artifacts and
+soft-delete retention; Artifact Registry images; inactive Run revisions/job definitions; disabled
+probe-secret/bootstrap identity; logs and evidence. Storage/log retention can still incur charges.
+No attributable billed cost was available; the US$10 operating target is not a guaranteed cap.
+The compute window ended well within four hours. Keep resources stopped.
+
+Next: publish the same-branch documentation evidence through the normal authorized Git path and
+have the human review PR #13. The GitHub connector's earlier metadata-edit 403 remains a tooling
+limitation; this run did not change PR metadata, mark it ready, or merge it.
+
+## Negative-path resumption preflight — 2026-09-29, browser-input blocker
+
+At 06:16 UTC, local and published head were
+`a534e2c77fdd2f348c6518c334f107652b6fd92a` on the expected branch. PR #13 was
+open, draft and unmerged. All six jobs in
+[CI run 36480555538](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36480555538)
+passed, including both unsuppressed image-security gates. The recorded deployed-image
+scans remain 0 High / 0 Critical; no new deployed-image scan was run in this preflight.
+The unrelated local `apps/web/package-lock.json` edit remains excluded and untouched.
+
+The operator supplied a verified shutdown checkpoint: both services manual-zero and
+private, no public invoker bindings, SQL STOPPED/NEVER, no running jobs, and the temporary
+client terminated. This is operator-provided evidence, not a new independent cloud
+read-back by this attempt. Local process/listener inspection independently found no
+temporary validation client and no listener on port 8765.
+
+Before starting billable resources, a harmless terminal keyboard test failed with
+`Keyboard focus root is no longer available`. Cloud Shell content remained readable,
+but automated command submission and reliable rollback could not be established.
+No resource was started, no endpoint exposed, no IAM setting changed, and no authenticated
+workspace request submitted. No new validation window was opened and no client restarted.
+
+User B approval-mutation denial, actor-spoof rejection, post-restart cross-user isolation,
+and the related negative-path monitoring evidence remain **NOT EXERCISED / AMBER**.
+The previously proven Verified FPU and single invoice posting remain historical evidence;
+this attempt made no workspace mutation and does not claim a fresh posting-count read.
+No new product P0/P1 finding was observed; final P0/P1 clearance remains **incomplete**.
+
+Next step: restore a working human-present authenticated browser/Cloud Shell input path,
+then independently reconfirm stopped/private state before opening a new bounded window.
+Do not resume compute while the control/rollback path is unreliable. Existing SQL storage,
+artifact images, retained objects and logs may still incur storage/retention charges.
+
+The subsequent request also authorized refreshing PR #13's description. Read-back confirmed
+that it still contained stale failing-image-security and unverified-FPU statements. A corrected
+description was prepared, retaining AMBER and all outstanding live gates, but the authenticated
+GitHub connector rejected the metadata update with HTTP 403, `Resource not accessible by
+integration`. The PR description was therefore **not updated**; an owner-authorized manual edit
+is required. A repeated harmless Cloud Shell input check still failed before command submission.
+No cloud startup, workspace request, new approval, invoice posting or IAM change occurred.
+
+## Negative-path continuation — 2026-09-28, authenticated test-client blocker
+
+Preflight verified published `1e802159e2844ccb504d1c37fd3107b5bb431be0`, draft/unmerged
+PR #13, and all six successful jobs in
+[CI run 36476245003](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36476245003).
+The API/web immutable image digests remain unchanged and retain their zero High/Critical gates.
+Both services were private/manual-zero, SQL STOPPED/NEVER, with zero active executions among
+19 job records. The unrelated local web lockfile change is preserved and excluded.
+
+A newly authorized four-hour / US$10-target window began with SQL resume at **20:17:07 UTC**.
+Its hard cutoff is 00:17:07 UTC September 29; the cleanup safeguard was moved to 00:00 UTC
+(05:30 Asia/Kolkata). The existing web service was briefly set to manual one, still private;
+the API remained manual zero. No public invoker binding was added, no workload privilege or
+Firebase setting was changed, and no workspace request/mutation was submitted.
+
+The remaining tests require valid human Firebase identities on actual HTTP POSTs, not fake
+principals or a workload service account. The ordinary UI hides the forbidden approval controls.
+A normal Google CLI-to-Firebase sign-in compatibility check was rejected with HTTP 400,
+INVALID_IDP_RESPONSE/audience mismatch. Credentials stayed inside the requesting process;
+only safe error categories were emitted. This is not a failed MoveBooks authorization test and
+does not justify adding OAuth audiences or weakening authentication. A read-only Identity
+Platform configuration call returned 403; the existing Firebase console confirmed localhost
+is already an authorized domain. No Identity Platform upgrade/domain change was made.
+
+An ephemeral localhost Firebase-SDK test client was proposed to issue only fixed requests against
+the preserved workspace, with origin checks and no credential logging/disk persistence. The
+execution security review **blocked its creation**, because receiving and holding Firebase ID
+tokens in memory needed explicit approval under the user's credential-handling restriction.
+No client was created or run, and the rejection was not bypassed. The operator requested an
+explicit decision on this narrow in-memory client or an existing approved authenticated client.
+No password, MFA code, token or cookie was requested from the human.
+
+Therefore User B approval mutation, live actor-spoof rejection, post-restart cross-user isolation
+and the missing negative-path monitoring gates remain **NOT EXERCISED / AMBER**. No new P0/P1
+product finding was observed, but final P0/P1 clearance remains incomplete. The last verified
+FPU/posting-count-one evidence below remains the baseline; no fresh database-state verification
+is claimed by this attempt. Fresh local integrated-journey/owner/runtime regression: **39 passed**,
+one inherited Starlette deprecation warning; these are not substituted for live acceptance.
+
+Rollback began at 20:22:54 UTC: web was returned to manual zero. SQL startup operation
+`4b630024-c70e-45c6-a253-d5d700000031` completed at 20:28:34.775Z; only then was NEVER/stop
+requested. Final read-back is recorded below.
+No invoice, approval, audit record, application source or deployment image was changed.
+
+Final SQL read-back reports **STOPPED / NEVER** after the stop operation started at
+20:28:54.087Z. Both application endpoints remained private throughout this attempt; there
+were no temporary invoker grants to remove. The mandatory stopped/private state is restored.
+
+Independent rollback checks confirmed empty API/web service IAM bindings, invoker IAM checks
+enabled, both manual counts zero, no public project bindings and no active executions among
+19 job records. GCS public-access prevention is enforced with uniform bucket access and no
+public IAM members. The probe Secret Manager resource has no public binding. SQL retains
+connector enforcement REQUIRED, encrypted-only transport and no authorized public networks.
+No new resources, workload identities, keys, auth domains or permissions were created.
+Existing disk/artifact/image/log retention is unchanged and can still incur storage charges;
+current session cost is unavailable. The proposed client was never created; its empty local
+temporary directory was removed. Final repository/link/credential-pattern scan: 85 Markdown /
+326 text files, zero findings; whitespace check passed.
+
+## Verified FPU and restart — 2026-09-28, latest successful acceptance evidence
+
+The same preserved workspace `efbf72e9-aff5-489c-b17e-d2edced3237b` reached
+**VERIFIED_FIRST_PRODUCTIVE_USE** through the authenticated browser. No workspace was created,
+no onboarding approval was repeated, and no prior decision/history was overwritten. The published
+owner-role correction recognizes all ten prerequisites and the five approval categories, retaining
+all six historical onboarding records (two belong to Opening balances).
+
+The human recorded two invoice approvals at 19:39:08.347663Z and 19:42:08.035299Z. Both retain
+the authenticated owner, WORKSPACE_OWNER role, approve action and matching contract fingerprint.
+Both are preserved; this is distinct from repeating onboarding approvals or posting twice.
+After the explicit `invoice approved` handoff, the agent submitted **Post and verify invoice once**.
+Invoice `7cd5ca8c-8091-4402-8e3c-c6eab2c31c72` was posted at 19:42:50.865226Z and verified
+at 19:42:50.869825Z. There is one invoice, one journal, one posting event and one posting attempt.
+
+### Deterministic financial acceptance
+
+The application and a separately executed read-only workload probe used deterministic Decimal checks,
+not model judgment. All six checks passed: customer/product/mapping/tax, totals, posting,
+accounting impact, audit and approval. All ten onboarding prerequisites remained complete.
+
+| Synthetic contract / journal | Verified amount (USD) |
+| --- | ---: |
+| One service line, quantity 1 × 100.00 | 100.00 |
+| CA-SALES, 0.0725 | 7.25 |
+| Invoice total / A/R debit | 107.25 |
+| Sales credit | 100.00 |
+| Tax-payable credit | 7.25 |
+| Total debits = total credits | 107.25 |
+
+Account balances changed exactly as expected: A/R 420.00 → 527.25, sales -1420.00 → -1520.00,
+tax control 0.00 → -7.25; bank 1125.00 and A/P -125.00 remained unchanged. This is a synthetic
+target transaction, not a real-provider posting, tax-advice or production-readiness claim.
+
+### Post-FPU restart and immutable history
+
+API-only redeploy reached Ready at 19:47:41.559431Z on
+`movebooks-beta-api-fpu-resume-1947`, with 100% traffic. It uses the same hardened API index
+`sha256:1849f94c8f4eaf34e5aab7c32789cb8196ea559c48dac39eaff2ae95db2d09cb`;
+no environment, workload identity, application source or privilege change was requested.
+Web remains on the previously scanned image. Authenticated browser reload retained Verified FPU,
+all ten prerequisites and attempt count one. No second execute request was submitted.
+
+Read-only job `movebooks-beta-probe-sgcnn` passed before restart at 19:46:29 UTC;
+`movebooks-beta-probe-khkx6` passed after restart at 19:49:59 UTC (Completed at 19:50:03 UTC).
+They verified identical whole-snapshot and component fingerprints:
+
+| Evidence | SHA-256, identical before/after restart |
+| --- | --- |
+| Whole persisted snapshot | `dcfc15905ea345eb5a8aa70581c5292a26ac290daa340fb6e4503eeb9a5b6e94` |
+| Invoice | `d3731d3930c8cbeacd77c8d53aa7ee288a8d6b690e477afbddee7835958143d1` |
+| Journal | `a11ce7b34b72b8c89c7c8926eb9e0827ba025c0b5dedfbfdbfc9a88514952e15` |
+| Events | `702dc1e5e1f909df4020525d99eb51d19ddf27b38dacc4e04bb42b768ae1674f` |
+| Both invoice approvals | `acb6c86c28c388edccc0e3ccaba769ab2e5abc6a274657c7d2f20949867f1ea3` |
+| Six onboarding decisions | `41e4392ff6be0c26d736df18e7c010a47607cc6a4d35246143d32325ed394845` |
+| Corresponding onboarding audit | `54556b87fb2a604494d3f76f6ad87895eaf3c3b72885a9c0f2fd9b194d46c11c` |
+
+An initial read-only diagnostic incorrectly assumed one invoice approval and failed its assertion.
+A subsequent safe diagnostic identified the two preserved human records; the verifier was corrected
+to validate both plus the latest applicable decision. No application logic/test was weakened and
+neither diagnostic wrote to the database. These workload reads prove durable evidence, not User B
+HTTP mutation denial or live client-actor spoof rejection.
+
+### Monitoring, security and final gate
+
+A fresh bounded API structured-log query from 19:30 UTC returned 51 records (limit 500):
+50 status 200 and one 401. All had action `request`; keys were only action, latency_ms, request_id
+and status. Zero bearer/JWT/private-key marker matches occurred, and no payload-bearing fields
+were present in this sample. Earlier bounded evidence below covers persistence/readiness failures.
+This is sampled evidence, not an exhaustive absence-of-leakage or complete failure-coverage claim.
+
+Published head `e8659f1` still has all six CI jobs successful in run 36470160345, including
+production dependency checks, full frontend/backend checks, PostgreSQL contracts, container tests
+and both unchanged image gates. Deployed immutable API/web images retain their same-day scans:
+zero High/Critical, zero ignored matches. No implementation or image contents changed in this
+continuation. The owner-role P1 is now resolved in the real authenticated journey.
+
+New observed P0: **0**. New observed P1: **0**. Final overall P0/P1 clearance is **not complete**:
+the following acceptance evidence remains required, so PR #13 stays draft/unmerged and AMBER:
+
+- Real User B approval POST against User A's workspace, with denial and no partial state/audit write.
+- Authenticated client-actor spoof POST rejection; source/local checks do not replace live proof.
+- Post-restart cross-user HTTP isolation (owner/snapshot persistence passed, not this negative test).
+- Explicit live lifecycle-invalid and duplicate/replay failure attempts with attributable safe logs;
+  one persisted posting and unchanged hashes prove no duplication in this journey, not those attacks.
+- Remaining storage-failure/log-safety coverage must be tied to actual exercised evidence before
+  declaring the full monitoring gate complete. Authenticated intake rejection remains the earlier
+  browser pre-transmission result, not a claimed authenticated backend upload POST.
+
+Do not repost the verified invoice, repeat decisions or restart Discover to fill these gaps.
+Use the same preserved workspace and a bounded, human-present negative-validation session only.
+
+### Completed shutdown / retained resources
+
+Rollback began at **19:50:44 UTC**. Read-back from 19:51:29 UTC confirmed both API and web
+service IAM bindings empty, both manual instance counts zero, SQL STOPPED with activation NEVER,
+and **zero active executions among 19 job records**. Project IAM has no allUsers or
+allAuthenticatedUsers binding. Anonymous requests to the stopped services returned 503, not
+application data; privacy evidence is the restored IAM policy, not a claimed 403 response.
+Both temporary service-level invoker grants were removed. No other permission was added, and no
+temporary identity, secret, static key or bootstrap access was created in this continuation.
+Invoker IAM enforcement remains enabled on both services; the SQL stop operation was DONE
+at 19:51:38.873Z without an error. Final image read-back matches the retained hardened digests.
+Shutdown completed before the existing cleanup deadline; the safeguard is not the evidence.
+
+Retained: private SQL disk with the completed workspace and immutable history; private GCS
+artifacts/soft-delete retention; Artifact Registry images; zero-scaled Run revisions; probe job
+definition/completed executions; existing Secret Manager definitions; Cloud Logging and Cloud
+Shell evidence. Storage/logging retention can still incur charges. The dashboard displayed INR
+0.00 estimated September charges, but that lagging, unrefreshed summary is **not session spend**;
+an authoritative current/session cost is unavailable. The US$10 target is not a hard billing cap.
+
+Fresh final focused regression: **53 passed**, one inherited Starlette deprecation warning.
+Final repository scan: 85 Markdown / 326 text files, zero findings; whitespace check passed.
+Only cloud evidence documents are changed; the unrelated web lockfile edit is preserved/excluded.
+
+## Published owner-role fix: deployment and preserved evidence — 2026-09-28
+
+### Subsequent human-present continuation preflight
+
+Documentation checkpoint `e8659f1459d5d27c44f11b73b3838d30518e4571` was published through
+normal GitHub Desktop push after terminal authentication was unavailable. No duplicate commit
+was created. All six jobs in [CI run 36470160345](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36470160345)
+passed, including both unchanged image-security gates. PR #13 remains draft/unmerged.
+The existing unrelated `apps/web/package-lock.json` change remains excluded.
+Fresh focused onboarding/cloud-owner/runtime-fault regression: **53 passed**; the inherited
+Starlette warning remains. Repository checks: 85 Markdown / 326 text, zero findings; whitespace pass.
+
+Before resumption, both services retained the exact scanned image digests below, manual count
+zero and empty IAM bindings; SQL was STOPPED/NEVER. Project IAM contained no public principal.
+SQL encrypted connector-only access and GCS enforced public-access prevention remained intact.
+SQL activation was requested at 19:12:38 UTC and its operation completed at 19:24:27 UTC.
+DONE and RUNNABLE were confirmed together before requesting one instance of each existing
+application service. This continuation does not extend the original 20:37:55 UTC cutoff.
+At the temporary-access confirmation checkpoint both service IAM policies remained empty.
+Both services subsequently reported Ready on their retained hardened digests, with manual count one.
+No onboarding decision, invoice contract, invoice approval or posting was submitted.
+This is an in-progress human-present handoff, not completed shutdown or final release clearance;
+the existing cleanup-only safeguard remains scheduled for 20:30 UTC.
+
+A bounded failure-only API log query since 12:00 UTC returned 78 records, below its 100-record
+limit: status 401 × 3, 404 × 5, 500 × 48 and 503 × 22. Actions were request × 67 and persistence
+× 11. No credential-marker matches or unexpected structured keys occurred in this sample.
+These are existing authentication/route and persistence/readiness signals, not new user-isolation,
+duplicate/replay or lifecycle-failure proof. The broader query was canceled without producing
+usable evidence. No log bodies, credentials or customer payloads were printed.
+
+### Human invoice-approval checkpoint — 19:34 UTC
+
+Following explicit owner confirmation, service-only `allUsers` / `roles/run.invoker` was added
+to API and web at 19:30:22 UTC (previous policies: empty). No project, database, storage or
+secret permission was changed. Web and API readiness returned 200; anonymous protected
+onboarding access returned 401. The authenticated browser resumed the same preserved workspace
+and displayed **10/10 completed prerequisites**, without any repeated onboarding decision.
+
+Read-only execution `movebooks-beta-probe-hnskb` succeeded. The full six-record onboarding
+history and corresponding audit fingerprints still match the values below; actor attribution
+is unchanged. At that read, invoice/journal counts were both zero and no FPU draft existed.
+The first prepare POST returned 401 at the HTTP boundary and the UI reported Failed to fetch.
+An authenticated reload and the probe confirmed no write; after successful preflight, a single
+draft-only retry succeeded. No authentication/IAM weakening or automatic decision was used.
+The precise cause of that transient first POST rejection is not established.
+
+The browser now shows READY FOR FIRST PRODUCTIVE USE / REQUIRES APPROVAL: Cedar School,
+Catalog preparation, quantity 1, unit price USD 100.00; deterministic contract subtotal 100.00,
+CA-SALES tax 7.25 at 0.0725, total **107.25**, NET_30. Accounts: `account-ar`, `account-sales`,
+`fpu-tax-payable`. Checkpoint DRAFT, posting attempts 0/3, Post and verify disabled.
+The Review productive transaction dialog is open for the human owner's **Confirm approve**
+action. No invoice approval or posting was submitted by the agent. Final FPU, financial posting,
+restart, complete monitoring and P0/P1 release clearance remain pending: **AMBER**.
+
+This is an active, bounded human-approval pause, not completed cleanup. Both temporary invoker
+grants and manual-one services remain active; SQL is running. Remove grants, set manual zero,
+stop SQL and verify no active jobs at completion, before the existing 20:30 UTC cleanup deadline.
+
+### Earlier deployment evidence
+
+Published PR head `4f4e138b626547677dea402400769003c9fa10b8` was confirmed on draft/unmerged
+PR #13. All six jobs in [CI run 36464584457](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36464584457)
+passed. The unrelated local web lockfile edit remains excluded. A fresh focused local rerun
+passed all 15 owner-role tests; repository checks passed (85 Markdown / 326 text, zero findings).
+
+The API was rebuilt from the exact clean published source and scanned: 0 High, 0 Critical,
+0 ignored; unchanged policy. See [image provenance](google-cloud-image-security.md).
+API index `1849f94c8f4eaf34e5aab7c32789cb8196ea559c48dac39eaff2ae95db2d09cb` resolves to
+platform digest `22b67843b3e27580413f15c11ded3eb438edf6bb10d0ced730a2ed4c7a37d802`.
+Fresh revision `movebooks-beta-api-ownerfix-ready-1853` became Ready at 18:53:35 UTC.
+Web remains `movebooks-beta-web-00004-xtb` on its unchanged scanned digest.
+Pre/post fingerprints of environment, service account, resource limits, probes and concurrency
+match: API `30707cea4843e1ff27f71f21e9e4e966a89c1107cc787aa7044ab0ac2a871575`,
+web `d5bd8ebff557258714fd8feab74f26366bcb0850135dd091b546a7d2a7d495c4`.
+
+### Startup sequencing evidence
+
+SQL activation began at 18:39:35 UTC and completed at 18:50:43 UTC. An early RUNNABLE
+projection was followed by MAINTENANCE while the update operation still ran. Starting the
+API before operation completion caused readiness timeouts and a failed revision; the first
+read-only probe also timed out. Both services were paused while SQL finished. A fresh revision
+on the same image subsequently became Ready without changing probes, capacity, IAM or code.
+Future resumes must verify both SQL operation DONE and RUNNABLE before starting application
+compute. Failed startup/probe attempts are not successful persistence or acceptance evidence.
+
+### Preserved onboarding records, not repeated approvals
+
+The existing validation job used the scanned API image, existing API workload identity and
+an explicit PostgreSQL READ ONLY transaction to inspect only the preserved workspace.
+No authentication override, fake browser principal, write, new workspace or approval was used.
+This is deployed workload/storage evidence, not a substitute for authenticated browser/HTTP tests.
+
+The initial probe incorrectly assumed five total historical decisions. Actual preserved state
+contains **five categories and six records**, including two earlier Opening balances records.
+The diagnostic was corrected to inspect the latest decision per category and fingerprint every
+historical record; no record was deleted, consolidated or changed. Execution
+`movebooks-beta-probe-c8kn2` exited 0 and verified the following at 18:55:09 UTC:
+
+| Category | Latest approval timestamp (UTC) | Audit reference |
+| --- | --- | --- |
+| Opening balances | 2026-09-28 18:08:58.763026 | `346f46fc-65d5-4446-9ff8-77ea089dd541` |
+| Synthetic invoice access | 2026-09-28 18:09:11.014722 | `f5d044e0-43d2-4813-bcb4-f0dfedda6677` |
+| Invoice preferences | 2026-09-28 18:09:21.350597 | `2d68666b-ee29-45ea-bec8-05fbbd3495e8` |
+| Tax and liability control | 2026-09-28 18:09:29.609285 | `93210068-006d-4f4e-b5dc-b2d433fb5faf` |
+| Synthetic bank setup | 2026-09-28 18:09:45.610272 | `8cd17f80-4f4d-42fb-9388-354f06ed99f2` |
+
+All latest decisions are approve / WORKSPACE_OWNER, with nonempty audit evidence and matching
+stored owner attribution. Actor SHA-256:
+`63ce343e618824dc9d5379e9348b70a60f91c94cada6b4ca4e9346d09bb73d77`.
+Full onboarding decision-history SHA-256:
+`41e4392ff6be0c26d736df18e7c010a47607cc6a4d35246143d32325ed394845`.
+Corresponding audit-history SHA-256:
+`54556b87fb2a604494d3f76f6ad87895eaf3c3b72885a9c0f2fd9b194d46c11c`.
+Workflow remains ONBOARDING, FPU absent, operational invoice/journal counts both zero.
+No onboarding approval has been submitted in this continuation.
+
+Execution `movebooks-beta-probe-5h9d2` subsequently ran the fixed image's actual
+`verify_onboarding_prerequisites` against the decoded preserved SQL snapshot under the same
+read-only boundary. It exited 0 at 18:57 UTC with **all 10 prerequisites COMPLETED**, including
+all five human-review categories. The full decision/audit hashes above were identical across
+the two successful reads. This verifies fixed-rule recognition of real persisted cloud state;
+it does not claim authenticated browser acceptance, change workflow state, prepare a contract
+or post an invoice.
+
+### Monitoring and readiness limits
+
+A bounded 1,000-entry API log sample from 18:39 UTC contained structured application keys
+`action`, `latency_ms`, `request_id`, `status`, with 14 status-200 and 13 status-500 entries.
+Startup/readiness timeouts and graceful-shutdown cancellation were visible during SQL maintenance,
+followed by successful readiness. No Bearer/JWT/private-key markers matched the sampled entries.
+This heuristic, limit-capped sample is not exhaustive log-safety certification or complete
+auth/owner/lifecycle/storage failure coverage. No invoice payload or model prompt was submitted.
+
+P0 observed in this continuation: 0. New P1 introduced: 0 observed. The previous role-mismatch
+P1 now passes deployed-code/persisted-state recognition, but final browser/FPU acceptance and
+cloud P0/P1 clearance remain pending; do not report the overall release as GREEN.
+
+Temporary service exposure awaits action-time confirmation. No new public invoker grant was
+made in this continuation. Browser recognition, separate human invoice approval, posting,
+deterministic financial acceptance, Verified FPU and complete final monitoring/P0/P1 clearance
+remain pending. Existing broader live mutation-denial/anti-spoofing/restart gaps remain open.
+No Gemini/ADK, cloud intake, provider or production activation occurred.
+
+### Mandatory shutdown at this pause
+
+By 18:59 UTC, normal authenticated Cloud Shell read-back verified both API and web at manual
+instance count **0**, both service IAM bindings empty, SQL **STOPPED / NEVER**, and **14 total
+job executions with zero active**. Project IAM had no allUsers/allAuthenticatedUsers grant.
+No public invoker was introduced, so there was no new grant to revoke. SQL/GCS/Secret Manager
+privacy and workload privileges were not broadened; no temporary identity, secret or key was
+created. The fixed Ready revision is retained but paused, not rolled back to an older image.
+
+Retained resources include the SQL disk with the same workspace/approval/audit history, private
+GCS objects and soft-delete retention, registry images, paused revisions, terminal job records,
+Cloud Logging and the Cloud Shell scan/build evidence. Storage/logging costs can continue.
+Actual session spend is unavailable; no claim is made that the Console's period-to-date INR 0.00
+display establishes current cost. The original deadline remains unchanged.
+
+Exact next step: obtain temporary endpoint-access confirmation for a bounded human-present
+resumption, wait for SQL operation completion, resume the fixed image, verify browser recognition
+without any new onboarding decisions, prepare the existing workspace's synthetic invoice and
+stop for separate human invoice approval. Only then post and deterministically verify FPU.
+PR #13 remains draft/unmerged; this documentation-only checkpoint is not a completed cloud gate.
+
+## Live P1: valid cloud onboarding approvals not recognized — 2026-09-28
+
+At 18:10 UTC the preserved workspace displayed all five separate onboarding approvals by the
+authenticated User A owner, role `WORKSPACE_OWNER`: CONFIRM_AS_VALIDATED,
+SYNTHETIC_INVOICE_OPERATOR, USE_CONFIGURED, CONFIRM_SYNTHETIC_TAX_CONTROL and OFFLINE_DEMO.
+Their activity records were present, but all five tasks still showed REVIEW_REQUIRED,
+prerequisite completion stayed 4/10, and Prepare invoice contract remained disabled. No invoice
+was prepared or posted. No approval was replayed, rewritten or bypassed to proceed.
+
+Root cause: `verify_onboarding_prerequisites` accepted only `DEMO_WORKSPACE_OWNER` despite the
+orchestrator recording `WORKSPACE_OWNER` for Firebase subjects. The same predicate mismatch
+also affected final invoice verification, with demo-only labels in FPU/remediation audit fields.
+This is one P1 root-cause finding with related readiness/verification/attribution effects.
+The local regression reproduced the Firebase failure while the demo-owner case passed.
+
+The minimal correction uses one shared server-owner role convention in decision creation,
+onboarding readiness, pre-posting role authorization, final verification and new audit fields.
+It checks the exact role for the server-verified workspace owner; it does not broadly accept
+either role. Owner equality, fresh evidence, explicit approval, allowed selections and all
+deterministic checks remain mandatory. Existing persisted approval records are unchanged and
+are recognized on re-evaluation. No API/body identity trust, schema migration, IAM change,
+history rewrite or automatic invoice approval was introduced.
+
+### Local verification, not live acceptance
+
+- New focused role-parity tests: **15 passed**, including demo/Firebase FPU, preserved decisions
+  through the persistence codec, idempotent completion, cross-owner denial, wrong-role rejection,
+  stale evidence/rejection/read-only decisions, correct new audit role labels, and recovery of
+  the old pending projection without replaying approvals or changing prior history.
+- Focused onboarding, runtime, fault and reconsideration regression: **121 passed**.
+- Full backend: **290 passed, 10 PostgreSQL-only tests skipped**, inherited Starlette warning.
+- Ruff: pass. Relevant frontend onboarding tests: **6 passed**; lint, typecheck and build: pass.
+- Repository checks: **85 Markdown / 326 text**, zero findings; whitespace: pass.
+- No frontend implementation/dependency change. The pre-existing unrelated lockfile edit is
+  preserved and excluded. No new full frontend-suite run or live PostgreSQL retest is claimed.
+
+P0 observed in this investigation: 0. P1 found: 1, corrected locally but **not cleared in the
+deployed environment**. Final cloud P0/P1 clearance remains pending. Existing deployed image
+scans were 0 High/Critical; they do not cover the new correction. Fresh publication/CI and a
+rebuilt, scanned API image are required before another bounded live continuation. PR #13 stays
+draft/unmerged. No Gemini/ADK, provider, production or cloud-intake activation occurred.
+Fresh read-back confirmed published PR head remains `a7e0b17` with six successful jobs in run
+36447214846. This source correction and the intervening local evidence commits are unpublished;
+those successful remote jobs do not validate this new commit.
+
+### Shutdown and retained evidence
+
+Live activity was stopped upon identifying the blocker. Normal Cloud Shell reported removal of
+both service-level public invoker bindings, both manual-zero updates and the SQL NEVER patch
+at approximately **18:12 UTC**. After reconnection, Cloud Shell account selection and metadata
+credential refresh failed during read-back; those failed commands are not verification evidence.
+Authenticated Cloud Console independently showed both services paused at manual instance count
+zero and Require authentication / IAM selected, without an allUsers warning after rollback.
+Its API security page briefly presented an allUsers removal control; that removal was invoked
+and the subsequent authentication state verified. SQL Console showed the instance **Stopped**.
+All three job histories were inspected: seven probe executions, one denied-probe execution
+and one schema execution, all terminal with end times; no new or running execution was present.
+No compute was restarted and no corrected image was deployed.
+
+Existing SQL disk/workspace/approval/audit state, GCS objects/soft-delete retention, registry
+images, inactive revisions, logs and secret definitions remain retained; storage/logging charges
+may continue. No new identity, static key or project-level role was created. Actual session cost
+is unavailable; the Console's period-to-date INR 0.00 display is not a reliable real-time session
+cost. The original four-hour deadline was not extended. The cleanup-only safeguard may verify
+the already-stopped state; it must not start resources.
+
+Exact next step: publish the same-branch correction, pass fresh CI/image security, deploy only
+inside an authorized window, and resume this workspace at onboarding using the existing
+approvals. Stop for the owner's separate invoice approval. User B approval-POST denial, live
+anti-spoofing/stale conflicts, FPU, post-execution restart and complete monitoring remain open.
+
+## Configuration applied; onboarding review pending — 2026-09-28
+
+The deployed UI verified all five consequential configuration decisions as APPROVED by the
+same authenticated User A subject before enabling Apply reviewed configuration. Applying
+once produced CONFIGURED, all eight areas APPLIED, integrations DISABLED, and a same-session
+Onboard → First Productive Use link. The onboarding activity view retains five separate human
+configuration approvals, their application, validation success, migration completion and the
+earlier controlled failure/resolution. No new scenario or workspace was created.
+
+Start onboarding from configured evidence produced ONBOARDING, four of ten prerequisites
+complete. Five explicit reviews remain: opening balances, synthetic invoice access, invoice
+preferences, tax/liability control and synthetic bank setup. The aggregate checklist is also
+pending; Prepare invoice contract remains disabled. Migrated Cedar School and Catalog
+preparation are the displayed default invoice entities, quantity one and unit price USD 100.00.
+No invoice contract or posting has yet been created.
+
+The assistant opened Review onboarding decision for opening balances, displaying
+CONFIRM_AS_VALIDATED and REQUEST_REVIEW choices and configuration reference
+`c8e54614-4fbb-4d8d-b5a2-b077efc435a2`, but submitted no onboarding approval. The owner is
+asked to review the five separate choices in the UI, keeping bank setup synthetic/offline.
+Prior configuration approval is not treated as onboarding or invoice approval. Live negative
+authorization/anti-spoofing, post-execution restart, final FPU and complete monitoring gates
+remain open. The original cutoff, cleanup safeguard and pending rollback are unchanged.
+
+## Resolution approved; migration and validation passed — 2026-09-28
+
+After the owner reported resolution approval, the same deployed workspace showed
+`Recorded human resolution decision: approved`, the proposal review disabled, and a separate
+Retry failed batch action. The assistant invoked that resume action once. All eight batches
+completed at 100%; Accounts remained at one attempt, Customers advanced from one to two,
+and each later batch completed in one attempt. The controlled failure remains visible. This
+is live evidence of bounded recovery without re-executing the prior Accounts batch, not yet
+the independent duplicate/replay POST or post-execution restart acceptance cases.
+
+Following the same-session Validate → Configure link recovered MIGRATION COMPLETE. Run
+validation produced **17 VERIFIED checks, zero discrepancies, USD**, report reference
+`136f6899-7b9d-4cdf-b472-3dfe6541ddd6`. Inspected source/target results include A/R 420.00,
+A/P 125.00, identical per-account trial balances and opening balances, exact entity IDs/counts,
+valid references, mapping completeness and transformation lineage. No tolerance, write-off,
+new scenario or replacement workspace was used. All values are synthetic.
+
+Continue to configuration prepared eight areas: three unchanged low-risk preferences
+(fiscal year, payment terms, invoice prefix) auto-applied under existing policy. Five remain
+REVIEW_REQUIRED: base currency USD, tax setup CA-SALES, inventory valuation WEIGHTED_AVERAGE,
+user roles FINANCE_REVIEWER, integrations DISABLED. Apply reviewed configuration is disabled.
+The assistant opened the Base currency review dialog, with source/report/policy/knowledge
+references, but did not click Confirm approve. The owner must review each consequential choice;
+the earlier mapping/resolution approvals are not reused as configuration approval.
+
+A bounded Cloud Logging sample after 17:31 UTC contained 51 entries, including 21 HTTP 200
+records, and zero bearer/JWT-shaped markers under the documented heuristic. This does not
+prove complete log safety or satisfy the still-open negative-path monitoring cases. No source
+or image content changed. Final cloud P0/P1 clearance and FPU remain unverified. This is another
+human-present pause within the original 20:37:55 UTC cutoff, with the 20:30 UTC cleanup
+safeguard unchanged; shutdown/public-invoker rollback has not yet occurred.
+
+## Reconsideration approved; governed migration pause — 2026-09-28
+
+After the owner reported approval, the deployed UI showed a separate APPROVED decision
+`8992183a-829a-40c3-88ad-02ffb0ad9113`, human-history time
+`2026-09-28T17:31:39.087757Z`, and reconsideration review time
+`2026-09-28T17:31:39.088302Z`. Its actor matches the original User A subject fingerprint below.
+The original rejection `25cd2d75-6907-4042-a64f-b5d3015a5af5`, both original timestamps,
+reason and nineteen evidence references remain visible and unchanged. Request
+`c9e06084-6517-4c64-8f13-a1e2208e159d` remains a distinct record with its original reason,
+requesting actor and timestamp. This verifies visible separate attribution, not yet the live
+forged-actor/stale/conflicting POST cases or post-execution restart persistence.
+
+The assistant followed the same-session Migrate → Resolve link and started the approved
+synthetic manifest once. No demo-session loader or new workspace was used. The UI reached
+29% progress: Accounts completed (four records, one attempt), Customers blocked (two records,
+one attempt), later batches unstarted. The controlled `DUPLICATE_CUSTOMER` failure and safe
+checkpoint boundary are visible. Retry count is zero; the Resolution Agent proposes
+`record_duplicate_disposition_and_retry` under `resolution-policy-v1` with batch/checksum,
+fixture and knowledge evidence. Prior completed checkpoints are reported intact.
+
+The accessible `dialog` named **Review proposed resolution** opened with focus on Close dialog,
+and separate **Reject and block** / **Approve resolution** controls. This medium-risk action
+requires another explicit human decision; the assistant has not submitted it or retried the
+batch. Validate remains locked. The owner is asked to review and click Approve resolution
+in the current dialog if accepting the synthetic proposal.
+
+This is a human-present pause within the unchanged **20:37:55 UTC** cutoff, not completed
+validation or shutdown. The 20:30 UTC cleanup safeguard remains scheduled. Both temporary
+service-level grants and live compute remain pending mandatory rollback. User B approval-POST
+denial, live anti-spoofing/conflicting review, canonical FPU, execution restart and complete
+monitoring remain open; final cloud P0/P1 clearance is not yet established. Image/source content
+is unchanged, and the prior zero High/Critical scans remain the applicable image evidence.
+
+## Live reconsideration request — 2026-09-28 (human review pending)
+
+The owner explicitly confirmed the two service-level temporary public-invoker grants after the
+previous stopped checkpoint. Local branch remained `feature/google-cloud-validation` at `39da55e`
+(documentation-only, not yet published); PR #13 remained draft/open/unmerged at published
+`a7e0b17`, with all six jobs successful. Unrelated lockfile edits were preserved. This continuation
+uses the existing deadline **20:37:55 UTC**, not a new four-hour clock.
+
+Compute resume was requested at **17:00:04 UTC**. SQL became RUNNABLE; web Ready at
+17:00:22.957575 UTC on unchanged `movebooks-beta-web-00004-xtb`. Its temporary service-only
+`allUsers` / `roles/run.invoker` grant was requested at **17:00:58 UTC**. The API's existing
+revision became Ready at 17:06:03.389352 UTC and its grant was requested at **17:06:40 UTC**.
+Bucket uniform access/PAP remained enforced; no project public principal or public probe-secret
+binding existed. Cloud SQL connector enforcement remained REQUIRED. No workload/database
+privilege, image content, application code, schema or protected-route policy was changed.
+
+### Startup recovery evidence, not an authentication pass
+
+Initial external API probes returned **429**, with three platform log records identifying no
+available instance. The browser failed to fetch the preserved session. These results are **not**
+counted as successful readiness or anonymous-auth rejection. Sanitized logs showed cancellation
+and timeout symptoms, no out-of-memory signal, and no bearer/JWT-shaped markers in the bounded
+sample. Two failed fresh-start requests reported 23,227 and 58,150 ms before cancellation.
+The root cause of the transient startup behavior is not established by these observations.
+
+An API-only fresh revision was requested at **17:08:28 UTC**, using the identical scanned index
+digest and unchanged runtime configuration/limits/probes: `movebooks-beta-api-resume-1710`.
+It became healthy at 17:11:57.991589 UTC and the service became Ready at 17:12:02.931618 UTC.
+No probe was weakened, capacity limit increased, or new credential/permission introduced.
+Subsequent actual HTTP checks returned **200** with `ready`/`cloud-dev` and **401** for anonymous
+access to the preserved workspace. Treat the initial startup instability as a runtime follow-up,
+not as evidence that retries/recovery or all failure-monitoring gates have passed.
+
+### Original rejection and separate request
+
+Reload under the existing User A session recovered the same preserved workspace
+`efbf72e9-aff5-489c-b17e-d2edced3237b`, ten completed mappings and the final Catalog preparation
+→ Service rejection. No Discover/Plan action, replacement workspace or direct database edit was
+used. The original rejection was visible before request submission:
+
+- Decision reference: `25cd2d75-6907-4042-a64f-b5d3015a5af5`.
+- Original mapping decision time: `2026-09-28T13:18:09.130310Z`.
+- Original human-history entry time: `2026-09-28T13:18:09.130447Z`.
+- Reason: `Rejected for review`.
+- Actor: the same authenticated User A subject. Its SHA-256 fingerprint is
+  `63ce343e618824dc9d5379e9348b70a60f91c94cada6b4ca4e9346d09bb73d77`;
+  the raw Firebase subject is not published here.
+- Nineteen original evidence references, inspected before the request, remain in its prior
+  snapshot, including `mapping-rule:mapping-policy-v1:products_services:product-001`.
+
+The request button was disabled with an empty reason. Entering a reason enabled the explicit
+request action. The submitted reason asks to reconsider this synthetic mapping while retaining
+the original rejection and requiring separate human review. The new request is
+`c9e06084-6517-4c64-8f13-a1e2208e159d`, recorded at **2026-09-28T17:14:48.473826Z**.
+Its requesting actor matches the original owner; the endpoint derives it from authenticated
+`principal.subject`, not a form actor field. This does not replace the still-required live
+forged-actor POST test.
+
+The deployed UI displays the original history unchanged, a separate reconsideration record,
+new proposed mapping, requesting actor/time and **REVIEW_REQUIRED**, with distinct Approve and
+Reject reconsideration buttons. Focus moves to the prior-history heading. The assistant did
+**not** click either review button and explicitly paused for the owner's UI decision. Migration
+remains blocked until that decision. No approved reconsideration/FPU/restart completion or final
+cloud P0/P1 clearance is claimed at this checkpoint.
+
+### Human-present pause, not completed validation
+
+At the pause the two app services have their explicitly approved service-only public invoker
+bindings, manual count one, and SQL is RUNNABLE/ALWAYS. They are **not** claimed shut down.
+The owner must click Approve reconsideration or Reject reconsideration in the existing User A
+Chrome tab. The request remains REVIEW_REQUIRED; no approval/rejection was submitted by the
+assistant. The previous User B browser tab is no longer available, so its separate authenticated
+session must be re-established with the owner's participation before the outstanding mutation test.
+
+A one-time local Codex cleanup safeguard is scheduled for **20:30 UTC on 2026-09-28**
+(02:00 Asia/Kolkata on September 29), before the 20:37:55 UTC cutoff. It is cleanup-only and
+must verify both grants removed, zero Run scaling, SQL STOPPED/NEVER and no running jobs. It does
+not authorize another live window or make cleanup a completed fact. Normal completion should
+perform cleanup earlier; keep the local host available for the safeguard. No cloud scheduler,
+new workload identity, static key or additional IAM role was created for this handoff.
+
+Final cloud P0/P1 counts remain unassessed. Original rejection preservation and creation of a
+separate request are now live evidence; subsequent human approval, forged/stale/conflicting
+requests, User B approval mutation denial, full FPU, execution restart and complete monitoring
+remain open. PR #13 remains draft and unmerged. No Gemini/ADK, provider or cloud intake activation.
+
+## Reconsideration deployment — 2026-09-28 (previous, AMBER)
+
+Preflight confirmed branch `feature/google-cloud-validation`, local/published source
+`a7e0b17298fed48ec68ae5de08bc06c9f2a07892`, PR #13 draft/open/unmerged and all six jobs
+successful in [run 36447214846](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36447214846).
+Only unrelated `apps/web/package-lock.json` metadata edits were present; they were preserved
+and excluded by building a fresh clone of the published source in authenticated Cloud Shell.
+The previously unpublished documentation chain is published; no duplicate commit was created.
+
+The owner authorized a new four-hour dev/test window and US$10 working target (not a hard cap).
+SQL start was requested at **16:37:55 UTC**, establishing **20:37:55 UTC** as the unchanged
+cutoff. Both services initially had empty IAM bindings and manual count zero; SQL was
+STOPPED/NEVER. No new service, database, bucket, account or job was provisioned.
+
+Both clean replacement builds passed unsuppressed Grype scans: **0 High, 0 Critical, 0 ignored**,
+exit zero. Existing Medium counts are six API/four web. Report hashes, image IDs, index digests
+and the transient registry push retry are recorded in the [image review](google-cloud-image-security.md).
+
+| Service | Ready revision | Deployed Linux AMD64 digest (SHA-256) | Ready at UTC |
+| --- | --- | --- | --- |
+| API | `movebooks-beta-api-00005-dh7` | `bfe13905dc614c2d9c276514a2316c677b5b39c764bd14298c5b02cb1e23920a` | 16:49:04.903124 |
+| Web | `movebooks-beta-web-00004-xtb` | `abde805e4b93de8ce66ba31d697b08fe16286ef8db436af06e4ff6badfe1a7ac` | 16:39:57.012114 |
+
+Both Ready revisions received 100% traffic. Registry index membership and config-digest
+comparisons link those platform digests to the exact scanned image IDs, rather than incorrectly
+equating an OCI index digest with its platform manifest. Runtime specs excluding the container
+image compare equal before/after for both services: environment, probes, command, resource
+limits and workload identity were preserved. SQL became RUNNABLE before the API deployment.
+No schema migration or extra database privilege was needed or granted.
+
+The action-time safety check blocked the temporary public-invoker command pending explicit
+confirmation. A subsequent read verified **empty IAM bindings on both services**. No public
+binding was added, no authenticated browser request was made in this continuation, and the
+preserved session `efbf72e9-aff5-489c-b17e-d2edced3237b` was not mutated. The original final
+Catalog preparation rejection remains the last verified state; its new reconsideration flow
+has not yet been exercised live. No replacement workspace or Discover restart was attempted.
+
+Fresh focused local regression: **97 passed** (reconsideration, mapping/approval, Google runtime
+and runtime faults); Ruff passed; repository checks passed across **85 Markdown / 325 text**
+files with zero findings. The inherited Starlette test-client warning remains. Existing six-job
+CI success is distinguished from these fresh local checks; no new full frontend run is claimed.
+
+Final cloud P0/P1 clearance remains **unassessed**, not zero by assumption. Reconsideration,
+exact live actor/anti-spoofing, stale/conflicting review, User B approval-POST denial, canonical
+FPU, execution checkpoint/replay restart and complete failure-monitoring evidence remain open.
+Prior A/B sign-in, read/plan/audit isolation, pre-migration restart and authenticated browser
+intake rejection evidence is retained and not promoted to those stronger claims.
+
+A bounded startup-log check covered **16 entries** for the new API revision: 12 INFO and four
+without severity, no HTTP request-status records, zero bearer-value and JWT-shaped markers.
+This is counts-only startup evidence, not authenticated request/failure-path coverage or proof
+that every retained log is secret-free. No user data or credential values were exported.
+
+Mandatory shutdown began **16:52:13 UTC**, without waiting out the authorized window while
+confirmation remained outstanding. Verification found both services at **manual count 0** with
+empty IAM bindings and the new revisions retained; SQL **STOPPED/NEVER**; nine historical job
+executions with zero running; no local scanner/build container running. No temporary public
+invoker was ever granted, so no removal was necessary. The schema identity remains disabled,
+probe-secret version 1 DISABLED, bucket uniform access/PAP enforced, and there are no project
+public bindings or MoveBooks workload Owner/Editor grants. No workload/database privilege changed.
+
+Retained resources: the existing SQL disk and synthetic workspace/audit state; private GCS
+objects/retention; registry images including the new pair; revisions and idle job/service
+definitions; disabled probe secret/bootstrap identity; build/scan evidence and logs. Storage,
+registry and logging charges may continue. Actual billing/monetary session estimate is unavailable;
+compute resume to shutdown request was about fourteen minutes, not a claim of a guaranteed cost.
+
+**Exact next step:** obtain the requested action-time confirmation for temporary invoker on the
+two app services only, resume minimum compute within the still-valid window (or obtain a new
+window after 20:37:55 UTC), and request reconsideration in the preserved workspace. Then stop
+for the owner to approve/reject in the UI. Do not redeploy old images, repeat Discover, assume
+approval, or promote PR #13 from draft based on this deployment-only checkpoint.
+
+## Local reconsideration implementation — previous code checkpoint
+
+The owner authorized the narrow audit-preserving recovery implementation after `fe498ad`.
+The final mapping rejection is not bypassed: an explicit request creates a linked REVIEW_REQUIRED
+record, and a separate owner review creates a new approved/rejected decision. Original rejection,
+actor, timestamp, reason/evidence and audit history remain. Legacy snapshot encoding stays
+compatible without rewriting the preserved row. See the [focused review](mapping-reconsideration.md)
+and [architecture](../architecture/plan-map-approve.md).
+
+Local reconsideration readiness is **GREEN**: 275 backend tests passed (10 existing database-only
+skips), 82 frontend tests passed, Ruff/lint/typecheck/build passed. No unresolved local P0/P1
+finding. These results do not certify the remaining live gates. Cloud resources were not started,
+no new images were deployed and the preserved workspace remains unchanged. The former missing
+reconsideration capability is addressed locally; live recovery still requires fresh CI/image
+scans, bounded deployment and separate human request/review on that same workspace. Overall
+cloud validation stays **AMBER**, PR #13 draft/unmerged, final cloud P0/P1 clearance unassessed.
+
+## Preserved-workspace continuation — 2026-09-28, 13:38–14:05 UTC (latest, AMBER)
+
+Preflight confirmed local/published `80dbf1eebc8078901b0a0220928aca54363d010c`, PR #13
+draft/open/unmerged and mergeable, and all six CI jobs successful in run `36429130279`.
+The previously unpublished documentation chain is now published; no duplicate commit or
+credential workaround is needed. The preserved session remains
+`efbf72e9-aff5-489c-b17e-d2edced3237b`. Discover was not repeated and no replacement workspace
+was created. The original 15:29:14 UTC deadline was not reset.
+
+SQL start was requested at 13:38:11 UTC, and RUNNABLE/ALWAYS was verified before API startup.
+Web became Ready at 13:39:11.828338 UTC. Its service-only public invoker grant was requested
+at 13:40:34 UTC. API manual count one was requested after SQL readiness; the unchanged hardened
+revision became Ready at 14:03:05.840881 UTC and its service-only grant was requested at
+14:03:37 UTC. No database, bucket, secret, workload-role or authentication boundary was broadened.
+
+### Mapping decisions and exact journey blocker
+
+The owner explicitly authorized all five outstanding synthetic targets. Four available approvals
+were submitted through User A's authenticated deployed UI and returned HTTP 200 at
+14:04:04.036592, 14:04:04.597608, 14:04:05.177929 and 14:04:05.670007 UTC:
+Independent Press Distribution → Vendor; CA-SALES → California sales tax; base_currency → USD;
+fiscal_calendar → Calendar Year. Reload recovered **ten completed mappings and one rejection**.
+The existing six approvals were not replayed.
+
+**Catalog preparation → Service could not be submitted.** Its earlier rejection is a final
+`REJECTED` decision, displayed as BLOCKED. The frontend disables all further decision controls
+for rejected proposals. Independently, `tools/mapping/controls.py::apply_mapping_decision`
+rejects any decision on APPROVED, MODIFIED or REJECTED proposals with
+`Mapping proposal already has a final decision.` This is not a timing, authentication or database
+outage, and the new human authorization does not provide an existing recovery transition.
+
+No disabled control was bypassed, no direct database edit was made, and no decision/history was
+overwritten. A governed superseding/reopen workflow is outside this evidence-only continuation.
+The same session remains AWAITING_APPROVAL; migration, resolution, validation, configuration,
+onboarding and Verified FPU were not run. Consequently migration checkpoint recovery,
+completed-journey restart/idempotency and replay checks remain unverified. The earlier
+pre-migration restart evidence remains valid but is not promoted to those stronger claims.
+
+User B's audit view remained denied after this restart/resumption and the four new approvals.
+The specific User B approval POST and persisted Firebase actor/forged-actor checks remain
+unexercised; owner-scoped read/plan denial and source/local tests are not substitutes.
+The ordinary UI does not expose another owner's approval controls or unredacted actor fields.
+No test-auth override, token extraction or production validation harness was introduced.
+
+### Authenticated selected-file rejection and log safety
+
+The owner manually selected the known synthetic `customers.csv` canary (67 bytes), without
+changing browser file-security settings. With User B signed in and consent checked, clicking
+Validate package displayed: **Try Your Data remains local-only. Cloud upload retention is not
+enabled; no files were sent.** No package ticket, validation-success result or workspace was
+created by this action. The frontend cloud guard runs before reading/encoding/sending file data.
+This establishes the deployed authenticated **browser rejection**, not an authenticated backend
+POST result: the independent backend cloud-rejection route was not invoked by this guard.
+
+A bounded counts-only scan of 120 API/web log entries since 13:38 UTC found **zero intake
+validation requests, zero canary markers, zero bearer-value markers and zero JWT-shaped markers**.
+The four successful approval POSTs are present. The no-transmission guard plus absent intake
+request is evidence against payload persistence/partial intake state for this tested action;
+no independent database or bucket content sweep is claimed. This limited heuristic does not
+prove every retained log is secret-free. Full persistence/storage/lifecycle/replay failure-path
+monitoring remains incomplete; earlier auth/owner/readiness failure evidence is retained.
+
+### Release checks and shutdown
+
+Fresh relevant local checks: **77 tests passed** across `test_google_runtime.py`,
+`test_runtime_faults.py` and `test_plan_map_approve.py`; Ruff passed. The existing Starlette
+test-client deprecation warning remains. Published CI still has six successful jobs, including
+both unsuppressed image-security gates and the production dependency gate. The exact hardened
+digests below were unchanged; their prior zero-High/zero-Critical scan evidence remains valid
+for those bytes. No fresh deployed-image rescan or full local frontend run is claimed here.
+Repository checks passed across 84 Markdown files and 320 text files, with zero findings;
+whitespace checks passed. The locally created disposable canary CSV was removed after testing.
+
+Mandatory rollback began **14:05:33 UTC**, well before the original cutoff. Both service-only
+public invoker bindings were removed, both Cloud Run manual counts returned to **0**, SQL was
+verified **STOPPED/NEVER**, and no validation jobs were running. SQL retained REQUIRED connector
+enforcement and ENCRYPTED_ONLY; no authorized networks were added. Final least-privilege checks
+and retained-resource details are recorded in the deployment handoff.
+
+An unrelated local `apps/web/package-lock.json` modification was discovered after the clean
+preflight. It was preserved, not deployed, reverted or included in the documentation commit.
+Only the three cloud-validation documents were changed by this continuation.
+
+**AMBER: no new confirmed P0/P1 defect, but final live P0/P1 counts/clearance remain unassessed,
+not certified zero.** The concrete immediate blocker is the immutable rejected mapping in the
+required preserved session. Further blockers remain approval-POST owner isolation, live actor
+attribution/anti-spoofing, canonical FPU, execution restart/replay and full negative-path monitoring.
+Next: authorize a narrowly scoped, audit-preserving mapping reconsideration/supersession change
+before another live run; retain the rejected decision and require a new attributable approval.
+Do not relax final-decision checks, overwrite the rejection, or silently create another workspace.
+PR #13 remains draft and unmerged. Cloud intake, Gemini and managed ADK remain disabled.
+
+Retained SQL synthetic evidence/disk, registry images, private bucket/soft-deleted objects,
+disabled secret, logs and service/job definitions may continue to incur storage costs.
+Session-attributable billed cost is unavailable; the US$10 target is not asserted as verified.
+
+
+## Human-present resumption — 2026-09-28, 12:48–13:25 UTC (stopped, AMBER)
+
+The owner requested a bounded authenticated continuation with the same locked scope. Preflight
+confirmed clean local `575731b`, published PR head `1fa818e`, PR #13 draft/open/unmerged, the
+exact hardened digests below, manual-zero Run services with empty IAM policies, and SQL
+STOPPED/NEVER with REQUIRED encrypted connector access. Both local documentation commits
+remain unpublished; normal Desktop/manual publication is still required. No duplicate commit
+or alternative credential extraction was attempted.
+
+Cloud Shell was reconnected using its normal authorization prompt. SQL start was requested at
+12:48:14 UTC; operation `a288ac25-0b49-4796-93a0-c9f000000031` began at 12:48:16.174 UTC.
+The existing overall deadline remains 15:29:14 UTC; this resumption does not reset the budget
+or grant another four hours. Both services were requested at manual count one, retaining the
+existing template maximum of one. An initial CLI attempt to combine service maximum and manual
+scaling was rejected without applying a change; the supported manual-scaling-only update followed.
+
+Frontend Ready was observed at 12:49:20.529591 UTC. SQL remained in maintenance/startup while
+the API startup `/readyz` probe timed out. Platform logs recorded consecutive startup-probe
+failures at 12:50:35 and 12:51:57 UTC. This is genuine readiness-failure visibility, not evidence
+of authenticated E2E. Probe requirements were not weakened and endpoints were not exposed
+while the API was unready. Google consent remains a required human action; no sign-in success
+or final live release clearance was claimed at that startup checkpoint.
+
+### Authenticated browser results
+
+The API became Ready at **12:54:08.574016 UTC** on the unchanged hardened revision. SQL start
+completed **12:59:26.343 UTC**, with RUNNABLE/ALWAYS subsequently observed. At **12:56:07 UTC**
+the operator began applying the approved service-only public invoker bindings to the two Ready
+services. No SQL/GCS/Secret Manager permission changed. The owner completed Google consent for
+both authorized users in separate browser tabs; no passwords, codes, cookies or tokens were read.
+
+- **User A authenticated HTTP access passed.** The deployed UI created synthetic session
+  `efbf72e9-aff5-489c-b17e-d2edced3237b` and completed Discover/Assess with zero blockers/warnings.
+  Planning and all eleven mapping proposals were prepared in that same durable session.
+- **Anonymous denial passed for the exercised routes:** workspace and activity GETs returned
+  JSON HTTP **401**, while the public runtime GET returned JSON HTTP **200**.
+- **User B read/mutation denial passed for the exercised routes:** workspace GET at
+  13:17:06.603519 UTC and plan POST at 13:17:14.577213 UTC returned HTTP **404**. The UI stopped
+  the governed operation without displaying User A's plan or mappings.
+- **User B audit-view denial passed:** the authenticated Trust view reported session unavailable,
+  with no replacement session created. This view requests the owner-scoped `intake-trust` route.
+- User A recorded six mapping approvals and one Catalog preparation rejection. The rejection
+  visibly blocked that proposal. These are synthetic test actions, not real accounting decisions.
+  The session remained **AWAITING_APPROVAL**: five mappings were not approved.
+
+The safety reviewer rejected the next approval batch, including jurisdiction-sensitive CA-SALES,
+pending explicit approval of the exact decisions. The operator did not retry through a different
+mechanism. Requested human decisions are: Independent Press Distribution → Vendor; Catalog
+preparation → Service; CA-SALES → California sales tax; base_currency → USD; fiscal_calendar →
+Calendar Year. No response to that approval request was received before shutdown.
+
+**Approval attribution is only partially verified.** The live Trust projection preserved action,
+timestamp and audit history, but deliberately labels the actor "Workspace owner" and omits
+underlying identity/evidence fields. Source review confirms `principal.subject` is passed to
+the decision service and server-authored audit record. This does not replace live verification
+of the persisted Firebase actor, role/reference fields or a forged-actor request. User B's
+specific approval POST denial also remains unexercised; plan-POST denial is not relabeled as it.
+
+### Restart and log evidence
+
+The API was explicitly scaled to zero, then back to one, without changing its image, identity or
+configuration. The Trust UI showed unavailable evidence during the outage. The same revision
+`movebooks-beta-api-00004-n92` returned Ready at **13:23:34.797127 UTC**. After refresh:
+
+- User A retrieved the same session, six approval events and one rejection event; the original
+  13:08:46.778377 UTC decision timestamp remained present. No extra decision events appeared.
+- User B remained denied the same audit view after restart.
+- This proves persistence/recovery for the exercised pre-migration state only. Migration
+  checkpoints, execution replay/idempotency, interrupted migration resume and verified FPU
+  were **not** exercised because migration was never authorized or started.
+
+A scoped request-log sample contained 74 entries: 67 HTTP 200, two 201, two 401 and three 404,
+with no unexpected structured JSON field names. A bounded, counts-only scan of 1,129 API/web
+Cloud Run log entries found zero bearer-value/JWT-shaped markers and zero synthetic intake
+canary markers. Ten account-email matches were classified as Cloud Audit principal and
+resource creator/last-modifier metadata, not application payload records. These are heuristic,
+bounded checks, not proof that every possible secret/payload is absent from all retained logs.
+Startup/readiness failure, owner denial, auth denial and shutdown visibility were observed;
+full storage/persistence/lifecycle/replay failure coverage remains incomplete.
+
+The synthetic intake-canary selection failed before upload because Chrome extension file-URL
+access was disabled. Nothing was uploaded by that attempt. The operator reported the documented
+browser-setting prerequisite instead of bypassing it. Source inspection confirms the frontend
+cloud guard rejects before encoding/sending files and the API independently rejects cloud intake,
+but **the authenticated interactive rejection test remains unverified**. No intake switch was
+enabled, no uploaded workspace was created, and no customer/provider data was used.
+
+### Final gate and rollback
+
+Shutdown began **13:25:16 UTC**, before the original four-hour deadline. Final checks confirmed:
+
+- Both services: no IAM bindings, manual count **0**, unchanged hardened image/revision.
+- SQL **STOPPED/NEVER**, REQUIRED connector enforcement and ENCRYPTED_ONLY retained.
+- No running validation jobs; schema identity and secret probe version 1 disabled.
+- GCS uniform access/public-access prevention retained; no broad IAM/runtime grant added.
+
+Audit timestamps for the temporary invoker binding: API added **12:56:09.271431 UTC**, removed
+**13:25:18.193316 UTC**; web added **12:56:11.680570 UTC**, removed **13:25:23.884571 UTC**.
+After rollback, both ordinary application endpoint probes returned HTTP **503**, content type
+`text/html`, consistent with disabled services. Empty IAM policies, not that HTTP status alone,
+establish removal of public invocation.
+
+The legacy probe job still referenced the older API digest when inspected. It was **not executed**.
+Do not run that retained job again without reviewing its image and using a cleared hardened image.
+No job definition, application code, schema or database privilege was changed in this continuation.
+
+Fresh relevant local regression: **53 runtime/fault/security tests passed**, Ruff passed, existing
+Starlette test-client deprecation warning only. Published PR head remains `1fa818e`, with all six
+CI jobs successful; PR #13 remains draft/open/unmerged. Exact deployed images remain the scanned
+zero-High/zero-Critical bytes; no fresh image scan is claimed for this no-code continuation.
+
+**AMBER. No new confirmed P0/P1 product defect was established, but final live P0/P1 clearance
+remains unassessed, not certified zero.** Remaining blockers are explicit approval of the five
+synthetic mappings, browser canary-selection support, and the unexercised approval-actor/
+anti-spoofing, approval-POST isolation, canonical FPU, migration checkpoint/replay/recovery,
+authenticated intake and complete negative-path monitoring gates. Stale local/ephemeral UI copy
+was observed alongside the correct cloud-runtime banner; it is a non-blocking presentation
+inconsistency, not evidence that durable storage failed.
+
+Retained resources include the synthetic session/decision evidence in SQL, its 10 GB disk/network
+allocation, registry images, private bucket/soft-deleted objects, disabled secret, logs, identities
+and service/job definitions. Session-attributable billed cost remains unavailable; retained storage
+may charge. Compute ran for roughly 37 minutes in this resumption, within the original budget
+window. Documentation commits still require normal Desktop/manual publication; no duplicate or
+force push is warranted. Next: obtain the exact mapping approvals and resolve file selection,
+then resume the preserved session in a coordinated bounded window, not a new discovery journey.
+
+## Hardened-image deployment continuation — 2026-09-28, after 11:22 UTC
+
+The owner explicitly confirmed the two service-only temporary `allUsers` / `roles/run.invoker`
+grants requested at the previous handoff, to be applied only after hardened revisions are Ready.
+No project-level public grant, private-data authorization bypass, live model or production access
+is authorized. The US$10 working target remains a target, not a metered hard cap. The live window
+started **11:29:14 UTC** and its maximum end is **15:29:14 UTC**; stop earlier on completion/blocker.
+
+Local `03659c2` was clean and preserved on the requested branch. Published PR head remained
+`1fa818e`, draft/open/unmerged, with all six CI jobs successful. Normal CLI push was attempted:
+after the sandbox network retry, normal Git authentication failed (`unable to get password from
+user`). No credential extraction, duplicate commit or force push was attempted; Desktop/manual
+publication is required unless normal Git authentication is restored. This does not block the
+authorized live checks because unpublished changes are documentation only.
+
+Cloud Shell recycled its ephemeral Docker cache and needed normal session authorization again.
+After that authorization, the retained archives restored the exact prepared image digests and
+the report/archive hashes matched the prior checkpoint. Initial Docker registry connections were
+refused; ordinary HTTPS returned the expected unauthenticated 401 and normal retries succeeded.
+No network security setting, alternate credential source or IAM permission was changed.
+
+Published to the existing regional Artifact Registry repository:
+
+- API `api:hardened-c80c920`, index digest
+  `sha256:854cee81ce688cb1a853b4e690925762d3038ab23c74e26d0b45c82ecfff6a56`.
+- Frontend `web:firebase-hardened-1fa818e`, index digest
+  `sha256:eab08023f3ffd8385436e939a4c86db75dc54bef9da01966ddaf680ee80c5ede`.
+
+Registry prefix: `asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta`.
+Both pushes exited zero. They are the previously scanned bytes, not new unscanned builds.
+Images add retained registry storage; no repository or workload identity was created.
+
+Preflight reconfirmed Firebase Google provider/domain configuration, dedicated workload identities,
+scoped Cloud SQL/custom Firebase roles, manual-zero services, empty service IAM policies and
+SQL STOPPED/NEVER with required encrypted IAM connector transport. Non-secret environment,
+identity, command and probe snapshots were retained for post-deployment comparison.
+
+Fresh local regression: Ruff PASS; backend **255 passed / 10 database-only skips**, with the
+existing Starlette test-client deprecation warning; frontend **76 passed**; lint/typecheck/build
+PASS; production npm audit **zero vulnerabilities**. The passing remote PostgreSQL/container
+jobs cover real database contracts; local skips are not live SQL success evidence.
+
+### Deployment, browser handoff and completed rollback
+
+Both exact hardened digests above were deployed with 100% traffic to their new revisions:
+
+| Service | Hardened revision | Ready timestamp (UTC) |
+| --- | --- | --- |
+| API | `movebooks-beta-api-00004-n92` | 2026-09-28 11:48:05.521029 |
+| Web | `movebooks-beta-web-00003-ngl` | 2026-09-28 11:29:32.287339 |
+
+Before/after snapshots of environment, identity, command, arguments and probes compared equal
+for each service. Dedicated identities and Firebase/durable-storage/deterministic-only settings
+were preserved. The previous template maximum of 20 instances was reduced to one; live manual
+count was one, and final manual count is zero. No traffic fallback to an older image occurred.
+Cloud SQL start operation `304fee66-d0da-43f7-b10c-e20d00000031` completed without a reported
+error at 11:40:35.701 UTC, after starting at 11:29:16.009 UTC. An earlier bounded wait timed out
+while startup continued; it was not a failed database operation. No schema privilege changed.
+
+The previous service IAM policies contained no bindings. Audit records show the only temporary
+application exposure and its completed rollback, all on 2026-09-28 UTC:
+
+| Service | `allUsers` / `roles/run.invoker` added | Binding removed |
+| --- | --- | --- |
+| `movebooks-beta-api` | 11:48:54.874042 | 11:59:20.585726 |
+| `movebooks-beta-web` | 11:48:58.574038 | 11:59:25.067527 |
+
+These were service-level grants only, in `movebooks-ai` / `asia-southeast1`. No project-wide
+public grant or SQL/GCS/Secret Manager access expansion occurred. Final policies again contain
+no service IAM bindings. Pre-exposure policy and deployment snapshots plus image push logs are
+retained in Cloud Shell's `movebooks-image-security-evidence-90479d5` directory.
+
+The deployed frontend sign-in page loaded in a real browser after exposure. The Google account
+chooser opened, and selecting authorized User A reached **Sign in to movebooks-ai.firebaseapp.com**
+with the Google **Continue** consent button. The operator stopped and requested the human action.
+Consent was still pending when rollback began; no password, MFA code, token or cookie was
+requested, extracted or recorded. **Google/Firebase sign-in success is not verified.** No new
+workspace was created by this attempt. Compute was stopped rather than left live during the wait.
+
+An external HTTP probe attempted health/readiness/runtime and anonymous/invalid-auth cases,
+but aborted on a non-JSON response before recording per-case results. Those assertions are
+**not passed**. Future probes must record status and content type before parsing JSON. After
+shutdown the ordinary web sign-in and API runtime routes displayed **Service is disabled** / 503;
+health URLs returned non-JSON 404s. A 404 is not evidence of a successful application auth check.
+Platform Ready and internal probe success likewise do not prove external route behavior; see
+[Cloud Run troubleshooting](https://docs.cloud.google.com/run/docs/troubleshooting).
+
+Scoped Cloud Logging showed structured request/status-200 probe events and startup/shutdown
+messages on the new API revision. This is limited probe evidence, not a complete log-content
+leakage audit or proof of auth, owner-denial, persistence, storage, readiness, lifecycle and
+replay-failure monitoring. Full negative-path coverage remains open.
+
+Final read-only shutdown verification:
+
+- Both Run services: hardened revision retained, manual count **0**, maximum **1**, no public binding.
+- Cloud SQL: **STOPPED**, activation **NEVER**. No validation job has running tasks.
+- Schema service account and synthetic secret version 1 remain disabled.
+- Bucket uniform access and public-access prevention remain enforced. Runtime/database roles
+  were not expanded; no workload Owner/Editor or new bootstrap grant was introduced.
+- No Gemini, managed ADK, provider integration, customer data or cloud intake was enabled.
+
+Retained resources include the SQL 10 GB disk/network allocation, existing and new registry
+image versions, private bucket/soft-deleted synthetic objects, disabled secret, logs and resource
+definitions. Non-sensitive Cloud Shell archives/reports/cache also remain. Session-attributable
+billed cost was unavailable; no zero-cost or hard-cap claim is made. Compute was shut down roughly
+half an hour after the 11:29 UTC start, well before the four-hour deadline; storage/logging can
+continue charging.
+
+**Final live readiness: AMBER; PR #13 remains draft and unmerged.** Image security remains GREEN
+for the exact deployed image bytes (zero High/Critical, no suppressions; reports were verified by
+hash, not rescanned in this deployment continuation). Published CI remains six successful jobs
+at `1fa818e`; unpublished documentation is not covered by a new remote run.
+
+Still unverified: real sign-in, two-user HTTP read/mutate/approve/audit denial, anonymous protected
+API denial, persistent/spoof-resistant approval attribution, canonical cloud verified FPU,
+active-journey restart/checkpoint/approval/owner-isolation recovery, authenticated payload-free
+intake rejection, and full failure/log-safety coverage. Prior adapter/CI results do not close them.
+No new confirmed P0/P1 product defect was established in this attempt; final live P0/P1 counts
+are **not assessed**, not zero, and release clearance cannot be granted.
+
+Next: coordinate a human-present bounded resumption, then have User A click **Continue** in the
+Google consent popup and complete any Google password/MFA prompt directly. The stopped app may
+show 503 until resumption. Independently authenticate User B and complete the outstanding HTTP,
+journey, recovery and monitoring gates before declaring GREEN. Preserve and publish `03659c2`
+and this documentation update via normal GitHub Desktop/manual push; terminal authentication
+remains blocked. Do not duplicate commits or merge PR #13.
+
+## Earlier live-resumption preflight — 2026-09-28, after 10:13 UTC
+
+The owner renewed the dev/test continuation in `movebooks-ai` / `asia-southeast1` with the
+US$10/four-hour operating target, not a hard cap. Branch head `1fa818e` was clean and published;
+PR #13 was draft, open and unmerged. All six jobs in
+[CI run 36406806226](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36406806226)
+passed, including both unsuppressed image-security gates. No source/runtime behavior was changed
+in this continuation. The operating window for application compute has not started.
+
+Read-only live preflight found an important distinction: **CI-cleared images are not the deployed
+images**. API revision `movebooks-beta-api-00003-v42` still references digest
+`36c2cb038691ef2c6005519bc90590922bc71048e1567ab4ef26fccdeac6eec3`; web revision
+`movebooks-beta-web-00002-2tf` references
+`598c7817dac46c4ee8f0f035deda1a13e5dc5a2aaf60a868faa7f470784846d1`.
+These are the older images, not the hardened replacements. The discrepancy was reported before
+deployment/exposure. Replace them with the scanned hardened images before browser validation;
+the frontend must also include the approved public Firebase build configuration.
+
+Verified without starting application compute:
+
+- Both Run services: manual instance count zero, no service IAM bindings/public invoker grant.
+- SQL: STOPPED, activation NEVER, connector enforcement REQUIRED, ENCRYPTED_ONLY, no authorized
+  networks. Its existing IAM-connector public IP is not anonymous database access.
+- Firebase: Google provider enabled; registered dev/test web app; expected numeric frontend Run
+  domain authorized; anonymous sign-in not enabled. This is configuration, not sign-in evidence.
+- API: Firebase identity, demo identity false, cloud-sql/GCS backends, explicit frontend CORS,
+  structured logging and deterministic-only model provider. Dedicated runtime identity retained.
+- Bucket: uniform access and public-access prevention enforced, seven-day soft-delete retention.
+- Schema identity and probe secret version 1 remain disabled; no validation job has running tasks.
+- Workload project bindings remain limited to named-instance Cloud SQL client/instanceUser and
+  the API's custom Firebase lookup role; no workload Owner/Editor binding was present. Bucket
+  policy contains only the API artifact role, and the named secret grants only API accessor.
+- Console billing summary displayed estimated INR 0.00 for September 1–28. This may lag actual
+  usage and is neither a measured validation-window cost nor a guaranteed spending cap.
+
+No public IAM grant, database privilege, secret activation, Cloud Run/SQL startup, production
+deployment, Gemini/ADK activation or customer-data handling occurred. Actual browser sign-in,
+two-user read/mutate/approve/audit denial, persisted approval attribution, canonical cloud FPU,
+active-journey restart/resume, authenticated intake rejection and live failure-signal coverage
+remain **unverified**. No new P0/P1 defect was established in preflight; final live P0/P1 counts
+remain **not assessed**, not zero. Overall readiness stays **AMBER**, and PR #13 stays draft.
+
+### Prepared replacement images (not deployed)
+
+Using normal authenticated Cloud Shell, public source was fetched and checked out at `1fa818e`.
+Its application/build sources are unchanged from `c80c920`; the difference is documentation.
+The exact previously tested API image was retained and freshly rescanned. The frontend was rebuilt
+with `--no-cache` and approved Firebase public configuration obtained through the normal SDK;
+no token, private key or service credential was printed or copied into the image. Build/lint/type
+checks passed. An isolated, network-disabled smoke container verified UID 65532, read-only
+filesystem, embedded expected project/auth/API domains and HTTP 200 for the Google sign-in page,
+with no demo entry. This is not a Firebase sign-in or deployed-path success claim.
+
+| Evidence | API | Firebase-configured frontend |
+| --- | --- | --- |
+| Local image index SHA-256 | `854cee81ce688cb1a853b4e690925762d3038ab23c74e26d0b45c82ecfff6a56` | `eab08023f3ffd8385436e939a4c86db75dc54bef9da01966ddaf680ee80c5ede` |
+| Fresh Grype High / Critical | 0 / 0 | 0 / 0 |
+| Medium / ignored matches | 6 / 0 | 4 / 0 |
+| Raw report SHA-256 | `bf602f662818f34e889a70e1ecfa191fce3499a2d260ae553675dc9a363b3c71` | `4b84f97b84cb7a9f35374b54e996ed5aca9244aa995dce1a3c83a99f5bec0797` |
+
+Frontend archive SHA-256: `ecda611a56a207c22282d37e28decfb4523f693dd33549f1b2c890328c4cdb9d`.
+Raw evidence is retained in Cloud Shell under `movebooks-image-security-evidence-90479d5`:
+`api-grype-live-preflight.json`, `web-firebase-grype-1fa818e.json`,
+`web-firebase-1fa818e.tar`, and `web-firebase-build-1fa818e.log`.
+An initial frontend scan could not read the mode-0600 public image archive and did not catalog
+packages. Making that non-secret archive readable resolved the tool-input error; the full scan
+then ran with the same pinned Grype image, read-only archive mount and unchanged `--fail-on high`.
+No suppression or cloud permission change was used. Residual Medium findings retain the existing
+[image-ledger](google-cloud-image-security.md) disposition.
+
+Neither replacement was published to Artifact Registry or deployed. No new GCP resource or role
+was created. Test/scanner containers completed and stopped; only image/report/cache storage was
+added in Cloud Shell. Retained billable GCP resources remain the SQL disk/network allocation,
+registry images, private bucket/soft-deleted synthetic objects, disabled secret, logs and resource
+definitions. Their continuing storage cost is not measured by this preflight.
+
+Next access-changing step requires action-time confirmation for temporary application invocation
+on only `movebooks-beta-api` and `movebooks-beta-web`. Application Firebase authentication and
+owner checks must remain enforced; SQL/GCS/Secret Manager stay private. Remove those service-only
+grants and stop compute at the end of the bounded window. The authorized users must complete any
+Google password/MFA prompts themselves; no tokens or credentials belong in evidence or chat.
+
+## Image-only closure — 2026-09-28
+
+This checkpoint supersedes the image-security/publication blockers below, not the remaining live
+cloud gates. Source `c80c920` was published normally on this branch. Fresh
+[CI run 36405067750](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36405067750)
+passed all six jobs, including both clean production-image Grype High gates, real PostgreSQL
+contracts (59 tests), and the production-container restart/resume/FPU journey. The replacement
+Python 3.14 suite passed 255 tests with the same ten database-only skips; the separate database
+job and container journey actually exercise persistence. Frontend: 76 tests, lint, TypeScript,
+production build and zero-vulnerability production npm audit pass.
+
+API High: **50 → 0**; frontend High: **1 → 0** (originally nine before runtime npm removal).
+No Critical findings, no ignored matches, unchanged `--fail-on high` policy. Six API and four web
+Medium matches remain recorded, not waived or claimed fixed. The
+[image-security evidence ledger](google-cloud-image-security.md) contains all thirteen API
+advisory classifications, prior npm/zlib findings, actual package versions, patch/applicability
+evidence, image IDs, report hashes and CI artifact retention. A deprecated glibc DNS-printer
+finding is classified by exact-image symbol/source inspection, not a blanket vendor waiver.
+
+**Image-security: GREEN for these tested synthetic Beta images. Overall cloud validation: AMBER.**
+No Cloud Run/SQL restart, endpoint exposure, Firebase interaction, IAM/schema change, deployment,
+Gemini or ADK activation occurred. Temporary Docker test/scanner processes completed and stopped;
+only non-sensitive image/report evidence and caches remain in Cloud Shell. Existing stopped GCP
+resources and retained storage were not modified. No new cloud spending estimate is claimed.
+PR #13 remains draft/unmerged. Next is human review of this image-only closure; real authenticated
+two-user isolation, approval attribution, canonical cloud FPU, cloud restart/resume, authenticated
+intake rejection and failure monitoring still require a separately resumed bounded live slice.
+
+## Earlier security continuation — 2026-09-28, after 08:42 UTC
+
+This section supersedes the earlier checkpoints where their status differs. **AMBER**, not ready
+for merge or public runtime validation. The prior four-hour window expired; renewal and temporary
+endpoint action-time confirmation were requested, not assumed. No SQL/Run compute restart,
+public invoker grant, schema grant, live-model activation or customer-data handling occurred.
+
+### Publication, remediation and verified checks
+
+- Prior documentation commit `05dc580` reached PR #13. Fresh
+  [CI run 36399079607](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36399079607)
+  passed all four existing jobs. This is evidence for that head only.
+- Security commit `54bb635` removes runtime npm/npx and adds unsuppressed High image gates with
+  raw artifact retention. See the [per-advisory ledger](google-cloud-image-security.md) for all
+  thirteen API advisories (50 matches) and eight web advisories (nine matches), their exploit
+  preconditions, evidence gaps and remediation. No blanket waiver, severity downgrade or ignore.
+- An exact-image web derivative was rebuilt and its non-root health/HTML smoke passed. Completed
+  Grype rescan: **1 High / 3 Medium / 0 Critical**, down from nine High by physical npm removal.
+  Residual zlib CVE-2026-85091 remains unresolved. This image was not pushed or deployed, and
+  this is not a full-source CI rebuild. A completed repeat scan of the unchanged exact API image
+  confirms **50 High / 58 Medium / 9 Low / 45 Negligible / 0 Critical** (exit 2); all thirteen
+  advisory counts agree with the ledger. Raw reports and SHA-256 digests are retained. API
+  native/tooling applicability remains unclosed, not waived.
+- Fresh local Ruff and the runtime/configuration/fault backend selection pass (**65 tests**).
+  Frontend lint and TypeScript pass. The first suite run exposed one focus-effect assertion race
+  (75/76 pass); the test now awaits the same observable focus requirement with `waitFor`, without
+  an arbitrary sleep or product behavior change. Focused identity suite **9 pass**, complete
+  frontend suite **76 pass**, production build **PASS**. No tests skipped or assertions weakened.
+  Fresh production npm audit reports **zero vulnerabilities**; repository checks cover **84
+  Markdown / 319 text files with zero findings**, and whitespace checks pass. This does not clear
+  OS/native image findings.
+- New security changes still require publication and fresh remote CI. Normal CLI Git authentication
+  is unavailable; Desktop's stale/inconsistent window did not yield a verified push of `54bb635`.
+  No token extraction or alternate credential access was attempted.
+
+### Remaining required evidence
+
+| Gate | Disposition |
+| --- | --- |
+| Image security | OPEN: web zlib and API native/tooling findings need supported fixes or complete narrow applicability evidence; preserve raw scans and rerun production images. |
+| Google sign-in / public-protected routes | Configured, not exercised with the authorized browser users. No public protected-data access is authorized. |
+| Two-user isolation / approval attribution | Adapter owner isolation passed previously; real User B HTTP denial and persistent User A approval attribution remain unverified. |
+| Canonical E2E / financial truth / FPU | No authenticated cloud journey to verified FPU receipt. Local/synthetic success does not close this gate. |
+| Restart/resume | Prior SQL sentinel/adapter persistence passes; real journey checkpoints, approvals, owner isolation and duplicate-execution protection across redeploy remain unverified. |
+| Cloud intake | Remains disabled; authenticated deployed rejection and payload-free logging still unverified. |
+| Monitoring/security | Existing safe startup/probe evidence retained; actual auth, persistence, storage, readiness, lifecycle and replay failure visibility across the full live path remains incomplete. |
+| P0/P1 | Prior DB-API P1 is resolved; no new product P0 was observed in these checks. Final live P0=0/P1=0 clearance is **not established**. CVE match counts are not product finding counts. |
+
+### Resources, permissions, cost and next step
+
+Read-only live preflight confirmed SQL STOPPED/NEVER and both Run services manually scaled to zero.
+Final readback again showed `manualInstanceCount=0` for both services and zero service IAM bindings
+(no public invoker grant).
+No additional cloud resources or permissions were created in this continuation. The local web
+smoke container was stopped; both scanners completed and final Docker running-container list was
+empty. Retained SQL disk/network allocation, registry images, private
+bucket/soft-deleted synthetic objects, disabled secret, logs and definitions remain as described
+below. New non-sensitive scan/image evidence is retained in Cloud Shell home. No current billed
+cost was obtained; earlier planning estimates are not a current spend measurement or hard cap.
+
+Next: publish the committed security/docs changes through normal GitHub authentication, finish
+unsuppressed API/web image clearance, then obtain the renewed bounded compute window and minimum
+temporary endpoint confirmation. Only then perform the authorized two-user browser/canonical FPU,
+restart and negative-path checks, remove temporary endpoint grants and stop compute again.
+PR #13 must stay draft/unmerged until all required evidence and P0/P1 clearance are complete.
+
+## Earlier resumed live validation — 2026-09-28 local time
+
+This section supersedes the historical checkpoints below. The same authorized project, region,
+US$10 operating target and four-hour window apply. SQL was restarted around 21:09 UTC. All data
+is synthetic; cloud intake, provider integrations, Gemini, managed ADK and production remain off.
+
+Times in this continuation are **2026-09-27 UTC** (2026-09-28 local time). Compute was stopped
+again at approximately 21:47 UTC, within the approved window.
+
+### Identity configuration and narrow bootstrap
+
+Following explicit owner approval, Firebase was attached on Blaze, Analytics disabled, Google
+sign-in enabled, and a dev/test web app registered. Its authorized frontend domain is
+`movebooks-beta-web-411600344727.asia-southeast1.run.app`. No Firebase Hosting, email/password
+or anonymous provider was activated. Two owner-authorized test accounts are available, but their
+addresses are deliberately not repeated in this public record. Configuration is not sign-in proof.
+
+The owner separately approved use of the **existing built-in PostgreSQL administrator** for the
+reviewed one-time grants, without exporting a credential. Import
+`188fd48b-cd66-4891-ab9c-4eaf00000031` completed at 21:29:47.806 UTC. SQL is preserved in
+[cloud_bootstrap_grants.sql](../../scripts/cloud_bootstrap_grants.sql): CONNECT on `movebooks`
+and USAGE on `public` for API/schema identities; CREATE on `public` only for the schema identity.
+No workload received database ownership, `cloudsqlsuperuser`, Owner or Editor.
+
+Schema execution `movebooks-beta-schema-jstn5` passed at 21:33:15 UTC. It created schema v1 and
+granted API SELECT/INSERT/UPDATE on `migration_sessions`, not DELETE or DDL. Revocation import
+`8879061f-904f-42a2-95dc-59b000000031` completed at 21:34:20.569 UTC using
+[cloud_bootstrap_revoke.sql](../../scripts/cloud_bootstrap_revoke.sql). The schema account was
+disabled, its explicit CONNECT/USAGE/CREATE grants revoked, and its narrow existing IAM bindings
+left attached to the disabled account. Explicit revocation does not claim to revoke inherited
+PUBLIC permissions; disabling the identity is an additional control.
+
+Temporary import access was limited to one non-sensitive object:
+`gs://movebooks-ai-beta-artifacts/operator/cloud_bootstrap_grants.sql`.
+Custom `movebooksBetaSqlImport` gave the managed SQL instance service agent only
+`storage.objects.get`. Custom `movebooksBetaBootstrapUpload` gave the existing human operator
+create/get/delete only. Both bucket bindings used an exact-object condition. CLI upload initially
+requested list permission; that permission was **not granted**. An exact-object SDK upload with
+normal Cloud Shell authentication succeeded. Both conditional bindings were removed after cleanup;
+the bootstrap/revocation object was soft-deleted with seven-day recovery. Final bucket policy again
+contains only the API artifact binding. Role definitions without bindings confer no access.
+
+### Live finding and remediation
+
+**P1 — cloud DB-API duplicate rejection classification**: the first persistence execution
+`movebooks-beta-probe-8jmcg` failed. A redacted diagnostic (`movebooks-beta-probe-57m6p`) identified
+SQLSTATE `23505` without printing SQL, parameters, records, credentials or driver messages.
+The Google connector returns `pg8000.dbapi.Connection`, while SQLAlchemy's ordinary pg8000 URL
+uses its legacy facade. The connector path reports this unique violation as `DatabaseError`,
+not the `IntegrityError` expected by the repository. PostgreSQL's
+[SQLSTATE reference](https://www.postgresql.org/docs/current/errcodes-appendix.html) identifies
+23505 as a unique violation and recommends code-based classification over message matching.
+
+Commit `ce5ad3015ae94777ed1a38f209b855072c6ea2c5` narrowly classifies that structured code as
+duplicate rejection. Other database errors still propagate to the existing safe failure boundary.
+No automatic retry, overwrite, identity bypass or permission expansion was introduced. Added
+redaction/non-duplicate tests and PostgreSQL coverage for both legacy and DB-API connections.
+Fresh live execution `movebooks-beta-probe-vdbkl` passed all runtime assertions after rebuilding.
+This finding is resolved in the exercised adapter scope; full cloud P0/P1 clearance is not inferred.
+
+Operator command failures (incompatible job flags, a diagnostic quoting error/empty diagnostic
+execution, and a Monitoring quoting error) are not successful checks. They made no product-data
+or IAM bypass. Only the named successful executions and explicit PASS records count below.
+
+### Current evidence
+
+| Gate | Actual evidence and limits |
+| --- | --- |
+| Run | Backend `movebooks-beta-api-00003-v42` and frontend `movebooks-beta-web-00002-2tf` are platform Ready. Backend startup/liveness JSON records return 200. Private CLI proxy `/healthz` still returns platform 404, so external HTTP/browser reachability is not a pass. |
+| Cloud SQL | Schema, attached IAM identity, no runtime schema CREATE/row DELETE, insert/read, repository owner filtering, duplicate rejection, actual transaction rollback, simultaneous CAS single winner, stale write rejection, killed-connection rollback/pool recovery all PASS in `movebooks-beta-probe-vdbkl`. |
+| GCS | Actual ArtifactService operations PASS: consented synthetic safe-summary put/read/delete, cross-owner denial, controlled-package rejection and missing-object failure. Bucket remains private. This is repository/adapter authorization, not real browser-user proof. |
+| Secret Manager | Actual runtime marker retrieval/redaction and unavailable/unallowlisted-secret safe failure PASS. Prior web-identity denial remains valid; no project-wide secret access added. |
+| Restart | Cloud SQL restart `f3440c74-7ce8-4597-92f7-8e8900000031` DONE at 21:43:00.941 UTC. New execution `movebooks-beta-probe-fvwsc` recovered the persisted sentinel. Read-only execution `movebooks-beta-probe-n7szq` then passed owner isolation and verified no runtime database ownership, no runtime cloudsqlsuperuser membership and no effective schema-identity CREATE. This proves adapter state survival, not interrupted canonical journey recovery. |
+| Identity / canonical E2E | NOT VERIFIED: no Firebase browser sign-in, cross-user HTTP denial, approval attribution, canonical cloud FPU receipt or authenticated intake rejection. No fake/emulator principal deployed. |
+| Logging / Monitoring | Safe structured startup, readiness and probe records inspected. Monitoring API returned HTTP 200 and eight instance-count series covering both Run services. Full auth/database/storage failure visibility and alert delivery remain unverified. No financial payload, prompt, token or secret was printed by the successful probes. |
+| CI | [Fresh run 36352554377](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36352554377) SUCCESS on `ce5ad30`; all four jobs, including both PostgreSQL driver paths, container restart smoke and npm production audit. Earlier fresh run 36351177147 passed on `1978e9b`. Draft [PR #13](https://github.com/JEMathew/movers-and-ledgers/pull/13) remains unmerged. |
+| Local checks | Ruff PASS; focused runtime/fault/config suite 65 passed; full backend 255 passed/10 PostgreSQL-only skips with inherited Starlette warning; 83 Markdown/318 text files, zero findings; whitespace PASS. Remote PostgreSQL CI covers the locally skipped database gates. |
+| Image security | Grype v0.119.0 completed against both rebuilt image archives. Both failed the High threshold (exit 2): API 50 High / 58 Medium / 9 Low / 45 Negligible; web 9 High / 7 Medium / 1 Low. No Critical matches returned. Dependency-only audits do not supersede these image failures. |
+
+Rebuilt image identities:
+
+- API with DB-API remediation: `sha256:36c2cb038691ef2c6005519bc90590922bc71048e1567ab4ef26fccdeac6eec3`.
+- Firebase-configured frontend: `sha256:598c7817dac46c4ee8f0f035deda1a13e5dc5a2aaf60a868faa7f470784846d1`.
+- Remediation source transfer SHA-256: `0cc74e5163d500558e2a3cc350137d6d757cf06bff6339658e8fbb2f26d9c051`.
+
+Both registry pushes encountered a transient connection refusal and succeeded on retry. No
+credential workaround was used. Public Firebase client configuration is build-time configuration,
+not a service-account key; its value is not included in this record.
+
+### Image-security triage — not cleared
+
+The official scanner image was pinned to
+`anchore/grype@sha256:8c2c9234a345577a6d321a4753aa3ee1276d8975c8452d2344a56b57733ecad3`.
+It ran without a Docker socket, host credentials or ADC mounts, with capabilities dropped and
+no-new-privileges. Initial archive-permission failures were corrected; only completed scans count.
+Cloud Shell reports are `/tmp/movebooks-api-grype.json` and `/tmp/movebooks-web-grype.json`;
+these are ephemeral operator evidence, not durable CI artifacts.
+
+Eight web High matches are under `/usr/local/lib/node_modules/npm/node_modules`, not the
+standalone application's dependency tree: ip-address 10.1.0, brace-expansion 2.0.2,
+pacote 19.0.2/20.0.1, picomatch 4.0.3 and sigstore 3.1.0. The ninth is Alpine zlib 1.3.2-r0
+(`CVE-2026-85091`). Node runs `server.js` directly; npm is not the application entrypoint.
+Removing unused package-manager tooling is a candidate runtime-image hardening, not a completed
+remediation or proof that these findings are unreachable.
+
+API High matches include Debian runtime packages (perl-base, ncurses, libc, util-linux/libmount,
+libacl, zlib) and a Python match (`CVE-2026-82049`). Many have vendor `not-fixed`/`wont-fix`
+status; that is **not** a risk acceptance. A source search found no direct application tarfile,
+Perl or gzprintf usage, but indirect/native reachability remains unreviewed. Do not equate
+50 package/advisory matches to 50 distinct product P1s or waive them based on a string search.
+Preserve the High gate, retain the exact digests, assess vendor/version applicability and reachable
+paths, then rebuild/rescan supported images. No blind major runtime upgrade or suppression was made.
+
+One observed application P1 (duplicate classification) is resolved. No P0 was observed in the
+exercised checks; **final P0/P1 clearance is incomplete**, especially image applicability and the
+unexercised authenticated application path. The overall validation checkpoint remains AMBER,
+not permission to expose or release these images.
+
+### Shutdown, retained resources and cost
+
+Verified after shutdown: SQL `STOPPED` / activation policy `NEVER`; both Run services manual
+instance count `0` and Ready; latest probe executions running count `0`; schema service account
+disabled; `movebooks-beta-probe` secret version 1 disabled; local service proxy exited. Both Run
+IAM policies remain without `allUsers`. No public invoker grant was applied. A read against a
+mistyped secret name returned NOT_FOUND; the actual named probe was then verified DISABLED.
+
+New resources in this continuation: Firebase attachment/Google provider/web-app configuration,
+two narrow custom role definitions, schema and synthetic rows in the existing database, new image
+versions/revisions, and one-shot execution records. No additional SQL instance, bucket or static key.
+Temporary exact-object import/upload bindings were removed; the bootstrap SQL object was
+soft-deleted and is recoverable within the bucket's seven-day retention. The schema identity's
+explicit bootstrap grants were revoked and its account disabled. Normal API privileges did not grow.
+
+Retained: 10 GB SQL disk and network allocation, synthetic probe rows, old/new registry images,
+private GCS artifacts/soft-deleted objects, disabled synthetic secret, logs, IAM/resource definitions,
+Firebase configuration, and Cloud Shell source/image archives and scanner cache. Storage/network
+allocation may continue to charge while compute is stopped. No project-specific actual spend was
+available; the prior delayed billing card is not evidence of zero cost. Planning estimate for this
+bounded session is roughly **US$0.20–$2**, not a billing measurement, excluding continuing retained
+storage, taxes and unmeasured network charges; the US$10 target is not a hard cap.
+
+### Remaining release gates
+
+The action-time confirmation for temporary `allUsers` Run Invoker on **only** the API and web
+services remains pending. Both service IAM policies were inspected and contain no public binding.
+Do not conflate network ingress `all` with anonymous invocation authorization. Protected data
+must still require Firebase tokens and owner checks when the temporary endpoints are enabled.
+Even if that confirmation arrives, do not expose the current images before security triage.
+
+Required remaining evidence: actual frontend reachability and two-user Firebase sign-in; protected
+versus public routes; cross-user denial and approval actor attribution; one canonical synthetic
+workspace through verified FPU; authenticated cloud-intake rejection; in-journey restart/replay/
+lifecycle checks; full failure observability; image security and final criterion-level cloud review.
+No production readiness, compliance, provider connectivity, customer intake or live-model claim.
+
+## Historical first live execution ledger — 2026-09-28
+
+The owner approved minimum dev/test provisioning, dedicated least-privilege identities, and
+a US$10/four-hour cost target, explicitly not a guaranteed cap. Window: 2026-09-27 20:37 UTC
+through 2026-09-28 00:37 UTC. Compute was stopped at approximately 21:01 UTC, well before the
+deadline. No production, customer data, providers, Gemini or managed ADK.
+
+Enabled Run, SQL Admin, Artifact Registry, Secret Manager, IAM, IAM Credentials, Firebase and
+Identity Toolkit APIs. Cloud Build was not enabled: builds use normally authenticated Cloud
+Shell Docker. Initial Run/SQL/registry/secret inventories were empty.
+
+| Resource | Configuration / current evidence |
+| --- | --- |
+| `movebooks-beta-pg` | PostgreSQL 17, ENTERPRISE `db-f1-micro`, zonal asia-southeast1, 10 GB SSD, no auto-grow/backups. IAM auth, ENCRYPTED_ONLY and REQUIRED connector enforcement observed; no authorized networks. Database `movebooks` and API/schema IAM users created. Finally STOPPED with activation policy NEVER. |
+| `movebooks-beta` | Regional Docker Artifact Registry repository created. |
+| `movebooks-ai-beta-artifacts` | asia-southeast1; uniform access true, public access prevention enforced; default 604800-second soft-delete retention. |
+| `movebooks-beta-api` | Dedicated service account; SQL Client and Instance User conditional on the named SQL instance; custom `firebaseauth.users.get`; custom bucket-only get/create/read/delete; Secret Accessor only on the named synthetic probe. No user-managed keys returned. |
+| `movebooks-beta-web` | Dedicated service account; no project data roles granted. |
+| `movebooks-beta-schema` | Temporary dedicated identity with conditional SQL Client/Instance User; no Owner/Editor or elevated database role. Bootstrap permissions unresolved; identity disabled at shutdown. |
+| `movebooks-beta-probe` secret | One regional Secret Manager version containing only a synthetic non-credential marker; no customer data, key or token. Version 1 disabled at shutdown. |
+| `movebooks-beta-api` / `movebooks-beta-web` Run services | Private invoker policy; dedicated identities; one CPU each, 512/256 MiB respectively; maximum one instance. Both finally set to manual scaling with zero instances. |
+| `movebooks-beta-probe` / `movebooks-beta-denied` Run jobs | One task, zero retries, bounded 120/60-second timeouts. Both completed successfully; zero running tasks. No scheduler. |
+
+Source archive is clean committed `4eacc8d295905820ba8cdbb591d141013de93761`, SHA-256
+`7b7657608e35d27f5a4edd47f760c3ab344ebde5a3a63774d79de3a93fbd71cc`, matched in Cloud Shell.
+Native file-picker upload succeeded after the extension file-upload permission error; no extension
+security setting was changed. Backend/frontend Linux image builds passed. Frontend is intentionally
+fail-closed until Firebase configuration is authorized and available; no demo fallback.
+
+An immediate bucket custom-role binding initially failed during role propagation; retry succeeded
+with the same four permissions, without broadening access. Default bucket legacy project-owner,
+editor and viewer groups were observed and removed. Removal also removed the human owner's
+implicit bucket-policy access; a custom three-permission bucket-policy role, conditional on this
+one bucket, restored that narrower operator capability. Final bucket policy contains only the API
+artifact binding. The original human project Owner binding was not modified.
+
+API activation automatically created the default Compute service account with project Editor.
+The audit detected it and removed Editor before using that identity; no validation workload uses
+the default account. Google-managed service-agent bindings are not application workload roles.
+
+Exact application grants: API and schema identities each have `roles/cloudsql.client` and
+`roles/cloudsql.instanceUser` conditioned on
+`projects/movebooks-ai/instances/movebooks-beta-pg`. API additionally has custom
+`movebooksBetaIdentity` (`firebaseauth.users.get` only), bucket-bound `movebooksBetaArtifacts`
+(`storage.buckets.get`, `storage.objects.create/get/delete`) and
+`roles/secretmanager.secretAccessor` on `movebooks-beta-probe` only. Web has no data roles.
+Custom `movebooksBetaBucketPolicy` restores the existing human operator's
+`storage.buckets.get/getIamPolicy/setIamPolicy` only on this named bucket. No workload impersonation,
+Owner, Editor or static key was granted. The disabled schema identity retains its two narrow IAM
+bindings; re-enabling it is a separate operator action, not automatic cleanup reversal.
+
+Cloud SQL reached RUNNABLE. A proposed `cloudsqlsuperuser` grant for the temporary schema identity
+was rejected by the approval safeguard and was not executed or bypassed. Database bootstrap now
+requires narrowly scoped DBA-issued CONNECT/USAGE/CREATE grants, or explicit approval for the
+temporary broader role and immediate revocation. No database-admin success is assumed.
+
+The initial API image audit found 12 advisory entries (including aliases/duplicates) in base-image
+pip 25.0.1, and no reported application-package findings. The repository package is not published
+on PyPI and is explicitly unauditable there. Dockerfile now upgrades pip to 26.2.1 from PyPI before
+installing the application. The rebuilt image passed `pip check` and `pip-audit` with no known
+dependency vulnerabilities; the unpublished application package is still explicitly skipped.
+The scanner ran only in an ephemeral container, not by adding a scanner to the production image.
+The first audit invocation used
+an unsupported flag and was corrected, not counted as a pass. This is a Python dependency audit,
+not an operating-system image scan.
+
+Frontend revision `movebooks-beta-web-00001-5b4` reports Ready under the dedicated frontend
+identity. Authenticated CLI proxy and unauthenticated HTTP probes returned platform 404 responses;
+external reachability is not counted as a health pass. No public invoker grant was applied.
+
+Firebase Console confirms Firebase is not attached. Confirming its Blaze pricing plan was blocked
+by the approval safeguard; no alternative activation path was attempted. Explicit approval for
+that billing activation and temporary public app endpoints was requested. Neither is assumed.
+The initial preflight below is historical, not a statement that this approved run made no changes.
+
+### Deployed artifacts and actual live evidence
+
+| Artifact | Immutable identifier |
+| --- | --- |
+| Initial API image, retained but not selected for the service | `sha256:09790e8b4f001e73468093fe08031bb9cac1d37c5ca463b65f2e8140481dd3d6` |
+| Patched API image (`api:pip2621`) | `sha256:4f9feb6d93ee0ad9528255d5a4a1b9dfbbd424b51daa93aafcc551c495acad45` |
+| Frontend image (`web:4eacc8d`) | `sha256:85c292a2e3c2cc597e8d4524e2ba08f7042103c407ba85495edd29d85e6bcca3` |
+| Backend revision | `movebooks-beta-api-00001-ct2` — NOT READY; startup readiness failed closed |
+| Frontend revision | `movebooks-beta-web-00001-5b4` — platform Ready, HTTP route unverified |
+| Transport job execution | `movebooks-beta-probe-nxsx4` — completed, one successful task |
+| Denial job execution | `movebooks-beta-denied-bgwg6` — completed, one successful task |
+
+Both jobs used the patched image and attached identities, never exported credentials. The bounded
+probe source is [cloud_validation_probe.py](../../scripts/cloud_validation_probe.py); only its
+`transport` and `denied` modes ran. Its schema, persistence and resume modes are prepared but
+**not executed**, and none is an authenticated product journey.
+
+| Required gate | Evidence / result from this live run |
+| --- | --- |
+| Cloud Run | PARTIAL: image builds/pushes, identities/configuration and frontend platform startup verified. Backend starts Uvicorn but `/readyz` returns 503/UNAVAILABLE because the schema is absent; the platform rejects that revision. Health checks were not weakened. Frontend numeric/hash URLs and authenticated CLI proxy returned platform 404, not an app-health pass. |
+| Cloud SQL transport | PASS: actual IAM-authenticated encrypted connector, current_user matches API IAM DB user, SELECT 1 succeeds. Live application schema/persistence/rollback/CAS/concurrency/owner isolation remain blocked. |
+| Identity | BLOCKED: Firebase not attached; Blaze activation needs confirmation. No real sign-in, two-user denial, revocation or HITL attribution claim. No emulator, demo fallback or synthetic-principal bypass deployed. |
+| GCS | PARTIAL: private policy and real scoped synthetic marker create/read/duplicate rejection/delete/missing-object failure pass. Real workspace authorization is not yet proved. No customer package persisted. |
+| Secret Manager | PASS for adapter scope: runtime retrieval, redacted representation, missing/unallowlisted secret rejection; actual frontend workload access denied. Only a non-credential marker was used. |
+| IAM | Dedicated identities and narrow conditional/resource grants inspected. Frontend workload actually denied GCS and secret access. Automatically added default Compute Editor removed. No workload Owner/Editor remains; no static keys created. |
+| Logging / Monitoring | PARTIAL: four job PASS records visible in Cloud Logging at 20:57:35–20:57:46 UTC, without payloads. Backend request/readiness records show safe 503/UNAVAILABLE. Full auth/storage/database/runtime failure visibility and Monitoring/alerts not validated. |
+| Canonical E2E | NOT RUN: no live authenticated workspace through Discover → verified First Productive Use; no cloud audit/HITL/reconciliation receipt. |
+| Restart/resume | NOT RUN: no durable application state yet; stopping infrastructure is not restart/resume proof. Uvicorn shutdown-complete/server-exit records observed at 20:59:08 UTC; graceful in-flight work preservation unverified. |
+| Failure modes | PASS only for missing/disallowed secret, denied workload storage/secret access, duplicate/missing synthetic GCS object and unready database schema. Database outage/recovery, stale writes, duplicate product requests, replay and invalid lifecycle events untested live. |
+| Cloud Try Your Data | Disabled in source/configuration, fresh local HTTP 503 and durable-write rejection tests pass. Authenticated deployed intake rejection remains BLOCKED; no upload was attempted or persisted. |
+| CI / security | Fresh backend 252 passed/5 skipped (local PostgreSQL-only gates require a configured test DB); focused runtime/fault checks 62 passed; Ruff/link/whitespace/secret-pattern checks pass. Fresh Linux images build; patched Python dependency audit passes. Fresh frontend 76 tests/lint/typecheck/build pass; prior npm audit passes. New remote branch CI and OS-image scan remain outstanding. |
+
+### Shutdown and retained charges
+
+Both Run services report `scalingMode: manual`, `manualInstanceCount: 0`. Cloud SQL reports
+`state: STOPPED`, `activationPolicy: NEVER`; the stop UPDATE completed without error at
+2026-09-27 21:01:39.662 UTC. Both job executions report running count zero and succeeded count
+one. All three dedicated identities returned zero user-managed keys. Temporary schema identity
+and secret version 1 disabled. The local Cloud Shell service-proxy
+process was stopped. No production compute exists in this validation setup.
+
+Retained: SQL 10 GB disk and allocated networking, image repository/images (including the old
+pip image for traceability), private bucket plus a soft-deleted tiny synthetic marker retained for
+seven days, disabled synthetic secret version, logs, Run/job definitions and IAM/API configuration.
+Only the disposable marker object was deleted, with seven-day soft-delete recovery. No repository
+content, schema or customer data was deleted. Storage/network retention may keep accruing charges;
+stopped compute is not a zero-cost project or a guaranteed US$10 cap.
+
+Current project-specific billed spend is **unavailable**: the Billing report's project selector
+returns no match for `movebooks`, although project billing is enabled. Account-wide data is not
+attributed to this run. Planning estimate for this roughly 25-minute provisioning/validation period:
+**US$0.10–US$1**, not a measured invoice or cap, excluding future retained storage/network costs,
+taxes and without assuming free credits. The small SQL tier, two bounded single-CPU services and
+two short tasks underpin this deliberately broad estimate; exact regional SKU usage is not yet
+reconciled. Refer to [Cloud SQL pricing](https://cloud.google.com/sql/pricing) and
+[Cloud Run pricing](https://cloud.google.com/run/pricing), and reconcile the actual project report
+when delayed usage appears. Reconfirm a bounded window before a later restart.
+
+## Historical preflight checkpoint (superseded by the live ledger above)
+
+User authorization identifies the target, and normal Console/Cloud Shell authentication now succeeds.
+No resources, IAM,
+APIs, secrets, deployments or billing settings were changed. No replacement project was created.
+No production, customer-data, provider, compliance, Gemini or managed ADK readiness is claimed.
+
+## Initial preflight — access failure, subsequently resolved
+
+The repository was clean on the requested branch. Its baseline tree matches the previously reviewed
+`130742236c2ef87b609ef7a1e68509945130a072` tree. Canonical constitutions, principles, scorecard,
+metrics, release policy, architecture, prior reviews, deployment guidance and three rubrics were read.
+
+Using the existing authenticated Chrome session, the Google Cloud Console URL for project
+`movebooks-ai` displayed **“You need additional access”** and **“No project selected.”** In the
+project picker, searching All projects for `movebooks-ai` returned **“No resources to display.”**
+The access page specifically lists `resourcemanager.projects.get` as missing. No access request
+or suggested role grant was submitted; page suggestions are not a least-privilege deployment plan.
+This does not prove the project does not exist: account access or the supplied ID must be resolved.
+No unrelated listed project was selected. Local `gcloud` is unavailable on PATH; earlier preflight
+also found no standard local ADC/configuration or configured project/region environment variables.
+No credential stores or process credentials were accessed, and no token was copied or reused.
+
+## Historical resumed preflight — 2026-09-28, before provisioning approval
+
+Console shows the intended MoveBooks AI project. Cloud Shell was authorized through its normal
+Google prompt; no service-account key, raw token, alternate account or credential export was used.
+Read-only commands confirmed:
+
+| Inspection | Actual result |
+| --- | --- |
+| `gcloud projects describe movebooks-ai` | ACTIVE; number `411600344727`. |
+| `gcloud billing projects describe movebooks-ai` | `billingEnabled: true`. No billing setting changed. |
+| `gcloud iam service-accounts list --project=movebooks-ai` | Empty list. |
+| `gcloud storage buckets list --project=movebooks-ai` | Empty list. |
+| `gcloud projects get-iam-policy movebooks-ai` | One human owner binding; no workload identity binding. Human Owner was not removed, avoiding lockout. |
+| `gcloud services list --enabled --project=movebooks-ai` | Logging, Monitoring, Storage and service-management APIs enabled. Cloud Run, SQL Admin, Artifact Registry, Secret Manager, Cloud Build, Firebase and Identity Toolkit absent. |
+
+Cloud Run/SQL/registry/secret/identity resource inventories have not been queried through disabled
+APIs; no equivalent resource is assumed absent without querying after approved API enablement.
+The configured primary region is the owner's `asia-southeast1` choice, not an observed deployment.
+An initial batched shell command had a paste/input concatenation error; IAM was rerun separately
+and its result verified. No mutation command was involved.
+
+Approval was requested for dedicated least-privilege workload setup and a spending/resource-lifetime
+limit before provisioning. The proposed US$10/four-hour operating budget is **not yet approved** and
+is not a hard billing cap; stopping compute would still leave storage charges. No paid resource,
+security-sensitive grant, public exposure or API activation has been performed.
+
+| Required gate | Current result |
+| --- | --- |
+| Project/region | Project access, number and ACTIVE state verified; region is authorized, not yet deployed. |
+| Existing resources/APIs/registry | PARTIAL: service accounts/buckets empty; required runtime APIs disabled; remaining inventory pending API enablement. |
+| Cloud Run backend/frontend | NOT RUN: no build push, deployment, revision, URL, live probe or shutdown evidence. |
+| Cloud SQL | NOT RUN: live connector/IAM, schema, rollback, concurrency, pooling and recovery unverified. |
+| Identity | NOT RUN: app Firebase sign-in, cross-user denial and real approval attribution unverified. Console sign-in is not application identity validation. |
+| GCS | NOT RUN: private policy, scoped artifact operations and actual denial behavior unverified. |
+| Secret Manager | NOT RUN: runtime retrieval, unavailable-secret behavior and actual least-privilege grants unverified. |
+| IAM | Human Owner only; no service accounts returned. Workload least privilege not yet provisioned or exercised. |
+| Logging/Monitoring | NOT RUN: no target project log query, collector/dashboard or failure visibility evidence. |
+| Canonical E2E | NOT RUN in cloud: no live session, approvals, recovery, reconciliation or verified FPU receipt. |
+| Restart/resume | NOT RUN in Cloud Run/Cloud SQL; prior local container proof is not cloud proof. |
+| Failure injection | NOT RUN live: no database/storage interruption, missing-secret, invalid-auth, stale-write, duplicate, replay, forged-event or in-flight restart exercise. |
+| Cloud Try Your Data | Remains disabled in code; fresh local rejection test passes. Deployed rejection is unverified. No uploaded data was retained. |
+| CI | Prior relevant remote run passed; no new run was triggered for this documentation checkpoint. |
+
+## Earlier local checks and baseline remote CI evidence
+
+The following command executed successfully: **19 passed**, with the inherited Starlette test-client
+deprecation warning. Tests use local configuration overrides, SQLite/repository fixtures and SDK
+doubles as applicable; none is counted as live GCP validation.
+
+```sh
+.venv/bin/pytest \
+  tests/test_google_runtime.py::test_uploads_not_automatically_persisted \
+  tests/test_google_runtime.py::test_cloud_identity_never_falls_back \
+  tests/test_google_runtime.py::test_structured_logs_drop_payloads_and_untrusted_strings \
+  tests/test_runtime_faults.py tests/test_validation_failures.py -q --tb=short
+```
+
+The cloud-intake test verifies HTTP 503 with cloud settings, no payload marker in captured logs,
+and rejection of both ordinary and uploaded-session durable writes. Source inspection confirms
+the browser's `cloudIdentity()` check stops upload before file transmission. No UI changes made.
+
+GitHub API inspection confirmed [CI run 36342874463](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36342874463)
+for the prior PR head `1307422`: all four jobs (`python`, `web`, `postgres-contract`, `containers`)
+and their substantive steps succeeded. These cover backend/configuration tests, Ruff, link/secret
+checks, whitespace, frontend tests/lint/typecheck/build, actual PostgreSQL and image builds/container
+restart smoke. This is existing baseline evidence, not a new run or cloud deployment evidence.
+
+## Dependency security remediation and fresh local verification
+
+A fresh `npm audit --omit=dev` confirmed vulnerable PostCSS 8.4.31 beneath Next.js 15.5.26
+(one high and one moderate dependency finding). The upstream
+[PostCSS advisory](https://github.com/advisories/GHSA-fxqj-rqcc-2cmp) identifies patched 8.5.23;
+the current 8.5.28 patch line was already used by the other build dependencies.
+Added a narrow `overrides.next.postcss = 8.5.28`, removed the stale vulnerable lock entry and
+regenerated the lock with npm. `npm ci` and `npm ls postcss` confirm Next resolves to 8.5.28;
+Next remains 15.5.26. No major framework upgrade or product architecture change.
+
+The first lock-only install retained the stale vulnerable entry and failed the audit. It was not
+counted as success. After re-resolving that entry, `npm ci` and `npm audit --omit=dev` report zero
+vulnerabilities. npm also refreshed bundled optional WASM lock metadata; no new direct feature
+dependency was introduced. This resolves the reported npm gate, not all possible image/runtime risks.
+
+Fresh checks after remediation: frontend **76 passed**, TypeScript **PASS**, frontend lint **PASS**,
+production build **PASS**, Ruff **PASS**. CI now has an explicit `npm audit --omit=dev` gate; its
+remote execution and a fresh deployable image build for this change remain pending. The existing
+baseline CI evidence above must not be attributed to this new change.
+
+## Security and review disposition
+
+No application lifecycle, authentication or persistence implementation changed. The dependency
+hosting finding was remediated locally, but **live P0/P1 clearance is NOT ASSESSED**, not zero by
+assumption. Cloud security and criterion-level rubric sign-off await provisioned runtime evidence.
+
+| Review lens | Disposition / required follow-up |
+| --- | --- |
+| Product / Customer Outcome / Demo | AMBER: cloud continuity to verified FPU untested; keep local versus cloud claims explicit. |
+| Agentic AI / FinTech Trust | Existing deterministic and HITL contracts retained; actual cloud attribution/recovery not verified. No live-model activation. |
+| Architecture | Existing topology retained; no fallback store or test identity introduced. Transport provisioned/exercised; schema and real Firebase path still blocked. |
+| Security | Narrow IAM, private artifact/secret transport and safe startup logs verified in the exercised scope. Real identity, full failure visibility and OS-image audit still outstanding. Do not weaken auth to proceed. |
+| Metrics | Log/monitoring contracts are not measured visibility. No fabricated SLOs, outcomes or successful cloud checks. |
+| Accessibility | No UI changes; no new accessibility certification or live protected-route UX claim. |
+| Release Readiness | AMBER: required runtime evidence absent. Product Management, Agentic AI and Migration rubric cloud assessments remain pending, without aggregate scores. |
+
+Remaining follow-ups: fresh remote CI for the remediated dependencies, OS-image review,
+production operational hardening (P2), and the
+Starlette warning (P3). Severity of undiscovered live issues is unknown; these prior classifications
+do not authorize exposing a vulnerable or misconfigured service. No live P0/P1 clearance is claimed.
+
+## Exact blockers and continuation
+
+1. Explicitly confirm Firebase's Blaze activation and the proposed temporary public Cloud Run
+   app endpoints (application Firebase auth remains mandatory), or have the owner configure the
+   approved identity path. Those actions were not silently included in generic provisioning approval.
+2. Have a DBA grant both API/schema identities CONNECT on database `movebooks` and USAGE on
+   schema `public`, with CREATE only for the temporary schema identity. It grants runtime access
+   only to its newly created table, not database ownership or a database-wide grant option.
+   The broader `cloudsqlsuperuser` proposal was blocked; no alternative admin route was used.
+   Re-enable the temporary identity only for approved bootstrap, then disable it again.
+3. Bootstrap schema, grant API only CONNECT/USAGE/SELECT/INSERT/UPDATE, resolve the frontend
+   route/configuration and configure two authorized real test identities. Rebuild frontend with
+   approved public Firebase configuration; do not expose the intentionally incomplete image.
+4. In a bounded authorized continuation, rerun actual persistence, rollback, CAS, owner isolation,
+   restart/outage, auth, intake rejection, replay/lifecycle, monitoring and canonical FPU checks.
+5. Run fresh remote CI and OS-image security gates, complete cloud rubric/security review and fix
+   every P0/P1 before GREEN. Existing CI triggers only PRs/main, not this unpublished feature head;
+   no PR, push, merge or CI configuration expansion was performed in this run.
+
+The immediate next step is **resolve the specific identity/ingress and database-bootstrap approvals**,
+not restart compute or activate Gemini/ADK. Keep the stopped resources stopped until those blockers
+are resolved; reconfirm the spending window if resuming after the approved deadline. See the
+[validation boundary](../architecture/google-cloud-validation.md). This checkpoint is not completion
+of the requested Google Cloud Beta runtime validation and does not assert P0=0/P1=0 clearance.

@@ -16,12 +16,17 @@ from sqlalchemy.exc import DBAPIError
 from domain.discovery_assessment.models import MigrationSession
 
 
-@pytest.fixture
-def postgres():
+@pytest.fixture(params=["legacy", "cloud-dbapi"])
+def postgres(request):
     url = os.environ.get("MOVEBOOKS_TEST_DATABASE_URL")
     if not url:
         pytest.skip("Real PostgreSQL gate requires MOVEBOOKS_TEST_DATABASE_URL")
-    engine = create_engine(url, pool_pre_ping=True, hide_parameters=True)
+    import pg8000.dbapi
+
+    # The Google connector returns this DB-API connection, while the ordinary
+    # SQLAlchemy URL uses pg8000's legacy facade. Exercise both error taxonomies.
+    options = {"module": pg8000.dbapi} if request.param == "cloud-dbapi" else {}
+    engine = create_engine(url, pool_pre_ping=True, hide_parameters=True, **options)
     assert engine.dialect.name == "postgresql", "SQLite cannot satisfy this gate"
     metadata.create_all(engine)
     yield SqlSessionRepository(engine), engine

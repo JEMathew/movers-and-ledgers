@@ -5,6 +5,11 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, ConfigDict, Field
 
 
+def owner_decision_role(subject: str) -> str:
+    """Label a server-verified owner; callers must still enforce workspace ownership."""
+    return "WORKSPACE_OWNER" if subject.startswith("firebase:") else "DEMO_WORKSPACE_OWNER"
+
+
 class DecisionInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
     action: Literal["approve", "modify", "reject"]

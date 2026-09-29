@@ -28,6 +28,8 @@ from domain.planning_mapping.models import (
     MappingProposal,
     MappingState,
     MigrationPlan,
+    ReconsiderationRequest,
+    ReconsiderationReview,
 )
 from movebooks_api.auth import Principal, require_principal
 
@@ -262,6 +264,51 @@ def _decide_mapping(
         raise _not_found(error) from error
     except ValueError as error:
         raise _conflict(error) from error
+
+
+def _reconsider(
+    session_id: UUID,
+    mapping_id: UUID,
+    request: ReconsiderationRequest | ReconsiderationReview,
+    principal: Principal,
+    reconsideration_id: UUID | None = None,
+) -> MappingProposal:
+    try:
+        session = discover_assess_service.reconsider_mapping(
+            principal.subject, session_id, mapping_id, request, reconsideration_id
+        )
+        return next(m for m in session.mappings if m.id == mapping_id)
+    except MigrationSessionNotFoundError as error:
+        raise _not_found(error) from error
+    except ValueError as error:
+        raise _conflict(error) from error
+
+
+@router.post(
+    "/migration-sessions/{session_id}/mappings/{mapping_id}/reconsiderations",
+    response_model=MappingProposal,
+)
+def request_mapping_reconsideration(
+    session_id: UUID,
+    mapping_id: UUID,
+    request: ReconsiderationRequest,
+    principal: AuthenticatedPrincipal,
+) -> MappingProposal:
+    return _reconsider(session_id, mapping_id, request, principal)
+
+
+@router.post(
+    "/migration-sessions/{session_id}/mappings/{mapping_id}/reconsiderations/{reconsideration_id}/review",
+    response_model=MappingProposal,
+)
+def review_mapping_reconsideration(
+    session_id: UUID,
+    mapping_id: UUID,
+    reconsideration_id: UUID,
+    request: ReconsiderationReview,
+    principal: AuthenticatedPrincipal,
+) -> MappingProposal:
+    return _reconsider(session_id, mapping_id, request, principal, reconsideration_id)
 
 
 @router.post(
