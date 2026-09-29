@@ -1,6 +1,7 @@
 # Bounded Gemini / Google ADK reasoning
 
-Status: implemented and tested locally; **live activation AMBER, not verified**. This is an
+Status: implemented locally and exercised through authenticated Gemini/ADK; **AMBER: resolution and
+onboarding structured output and semantic gaps remain**. This is an
 opt-in synthetic dev/test advisory path, not a replacement for stage agents or financial tools.
 Cloud Run, Cloud SQL, Firebase, IAM and the preserved cloud workspace were not changed.
 
@@ -24,12 +25,14 @@ provides structured, provider-neutral advisory inference without changing those 
 | Configuration | Existing accounting/tax/access proposal states and approval requirements | Explicit `reasoning_models.configuration`; reasoning explains policy, never applies settings | Existing deterministic configuration review |
 | Onboarding / Knowledge | Current governed checklist only; no external knowledge retrieval | Explicit `reasoning_models.onboarding`; a faster model may suffice for bounded guidance | Existing onboarding controls; unsupported requests escalate |
 
-There is **no default live model ID** and no verified model choice in this record. The existing
+There is **no default live model ID**. The bounded 2026-09-29 run explicitly selected
+`gemini-2.5-flash` for all five routes; three capabilities produced accepted outputs. The existing
 legacy `route_for` suggested model table is not the live selector. `live_route` accepts only these
 five capabilities; financial/reconciliation/execution routes cannot be selected. Each request has
 a 30-second default deadline (operator range 1–60), at most two model calls, two evidence reads and
 2048 output tokens per call. Latency and price expectations must be checked for the selected models;
-no measured live latency or currency estimate exists yet.
+measured request latency was 1.545–5.110 seconds. Known token cost was US$0.0057781 plus unknown
+first-resolution failure usage, not billed spend. See the [attempt ledger](../reviews/live-gemini-adk-2026-09-29-evidence.md).
 
 ## ADK runner and typed contracts
 
@@ -101,11 +104,13 @@ endpoint. Ambient Gemini keys/endpoint overrides and configured OTLP export endp
 SDK content capture flags are forced off and SDK debug payload logging is suppressed process-wide.
 Only allowlisted application scalar telemetry is intended for use. No Secret Manager/IAM changes
 are required by the code, and none were made. Read-only Cloud Shell preflight on 2026-09-29 verified
-normal ADC for `movebooks-ai`, but Service Usage reports `aiplatform.googleapis.com` **DISABLED**.
+normal ADC for `movebooks-ai`; Service Usage initially reported `aiplatform.googleapis.com` **DISABLED**.
 The user subsequently approved enabling only that API; enablement succeeded and project IAM bindings
 were unchanged in the immediate before/after read-back. No IAM-change command was run. A regional
 `gemini-2.5-flash:countTokens` request returned HTTP 200 with seven synthetic input tokens. Actual
-generation permission and ADK execution are not yet proven.
+generation and local bounded ADK execution subsequently succeeded using that ADC. This does not
+activate managed ADK, deploy an application, or prove all five capabilities. Resolution/onboarding
+failed output validation; safe fallback preserved no-write and human-governance boundaries.
 
 ## Measurement contract
 
@@ -119,14 +124,17 @@ payloads, actors and exception messages are excluded from logs.
 | --- | --- |
 | Attempts / reserved calls | Number of unique durable reservations; two reserved calls per live request |
 | Observed calls and usage | Provider-reported call/tool/input/output counts; unknown remains null on interrupted runs, never assumed zero |
-| Latency | Host elapsed milliseconds per terminal request, including fallback; no live baseline yet |
+| Latency | Host elapsed milliseconds including fallback; seven live observations are not a baseline |
 | Fallback rate | FALLBACK terminal records / all terminal records; pending is reported separately |
 | Escalation rate | Records with advice.next_action=ESCALATE / terminal records with advice; do not equate escalation frequency with quality |
 | Reference validity | Pass only for a provider output accepted by schema/reference checks; null for rejected/unavailable output |
-| Semantic grounding / task correctness | Human claim-level assessment of live answers; currently NOT ASSESSED, not replaced by reference validity |
-| Tool selection / policy | Actual ADK allowlist and forbidden-tool tests; live selection still unassessed |
+| Semantic grounding / task correctness | Representative human assessment remains absent; advisory inspection found two live semantic defects despite valid refs |
+| Tool selection / policy | ADK allowlist/forbidden-tool tests; live planning used one evidence read and two model calls; no business writes |
 | Cost | API currency is null until verified model-specific prices exist; retain known tokens and reserved exposure, including unobserved interrupted usage |
 | Customer outcome | Future comprehension/decision-burden study; neither model usage nor acceptance substitutes for verified FPU |
+
+The isolated Cloud Shell smoke did not create durable reservations. Its separate attempt ledger is
+the denominator for that experiment only; this does not validate production telemetry aggregation.
 
 ## Bounded validation runbook
 
@@ -136,25 +144,26 @@ Google's [model specification](https://docs.cloud.google.com/gemini-enterprise-a
 lists `gemini-2.5-flash`, structured output and `asia-southeast1`. Its
 [lifecycle table](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions)
 lists retirement of the 2.5 Pro / Flash / Flash-Lite family on 2026-10-20. Recheck before any later
-run; do not silently substitute a successor model. No live route configuration has been activated.
+run; do not silently substitute a successor model. All five live evaluation routes were explicitly
+configured with Flash in the isolated process; deployed application configuration was not changed.
 
 Published [standard text pricing](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing),
 USD per million tokens, excluding separate paid tools:
 
-| Documented model | Input | Output including reasoning | Actual use in this preflight |
+| Documented model | Input | Output including reasoning | Actual use in this bounded session |
 | --- | --- | --- | --- |
-| Gemini 2.5 Flash | 0.30 | 2.50 | None |
+| Gemini 2.5 Flash | 0.30 | 2.50 | Six cases plus one diagnostic retry |
 | Gemini 2.5 Pro, input at most 200K tokens | 1.25 | 10.00 | None |
 | Gemini 2.5 Flash-Lite | 0.10 | 0.40 | None |
 
-These are reference rates, not a project billing read-back or a measured call cost. Actual model
-generation access, usage reporting, latency, structured responses and semantic grounding remain
-unverified. The API is now enabled; transfer of the reviewed source into Cloud Shell is blocked by
-the browser extension's file-upload permission. Preflight made zero generation calls; no generation
-spend was incurred. Token counting is not a generation/ADK quality result. Before invoking, bound
-total input/output exposure for all six requested representative cases
-and one failure case against the US$1 session target, including possible second ADK calls and any
-diagnostic retries. Do not expand testing automatically.
+These rates support token-cost estimates, not project billing read-back. The reviewed source upload
+was completed and hash-verified. Seven requests (six distinct cases and one diagnostic retry) yielded
+four accepted outputs and three safe fallbacks; all five capability routes were attempted. Partial
+failed-run usage is explicitly separate from successful provider telemetry. The first resolution
+failure's consumption remains unknown. The 14 reserved-call ceiling included the diagnostic retry;
+actual schema failures covered the negative path without an extra invalid-model request. No further
+paid calls were made. Full semantic grounding and capability readiness remain unproven; keep AMBER.
+Before any later bounded run, account for all attempts/unknowns and reconfirm model lifecycle/prices.
 
 ### Execution prerequisites
 

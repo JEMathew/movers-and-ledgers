@@ -2,7 +2,9 @@
 
 Date: 2026-09-29. Branch: `feature/live-gemini-adk`, based on merged main
 `6ddf7db997409721ecbde6185ed851c275aa93dd`. Scope: five optional owner-requested synthetic reasoning
-advisors. **Overall AMBER: local implementation gates pass; live activation not verified.**
+advisors. **Overall AMBER: authenticated live generation works, but two capabilities fail structured
+output and accepted answers have semantic gaps.** See the complete
+[2026-09-29 live attempt ledger](live-gemini-adk-2026-09-29-evidence.md).
 This record does not inherit live-model evidence from PR #13's deterministic cloud validation.
 
 ## Evidence and boundaries
@@ -36,7 +38,7 @@ This record does not inherit live-model evidence from PR #13's deterministic clo
   exists yet. The existing image gate was not weakened; prior cloud image results do not certify new
   optional AI images. CI now adds a credential-free real-ADK/offline-eval and dependency-audit job.
 
-## Live preflight and exact blocker
+## Historical preflight and current live outcome
 
 User authorized project `movebooks-ai`, region `asia-southeast1`, a **US$1 model-call operating
 target**, no Cloud Run or SQL startup. The initial local preflight could not discover ADC or use
@@ -55,28 +57,36 @@ successfully used authenticated Chrome Cloud Shell and normal Google SDK ADC ref
 
 An authenticated regional `gemini-2.5-flash:countTokens` request with a seven-token synthetic planning
 sentence returned **HTTP 200 / totalTokens 7**. This verifies authenticated token-count endpoint
-access, not generation permission, ADK execution or model response quality. No generation call ran.
+access, not generation permission, ADK execution or model response quality. No generation call had
+run at that preflight checkpoint.
 
-The reviewed source archive could not be uploaded to Cloud Shell because Chrome's ChatGPT extension
-does not have file-URL access. No browser permission was changed. The archive contains only tracked
+The initial upload was blocked by browser file access. The user subsequently enabled upload access
+and uploaded the reviewed archive; its hash was verified in Cloud Shell. The archive contains tracked
 advisory source, settings and synthetic cases from `937a278`, not credentials or workspace data:
 SHA-256 `c1df71aadee2accbe99a99b711dd28fff0de6a7cd283b34f75b564915849df1c`.
-**Live inference remains blocked on transferring the reviewed source into the authenticated process.**
-Per-capability live routing, live ADK execution and live failure paths remain unexercised.
 
-**Live agents activated: none. Paid model calls: zero. Model-call spend from this work: US$0.**
-No live latency, token usage, quality or cost estimate is fabricated from offline timings. Cloud Run,
-SQL, Firebase, IAM, GCS, Secret Manager, production images and the preserved completed FPU workspace
-were not changed or started. No approvals repeated and no invoice posted. This is an unchanged-cloud
-statement, not a fresh independent shutdown verification. No temporary cloud access was granted.
+Actual bounded live execution used normal ADC and explicit `gemini-2.5-flash` routes for all five
+capabilities. Six cases plus one diagnostic retry yielded **four accepted outputs / seven requests**:
+planning, both mapping cases and configuration passed host schema/reference gates; resolution twice
+and onboarding fell back. Diagnostic resolution and onboarding raised `ValidationError` after
+generation. Exact rejected fields remain unknown. No schema/authority constraints were weakened.
+These real failures exercised fallback; no extra invalid-model call was needed. All calls stopped.
 
-Next prerequisite: make the reviewed source available in Cloud Shell through an authorized upload
-or published source checkout, then verify inference access through the bounded runner. Do not paste
-tokens or export browser credentials. Run the requested six representative cases across five
-capabilities and one bounded failure case only after prerequisites pass. The current harness admits
-at most five selected cases per invocation; account for the entire session budget across invocations.
-Do not resume cloud runtime validation or start Cloud Run/SQL. No fresh live release-review clearance
-is claimed; prior local P0/P1 findings remain scoped to the inspected local implementation.
+Known usage including partial diagnostic counts: **3,727 input / 1,864 output tokens**;
+**US$0.0057781 estimated known cost**, plus unknown first-resolution consumption. Latency across
+all requests: **1.545–5.110 seconds**. This is not billed spend or a production baseline. Fourteen
+reserved calls are a maximum exposure, not measured consumption. The ledger preserves every attempt.
+
+Accepted configuration prose confused advisor limitations with product functionality; mapping
+low-confidence prose asserted an unsupported automated-processing policy. Both are **P2** semantic
+gaps despite safe host authority flags. Self-reported 0.9 confidence is not calibrated quality.
+No business repository/API was invoked; synthetic input equality is not a cloud FPU persistence test.
+Cloud Run, SQL, Firebase, IAM, GCS, Secret Manager, production images and the preserved workspace
+were not changed or started by the live evaluation. No approvals repeated or invoice posted.
+
+Next: diagnose structured-output errors with sanitized metadata/offline regressions, correct the two
+semantic gaps, then run only a separately bounded targeted follow-up. No deployment/merge or complete
+five-capability GREEN is justified. Remote CI and optional ADK image gates remain separate gaps.
 
 ## Review findings and remediation
 
@@ -85,7 +95,9 @@ and Product / Agentic AI / GenAI Quality / Metrics / Release Readiness. The buil
 and consolidates the decision here. No reviewer merged or changed production resources.
 
 Initial P0: **0**. Initial P1: **0**. Final unresolved P0: **0**, P1: **0** for the **inspected local
-synthetic no-write scope only**. Missing live evidence still prevents an overall GREEN declaration.
+and bounded live synthetic no-write scope only**. The live P2 failures prevent an overall GREEN
+declaration. Independent reviewers inspected source and supplied live summaries, not independently
+replayed cloud calls. Their final findings and qualifications are in the live ledger.
 
 | Finding | Severity | Evidence and why it matters | Remediation / re-review |
 | --- | --- | --- | --- |
@@ -99,6 +111,11 @@ synthetic no-write scope only**. Missing live evidence still prevents an overall
 | Reference check hardcoded as passed | P2 | Failed/unavailable provider results falsely appeared grounded | Null when no accepted provider response; semantic quality remains separately unscored; Product closed |
 
 ## Criterion-level review (no aggregate score)
+
+The tables below preserve the initial local-only review baseline. Current live evidence supersedes
+their former “no live evidence” gaps as specified in the ledger, not by treating accepted schema as
+quality. Final Agentic AI evidence/provenance and evaluation criteria are **2/4**, tool authority and
+human governance **3/4**; GenAI quality **2/4**, Release Readiness **2/4 / AMBER**. No aggregate score.
 
 Use the normative criterion definitions, “what good looks like,” product/user importance and 0–4
 scales in the [Product rubric](../rubrics/PRODUCT_MANAGEMENT_RUBRIC.md) and
@@ -138,11 +155,12 @@ They are not an average, activation permission or production-readiness score.
 
 ## Remaining owned gaps
 
-- **P2, release owner:** Cloud Shell ADC and the regional token-count endpoint now work; Vertex AI
-  API is enabled with approval. Transfer the reviewed source into the authenticated process, then
-  verify inference through bounded live orchestration/structured-output and failure-path checks.
+- **P2, engineering/release:** authenticated generation works, but resolution/onboarding failed
+  structured output. Diagnose safe schema metadata and preserve partial usage/failure categories;
+  first-resolution usage remains unknown. Full capability acceptance stays blocked.
 - **P2, GenAI/Product owners:** representative semantic correctness, grounding, usefulness and live
-  tool/escalation quality; no quality score exists yet. An offline canned result is not a substitute.
+  tool/escalation quality; live mapping-policy and configuration-scope defects require correction.
+  No representative human quality study exists. Canned results or valid refs are not substitutes.
 - **P2, engineering/release:** optional ADK image compatibility/security and durable live runtime
   evidence before cloud activation; branch remote CI not run. Production image policy stays intact.
 - **P2, operations:** permanent PENDING reservations have no reset/recovery workflow. Safe fallback
@@ -155,26 +173,28 @@ They are not an average, activation permission or production-readiness score.
 
 ## Seventeen-area release coverage
 
+Current status below combines the original local gates with this bounded live experiment.
+
 | Area | Assessment for this change |
 | --- | --- |
 | User | Clear optional owner guidance; representative benefit unvalidated |
 | Customer outcome | No FPU change; live contribution unmeasured |
-| Business | No commercial or production claim; cost target unspent |
+| Business | No commercial or production claim; known estimate US$0.0057781 plus unknown failed-call usage |
 | Product | Existing journey, Guide/Learn separation and Beta limits preserved |
 | Migration | Execution, reconciliation, retry and lifecycle services unchanged; regression suite passes |
-| Agent | Read-only bounded ADK orchestration tested offline |
-| GenAI | Strict schema/safety cases pass; live quality NOT ASSESSED |
+| Agent | Read-only ADK exercised live; two capabilities failed structured output |
+| GenAI | Four accepted outputs, semantic defects found; no representative human quality study |
 | Deterministic quality | Existing tools remain authoritative; one-invoice/FPU preservation test |
 | Safety/trust | Explicit human governance and no-write/no-self-approval boundary |
 | Security/privacy | Owner checks, pinned egress, no uploads, safe SDK/app telemetry; audit clear locally |
 | Reliability/operations | Bounded deadlines/calls, reservation/CAS and SQLite restart; live gap |
 | Engineering quality | Lint, types, build and backend/frontend gates pass; remote CI pending |
-| Evaluation maturity | Contract catalog and real offline runner; no live semantic/calibration evidence |
+| Evaluation maturity | Offline contracts plus seven live attempts; semantic gaps documented, calibration unproven |
 | UX/accessibility | Named controls/status/errors/evidence tested; bounded desktop light/dark visual check |
 | Platform scalability | No production load/global billing-cap proof; default off and workspace limits |
 | Feedback/support | Existing surfaces unchanged; pending operations need future support policy |
-| Demo readiness | Local advisory/fallback demonstrable; **not ready to claim live Gemini activation** |
+| Demo readiness | Live generation/fallback demonstrable; **not ready to claim complete five-capability readiness** |
 
 Final: **AMBER for the requested live activation objective; no P0/P1 found in the inspected local
-synthetic slice.** Nothing merged, deployed or pushed by this slice. See the
+and bounded live synthetic slice.** Nothing merged, deployed or pushed by this slice. See the
 [architecture and bounded runbook](../architecture/live-gemini-adk.md).
