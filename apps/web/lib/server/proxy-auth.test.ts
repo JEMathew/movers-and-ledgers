@@ -1,3 +1,4 @@
+import { Buffer } from "node:buffer";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { createLocalJWKSet, exportJWK, generateKeyPair, SignJWT, type JWTVerifyGetKey } from "jose";
 import { verifyUser } from "./proxy-auth";
@@ -30,9 +31,22 @@ describe("Firebase proxy verification (synthetic signed JWTs, no live credential
   });
   it("rejects altered signatures and emulator unsigned tokens", async () => {
     const signed = await token();
+    await expect(verifyUser(signed, "synthetic-project")).resolves.toBeUndefined();
     const parts = signed.split(".");
-    parts[2] = `x${parts[2].slice(1)}`;
-    await expect(verifyUser(parts.join("."), "synthetic-project")).rejects.toThrow();
+    const originalSignature = parts[2];
+    const signature = Buffer.from(originalSignature, "base64url");
+    expect(signature.length).toBeGreaterThan(0);
+    // Replacing a character with "x" can leave a valid signature unchanged.
+    // Flip an actual byte bit, then re-encode valid base64url without changing claims.
+    signature[0] ^= 1;
+    parts[2] = signature.toString("base64url");
+    const tampered = parts.join(".");
+    expect(parts[2]).not.toBe(originalSignature);
+    expect(tampered).not.toBe(signed);
+    expect(Buffer.from(parts[2], "base64url")).not.toEqual(Buffer.from(originalSignature, "base64url"));
+    await expect(verifyUser(tampered, "synthetic-project")).rejects.toMatchObject({
+      code: "ERR_JWS_SIGNATURE_VERIFICATION_FAILED",
+    });
     await expect(verifyUser("eyJhbGciOiJub25lIn0.e30.", "synthetic-project")).rejects.toThrow();
   });
 });
