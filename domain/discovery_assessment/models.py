@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 from domain.migration_resolution.models import MigrationExecution
 from domain.onboarding_fpu.models import OnboardingState
 from domain.planning_mapping.models import MappingProposal, MigrationPlan, WorkflowStatus
+from domain.reasoning.models import ReasoningRecord
 from domain.validation_configuration.models import (
     ConfigurationPlan,
     ValidationRepair,
@@ -273,3 +274,4 @@ class MigrationSession(BaseModel):
     configuration: ConfigurationPlan | None = None
     configuration_history: list[ConfigurationPlan] = Field(default_factory=list)
     onboarding: OnboardingState | None = None
+    reasoning_records: list[ReasoningRecord] = Field(default_factory=list)

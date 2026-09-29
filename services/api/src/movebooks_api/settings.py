@@ -2,7 +2,7 @@ from functools import lru_cache
 from typing import Literal
 from urllib.parse import urlparse
 
-from pydantic import model_validator
+from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     persistence_backend: Literal["memory", "cloud-sql"] = "memory"
     storage_backend: Literal["memory", "gcs"] = "memory"
     identity_mode: Literal["demo", "firebase"] = "demo"
-    model_provider_mode: Literal["deterministic-only", "gemini-ready", "fallback"] = (
+    model_provider_mode: Literal["deterministic-only", "gemini-ready", "fallback", "gemini-adk"] = (
         "deterministic-only"
     )
     logging_mode: Literal["structured", "off"] = "structured"
@@ -25,6 +25,11 @@ class Settings(BaseSettings):
     sql_database: str = ""
     sql_iam_user: str = ""
     storage_bucket: str = ""
+    reasoning_project: str = ""
+    reasoning_location: Literal["asia-southeast1"] = "asia-southeast1"
+    reasoning_models: dict[str, str] = Field(default_factory=dict)
+    reasoning_timeout_seconds: float = Field(default=30, ge=1, le=60)
+    reasoning_max_runs: int = Field(default=10, ge=1, le=10)
 
     @property
     def cloud(self) -> bool:
@@ -33,6 +38,34 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def safe_modes(self):
         import os
+
+        if self.model_provider_mode == "gemini-adk":
+            import re
+
+            from domain.reasoning.models import Capability
+
+            if self.env in {"staging", "production"}:
+                raise ValueError("Live reasoning is authorized only for synthetic dev/test")
+            if not self.reasoning_project or set(self.reasoning_models) != set(Capability):
+                raise ValueError("Explicit project and all five capability model routes required")
+            if any(
+                not re.fullmatch(r"gemini-[a-z0-9.-]{1,80}", m)
+                for m in self.reasoning_models.values()
+            ):
+                raise ValueError("Only explicit Gemini model IDs are supported")
+            if any(
+                os.environ.get(k)
+                for k in (
+                    "OTEL_EXPORTER_OTLP_ENDPOINT",
+                    "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT",
+                    "GOOGLE_GENAI_USE_VERTEXAI",
+                    "GOOGLE_API_KEY",
+                    "GEMINI_API_KEY",
+                    "GOOGLE_VERTEX_BASE_URL",
+                    "GOOGLE_GEMINI_BASE_URL",
+                )
+            ):
+                raise ValueError("Use explicit Vertex ADC configuration, not ambient keys/tracing")
 
         if os.environ.get("DATABASE_URL"):
             raise ValueError(

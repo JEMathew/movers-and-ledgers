@@ -20,6 +20,8 @@ Implemented workflows:
 - [Migrate → Resolve](migrate-resolve.md)
 - [Validate → Configure](validate-configure.md)
 - [Onboard → Verified First Productive Use](onboard-fpu.md)
+- [Optional Gemini / ADK advisory reasoning](live-gemini-adk.md) — synthetic-only, opt-in,
+  non-authoritative explanations; live activation evidence remains pending.
 
 `MIGRATION_COMPLETE` permits Validation only when all batches complete and unresolved migration
 exceptions equal zero. Validation must be VERIFIED with no blocking discrepancies before

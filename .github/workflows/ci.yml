@@ -6,6 +6,20 @@ on:
 permissions:
   contents: read
 jobs:
+  agents:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python -m pip install --upgrade 'pip>=26.2' 'setuptools>=83'
+      - run: pip install -e '.[dev,agents]' pip-audit
+      - name: Real ADK runner with offline models; no credentials
+        run: pytest tests/test_live_reasoning.py -q
+      - name: Synthetic reasoning contract catalog (not live quality evidence)
+        run: python scripts/live_reasoning_eval.py
+      - name: Optional AI dependency audit
+        run: pip-audit --skip-editable
   python:
     runs-on: ubuntu-latest
     steps:

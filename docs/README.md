@@ -14,6 +14,10 @@ Use this index to find the durable decision records without turning the reposito
 
 ## AI, trust, and evaluation
 
+- [Gemini / ADK advisory architecture](architecture/live-gemini-adk.md) and
+  [validation/review record](reviews/live-gemini-adk.md) — optional synthetic reasoning;
+  local evidence is not a live activation claim.
+
 - [AI and agent constitution](AI_AGENT_CONSTITUTION.md) — responsibility boundaries, evidence, approvals, safe stops, and prohibited actions.
 - [Trust and agent operations](TRUST.md) — trace and control baseline.
 - [Evaluation principles](EVALUATION_PRINCIPLES.md) — evaluation layers, quality dimensions, and evidence discipline.

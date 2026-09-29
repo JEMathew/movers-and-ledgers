@@ -75,3 +75,17 @@ def route_for(capability: str) -> CapabilityRoute:
     except KeyError as error:
         message = f"No governed model route exists for capability '{capability}'."
         raise ValueError(message) from error
+
+
+def live_route(capability, settings) -> CapabilityRoute:
+    """Explicit capability allowlist; never routes arithmetic or control capabilities."""
+    from domain.reasoning.models import Capability
+
+    capability = Capability(capability)
+    live = settings.model_provider_mode == "gemini-adk"
+    return CapabilityRoute(
+        capability.value,
+        "gemini-adk" if live else "deterministic-fallback",
+        settings.reasoning_models[capability] if live else None,
+        "Advisory reasoning only; existing deterministic services retain all authority.",
+    )
