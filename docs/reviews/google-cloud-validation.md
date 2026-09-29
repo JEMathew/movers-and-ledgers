@@ -5,7 +5,8 @@ Baseline: `41b73cea100e166bb7e3ea661c33650264755cec` (merged PR #12).
 Authorized target: `movebooks-ai`, primary region `asia-southeast1`, dev/test only.
 
 **GREEN for Google Cloud Beta runtime validation in the exercised synthetic dev/test scope.
-Final unresolved P0: 0; P1: 0. PR #13 remains draft/unmerged, ready for human review.
+Final unresolved P0: 0; P1: 0. At this validation checkpoint, PR #13 was draft/unmerged,
+ready for human review. It subsequently merged as `2c62b22`; the checkpoint below is historical.
 This is not production readiness, provider connectivity, compliance, customer-data intake,
 Gemini or managed ADK runtime clearance.**
 
