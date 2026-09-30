@@ -112,6 +112,17 @@ allowlisting, malicious/absent/cross-site origin rejection, media packaging and 
 playback. Backend code and business controls are unchanged. Image scan, live Hosting auth,
 README remote rendering and final release clearance remain pending.
 
+The fresh production audit found inherited GHSA-m9gg-hp2v-232j in
+`firebase -> @firebase/firestore -> @grpc/grpc-js@1.9.16` (four High package-chain
+entries, not four distinct root advisories). The application imports Firebase App/Auth,
+not Firestore or a gRPC server. No authentication bypass in this application was demonstrated.
+Rather than suppress the dependency gate, a Firestore-scoped override selects patched
+`@grpc/grpc-js@1.13.6`, with no Firebase major change or application-auth change. See
+[the upstream advisory](https://github.com/grpc/grpc-node/security/advisories/GHSA-m9gg-hp2v-232j).
+The resulting production audit reports zero vulnerabilities. All 204 frontend tests,
+lint, typecheck and production build passed again. The lockfile changes only this dependency
+and its required ordered-map package. A new exact-source image scan is required before deployment.
+
 Local visual checks at 1280 × 900 and 390 × 844 passed in light/dark themes with no horizontal
 overflow and no captured console errors. Native controls accepted keyboard play/pause; both
 media paths returned HTTP 200 with the expected type and size. Fixed media geometry is
