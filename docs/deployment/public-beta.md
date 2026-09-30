@@ -1,15 +1,127 @@
 # Public Beta connectivity and release gate
 
 **V1 baseline LIVE / GREEN — MoveBooks AI V1.0 bounded synthetic public Beta.**
-The historical post-merge CI fixture hold is resolved. The latest post-V1 account-shell
-deployment remains **AMBER for its targeted live regression**. The owner confirms first-click
-Google authentication and API-verified identity now work, but reports unreliable Sign out.
-A local event-handling fix and compact Settings/copy follow-up are recorded below. Exact
-source `d19b7a3` is now deployed; human-present Safari callback, signed-in Settings and
-one-click Sign out/protected-denial verification are still pending. Deployment is not
-live clearance of that P1 gate.
-Neither assessment claims production/compliance readiness. The dated original records below
-are retained as history; they are not an unresolved CI hold.
+The historical post-merge CI fixture hold is resolved. The post-V1 account-shell regression
+is **GREEN for its exercised live scope** and merged in PR #21. Safari verification of
+deployed source `d19b7a3` passed: API-verified User A identity, compact Settings, Product/Guide
+navigation and refresh, one-click Sign out, protected denial and no stale identity restoration.
+The 390 × 844 signed-in Safari responsive viewport fit the account/navigation controls.
+The final bounded read-back found 73 log entries, no ERROR/5xx, no business-write requests,
+no running jobs and unchanged API privacy/IAM/SQL. These are bounded observations, not
+production/compliance certification. Earlier AMBER handoffs below are retained as history.
+
+## Public-brand preparation — 30 September 2026
+
+**AMBER / not ready to publish or merge the new brand slice.** Branch
+`feat/public-brand-experience` starts from main `5e01f7e9dc7c25f4aaa5345c3ffb9a27e7a9015a`,
+including merged [PR #21](https://github.com/JEMathew/movers-and-ledgers/pull/21).
+All seven jobs in [main CI run 36749557786](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36749557786)
+passed. The working tree was clean before the scoped copy/evidence changes.
+
+Read-only baseline at 17:21 UTC confirmed web `movebooks-beta-web-00012-tjn` public and
+API `movebooks-beta-api-00012-z5n` private, with the immutable images recorded below.
+Both retain min 0 / max 1 / concurrency 8. Service/project IAM and runtime fingerprints,
+SQL RUNNABLE/ALWAYS configuration and the existing identities are unchanged. All listed
+validation job executions are completed. No cloud/Firebase/DNS change or deployment was made.
+
+### Firebase Hosting selection — replaces the paid-domain plan
+
+The only selected new public URL is `https://movebooks-si.web.app`. The product remains
+**MoveBooks AI**, not MoveBooks SI. No paid domain or custom domain mapping is planned.
+
+The Firebase Hosting API validation-only request returned 200 for `movebooks-si`; the
+subsequent authorized create returned `projects/movebooks-ai/sites/movebooks-si` and
+`https://movebooks-si.web.app`. The fallback `movebooks-ai` already exists as this project's
+default site and was not changed. Site creation reserves the name; it does not prove the
+application or authentication works there. No Hosting release is live from this change yet.
+
+Fresh baseline at 18:14 UTC confirms the same private API/public web revisions, service and
+project IAM fingerprints, min 0 / max 1 / concurrency 8 and SQL RUNNABLE/ALWAYS configuration.
+All 19 retained validation executions are completed. No backend service, SQL or IAM change
+is part of this slice. Normal gcloud Cloud Shell SSH setup created a local operator SSH key;
+this is not a workload/service-account key or a workload IAM grant.
+
+`firebase.json` describes a catch-all rewrite to existing `movebooks-beta-web` in
+`asia-southeast1`. No direct API rewrite, load balancer, VPC or new application service is
+introduced. The Hosting release will follow the current web service rather than adding
+Cloud Run revision tags. Firebase Hosting supports this region; its request timeout is
+60 seconds. Preserve private/no-store proxy responses and never cache identity/workspaces.
+See [Firebase's Cloud Run integration](https://firebase.google.com/docs/hosting/cloud-run).
+
+The web build uses `NEXT_PUBLIC_API_BASE_URL=/api` so each supported browser origin uses its
+own authenticated proxy. `MOVEBOOKS_PUBLIC_WEB_ORIGIN` remains the operational Cloud Run
+origin; `MOVEBOOKS_ADDITIONAL_WEB_ORIGINS=https://movebooks-si.web.app` is the only additional
+deployment-owned origin. HTTPS, exact origin checks, cross-site denial, Firebase verification,
+fixed API audience, request allowlist, header stripping and backend ownership remain intact.
+No arbitrary Host/Origin value becomes a trusted origin or API destination.
+
+After the scanned web revision is ready, add only `movebooks-si.web.app` to Firebase
+authorized domains, preserving all existing entries. Human Google sign-in, verified email,
+navigation/refresh, Settings/account menu, sign-out and protected denial are required before
+canonical-link replacement. README links and GitHub settings remain unchanged until then.
+
+The web.app hostname and managed HTTPS avoid domain purchase/renewal. Hosting currently
+includes 10 GB storage and 10 GB/month transfer at no charge; Blaze overages are $0.026/GB
+stored and $0.15/GB transferred. Cloud Run requests/data transfer and existing SQL charges
+continue; this is a free hostname/allowance, not a spending cap. See
+[Hosting pricing](https://firebase.google.com/docs/hosting/usage-quotas-pricing).
+
+### Product Vision and trust changes
+
+Approved source: `hf_20260928_094916_5d9b8dc0-6092-42e1-8f50-93035076fb0b.mp4`.
+Master: 50,986,565 bytes, 25.04 seconds, 1920 × 1080 at 24 fps, HEVC Main 10/BT.709 and
+AAC-LC stereo 32 kHz. SHA-256:
+`bcf1e356e7f5fd0c7f9af37389bc921d7df900246b5d3aec7353ad1f7a8376ce`.
+
+One repo copy of the optimized media lives under `apps/web/public/media/`, shared by local
+Next.js, the production image and README-relative links, instead of duplicating the binary
+under docs and runtime. The Docker runtime now copies this public directory.
+
+- `movebooks-ai-product-vision.mp4`: 6,593,004 bytes; H.264 High/yuv420p; fast-start;
+  unchanged 1920 × 1080, 24 fps and 25.04 seconds. Approximately 87% smaller.
+  SHA-256 `6ba11a2dfcdebe4f38750e0762349fc8d0ed766531ac6fc19b922d65abcc3ada`.
+- `movebooks-ai-product-vision-poster.webp`: 92,446 bytes; 1280 × 720, extracted from the
+  approved film. SHA-256 `6b96ca4ee684c653a6de9fb58add5877021d653937b021efa8b3b219905e08e7`.
+- AAC packets were copied unchanged; both audio hashes:
+  `07b226be0ffce04a0e7f7b9c83f8592f1e1566efca21e62c9809bad98ecf86b1`.
+
+The native, keyboard-operable player sits after the five-phase journey and before Trust.
+It has a poster, explicit controls, inline playback, no autoplay/loop, `preload=none` and
+fixed 16:9 geometry. No video is needed for initial render; initial local state was paused,
+readyState 0 and zero buffered ranges. Keyboard play reached readyState 4 at 1920 × 1080.
+No third-party player/tracker was added. Approximate optional transfer: 92 KB poster plus
+6.59 MB on play; homepage first-load JavaScript remains 111 kB. These are bounded local
+observations, not a field Core Web Vitals measurement.
+
+README has a clickable poster near the top and explicitly distinguishes Product Vision
+from the working Beta and a real product-screen Demo. Sampled imagery shows the five current
+phases and Business Ready · Verified; depicted financial screens are conceptual, not live
+Beta screenshots. Historical "First Real Task" wording is retained. No creative was
+regenerated. Full narration transcription/caption review remains a non-blocking follow-up.
+
+The approved trust sentence appears once in the landing Trust lead-in. The stack attribution
+is subtle beneath its cards. Trust clarifies verified human approval, deterministic financial
+truth, safe fallback, public deterministic-only routing and bounded synthetic Gemini evidence.
+The projection excludes uploaded exports, raw financial rows/amounts, actors, comments and
+credentials. Neither live models nor managed ADK are activated.
+
+Local gates: 204 frontend tests pass across 24 files, lint/typecheck pass, production build
+passes; repository checks cover 94 Markdown/373 text files with zero findings and whitespace
+checks pass. New tests cover same-origin HTTPS identity URLs, explicit Hosting origin
+allowlisting, malicious/absent/cross-site origin rejection, media packaging and bounded native
+playback. Backend code and business controls are unchanged. Image scan, live Hosting auth,
+README remote rendering and final release clearance remain pending.
+
+Local visual checks at 1280 × 900 and 390 × 844 passed in light/dark themes with no horizontal
+overflow and no captured console errors. Native controls accepted keyboard play/pause; both
+media paths returned HTTP 200 with the expected type and size. Fixed media geometry is
+reserved before playback. No Safari sign-in on Hosting is claimed by these local checks.
+
+GitHub recommendations only (not applied): homepage `https://movebooks-si.web.app` after
+HTTPS/auth gates pass; About: "Provider-neutral, evidence-driven agentic accounting migration
+and onboarding platform with deterministic financial controls and human governance."
+Topics: `agentic-ai`, `accounting`, `migration`, `onboarding`, `fintech`,
+`human-in-the-loop`, `gemini`, `google-adk`, `google-cloud`, `product-management`.
 
 ## Account and migration-entry cleanup — 30 September 2026
 

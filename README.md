@@ -36,6 +36,17 @@ validation is separate from deployment activation.
 [High-resolution PNG for presentations](docs/assets/movebooks-product-overview.png).
 On mobile, open the image to zoom; the journey and trust model are also described below.
 
+## Product Vision
+
+[![MoveBooks AI Product Vision — play the 25-second narrated film](apps/web/public/media/movebooks-ai-product-vision-poster.webp)](apps/web/public/media/movebooks-ai-product-vision.mp4)
+
+Watch the 25-second narrated MoveBooks AI product vision.
+
+**Product Vision** illustrates the intended customer experience and product direction.
+**Live Beta** is the currently implemented and validated experience. A **Demo** would be an
+actual product-screen walkthrough; this film is not one and does not imply every depicted
+screen or provider connection is implemented.
+
 **Reference implementation:** This public repository is provided primarily for demonstration, evaluation, learning, and portfolio purposes. MoveBooks AI and Movers & Ledgers remain independent product concepts. Public access to the repository does not by itself grant rights to commercially reproduce, rebrand, resell, or redistribute the product beyond the permissions explicitly provided in the repository license.
 
 ## The Migration Problem
@@ -48,8 +59,6 @@ Accounting migrations leave teams asking both **“Did the data move correctly?�
 - Manual mapping and cleanup that consume expert time.
 - Migration and reconciliation risk when transfer success is mistaken for correctness.
 - Disconnected migration and onboarding, with no clear proof of business readiness.
-
-## Product Vision
 
 Migration should end at productive use, not file transfer. MoveBooks connects the
 full journey through five customer-facing phases:

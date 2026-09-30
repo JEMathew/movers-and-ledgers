@@ -15,6 +15,28 @@ beforeEach(() => {
 });
 
 describe("private API proxy", () => {
+  it("accepts only the explicit additional Hosting origin without changing the API audience", async () => {
+    const hosted = { ...config, additionalOrigins: ["https://movebooks-si.web.app"] };
+    for (const Origin of [config.publicOrigin, "https://movebooks-si.web.app"]) {
+      const response = await proxyRequest(request(`${path}/plan`, { method: "POST", headers: { Origin, "Sec-Fetch-Site": "same-origin" } }), hosted, dependencies);
+      expect(response.status).toBe(200);
+    }
+    expect(dependencies.verifyUser).toHaveBeenCalledTimes(2);
+    expect(dependencies.workloadAuthorization).toHaveBeenLastCalledWith(config.upstream);
+    vi.mocked(dependencies.fetch).mockClear();
+    for (const Origin of ["https://evil.web.app", "https://movebooks-si.web.app.evil.test", "null", ""]) {
+      expect((await proxyRequest(request(`${path}/plan`, { method: "POST", headers: { Origin } }), hosted, dependencies)).status).toBe(403);
+    }
+    expect((await proxyRequest(request(path, { headers: { Origin: hosted.additionalOrigins[0], "Sec-Fetch-Site": "cross-site" } }), hosted, dependencies)).status).toBe(403);
+    expect(dependencies.fetch).not.toHaveBeenCalled();
+  });
+  it("rejects unsafe additional origins and never derives them from request headers", () => {
+    const env = { NEXT_PUBLIC_IDENTITY_MODE: "firebase", NEXT_PUBLIC_FIREBASE_PROJECT_ID: "synthetic-project", MOVEBOOKS_PRIVATE_API_ORIGIN: config.upstream, MOVEBOOKS_PUBLIC_WEB_ORIGIN: config.publicOrigin };
+    expect(proxyConfig({ ...env, MOVEBOOKS_ADDITIONAL_WEB_ORIGINS: "https://movebooks-si.web.app" }).additionalOrigins).toEqual(["https://movebooks-si.web.app"]);
+    for (const value of ["*", "https://*.web.app", "http://movebooks-si.web.app", "https://user:pass@movebooks-si.web.app", "https://movebooks-si.web.app/path", "https://movebooks-si.web.app?next=evil", config.upstream, "https://movebooks-si.web.app,"]) {
+      expect(() => proxyConfig({ ...env, MOVEBOOKS_ADDITIONAL_WEB_ORIGINS: value })).toThrow();
+    }
+  });
   it("exposes only authenticated read-only identity, with no client owner headers or cache", async () => {
     const response = await proxyRequest(request("/api/v1/identity", { headers: { "X-Email": "spoof", "X-Owner": "spoof" } }), config, dependencies);
     expect(response.status).toBe(200);

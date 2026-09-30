@@ -45,10 +45,16 @@ export type VerifiedIdentity = { subject: string; email: string };
 // transport margin: a min-zero API's first verified request can exceed 15s.
 const IDENTITY_VERIFICATION_TIMEOUT_MS = 65_000;
 
+/** The only relative cloud endpoint is the same-origin, fixed /api proxy. */
+export function identityEndpoint(base: string | undefined, browserOrigin?: string) {
+  const endpoint = base === "/api" ? new URL("/api", browserOrigin) : new URL(base ?? "http://invalid");
+  if (endpoint.protocol !== "https:" || endpoint.username || endpoint.password) throw new Error("Invalid identity endpoint: HTTPS without credentials is required");
+  return endpoint;
+}
+
 /** Display only the API-verified session, never a workspace actor or browser owner claim. */
 export async function verifiedIdentity(user: import("firebase/auth").User): Promise<VerifiedIdentity> {
-  const endpoint = new URL(process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://invalid");
-  if (endpoint.protocol !== "https:" || endpoint.username || endpoint.password) throw new Error("Invalid identity endpoint");
+  const endpoint = identityEndpoint(process.env.NEXT_PUBLIC_API_BASE_URL, window.location.origin);
   const response = await fetch(`${endpoint.href.replace(/\/$/, "")}/v1/identity`, {
     headers: { Authorization: `Bearer ${await user.getIdToken()}` },
     cache: "no-store", credentials: "omit", redirect: "error", signal: AbortSignal.timeout(IDENTITY_VERIFICATION_TIMEOUT_MS),
@@ -74,8 +80,7 @@ export function signInError(error: unknown) {
 
 export async function authHeaders(): Promise<Record<string, string>> {
   if (cloudIdentity()) {
-    const endpoint = new URL(process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://invalid");
-    if (endpoint.protocol !== "https:" || endpoint.username || endpoint.password) throw new Error("Cloud API is not configured with HTTPS. No token was sent.");
+    identityEndpoint(process.env.NEXT_PUBLIC_API_BASE_URL, window.location.origin);
     const auth = await firebaseAuth();
     if (!auth.currentUser) throw new Error("Sign in with Google to access this workspace.");
     return { Authorization: `Bearer ${await auth.currentUser.getIdToken()}` };

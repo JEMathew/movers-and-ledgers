@@ -22,6 +22,7 @@ RUN apk add --no-cache nodejs-22-minimal=22.23.2-r1
 WORKDIR /app
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
+COPY --from=build /app/public ./public
 USER 65532:65532
 EXPOSE 8080
 CMD ["node", "server.js"]
