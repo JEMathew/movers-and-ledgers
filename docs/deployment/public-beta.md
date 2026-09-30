@@ -4,14 +4,108 @@
 The historical post-merge CI fixture hold is resolved. The latest post-V1 account-shell
 deployment remains **AMBER for its targeted live regression**. The owner confirms first-click
 Google authentication and API-verified identity now work, but reports unreliable Sign out.
-A local event-handling fix and compact Settings/copy follow-up are recorded below; they
-have not been deployed or live-cleared.
+A local event-handling fix and compact Settings/copy follow-up are recorded below. Exact
+source `d19b7a3` is now deployed; human-present Safari callback, signed-in Settings and
+one-click Sign out/protected-denial verification are still pending. Deployment is not
+live clearance of that P1 gate.
 Neither assessment claims production/compliance readiness. The dated original records below
 are retained as history; they are not an unresolved CI hold.
 
 ## Account and migration-entry cleanup — 30 September 2026
 
-### Sign-out event handling and compact preferences — local follow-up
+### Exact-source web deployment — Safari authentication handoff
+
+**AMBER; not cleared for merge.** Authorized source
+`d19b7a3846a8e3561a1c0f9152528e69f0295284` on `release/account-shell-regression`
+had a clean working tree. Only a new web image was deployed; no API deployment,
+IAM/SQL/Firebase/runtime-configuration change or business mutation was performed.
+
+Fresh artifact evidence:
+
+- Clean, no-cache Linux amd64 web build passed, including production compilation,
+  build-time lint/type validation and generation of 25 pages.
+- Production `npm audit --omit=dev`: **0 vulnerabilities**.
+- Existing pinned Grype `--fail-on high` gate: **0 Critical / 0 High / 5 Medium /
+  1 Low**, exit 0. No ignore, suppression or only-fixed filter was used.
+- Source archive SHA-256:
+  `61553d8faf8e3ad39b0736b2514877947202e431c3db168b7260407e13b85dae`.
+- Scanned image archive SHA-256:
+  `68dde6b325ed0ed1ce3f1beb996ac42e73cd59638534ad004b6d4d89b7845a45`.
+- Initial scan report SHA-256:
+  `7352e742ef2f0160326c259d46b0b9f341451cd883fde8948fdf51475af403d6`.
+- Published image:
+  `asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/web@sha256:8d9812d6077abf08c90dd0868684cab392c010bebcd35f0ca869f3f50268e397`.
+  The published configuration/rootfs matched the scanned archive, configuration
+  SHA-256 `bf10ad02254090863bd3207278b26b4d0edc27569325002bcf457e04fe0e5af0`.
+- An accidentally queued duplicate Cloud Shell build was terminated before
+  publication. It overwrote the temporary initial report, not the deployed
+  immutable artifact. The exact deployed digest was subsequently pulled and
+  scanned again with the same strict pinned gate: **exit 0, 0 Critical / 0 High /
+  5 Medium / 1 Low**. Retained replacement report SHA-256:
+  `2a327788596e9599ab449caf56fd4ebcdce639c0a57425a0096704d807d00b15`.
+  Residual `glibc-2.44 2.44-r6` matches: Medium CVE-2026-77117, CVE-2026-80489,
+  CVE-2026-8674, CVE-2026-89092, CVE-2026-86805; Low CVE-2026-95818. These
+  remain tracked follow-ups, not suppressed findings or a vulnerability-free claim.
+
+Web revision **`movebooks-beta-web-00012-tjn`**, created
+**2026-09-30 14:06:34 UTC**, is Ready and serves **100%**. Public origin remains
+`https://movebooks-beta-web-411600344727.asia-southeast1.run.app`.
+Rollback target **`movebooks-beta-web-00011-p9v`** remains available; its immutable
+image is `sha256:1e97ed9c8c0e0cc40ce919989eeaf7c40350f932e4c0531a06a71dc443240d16`.
+An owner-approved rollback would route web traffic back to that revision, without
+changing API, IAM or SQL. No rollback was performed.
+
+Read-only preflight at 13:52 UTC, pre-deployment at 14:05 UTC, post-deployment
+at 14:07 UTC and final read-back at 14:14 UTC matched the service
+configuration/IAM and SQL fingerprints:
+
+- Web remains public; API remains private with no public invoker. The existing
+  dedicated web identity retains service-level API invocation only.
+- Both services retain automatic scaling, min 0 / max 1, concurrency 8, existing
+  identities, environment/secrets, ingress and CPU-throttling settings.
+- API remains `movebooks-beta-api-00012-z5n`, image
+  `sha256:925d5d218b925e2324ca03352aeea07db428485663989cfb5d0f1b0041bf5411`.
+- SQL remains RUNNABLE / ALWAYS, `db-f1-micro`, 10 GB, encrypted public-IP
+  connectivity with no authorized networks. No pending SQL operation or project
+  IAM drift was found. Recurring resource sizing/cost posture is unchanged.
+- Authenticated Cloud Run `/readyz` returned application **200**; IAM-only
+  identity/preserved-onboarding requests returned **401**; anonymous direct API
+  readiness/identity/preserved-onboarding requests returned Google edge **403**.
+  Native container liveness remained successful.
+
+Signed-out live checks:
+
+- HTTP **200** for `/`, `/product`, `/workspace`, `/sign-in`, `/guide`, `/simulator`,
+  `/learn`, `/play`, `/trust`, `/feedback`, `/support` and the anonymous preserved
+  `/onboard-fpu` page shell. **26 static assets returned 200**. Anonymous proxy
+  identity and preserved-onboarding GETs returned **401**; a page shell's 200
+  does not grant protected workspace access.
+- Desktop and 390px mobile checks found one Settings entry, Google sign-in,
+  no Sign out/stale email and no horizontal overflow on the required surfaces.
+  Compact Settings rendered in light/dark, with theme preference and device
+  reduced-motion guidance only; no Session section. Escape/close returned focus,
+  outside-pointer dismissal worked, and mobile navigation coexisted with controls.
+- The requested home migration reasons, all three explicit customer questions and
+  “Migration is more than moving files” wording were present. The replaced
+  ambiguous home phrases were absent. Product retained its customer-facing entry.
+- A fresh Safari **private** `/workspace` showed the correct signed-out surface.
+  The first enabled **Continue with Google** click opened Google's sign-in popup;
+  no second click was made. The owner was asked to complete User A sign-in/MFA.
+  No password, token or session cookie was extracted or requested.
+- Final bounded new-revision log read: **214 entries, 0 ERROR-or-higher/5xx**;
+  **0 unfinished Cloud Run jobs**. This is bounded evidence, not a universal
+  absence-of-errors claim.
+
+Still required: completed Safari callback/API-verified User A email, signed-in
+Settings/menu behavior, read-only Go to migration/owner workspace access, one-click
+Firebase-confirmed Sign out, absence of stale identity restoration, and protected
+denial afterward. The reported P1 remains **fixed locally, live clearance pending**;
+P0 observed: **0**. No new P2/P3 defect was found in completed scoped checks;
+Medium/Low image advisories and existing operational follow-ups remain visible.
+No scenario, approval, invoice, migration or preserved FPU state was changed.
+No merge, tag or V1 release modification was performed.
+
+### Historical local sign-out event handling and compact preferences
 
 The owner confirmed first-click chooser, correct API-verified email, no false session-attention
 state and a working account-menu disclosure on deployed candidate `310c45b`. The owner then
