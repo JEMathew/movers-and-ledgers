@@ -6,6 +6,47 @@ deployment remains **AMBER for its targeted live regression**, pending human Saf
 Neither assessment claims production/compliance readiness. The dated original records below
 are retained as history; they are not an unresolved CI hold.
 
+## Account-shell refresh checkpoint — 30 September 2026
+
+**AMBER: deployed and signed-out regression passed; human-present Safari authentication
+and signed-in/session/sign-out regression are still pending.** Do not substitute previous
+V1 manual results or local mocks for these live gates.
+
+- Branch `release/account-shell-regression` was fast-forwarded to main
+  `218de41039394464bb813bd1ace161b3c5decefd`. Account-shell PR #19 and portfolio PR #20 are
+  merged; all seven jobs in [main CI run 36702920084](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36702920084)
+  passed. Changes since the previously deployed `ac95900` are documentation/assets only;
+  API and web application source are unchanged.
+- A clean web-only build from that exact commit passed. Initial Docker registry blob
+  downloads failed; the same pinned vendor bases were fetched using the existing host
+  registry client and loaded into Docker. No networking, Dockerfile or scan-policy change.
+- Web revision `movebooks-beta-web-00009-4q4` serves 100% of traffic. Immutable image:
+  `sha256:882be93cfbc18908854cf29e46ae50bec67294662b6ebf6c7470d61892b82692`.
+  Fresh Grype gate: **0 Critical / 0 High**, 5 Medium / 1 Low, without suppression.
+  Report SHA-256: `de1a3ae0abe290cd5a39f599e13f4bc2d1c0bd187094afa7d1a628dc7b41e71c`.
+  Published image configuration/rootfs matches the scanned archive.
+- Read-back at 10:59 UTC (16:29 IST) confirmed API `movebooks-beta-api-00012-z5n` and its
+  image unchanged/private; web remains public. Service/project IAM and runtime configuration
+  fingerprints match the preflight. Min 0/max 1/concurrency 8, service identities, environment
+  and secrets remain unchanged. SQL remains RUNNABLE/ALWAYS with identical settings.
+- Authenticated API `/readyz` returned 200; IAM-authenticated requests without Firebase
+  identity to identity/onboarding returned 401; anonymous API requests returned edge 403.
+- Live `/`, `/product`, `/workspace`, `/guide` returned 200 and showed the consistent
+  signed-out shell on desktop and mobile: Settings + Google sign-in, no Sign out/stale email.
+  Mobile home/workspace light/dark checks found no horizontal overflow or control overlap.
+  Settings Escape restored visible focus; mobile navigation coexists with account controls.
+  No browser warning/error entries were captured during these signed-out checks.
+- Focused account/identity/Google/proxy tests: **66 passed**. Lint, typecheck, production
+  build, production dependency audit (0 vulnerabilities), repository and whitespace checks passed.
+  A bounded 20-minute read-back found API 37/web 20 log entries, zero ERROR-or-higher/5xx,
+  and zero unfinished Cloud Run job executions. Temporary build SSH access was revoked and
+  the task-created local keypair removed. No approvals, postings, scenarios or business writes.
+- Pending: cold Safari first-click sign-in, API-verified identity/account-menu interactions,
+  same-tab navigation/reload/owner access, then sign-out and protected denial. Firebase uses
+  browser-session persistence; cross-tab persistence is not claimed. P0/P1 observed: 0/0;
+  final live clearance remains pending. No new P2/P3 UX finding; residual image advisories
+  remain non-blocking follow-ups. No API deployment, IAM/SQL change, merge or V1 tag change.
+
 ## Portfolio evidence reconciliation — 30 September 2026
 
 Documentation-only reconciliation; no cloud resources, IAM, application code or release tags
