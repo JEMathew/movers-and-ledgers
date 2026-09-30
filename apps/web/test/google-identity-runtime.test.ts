@@ -46,6 +46,16 @@ describe("prepared Firebase runtime", () => {
     const { authHeaders } = await import("@/lib/identity");
     await expect(authHeaders()).rejects.toThrow("Sign in with Google");
   });
+  it("clears the SDK user on confirmed sign-out and denies the next protected request", async () => {
+    const auth = { authStateReady: sdk.ready, currentUser: { getIdToken: vi.fn().mockResolvedValue("synthetic-token") } as { getIdToken: () => Promise<string> } | null };
+    sdk.getAuth.mockReturnValue(auth);
+    sdk.signOut.mockImplementation(async () => { auth.currentUser = null; });
+    const { authHeaders, prepareGoogleIdentity } = await import("@/lib/identity");
+    expect(await authHeaders()).toEqual({ Authorization: "Bearer synthetic-token" });
+    const runtime = await prepareGoogleIdentity(); await runtime.signOut();
+    expect(sdk.signOut).toHaveBeenCalledWith(auth);
+    await expect(authHeaders()).rejects.toThrow("Sign in with Google to access this workspace.");
+  });
 });
 
 describe("server-verified identity display", () => {

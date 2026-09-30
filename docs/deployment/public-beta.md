@@ -2,13 +2,160 @@
 
 **V1 baseline LIVE / GREEN — MoveBooks AI V1.0 bounded synthetic public Beta.**
 The historical post-merge CI fixture hold is resolved. The latest post-V1 account-shell
-deployment remains **AMBER for its targeted live regression**. The owner reports that
-authentication now works after the timeout fix; the latest customer-language/account-menu
-cleanup below is local-only and is not a new deployed or fully verified live release.
+deployment remains **AMBER for its targeted live regression**. The owner confirms first-click
+Google authentication and API-verified identity now work, but reports unreliable Sign out.
+A local event-handling fix and compact Settings/copy follow-up are recorded below; they
+have not been deployed or live-cleared.
 Neither assessment claims production/compliance readiness. The dated original records below
 are retained as history; they are not an unresolved CI hold.
 
 ## Account and migration-entry cleanup — 30 September 2026
+
+### Sign-out event handling and compact preferences — local follow-up
+
+The owner confirmed first-click chooser, correct API-verified email, no false session-attention
+state and a working account-menu disclosure on deployed candidate `310c45b`. The owner then
+reported unreliable Sign out and requested a narrower Settings surface and clearer home copy.
+These findings supersede the pending callback checkpoint below, not its historical evidence.
+
+**Root cause reproduced locally:** account-menu `onBlur` treated a null `relatedTarget` as
+an outside focus move. A non-focusing pointer click (Safari ordering: pointerdown/mousedown,
+focused Settings blur to null, mouseup/click) unmounted Sign out before its click handler.
+The added regression failed on the original implementation because the button was removed.
+This blocks the handler before Firebase sign-out, identity/session-reference clearing and
+navigation; it is not evidence of a Firebase or backend authorization failure.
+
+The fix keeps the action mounted for null-target blur, while retaining real focus-exit,
+outside-pointer and Escape dismissal. The unchanged provider still waits for Firebase
+confirmation, clears only selected-session references, navigates to `/sign-in`, displays a
+sanitized failure on rejection and invalidates stale in-flight verification. No Firebase,
+API/proxy authorization, migration/financial code, IAM, SQL or runtime configuration changed.
+
+Settings now uses a compact anchored, non-modal dialog with System/Light/Dark and existing
+device reduced-motion guidance only. Session/authentication information remains in the
+account UI. Initial theme focus, Escape/close focus return, outside click, keyboard exit
+and Safari non-focusing click behavior have regression coverage. There is no duplicate
+Settings button. Desktop and 390px mobile light/dark rendering, visible focus, theme changes
+and outside dismissal were inspected locally; no horizontal overflow was observed.
+
+Home uses the owner-supplied “Why businesses migrate” heading, supporting text and four
+reasons, plus the three explicit data/numbers/business-readiness questions and explanations.
+The existing card/grid layout is retained. The shared header's Go to migration remains
+`/workspace` and issues no mutation; the existing Product continuation may link to the saved
+journey's authoritative stage using a read-only request. No CTA or workflow was redesigned.
+
+Local validation:
+
+- Focused account/auth/runtime/public-surface regressions: **89 passed / 5 files**.
+- Full frontend: **193 passed / 22 files**.
+- Backend identity/runtime: **57 passed**; existing Starlette deprecation warning only.
+- Frontend lint, typecheck and production build: passed.
+- Repository/link/credential-pattern checks: **94 Markdown / 369 text files, 0 findings**.
+- Whitespace check: passed.
+- Success/failure sign-out, all three session-reference removals, sanitized retry feedback,
+  stale-verification rejection and SDK-user removal followed by denied protected headers
+  pass locally. These mocked/local contracts do not establish a new live sign-out result.
+
+Live reproduction limitation: the previously authenticated Safari window was no longer
+available. A fresh live `/workspace` tab was signed out. Human User A sign-in was requested;
+no credentials were extracted and no automatic Google sign-in was attempted. Live tracing
+and protected-denial-after-sign-out must be repeated with the fixed deployed candidate.
+
+Assessment: **local checks GREEN; release AMBER**. P0 observed: **0**. The reported sign-out
+issue is **one P1 release blocker, fixed locally but not live-cleared**. Settings weight and
+copy clarity P2 findings are addressed locally. No new P3 identified; existing operational
+and image-advisory follow-ups remain unchanged. Do not claim final P1 clearance or merge.
+Next: review the local fix, authorize a scanned web-only deployment, then complete the
+human-present Safari sign-out/protected-denial regression. No deployment or cloud change
+was made in this follow-up.
+
+### Historical exact-candidate deployment; initial Safari handoff
+
+**AMBER — DEPLOYED, RELEASE DECISION REQUIRED.** Signed-out smoke and security gates
+passed; real Safari callback, signed-in/menu/session/sign-out, mobile authenticated and
+preserved-journey checks remain pending. This is an incomplete gate, not a finding of
+broken authentication. Do not merge or use earlier local fixtures as live clearance.
+
+Candidate: `310c45b3937d272b3ddd46b7130887bc3780f621` on
+`release/account-shell-regression`. The tree was clean before evidence updates. Review of
+the candidate diff found only the intended presentation/copy/tests/documentation changes;
+identity-provider, auth/proxy libraries, backend, infrastructure, migration and financial
+controls are unchanged. No defects were repaired during this validation attempt.
+
+Fresh repository-authoritative checks:
+
+- `npm test`: 188 passed / 22 files.
+- `npm test -- test/account-shell.test.tsx test/google-sign-in.test.tsx test/runtime-identity.test.tsx components/public-surfaces/surfaces.test.tsx`:
+  71 passed / 4 files.
+- `npm run lint`, `npm run typecheck`, `npm run build`: passed.
+- `npm audit --omit=dev`: 0 vulnerabilities. The first sandboxed audit was unable to
+  resolve the registry; the normal-network rerun above passed, without changing the gate.
+- `.venv/bin/python scripts/repository_checks.py`: 94 Markdown / 369 text files, 0 findings,
+  including repository links and the existing bounded credential-pattern scan.
+- `git diff --check`: passed.
+- `.venv/bin/pytest tests/test_identity_display.py tests/test_runtime_faults.py tests/test_validation_failures.py -q`:
+  24 passed; existing Starlette test-client deprecation warning only.
+
+Read-only cloud preflight at 12:53 UTC matched the previous configuration fingerprints:
+web `movebooks-beta-web-00010-zll` public, API `movebooks-beta-api-00012-z5n` private,
+min 0/max 1/concurrency 8, SQL RUNNABLE/ALWAYS, no service/project IAM or SQL drift.
+Unchanged API readiness returned application 200; IAM-authenticated requests without
+Firebase identity to identity/preserved onboarding returned 401; anonymous direct API
+requests returned 403. No business writes or sign-in occurred in these probes.
+
+The exact source archive SHA-256 is
+`19da34caa55eaaadece96edae42bd82f2ec6bca6fb55e5f43c1fa538b38286e3`.
+The existing browser Cloud Shell path is used for the clean web build and unchanged pinned
+Grype `--fail-on high` gate. A requested new default SSH key was blocked by the local
+approval boundary and was not created/uploaded; browser Cloud Shell requires no new SSH
+access. Build/scan/publication completed with exit 0. Local fixture results do not
+establish live readiness.
+
+Deployment evidence:
+
+- Project `movebooks-ai`, region `asia-southeast1`, existing web service only.
+- Image `sha256:1e97ed9c8c0e0cc40ce919989eeaf7c40350f932e4c0531a06a71dc443240d16`,
+  registry `asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/web`.
+- Fresh Grype: **0 Critical / 0 High / 5 Medium / 1 Low**; no ignore/only-fixed filter.
+  Report SHA-256 `4558b1ee315de53a893fc6c5885a029802404bdeec41247a7bbffbe26116b912`;
+  image archive SHA-256 `0913c86d32fe20129311c4bff665e8aa52c0d70b0d4ae12421813a7d95ebac9d`.
+  Published configuration/rootfs matched the scanned archive; configuration SHA-256
+  `7e7a7c0f3c56d449c3d34fe98d811b406909d87abf35bc63b1b2532bba38d01e`.
+  Residual matches are `glibc-2.44 2.44-r6`: Medium CVE-2026-77117, CVE-2026-80489,
+  CVE-2026-8674, CVE-2026-86805, CVE-2026-89092; Low CVE-2026-95818. They remain
+  visible follow-ups, not suppressed findings or a vulnerability-free claim.
+- `gcloud run services update movebooks-beta-web --image=<immutable registry digest above>
+  --project=movebooks-ai --region=asia-southeast1 --quiet` changed only the image.
+  Revision **`movebooks-beta-web-00011-p9v`**, created **2026-09-30 13:06:25 UTC**,
+  Ready and serving **100%**. No API redeployment.
+- Post-deployment read-back matched all preflight runtime/IAM/SQL fingerprints, except
+  the intended web image/revision. Web public; API private and unchanged; min 0/max 1,
+  concurrency 8; SQL RUNNABLE/ALWAYS. No business mutation or new access grant.
+- HTTP 200: `/`, `/product`, `/workspace`, `/sign-in`, `/guide`, `/simulator`, `/learn`,
+  `/play`, `/trust`, `/feedback`, `/support`, and anonymous preserved `/onboard-fpu`
+  page shell. **26 static assets returned 200**. The page-shell 200 does not confer
+  protected access: anonymous proxy identity/preserved onboarding requests returned 401.
+- Bounded new-web log read: 35 entries, **0 ERROR-or-higher/5xx**; **0 unfinished Cloud
+  Run jobs**. This is bounded evidence, not a universal absence-of-errors claim.
+- Fresh Safari tab on `/workspace`: one Settings control, Google sign-in, expected
+  customer-language heading/supporting text/Continue with Google, synthetic scope note,
+  no account email or Sign out. Theme preference worked; Escape closed Settings and
+  restored visible focus. The **first enabled Continue with Google click opened the
+  Google account chooser**. Paused for the owner to select User A; callback/session
+  establishment is not yet claimed. No credentials were requested or captured.
+- Trust limitations and `/play` passed HTTP/content smoke. Full preserved journey access,
+  navigation continuity, signed-in/mobile interactions and sign-out denial remain pending.
+- Rollback target remains Ready: `movebooks-beta-web-00010-zll`, previous immutable image
+  `sha256:18635ccea56a07300278c6f3f67bb8b490ff90af176d44e258f9ade151c09a7d`.
+  If an owner-approved rollback is needed, route web traffic back to that revision; do
+  not change API/IAM/SQL. No rollback was performed.
+
+Observed new P0/P1 defects: **0/0**, not final clearance. No new P2/P3 defect identified
+in completed checks; residual image Medium/Low advisories remain tracked follow-ups.
+Application source remains exactly the candidate. Only this evidence document is edited
+after deployment; no merge/tag/release was created. Exact SHA is **not yet cleared to merge**.
+
+### Local implementation and presentation evidence
 
 This presentation-only follow-up is on `release/account-shell-regression`, following
 source `32edb96cd65d16eda4bdf853db2e92782c348da3`. The preceding web-only deployment

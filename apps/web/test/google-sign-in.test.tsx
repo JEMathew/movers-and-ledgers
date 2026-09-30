@@ -167,14 +167,23 @@ describe("shared Google authentication controls", () => {
   });
   it("signs out, clears selected-session references, and navigates only after success", async () => {
     const done = deferred<void>(); mocks.signOut.mockReturnValue(done.promise);
-    sessionStorage.setItem("movebooks-migration-session", "preserved");
+    const selectedKeys = ["movebooks-migration-session", "movebooks-validation-session", "movebooks-onboarding-session"];
+    for (const key of selectedKeys) sessionStorage.setItem(key, "preserved");
     sessionStorage.setItem("unrelated", "keep"); mount();
     await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" }); await act(async () => listener(user));
-    fireEvent.click(screen.getByRole("button", { name: /^Account:/ })); fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Account:/ }));
+    const signOut = screen.getByRole("button", { name: "Sign out" });
+    fireEvent.pointerDown(signOut); fireEvent.mouseDown(signOut);
+    fireEvent.blur(screen.getByRole("button", { name: "Settings" }), { relatedTarget: null });
+    fireEvent.mouseUp(signOut); fireEvent.click(signOut);
+    expect(mocks.signOut).toHaveBeenCalledTimes(1);
+    expect(within(screen.getByRole("banner")).queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
+    expect(sessionStorage.getItem(selectedKeys[0])).toBe("preserved");
     expect(screen.queryByText(/Signed in as/)).not.toBeInTheDocument(); expect(mocks.navigate).not.toHaveBeenCalled();
     await act(async () => done.resolve());
     expect(mocks.navigate).toHaveBeenCalledWith("/sign-in");
-    expect(sessionStorage.getItem("movebooks-migration-session")).toBeNull();
+    for (const key of selectedKeys) expect(sessionStorage.getItem(key)).toBeNull();
+    expect(within(screen.getByRole("banner")).getByRole("button", { name: "Sign in with Google" })).toBeEnabled();
     expect(sessionStorage.getItem("unrelated")).toBe("keep");
   });
   it("does not claim successful sign-out on SDK failure", async () => {
@@ -183,7 +192,11 @@ describe("shared Google authentication controls", () => {
     await act(async () => listener(user));
     fireEvent.click(screen.getByRole("button", { name: /^Account:/ })); fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Sign-out could not be confirmed");
+    expect(screen.getByRole("alert")).not.toHaveTextContent("SECRET");
     expect(mocks.navigate).not.toHaveBeenCalled();
+    expect(within(screen.getByRole("banner")).queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /^Account:/ }));
+    expect(screen.getByRole("button", { name: "Sign out" })).toBeEnabled();
   });
   it("late identity verification cannot restore an account after sign-out", async () => {
     const verification = deferred<{subject: string; email: string}>(); mocks.verify.mockReturnValue(verification.promise);

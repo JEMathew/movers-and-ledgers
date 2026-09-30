@@ -251,10 +251,13 @@ button, input, select, textarea { font: inherit; }
 .mobile-nav > summary { list-style: none; }
 .account-trigger { max-width: min(18rem, 55vw); }
 .account-menu { position: relative; }
+.account-controls { position: relative; }
+.settings-panel { max-height: calc(100dvh - 7rem); overflow-y: auto; }
 .account-panel { position: absolute; z-index: 40; top: calc(100% + .5rem); right: 0; width: min(19rem, calc(100vw - 2rem)); padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-elevated); box-shadow: var(--shadow-md); }
 @media (max-width: 1279px) {
   /* Anchor to the shared header when the account row wraps on small screens. */
   .account-menu { position: static; }
+  .account-controls { position: static; }
   .account-panel { right: .75rem; }
 }
 .mobile-nav > summary::-webkit-details-marker { display: none; }

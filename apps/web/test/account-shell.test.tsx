@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Nav } from "@/components/Nav";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import SignIn from "@/app/sign-in/page";
+import Home from "@/app/page";
 
 const session = vi.hoisted(() => ({ ready: true, busy: false, hasSession: false,
   identity: null as null | { subject: string; email: string }, error: "", signIn: vi.fn(), signOut: vi.fn() }));
@@ -84,6 +85,17 @@ describe("global account and settings shell", () => {
     expect(screen.queryByRole("button", { name: "Sign out" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Sign in with Google" })).toBeEnabled();
   });
+  it("keeps Sign out mounted through Safari's non-focusing pointer click", () => {
+    signedIn(); render(shell()); fireEvent.click(account());
+    const signOut = screen.getByRole("button", { name: "Sign out" });
+    fireEvent.pointerDown(signOut);
+    fireEvent.mouseDown(signOut);
+    // Safari can blur the focused Settings button without focusing the clicked button.
+    fireEvent.blur(screen.getByRole("button", { name: "Settings" }), { relatedTarget: null });
+    expect(signOut).toBeInTheDocument();
+    fireEvent.mouseUp(signOut); fireEvent.click(signOut);
+    expect(session.signOut).toHaveBeenCalledTimes(1);
+  });
   it("never offers sign-in alongside an unverified existing session", () => {
     session.hasSession = true; session.error = "Your Google session could not be verified by the API.";
     render(shell()); fireEvent.click(account());
@@ -107,21 +119,55 @@ describe("global account and settings shell", () => {
     render(shell()); screen.getByRole("button", { name: "Settings" }).focus(); fireEvent.click(screen.getByRole("button", { name: "Settings" }));
     const dialog = screen.getByRole("dialog", { name: "Settings" });
     const theme = within(dialog).getByRole("combobox", { name: "Theme preference" });
+    expect(theme).toHaveFocus();
+    expect(dialog).toHaveAttribute("aria-modal", "false");
+    expect(dialog).toHaveClass("settings-panel");
     fireEvent.change(theme, { target: { value: "dark" } });
     expect(theme).toHaveValue("dark");
     fireEvent.change(theme, { target: { value: "system" } });
     expect(theme).toHaveValue("system");
     expect(dialog).toHaveTextContent("device’s reduced-motion preference");
-    expect(dialog).not.toHaveTextContent(/Billing|Notifications|Provider integration/);
-    fireEvent.click(within(dialog).getByRole("button", { name: "Close dialog" }));
+    expect(dialog).not.toHaveTextContent(/Billing|Notifications|Provider integration|Session|Signed out|Signed in/);
+    fireEvent.click(within(dialog).getByRole("button", { name: "Close settings" }));
     expect(screen.getByRole("button", { name: "Settings" })).toHaveFocus();
   });
   it("restores the account trigger when Settings closes after its menu unmounts", () => {
     signedIn(); render(shell()); fireEvent.click(account());
     fireEvent.click(screen.getByRole("button", { name: "Settings" }));
-    fireEvent.click(screen.getByRole("button", { name: "Close dialog" }));
+    fireEvent.keyDown(screen.getByRole("combobox"), { key: "Escape" });
     expect(account()).toHaveFocus();
     expect(account()).toHaveAttribute("aria-expanded", "false");
+  });
+  it("closes preferences on outside click or keyboard focus exit without trapping focus", () => {
+    render(shell()); fireEvent.click(screen.getByRole("button", { name: "Settings" }));
+    fireEvent.pointerDown(screen.getByRole("button", { name: "Outside control" }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
+    fireEvent.blur(screen.getByRole("combobox"), { relatedTarget: screen.getByRole("button", { name: "Outside control" }) });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+  it("preserves preference controls through a non-focusing Safari click", () => {
+    render(shell()); fireEvent.click(screen.getByRole("button", { name: "Settings" }));
+    const close = screen.getByRole("button", { name: "Close settings" });
+    fireEvent.pointerDown(close); fireEvent.blur(screen.getByRole("combobox"), { relatedTarget: null });
+    fireEvent.click(close);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Settings" })).toHaveFocus();
+  });
+  it("explains migration reasons and the three concrete customer questions", () => {
+    render(<Home />);
+    expect(screen.getByRole("heading", { name: "Why businesses migrate" })).toBeVisible();
+    for (const copy of [
+      "Outgrown systems, fragmented data, manual processes and limited visibility can make everyday accounting harder to operate and scale.",
+      "Support growth without adding manual work.", "Work securely from anywhere.",
+      "Reduce disconnected tools and duplicate processes.", "Improve reporting and operational visibility.",
+      "Customers, vendors, accounts, transactions and configuration need to arrive complete and usable.",
+      "Balances, totals and reconciliation must match before migration is considered successful.",
+      "Configuration, access and onboarding must work before the migration is truly complete.",
+      "Migration is more than moving files. It is a financial-trust and business-readiness problem.",
+    ]) expect(screen.getByText(copy)).toBeVisible();
+    for (const question of ["Will all my data move correctly?", "Will my numbers still be right?", "Will my business be ready to operate?"]) expect(screen.getByRole("heading", { name: question })).toBeVisible();
+    expect(screen.queryByText("Will everything move?")).not.toBeInTheDocument();
   });
   it("keeps mobile navigation and account controls separate and reachable", () => {
     render(shell());
