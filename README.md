@@ -17,10 +17,10 @@ implementation of Intuit, QuickBooks or any other accounting provider.
 
 ## Live Beta
 
-[**Open the public Beta →**](https://movebooks-beta-web-411600344727.asia-southeast1.run.app)
+[**Open the public Beta →**](https://movebooks-si.web.app)
 · [V1.0 release](https://github.com/JEMathew/movers-and-ledgers/releases/tag/v1.0.0)
 · [Repository](https://github.com/JEMathew/movers-and-ledgers)
-· [User Guide](https://movebooks-beta-web-411600344727.asia-southeast1.run.app/guide)
+· [User Guide](https://movebooks-si.web.app/guide)
 · [Trust & evidence](docs/TRUST.md)
 
 **Bounded synthetic Beta · No production customer/provider data · No production/compliance claim**
@@ -38,7 +38,7 @@ On mobile, open the image to zoom; the journey and trust model are also describe
 
 ## Product Vision
 
-[![MoveBooks AI Product Vision — play the 25-second narrated film](apps/web/public/media/movebooks-ai-product-vision-poster.webp)](apps/web/public/media/movebooks-ai-product-vision.mp4)
+[![MoveBooks AI Product Vision — play the 25-second narrated film](apps/web/public/media/movebooks-ai-product-vision-poster.webp)](https://movebooks-si.web.app/#product-vision)
 
 Watch the 25-second narrated MoveBooks AI product vision.
 

@@ -12,7 +12,11 @@ production/compliance certification. Earlier AMBER handoffs below are retained a
 
 ## Public-brand preparation — 30 September 2026
 
-**AMBER / Hosting is live for validation; human sign-in and canonical-link gates remain open.** Branch
+**GREEN for the exercised Hosting-origin authentication and public-brand scope.**
+Preferred public Beta URL: **https://movebooks-si.web.app**. The product remains
+**MoveBooks AI**; the suffix is URL-only. Human-present Safari validation is recorded
+in the closure checkpoint below. Earlier preparation/AMBER entries are historical.
+Branch
 `feat/public-brand-experience` starts from main `5e01f7e9dc7c25f4aaa5345c3ffb9a27e7a9015a`,
 including merged [PR #21](https://github.com/JEMathew/movers-and-ledgers/pull/21).
 All seven jobs in [main CI run 36749557786](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36749557786)
@@ -192,6 +196,71 @@ do not expose the API or alter SQL/IAM. That previous revision does not support 
 Hosting-origin authentication path: disable/roll back the Hosting release rather than
 presenting it as validated, and continue using the recorded Cloud Run fallback. Review
 the rollback action explicitly before applying it. No rollback was needed at this checkpoint.
+
+### Hosting authentication closure — 1 October 2026 IST
+
+This supersedes the pending-auth/canonical-link status above. On deployed source
+`f862d889bb6acc466c5ceaeba123efa44440f67b`, a fresh Safari tab initially disabled
+sign-in while preparing authentication. One enabled **Continue with Google** click
+opened Google's account chooser. The human selected User A and completed sign-in.
+The shared header then showed the API-verified User A email. No credentials, cookies
+or user tokens were extracted, copied or stored by the validation process.
+
+| Gate | Observed result |
+| --- | --- |
+| Safari first-click Google sign-in | Passed; one click, normal chooser, human-completed authentication |
+| API-verified identity | Passed; User A email visible, with successful `/v1/identity` requests |
+| Account menu | Identity display plus only Settings and Sign out actions; no simultaneous sign-in |
+| Compact Settings | Theme preference and OS reduced-motion guidance; Escape closes and returns focus |
+| Product / Guide / Workspace | Identity remained visible through navigation |
+| One normal browser refresh | Bounded verifying state, then the same API-verified identity restored |
+| Go to migration | Opens `/workspace`; no migration selected or created |
+| One-click Sign out | Identity removed and signed-out controls returned |
+| Post-sign-out Workspace | Sign-in gate; no protected workspace state exposed |
+| Stale identity restoration | No restoration during subsequent observation/navigation; existing late-result regression test retained |
+| Anonymous Hosting data requests | Identity and preserved-workspace GETs: 401, `no-store, private` |
+| Direct anonymous API | 403; API remains IAM-private |
+
+The bounded application log window from 00:22:00 to 00:25:35 IST on 1 October
+(30 September 18:52:00–18:55:35 UTC) contained **39 entries / 23 HTTP requests**,
+including six identity HTTP 200 records across web/API. There were **zero ERROR/5xx**
+entries and **zero non-read-only HTTP requests**. Google/Firebase authentication
+traffic is outside this application-log count. This is bounded evidence, not a
+claim about all historical traffic. No workspace was created, no approval repeated,
+no invoice posted and no business state changed in this check.
+
+Final configuration comparison at 00:25:42 IST passed against the pre-check baseline:
+web `movebooks-beta-web-00013-j2c`, API `movebooks-beta-api-00012-z5n`, both Ready;
+service/project IAM fingerprints identical; API private / web public; min 0 / max 1 /
+concurrency 8; SQL RUNNABLE/ALWAYS and configuration fingerprint identical. No cloud,
+IAM, Firebase, SQL, application-code or deployment change was made during auth closure.
+
+Only after these gates passed, README Live Beta/User Guide and the documentation index
+were changed to `https://movebooks-si.web.app`; the README poster links to its live
+`/#product-vision` section. Internal landing links already follow the current origin.
+The raw Cloud Run host remains operational fallback/evidence, not the preferred public
+link. No paid domain, product rename or fallback-site change was introduced. GitHub
+homepage/About/topics remain recommendations only; repository settings were not edited.
+
+P0: **0 observed**; P1: **0 observed** for this bounded closure. Non-blocking P2 follow-ups:
+the retained lower-severity image advisories and full narration caption/transcript review.
+Non-blocking P3: field performance measurement beyond the bounded media/render checks.
+Live stale-response timing was not artificially manipulated; the focused automated
+late-verification tests cover that race. This does not claim production/compliance readiness,
+new cross-owner testing, or a new full migration acceptance run.
+
+**Safe to share the selected public Beta URL: YES. Ready to submit for PR review: YES.**
+Merge still requires branch CI and human review. No merge or V1 tag/release modification.
+
+Closure checks: **89 focused tests passed across six files**, covering Google sign-in,
+API identity, account shell, late verification/sign-out races, Hosting-origin validation,
+private proxy and Product Vision. Repository/link checks: 94 Markdown / 373 text files,
+zero findings; whitespace check passed. Full frontend 204 tests, lint/typecheck/build and
+zero-vulnerability dependency audit remain the recorded source-build results above; this
+closure changes documentation only and did not rebuild/redeploy. Fresh media HEAD checks:
+MP4 200 / 6,593,004 bytes; WebP 200 / 92,446 bytes; 1 KB video range 206. Native poster-first,
+no-autoplay behavior and fixed responsive geometry are unchanged. Remote README rendering
+and branch CI remain PR-publication checks rather than claimed completed checks.
 
 ## Account and migration-entry cleanup — 30 September 2026
 
