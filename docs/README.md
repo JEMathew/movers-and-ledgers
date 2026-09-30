@@ -2,6 +2,15 @@
 
 Use this index to find the durable decision records without turning the repository README into a handbook.
 
+## Start here
+
+- [Product overview and live Beta](../README.md) — problem, journey, current versus future scope, and demo links.
+- [Beta User Guide](https://movebooks-beta-web-411600344727.asia-southeast1.run.app/guide) and [guide review](reviews/user-guide.md) — getting started; Learn remains the concept-learning surface.
+- [V1 final acceptance](reviews/v1-final-acceptance.md) — GREEN for its exercised bounded synthetic scope.
+- [Public-Beta deployment checkpoint](deployment/public-beta.md) — released baseline, current deployment, and pending post-V1 regression; not production readiness.
+- [Cloud validation](reviews/google-cloud-validation.md) — identity, isolation, persistence, recovery and FPU evidence.
+- [Final bounded live Mapping evidence](reviews/live-gemini-adk-mapping.md) — closes the advisory validation sequence; does not activate models in the public Beta.
+
 ## Product and experience
 
 - [Try Your Data architecture](architecture/try-your-data.md) — controlled local package intake and shared lifecycle handoff.
@@ -15,8 +24,8 @@ Use this index to find the durable decision records without turning the reposito
 ## AI, trust, and evaluation
 
 - [Gemini / ADK advisory architecture](architecture/live-gemini-adk.md) and
-  [validation/review record](reviews/live-gemini-adk.md) — optional synthetic reasoning;
-  local evidence is not a live activation claim.
+  [validation/review record](reviews/live-gemini-adk.md) — bounded synthetic advisory reasoning
+  validated live in dev/test; public-Beta deterministic routing and managed-runtime limits remain separate.
 
 - [AI and agent constitution](AI_AGENT_CONSTITUTION.md) — responsibility boundaries, evidence, approvals, safe stops, and prohibited actions.
 - [Trust and agent operations](TRUST.md) — trace and control baseline.

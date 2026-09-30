@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440" role="img" aria-labelledby="title description">
+<title id="title">MoveBooks AI — Move your books. Keep your confidence.</title>
+<desc id="description">Bounded synthetic Beta, provider-neutral reference implementation. Five stages: Understand, Prepare, Move, Verify, Start. AI assists planning, mapping and exception resolution. Deterministic tools verify financial truth; humans approve consequential decisions. Outcome: Verified First Productive Use. Read in order: problem, journey, customer outcome, trust foundation, product family.</desc>
+<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#111827" flood-opacity=".035"/></filter></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#111827}.body{font-size:25px;fill:#475569}.title{font-size:29px;font-weight:700}.section{font-size:26px;font-weight:700;fill:#475569}.label{font-size:21px;letter-spacing:2px;font-weight:700;fill:#155eef}.line{fill:none;stroke:#64748b;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="2560" height="1440" fill="#f7f9fc"/>
+<rect x="64" y="48" width="7" height="126" rx="3" fill="#155eef"/>
+<text x="96" y="99" font-size="62">MoveBooks AI</text>
+<text x="96" y="145" font-size="34">Move your books. Keep your confidence.</text>
+<text x="96" y="184" class="body">Bounded synthetic Beta · Provider-neutral reference implementation</text>
+<text x="64" y="246" class="section">The migration problem</text>
+<rect x="64" y="266" width="590" height="144" rx="20" fill="#fff" stroke="#d8e0eb" filter="url(#shadow)"/>
+<g transform="translate(88 289) scale(1.6)" class="line"><rect x="2" y="2" width="8" height="8" rx="1"/><rect x="14" y="2" width="8" height="8" rx="1"/><rect x="8" y="14" width="8" height="8" rx="1"/></g>
+<text x="142" y="316" class="title">Fragmented accounting data</text>
+<text x="88" y="358" class="body">Data lives across spreadsheets, legacy</text>
+<text x="88" y="391" class="body">tools and inconsistent formats.</text>
+<rect x="678" y="266" width="590" height="144" rx="20" fill="#fff" stroke="#d8e0eb" filter="url(#shadow)"/>
+<g transform="translate(702 289) scale(1.6)" class="line"><circle cx="10" cy="10" r="7"/><path d="m15 15 7 7M8 8a2 2 0 0 1 4 0c0 2-2 1-2 3M10 14h.01"/></g>
+<text x="756" y="316" class="title">Unknown migration quality</text>
+<text x="702" y="358" class="body">Missing, duplicated or incompatible</text>
+<text x="702" y="391" class="body">records create uncertainty.</text>
+<rect x="1292" y="266" width="590" height="144" rx="20" fill="#fff" stroke="#d8e0eb" filter="url(#shadow)"/>
+<g transform="translate(1316 289) scale(1.6)" class="line"><path d="M3 5h6l6 14h6M3 19h6l6-14h6m-3-3 3 3-3 3m0 8 3 3-3 3"/></g>
+<text x="1370" y="316" class="title">Manual mapping and cleanup</text>
+<text x="1316" y="358" class="body">Critical accounting decisions require</text>
+<text x="1316" y="391" class="body">significant human effort.</text>
+<rect x="1906" y="266" width="590" height="144" rx="20" fill="#fff" stroke="#d8e0eb" filter="url(#shadow)"/>
+<g transform="translate(1930 289) scale(1.6)" class="line"><path d="M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6Z M12 7v6m0 4h.01"/></g>
+<text x="1984" y="316" class="title">Risk of incorrect outcomes</text>
+<text x="1930" y="358" class="body">Migration is not complete until</text>
+<text x="1930" y="391" class="body">financial truth is verified.</text>
+<text x="64" y="470" class="section">How MoveBooks works</text>
+<rect x="64" y="492" width="470.4" height="340" rx="20" fill="#fff" stroke="#d8e0eb" filter="url(#shadow)"/>
+<circle cx="103" cy="536" r="19" fill="#eaf1ff"/>
+<text x="96" y="544" class="label">1</text>
+<text x="138" y="545" class="label">UNDERSTAND</text>
+<text x="88" y="592" font-size="28">Discover + Assess</text>
+<circle cx="92" cy="635" r="3" fill="#64748b"/>
+<text x="107" y="643" font-size="23">Understand the current environment</text>
+<circle cx="92" cy="674" r="3" fill="#64748b"/>
+<text x="107" y="682" font-size="23">Find readiness gaps</text>
+<circle cx="92" cy="713" r="3" fill="#64748b"/>
+<text x="107" y="721" font-size="23">Surface evidence and risk</text>
+<path d="M88 755h422.4" stroke="#d8e0eb"/>
+<text x="88" y="787" font-size="18">OUTPUT</text>
+<text x="88" y="816" font-size="27" font-weight="700" style="fill:#155eef">Current State</text>
+<path d="M538 535h13m-5-5 5 5-5 5" fill="none" stroke="#155eef" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="554.4" y="492" width="470.4" height="340" rx="20" fill="#fff" stroke="#d8e0eb" filter="url(#shadow)"/>
+<circle cx="593.4" cy="536" r="19" fill="#eaf1ff"/>
+<text x="586.4" y="544" class="label">2</text>
+<text x="628.4" y="545" class="label">PREPARE</text>
+<text x="578.4" y="592" font-size="28">Plan + Map &amp; Approve</text>
+<circle cx="582.4" cy="635" r="3" fill="#64748b"/>
+<text x="597.4" y="643" font-size="23">Build the migration plan</text>
+<circle cx="582.4" cy="674" r="3" fill="#64748b"/>
+<text x="597.4" y="682" font-size="23">Recommend mappings</text>
+<circle cx="582.4" cy="713" r="3" fill="#64748b"/>
+<text x="597.4" y="721" font-size="23">Human approves key decisions</text>
+<path d="M578.4 755h422.4" stroke="#d8e0eb"/>
+<text x="578.4" y="787" font-size="18">OUTPUT</text>
+<text x="578.4" y="816" font-size="27" font-weight="700" style="fill:#155eef">Approved Plan</text>
+<path d="M1028.4 535h13m-5-5 5 5-5 5" fill="none" stroke="#155eef" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1044.8" y="492" width="470.4" height="340" rx="20" fill="#fff" stroke="#d8e0eb" filter="url(#shadow)"/>
+<circle cx="1083.8" cy="536" r="19" fill="#eaf1ff"/>
+<text x="1076.8" y="544" class="label">3</text>
+<text x="1118.8" y="545" class="label">MOVE</text>
+<text x="1068.8" y="592" font-size="28">Migrate + Resolve</text>
+<circle cx="1072.8" cy="635" r="3" fill="#64748b"/>
+<text x="1087.8" y="643" font-size="23">Execute controlled batches</text>
+<circle cx="1072.8" cy="674" r="3" fill="#64748b"/>
+<text x="1087.8" y="682" font-size="23">Detect and classify exceptions</text>
+<circle cx="1072.8" cy="713" r="3" fill="#64748b"/>
+<text x="1087.8" y="721" font-size="23">Recover from checkpoints</text>
+<path d="M1068.8 755h422.4" stroke="#d8e0eb"/>
+<text x="1068.8" y="787" font-size="18">OUTPUT</text>
+<text x="1068.8" y="816" font-size="27" font-weight="700" style="fill:#155eef">Migrated Data</text>
+<path d="M1518.8 535h13m-5-5 5 5-5 5" fill="none" stroke="#155eef" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1535.1999999999998" y="492" width="470.4" height="340" rx="20" fill="#fff" stroke="#d8e0eb" filter="url(#shadow)"/>
+<circle cx="1574.1999999999998" cy="536" r="19" fill="#eaf1ff"/>
+<text x="1567.1999999999998" y="544" class="label">4</text>
+<text x="1609.1999999999998" y="545" class="label">VERIFY</text>
+<text x="1559.1999999999998" y="592" font-size="28">Validate + Configure</text>
+<circle cx="1563.1999999999998" cy="635" r="3" fill="#64748b"/>
+<text x="1578.1999999999998" y="643" font-size="23">Reconcile deterministically</text>
+<circle cx="1563.1999999999998" cy="674" r="3" fill="#64748b"/>
+<text x="1578.1999999999998" y="682" font-size="23">Verify balances and integrity</text>
+<circle cx="1563.1999999999998" cy="713" r="3" fill="#64748b"/>
+<text x="1578.1999999999998" y="721" font-size="23">Configure the target safely</text>
+<path d="M1559.1999999999998 755h422.4" stroke="#d8e0eb"/>
+<text x="1559.1999999999998" y="787" font-size="18">OUTPUT</text>
+<text x="1559.1999999999998" y="816" font-size="27" font-weight="700" style="fill:#087a55">Verified Setup</text>
+<path d="M2009.1999999999998 535h13m-5-5 5 5-5 5" fill="none" stroke="#155eef" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="2025.6" y="492" width="470.4" height="340" rx="20" fill="#fff" stroke="#d8e0eb" filter="url(#shadow)"/>
+<circle cx="2064.6" cy="536" r="19" fill="#eaf1ff"/>
+<text x="2057.6" y="544" class="label">5</text>
+<text x="2099.6" y="545" class="label">START</text>
+<text x="2049.6" y="592" font-size="25">Onboard + First Productive Use</text>
+<circle cx="2053.6" cy="635" r="3" fill="#64748b"/>
+<text x="2068.6" y="643" font-size="23">Complete guided setup</text>
+<circle cx="2053.6" cy="674" r="3" fill="#64748b"/>
+<text x="2068.6" y="682" font-size="23">Perform the first productive task</text>
+<circle cx="2053.6" cy="713" r="3" fill="#64748b"/>
+<text x="2068.6" y="721" font-size="23">Reach Business Ready · Verified</text>
+<path d="M2049.6 755h422.4" stroke="#d8e0eb"/>
+<text x="2049.6" y="787" font-size="18">OUTPUT</text>
+<text x="2049.6" y="816" font-size="25" font-weight="700" style="fill:#087a55">Verified First Productive Use</text>
+<text x="64" y="887" class="section">Customer outcome</text>
+<rect x="64" y="908" width="793.3" height="124" rx="20" fill="#e6f7ef" stroke="#d8e0eb" filter="url(#shadow)"/>
+<text x="88" y="949" class="title">Lower migration risk</text>
+<text x="88" y="986" class="body">Deterministic controls verify financial truth.</text>
+<rect x="881.3" y="908" width="793.3" height="124" rx="20" fill="#fff" stroke="#d8e0eb" filter="url(#shadow)"/>
+<text x="905.3" y="949" class="title">Less manual effort</text>
+<text x="905.3" y="986" class="body">AI assists planning, mapping and exception resolution.</text>
+<rect x="1698.6" y="908" width="793.3" height="124" rx="20" fill="#fff" stroke="#d8e0eb" filter="url(#shadow)"/>
+<text x="1722.6" y="949" class="title">Faster time to productive use</text>
+<text x="1722.6" y="986" class="body">A guided journey connects migration</text>
+<text x="1722.6" y="1016" class="body">to verified onboarding.</text>
+<text x="64" y="1082" class="section">Trust foundation</text>
+<text x="64" y="1128" class="title">Human control</text>
+<text x="64" y="1168" class="body">People approve consequential decisions.</text>
+<text x="678" y="1128" class="title">Deterministic financial truth</text>
+<text x="678" y="1168" class="body">Rules verify balances, reconciliation</text>
+<text x="678" y="1201" class="body">and critical controls.</text>
+<text x="1292" y="1128" class="title">Evidence &amp; auditability</text>
+<text x="1292" y="1168" class="body">Recommendations and decisions</text>
+<text x="1292" y="1201" class="body">remain traceable.</text>
+<text x="1906" y="1128" class="title">Secure identity &amp; isolation</text>
+<text x="1906" y="1168" class="body">Authenticated access and</text>
+<text x="1906" y="1201" class="body">owner-scoped workspaces.</text>
+<text x="64" y="1249" font-size="27">AI reasons and coordinates. Deterministic tools protect financial truth. Humans govern consequential decisions.</text>
+<rect x="64" y="1281" width="793.3" height="103" rx="20" fill="#f1f5f9" stroke="#d8e0eb" filter="url(#shadow)"/>
+<text x="88" y="1322" class="title">MoveBooks AI Product</text>
+<text x="88" y="1360" class="body">Complete a governed migration.</text>
+<rect x="881.3" y="1281" width="793.3" height="103" rx="20" fill="#f1f5f9" stroke="#d8e0eb" filter="url(#shadow)"/>
+<text x="905.3" y="1322" class="title">MoveBooks AI Simulator</text>
+<text x="905.3" y="1360" class="body">Rehearse using synthetic accounting environments.</text>
+<rect x="1698.6" y="1281" width="793.3" height="103" rx="20" fill="#f1f5f9" stroke="#d8e0eb" filter="url(#shadow)"/>
+<text x="1722.6" y="1322" class="title">MoveBooks AI Play</text>
+<text x="1722.6" y="1360" class="body">Learn by experimenting with migration decisions.</text>
+</svg>

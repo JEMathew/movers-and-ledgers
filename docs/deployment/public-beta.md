@@ -1,18 +1,51 @@
 # Public Beta connectivity and release gate
 
-**LIVE / AMBER — MoveBooks AI V1.0 bounded synthetic public Beta.** The deployed
-runtime smoke is GREEN, but final go-live closure is held on a newly observed
-post-merge CI test-fixture failure. No new product P0/P1 defect is established.
+**V1 baseline LIVE / GREEN — MoveBooks AI V1.0 bounded synthetic public Beta.**
+The historical post-merge CI fixture hold is resolved. The latest post-V1 account-shell
+deployment remains **AMBER for its targeted live regression**, pending human Safari results.
+Neither assessment claims production/compliance readiness. The dated original records below
+are retained as history; they are not an unresolved CI hold.
+
+## Portfolio evidence reconciliation — 30 September 2026
+
+Documentation-only reconciliation; no cloud resources, IAM, application code or release tags
+were changed in this pass. Final [V1 acceptance](../reviews/v1-final-acceptance.md) is GREEN.
+The signature-tamper fixture was corrected in `194375f`; current main `ac959004edf945dbb76a483e53e20872f9f5cd95`
+includes that correction and account-shell PR #19. Public GitHub
+[CI run 36681965187](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36681965187)
+reports success. This supersedes the specific CI hold below, not all future release gates.
+
+The separately authorized account-shell deployment checkpoint at 07:32 UTC records web
+`movebooks-beta-web-00008-g6m` at 100%, image
+`sha256:afedd6406cb88af7f4bb4a1152efc6777ed41598b6d079c02eda5e9456d99bc0`.
+Its fresh Grype scan passed: 0 Critical / 0 High, 5 Medium / 1 Low; report SHA-256
+`4445c0e3f63f8653c27d1947f3589d0b5f52dd280d0689ca2c2dc2e5c81b1992`.
+API remained `movebooks-beta-api-00012-z5n`, private, with its unchanged digest below;
+web stayed public, min 0/max 1/concurrency 8 unchanged, project/service IAM unchanged.
+SQL configuration was unchanged during deployment; the older fingerprint difference
+was exactly settingsVersion 90 to 91, with all other settings matching.
+
+That checkpoint passed signed-out checks on home/product/workspace/guide, mobile home/workspace
+light/dark checks, 55 focused auth/UI/proxy tests, lint/typecheck/build and dependency audit.
+It observed no ERROR/5xx in its bounded revision log window and no unfinished Cloud Run jobs.
+Temporary build SSH access was removed. No business data was mutated.
+**Safari first-click sign-in, signed-in account-menu behavior, navigation/refresh and post-sign-out
+protected denial for this new shell remain pending human confirmation.** Earlier V1 manual passes
+must not be relabeled as a fresh pass for this update. This documentation task did not rerun them.
+
+## Historical V1 release baseline
+
 PR [#18](https://github.com/JEMathew/movers-and-ledgers/pull/18) merged
 `release/public-beta` into `main` at
 `3e1a1f85ffbb7dd37140dbdb772228c08fcd430d`; the release branch remains at
 `3d0960822fcd9f814a638df97c96916c40c0c325`.
 Project `movebooks-ai`; region `asia-southeast1`.
 
-## Go-live closure checkpoint — 30 September 2026 IST
+## Historical go-live closure checkpoint — 30 September 2026 IST
 
-This is the authoritative current assessment; the earlier merge-readiness result
-below is historical. Read-only cloud drift verification and smoke began at
+This dated assessment is superseded by the portfolio evidence reconciliation above;
+its CI hold and next actions are retained as historical evidence, not current blockers.
+Read-only cloud drift verification and smoke began at
 2026-09-29 19:43–19:47 UTC (30 September IST). No application/UX changes,
 redeployment, IAM/Firebase/network/SQL/secret changes, Google user sign-in,
 workspace creation, approvals, invoice posting or other business writes occurred.

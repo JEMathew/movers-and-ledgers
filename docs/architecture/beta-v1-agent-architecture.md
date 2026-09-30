@@ -54,9 +54,11 @@ configuration areas. `CONFIGURED` is not Onboarding or First Productive Use.
 
 The implementation runs without Gemini. `MappingRecommendationProvider` is one model integration
 boundary: the shipped deterministic fallback uses versioned repository knowledge and emits the same
-structured recommendation contract. A future Gemini provider may propose semantic matches and concise
-explanations, but deterministic validation and approval policy remain authoritative and raw financial
-records are not required.
+structured recommendation contract. The later [bounded Gemini / ADK advisory path](live-gemini-adk.md)
+is implemented and live-validated in synthetic dev/test. It explains existing proposals through a
+separate reasoning port; it does not replace this deterministic mapping provider or approve mappings.
+Public-Beta routing remains deterministic-only. Financial validation and approval policy remain
+authoritative; managed ADK hosting and real provider integrations remain future work.
 
 ## Integrated Beta and future production work
 
