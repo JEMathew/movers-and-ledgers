@@ -30,6 +30,7 @@ export function IdentityProvider({ children }: { children: React.ReactNode }) {
     const version = ++generation.current;
     setHasSession(!!user);
     setIdentity(null);
+    setError("");
     if (!user) { setReady(true); return true; }
     setReady(false);
     try {

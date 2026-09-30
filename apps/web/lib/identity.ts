@@ -41,13 +41,17 @@ export async function firebaseAuth() {
 
 export type VerifiedIdentity = { subject: string; email: string };
 
+// The private proxy allows 60s for the read-only upstream request. Leave a small
+// transport margin: a min-zero API's first verified request can exceed 15s.
+const IDENTITY_VERIFICATION_TIMEOUT_MS = 65_000;
+
 /** Display only the API-verified session, never a workspace actor or browser owner claim. */
 export async function verifiedIdentity(user: import("firebase/auth").User): Promise<VerifiedIdentity> {
   const endpoint = new URL(process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://invalid");
   if (endpoint.protocol !== "https:" || endpoint.username || endpoint.password) throw new Error("Invalid identity endpoint");
   const response = await fetch(`${endpoint.href.replace(/\/$/, "")}/v1/identity`, {
     headers: { Authorization: `Bearer ${await user.getIdToken()}` },
-    cache: "no-store", credentials: "omit", redirect: "error", signal: AbortSignal.timeout(15000),
+    cache: "no-store", credentials: "omit", redirect: "error", signal: AbortSignal.timeout(IDENTITY_VERIFICATION_TIMEOUT_MS),
   });
   if (!response.ok) throw new Error("Session verification failed");
   const value = await response.json();

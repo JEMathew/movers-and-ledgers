@@ -8,7 +8,7 @@ export function GoogleSignIn({ destination, compact = false }: { destination?: s
   const { ready, busy, identity, hasSession, signIn } = useIdentity();
   if (identity) return compact ? null : <a className="button mt-7" href={safeDestination(destination ?? "/workspace")}>Continue to workspace</a>;
   if (hasSession) return compact ? null : <p role="status" className="mt-7">{!ready || busy ? "Verifying account…" : "Your session needs attention. Use the account control above to sign out and try again."}</p>;
-  return <Button className={compact ? "underline" : "mt-7 w-full"} variant={compact ? "ghost" : "primary"}
+  return <Button className={compact ? undefined : "mt-7"} size={compact ? "small" : "default"} variant={compact ? "ghost" : "secondary"}
     disabled={!ready || busy} onClick={() => signIn(destination ?? (window.location.pathname === "/sign-in"
       ? new URLSearchParams(window.location.search).get("next") ?? "/workspace"
       : `${window.location.pathname}${window.location.search}`))}>

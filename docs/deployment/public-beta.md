@@ -2,11 +2,72 @@
 
 **V1 baseline LIVE / GREEN — MoveBooks AI V1.0 bounded synthetic public Beta.**
 The historical post-merge CI fixture hold is resolved. The latest post-V1 account-shell
-deployment remains **AMBER for its targeted live regression**, pending human Safari results.
+deployment remains **AMBER for its targeted live regression**: first-click Safari sign-in
+passed, but API-verified identity display needs the local timeout/presentation fix below.
 Neither assessment claims production/compliance readiness. The dated original records below
 are retained as history; they are not an unresolved CI hold.
 
-## Account-shell refresh checkpoint — 30 September 2026
+## Account-shell identity timeout correction — 30 September 2026
+
+**Local GREEN; live regression AMBER. Not deployed.** This checkpoint supersedes the
+pending-first-click status below, not the deployed image or infrastructure record.
+The owner confirmed that Safari opened Google's chooser on the first click and selected
+the intended account. The live shell then showed "Session needs attention" instead of
+an API-verified email. A successful Google popup alone is not verified application identity.
+
+Read-only Cloud Run request evidence identified the deadline mismatch:
+
+| Request timestamp (UTC) | Revision / path | Status | Latency |
+| --- | --- | --- | --- |
+| 2026-09-30 11:26:38.144349 | web `00009-4q4`, `/api/v1/identity` | 200 | 22.328726512 seconds |
+| 2026-09-30 11:26:38.379130 | API `00012-z5n`, `/v1/identity` | 200 | 21.948704182 seconds |
+
+The browser previously aborted identity verification at 15 seconds even though the
+existing private proxy allows 60 seconds for its upstream request. That abort took the
+genuine client-failure path before the successful response arrived. This is not evidence
+of an API identity rejection, wrong account, route mismatch, or authorization bypass.
+The min-zero runtime permits slow first requests; the precise source of this request's
+server latency was not independently established as a cold start.
+
+The read-only identity request now has a bounded 65-second client deadline (the existing
+proxy budget plus transport margin), without retries or an authentication fallback.
+Loading and updating have explicit accessible labels/copy; a previous error is cleared
+when fresh verification begins. Only a verified API response with the matching Firebase
+subject supplies the displayed email. Genuine rejection/timeout still fails closed with
+sanitized sign-out/re-auth guidance. Generation checks still discard stale responses,
+including responses completing after sign-out. No provider error, token, or raw payload
+is displayed or recorded.
+
+The header uses the existing small ghost Google sign-in button beside Settings. The
+page sign-in action is content-width/secondary rather than a full-width primary CTA.
+The normal verified-email disclosure retains Settings and Sign out. Pending verification
+is not labeled as a failed session; no simultaneous sign-in/sign-out or client-only email
+is introduced. Existing focus, Escape, outside-click and sign-out behavior are retained.
+
+Local validation: **73 focused auth/account-shell/runtime/proxy tests and 182 full frontend
+tests passed**; lint, typecheck and production build passed. Added fake-clock coverage
+reproduces the 22.33-second response and checks the 65-second stalled-request failure;
+additional cases cover pending verification, stale-error clearing, older success/failure
+responses, compact controls and verified/failed account-menu states. Existing sign-out,
+anonymous/invalid-token and proxy isolation checks remain passing. No tests were weakened.
+The focused backend identity/runtime regression also passed **57 tests**, with the existing
+Starlette test-client deprecation warning. Repository checks covered 94 Markdown files and
+369 text files with zero findings; whitespace checks passed. These are local checks, not
+a new live sign-out/isolation validation or a scan of a replacement container image.
+
+No backend/proxy authorization implementation, dependency/lockfile, Firebase architecture,
+IAM, API privacy, SQL, Cloud Run configuration, workspace, approval or invoice change.
+No deployment or merge. P0/P1 introduced or observed in this focused local review: **0/0**.
+The premature timeout and oversized sign-in are two P2 issues corrected locally; live
+clearance remains pending. No additional P3 finding was identified in this bounded review.
+
+Next gate requires deployment approval: build and scan a fresh web image, deploy web only,
+then human-present Safari cold-load verification of first-click sign-in, API-verified email,
+menu/Settings/Sign out, and protected denial after sign-out. Desktop/mobile and light/dark
+visual checks of this new fix are also pending that approved live pass. Previous image scans
+and visual results are not evidence for an unbuilt/undeployed replacement artifact.
+
+## Historical account-shell refresh checkpoint — 30 September 2026
 
 **AMBER: deployed and signed-out regression passed; human-present Safari authentication
 and signed-in/session/sign-out regression are still pending.** Do not substitute previous

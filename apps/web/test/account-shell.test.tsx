@@ -24,6 +24,8 @@ describe("global account and settings shell", () => {
     render(shell());
     expect(screen.getByRole("button", { name: "Settings" })).toBeVisible();
     expect(screen.getByRole("button", { name: "Sign in with Google" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Sign in with Google" })).toHaveClass("button", "small", "ghost");
+    expect(screen.getByRole("button", { name: "Sign in with Google" })).not.toHaveClass("w-full", "primary");
     expect(screen.queryByRole("button", { name: /Account:|Sign out/ })).not.toBeInTheDocument();
   });
   it("shows a disabled bounded initialization state instead of claiming sign-in", () => {
@@ -35,11 +37,13 @@ describe("global account and settings shell", () => {
   it("uses verified identity only and keeps sign-out inside the disclosure", () => {
     signedIn(); render(shell());
     expect(account()).toHaveAccessibleName("Account: verified@example.test");
+    expect(account()).toHaveTextContent("verified@example.test");
+    expect(screen.queryByText("Session needs attention")).not.toBeInTheDocument();
     expect(account()).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByRole("button", { name: "Sign out" })).not.toBeInTheDocument();
     fireEvent.click(account());
     expect(account()).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByText("Signed in as verified@example.test")).toBeVisible();
+    expect(screen.getByRole("status")).toHaveTextContent("Signed in as verified@example.test");
     expect(screen.getByRole("button", { name: "Sign out" })).toBeEnabled();
     expect(screen.queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
     expect(document.body).not.toHaveTextContent("internal-only");
@@ -68,10 +72,23 @@ describe("global account and settings shell", () => {
     expect(screen.getByRole("button", { name: "Sign in with Google" })).toBeEnabled();
   });
   it("never offers sign-in alongside an unverified existing session", () => {
-    session.hasSession = true; render(shell()); fireEvent.click(account());
+    session.hasSession = true; session.error = "Your Google session could not be verified by the API.";
+    render(shell()); fireEvent.click(account());
     expect(screen.queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
-    expect(screen.getByText(/Account not verified/)).toBeVisible();
+    expect(screen.getByRole("status")).toHaveTextContent("MoveBooks could not verify your account");
+    expect(account()).toHaveTextContent("Session needs attention");
     expect(screen.getByRole("button", { name: "Sign out" })).toBeEnabled();
+  });
+  it("keeps pending verification distinct from an attention/error state", () => {
+    session.hasSession = true; session.ready = false;
+    render(shell());
+    expect(account()).toHaveAccessibleName("Account: verifying session");
+    expect(account()).toHaveTextContent("Verifying account…");
+    fireEvent.click(account());
+    expect(screen.getByRole("status")).toHaveTextContent("Verifying your account with MoveBooks");
+    expect(screen.queryByText(/Session needs attention|could not verify/)).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Sign out" })).toBeEnabled();
+    expect(screen.queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
   });
   it("offers only supported theme and system accessibility settings", () => {
     render(shell()); screen.getByRole("button", { name: "Settings" }).focus(); fireEvent.click(screen.getByRole("button", { name: "Settings" }));

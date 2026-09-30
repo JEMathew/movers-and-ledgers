@@ -57,7 +57,10 @@ describe("shared Google authentication controls", () => {
   });
   it("workspace first-click CTA uses the same supported path", async () => {
     mount(true);
-    fireEvent.click(await within(screen.getByRole("main")).findByRole("button", { name: "Sign in with Google" }));
+    const button = await within(screen.getByRole("main")).findByRole("button", { name: "Sign in with Google" });
+    expect(button).toHaveClass("secondary");
+    expect(button).not.toHaveClass("w-full");
+    fireEvent.click(button);
     expect(mocks.popup).toHaveBeenCalledTimes(1);
   });
   it("SDK auth listener cannot race popup completion and consume the first successful navigation", async () => {
@@ -113,6 +116,42 @@ describe("shared Google authentication controls", () => {
     await act(async () => listener(user)); await act(async () => listener(null));
     expect(screen.queryByText(/Signed in as/)).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Account:.*@/ })).not.toBeInTheDocument();
+  });
+  it("waits for API verification without showing attention or a client-only email", async () => {
+    const verification = deferred<{subject: string; email: string}>(); mocks.verify.mockReturnValue(verification.promise);
+    mount(); await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" });
+    act(() => listener(user));
+    expect(screen.getByRole("button", { name: "Account: verifying session" })).toHaveTextContent("Verifying account…");
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Session needs attention|untrusted-client/)).not.toBeInTheDocument();
+    await act(async () => verification.resolve({ subject: "firebase:user-b", email: "verified-b@example.test" }));
+    expect(screen.getByRole("button", { name: "Account: verified-b@example.test" })).toBeVisible();
+  });
+  it("clears a previous verification error while a fresh SDK identity verification is pending", async () => {
+    mocks.verify.mockRejectedValueOnce(new Error("failed"));
+    mount(); await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" });
+    await act(async () => listener(user));
+    expect(screen.getByRole("alert")).toHaveTextContent("could not be verified");
+    const verification = deferred<{subject: string; email: string}>(); mocks.verify.mockReturnValueOnce(verification.promise);
+    act(() => listener(user));
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Account: verifying session" })).toBeVisible();
+    await act(async () => verification.resolve({ subject: "firebase:user-b", email: "verified-b@example.test" }));
+    expect(screen.getByRole("button", { name: "Account: verified-b@example.test" })).toBeVisible();
+  });
+  it.each(["resolve", "reject"] as const)("ignores an older verification that later %ss after current identity is verified", async outcome => {
+    const old = deferred<{subject: string; email: string}>(); mocks.verify.mockReturnValueOnce(old.promise);
+    mount(); await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" });
+    act(() => listener(user));
+    await act(async () => listener(user));
+    expect(screen.getByRole("button", { name: "Account: verified-b@example.test" })).toBeVisible();
+    await act(async () => {
+      if (outcome === "resolve") old.resolve({ subject: "firebase:other", email: "stale@example.test" });
+      else old.reject(new Error("stale failure"));
+    });
+    expect(screen.getByRole("button", { name: "Account: verified-b@example.test" })).toBeVisible();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.queryByText(/stale@example|Session needs attention/)).not.toBeInTheDocument();
   });
   it("does not label an API-rejected session as signed in or navigate after login", async () => {
     mocks.verify.mockRejectedValue(new Error("rejected")); mocks.popup.mockResolvedValue({ user }); mount();

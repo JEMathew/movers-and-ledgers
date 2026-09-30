@@ -20,6 +20,13 @@ export function AccountControls() {
   const firstAction = useRef<HTMLButtonElement>(null);
   const id = useId();
   const cloud = cloudIdentity();
+  const verifying = session.hasSession && !session.identity && !session.ready;
+  const accountLabel = session.identity ? `Account: ${session.identity.email}`
+    : session.busy ? "Account: updating session" : verifying ? "Account: verifying session" : "Account: session not verified";
+  const accountMessage = session.identity ? `Signed in as ${session.identity.email}`
+    : session.busy ? "Updating your session…"
+    : verifying ? "Verifying your account with MoveBooks. This can take up to a minute when the Beta starts."
+    : "Google sign-in is present, but MoveBooks could not verify your account. Sign out, then sign in again. No verified email is shown.";
   const accountKey = session.identity?.email ?? (session.hasSession ? "unverified" : null);
   const open = openFor !== null && openFor === accountKey;
 
@@ -45,14 +52,14 @@ export function AccountControls() {
         if (event.key === "Escape" && open) { event.preventDefault(); setOpenFor(null); trigger.current?.focus(); }
       }} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpenFor(null); }}>
         <button ref={trigger} type="button" className="button secondary small account-trigger" disabled={session.busy}
-          aria-expanded={open} aria-controls={id} aria-label={session.identity ? `Account: ${session.identity.email}` : "Account: session not verified"}
+          aria-expanded={open} aria-controls={id} aria-label={accountLabel}
           onClick={() => setOpenFor(open ? null : accountKey)}>
           <UserRound size={17} aria-hidden="true" />
           <span className="truncate">{session.identity?.email ?? (session.busy ? "Updating session…" : !session.ready ? "Verifying account…" : "Session needs attention")}</span>
           <ChevronDown size={15} aria-hidden="true" />
         </button>
         {open && <div id={id} className="account-panel" aria-label="Account controls">
-          <p className="mb-3 break-all text-sm text-secondary">{session.identity ? `Signed in as ${session.identity.email}` : "Account not verified. Sign out to clear this session."}</p>
+          <p role="status" className="mb-3 break-all text-sm text-secondary">{accountMessage}</p>
           <button ref={firstAction} type="button" className="button ghost small w-full" onClick={showSettings}>Settings</button>
           <button type="button" className="button secondary small mt-2 w-full" disabled={session.busy} onClick={() => { setOpenFor(null); session.signOut(); }}>Sign out</button>
         </div>}
@@ -66,7 +73,7 @@ export function AccountControls() {
       <h3 className="mt-6 font-semibold">Reduced motion</h3>
       <p className="mt-2 text-sm text-secondary">MoveBooks respects your device’s reduced-motion preference. Change it in your operating system’s accessibility settings.</p>
       <h3 className="mt-6 font-semibold">Session</h3>
-      <p className="mt-2 break-all text-sm text-secondary">{!cloud ? "Google sign-in is not configured in this environment." : session.identity ? `Verified account: ${session.identity.email}` : session.hasSession ? "Your account has not been verified. No account identity is displayed." : session.ready ? "Signed out." : "Checking sign-in availability…"}</p>
+      <p className="mt-2 break-all text-sm text-secondary">{!cloud ? "Google sign-in is not configured in this environment." : session.hasSession ? accountMessage : session.ready ? "Signed out." : "Checking sign-in availability…"}</p>
     </Dialog>
   </div>;
 }
