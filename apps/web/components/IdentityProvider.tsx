@@ -1,7 +1,8 @@
 "use client";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { User } from "firebase/auth";
-import { cloudIdentity, navigateAfterAuth, prepareGoogleIdentity, signInError, verifiedIdentity, type GoogleIdentityRuntime, type VerifiedIdentity } from "@/lib/identity";
+import { useRouter } from "next/navigation";
+import { cloudIdentity, navigateAfterAuth, prepareGoogleIdentity, safeDestination, signInError, verifiedIdentity, type GoogleIdentityRuntime, type VerifiedIdentity } from "@/lib/identity";
 
 type Session = {
   ready: boolean; busy: boolean; hasSession: boolean; identity: VerifiedIdentity | null; error: string;
@@ -16,6 +17,7 @@ export function useIdentity() {
 }
 
 export function IdentityProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const runtime = useRef<GoogleIdentityRuntime | null>(null);
   const generation = useRef(0);
   const active = useRef(false);
@@ -72,7 +74,12 @@ export function IdentityProvider({ children }: { children: React.ReactNode }) {
     try { popup = runtime.current.signIn(); }
     catch (failure) { operation.current = false; setBusy(false); setError(signInError(failure)); return; }
     void popup.then(async result => {
-      if (active.current && await refresh(result.user)) navigateAfterAuth(destination);
+      if (active.current && await refresh(result.user)) {
+        // Keep the root provider and its API-verified identity alive. A document
+        // reload repeated Firebase initialization and the same identity request.
+        const target = safeDestination(destination);
+        if (target !== window.location.pathname + window.location.search) router.replace(target);
+      }
     }).catch(failure => { if (active.current) setError(signInError(failure)); })
       .finally(() => { operation.current = false; if (active.current) setBusy(false); });
   }
@@ -80,7 +87,7 @@ export function IdentityProvider({ children }: { children: React.ReactNode }) {
   function signOut() {
     if (!runtime.current || operation.current) return;
     operation.current = true; ++generation.current;
-    setIdentity(null); setBusy(true); setError("");
+    setIdentity(null); setReady(true); setBusy(true); setError("");
     void runtime.current.signOut().then(() => {
       if (active.current) { setHasSession(false); setReady(true); }
       // Clear only UI references, never persisted workspace/approval data.

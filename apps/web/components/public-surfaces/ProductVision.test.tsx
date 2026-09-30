@@ -5,7 +5,7 @@ import { resolve } from "node:path";
 import Home from "@/app/page";
 
 describe("Product Vision media", () => {
-  it("places the approved vision after the journey with native, bounded playback", () => {
+  it("places the approved vision directly after the hero with native, bounded playback", () => {
     render(<Home/>);
     const video = screen.getByLabelText("MoveBooks AI Product Vision");
     expect(video.tagName).toBe("VIDEO");
@@ -22,7 +22,8 @@ describe("Product Vision media", () => {
     expect(screen.getAllByText("AI that assists. Rules that verify. People who decide.")).toHaveLength(1);
     expect(screen.getByText("Built with Google Cloud, Gemini and Google ADK")).toBeVisible();
     const sections = [...document.querySelectorAll("main > section")];
-    expect(sections.indexOf(document.querySelector("#product-vision")!)).toBe(sections.indexOf(document.querySelector("#how-it-works")!) + 1);
+    expect(sections[1]).toBe(document.querySelector("#product-vision"));
+    expect(sections[2]).toHaveAttribute("aria-labelledby", "why-migrate");
   });
   it("ships one bounded H.264 fast-start asset and a small poster", () => {
     const root = resolve(process.cwd(), "public/media");

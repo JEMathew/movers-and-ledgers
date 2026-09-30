@@ -108,25 +108,26 @@ describe("global account and settings shell", () => {
     session.hasSession = true; session.ready = false;
     render(shell());
     expect(account()).toHaveAccessibleName("Account: verifying session");
-    expect(account()).toHaveTextContent("Verifying account…");
+    expect(account()).toHaveTextContent("Verifying your account…");
     fireEvent.click(account());
-    expect(screen.getByRole("status")).toHaveTextContent("Verifying your account with MoveBooks");
+    expect(screen.getByRole("status")).toHaveTextContent("Verifying your account…");
     expect(screen.queryByText(/Session needs attention|could not verify/)).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Sign out" })).toBeEnabled();
     expect(screen.queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
   });
-  it("offers only supported theme and system accessibility settings", () => {
+  it("offers only theme settings while motion preferences remain automatic", () => {
     render(shell()); screen.getByRole("button", { name: "Settings" }).focus(); fireEvent.click(screen.getByRole("button", { name: "Settings" }));
     const dialog = screen.getByRole("dialog", { name: "Settings" });
-    const theme = within(dialog).getByRole("combobox", { name: "Theme preference" });
+    const theme = within(dialog).getByRole("combobox", { name: "Theme" });
     expect(theme).toHaveFocus();
+    expect(within(theme).getAllByRole("option").map(option => option.textContent)).toEqual(["System", "Light", "Dark"]);
     expect(dialog).toHaveAttribute("aria-modal", "false");
     expect(dialog).toHaveClass("settings-panel");
     fireEvent.change(theme, { target: { value: "dark" } });
     expect(theme).toHaveValue("dark");
     fireEvent.change(theme, { target: { value: "system" } });
     expect(theme).toHaveValue("system");
-    expect(dialog).toHaveTextContent("device’s reduced-motion preference");
+    expect(dialog).not.toHaveTextContent(/Reduced motion|reduced-motion/);
     expect(dialog).not.toHaveTextContent(/Billing|Notifications|Provider integration|Session|Signed out|Signed in/);
     fireEvent.click(within(dialog).getByRole("button", { name: "Close settings" }));
     expect(screen.getByRole("button", { name: "Settings" })).toHaveFocus();

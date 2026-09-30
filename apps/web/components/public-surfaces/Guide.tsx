@@ -14,7 +14,7 @@ export const guideSections = [
   { id: "reconsideration", title: "Reconsidering a decision" },
   { id: "simulator", title: "Simulator" },
   { id: "play", title: "Play" },
-  { id: "try-your-data", title: "Try Your Data" },
+  { id: "try-your-data", title: "Try your data" },
   { id: "trust", title: "Trust & evidence" },
   { id: "support-feedback", title: "Support and feedback" },
   { id: "limitations", title: "Beta limitations and data guidance" },
@@ -22,8 +22,8 @@ export const guideSections = [
 type SectionId = (typeof guideSections)[number]["id"];
 
 const startPaths = [
-  { Icon: Gamepad2, title: "Just curious", copy: "Try three quick decisions in Play. About five minutes, no sign-in, nothing saved.", cta: "Open Play", href: "/play" },
-  { Icon: Compass, title: "See the real workflow", copy: "Rehearse the full journey with Harbor Light Books, a synthetic sample business.", cta: "Open Simulator", href: "/simulator" },
+  { Icon: Gamepad2, title: "Just curious", copy: "Try three quick decisions in Play. About five minutes, no sign-in, nothing saved.", cta: "Try the learning exercise", href: "/play" },
+  { Icon: Compass, title: "See the real workflow", copy: "Rehearse the full journey with Harbor Light Books, a synthetic sample business.", cta: "Review the simulation", href: "/simulator" },
   { Icon: Upload, title: "Check a test export", copy: "In local development, validate a de-identified test package, then continue in the same governed journey. Cloud uploads are disabled.", cta: "Try Your Data", href: "/try-your-data" },
 ];
 
@@ -57,13 +57,14 @@ function Bullets({ items }: { items: string[] }) {
 }
 
 function Next({ links }: { links: [string, string][] }) {
-  return <p className="flex flex-wrap gap-3">{links.map(([label, href], i) => <NextLink key={href} className={`button small ${i ? "secondary" : ""}`} href={href}>{label}</NextLink>)}</p>;
+  return <p className="flex flex-wrap gap-3">{links.map(([label, href]) => <NextLink key={href} className="button secondary small" href={href}>{label}</NextLink>)}</p>;
 }
 
 export function Guide() {
   return <Surface eyebrow="User Guide" title="Your guide to a verified move." intro="Everything a first-time user needs for Beta V1.0, in about ten minutes. Skim the headings, open the details when you want more.">
+    <div><NextLink className="button" href="/workspace">Go to migration</NextLink></div>
     <div className="grid items-start gap-10 lg:grid-cols-[15rem_1fr]">
-      <nav aria-label="User guide contents" className="panel p-5 lg:sticky lg:top-6"><h2 className="type-label text-muted">Contents</h2><ol className="mt-3 grid gap-1 text-sm sm:grid-cols-2 lg:grid-cols-1">{guideSections.map((section, i) => <li key={section.id}><a className="flex min-h-9 items-center gap-2 rounded-md px-2 font-semibold hover:bg-[var(--surface-subtle)]" href={`#${section.id}`}><span aria-hidden="true" className="w-4 text-muted">{String.fromCharCode(65 + i)}</span>{section.title}</a></li>)}</ol></nav>
+      <nav aria-label="User guide contents" className="panel p-5 lg:sticky lg:top-6"><h2 className="text-sm font-semibold text-muted">Contents</h2><ol className="mt-3 grid gap-1 text-sm sm:grid-cols-2 lg:grid-cols-1">{guideSections.map((section, i) => <li key={section.id}><a className="flex min-h-9 items-center gap-2 rounded-md px-2 font-semibold hover:bg-[var(--surface-subtle)]" href={`#${section.id}`}><span aria-hidden="true" className="w-4 text-muted">{String.fromCharCode(65 + i)}</span>{section.title}</a></li>)}</ol></nav>
       <div className="min-w-0 space-y-12">
 
         <Section id="what-is-movebooks">
@@ -75,7 +76,7 @@ export function Guide() {
         <Section id="start-here">
           <p className="text-secondary">Pick the path that fits how much time you have.</p>
           <ol className="grid gap-4 md:grid-cols-3">{startPaths.map(({ Icon, title, copy, cta, href }) => <li key={href} className="card flex flex-col p-5"><Icon aria-hidden="true" className="text-primary" size={22}/><h3 className="type-card mt-4">{title}</h3><p className="mt-2 flex-1 text-sm text-secondary">{copy}</p><Link className="mt-4" href={href}>{cta} <span aria-hidden="true">→</span></Link></li>)}</ol>
-          <p className="text-sm text-muted">Local development uses demo access. An authorized cloud dev/test environment uses Google sign-in and owner-protected workspaces; it is not an always-on public service. Production builds without configured identity disable sign-in. Opening a page never approves anything; your decisions control progress.</p>
+          <p className="text-sm text-muted">Local development uses demo access. The public synthetic Beta uses Google sign-in and owner-protected migrations, without a production uptime guarantee. Production builds without configured identity disable sign-in. Opening a page never approves anything; your decisions control progress.</p>
         </Section>
 
         <Section id="journey">
@@ -126,12 +127,12 @@ export function Guide() {
         <Section id="simulator">
           <p className="text-secondary">Simulator runs the real Beta workflow with Harbor Light Books, a synthetic business with accounts, customers, suppliers, products and transactions.</p>
           <ol className="list-decimal space-y-2 pl-5 text-secondary">
-            <li>Open Simulator and choose <strong className="text-[var(--foreground)]">Start Harbor Light Books</strong>.</li>
+            <li>Open Simulator and choose <strong className="text-[var(--foreground)]">Start simulation</strong>.</li>
             <li>Use local demo access in development, or Google sign-in in an authorized cloud dev/test environment, then start discovery yourself.</li>
             <li>Work through the five stages, making each decision. Expect a controlled duplicate-customer failure to practise recovery.</li>
             <li>You finish when the first invoice is verified: Business Ready · Verified in the synthetic environment.</li>
           </ol>
-          <Next links={[["Open Simulator", "/simulator"]]}/>
+          <Next links={[["Review the simulation", "/simulator"]]}/>
         </Section>
 
         <Section id="play">
@@ -140,7 +141,7 @@ export function Guide() {
             "Unsafe shortcuts show their consequence and cannot advance the exercise.",
             "Nothing reads or changes your workspace. Finishing Play is learning, not migration progress.",
           ]}/>
-          <Next links={[["Open Play", "/play"]]}/>
+          <Next links={[["Try the learning exercise", "/play"]]}/>
         </Section>
 
         <Section id="try-your-data">
@@ -153,7 +154,7 @@ export function Guide() {
           </ol>
           <Alert tone="warning" title="Test exports only"><p>Use synthetic or de-identified data. This is a local evaluation, not a secure production intake service.</p></Alert>
           <More summary="File formats and limits"><p>CSV or JSON files, or one flat ZIP. Eight required files; <code>metadata.json</code> is optional.</p><p>Up to 9 files, 1,000 rows and 256 KiB per file, 2 MiB in total. No PDFs, images, macros, binaries, folders or nested ZIPs.</p></More>
-          <Next links={[["Open Try Your Data", "/try-your-data"]]}/>
+          <Next links={[["Review local data requirements", "/try-your-data"]]}/>
         </Section>
 
         <Section id="trust">
@@ -169,13 +170,13 @@ export function Guide() {
             "An empty section means nothing is recorded yet — it is not a passed check.",
           ]}/>
           <More summary="What Trust does not show"><p>Raw financial amounts, record payloads, prompts and hidden reasoning are never displayed. Trust is read-only: it cannot approve, retry or repair anything.</p></More>
-          <Next links={[["Open Trust", "/trust"], ["What evidence means", "/learn#evidence"]]}/>
+          <Next links={[["Review migration evidence", "/trust"], ["What evidence means", "/learn#evidence"]]}/>
         </Section>
 
         <Section id="support-feedback">
           <div className="grid gap-4 md:grid-cols-2">
-            <Card><h3 className="type-card">Support</h3><p className="mt-2 text-sm text-secondary">Choose what you are stuck on — a blocker, an approval, a paused move, a mismatch — and get the safe next step. From any stage, use <strong>Get help with this step</strong>. Support is self-service; it cannot approve or retry for you.</p><Link className="mt-4 inline-block" href="/support">Open Support <span aria-hidden="true">→</span></Link></Card>
-            <Card><h3 className="type-card">Feedback</h3><p className="mt-2 text-sm text-secondary">Share feedback, report an issue or suggest an improvement. The Beta prepares a draft on your device; nothing is sent. Review it, download it and share it through your agreed channel.</p><Link className="mt-4 inline-block" href="/feedback">Open Feedback <span aria-hidden="true">→</span></Link></Card>
+            <Card><h3 className="type-card">Support</h3><p className="mt-2 text-sm text-secondary">Choose what you are stuck on — a blocker, an approval, a paused move, a mismatch — and get the safe next step. From any stage, use <strong>Get help with this step</strong>. Support is self-service; it cannot approve or retry for you.</p><Link className="mt-4 inline-block" href="/support">Get help with a step <span aria-hidden="true">→</span></Link></Card>
+            <Card><h3 className="type-card">Feedback</h3><p className="mt-2 text-sm text-secondary">Share feedback, report an issue or suggest an improvement. The Beta prepares a draft on your device; nothing is sent. Review it, download it and share it through your agreed channel.</p><Link className="mt-4 inline-block" href="/feedback">Prepare feedback <span aria-hidden="true">→</span></Link></Card>
           </div>
           <p className="text-sm text-muted">There is no live support team or response-time commitment in this Beta.</p>
         </Section>

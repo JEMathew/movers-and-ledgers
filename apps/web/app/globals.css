@@ -249,7 +249,7 @@ button, input, select, textarea { font: inherit; }
 .assessment-summary { border-color: var(--primary); }
 @keyframes mb-orbit { to { transform: rotate(360deg); } }
 .mobile-nav > summary { list-style: none; }
-.account-trigger { max-width: min(18rem, 55vw); }
+.account-trigger { width: min(18rem, calc(100vw - 6rem)); }
 .account-menu { position: relative; }
 .account-controls { position: relative; }
 .settings-panel { max-height: calc(100dvh - 7rem); overflow-y: auto; }

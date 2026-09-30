@@ -26,7 +26,7 @@ describe("User Guide", () => {
   });
   it("links only to existing product routes", () => {
     render(<Guide/>);
-    const known = new Set([...publicLinks.map(([, href]) => href), "/try-your-data", "/learn"]);
+    const known = new Set([...publicLinks.map(([, href]) => href), "/try-your-data", "/learn", "/workspace"]);
     for (const link of screen.getAllByRole("link")) {
       const href = link.getAttribute("href")!;
       if (href.startsWith("#")) continue;

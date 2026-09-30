@@ -7,11 +7,12 @@ import { IdentityEntry } from "@/components/IdentityEntry";
 import { RuntimeNotice } from "@/components/RuntimeNotice";
 import { WorkspaceEntry } from "@/components/WorkspaceEntry";
 
-const mocks = vi.hoisted(() => ({ prepare: vi.fn(), verify: vi.fn(), navigate: vi.fn(), popup: vi.fn(), signOut: vi.fn(), unsubscribe: vi.fn() }));
+const mocks = vi.hoisted(() => ({ prepare: vi.fn(), verify: vi.fn(), navigate: vi.fn(), replace: vi.fn(), popup: vi.fn(), signOut: vi.fn(), unsubscribe: vi.fn() }));
 vi.mock("@/lib/identity", async importOriginal => ({
   ...await importOriginal<typeof import("@/lib/identity")>(),
   prepareGoogleIdentity: mocks.prepare, verifiedIdentity: mocks.verify, navigateAfterAuth: mocks.navigate,
 }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ replace: mocks.replace }), usePathname: () => window.location.pathname }));
 let listener: (user: User | null) => void;
 const user = { uid: "user-b", email: "untrusted-client@example.test" } as User;
 const runtime = { signIn: mocks.popup, signOut: mocks.signOut, subscribe: (callback: typeof listener) => { listener = callback; callback(null); return mocks.unsubscribe; } };
@@ -30,6 +31,23 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllEnvs());
 
 describe("shared Google authentication controls", () => {
+  it("shows verification immediately after popup completion and routes without reinitializing identity", async () => {
+    const verification = deferred<{subject: string; email: string}>();
+    mocks.verify.mockReturnValue(verification.promise); mocks.popup.mockResolvedValue({ user });
+    mount();
+    fireEvent.click(await screen.findByRole("button", { name: "Continue with Google" }));
+    const pending = await screen.findByRole("button", { name: "Account: verifying session" });
+    expect(pending).toHaveTextContent("Verifying your account…");
+    expect(pending).toBeDisabled();
+    expect(screen.queryByText(/Updating session|Session needs attention|untrusted-client/)).not.toBeInTheDocument();
+    expect(mocks.replace).not.toHaveBeenCalled();
+    await act(async () => verification.resolve({ subject: "firebase:user-b", email: "verified-b@example.test" }));
+    expect(screen.getByRole("button", { name: "Account: verified-b@example.test" })).toBeEnabled();
+    expect(mocks.replace).toHaveBeenCalledWith("/onboard-fpu?session=preserved");
+    expect(mocks.navigate).not.toHaveBeenCalled();
+    expect(mocks.verify).toHaveBeenCalledTimes(1);
+    expect(mocks.prepare).toHaveBeenCalledTimes(1);
+  });
   it("initializes once before enabling either control; first ready click starts popup synchronously", async () => {
     const init = deferred<typeof runtime>(); mocks.prepare.mockReturnValue(init.promise);
     mount();
@@ -52,7 +70,9 @@ describe("shared Google authentication controls", () => {
     fireEvent.click(await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" }));
     expect(mocks.popup).toHaveBeenCalledTimes(1);
     await act(async () => popup.resolve({ user }));
-    expect(mocks.navigate).toHaveBeenCalledWith("/onboard-fpu?session=preserved");
+    expect(mocks.replace).not.toHaveBeenCalled();
+    expect(mocks.navigate).not.toHaveBeenCalled();
+    expect(mocks.verify).toHaveBeenCalledTimes(1);
     expect(screen.getByRole("button", { name: "Account: verified-b@example.test" })).toBeVisible();
   });
   it("workspace first-click CTA uses the same supported path", async () => {
@@ -70,16 +90,17 @@ describe("shared Google authentication controls", () => {
   it("SDK auth listener cannot race popup completion and consume the first successful navigation", async () => {
     const popup = deferred<{ user: User }>(); mocks.popup.mockReturnValue(popup.promise);
     mount();
-    fireEvent.click(await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Continue with Google" }));
     await act(async () => { listener(user); popup.resolve({ user }); });
     expect(mocks.verify).toHaveBeenCalledTimes(1);
-    expect(mocks.navigate).toHaveBeenCalledTimes(1);
+    expect(mocks.replace).toHaveBeenCalledTimes(1);
+    expect(mocks.navigate).not.toHaveBeenCalled();
   });
   it("honors next when signing in from the header on the sign-in page", async () => {
     window.history.replaceState(null, "", "/sign-in?next=%2Fplan-map%3Fsession%3Dpreserved");
     mocks.popup.mockResolvedValue({ user }); mount();
     fireEvent.click(await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" }));
-    await waitFor(() => expect(mocks.navigate).toHaveBeenCalledWith("/plan-map?session=preserved"));
+    await waitFor(() => expect(mocks.replace).toHaveBeenCalledWith("/plan-map?session=preserved"));
   });
   it("coalesces duplicate clicks across header and primary controls", async () => {
     mount();
@@ -125,7 +146,7 @@ describe("shared Google authentication controls", () => {
     const verification = deferred<{subject: string; email: string}>(); mocks.verify.mockReturnValue(verification.promise);
     mount(); await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" });
     act(() => listener(user));
-    expect(screen.getByRole("button", { name: "Account: verifying session" })).toHaveTextContent("Verifying account…");
+    expect(screen.getByRole("button", { name: "Account: verifying session" })).toHaveTextContent("Verifying your account…");
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     expect(screen.queryByText(/Session needs attention|untrusted-client/)).not.toBeInTheDocument();
     await act(async () => verification.resolve({ subject: "firebase:user-b", email: "verified-b@example.test" }));
@@ -163,6 +184,7 @@ describe("shared Google authentication controls", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("could not be verified");
     expect(screen.queryByRole("button", { name: /Account:.*@/ })).not.toBeInTheDocument();
     expect(screen.queryByText(/Signed in as/)).not.toBeInTheDocument(); expect(mocks.navigate).not.toHaveBeenCalled();
+    expect(mocks.replace).not.toHaveBeenCalled();
     expect(screen.queryByRole("button", { name: /Account:.*@/ })).not.toBeInTheDocument();
   });
   it("signs out, clears selected-session references, and navigates only after success", async () => {
@@ -200,9 +222,13 @@ describe("shared Google authentication controls", () => {
   });
   it("late identity verification cannot restore an account after sign-out", async () => {
     const verification = deferred<{subject: string; email: string}>(); mocks.verify.mockReturnValue(verification.promise);
+    const signOut = deferred<void>(); mocks.signOut.mockReturnValue(signOut.promise);
     mount(); await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" });
     act(() => listener(user)); fireEvent.click(screen.getByRole("button", { name: /^Account:/ })); fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    expect(screen.getByRole("button", { name: "Account: signing out" })).toHaveTextContent("Signing out…");
+    expect(screen.queryByRole("button", { name: "Account: verifying session" })).not.toBeInTheDocument();
     await act(async () => verification.resolve({ subject: "firebase:user-b", email: "stale@example.test" }));
+    await act(async () => signOut.resolve());
     expect(screen.queryByText(/Signed in as/)).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Account:.*@/ })).not.toBeInTheDocument();
   });
@@ -212,5 +238,13 @@ describe("shared Google authentication controls", () => {
     act(() => listener(user)); view.unmount();
     await act(async () => verification.resolve({ subject: "firebase:user-b", email: "stale@example.test" }));
     expect(mocks.unsubscribe).toHaveBeenCalledTimes(1); expect(mocks.navigate).not.toHaveBeenCalled();
+    expect(mocks.replace).not.toHaveBeenCalled();
+  });
+  it("sanitizes sign-in destinations before client navigation", async () => {
+    mocks.popup.mockResolvedValue({ user });
+    render(<IdentityProvider><IdentityEntry destination="//untrusted.example" /></IdentityProvider>);
+    fireEvent.click(await screen.findByRole("button", { name: "Continue with Google" }));
+    await waitFor(() => expect(mocks.replace).toHaveBeenCalledWith("/workspace"));
+    expect(mocks.navigate).not.toHaveBeenCalled();
   });
 });

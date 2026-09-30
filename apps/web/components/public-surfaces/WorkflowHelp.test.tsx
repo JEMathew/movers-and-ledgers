@@ -16,5 +16,9 @@ describe("context after a same-page new assessment", () => {
     fireEvent.click(link);
     expect(link).toHaveAttribute("href", `http://localhost:3000/trust?session=${newId}`);
     expect(link.getAttribute("href")).not.toContain(oldId);
+    const learn = screen.getByRole("link", { name: "Learn about Understand" });
+    learn.addEventListener("click", event => event.preventDefault());
+    fireEvent.click(learn);
+    expect(learn).toHaveAttribute("href", `http://localhost:3000/learn?stage=0&session=${newId}#evidence`);
   });
 });

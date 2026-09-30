@@ -17,5 +17,5 @@ export function WorkflowHelp() {
     if (isSessionId(id)) target.searchParams.set("session", id);
     event.currentTarget.href = target.toString();
   }
-  return <aside className="shell mt-10" aria-label="Help for this workflow"><nav className="panel flex flex-wrap gap-3 p-4" aria-label="Contextual help"><a className="button secondary small" href={`/learn#${phases[phase].topic}`}>Learn about {phases[phase].name}</a><a className="button secondary small" href="/trust" onClick={attachCurrentSession}>Trust & evidence</a><a className="button secondary small" href={`/support?stage=${phase}`} onClick={attachCurrentSession}>Get help with this step</a></nav><ReasoningAdvice key={path} path={path}/></aside>;
+  return <aside className="shell mt-10" aria-label="Help for this workflow"><nav className="panel flex flex-wrap gap-3 p-4" aria-label="Contextual help"><a className="button secondary small" href={`/learn?stage=${phase}#${phases[phase].topic}`} onClick={attachCurrentSession}>Learn about {phases[phase].name}</a><a className="button secondary small" href="/trust" onClick={attachCurrentSession}>Trust & evidence</a><a className="button secondary small" href={`/support?stage=${phase}`} onClick={attachCurrentSession}>Get help with this step</a></nav><ReasoningAdvice key={path} path={path}/></aside>;
 }

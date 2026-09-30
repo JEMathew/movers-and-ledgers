@@ -11,6 +11,7 @@ import { Play } from "./Play";
 import { ProductEntry } from "./ProductEntry";
 import { Support } from "./Support";
 import { Trust } from "./Trust";
+import { Guide } from "./Guide";
 import { publicLinks, sampleEntry, topics } from "./content";
 import { contextQuery, safeContext } from "./context";
 import { phaseFor, projectSession } from "./session";
@@ -29,12 +30,25 @@ const evidence = {
   chain_of_thought: "PRIVATE_REASONING", prompt: "PRIVATE_PROMPT", secret: "PRIVATE_SECRET",
 };
 
+vi.mock("next/navigation", () => ({ useRouter: () => ({ replace: vi.fn() }) }));
+
 describe("public surface contracts", () => {
+  it.each([
+    ["Product", ProductEntry], ["Guide", Guide], ["Simulator", Simulator],
+    ["Learn", Learn], ["Play", Play], ["Trust", Trust],
+    ["Feedback", Feedback], ["Support", Support],
+  ] as const)("keeps %s section headings out of uppercase label styling", async (_name, Page) => {
+    render(<Page/>);
+    await waitFor(() => {
+      expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+      for (const heading of screen.getAllByRole("heading")) expect(heading.className).not.toMatch(/uppercase|type-label|eyebrow/);
+    });
+  });
   it("presents the required business message, CTAs, full journey and scope without invented progress", () => {
     render(<Home/>);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Move your books.Keep your confidence.");
-    expect(screen.getByRole("link", { name: "Explore Beta" })).toHaveAttribute("href", "/product");
-    expect(screen.getByRole("link", { name: "See How It Works" })).toHaveAttribute("href", "#how-it-works");
+    expect(screen.getByRole("link", { name: "Explore MoveBooks" })).toHaveAttribute("href", "/product");
+    expect(screen.getByRole("link", { name: "See how it works" })).toHaveAttribute("href", "#how-it-works");
     expect(screen.getByText(/Bounded synthetic Beta · No production customer data/)).toBeVisible();
     expect(screen.getByRole("link", { name: "Beta limitations" })).toHaveAttribute("href", "/trust#beta-limitations");
     expect(screen.getByText("Onboard + First Real Task")).toBeVisible();
@@ -61,7 +75,7 @@ describe("public surface contracts", () => {
   it("routes Simulator to ordinary discovery with no requests or automatic approvals", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<Simulator/>);
-    expect(screen.getByRole("link", { name: "Start Harbor Light Books" })).toHaveAttribute("href", sampleEntry);
+    expect(screen.getByRole("link", { name: "Start simulation" })).toHaveAttribute("href", sampleEntry);
     expect(screen.getByText(/We never pre-approve/)).toBeVisible();
     expect(screen.getByText(/Cloud mode uses real Google sign-in and durable synthetic workspaces/)).toBeVisible();
     expect(screen.queryByText(/Sessions expire when the API restarts/)).not.toBeInTheDocument();
@@ -78,7 +92,7 @@ describe("public surface contracts", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<ProductEntry/>);
     expect(await screen.findByText(/No migration selected/)).toBeVisible();
-    expect(screen.getByRole("link", { name: "Explore Sample Business" })).toHaveAttribute("href", sampleEntry);
+    expect(screen.getByRole("link", { name: "Start a sample migration" })).toHaveAttribute("href", sampleEntry);
     expect(screen.getByText(/Uploads are unavailable in this public Beta/)).toBeVisible();
     expect(screen.getByText(/Real accounting-provider connections are not available/)).toBeVisible();
     expect(screen.queryByText(/Production identity and durable sessions are not available/)).not.toBeInTheDocument();
@@ -98,7 +112,28 @@ describe("public surface contracts", () => {
       expect(screen.getByRole("link", { name: topic.title })).toHaveAttribute("href", `#${topic.id}`);
       expect(document.getElementById(topic.id)?.tagName).toBe("DETAILS");
     }
-    expect(screen.getAllByRole("link", { name: /Explore/, hidden: true })).toHaveLength(10);
+    expect(screen.getAllByRole("link", { name: /Review .* in Product/, hidden: true })).toHaveLength(10);
+  });
+  it("returns from Learn to the referenced step without fetching or changing progress", () => {
+    window.history.replaceState(null, "", `/learn?stage=3&session=${id}#reconciliation`);
+    const fetch = vi.spyOn(globalThis, "fetch");
+    render(<Learn/>);
+    expect(screen.getByRole("link", { name: "Return to verify" })).toHaveAttribute("href", `/validate-configure?session=${id}`);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+  it("does not invent a current migration from invalid Learn context", () => {
+    window.history.replaceState(null, "", "/learn?stage=99&session=invalid");
+    render(<Learn/>);
+    expect(screen.getByRole("link", { name: "Go to migration" })).toHaveAttribute("href", "/workspace");
+  });
+  it("uses sentence-case landing headings and explicit hero destinations", () => {
+    render(<Home/>);
+    for (const name of ["The questions behind every move", "How MoveBooks works", "Trust by design"]) {
+      expect(screen.getByRole("heading", { name })).toBeVisible();
+    }
+    expect(screen.getByRole("link", { name: "Explore MoveBooks" })).toHaveAttribute("href", "/product");
+    expect(screen.getByRole("link", { name: "See how it works" })).toHaveAttribute("href", "#how-it-works");
+    for (const heading of screen.getAllByRole("heading")) expect(heading.className).not.toMatch(/uppercase|type-label|eyebrow/);
   });
   it("teaches consequences without allowing unsafe shortcuts or changing any workflow", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
@@ -193,9 +228,9 @@ describe("public surface contracts", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<Support/>);
     expect(screen.getByRole("heading", { name: "Validation mismatch" })).toBeVisible();
-    expect(screen.getByRole("link", { name: "Return to current workflow" })).toHaveAttribute("href", `/validate-configure?session=${id}`);
+    expect(screen.getByRole("link", { name: "Return to migration" })).toHaveAttribute("href", `/validate-configure?session=${id}`);
     expect(screen.getByRole("link", { name: "Learn about this step" })).toHaveAttribute("href", "/learn#reconciliation");
-    expect(screen.getByRole("link", { name: "Report Issue" }).getAttribute("href")).not.toContain("raw_data");
+    expect(screen.getByRole("link", { name: "Prepare issue draft" }).getAttribute("href")).not.toContain("raw_data");
     expect(fetch).not.toHaveBeenCalled();
   });
   it("keeps analytics as uninstrumented contracts, with server-owned completion and intake", () => {

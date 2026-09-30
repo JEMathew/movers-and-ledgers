@@ -8,7 +8,7 @@ import { Nav } from "@/components/Nav";
 import { IdentityProvider } from "@/components/IdentityProvider";
 import { GET } from "@/app/api/auth/demo/route";
 const route = vi.hoisted(() => ({ path: "/trust" }));
-vi.mock("next/navigation", () => ({ usePathname: () => route.path }));
+vi.mock("next/navigation", () => ({ usePathname: () => route.path, useRouter: () => ({ replace: vi.fn() }) }));
 
 afterEach(() => vi.unstubAllEnvs());
 describe("truthful runtime identity", () => {

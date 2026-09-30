@@ -25,10 +25,10 @@ export function AccountControls() {
   const cloud = cloudIdentity();
   const verifying = session.hasSession && !session.identity && !session.ready;
   const accountLabel = session.identity ? `Account: ${session.identity.email}`
-    : session.busy ? "Account: updating session" : verifying ? "Account: verifying session" : "Account: session not verified";
+    : verifying ? "Account: verifying session" : session.busy ? "Account: signing out" : "Account: session not verified";
   const accountMessage = session.identity ? `Signed in as ${session.identity.email}`
-    : session.busy ? "Updating your session…"
-    : verifying ? "Verifying your account with MoveBooks. This can take up to a minute when the Beta starts."
+    : verifying ? "Verifying your account…"
+    : session.busy ? "Signing out…"
     : "Google sign-in is present, but MoveBooks could not verify your account. Sign out, then sign in again. No verified email is shown.";
   const accountKey = session.identity?.email ?? (session.hasSession ? "unverified" : null);
   const open = openFor !== null && openFor === accountKey;
@@ -75,7 +75,7 @@ export function AccountControls() {
           aria-expanded={open} aria-controls={id} aria-label={accountLabel}
           onClick={() => { setSettingsOpen(false); setOpenFor(open ? null : accountKey); }}>
           <UserRound size={17} aria-hidden="true" />
-          <span className="truncate">{session.identity?.email ?? (session.busy ? "Updating session…" : !session.ready ? "Verifying account…" : "Session needs attention")}</span>
+          <span className="truncate" aria-live="polite">{session.identity?.email ?? (verifying ? "Verifying your account…" : session.busy ? "Signing out…" : "Session needs attention")}</span>
           <ChevronDown size={15} aria-hidden="true" />
         </button>
         {open && <div id={id} className="account-panel" aria-label="Account controls">
@@ -88,13 +88,11 @@ export function AccountControls() {
       onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); closeSettings(); } }}
       onBlur={event => { if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) setSettingsOpen(false); }}>
       <div className="mb-3 flex items-center justify-between gap-3"><h2 id={`${settingsId}-title`} className="font-semibold">Settings</h2><button type="button" className="button ghost small" aria-label="Close settings" onClick={closeSettings}><X size={16} aria-hidden="true" /></button></div>
-      <label className="field-label grid gap-2">Theme preference
+      <label className="field-label grid gap-2">Theme
         <select ref={themeControl} className="field-control" value={mounted ? theme ?? "system" : "system"} disabled={!mounted} onChange={event => setTheme(event.target.value)}>
           <option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option>
         </select>
       </label>
-      <h3 className="mt-4 text-sm font-semibold">Reduced motion</h3>
-      <p className="mt-2 text-sm text-secondary">MoveBooks respects your device’s reduced-motion preference. Change it in your operating system’s accessibility settings.</p>
     </div>}
   </div>;
 }
