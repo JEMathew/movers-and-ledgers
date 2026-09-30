@@ -5,9 +5,9 @@ Use this index to find the durable decision records without turning the reposito
 ## Start here
 
 - [Product overview and live Beta](../README.md) — problem, journey, current versus future scope, and demo links.
-- [Beta User Guide](https://movebooks-beta-web-411600344727.asia-southeast1.run.app/guide) and [guide review](reviews/user-guide.md) — getting started; Learn remains the concept-learning surface.
+- [Beta User Guide](https://movebooks-si.web.app/guide) and [guide review](reviews/user-guide.md) — getting started; Learn remains the concept-learning surface.
 - [V1 final acceptance](reviews/v1-final-acceptance.md) — GREEN for its exercised bounded synthetic scope.
-- [Public-Beta deployment checkpoint](deployment/public-beta.md) — released baseline, current deployment, and pending post-V1 regression; not production readiness.
+- [Public-Beta deployment checkpoint](deployment/public-beta.md) — released baseline, current deployment, and bounded Hosting/auth validation; not production readiness.
 - [Cloud validation](reviews/google-cloud-validation.md) — identity, isolation, persistence, recovery and FPU evidence.
 - [Final bounded live Mapping evidence](reviews/live-gemini-adk-mapping.md) — closes the advisory validation sequence; does not activate models in the public Beta.
 

@@ -1,0 +1,14 @@
+{
+  "hosting": {
+    "site": "movebooks-si",
+    "rewrites": [
+      {
+        "source": "**",
+        "run": {
+          "serviceId": "movebooks-beta-web",
+          "region": "asia-southeast1"
+        }
+      }
+    ]
+  }
+}

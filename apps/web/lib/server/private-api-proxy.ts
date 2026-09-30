@@ -1,6 +1,6 @@
 import { allowedRoute, cloudIntake } from "./proxy-policy";
 
-export type ProxyConfig = { upstream: string; publicOrigin: string; projectId: string };
+export type ProxyConfig = { upstream: string; publicOrigin: string; projectId: string; additionalOrigins?: string[] };
 export type ProxyDependencies = {
   verifyUser: (token: string, projectId: string) => Promise<void>;
   workloadAuthorization: (audience: string) => Promise<string>;
@@ -22,7 +22,17 @@ export function proxyConfig(env: Partial<NodeJS.ProcessEnv>): ProxyConfig {
       env.NEXT_PUBLIC_IDENTITY_MODE !== "firebase" || !env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
     throw new Error("Private API proxy is not configured");
   }
-  return { upstream: upstream.origin, publicOrigin: publicOrigin.origin, projectId: env.NEXT_PUBLIC_FIREBASE_PROJECT_ID };
+  const additionalOrigins = env.MOVEBOOKS_ADDITIONAL_WEB_ORIGINS?.split(",").map(value => {
+    const origin = new URL(value.trim());
+    if (origin.protocol !== "https:" || origin.href !== `${origin.origin}/` ||
+        origin.hostname.includes("*") || origin.origin === upstream.origin) {
+      throw new Error("Invalid additional web origin");
+    }
+    return origin.origin;
+  });
+  return { upstream: upstream.origin, publicOrigin: publicOrigin.origin, projectId: env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    ...(additionalOrigins ? { additionalOrigins } : {}),
+  };
 }
 
 async function boundedBody(stream: ReadableStream<Uint8Array> | null, limit: number) {
@@ -52,8 +62,9 @@ export async function proxyRequest(request: Request, config: ProxyConfig, depend
   if (!url.pathname.startsWith("/api/v1/") || url.search ||
       (!allowedRoute(request.method, path) && !cloudIntake(path))) return failure(404, "API route unavailable.");
   const origin = request.headers.get("origin");
-  if ((origin && origin !== config.publicOrigin) ||
-      (request.method !== "GET" && origin !== config.publicOrigin) ||
+  const allowedOrigins = [config.publicOrigin, ...(config.additionalOrigins ?? [])];
+  if ((origin && !allowedOrigins.includes(origin)) ||
+      (request.method !== "GET" && (!origin || !allowedOrigins.includes(origin))) ||
       request.headers.get("sec-fetch-site") === "cross-site") return failure(403, "Same-origin request required.");
   const authorization = request.headers.get("authorization") ?? "";
   if (!/^Bearer [A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(authorization) || authorization.length > 8192) {
