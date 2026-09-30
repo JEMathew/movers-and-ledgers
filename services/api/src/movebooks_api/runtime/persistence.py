@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import threading
 
 from sqlalchemy import Column, MetaData, String, Table, Text, insert, select, update
 from sqlalchemy.exc import DatabaseError, IntegrityError
@@ -146,12 +147,44 @@ def cloud_engine(settings):
     return engine, connector
 
 
+class LazyCloudSessionRepository(SqlSessionRepository):
+    """Cloud SQL engine/connector are built on first database use, not at import.
+
+    Constructing the connector resolves application default credentials, so doing it
+    at import blocked the server from binding before any SQL was needed. Readiness and
+    every session operation still create and use the same fail-closed engine.
+    """
+
+    def __init__(self, settings):
+        self._settings = settings
+        self._engine = None
+        self._connector = None
+        self._lock = threading.Lock()
+
+    @property
+    def engine(self):
+        with self._lock:
+            if self._engine is None:
+                self._engine, self._connector = cloud_engine(self._settings)
+            return self._engine
+
+    @property
+    def started(self):
+        return self._engine is not None
+
+    def close(self):
+        with self._lock:
+            engine, connector = self._engine, self._connector
+            self._engine = self._connector = None
+        if engine is not None:
+            engine.dispose()
+        if connector is not None:
+            connector.close()
+
+
 def session_repository(settings):
     if settings.persistence_backend == "memory":
         from movebooks_api.discover_assess.repository import InMemoryMigrationSessionRepository
 
         return InMemoryMigrationSessionRepository()
-    engine, connector = cloud_engine(settings)
-    repository = SqlSessionRepository(engine)
-    repository.connector = connector
-    return repository
+    return LazyCloudSessionRepository(settings)

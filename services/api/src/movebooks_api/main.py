@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager
 from typing import Annotated
 
@@ -16,6 +17,7 @@ from .discover_assess.validate_configure import router as validate_configure_rou
 from .intake_api import router as intake_router
 from .reasoning import router as reasoning_router
 from .runtime.observability import SafeRequestMiddleware, emit
+from .runtime.warmup import warm_cloud_dependencies
 from .settings import get_settings
 
 settings = get_settings()
@@ -23,9 +25,12 @@ settings = get_settings()
 
 @asynccontextmanager
 async def lifespan(app):
+    warm_cloud_dependencies(settings)
     yield
     repository = discover_assess_service.repository
-    if hasattr(repository, "engine"):
+    if hasattr(repository, "close"):
+        repository.close()
+    elif hasattr(repository, "engine"):
         repository.engine.dispose()
         if hasattr(repository, "connector"):
             repository.connector.close()
@@ -60,16 +65,37 @@ async def runtime_failure(request, error):
     )
 
 
-@app.get("/readyz", tags=["operations"])
-def ready():
-    try:
-        repository = discover_assess_service.repository
-        if hasattr(repository, "ready"):
-            repository.ready()
-        if settings.cloud:
+def readiness_checks(settings, repository):
+    """Independent bounded checks; every one must pass and none may leak details."""
+    checks = []
+    if hasattr(repository, "ready"):
+        checks.append(repository.ready)
+    if settings.cloud:
+
+        def bucket():
             from .runtime.storage import GoogleArtifacts
 
             GoogleArtifacts(settings.google_project, settings.storage_bucket).ready()
+
+        checks.append(bucket)
+    return checks
+
+
+def run_readiness(checks):
+    """Run the checks concurrently; any failure propagates so readiness fails closed."""
+    if len(checks) < 2:
+        for check in checks:
+            check()
+        return
+    with ThreadPoolExecutor(max_workers=len(checks)) as pool:
+        for future in [pool.submit(check) for check in checks]:
+            future.result()
+
+
+@app.get("/readyz", tags=["operations"])
+def ready():
+    try:
+        run_readiness(readiness_checks(settings, discover_assess_service.repository))
         return {"status": "ready", "mode": settings.env}
     except Exception:
         emit(action="persistence", error_code="UNAVAILABLE", status=503)
