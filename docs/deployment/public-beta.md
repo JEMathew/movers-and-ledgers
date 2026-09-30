@@ -12,7 +12,7 @@ production/compliance certification. Earlier AMBER handoffs below are retained a
 
 ## Public-brand preparation — 30 September 2026
 
-**AMBER / not ready to publish or merge the new brand slice.** Branch
+**AMBER / Hosting is live for validation; human sign-in and canonical-link gates remain open.** Branch
 `feat/public-brand-experience` starts from main `5e01f7e9dc7c25f4aaa5345c3ffb9a27e7a9015a`,
 including merged [PR #21](https://github.com/JEMathew/movers-and-ledgers/pull/21).
 All seven jobs in [main CI run 36749557786](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36749557786)
@@ -133,6 +133,65 @@ HTTPS/auth gates pass; About: "Provider-neutral, evidence-driven agentic account
 and onboarding platform with deterministic financial controls and human governance."
 Topics: `agentic-ai`, `accounting`, `migration`, `onboarding`, `fintech`,
 `human-in-the-loop`, `gemini`, `google-adk`, `google-cloud`, `product-management`.
+
+### Hosting deployment checkpoint — 1 October 2026 IST
+
+This checkpoint supersedes the preparation-only statements above. Source
+`f862d889bb6acc466c5ceaeba123efa44440f67b` was built cleanly for Linux amd64, scanned
+and deployed **web only**. Fresh production audit: zero vulnerabilities. Strict Grype
+gate: 0 Critical / 0 High / 5 Medium / 1 Low, exit 0, no suppressions. Residual matches
+are `glibc-2.44@2.44-r6`: Medium CVE-2026-77117, CVE-2026-80489, CVE-2026-8674,
+CVE-2026-89092, CVE-2026-86805; Low CVE-2026-95818. These remain tracked Beta follow-ups.
+
+- Source archive SHA-256: `c66d6bde2395dc5907ca2dfce28eebe94570a72f2226fa1a83bcb4331ad2fba4`.
+- Scanned image archive SHA-256: `990e51f60023f60bacc3d9e218ea48e43f59ec8849e34aeebfa301b4dbd608a9`.
+- Grype report SHA-256: `390ef70bca618aaba97162de8911702a45d2ed0169b45c91df62b3e1949a6c7d`.
+- Web image: `sha256:da35f5e0f73b539e06767de63dea086094186cec596efbebb3a862d686f97da1`.
+- Web revision: `movebooks-beta-web-00013-j2c`, Ready, 100% traffic.
+- Hosting release: `sites/movebooks-si/releases/1790793574355000`, published
+  30 September 2026 at 18:39:34 UTC; catch-all rewrite exactly as described above.
+- Only web environment changes: `NEXT_PUBLIC_API_BASE_URL=/api` and
+  `MOVEBOOKS_ADDITIONAL_WEB_ORIGINS=https://movebooks-si.web.app`.
+- Only Firebase Authentication change: add `movebooks-si.web.app` to authorized domains;
+  all four existing entries retained, no provider/auth-policy change.
+
+The public Cloud Run fallback returned 200 for all nine public surfaces, workspace,
+sign-in and the unauthenticated preserved-workspace shell; 26 static assets passed.
+The new HTTPS Hosting URL returned 200 for all nine public surfaces, workspace and
+sign-in; 25 referenced static assets passed. Video/poster returned the expected 200,
+types and byte sizes; video range request returned 206. Browser rendering confirms
+the MoveBooks AI name, Product Vision section and signed-out account controls. Video
+starts paused with zero buffered ranges and no autoplay; no horizontal overflow observed.
+Local four-viewport/theme visual evidence above remains applicable to this source.
+
+On both origins, anonymous identity and preserved-workspace data GETs return 401.
+Hosting preserves `Cache-Control: no-store, private` on these proxy responses. Public
+HTML preserves Next.js RSC/router `Vary` headers; Firebase adds its own cache variation.
+This does not yet prove authenticated cache/navigation behavior, which remains a human
+validation gate. Direct API anonymous requests remain Google edge 403; normal gcloud IAM
+readiness returns application 200, while protected calls without Firebase identity return 401.
+
+Final read-back at 18:40 UTC: API revision/digest/configuration unchanged; web and API
+service IAM plus project IAM unchanged; both min 0 / max 1 / concurrency 8; SQL
+RUNNABLE/ALWAYS configuration unchanged. No running jobs or observed new web ERROR/5xx
+in the bounded smoke window. No scenario creation, approval, invoice posting, credential
+capture or business-data mutation occurred. Public-Beta services remain available;
+this task does not apply the expired validation-window shutdown automation.
+
+**Release decision: AMBER.** No new P0/P1 defect observed in local/security/anonymous
+smoke checks, but no final authenticated clearance is claimed. First-click Google sign-in,
+API-verified email, account menu/Settings, navigation/reload, one-click sign-out and protected
+denial must pass on the Hosting origin. Canonical README/public links and GitHub settings
+are intentionally unchanged. Remote README rendering and branch CI await publication.
+The unused superseded `747a770` image was scanned/published but never deployed; it and the
+new image consume registry storage. Hosting site/version metadata, registry images and
+logs are retained; existing SQL and request charges continue under the prior Beta budget.
+
+Rollback: restore web traffic to `movebooks-beta-web-00012-tjn` if a live blocker is proven;
+do not expose the API or alter SQL/IAM. That previous revision does not support the new
+Hosting-origin authentication path: disable/roll back the Hosting release rather than
+presenting it as validated, and continue using the recorded Cloud Run fallback. Review
+the rollback action explicitly before applying it. No rollback was needed at this checkpoint.
 
 ## Account and migration-entry cleanup — 30 September 2026
 
