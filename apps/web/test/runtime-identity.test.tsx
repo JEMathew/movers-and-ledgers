@@ -4,6 +4,7 @@ import { NextRequest } from "next/server";
 import { authHeaders, safeDestination } from "@/lib/identity";
 import { IdentityEntry } from "@/components/IdentityEntry";
 import { RuntimeNotice } from "@/components/RuntimeNotice";
+import { Nav } from "@/components/Nav";
 import { IdentityProvider } from "@/components/IdentityProvider";
 import { GET } from "@/app/api/auth/demo/route";
 
@@ -29,7 +30,7 @@ describe("truthful runtime identity", () => {
   });
   it("labels cloud scope without claiming successful sign-in", () => {
     vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "firebase");
-    render(<IdentityProvider><IdentityEntry destination="/workspace" /><RuntimeNotice /></IdentityProvider>);
+    render(<IdentityProvider><Nav /><IdentityEntry destination="/workspace" /><RuntimeNotice /></IdentityProvider>);
     expect(screen.getAllByRole("button", {name:"Preparing Google sign-in…"})).toHaveLength(2);
     expect(screen.queryByRole("link", {name:/enter local demo/i})).not.toBeInTheDocument();
     expect(screen.getByRole("complementary", {name:"Runtime scope"})).toHaveTextContent(/local-only/);
@@ -42,7 +43,7 @@ describe("truthful runtime identity", () => {
   });
   it("focuses a visible error when cloud sign-in is unavailable", async () => {
     vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "firebase");
-    render(<IdentityProvider><IdentityEntry destination="/workspace" /><RuntimeNotice /></IdentityProvider>);
+    render(<IdentityProvider><Nav /><IdentityEntry destination="/workspace" /><RuntimeNotice /></IdentityProvider>);
     // Initialization fails before any click, not after losing user activation.
     expect(screen.getAllByRole("button", {name:"Preparing Google sign-in…"})[0]).toBeDisabled();
     const alert = await screen.findByRole("alert");

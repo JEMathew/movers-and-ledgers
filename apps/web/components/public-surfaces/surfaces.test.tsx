@@ -4,6 +4,7 @@ import Home from "@/app/page";
 import Learn from "@/app/learn/page";
 import Simulator from "@/app/simulator/page";
 import { Nav } from "@/components/Nav";
+import { IdentityProvider } from "@/components/IdentityProvider";
 import { DiscoverAssessExperience } from "@/components/discover-assess/DiscoverAssessExperience";
 import { Feedback } from "./Feedback";
 import { Play } from "./Play";
@@ -43,7 +44,7 @@ describe("public surface contracts", () => {
     expect(screen.queryByText(/Google identity, live Gemini/)).not.toBeInTheDocument();
   });
   it("preserves Product, workspace and all public navigation on desktop and mobile", () => {
-    render(<Nav/>);
+    render(<IdentityProvider><Nav/></IdentityProvider>);
     for (const label of ["Primary navigation", "Mobile primary navigation"]) {
       const nav = screen.getByRole("navigation", { name: label, hidden: true });
       for (const [name, href] of publicLinks) expect(within(nav).getByRole("link", { name, hidden: true })).toHaveAttribute("href", href);

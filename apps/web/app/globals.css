@@ -249,6 +249,8 @@ button, input, select, textarea { font: inherit; }
 .assessment-summary { border-color: var(--primary); }
 @keyframes mb-orbit { to { transform: rotate(360deg); } }
 .mobile-nav > summary { list-style: none; }
+.account-trigger { max-width: min(18rem, 55vw); }
+.account-panel { position: absolute; z-index: 40; top: calc(100% + .5rem); right: 0; width: min(19rem, calc(100vw - 2rem)); padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-elevated); box-shadow: var(--shadow-md); }
 .mobile-nav > summary::-webkit-details-marker { display: none; }
 .mobile-nav-panel { position: absolute; z-index: 30; top: calc(100% - 0.25rem); right: 0; display: grid; min-width: 13rem; gap: 0.25rem; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-elevated); padding: 0.75rem; box-shadow: var(--shadow-md); }
 .mobile-nav-panel > a:not(.button) { min-height: 2.75rem; padding: 0.7rem 0.75rem; border-radius: var(--radius-md); font-size: 0.875rem; font-weight: 650; }

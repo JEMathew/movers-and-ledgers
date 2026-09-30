@@ -1,23 +1,23 @@
 "use client";
 import Link from "next/link";
 import { Menu } from "lucide-react";
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { AccountControls } from "@/components/AccountControls";
 import { publicLinks } from "@/components/public-surfaces/content";
 
 const links = publicLinks;
 
 export function Nav() {
-  return <header className="shell relative flex min-h-20 items-center justify-between py-4">
+  return <header className="shell relative flex min-h-20 flex-wrap items-center justify-between gap-3 py-4">
     <Link href="/" className="flex items-center gap-3 font-black tracking-tight">
       <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--primary)] text-[var(--on-primary)]">M</span>
       <span>MoveBooks <span className="font-semibold text-primary">AI</span></span>
     </Link>
-    <div className="flex items-center gap-2">
-      <nav aria-label="Primary navigation" className="hidden items-center gap-5 text-sm font-semibold xl:flex">
+    <div className="flex max-w-full flex-wrap items-center gap-2">
+      <nav aria-label="Primary navigation" className="hidden items-center gap-3 text-sm font-semibold xl:flex">
         {links.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}
         <Link href="/workspace" className="button small">Open workspace <span aria-hidden="true">↗</span></Link>
       </nav>
-      <ThemeToggle />
+      <AccountControls />
       <details className="mobile-nav xl:hidden">
         <summary className="button ghost icon-button" aria-label="Open navigation">
           <Menu aria-hidden="true" size={19} />

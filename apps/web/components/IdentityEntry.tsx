@@ -5,13 +5,14 @@ import { Button } from "@/components/ui";
 import { useIdentity } from "./IdentityProvider";
 
 export function GoogleSignIn({ destination, compact = false }: { destination?: string; compact?: boolean }) {
-  const { ready, busy, identity, signIn } = useIdentity();
+  const { ready, busy, identity, hasSession, signIn } = useIdentity();
   if (identity) return compact ? null : <a className="button mt-7" href={safeDestination(destination ?? "/workspace")}>Continue to workspace</a>;
+  if (hasSession) return compact ? null : <p role="status" className="mt-7">{!ready || busy ? "Verifying account…" : "Your session needs attention. Use the account control above to sign out and try again."}</p>;
   return <Button className={compact ? "underline" : "mt-7 w-full"} variant={compact ? "ghost" : "primary"}
     disabled={!ready || busy} onClick={() => signIn(destination ?? (window.location.pathname === "/sign-in"
       ? new URLSearchParams(window.location.search).get("next") ?? "/workspace"
       : `${window.location.pathname}${window.location.search}`))}>
-    {!ready ? "Preparing Google sign-in…" : busy ? "Signing in…" : compact ? "Sign in" : "Sign in with Google"}
+    {!ready ? "Preparing Google sign-in…" : busy ? "Signing in…" : "Sign in with Google"}
   </Button>;
 }
 
