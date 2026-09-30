@@ -1,11 +1,19 @@
 "use client";
 import { cloudIdentity } from "@/lib/identity";
 import { IdentityFeedback } from "./IdentityEntry";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 function CloudNotice() {
-  return <aside aria-label="Runtime scope" className="shell py-3 text-sm text-secondary">
-    Cloud foundation Beta: synthetic workspaces use durable storage. Try Your Data remains local-only. Not production-ready. Approval identity is verified by the API.
+  const path = usePathname();
+  // These entry pages already state the Beta boundary next to their main action.
+  const hasScopeNote = ["/", "/product", "/workspace", "/sign-in"].includes(path ?? "");
+  return <div className="shell text-sm text-secondary">
+    {!hasScopeNote && <aside aria-label="Beta scope" className="py-3">
+      <span className="font-semibold">MoveBooks AI Beta</span> · Explore the migration journey safely using synthetic data.{" "}
+      <Link className="underline" href="/trust#beta-limitations">Beta limitations</Link>
+    </aside>}
     <IdentityFeedback />
-  </aside>;
+  </div>;
 }
 export function RuntimeNotice() { return cloudIdentity() ? <CloudNotice /> : null; }

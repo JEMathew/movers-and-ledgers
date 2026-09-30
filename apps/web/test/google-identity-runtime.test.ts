@@ -19,7 +19,7 @@ beforeEach(() => {
   sdk.persistence.mockResolvedValue(undefined); sdk.ready.mockResolvedValue(undefined);
   sdk.popup.mockReturnValue(Promise.resolve());
 });
-afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); });
+afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllEnvs(); vi.unstubAllGlobals(); });
 describe("prepared Firebase runtime", () => {
   it("deduplicates initialization/persistence and waits for SDK readiness before exposing popup action", async () => {
     let release!: () => void;
@@ -46,10 +46,55 @@ describe("prepared Firebase runtime", () => {
     const { authHeaders } = await import("@/lib/identity");
     await expect(authHeaders()).rejects.toThrow("Sign in with Google");
   });
+  it("clears the SDK user on confirmed sign-out and denies the next protected request", async () => {
+    const auth = { authStateReady: sdk.ready, currentUser: { getIdToken: vi.fn().mockResolvedValue("synthetic-token") } as { getIdToken: () => Promise<string> } | null };
+    sdk.getAuth.mockReturnValue(auth);
+    sdk.signOut.mockImplementation(async () => { auth.currentUser = null; });
+    const { authHeaders, prepareGoogleIdentity } = await import("@/lib/identity");
+    expect(await authHeaders()).toEqual({ Authorization: "Bearer synthetic-token" });
+    const runtime = await prepareGoogleIdentity(); await runtime.signOut();
+    expect(sdk.signOut).toHaveBeenCalledWith(auth);
+    await expect(authHeaders()).rejects.toThrow("Sign in with Google to access this workspace.");
+  });
 });
 
 describe("server-verified identity display", () => {
   const user = { uid: "user-b", email: "do-not-trust@example.test", getIdToken: vi.fn().mockResolvedValue("synthetic-token") } as unknown as User;
+  function delayedVerification(delay: number) {
+    vi.useFakeTimers();
+    // Model the actual AbortSignal deadline with the fake clock, not real sleeps.
+    const timeout = vi.spyOn(AbortSignal, "timeout").mockImplementation(milliseconds => {
+      const controller = new AbortController();
+      setTimeout(() => controller.abort(new DOMException("Timed out", "TimeoutError")), milliseconds);
+      return controller.signal;
+    });
+    const fetch = vi.fn().mockImplementation((_url: string, options: RequestInit) => new Promise((resolve, reject) => {
+      const completion = setTimeout(() => resolve(Response.json({ subject: "firebase:user-b", email: "server@example.test" })), delay);
+      options.signal?.addEventListener("abort", () => { clearTimeout(completion); reject(options.signal?.reason); }, { once: true });
+    }));
+    vi.stubGlobal("fetch", fetch);
+    return { timeout, fetch };
+  }
+  it("accepts the observed 22.33s identity response instead of abandoning it at 15s", async () => {
+    const { timeout, fetch } = delayedVerification(22_330);
+    const { verifiedIdentity } = await import("@/lib/identity");
+    let settled = false;
+    const result = verifiedIdentity(user).then(value => { settled = true; return value; }, () => { settled = true; return null; });
+    await vi.advanceTimersByTimeAsync(15_001);
+    expect(settled).toBe(false);
+    await vi.advanceTimersByTimeAsync(7_329);
+    expect(await result).toEqual({ subject: "firebase:user-b", email: "server@example.test" });
+    expect(timeout).toHaveBeenCalledWith(65_000);
+    expect(fetch).toHaveBeenCalledTimes(1); // No automatic sign-in or verification retry.
+  });
+  it("still times out a stalled verification and never substitutes client identity", async () => {
+    const { fetch } = delayedVerification(66_000);
+    const { verifiedIdentity } = await import("@/lib/identity");
+    const result = verifiedIdentity(user).then(() => "unexpected identity", error => error.name);
+    await vi.advanceTimersByTimeAsync(65_000);
+    expect(await result).toBe("TimeoutError");
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
   it("uses verified response subject/email via authenticated no-store request", async () => {
     const fetch = vi.fn().mockResolvedValue(Response.json({ subject: "firebase:user-b", email: "server@example.test" }));
     vi.stubGlobal("fetch", fetch);

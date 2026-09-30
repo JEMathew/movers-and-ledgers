@@ -40,7 +40,7 @@ describe("shared Google authentication controls", () => {
     await act(async () => { init.resolve(runtime); });
     let inClick = false;
     mocks.popup.mockImplementation(() => { expect(inClick).toBe(true); return new Promise(() => {}); });
-    inClick = true; fireEvent.click(screen.getAllByRole("button", { name: "Sign in with Google" }).at(-1)!); inClick = false;
+    inClick = true; fireEvent.click(screen.getByRole("button", { name: "Continue with Google" })); inClick = false;
     expect(mocks.popup).toHaveBeenCalledTimes(1);
     expect(mocks.prepare).toHaveBeenCalledTimes(1);
     expect(screen.getAllByRole("button", { name: "Signing in…" })).toHaveLength(2);
@@ -57,7 +57,14 @@ describe("shared Google authentication controls", () => {
   });
   it("workspace first-click CTA uses the same supported path", async () => {
     mount(true);
-    fireEvent.click(await within(screen.getByRole("main")).findByRole("button", { name: "Sign in with Google" }));
+    const button = await within(screen.getByRole("main")).findByRole("button", { name: "Continue with Google" });
+    expect(screen.getByRole("heading", { name: "Sign in to continue your migration" })).toBeVisible();
+    expect(screen.getByRole("main")).toHaveTextContent("Use your Google account to securely access your MoveBooks migration.");
+    expect(screen.getByRole("main")).toHaveTextContent("Bounded synthetic Beta · No production customer data");
+    expect(screen.getByRole("main")).not.toHaveTextContent(/workspace ownership|API verifies|durable storage/);
+    expect(button).toHaveClass("secondary");
+    expect(button).not.toHaveClass("w-full");
+    fireEvent.click(button);
     expect(mocks.popup).toHaveBeenCalledTimes(1);
   });
   it("SDK auth listener cannot race popup completion and consume the first successful navigation", async () => {
@@ -77,7 +84,7 @@ describe("shared Google authentication controls", () => {
   it("coalesces duplicate clicks across header and primary controls", async () => {
     mount();
     const header = await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" });
-    const primary = screen.getAllByRole("button", { name: "Sign in with Google" }).at(-1)!;
+    const primary = screen.getByRole("button", { name: "Continue with Google" });
     fireEvent.click(header); fireEvent.click(primary); fireEvent.click(header);
     expect(mocks.popup).toHaveBeenCalledTimes(1);
   });
@@ -114,6 +121,42 @@ describe("shared Google authentication controls", () => {
     expect(screen.queryByText(/Signed in as/)).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Account:.*@/ })).not.toBeInTheDocument();
   });
+  it("waits for API verification without showing attention or a client-only email", async () => {
+    const verification = deferred<{subject: string; email: string}>(); mocks.verify.mockReturnValue(verification.promise);
+    mount(); await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" });
+    act(() => listener(user));
+    expect(screen.getByRole("button", { name: "Account: verifying session" })).toHaveTextContent("Verifying account…");
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Session needs attention|untrusted-client/)).not.toBeInTheDocument();
+    await act(async () => verification.resolve({ subject: "firebase:user-b", email: "verified-b@example.test" }));
+    expect(screen.getByRole("button", { name: "Account: verified-b@example.test" })).toBeVisible();
+  });
+  it("clears a previous verification error while a fresh SDK identity verification is pending", async () => {
+    mocks.verify.mockRejectedValueOnce(new Error("failed"));
+    mount(); await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" });
+    await act(async () => listener(user));
+    expect(screen.getByRole("alert")).toHaveTextContent("could not be verified");
+    const verification = deferred<{subject: string; email: string}>(); mocks.verify.mockReturnValueOnce(verification.promise);
+    act(() => listener(user));
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Account: verifying session" })).toBeVisible();
+    await act(async () => verification.resolve({ subject: "firebase:user-b", email: "verified-b@example.test" }));
+    expect(screen.getByRole("button", { name: "Account: verified-b@example.test" })).toBeVisible();
+  });
+  it.each(["resolve", "reject"] as const)("ignores an older verification that later %ss after current identity is verified", async outcome => {
+    const old = deferred<{subject: string; email: string}>(); mocks.verify.mockReturnValueOnce(old.promise);
+    mount(); await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" });
+    act(() => listener(user));
+    await act(async () => listener(user));
+    expect(screen.getByRole("button", { name: "Account: verified-b@example.test" })).toBeVisible();
+    await act(async () => {
+      if (outcome === "resolve") old.resolve({ subject: "firebase:other", email: "stale@example.test" });
+      else old.reject(new Error("stale failure"));
+    });
+    expect(screen.getByRole("button", { name: "Account: verified-b@example.test" })).toBeVisible();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.queryByText(/stale@example|Session needs attention/)).not.toBeInTheDocument();
+  });
   it("does not label an API-rejected session as signed in or navigate after login", async () => {
     mocks.verify.mockRejectedValue(new Error("rejected")); mocks.popup.mockResolvedValue({ user }); mount();
     fireEvent.click(await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" }));
@@ -124,14 +167,23 @@ describe("shared Google authentication controls", () => {
   });
   it("signs out, clears selected-session references, and navigates only after success", async () => {
     const done = deferred<void>(); mocks.signOut.mockReturnValue(done.promise);
-    sessionStorage.setItem("movebooks-migration-session", "preserved");
+    const selectedKeys = ["movebooks-migration-session", "movebooks-validation-session", "movebooks-onboarding-session"];
+    for (const key of selectedKeys) sessionStorage.setItem(key, "preserved");
     sessionStorage.setItem("unrelated", "keep"); mount();
     await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" }); await act(async () => listener(user));
-    fireEvent.click(screen.getByRole("button", { name: /^Account:/ })); fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Account:/ }));
+    const signOut = screen.getByRole("button", { name: "Sign out" });
+    fireEvent.pointerDown(signOut); fireEvent.mouseDown(signOut);
+    fireEvent.blur(screen.getByRole("button", { name: "Settings" }), { relatedTarget: null });
+    fireEvent.mouseUp(signOut); fireEvent.click(signOut);
+    expect(mocks.signOut).toHaveBeenCalledTimes(1);
+    expect(within(screen.getByRole("banner")).queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
+    expect(sessionStorage.getItem(selectedKeys[0])).toBe("preserved");
     expect(screen.queryByText(/Signed in as/)).not.toBeInTheDocument(); expect(mocks.navigate).not.toHaveBeenCalled();
     await act(async () => done.resolve());
     expect(mocks.navigate).toHaveBeenCalledWith("/sign-in");
-    expect(sessionStorage.getItem("movebooks-migration-session")).toBeNull();
+    for (const key of selectedKeys) expect(sessionStorage.getItem(key)).toBeNull();
+    expect(within(screen.getByRole("banner")).getByRole("button", { name: "Sign in with Google" })).toBeEnabled();
     expect(sessionStorage.getItem("unrelated")).toBe("keep");
   });
   it("does not claim successful sign-out on SDK failure", async () => {
@@ -140,7 +192,11 @@ describe("shared Google authentication controls", () => {
     await act(async () => listener(user));
     fireEvent.click(screen.getByRole("button", { name: /^Account:/ })); fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Sign-out could not be confirmed");
+    expect(screen.getByRole("alert")).not.toHaveTextContent("SECRET");
     expect(mocks.navigate).not.toHaveBeenCalled();
+    expect(within(screen.getByRole("banner")).queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /^Account:/ }));
+    expect(screen.getByRole("button", { name: "Sign out" })).toBeEnabled();
   });
   it("late identity verification cannot restore an account after sign-out", async () => {
     const verification = deferred<{subject: string; email: string}>(); mocks.verify.mockReturnValue(verification.promise);
