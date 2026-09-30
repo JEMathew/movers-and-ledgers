@@ -7,6 +7,8 @@ import { RuntimeNotice } from "@/components/RuntimeNotice";
 import { Nav } from "@/components/Nav";
 import { IdentityProvider } from "@/components/IdentityProvider";
 import { GET } from "@/app/api/auth/demo/route";
+const route = vi.hoisted(() => ({ path: "/trust" }));
+vi.mock("next/navigation", () => ({ usePathname: () => route.path }));
 
 afterEach(() => vi.unstubAllEnvs());
 describe("truthful runtime identity", () => {
@@ -33,7 +35,15 @@ describe("truthful runtime identity", () => {
     render(<IdentityProvider><Nav /><IdentityEntry destination="/workspace" /><RuntimeNotice /></IdentityProvider>);
     expect(screen.getAllByRole("button", {name:"Preparing Google sign-in…"})).toHaveLength(2);
     expect(screen.queryByRole("link", {name:/enter local demo/i})).not.toBeInTheDocument();
-    expect(screen.getByRole("complementary", {name:"Runtime scope"})).toHaveTextContent(/local-only/);
+    expect(screen.getByRole("complementary", {name:"Beta scope"})).toHaveTextContent(/safely using synthetic data/);
+    expect(screen.getByRole("link", {name:"Beta limitations"})).toHaveAttribute("href", "/trust#beta-limitations");
+  });
+  it.each(["/", "/product", "/workspace", "/sign-in"])("does not duplicate the scope note on %s", path => {
+    route.path = path;
+    vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "firebase");
+    render(<IdentityProvider><RuntimeNotice /></IdentityProvider>);
+    expect(screen.queryByRole("complementary", {name:"Beta scope"})).not.toBeInTheDocument();
+    route.path = "/trust";
   });
   it.each(["//evil.example", "/\\evil.example", "https://evil.example", "/\n/evil.example", "/\t/evil.example"])("rejects redirect %s", value => {
     expect(safeDestination(value)).toBe("/workspace");

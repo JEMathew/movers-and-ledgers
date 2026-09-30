@@ -2,12 +2,72 @@
 
 **V1 baseline LIVE / GREEN — MoveBooks AI V1.0 bounded synthetic public Beta.**
 The historical post-merge CI fixture hold is resolved. The latest post-V1 account-shell
-deployment remains **AMBER for its targeted live regression**: first-click Safari sign-in
-passed, but API-verified identity display needs the local timeout/presentation fix below.
+deployment remains **AMBER for its targeted live regression**. The owner reports that
+authentication now works after the timeout fix; the latest customer-language/account-menu
+cleanup below is local-only and is not a new deployed or fully verified live release.
 Neither assessment claims production/compliance readiness. The dated original records below
 are retained as history; they are not an unresolved CI hold.
 
-## Account-shell identity timeout correction — 30 September 2026
+## Account and migration-entry cleanup — 30 September 2026
+
+This presentation-only follow-up is on `release/account-shell-regression`, following
+source `32edb96cd65d16eda4bdf853db2e92782c348da3`. The preceding web-only deployment
+was `movebooks-beta-web-00010-zll` at 100%, image
+`sha256:18635ccea56a07300278c6f3f67bb8b490ff90af176d44e258f9ade151c09a7d`.
+Its fresh scan was 0 Critical / 0 High (5 Medium / 1 Low), report SHA-256
+`1078fe0c5f4cb3ccf73a48d73c6d5cbdaa049612711f4e3f4aec823af1632428`.
+Those are historical deployment facts, not a scan or deployment of this new cleanup.
+The owner subsequently reported successful authentication and identified duplicate
+Settings and implementation-heavy entry copy. No further live authentication, cloud
+read-back or business-state mutation was performed for this local cleanup.
+
+- Signed-in Settings exists only inside the verified-account disclosure, alongside Sign out.
+  Closing Settings returns focus to the account trigger because the menu opener unmounts.
+  Loading/attention sessions retain that single menu-based Settings path.
+- Signed-out users retain one compact Settings control for theme/accessibility preferences
+  before authentication, plus the existing Google sign-in action. No redundant header
+  sign-in link is added. This keeps preferences available without requiring an account.
+- Verified users see **Go to migration**. The shared header does not have authoritative
+  migration-progress state, so it never guesses Start/Continue/View from local references
+  and makes no extra request for CTA personalization. The underlying `/workspace` route
+  and safe destination handling are unchanged.
+- Sign-in and signed-out workspace use **Sign in to continue your migration**, **Use your
+  Google account to securely access your MoveBooks migration**, and **Continue with Google**.
+- Home/Product use concise synthetic-Beta scope notes. The global banner no longer repeats
+  those notes on entry pages; authentication feedback remains available. Trust's **Beta
+  limitations** section retains no-production-data/provider/production-readiness boundaries,
+  with expandable server-verification, persistence and local-only intake details. Sample
+  business, Simulator and local evaluation remain distinct; no upload/integration claim is added.
+- Mobile visual review caught the account menu extending beyond the left edge after removing
+  standalone Settings. Below the desktop navigation breakpoint, the menu now anchors to the
+  shared header; desktop placement remains anchored to the account control.
+
+No Firebase/identity-provider/token-verification/proxy/backend authorization implementation,
+workflow, financial logic, IAM, SQL, live runtime or V1 tag change. `/play` content and behavior
+are unchanged; it inherits the shared shell like other routes. No deployment or merge.
+
+Local closure evidence:
+
+- Focused account/auth/runtime/public-surface tests: **71 passed**. Full frontend suite:
+  **188 passed across 22 files**. Lint, TypeScript and production build passed, including
+  a repeat after the mobile positioning correction. Existing proxy/auth regressions remain
+  included; no authentication or backend implementation was changed.
+- Repository/link checks covered **94 Markdown files and 369 text files with 0 findings**;
+  `git diff --check` passed. No dependency or lockfile changes.
+- Visual review covered desktop `/`, `/product`, `/workspace` and mobile `/`, `/workspace`,
+  each signed in/out and light/dark (20 combinations). It used real UI components and built
+  production CSS in an isolated localhost fixture with a synthetic account context, not a
+  real authenticated session. This verifies presentation, not live SSO/authorization.
+- Account Settings/Sign out, Escape, outside-click dismissal, focus restoration and mobile
+  navigation coexistence were checked. The temporary fixture server was terminated and
+  browser viewport override removed. Home structured-data scripts emit a client-rendering
+  warning in this fixture; they are not executed there and no production script change was made.
+- **P0: 0; P1: 0 observed for this scoped change.** No unresolved P2/P3 defect identified in
+  the touched presentation. **Local GREEN; deployment/live regression pending.** A separately
+  authorized web build/scan/deployment followed by human-present Safari account/sign-out
+  regression remains necessary before declaring the deployed cleanup GREEN.
+
+## Historical account-shell identity timeout correction — 30 September 2026
 
 **Local GREEN; live regression AMBER. Not deployed.** This checkpoint supersedes the
 pending-first-click status below, not the deployed image or infrastructure record.

@@ -44,11 +44,11 @@ export function AccountControls() {
   function showSettings() { setOpenFor(null); setSettingsOpen(true); }
 
   return <div className="account-controls flex items-center gap-2">
-    <button ref={settingsTrigger} type="button" className="button ghost small" onClick={showSettings} aria-haspopup="dialog">
+    {!session.hasSession && <button ref={settingsTrigger} type="button" className="button ghost small" onClick={showSettings} aria-haspopup="dialog">
       <Settings size={17} aria-hidden="true" /><span>Settings</span>
-    </button>
+    </button>}
     {!cloud ? <button type="button" className="button small" disabled title="Google sign-in is not configured in this environment">Sign in with Google</button>
-      : session.hasSession ? <div ref={root} className="relative" onKeyDown={event => {
+      : session.hasSession ? <div ref={root} className="account-menu" onKeyDown={event => {
         if (event.key === "Escape" && open) { event.preventDefault(); setOpenFor(null); trigger.current?.focus(); }
       }} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpenFor(null); }}>
         <button ref={trigger} type="button" className="button secondary small account-trigger" disabled={session.busy}
@@ -64,7 +64,7 @@ export function AccountControls() {
           <button type="button" className="button secondary small mt-2 w-full" disabled={session.busy} onClick={() => { setOpenFor(null); session.signOut(); }}>Sign out</button>
         </div>}
       </div> : <GoogleSignIn compact />}
-    <Dialog open={settingsOpen} onClose={() => setSettingsOpen(false)} title="Settings" description="Preferences for this browser. No workspace or financial settings are changed." fallbackFocusRef={settingsTrigger}>
+    <Dialog open={settingsOpen} onClose={() => setSettingsOpen(false)} title="Settings" description="Preferences for this browser. Your migration and financial settings stay unchanged." fallbackFocusRef={session.hasSession ? trigger : settingsTrigger}>
       <label className="field-label grid gap-2">Theme preference
         <select className="field-control" value={mounted ? theme ?? "system" : "system"} disabled={!mounted} onChange={event => setTheme(event.target.value)}>
           <option value="system">Use device setting</option><option value="light">Light</option><option value="dark">Dark</option>

@@ -2,11 +2,13 @@
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import { AccountControls } from "@/components/AccountControls";
+import { useIdentity } from "@/components/IdentityProvider";
 import { publicLinks } from "@/components/public-surfaces/content";
 
 const links = publicLinks;
 
 export function Nav() {
+  const { identity } = useIdentity();
   return <header className="shell relative flex min-h-20 flex-wrap items-center justify-between gap-3 py-4">
     <Link href="/" className="flex items-center gap-3 font-black tracking-tight">
       <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--primary)] text-[var(--on-primary)]">M</span>
@@ -15,7 +17,7 @@ export function Nav() {
     <div className="flex max-w-full flex-wrap items-center gap-2">
       <nav aria-label="Primary navigation" className="hidden items-center gap-3 text-sm font-semibold xl:flex">
         {links.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}
-        <Link href="/workspace" className="button small">Open workspace <span aria-hidden="true">↗</span></Link>
+        {identity && <Link href="/workspace" className="button small">Go to migration <span aria-hidden="true">↗</span></Link>}
       </nav>
       <AccountControls />
       <details className="mobile-nav xl:hidden">
@@ -24,7 +26,7 @@ export function Nav() {
         </summary>
         <nav aria-label="Mobile primary navigation" className="mobile-nav-panel" onClick={event => { if ((event.target as HTMLElement).closest("a")) event.currentTarget.closest("details")?.removeAttribute("open"); }}>
           {links.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}
-          <Link href="/workspace" className="button small">Open workspace <span aria-hidden="true">↗</span></Link>
+          {identity && <Link href="/workspace" className="button small">Go to migration <span aria-hidden="true">↗</span></Link>}
         </nav>
       </details>
     </div>

@@ -40,7 +40,7 @@ describe("shared Google authentication controls", () => {
     await act(async () => { init.resolve(runtime); });
     let inClick = false;
     mocks.popup.mockImplementation(() => { expect(inClick).toBe(true); return new Promise(() => {}); });
-    inClick = true; fireEvent.click(screen.getAllByRole("button", { name: "Sign in with Google" }).at(-1)!); inClick = false;
+    inClick = true; fireEvent.click(screen.getByRole("button", { name: "Continue with Google" })); inClick = false;
     expect(mocks.popup).toHaveBeenCalledTimes(1);
     expect(mocks.prepare).toHaveBeenCalledTimes(1);
     expect(screen.getAllByRole("button", { name: "Signing in…" })).toHaveLength(2);
@@ -57,7 +57,11 @@ describe("shared Google authentication controls", () => {
   });
   it("workspace first-click CTA uses the same supported path", async () => {
     mount(true);
-    const button = await within(screen.getByRole("main")).findByRole("button", { name: "Sign in with Google" });
+    const button = await within(screen.getByRole("main")).findByRole("button", { name: "Continue with Google" });
+    expect(screen.getByRole("heading", { name: "Sign in to continue your migration" })).toBeVisible();
+    expect(screen.getByRole("main")).toHaveTextContent("Use your Google account to securely access your MoveBooks migration.");
+    expect(screen.getByRole("main")).toHaveTextContent("Bounded synthetic Beta · No production customer data");
+    expect(screen.getByRole("main")).not.toHaveTextContent(/workspace ownership|API verifies|durable storage/);
     expect(button).toHaveClass("secondary");
     expect(button).not.toHaveClass("w-full");
     fireEvent.click(button);
@@ -80,7 +84,7 @@ describe("shared Google authentication controls", () => {
   it("coalesces duplicate clicks across header and primary controls", async () => {
     mount();
     const header = await within(screen.getByRole("banner")).findByRole("button", { name: "Sign in with Google" });
-    const primary = screen.getAllByRole("button", { name: "Sign in with Google" }).at(-1)!;
+    const primary = screen.getByRole("button", { name: "Continue with Google" });
     fireEvent.click(header); fireEvent.click(primary); fireEvent.click(header);
     expect(mocks.popup).toHaveBeenCalledTimes(1);
   });

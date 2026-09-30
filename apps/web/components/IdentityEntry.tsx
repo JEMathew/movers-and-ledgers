@@ -6,13 +6,13 @@ import { useIdentity } from "./IdentityProvider";
 
 export function GoogleSignIn({ destination, compact = false }: { destination?: string; compact?: boolean }) {
   const { ready, busy, identity, hasSession, signIn } = useIdentity();
-  if (identity) return compact ? null : <a className="button mt-7" href={safeDestination(destination ?? "/workspace")}>Continue to workspace</a>;
+  if (identity) return compact ? null : <a className="button mt-7" href={safeDestination(destination ?? "/workspace")}>Go to migration</a>;
   if (hasSession) return compact ? null : <p role="status" className="mt-7">{!ready || busy ? "Verifying account…" : "Your session needs attention. Use the account control above to sign out and try again."}</p>;
   return <Button className={compact ? undefined : "mt-7"} size={compact ? "small" : "default"} variant={compact ? "ghost" : "secondary"}
     disabled={!ready || busy} onClick={() => signIn(destination ?? (window.location.pathname === "/sign-in"
       ? new URLSearchParams(window.location.search).get("next") ?? "/workspace"
       : `${window.location.pathname}${window.location.search}`))}>
-    {!ready ? "Preparing Google sign-in…" : busy ? "Signing in…" : "Sign in with Google"}
+    {!ready ? "Preparing Google sign-in…" : busy ? "Signing in…" : compact ? "Sign in with Google" : "Continue with Google"}
   </Button>;
 }
 
@@ -25,5 +25,5 @@ export function IdentityFeedback() {
 
 export function IdentityEntry({ destination }: { destination: string }) {
   return <>{cloudIdentity() ? <GoogleSignIn destination={destination} /> : process.env.NODE_ENV !== "production" ? <a className="button mt-7 w-full" href={`/api/auth/demo?next=${encodeURIComponent(safeDestination(destination))}`}>Enter local demo →</a> : <p role="status" className="mt-7">Sign-in is not configured. Demo access is disabled.</p>}
-    <p className="mt-4 text-xs text-muted">{cloudIdentity() ? "Cloud foundation Beta · synthetic workspaces only · not production-ready" : "Local demo identity · controlled de-identified test exports only"}</p></>;
+    <p className="mt-4 text-xs text-muted">{cloudIdentity() ? "Bounded synthetic Beta · No production customer data" : "Local demo identity · controlled de-identified test exports only"}</p></>;
 }
