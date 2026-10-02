@@ -33,7 +33,8 @@ describe("truthful runtime identity", () => {
   it("labels cloud scope without claiming successful sign-in", () => {
     vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "firebase");
     render(<IdentityProvider><Nav /><IdentityEntry destination="/workspace" /><RuntimeNotice /></IdentityProvider>);
-    expect(screen.getAllByRole("button", {name:"Preparing Google sign-in…"})).toHaveLength(2);
+    for (const name of ["Sign in with Google", "Continue with Google"]) expect(screen.getByRole("button", {name})).toBeDisabled();
+    expect(document.body).not.toHaveTextContent(/Preparing Google sign-in/);
     expect(screen.queryByRole("link", {name:/enter local demo/i})).not.toBeInTheDocument();
     expect(screen.getByRole("complementary", {name:"Beta scope"})).toHaveTextContent(/safely using synthetic data/);
     expect(screen.getByRole("link", {name:"Beta limitations"})).toHaveAttribute("href", "/trust#beta-limitations");
@@ -55,7 +56,7 @@ describe("truthful runtime identity", () => {
     vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "firebase");
     render(<IdentityProvider><Nav /><IdentityEntry destination="/workspace" /><RuntimeNotice /></IdentityProvider>);
     // Initialization fails before any click, not after losing user activation.
-    expect(screen.getAllByRole("button", {name:"Preparing Google sign-in…"})[0]).toBeDisabled();
+    expect(screen.getByRole("button", {name:"Sign in with Google"})).toBeDisabled();
     const alert = await screen.findByRole("alert");
     // Focus is applied by an effect after the error node is committed.
     await waitFor(() => expect(alert).toHaveFocus());

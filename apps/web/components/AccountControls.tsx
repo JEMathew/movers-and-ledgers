@@ -1,11 +1,13 @@
 "use client";
 
-import { ChevronDown, Settings, UserRound, X } from "lucide-react";
+import { ChevronDown, SunMoon, UserRound, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useId, useRef, useState } from "react";
 import { cloudIdentity } from "@/lib/identity";
 import { useIdentity } from "./IdentityProvider";
 import { GoogleSignIn } from "./IdentityEntry";
+
+const themes = [["system", "System"], ["light", "Light"], ["dark", "Dark"]] as const;
 
 export function AccountControls() {
   const session = useIdentity();
@@ -19,7 +21,6 @@ export function AccountControls() {
   const firstAction = useRef<HTMLButtonElement>(null);
   const controls = useRef<HTMLDivElement>(null);
   const preferences = useRef<HTMLDivElement>(null);
-  const themeControl = useRef<HTMLSelectElement>(null);
   const id = useId();
   const settingsId = useId();
   const cloud = cloudIdentity();
@@ -45,7 +46,7 @@ export function AccountControls() {
   }, [open]);
   useEffect(() => {
     if (!settingsOpen) return;
-    themeControl.current?.focus();
+    preferences.current?.querySelector<HTMLElement>("select, input[type=radio]:checked, input[type=radio]")?.focus();
     const outside = (event: PointerEvent) => {
       if (event.target instanceof Node && !controls.current?.contains(event.target)) setSettingsOpen(false);
     };
@@ -60,9 +61,6 @@ export function AccountControls() {
   }
 
   return <div ref={controls} className="account-controls flex items-center gap-2">
-    {!session.hasSession && <button ref={settingsTrigger} type="button" className="button ghost small" onClick={() => settingsOpen ? closeSettings() : showSettings()} aria-haspopup="dialog" aria-expanded={settingsOpen} aria-controls={settingsId}>
-      <Settings size={17} aria-hidden="true" /><span>Settings</span>
-    </button>}
     {!cloud ? <button type="button" className="button small" disabled title="Google sign-in is not configured in this environment">Sign in with Google</button>
       : session.hasSession ? <div ref={root} className="account-menu" onKeyDown={event => {
         if (event.key === "Escape" && open) { event.preventDefault(); setOpenFor(null); trigger.current?.focus(); }
@@ -84,15 +82,25 @@ export function AccountControls() {
           <button type="button" className="button secondary small mt-2 w-full" disabled={session.busy} onClick={() => { setOpenFor(null); session.signOut(); }}>Sign out</button>
         </div>}
       </div> : <GoogleSignIn compact />}
+    {!session.hasSession && <button ref={settingsTrigger} type="button" className="button ghost small appearance-trigger" aria-label="Change appearance" title="Change appearance"
+      onClick={() => settingsOpen ? closeSettings() : showSettings()} aria-haspopup="dialog" aria-expanded={settingsOpen} aria-controls={settingsId}>
+      <SunMoon size={18} aria-hidden="true" />
+    </button>}
     {settingsOpen && <div ref={preferences} id={settingsId} className="account-panel settings-panel" role="dialog" aria-modal="false" aria-labelledby={`${settingsId}-title`}
       onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); closeSettings(); } }}
       onBlur={event => { if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) setSettingsOpen(false); }}>
-      <div className="mb-3 flex items-center justify-between gap-3"><h2 id={`${settingsId}-title`} className="font-semibold">Settings</h2><button type="button" className="button ghost small" aria-label="Close settings" onClick={closeSettings}><X size={16} aria-hidden="true" /></button></div>
-      <label className="field-label grid gap-2">Theme
-        <select ref={themeControl} className="field-control" value={mounted ? theme ?? "system" : "system"} disabled={!mounted} onChange={event => setTheme(event.target.value)}>
+      <div className="mb-3 flex items-center justify-between gap-3"><h2 id={`${settingsId}-title`} className="font-semibold">{session.hasSession ? "Settings" : "Appearance"}</h2><button type="button" className="button ghost small" aria-label={session.hasSession ? "Close settings" : "Close appearance"} onClick={closeSettings}><X size={16} aria-hidden="true" /></button></div>
+      {session.hasSession ? <label className="field-label grid gap-2">Theme
+        <select className="field-control" value={mounted ? theme ?? "system" : "system"} disabled={!mounted} onChange={event => setTheme(event.target.value)}>
           <option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option>
         </select>
-      </label>
+      </label> : <fieldset className="appearance-options">
+        <legend className="sr-only">Display mode</legend>
+        {themes.map(([value, label]) => <label key={value} className="appearance-option">
+          <input type="radio" name={`${settingsId}-appearance`} value={value} checked={mounted && (theme ?? "system") === value} disabled={!mounted} onChange={() => setTheme(value)} />
+          <span>{label}</span>
+        </label>)}
+      </fieldset>}
     </div>}
   </div>;
 }
