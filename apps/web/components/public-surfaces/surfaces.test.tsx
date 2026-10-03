@@ -47,7 +47,8 @@ describe("public surface contracts", () => {
   it("presents the required business message, CTAs, full journey and scope without invented progress", () => {
     render(<Home/>);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Move your books.Keep your confidence.");
-    expect(screen.getByRole("link", { name: "Explore MoveBooks" })).toHaveAttribute("href", "/product");
+    expect(screen.getByRole("link", { name: "Start my migration" })).toHaveAttribute("href", "/workspace");
+    expect(screen.getByRole("link", { name: "Try a migration" })).toHaveAttribute("href", "/simulator");
     expect(screen.getByRole("link", { name: "See how it works" })).toHaveAttribute("href", "#how-it-works");
     expect(screen.getByText(/Bounded synthetic Beta · No production customer data/)).toBeVisible();
     expect(screen.getByRole("link", { name: "Beta limitations" })).toHaveAttribute("href", "/trust#beta-limitations");
@@ -58,16 +59,19 @@ describe("public surface contracts", () => {
     expect(screen.getByText(/Live Gemini advice requires explicit deployment configuration/)).toBeVisible();
     expect(screen.queryByText(/Google identity, live Gemini/)).not.toBeInTheDocument();
   });
-  it("preserves Product, workspace and all public navigation on desktop and mobile", () => {
+  it("shows the signed-out navigation on desktop and mobile, without Product or Feedback", () => {
     render(<IdentityProvider><Nav/></IdentityProvider>);
     for (const label of ["Primary navigation", "Mobile primary navigation"]) {
       const nav = screen.getByRole("navigation", { name: label, hidden: true });
       for (const [name, href] of publicLinks) expect(within(nav).getByRole("link", { name, hidden: true })).toHaveAttribute("href", href);
+      expect(within(nav).queryByRole("link", { name: /^(Product|Feedback|Guide|Simulator)$/, hidden: true })).not.toBeInTheDocument();
     }
+    expect(publicLinks.map(([label]) => label)).toEqual(["Explore", "How it works", "Learn", "Play", "Trust", "Support"]);
+    expect(screen.getByRole("link", { name: "MoveBooks AI home" })).toHaveAttribute("href", "/");
     expect(screen.getByLabelText("Open navigation")).toHaveProperty("tagName", "SUMMARY");
     const menu = screen.getByLabelText("Open navigation").closest("details")!;
     menu.open = true;
-    const mobileLink = within(screen.getByRole("navigation", { name: "Mobile primary navigation" })).getByRole("link", { name: "Product" });
+    const mobileLink = within(screen.getByRole("navigation", { name: "Mobile primary navigation" })).getByRole("link", { name: "Explore" });
     mobileLink.addEventListener("click", event => event.preventDefault());
     fireEvent.click(mobileLink);
     expect(menu.open).toBe(false);
@@ -75,7 +79,8 @@ describe("public surface contracts", () => {
   it("routes Simulator to ordinary discovery with no requests or automatic approvals", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<Simulator/>);
-    expect(screen.getByRole("link", { name: "Start simulation" })).toHaveAttribute("href", sampleEntry);
+    expect(screen.getByRole("link", { name: "Try a migration" })).toHaveAttribute("href", sampleEntry);
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Try a migration with a sample business.");
     expect(screen.getByText(/We never pre-approve/)).toBeVisible();
     expect(screen.getByText(/Cloud mode uses real Google sign-in and durable synthetic workspaces/)).toBeVisible();
     expect(screen.queryByText(/Sessions expire when the API restarts/)).not.toBeInTheDocument();
@@ -131,7 +136,7 @@ describe("public surface contracts", () => {
     for (const name of ["The questions behind every move", "How MoveBooks works", "Trust by design"]) {
       expect(screen.getByRole("heading", { name })).toBeVisible();
     }
-    expect(screen.getByRole("link", { name: "Explore MoveBooks" })).toHaveAttribute("href", "/product");
+    expect(screen.getByRole("link", { name: "Start my migration" })).toHaveAttribute("href", "/workspace");
     expect(screen.getByRole("link", { name: "See how it works" })).toHaveAttribute("href", "#how-it-works");
     for (const heading of screen.getAllByRole("heading")) expect(heading.className).not.toMatch(/uppercase|type-label|eyebrow/);
   });

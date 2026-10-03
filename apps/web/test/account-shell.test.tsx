@@ -22,12 +22,17 @@ beforeEach(() => {
 afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); });
 
 describe("global account and settings shell", () => {
-  it("shows Google sign-in as the primary action with a compact appearance icon and no Settings text", () => {
+  it("shows Sign in, a primary Start my migration action and a compact appearance icon, with no Settings text", () => {
     render(shell());
     const signIn = screen.getByRole("button", { name: "Sign in with Google" });
     expect(signIn).toBeEnabled();
-    expect(signIn).toHaveClass("button", "small");
-    expect(signIn).not.toHaveClass("ghost", "w-full");
+    expect(signIn).toHaveTextContent(/^Sign in$/);
+    expect(signIn).toHaveClass("button", "small", "ghost");
+    const start = screen.getByRole("link", { name: "Start my migration" });
+    expect(start).toHaveAttribute("href", "/workspace");
+    expect(start).toHaveClass("button", "small");
+    expect(start).not.toHaveClass("ghost", "secondary");
+    expect(signIn.compareDocumentPosition(start) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(screen.queryByRole("button", { name: "Settings" })).not.toBeInTheDocument();
     expect(screen.queryByText("Settings")).not.toBeInTheDocument();
     const appearance = screen.getByRole("button", { name: "Change appearance" });
@@ -246,14 +251,24 @@ describe("global account and settings shell", () => {
     expect(screen.getByRole("button", { name: "Change appearance" })).toBeEnabled();
     expect(screen.getByRole("button", { name: "Sign in with Google" })).toBeEnabled();
   });
-  it("uses a migration fallback only with verified identity, without fetching progress", () => {
+  it("swaps public navigation for the signed-in product navigation only after verification, without fetching", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     const view = render(shell());
-    expect(screen.queryByRole("link", { name: /Go to migration|Open workspace/, hidden: true })).not.toBeInTheDocument();
-    signedIn(); view.rerender(shell());
-    expect(screen.getAllByRole("link", { name: /Go to migration/, hidden: true })).toHaveLength(2);
-    for (const link of screen.getAllByRole("link", { name: /Go to migration/, hidden: true })) expect(link).toHaveAttribute("href", "/workspace");
-    expect(screen.queryByText(/Open workspace|Continue migration|Start a migration|View migration/)).not.toBeInTheDocument();
+    const links = (name: string | RegExp) => screen.queryAllByRole("link", { name, hidden: true });
+    expect(links("My Migration")).toHaveLength(0);
+    expect(links("How it works")).toHaveLength(2);
+    session.hasSession = true; session.ready = false; view.rerender(shell());
+    expect(links("My Migration")).toHaveLength(0);
+    expect(links("Start my migration")).toHaveLength(0);
+    signedIn(); session.ready = true; view.rerender(shell());
+    expect(links("My Migration")).toHaveLength(2);
+    for (const link of links("My Migration")) expect(link).toHaveAttribute("href", "/workspace");
+    for (const [name, href] of [["Explore", "/simulator"], ["Learn", "/learn"], ["Help", "/support"]]) {
+      expect(links(name)).toHaveLength(2);
+      for (const link of links(name)) expect(link).toHaveAttribute("href", href);
+    }
+    for (const name of ["How it works", "Play", "Trust", "Support", "Start my migration", /Go to migration/]) expect(links(name)).toHaveLength(0);
+    expect(account()).toHaveAccessibleName("Account: verified@example.test");
     expect(fetch).not.toHaveBeenCalled();
     fetch.mockRestore();
   });

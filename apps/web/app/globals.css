@@ -267,6 +267,8 @@ button, input, select, textarea { font: inherit; }
   .account-controls { position: static; }
   .account-panel { right: .75rem; }
 }
+.site-nav a { padding: 0.5rem 0.7rem; border-radius: var(--radius-md); color: var(--text-secondary); }
+.site-nav a:hover { background: var(--surface-subtle); color: var(--foreground); }
 .mobile-nav > summary::-webkit-details-marker { display: none; }
 .mobile-nav-panel { position: absolute; z-index: 30; top: calc(100% - 0.25rem); right: 0; display: grid; min-width: 13rem; gap: 0.25rem; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-elevated); padding: 0.75rem; box-shadow: var(--shadow-md); }
 .mobile-nav-panel > a:not(.button) { min-height: 2.75rem; padding: 0.7rem 0.75rem; border-radius: var(--radius-md); font-size: 0.875rem; font-weight: 650; }
