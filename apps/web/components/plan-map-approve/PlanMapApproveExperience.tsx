@@ -16,6 +16,7 @@ import type { AgentActivity } from "@/components/discover-assess/types";
 import { Alert, LoadingState } from "@/components/ui/feedback";
 import { Select } from "@/components/ui/forms";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
+import { ActionLink, NextAction } from "@/components/journey/NextAction";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
 
@@ -142,6 +143,7 @@ export function PlanMapApproveExperience() {
   // Plan until a plan exists, Map until the first decision, Approve until the handoff is ready.
   const anyDecided = mappings.some((item) => ["APPROVED", "MODIFIED", "REJECTED"].includes(item.state));
   const journeyStep = handoffReady ? 4 : !plan ? 1 : decisionsComplete || anyDecided ? 3 : 2;
+  const pending = mappings.filter((item) => !["APPROVED", "MODIFIED", "REJECTED"].includes(item.state)).length;
 
   return (
     <main className="shell min-h-[75vh] py-12 sm:py-16">
@@ -172,12 +174,14 @@ export function PlanMapApproveExperience() {
             </div>
           </div>
           <Button onClick={preparePlan} disabled={running || Boolean(mappings.length)}>
-            {plan ? "Plan and mappings prepared" : "Build migration plan"}
+            {plan ? "Plan and mappings prepared" : "Create my migration plan"}
             <ArrowRight aria-hidden="true" size={17} />
           </Button>
         </div>
         {running && <div className="mt-5"><LoadingState label={phase === "planning" ? "Planning dependencies and checkpoints" : "Preparing mapping proposals"} /></div>}
       </Panel>
+
+      {plan && pending > 0 && <NextAction label="Review mappings" href="#mapping-heading">{pending} of {mappings.length} {mappings.length === 1 ? "mapping needs" : "mappings need"} your decision. Approve, change or reject each recommendation; nothing moves until the plan is approved.</NextAction>}
 
       {error && <div className="mt-6"><Alert tone="error" title="Governed workflow stopped"><p className="mt-1">{error}</p></Alert></div>}
 
@@ -249,7 +253,7 @@ export function PlanMapApproveExperience() {
           <div className="mt-6">
             <Alert tone={handoffReady ? "success" : "warning"} title={handoffReady ? "Approved manifest ready for handoff" : "Migration remains stopped"}>
               <p className="mt-1">{handoffReady ? "Your approved mappings and plan will be used by migration in this same business session. No target writes have occurred yet." : decisionsComplete ? "Mapping decisions are complete, but deterministic assessment blockers must be resolved before migration handoff." : "Every proposal must reach an approved or modified state. Blocked, rejected, or pending decisions prevent migration handoff."}</p>
-              {handoffReady && <a className="mt-3 inline-block font-semibold underline" href={`/migrate-resolve?session=${sessionId}`}>Continue to Migrate → Resolve</a>}
+              {handoffReady && <ActionLink className="mt-4" label="Start migration" href={`/migrate-resolve?session=${sessionId}`} />}
             </Alert>
           </div>
         </section>

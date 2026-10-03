@@ -21,7 +21,7 @@ describe("ValidateConfigureExperience", () => {
     render(<ValidateConfigureExperience />);
     expect(screen.getByText(/No production readiness claim/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", {name: "Load discrepancy scenario"}));
-    fireEvent.click(await screen.findByRole("button", {name: "Run validation"}));
+    fireEvent.click(await screen.findByRole("button", {name: "Verify my books"}));
     expect(await screen.findByText("-20.00")).toBeInTheDocument();
     expect(screen.getByRole("button", {name: "Continue to configuration"})).toBeDisabled();
     expect(mock).toHaveBeenCalledTimes(2);
@@ -85,6 +85,16 @@ describe("ValidateConfigureExperience", () => {
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
   });
 
+  it("hands off to onboarding with one Complete setup action once configuration is applied", async () => {
+    const configured = { ...structuredClone(review), workflow_status: "CONFIGURED", ready_for_onboarding: true };
+    configured.configuration!.proposals[0].state = "APPLIED";
+    vi.spyOn(globalThis, "fetch").mockImplementation(() => response(configured));
+    window.history.replaceState(null, "", "/validate-configure?session=session-vc");
+    render(<ValidateConfigureExperience />);
+    expect(await screen.findByRole("link", {name: "Complete setup"})).toHaveAttribute("href", "/onboard-fpu?session=session-vc");
+    expect(screen.queryByRole("link", {name: /Continue to Onboard/})).not.toBeInTheDocument();
+    expect(screen.getByRole("list", {name: "Migration journey"}).querySelector('[aria-current="step"]')).toHaveTextContent("Set upCurrent");
+  });
   it("keeps keyboard focus inside the review dialog in both directions", async () => {
     vi.spyOn(globalThis, "fetch").mockImplementation(() => response(review));
     vi.spyOn(HTMLElement.prototype, "getClientRects").mockReturnValue([{}] as unknown as DOMRectList);

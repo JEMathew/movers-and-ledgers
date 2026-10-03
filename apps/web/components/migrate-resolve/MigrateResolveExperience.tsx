@@ -15,6 +15,7 @@ import type { AgentActivity } from "@/components/discover-assess/types";
 import { Dialog } from "@/components/ui/dialog";
 import { Alert } from "@/components/ui/feedback";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
+import { NextAction } from "@/components/journey/NextAction";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
 
@@ -71,6 +72,7 @@ export function MigrateResolveExperience() {
   const resolving = execution?.status === "RESOLVING";
   const retryPending = execution?.status === "RETRY_PENDING";
   const paused = resolving || retryPending || execution?.status === "MIGRATION_BLOCKED";
+  const openIssues = execution?.failures.filter((item) => !item.resolved).length ?? 0;
 
   const loadDemo = async () => {
     setBusy(true);
@@ -201,6 +203,8 @@ export function MigrateResolveExperience() {
             <Button onClick={start} disabled={busy} leadingIcon={Play}>Start migration</Button>
           ) : retryPending ? (
             <Button onClick={retry} disabled={busy} leadingIcon={RefreshCw}>Retry failed batch</Button>
+          ) : resolving && proposal ? (
+            <Button onClick={() => setDialogOpen(true)} disabled={busy} leadingIcon={Bot}>{openIssues > 1 ? `Resolve ${openIssues} issues` : "Resolve 1 issue"}</Button>
           ) : null}
         </div>
         {session && (
@@ -270,12 +274,9 @@ export function MigrateResolveExperience() {
           <Alert tone="success" title="Synthetic migration complete">
             <p className="mt-1">All batches completed, no blocking exceptions remain, and the target state is inspectable.</p>
           </Alert>
-          <Panel className="mt-4">
-            <div className="flex items-start gap-4">
-              <div className="activity-icon"><ShieldCheck aria-hidden="true" size={19} /></div>
-              <div><h2 className="type-card">Ready for migration validation</h2><p className="mt-2 text-sm text-secondary">Compare source and target evidence before configuring the environment.</p><a className="button mt-4" href={`/validate-configure?session=${session?.id}`}>Continue to Validate → Configure</a></div>
-            </div>
-          </Panel>
+          <NextAction className="mt-4" label="Verify my books" href={`/validate-configure?session=${session?.id}`}>
+            <span className="flex items-start gap-3"><ShieldCheck aria-hidden="true" className="mt-1 shrink-0 text-primary" size={19} />Compare your migrated books with the source evidence before setting up the environment.</span>
+          </NextAction>
         </section>
       )}
 

@@ -1,8 +1,8 @@
 "use client";
-import { ArrowRight } from "lucide-react";
 import { Alert, LoadingState } from "@/components/ui/feedback";
 import { Button } from "@/components/ui/primitives";
 import { MigrationJourney } from "./journey/MigrationJourney";
+import { ActionLink } from "./journey/NextAction";
 import { journeyHeldFor, journeyStepFor, nextActionFor, withSession } from "./journey/journey";
 import { useSessionView } from "./public-surfaces/session";
 
@@ -23,7 +23,7 @@ export function MyMigration() {
       <p className="eyebrow text-primary">Your next step</p>
       <h2 id="next-step-title" className="type-section mt-2">{action.heading}</h2>
       <p className="mt-3 max-w-2xl leading-7 text-secondary">{action.detail}</p>
-      <a className="button mt-6" href={action.href}>{action.label} <ArrowRight size={17} aria-hidden="true" /></a>
+      <ActionLink className="mt-6" label={action.label} href={action.href} />
     </section>}
     {view && view.blockers.length > 0 && <section className="mt-8" aria-labelledby="attention-title">
       <h2 id="attention-title" className="type-card">What needs attention</h2>

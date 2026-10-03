@@ -104,7 +104,7 @@ describe("PlanMapApproveExperience", () => {
   it("requires an assessed session and never silently creates a different business", async () => {
     const fetchMock = vi.fn(); vi.stubGlobal("fetch", fetchMock);
     render(<PlanMapApproveExperience />);
-    fireEvent.click(screen.getByRole("button", {name: /Build migration plan/}));
+    fireEvent.click(screen.getByRole("button", {name: /Create my migration plan/}));
     expect(await screen.findByRole("alert")).toHaveTextContent("same business session");
     expect(fetchMock).not.toHaveBeenCalled();
   });
@@ -114,7 +114,7 @@ describe("PlanMapApproveExperience", () => {
     const fetchMock = vi.fn().mockResolvedValue(jsonResponse({id:"session-001",plan,mappings:[{...proposal,state:"APPROVED"}],activity}));
     vi.stubGlobal("fetch", fetchMock);
     render(<PlanMapApproveExperience />);
-    expect(await screen.findByRole("link", {name:"Continue to Migrate → Resolve"})).toHaveAttribute("href", "/migrate-resolve?session=session-001");
+    expect(await screen.findByRole("link", {name:"Start migration"})).toHaveAttribute("href", "/migrate-resolve?session=session-001");
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock.mock.calls[0][1].method).toBeUndefined();
   });
@@ -124,7 +124,7 @@ describe("PlanMapApproveExperience", () => {
     const journey = screen.getByRole("list", { name: "Migration journey" });
     expect(journey).toHaveTextContent("First use");
     expect(journey.querySelector('[aria-current="step"]')).toHaveTextContent("PlanCurrent");
-    expect(screen.getByRole("button", { name: /Build migration plan/ })).toBeEnabled();
+    expect(screen.getByRole("button", { name: /Create my migration plan/ })).toBeEnabled();
   });
 
   it("builds a plan, exposes mapping evidence, and requires a human decision", async () => {
@@ -137,7 +137,7 @@ describe("PlanMapApproveExperience", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<PlanMapApproveExperience />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Build migration plan/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Create my migration plan/ }));
 
     expect(await screen.findByRole("heading", { name: "Seven-phase plan" })).toBeVisible();
     expect(screen.getByText("NOT STARTED")).toBeVisible();
@@ -162,13 +162,13 @@ describe("PlanMapApproveExperience", () => {
       .mockResolvedValueOnce(jsonResponse(activity));
     vi.stubGlobal("fetch", fetchMock);
     render(<PlanMapApproveExperience />);
-    fireEvent.click(screen.getByRole("button", { name: /Build migration plan/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Create my migration plan/ }));
     await screen.findByRole("heading", { name: "Review mapping proposals" });
 
     fireEvent.click(screen.getByRole("button", { name: "Approve" }));
 
     expect(await screen.findByText("Approved manifest ready for handoff")).toBeVisible();
-    expect(screen.getByRole("link", {name: "Continue to Migrate → Resolve"})).toHaveAttribute("href", "/migrate-resolve?session=session-001");
+    expect(screen.getByRole("link", {name: "Start migration"})).toHaveAttribute("href", "/migrate-resolve?session=session-001");
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(6));
   });
 
@@ -176,7 +176,7 @@ describe("PlanMapApproveExperience", () => {
     sessionStorage.setItem("movebooks-migration-session", "session-001");
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ detail: "Policy unavailable" }, 503)));
     render(<PlanMapApproveExperience />);
-    fireEvent.click(screen.getByRole("button", { name: /Build migration plan/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Create my migration plan/ }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Policy unavailable");
     expect(screen.queryByRole("heading", { name: "Review mapping proposals" })).not.toBeInTheDocument();
   });
@@ -201,10 +201,10 @@ describe("PlanMapApproveExperience", () => {
     fireEvent.change(screen.getByLabelText("Reason for reconsideration"), {target: {value: "Explicit reconsideration"}});
     fireEvent.click(screen.getByRole("button", {name: "Request reconsideration"}));
     const approveReview = await screen.findByRole("button", {name: "Approve reconsideration"});
-    expect(screen.queryByRole("link", {name: "Continue to Migrate → Resolve"})).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", {name: "Start migration"})).not.toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(3);
     fireEvent.click(approveReview);
-    expect(await screen.findByRole("link", {name: "Continue to Migrate → Resolve"})).toBeVisible();
+    expect(await screen.findByRole("link", {name: "Start migration"})).toBeVisible();
     expect(screen.getByText("Original reason: Original rejection", {exact: true})).toBeVisible();
     expect(fetchMock.mock.calls[1][0]).toContain("/mappings/mapping-001/reconsiderations");
     expect(fetchMock.mock.calls[3][0]).toContain("/reconsiderations/request-001/review");
