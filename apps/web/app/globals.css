@@ -214,7 +214,7 @@ button, input, select, textarea { font: inherit; }
 .motion-spin { animation: mb-spin 900ms linear infinite; }
 @keyframes mb-spin { to { transform: rotate(360deg); } }
 
-.dialog { width: min(34rem, calc(100% - 2rem)); border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--surface-elevated); color: var(--foreground); padding: 1.5rem; box-shadow: var(--shadow-md); }
+.dialog { margin: auto; max-height: calc(100dvh - 2rem); overflow-y: auto; width: min(34rem, calc(100% - 2rem)); border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--surface-elevated); color: var(--foreground); padding: 1.5rem; box-shadow: var(--shadow-md); }
 .dialog::backdrop { background: var(--overlay); backdrop-filter: blur(2px); }
 .tooltip { position: relative; display: inline-flex; }
 .tooltip-content { position: absolute; z-index: 20; left: 50%; bottom: calc(100% + 0.5rem); width: max-content; max-width: 16rem; transform: translateX(-50%) translateY(0.25rem); border-radius: var(--radius-sm); background: var(--foreground); color: var(--background); padding: 0.4rem 0.55rem; font-size: 0.72rem; opacity: 0; pointer-events: none; transition: opacity var(--motion-micro), transform var(--motion-micro); }

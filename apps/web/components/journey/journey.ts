@@ -85,7 +85,7 @@ export function nextActionFor(state?: JourneyState): NextAction {
     case "MIGRATION_COMPLETE": case "VALIDATING":
       return { heading: "Verify your books", detail: "Compare your migrated books with the source. Every total must match.", label: "Verify my books", href: at("/validate-configure") };
     case "VALIDATION_BLOCKED":
-      return { heading: "Resolve verification issues", detail: "A check did not match. Review the difference and the permitted repair, then verify again.", label: verify ? `Resolve ${count(verify, "verification issue")}` : "Verify my books", href: at("/validate-configure") };
+      return { heading: "Review verification issues", detail: "A check did not match. Review the difference and any permitted repair, then verify again.", label: verify ? `Review ${count(verify, "verification issue")}` : "Verify my books", href: at("/validate-configure") };
     case "VALIDATED": case "CONFIGURING": case "CONFIGURATION_REVIEW_REQUIRED":
       return { heading: "Complete your setup", detail: "Your books match. Review the settings that shape your new environment.", label: "Complete setup", href: at("/validate-configure") };
     case "CONFIGURED": case "ONBOARDING": case "ONBOARDING_BLOCKED":
