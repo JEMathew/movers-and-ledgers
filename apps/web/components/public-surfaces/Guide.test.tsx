@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 import { middleware } from "@/middleware";
 import { Guide, guideSections } from "./Guide";
-import { phases, publicLinks } from "./content";
+import { footerLinks, phases, publicLinks } from "./content";
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -26,7 +26,7 @@ describe("User Guide", () => {
   });
   it("links only to existing product routes", () => {
     render(<Guide/>);
-    const known = new Set([...publicLinks.map(([, href]) => href), "/try-your-data", "/learn", "/workspace"]);
+    const known = new Set([...publicLinks.map(([, href]) => href), ...footerLinks.map(([, href]) => href.split("#")[0]), "/try-your-data", "/learn", "/workspace", "/product"]);
     for (const link of screen.getAllByRole("link")) {
       const href = link.getAttribute("href")!;
       if (href.startsWith("#")) continue;
@@ -45,7 +45,7 @@ describe("User Guide", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<Guide/>);
     expect(fetch).not.toHaveBeenCalled();
-    expect(publicLinks).toContainEqual(["Guide", "/guide"]);
+    expect(publicLinks).toContainEqual(["How it works", "/guide"]);
     expect(middleware(new NextRequest("http://localhost/guide")).headers.get("location")).toBeNull();
   });
   it("explains merged pre-execution reconsideration without suggesting an approval bypass", () => {

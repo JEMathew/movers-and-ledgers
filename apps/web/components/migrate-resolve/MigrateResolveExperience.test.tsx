@@ -99,6 +99,12 @@ describe("MigrateResolveExperience", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(3);
     expect(screen.getByText("Migration paused safely")).toBeVisible();
+    // One dominant action while paused: resolve the open issue through the governed review.
+    const resolveCta = screen.getByRole("button", { name: "Resolve 1 issue" });
+    expect(resolveCta).not.toHaveClass("secondary", "ghost");
+    fireEvent.click(resolveCta);
+    expect(screen.getByRole("dialog", { name: /review proposed resolution/i })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Close dialog" }));
 
     fireEvent.click(screen.getByRole("button", { name: "Review Resolution Agent proposal" }));
     const reopened = screen.getByRole("dialog", { name: /review proposed resolution/i });
@@ -116,6 +122,8 @@ describe("MigrateResolveExperience", () => {
       await waitFor(() => expect(retry).toBeEnabled());
       fireEvent.click(retry);
       expect(await screen.findByText("Synthetic migration complete")).toBeVisible();
+      expect(screen.getByRole("link", { name: "Verify my books" })).toHaveAttribute("href", expect.stringMatching(/^\/validate-configure\?session=/));
+      expect(screen.queryByRole("link", { name: /Continue to Validate/ })).not.toBeInTheDocument();
       expect(fetchMock.mock.calls[5][0]).toContain("/migration/resume");
       expect(fetchMock.mock.calls[5][1]?.method).toBe("POST");
       expect(fetchMock).toHaveBeenCalledTimes(7);

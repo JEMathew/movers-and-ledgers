@@ -1,11 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { ChevronDown, SunMoon, UserRound, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useId, useRef, useState } from "react";
 import { cloudIdentity } from "@/lib/identity";
 import { useIdentity } from "./IdentityProvider";
 import { GoogleSignIn } from "./IdentityEntry";
+import { startMigrationHref } from "./public-surfaces/content";
 
 const themes = [["system", "System"], ["light", "Light"], ["dark", "Dark"]] as const;
 
@@ -61,7 +63,7 @@ export function AccountControls() {
   }
 
   return <div ref={controls} className="account-controls flex items-center gap-2">
-    {!cloud ? <button type="button" className="button small" disabled title="Google sign-in is not configured in this environment">Sign in with Google</button>
+    {!cloud ? <button type="button" className="button ghost small" disabled aria-label="Sign in with Google" title="Google sign-in is not configured in this environment">Sign in</button>
       : session.hasSession ? <div ref={root} className="account-menu" onKeyDown={event => {
         if (event.key === "Escape" && open) { event.preventDefault(); setOpenFor(null); trigger.current?.focus(); }
       }} onBlur={event => {
@@ -82,6 +84,7 @@ export function AccountControls() {
           <button type="button" className="button secondary small mt-2 w-full" disabled={session.busy} onClick={() => { setOpenFor(null); session.signOut(); }}>Sign out</button>
         </div>}
       </div> : <GoogleSignIn compact />}
+    {!session.hasSession && <Link className="button small" href={startMigrationHref}>Start my migration</Link>}
     {!session.hasSession && <button ref={settingsTrigger} type="button" className="button ghost small appearance-trigger" aria-label="Change appearance" title="Change appearance"
       onClick={() => settingsOpen ? closeSettings() : showSettings()} aria-haspopup="dialog" aria-expanded={settingsOpen} aria-controls={settingsId}>
       <SunMoon size={18} aria-hidden="true" />

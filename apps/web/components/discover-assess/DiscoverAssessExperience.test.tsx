@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { DiscoverAssessExperience } from "./DiscoverAssessExperience";
@@ -95,7 +95,10 @@ describe("DiscoverAssessExperience", () => {
     expect(screen.getByRole("heading", { name: "Assess My Migration" })).toBeVisible();
     expect(screen.getByRole("combobox", { name: "Synthetic business" })).toHaveValue("northstar-supplies");
     expect(screen.getByRole("link", { name: "Try Your Data" })).toHaveAttribute("href", "/try-your-data");
-    expect(screen.getByRole("list", { name: "Assessment progress" })).toBeVisible();
+    const journey = screen.getByRole("list", { name: "Migration journey" });
+    expect(journey).toBeVisible();
+    expect(journey.querySelector('[aria-current="step"]')).toBeNull();
+    expect(screen.getByText("Progress not confirmed · nothing is assumed")).toBeVisible();
   });
 
   it("labels uploaded source honestly and retries failed reads without creating a sample", async () => {
@@ -112,6 +115,40 @@ describe("DiscoverAssessExperience", () => {
     expect(screen.getByRole("combobox", {name: "Synthetic business"})).toHaveValue("northstar-supplies");
   });
 
+  it.each([
+    ["CREATED", undefined],
+    ["DISCOVERED", "discovered"],
+  ])("resumes a %s migration in the same session instead of creating a new one", async (_status, found) => {
+    sessionStorage.clear();
+    window.history.replaceState(null, "", "?session=session-777");
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(jsonResponse({ id: "session-777", sample_company_id: "harbor-light-migrate-demo", activity: [], ...(found ? { discovery } : {}) }))
+      .mockResolvedValueOnce(jsonResponse(discovery))
+      .mockResolvedValueOnce(jsonResponse(assessment))
+      .mockResolvedValueOnce(jsonResponse(activity));
+    vi.stubGlobal("fetch", fetchMock);
+    render(<DiscoverAssessExperience />);
+
+    const resume = await screen.findByRole("button", { name: /Continue this assessment/ });
+    expect(resume).not.toHaveClass("secondary");
+    // Starting over stays available, but only as a separate, secondary action.
+    expect(screen.getByRole("button", { name: /Start a new assessment/ })).toHaveClass("secondary");
+    expect(screen.queryByRole("button", { name: /Assess this migration/ })).not.toBeInTheDocument();
+    fireEvent.click(resume);
+
+    expect(await screen.findByRole("heading", { name: "Migration readiness" })).toBeVisible();
+    const urls = fetchMock.mock.calls.map(call => String(call[0]));
+    expect(urls.slice(1)).toEqual([
+      expect.stringMatching(/\/v1\/migration-sessions\/session-777\/discovery$/),
+      expect.stringMatching(/\/v1\/migration-sessions\/session-777\/assessment$/),
+      expect.stringMatching(/\/v1\/migration-sessions\/session-777\/activity$/),
+    ]);
+    expect(urls.some(url => url.endsWith("/v1/migration-sessions"))).toBe(false);
+    expect(window.location.search).toBe("?session=session-777");
+    expect(sessionStorage.getItem("movebooks-migration-session")).toBe("session-777");
+    expect(screen.getByRole("link", { name: "Create my migration plan" })).toHaveAttribute("href", "/plan-map-approve?session=session-777");
+  });
+
   it("runs the API-backed journey and hands off to the governed planning workspace", async () => {
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(jsonResponse({ id: "session-001" }, 201))
@@ -125,19 +162,49 @@ describe("DiscoverAssessExperience", () => {
     fireEvent.click(screen.getByRole("button", { name: /Assess this migration/ }));
 
     expect(await screen.findByRole("heading", { name: "Migration readiness" })).toBeVisible();
+    expect(screen.getByText("Northstar Supplies can move forward. 1 item needs your review first.")).toBeVisible();
     expect(screen.getAllByText("NEEDS ATTENTION").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Potential duplicate customers need review").length).toBeGreaterThan(0);
+    // Technical evidence is available but secondary.
+    expect(screen.getByRole("heading", { name: "Activity and evidence" })).not.toBeVisible();
+    fireEvent.click(screen.getByText("Show technical evidence"));
     expect(screen.getByRole("heading", { name: "Activity and evidence" })).toBeVisible();
 
-    fireEvent.click(screen.getByRole("button", { name: /Continue to Planning/ }));
-    expect(screen.getByText("Planning is the next governed phase")).toBeVisible();
-    expect(screen.getByRole("link", { name: /Open Plan & Map workspace/ })).toHaveAttribute(
-      "href",
-      "/plan-map-approve?session=session-001",
-    );
+    const cta = screen.getByRole("link", { name: "Create my migration plan" });
+    expect(cta).toHaveAttribute("href", "/plan-map-approve?session=session-001");
+    cta.addEventListener("click", event => event.preventDefault());
+    fireEvent.click(cta);
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe("session-001");
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(5));
     expect(fetchMock.mock.calls[4][1]?.body).toContain("continue_to_plan_selected");
+  });
+
+  it("leads with outcome, readiness, blockers and one next action before any technical evidence", async () => {
+    const blocker = { ...discovery.findings[0], id: "finding:002", category: "BLOCKER", title: "An invoice references a missing customer", recommended_action: "Restore the customer or correct the invoice." };
+    window.history.replaceState(null, "", "?session=session-002");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({
+      id: "session-002", sample_company_id: "northstar-supplies", activity,
+      discovery: { ...discovery, findings: [discovery.findings[0], blocker] },
+      assessment: { ...assessment, readiness: "BLOCKED", blocker_count: 1 },
+    })));
+    render(<DiscoverAssessExperience />);
+    const readiness = await screen.findByRole("heading", { name: "Migration readiness" });
+    expect(screen.getByText("Northstar Supplies has 1 readiness blocker to resolve before anything moves.")).toBeVisible();
+    const issues = screen.getByRole("heading", { name: "What needs attention" });
+    const cta = screen.getByRole("link", { name: "Review 1 readiness issue" });
+    const evidence = screen.getByText("Show technical evidence");
+    const source = screen.getByRole("heading", { name: "Assess another source" });
+    const follows = (a: Element, b: Element) => Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(follows(readiness, issues) && follows(issues, cta) && follows(cta, evidence) && follows(evidence, source)).toBe(true);
+    expect(cta).toHaveAttribute("href", "/plan-map-approve?session=session-002");
+    expect(within(screen.getByRole("region", { name: "What needs attention" })).getByText("Restore the customer or correct the invoice.")).toBeVisible();
+    // The CTA reviews blockers; it never claims a repair this product cannot perform.
+    expect(screen.getByText(/Migration stays blocked until the source data is corrected; nothing here can waive a blocker/)).toBeVisible();
+    expect(screen.queryByRole("link", { name: /^Resolve/ })).not.toBeInTheDocument();
+    expect(screen.getByText("No mapping, target write or approval has happened yet.")).toBeVisible();
+    expect(screen.getAllByRole("link").filter(link => link.classList.contains("button") && !link.classList.contains("secondary"))).toEqual([cta]);
+    expect(screen.getByRole("button", { name: /Start a new assessment/ })).toHaveClass("secondary");
+    expect(screen.getByRole("list", { name: "Migration journey" }).querySelector('[aria-current="step"]')).toHaveTextContent("PlanCurrent");
   });
 
   it("shows a recoverable error without inventing results", async () => {

@@ -15,7 +15,10 @@ import { useEffect, useState } from "react";
 import type { AgentActivity } from "@/components/discover-assess/types";
 import { Alert, LoadingState } from "@/components/ui/feedback";
 import { Select } from "@/components/ui/forms";
-import { Stepper } from "@/components/ui/navigation";
+import { MigrationJourney } from "@/components/journey/MigrationJourney";
+import { journeyStepFor } from "@/components/journey/journey";
+import { ActionLink, NextAction } from "@/components/journey/NextAction";
+import { isSessionId, projectSession, SELECTED_SESSION_KEY } from "@/components/public-surfaces/session";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
 
@@ -60,6 +63,8 @@ function phaseProductStatus(status: string) {
 export function PlanMapApproveExperience() {
   const [phase, setPhase] = useState<Phase>("idle");
   const [sessionId, setSessionId] = useState<string>();
+  const [loadedStatus, setLoadedStatus] = useState<string>();
+  const [readState, setReadState] = useState<"loading" | "ready" | "error">("loading");
   const [plan, setPlan] = useState<MigrationPlan>();
   const [mappings, setMappings] = useState<MappingProposal[]>([]);
   const [history, setHistory] = useState<MappingHistoryDecision[]>([]);
@@ -69,26 +74,39 @@ export function PlanMapApproveExperience() {
   const [modifications, setModifications] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    const saved = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session");
-    if (!saved) return;
-    void api<{id: string; plan?: MigrationPlan; mappings: MappingProposal[]; activity: AgentActivity[]; human_decisions?: MappingHistoryDecision[]}>(`/v1/migration-sessions/${saved}`).then(data => {
-      setSessionId(data.id); setPlan(data.plan ?? undefined); setMappings(data.mappings); setActivity(data.activity);
-      setHistory(data.human_decisions ?? []);
-      if (data.plan) setPhase("review");
-    }).catch(caught => { setError(caught.message); setPhase("error"); });
+    const controller = new AbortController();
+    let active = true;
+    async function read() {
+      try {
+        const saved = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem(SELECTED_SESSION_KEY);
+        if (!saved) throw new Error("Start with Discover → Assess, then continue with the same business session.");
+        if (!isSessionId(saved)) throw new Error("Invalid session reference. Open an existing migration from My Migration.");
+        const data = await api<{id: string; workflow_status: string; plan?: MigrationPlan; mappings: MappingProposal[]; activity: AgentActivity[]; human_decisions?: MappingHistoryDecision[]}>(`/v1/migration-sessions/${saved}`, { signal: controller.signal });
+        const evidence = projectSession(data, saved);
+        if (!active) return;
+        // Adoption belongs to a validated read, never to an attempted workflow mutation.
+        sessionStorage.setItem(SELECTED_SESSION_KEY, evidence.id);
+        setSessionId(evidence.id); setLoadedStatus(evidence.status); setPlan(data.plan ?? undefined); setMappings(data.mappings); setActivity(data.activity);
+        setHistory(data.human_decisions ?? []);
+        setReadState("ready");
+        if (data.plan) setPhase("review");
+      } catch (caught) {
+        if (!active) return;
+        setReadState("error");
+        setError(caught instanceof Error ? caught.message : "Session unavailable.");
+        setPhase("error");
+      }
+    }
+    void read();
+    return () => { active = false; controller.abort(); };
   }, []);
 
   const preparePlan = async () => {
+    if (readState !== "ready" || !sessionId) return;
     setError(undefined);
     try {
       setPhase("planning");
-      const activeSession = sessionId ?? new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session");
-      if (!activeSession) {
-        throw new Error("Start with Discover → Assess, then continue with the same business session.");
-      }
-      setSessionId(activeSession);
-      sessionStorage.setItem("movebooks-migration-session", activeSession);
-      window.history.replaceState(null, "", `?session=${encodeURIComponent(activeSession)}`);
+      const activeSession = sessionId;
       const generatedPlan = await api<MigrationPlan>(
         `/v1/migration-sessions/${activeSession}/plan`,
         { method: "POST" },
@@ -114,7 +132,7 @@ export function PlanMapApproveExperience() {
     proposal: MappingProposal,
     decision: "approve" | "reject" | "modify",
   ) => {
-    if (!sessionId) return;
+    if (readState !== "ready" || !sessionId) return;
     setError(undefined);
     try {
       const body =
@@ -139,6 +157,12 @@ export function PlanMapApproveExperience() {
   const running = phase === "planning" || phase === "mapping";
   const decisionsComplete = mappings.length > 0 && mappings.every((item) => ["APPROVED", "MODIFIED"].includes(item.state));
   const handoffReady = decisionsComplete && plan !== undefined && plan.blockers.length === 0;
+  // Plan until a plan exists, Map until the first decision, Approve until the handoff is ready.
+  const anyDecided = mappings.some((item) => ["APPROVED", "MODIFIED", "REJECTED"].includes(item.state));
+  // Without a plan the stage would claim Assess is done; a loaded CREATED/DISCOVERED status says otherwise.
+  const assessPending = !plan && loadedStatus !== undefined && journeyStepFor(loadedStatus) === 0;
+  const journeyStep = readState !== "ready" ? null : assessPending ? 0 : handoffReady ? 4 : !plan ? 1 : decisionsComplete || anyDecided ? 3 : 2;
+  const pending = mappings.filter((item) => !["APPROVED", "MODIFIED", "REJECTED"].includes(item.state)).length;
 
   return (
     <main className="shell min-h-[75vh] py-12 sm:py-16">
@@ -154,24 +178,7 @@ export function PlanMapApproveExperience() {
         <div className="migration-orb" aria-hidden="true"><span /></div>
       </header>
 
-      <div className="mt-10">
-        <Stepper
-          label="Complete migration journey"
-          current={phase === "idle" ? 2 : phase === "planning" ? 2 : 3}
-          steps={[
-            { label: "Discover", complete: Boolean(sessionId), description: sessionId ? "Complete" : "Required" },
-            { label: "Assess", complete: Boolean(sessionId), description: sessionId ? "Complete" : "Required" },
-            { label: "Plan", description: plan ? "Prepared" : "Next" },
-            { label: "Map & Approve", description: phase === "review" ? "Current" : "Next" },
-            { label: "Migrate" },
-            { label: "Resolve" },
-            { label: "Validate" },
-            { label: "Configure" },
-            { label: "Onboard" },
-            { label: "First Productive Use" },
-          ]}
-        />
-      </div>
+      <MigrationJourney className="mt-10" current={journeyStep} />
 
       <Panel className="mt-8 border-[var(--primary)]">
         <div className="flex flex-wrap items-center justify-between gap-5">
@@ -185,13 +192,16 @@ export function PlanMapApproveExperience() {
               </p>
             </div>
           </div>
-          <Button onClick={preparePlan} disabled={running || Boolean(mappings.length)}>
-            {plan ? "Plan and mappings prepared" : "Build migration plan"}
+          <Button variant={readState === "ready" ? "primary" : "secondary"} onClick={preparePlan} disabled={readState !== "ready" || running || Boolean(mappings.length)}>
+            {plan ? "Plan and mappings prepared" : "Create my migration plan"}
             <ArrowRight aria-hidden="true" size={17} />
           </Button>
         </div>
         {running && <div className="mt-5"><LoadingState label={phase === "planning" ? "Planning dependencies and checkpoints" : "Preparing mapping proposals"} /></div>}
+        {readState === "loading" && <div className="mt-5"><LoadingState label="Loading your migration" /></div>}
       </Panel>
+
+      {plan && pending > 0 && <NextAction label="Review mappings" href="#mapping-heading">{pending} of {mappings.length} {mappings.length === 1 ? "mapping needs" : "mappings need"} your decision. Approve, change or reject each recommendation; nothing moves until the plan is approved.</NextAction>}
 
       {error && <div className="mt-6"><Alert tone="error" title="Governed workflow stopped"><p className="mt-1">{error}</p></Alert></div>}
 
@@ -253,6 +263,7 @@ export function PlanMapApproveExperience() {
                   </div>
                 </div>
                 <MappingReconsideration mapping={item} history={history} submit={async (path, body) => {
+                  if (readState !== "ready" || !sessionId) throw new Error("Read the migration successfully before recording a decision.");
                   await api(`/v1/migration-sessions/${sessionId}/mappings/${item.id}${path}`, {method: "POST", body: JSON.stringify(body)});
                   const snapshot = await api<{mappings: MappingProposal[]; human_decisions: MappingHistoryDecision[]; activity: AgentActivity[]}>(`/v1/migration-sessions/${sessionId}`);
                   setMappings(snapshot.mappings); setHistory(snapshot.human_decisions); setActivity(snapshot.activity);
@@ -263,7 +274,7 @@ export function PlanMapApproveExperience() {
           <div className="mt-6">
             <Alert tone={handoffReady ? "success" : "warning"} title={handoffReady ? "Approved manifest ready for handoff" : "Migration remains stopped"}>
               <p className="mt-1">{handoffReady ? "Your approved mappings and plan will be used by migration in this same business session. No target writes have occurred yet." : decisionsComplete ? "Mapping decisions are complete, but deterministic assessment blockers must be resolved before migration handoff." : "Every proposal must reach an approved or modified state. Blocked, rejected, or pending decisions prevent migration handoff."}</p>
-              {handoffReady && <a className="mt-3 inline-block font-semibold underline" href={`/migrate-resolve?session=${sessionId}`}>Continue to Migrate → Resolve</a>}
+              {handoffReady && <ActionLink className="mt-4" label="Start migration" href={`/migrate-resolve?session=${sessionId}`} />}
             </Alert>
           </div>
         </section>
