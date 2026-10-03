@@ -56,7 +56,7 @@ export function ValidateConfigureExperience() {
     if (!id) return;
     let active = true;
     request(`/migration-sessions/${encodeURIComponent(id)}/validation-configuration`, undefined, "GET")
-      .then(data => { if (active) setSnapshot(data); })
+      .then(data => { if (active) { setSnapshot(data); sessionStorage.setItem("movebooks-migration-session", data.session_id); } })
       .catch(() => { if (active) setError("The saved demo session is unavailable. Start a new synthetic scenario below."); });
     return () => { active = false; };
   }, []);

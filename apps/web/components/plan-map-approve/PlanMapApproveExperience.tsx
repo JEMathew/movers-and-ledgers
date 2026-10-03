@@ -74,6 +74,7 @@ export function PlanMapApproveExperience() {
     if (!saved) return;
     void api<{id: string; plan?: MigrationPlan; mappings: MappingProposal[]; activity: AgentActivity[]; human_decisions?: MappingHistoryDecision[]}>(`/v1/migration-sessions/${saved}`).then(data => {
       setSessionId(data.id); setPlan(data.plan ?? undefined); setMappings(data.mappings); setActivity(data.activity);
+      sessionStorage.setItem("movebooks-migration-session", data.id);
       setHistory(data.human_decisions ?? []);
       if (data.plan) setPhase("review");
     }).catch(caught => { setError(caught.message); setPhase("error"); });

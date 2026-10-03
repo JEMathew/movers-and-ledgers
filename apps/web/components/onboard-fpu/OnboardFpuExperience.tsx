@@ -44,7 +44,7 @@ export function OnboardFpuExperience() {
     const id = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session") ?? sessionStorage.getItem(STORAGE);
     if (!id) return;
     let active = true;
-    request(`/migration-sessions/${encodeURIComponent(id)}/onboarding`, undefined, "GET").then(data => { if (active) accept(data); }).catch(() => { if (active) setError("Saved session unavailable. Start a new synthetic scenario."); });
+    request(`/migration-sessions/${encodeURIComponent(id)}/onboarding`, undefined, "GET").then(data => { if (active) { accept(data); sessionStorage.setItem("movebooks-migration-session", data.session_id); } }).catch(() => { if (active) setError("Saved session unavailable. Start a new synthetic scenario."); });
     return () => { active = false; };
   }, []);
   async function perform(path: string, body?: object, key?: string) {

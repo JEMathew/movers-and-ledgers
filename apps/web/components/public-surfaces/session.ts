@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { authHeaders } from "@/lib/identity";
 
+/** The migration the customer is working on, carried across navigation within the tab. */
+export const SELECTED_SESSION_KEY = "movebooks-migration-session";
 export const isSessionId = (value: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
 export function phaseFor(status: string): number | null {
   if (["CREATED", "DISCOVERED", "ASSESSED"].includes(status)) return 0;
@@ -60,13 +62,18 @@ export function useSessionView() {
     async function read() {
       setLoading(true); setView(undefined); setError("");
       try {
-        const id = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session");
+        const linked = new URLSearchParams(window.location.search).get("session");
+        const id = linked ?? sessionStorage.getItem(SELECTED_SESSION_KEY);
         if (!id) return;
         if (!isSessionId(id)) throw new Error("Invalid session reference. Start or open a synthetic session from Product.");
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"}/v1/migration-sessions/${id}/intake-trust`, { headers: await authHeaders(), signal: controller.signal });
         if (!response.ok) throw new Error(response.status === 404 ? "Session unavailable or expired. No replacement session was created." : "Session could not be read. Check local demo access and the API, then refresh.");
         const projection = projectSession(await response.json(), id);
-        if (active) setView(projection);
+        if (!active) return;
+        // Adopt a deep-linked migration only once it has been read and validated, so an
+        // invalid or expired link never replaces the migration already selected in this tab.
+        if (linked) sessionStorage.setItem(SELECTED_SESSION_KEY, id);
+        setView(projection);
       } catch (caught) { if (active) setError(caught instanceof Error ? caught.message : "Session unavailable."); }
       finally { if (active) setLoading(false); }
     }

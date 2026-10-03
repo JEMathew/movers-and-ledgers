@@ -62,6 +62,7 @@ export function MigrateResolveExperience() {
     if (!saved) return;
     void api<DemoSession>(`/v1/migration-sessions/${saved}`).then(data => {
       setSession(data); setExecution(data.execution ?? undefined); setActivity(data.activity);
+      sessionStorage.setItem("movebooks-migration-session", data.id);
       window.history.replaceState(null, "", `?session=${encodeURIComponent(data.id)}`);
     }).catch(caught => setError(caught.message));
   }, []);

@@ -55,6 +55,29 @@ describe("My Migration", () => {
     fireEvent.click(screen.getByRole("button", { name: "Try again" }));
     await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));
   });
+  it("adopts a deep-linked migration in a fresh tab so it survives navigation", async () => {
+    sessionStorage.clear();
+    window.history.replaceState(null, "", `/workspace?session=${id}`);
+    const fetch = vi.spyOn(globalThis, "fetch").mockImplementation(() => json(evidence));
+    const first = render(<MyMigration />);
+    await screen.findByRole("link", { name: /Resolve 1 issue/ });
+    expect(sessionStorage.getItem("movebooks-migration-session")).toBe(id);
+    first.unmount();
+    // Learn → Go to migration links to /workspace without a session reference.
+    window.history.replaceState(null, "", "/workspace");
+    render(<MyMigration />);
+    expect(await screen.findByRole("link", { name: /Resolve 1 issue/ })).toHaveAttribute("href", `/migrate-resolve?session=${id}`);
+    expect(String(fetch.mock.calls[1][0])).toContain(`/v1/migration-sessions/${id}/`);
+  });
+  it.each([404, 500])("keeps the selected migration when a deep link cannot be read (%s)", async status => {
+    const selected = "22222222-2222-4222-8222-222222222222";
+    sessionStorage.setItem("movebooks-migration-session", selected);
+    window.history.replaceState(null, "", `/workspace?session=${id}`);
+    vi.spyOn(globalThis, "fetch").mockImplementation(() => json({}, status));
+    render(<MyMigration />);
+    expect(await screen.findByText("Migration unavailable")).toBeVisible();
+    expect(sessionStorage.getItem("movebooks-migration-session")).toBe(selected);
+  });
   it("rejects an invalid session reference without a request", async () => {
     window.history.replaceState(null, "", "/workspace?session=../../private");
     const fetch = vi.spyOn(globalThis, "fetch");

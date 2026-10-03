@@ -75,6 +75,7 @@ export function DiscoverAssessExperience() {
     setError(undefined);
     void api<{id: string; sample_company_id: string; discovery?: DiscoveryResult; assessment?: AssessmentResult; activity: AgentActivity[]}>(`/v1/migration-sessions/${saved}`).then(data => {
       setSessionId(data.id); setDiscovery(data.discovery); setAssessment(data.assessment);
+      sessionStorage.setItem("movebooks-migration-session", data.id);
       if (["northstar-supplies", "harbor-light-migrate-demo"].includes(data.sample_company_id)) setSample(data.sample_company_id);
       setActivity(data.activity); setPhase(data.assessment ? "complete" : "select");
     }).catch(caught => { setError(caught.message); setPhase("error"); });
