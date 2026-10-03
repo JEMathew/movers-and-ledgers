@@ -123,7 +123,9 @@ describe("PlanMapApproveExperience", () => {
     expect(screen.getByRole("heading", { name: "Build the governed migration handoff" })).toBeVisible();
     const journey = screen.getByRole("list", { name: "Migration journey" });
     expect(journey).toHaveTextContent("First use");
-    expect(journey.querySelector('[aria-current="step"]')).toHaveTextContent("PlanCurrent");
+    // Without a migration session no step is claimed as completed or current.
+    expect(journey.querySelector('[aria-current="step"]')).toBeNull();
+    expect(screen.getByText("Progress not confirmed · nothing is assumed")).toBeVisible();
     expect(screen.getByRole("button", { name: /Create my migration plan/ })).toBeEnabled();
   });
 

@@ -49,8 +49,10 @@ describe("My Migration", () => {
     render(<MyMigration />);
     expect(await screen.findByText("Migration unavailable")).toBeVisible();
     expect(screen.getByText("No progress is assumed.")).toBeVisible();
-    expect(steps()[0]).toHaveAttribute("aria-current", "step");
-    expect(screen.queryByText("Completed")).not.toBeInTheDocument();
+    // An expired or unreadable migration shows no completed or current step.
+    expect(steps().some(step => step.hasAttribute("aria-current"))).toBe(false);
+    expect(screen.getByText("Progress not confirmed · nothing is assumed")).toBeVisible();
+    expect(screen.queryByText(/Completed|Current/)).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Check my readiness/ })).toHaveAttribute("href", "/assess?sample=harbor-light-migrate-demo");
     fireEvent.click(screen.getByRole("button", { name: "Try again" }));
     await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));

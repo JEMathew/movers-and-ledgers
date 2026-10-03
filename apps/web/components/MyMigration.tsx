@@ -9,7 +9,8 @@ import { useSessionView } from "./public-surfaces/session";
 /** The signed-in home: one journey, the current state and one dominant next action. Read-only. */
 export function MyMigration() {
   const { view, loading, error, refresh } = useSessionView();
-  const step = view ? journeyStepFor(view.status) ?? 0 : 0;
+  // Progress comes only from an authoritative read; with no migration selected, the journey starts at Assess.
+  const step = view ? journeyStepFor(view.status) : loading || error ? null : 0;
   const action = nextActionFor(view);
   return <main id="main-content" className="shell min-h-[70vh] py-12 sm:py-16">
     <header className="max-w-3xl">

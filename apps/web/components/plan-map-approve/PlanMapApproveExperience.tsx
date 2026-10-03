@@ -143,7 +143,7 @@ export function PlanMapApproveExperience() {
   const handoffReady = decisionsComplete && plan !== undefined && plan.blockers.length === 0;
   // Plan until a plan exists, Map until the first decision, Approve until the handoff is ready.
   const anyDecided = mappings.some((item) => ["APPROVED", "MODIFIED", "REJECTED"].includes(item.state));
-  const journeyStep = handoffReady ? 4 : !plan ? 1 : decisionsComplete || anyDecided ? 3 : 2;
+  const journeyStep = !sessionId ? null : handoffReady ? 4 : !plan ? 1 : decisionsComplete || anyDecided ? 3 : 2;
   const pending = mappings.filter((item) => !["APPROVED", "MODIFIED", "REJECTED"].includes(item.state)).length;
 
   return (
