@@ -117,7 +117,32 @@ describe("public surface contracts", () => {
       expect(screen.getByRole("link", { name: topic.title })).toHaveAttribute("href", `#${topic.id}`);
       expect(document.getElementById(topic.id)?.tagName).toBe("DETAILS");
     }
-    expect(screen.getAllByRole("link", { name: /Review .* in Product/, hidden: true })).toHaveLength(10);
+    // With no migration selected, each topic leads to My Migration, never the marketing Product page.
+    const links = screen.getAllByRole("link", { name: "Go to My Migration", hidden: true });
+    expect(links).toHaveLength(10);
+    for (const link of links) expect(link).toHaveAttribute("href", "/workspace");
+    expect(document.querySelector('a[href^="/product"]')).toBeNull();
+  });
+  it.each(["query", "storage"])("keeps the migration session on Learn topic links (from %s)", async source => {
+    sessionStorage.clear();
+    if (source === "query") window.history.replaceState(null, "", `/learn?session=${id}`);
+    else { window.history.replaceState(null, "", "/learn"); sessionStorage.setItem("movebooks-migration-session", id); }
+    render(<Learn/>);
+    const links = await screen.findAllByRole("link", { name: /in your migration$/, hidden: true });
+    expect(links).toHaveLength(10);
+    const reconciliation = within(document.getElementById("reconciliation") as HTMLElement).getByRole("link", { hidden: true });
+    expect(reconciliation).toHaveTextContent("Open Validate in your migration");
+    expect(reconciliation).toHaveAttribute("href", `/validate-configure?session=${id}`);
+    const mappings = within(document.getElementById("mappings") as HTMLElement).getByRole("link", { hidden: true });
+    expect(mappings).toHaveAttribute("href", `/plan-map-approve?session=${id}`);
+    expect(document.querySelector('a[href^="/product"]')).toBeNull();
+    sessionStorage.clear();
+  });
+  it("ignores an invalid stored session on Learn topic links", async () => {
+    sessionStorage.setItem("movebooks-migration-session", "../../private");
+    render(<Learn/>);
+    await waitFor(() => expect(screen.getAllByRole("link", { name: "Go to My Migration", hidden: true })).toHaveLength(10));
+    sessionStorage.clear();
   });
   it("returns from Learn to the referenced step without fetching or changing progress", () => {
     window.history.replaceState(null, "", `/learn?stage=3&session=${id}#reconciliation`);
