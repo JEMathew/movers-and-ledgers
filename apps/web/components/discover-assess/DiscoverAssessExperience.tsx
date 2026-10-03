@@ -215,11 +215,11 @@ export function DiscoverAssessExperience() {
           {/* 4. Next recommended action */}
           <NextAction
             className="mt-8"
-            label={blockers.length ? `Resolve ${count(blockers.length, "readiness issue")}` : "Create my migration plan"}
+            label={blockers.length ? `Review ${count(blockers.length, "readiness issue")}` : "Create my migration plan"}
             href={`/plan-map-approve?session=${sessionId}`}
             onClick={recordPlanSelection}
           >
-            <p>{blockers.length ? "Planning keeps every issue visible and holds migration until each blocker is resolved." : "Next, the plan sequences your records and proposes mappings for you to approve."}</p>
+            <p>{blockers.length ? "Planning keeps each blocker visible beside your plan. Migration stays blocked until the source data is corrected; nothing here can waive a blocker." : "Next, the plan sequences your records and proposes mappings for you to approve."}</p>
             <p className="mt-1 text-sm">No mapping, target write or approval has happened yet.</p>
           </NextAction>
 

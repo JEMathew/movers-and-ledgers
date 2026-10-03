@@ -31,8 +31,8 @@ describe("operational migration journey", () => {
   });
   it.each([
     [state("CREATED"), "Check my readiness", `/assess?session=${id}`],
-    [state("ASSESSED", { readinessIssues: 3 }), "Resolve 3 readiness issues", `/plan-map-approve?session=${id}`],
-    [state("ASSESSED", { readinessIssues: 1 }), "Resolve 1 readiness issue", `/plan-map-approve?session=${id}`],
+    [state("ASSESSED", { readinessIssues: 3 }), "Review 3 readiness issues", `/plan-map-approve?session=${id}`],
+    [state("ASSESSED", { readinessIssues: 1 }), "Review 1 readiness issue", `/plan-map-approve?session=${id}`],
     [state("ASSESSED"), "Create my migration plan", `/plan-map-approve?session=${id}`],
     [state("MAPPING"), "Review mappings", `/plan-map-approve?session=${id}`],
     [state("AWAITING_APPROVAL"), "Approve migration plan", `/plan-map-approve?session=${id}`],

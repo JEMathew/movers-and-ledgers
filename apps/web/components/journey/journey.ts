@@ -62,7 +62,8 @@ export function nextActionFor(state?: JourneyState): NextAction {
       return { heading: "Check your readiness", detail: "Finish the readiness check to see what can move and what needs attention.", label: "Check my readiness", href: at("/assess") };
     case "ASSESSED":
       return ready
-        ? { heading: "Resolve readiness issues", detail: "Planning keeps each issue visible and holds migration until it is resolved.", label: `Resolve ${count(ready, "readiness issue")}`, href: at("/plan-map-approve") }
+        // Readiness blockers are source-data problems this product cannot repair, so the action is a review.
+        ? { heading: "Review readiness blockers", detail: "Planning keeps each blocker visible beside your plan. Migration stays blocked until the source data is corrected; nothing here can waive a blocker.", label: `Review ${count(ready, "readiness issue")}`, href: at("/plan-map-approve") }
         : { heading: "Plan your migration", detail: "Your readiness check is complete. Create the plan and review how your records map.", label: "Create my migration plan", href: at("/plan-map-approve") };
     case "PLANNED": case "MAPPING":
       return { heading: "Review your mappings", detail: "Check where each record goes. Approve, change or reject each recommendation.", label: "Review mappings", href: at("/plan-map-approve") };

@@ -190,14 +190,16 @@ describe("DiscoverAssessExperience", () => {
     const readiness = await screen.findByRole("heading", { name: "Migration readiness" });
     expect(screen.getByText("Northstar Supplies has 1 readiness blocker to resolve before anything moves.")).toBeVisible();
     const issues = screen.getByRole("heading", { name: "What needs attention" });
-    const cta = screen.getByRole("link", { name: "Resolve 1 readiness issue" });
+    const cta = screen.getByRole("link", { name: "Review 1 readiness issue" });
     const evidence = screen.getByText("Show technical evidence");
     const source = screen.getByRole("heading", { name: "Assess another source" });
     const follows = (a: Element, b: Element) => Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
     expect(follows(readiness, issues) && follows(issues, cta) && follows(cta, evidence) && follows(evidence, source)).toBe(true);
     expect(cta).toHaveAttribute("href", "/plan-map-approve?session=session-002");
     expect(within(screen.getByRole("region", { name: "What needs attention" })).getByText("Restore the customer or correct the invoice.")).toBeVisible();
-    expect(screen.getByText(/holds migration until each blocker is resolved/)).toBeVisible();
+    // The CTA reviews blockers; it never claims a repair this product cannot perform.
+    expect(screen.getByText(/Migration stays blocked until the source data is corrected; nothing here can waive a blocker/)).toBeVisible();
+    expect(screen.queryByRole("link", { name: /^Resolve/ })).not.toBeInTheDocument();
     expect(screen.getByText("No mapping, target write or approval has happened yet.")).toBeVisible();
     expect(screen.getAllByRole("link").filter(link => link.classList.contains("button") && !link.classList.contains("secondary"))).toEqual([cta]);
     expect(screen.getByRole("button", { name: /Start a new assessment/ })).toHaveClass("secondary");
