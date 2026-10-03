@@ -121,9 +121,9 @@ describe("PlanMapApproveExperience", () => {
   it("shows the complete migration journey and a bounded start action", () => {
     render(<PlanMapApproveExperience />);
     expect(screen.getByRole("heading", { name: "Build the governed migration handoff" })).toBeVisible();
-    expect(screen.getByRole("list", { name: "Complete migration journey" })).toHaveTextContent(
-      "First Productive Use",
-    );
+    const journey = screen.getByRole("list", { name: "Migration journey" });
+    expect(journey).toHaveTextContent("First use");
+    expect(journey.querySelector('[aria-current="step"]')).toHaveTextContent("PlanCurrent");
     expect(screen.getByRole("button", { name: /Build migration plan/ })).toBeEnabled();
   });
 

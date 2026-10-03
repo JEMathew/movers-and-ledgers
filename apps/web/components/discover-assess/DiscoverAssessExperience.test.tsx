@@ -95,7 +95,9 @@ describe("DiscoverAssessExperience", () => {
     expect(screen.getByRole("heading", { name: "Assess My Migration" })).toBeVisible();
     expect(screen.getByRole("combobox", { name: "Synthetic business" })).toHaveValue("northstar-supplies");
     expect(screen.getByRole("link", { name: "Try Your Data" })).toHaveAttribute("href", "/try-your-data");
-    expect(screen.getByRole("list", { name: "Assessment progress" })).toBeVisible();
+    const journey = screen.getByRole("list", { name: "Migration journey" });
+    expect(journey).toBeVisible();
+    expect(journey.querySelector('[aria-current="step"]')).toHaveTextContent("AssessCurrent");
   });
 
   it("labels uploaded source honestly and retries failed reads without creating a sample", async () => {

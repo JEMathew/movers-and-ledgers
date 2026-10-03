@@ -5,6 +5,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { Alert } from "@/components/ui/feedback";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
+import { MigrationJourney } from "@/components/journey/MigrationJourney";
 import type { Snapshot, Task } from "./types";
 import { authHeaders } from "@/lib/identity";
 
@@ -66,6 +67,7 @@ export function OnboardFpuExperience() {
 
   return <main className="shell py-12">
     <div className="max-w-3xl"><p className="eyebrow text-primary">Onboard → Verified First Productive Use</p><h1 className="type-page mt-3">Your books are here.<br />Put them to work.</h1><p className="mt-5 type-body-secondary">Finish governed setup, then post and verify your first customer invoice in the synthetic target.</p></div>
+    <MigrationJourney className="mt-8" current={snapshot?.verified_fpu ? 9 : snapshot?.ready || fpu ? 8 : 7} />
     <Panel className="mt-8"><Badge>Synthetic public-reference Beta</Badge><p className="mt-3 text-sm text-secondary">No real provider writes, bank connection, or production readiness claim. Demo loading explicitly replays earlier migration and configuration approvals. All new onboarding and invoice decisions are yours, attributed to the API-verified workspace owner. Local demo sessions are process-local; cloud-mode synthetic sessions use durable state.</p><div className="mt-4 flex flex-wrap items-end gap-3"><label className="text-sm">Synthetic scenario<select className="field-control mt-2 block max-w-full" value={scenario} onChange={e => setScenario(e.target.value)}>{["clean", "posting_failure", "missing_customer", "missing_product", "invalid_tax", "invalid_mapping", "totals_mismatch", "missing_role", "incomplete_configuration", "verification_interrupted"].map(s => <option key={s} value={s}>{s.replaceAll("_", " ")}</option>)}</select></label><Button disabled={busy} variant="secondary" onClick={async () => { if (await perform("/onboarding-demo-sessions", {scenario})) { setEditing(false); setQuantity(1); setPrice("100.00"); } }}>Load synthetic scenario</Button></div></Panel>
     <div className="mt-4 min-h-6 text-sm" ref={statusRef} tabIndex={-1} role="status" aria-live="polite">{busy ? "Checking evidence and recording your action…" : snapshot ? `${snapshot.company_name} · ${snapshot.effective_status.replaceAll("_", " ")}` : "Choose a scenario or continue from Configure."}</div>
     {error && !review && <Alert tone="error" title="Action not completed"><p>{error}</p><p>No success is assumed. Review and retry.</p></Alert>}

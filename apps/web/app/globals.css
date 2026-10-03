@@ -190,6 +190,13 @@ button, input, select, textarea { font: inherit; }
 .step-marker { z-index: 1; display: grid; flex: 0 0 auto; width: 1.5rem; height: 1.5rem; place-items: center; border: 1px solid var(--border-strong); border-radius: 999px; background: var(--surface); }
 .stepper .is-complete, .stepper .is-active { color: var(--primary); }
 .stepper .is-complete .step-marker, .stepper .is-active .step-marker { border-color: var(--primary); background: var(--primary-subtle); }
+.journey { display: grid; gap: 0.75rem; }
+.journey-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 1rem; }
+.stepper.journey-steps { grid-template-columns: repeat(9, minmax(0, 1fr)); }
+.journey-steps .is-active strong { color: var(--foreground); }
+.journey-steps .is-active .step-marker { box-shadow: 0 0 0 3px var(--primary-subtle); }
+.journey-steps .is-held { color: var(--warning); }
+.journey-steps .is-held .step-marker { border-color: var(--warning); }
 
 .alert { display: grid; grid-template-columns: auto 1fr; gap: 0.75rem; border: 1px solid currentColor; border-radius: var(--radius-md); padding: 0.85rem 1rem; font-size: 0.875rem; }
 .alert-success { background: var(--success-subtle); color: var(--success); }
@@ -282,6 +289,12 @@ button, input, select, textarea { font: inherit; }
 
 @media (max-width: 700px) { .shell { width: min(100% - 1.5rem, 1200px); } }
 @media (max-width: 700px) { .stepper { grid-template-columns: 1fr; } .stepper li:not(:last-child)::after { left: 0.75rem; right: auto; top: 1.4rem; bottom: -0.1rem; width: 1px; height: auto; } }
+/* The nine-step journey scrolls sideways below desktop width instead of stacking nine rows. */
+@media (max-width: 1023px) {
+  .stepper.journey-steps { display: flex; overflow-x: auto; padding-bottom: 0.35rem; scrollbar-width: thin; }
+  .stepper.journey-steps li { flex: 0 0 6.75rem; }
+  .stepper.journey-steps li:not(:last-child)::after { left: 1.65rem; right: 0.15rem; top: 0.75rem; bottom: auto; width: auto; height: 1px; }
+}
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.01ms !important; }

@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 
 import { Alert, LoadingState } from "@/components/ui/feedback";
 import { Badge, Button, Card, Link, Panel } from "@/components/ui/primitives";
-import { Stepper } from "@/components/ui/navigation";
+import { MigrationJourney } from "@/components/journey/MigrationJourney";
 import { StatusBadge } from "@/components/ui/status";
 
 import type {
@@ -131,7 +131,6 @@ export function DiscoverAssessExperience() {
   };
 
   const running = phase === "discovering" || phase === "assessing";
-  const activeStep = phase === "select" || phase === "error" ? 0 : phase === "discovering" ? 1 : 2;
 
   return (
     <main className="shell min-h-[75vh] py-12 sm:py-16">
@@ -149,17 +148,7 @@ export function DiscoverAssessExperience() {
         </div>
       </header>
 
-      <div className="mt-10" aria-live="polite">
-        <Stepper
-          label="Assessment progress"
-          current={activeStep}
-          steps={[
-            { label: "Choose a sample", description: activeStep === 0 ? "Current" : "Complete" },
-            { label: "Discover the source", description: activeStep === 1 ? "Current" : activeStep > 1 ? "Complete" : "Next" },
-            { label: "Assess readiness", description: activeStep === 2 ? "Current" : "Next" },
-          ]}
-        />
-      </div>
+      <MigrationJourney className="mt-10" current={assessment ? 1 : 0} />
 
       <section aria-labelledby="sample-heading" className="mt-6">
         <div className="flex flex-wrap items-end justify-between gap-4">

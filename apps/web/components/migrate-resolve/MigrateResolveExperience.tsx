@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import type { AgentActivity } from "@/components/discover-assess/types";
 import { Dialog } from "@/components/ui/dialog";
 import { Alert } from "@/components/ui/feedback";
-import { Stepper } from "@/components/ui/navigation";
+import { MigrationJourney } from "@/components/journey/MigrationJourney";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
 
@@ -70,6 +70,7 @@ export function MigrateResolveExperience() {
   const complete = execution?.status === "MIGRATION_COMPLETE";
   const resolving = execution?.status === "RESOLVING";
   const retryPending = execution?.status === "RETRY_PENDING";
+  const paused = resolving || retryPending || execution?.status === "MIGRATION_BLOCKED";
 
   const loadDemo = async () => {
     setBusy(true);
@@ -172,24 +173,7 @@ export function MigrateResolveExperience() {
         </div>
       </header>
 
-      <div className="mt-10">
-        <Stepper
-          label="Complete migration journey"
-          current={complete ? 6 : resolving || retryPending ? 5 : 4}
-          steps={[
-            { label: "Discover", description: "Complete" },
-            { label: "Assess", description: "Complete" },
-            { label: "Plan", description: "Complete" },
-            { label: "Map & Approve", description: session ? "Complete" : "Required" },
-            { label: "Migrate", complete, description: complete ? "Complete" : resolving || retryPending ? "Paused safely" : "Current" },
-            { label: "Resolve", description: resolving || retryPending ? "Current" : "As needed" },
-            { label: "Validate", description: complete ? "Next: verify your numbers" : "Locked" },
-            { label: "Configure" },
-            { label: "Onboard" },
-            { label: "First Productive Use" },
-          ]}
-        />
-      </div>
+      <MigrationJourney className="mt-10" current={complete ? 6 : paused ? 5 : 4} held={paused ? { index: 4, label: "Paused" } : undefined} />
 
       {error && (
         <div className="mt-6">

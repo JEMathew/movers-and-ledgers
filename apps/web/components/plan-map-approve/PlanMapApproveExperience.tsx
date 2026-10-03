@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import type { AgentActivity } from "@/components/discover-assess/types";
 import { Alert, LoadingState } from "@/components/ui/feedback";
 import { Select } from "@/components/ui/forms";
-import { Stepper } from "@/components/ui/navigation";
+import { MigrationJourney } from "@/components/journey/MigrationJourney";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
 
@@ -139,6 +139,9 @@ export function PlanMapApproveExperience() {
   const running = phase === "planning" || phase === "mapping";
   const decisionsComplete = mappings.length > 0 && mappings.every((item) => ["APPROVED", "MODIFIED"].includes(item.state));
   const handoffReady = decisionsComplete && plan !== undefined && plan.blockers.length === 0;
+  // Plan until a plan exists, Map until the first decision, Approve until the handoff is ready.
+  const anyDecided = mappings.some((item) => ["APPROVED", "MODIFIED", "REJECTED"].includes(item.state));
+  const journeyStep = handoffReady ? 4 : !plan ? 1 : decisionsComplete || anyDecided ? 3 : 2;
 
   return (
     <main className="shell min-h-[75vh] py-12 sm:py-16">
@@ -154,24 +157,7 @@ export function PlanMapApproveExperience() {
         <div className="migration-orb" aria-hidden="true"><span /></div>
       </header>
 
-      <div className="mt-10">
-        <Stepper
-          label="Complete migration journey"
-          current={phase === "idle" ? 2 : phase === "planning" ? 2 : 3}
-          steps={[
-            { label: "Discover", complete: Boolean(sessionId), description: sessionId ? "Complete" : "Required" },
-            { label: "Assess", complete: Boolean(sessionId), description: sessionId ? "Complete" : "Required" },
-            { label: "Plan", description: plan ? "Prepared" : "Next" },
-            { label: "Map & Approve", description: phase === "review" ? "Current" : "Next" },
-            { label: "Migrate" },
-            { label: "Resolve" },
-            { label: "Validate" },
-            { label: "Configure" },
-            { label: "Onboard" },
-            { label: "First Productive Use" },
-          ]}
-        />
-      </div>
+      <MigrationJourney className="mt-10" current={journeyStep} />
 
       <Panel className="mt-8 border-[var(--primary)]">
         <div className="flex flex-wrap items-center justify-between gap-5">

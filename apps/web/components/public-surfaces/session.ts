@@ -17,7 +17,7 @@ const list = (value: unknown): RecordData[] => Array.isArray(value) ? value.map(
 const text = (value: unknown) => typeof value === "string" ? value.slice(0, 400) : "";
 const refs = (value: unknown) => Array.isArray(value) ? value.filter((x): x is string => typeof x === "string").slice(0, 12).map(x => x.slice(0, 160)) : [];
 export type TraceRow = { id: string; title: string; kind: string; status: string; time: string; actor: string; tool: string; evidence: string[] };
-export type SessionView = { id: string; status: string; phase: number; sourceKind: string; activity: TraceRow[]; decisions: TraceRow[]; checks: TraceRow[]; blockers: string[]; events: TraceRow[] };
+export type SessionView = { id: string; status: string; phase: number; sourceKind: string; activity: TraceRow[]; decisions: TraceRow[]; checks: TraceRow[]; blockers: string[]; events: TraceRow[]; readinessIssues: number; migrationIssues: number; verificationIssues: number };
 
 // Explicit presentation projection. Never stringify a session, prompt, payload,
 // model trace, invoice, selected value or raw reconciliation amount into the UI.
@@ -32,16 +32,21 @@ export function projectSession(raw: unknown, expectedId: string): SessionView {
   const checks = list(report?.checks).map(c => ({ id: text(c.id), title: text(c.label), kind: "Deterministic verification", status: text(c.status), time: text(report?.created_at), actor: "Validation rules", tool: "", evidence: refs(c.evidence) }));
   const fpu = object(object(s.onboarding).fpu);
   checks.push(...list(fpu.checks).map(c => ({ id: text(c.id), title: text(c.id).replaceAll("_", " "), kind: "Deterministic verification", status: c.passed === true ? "VERIFIED" : "BLOCKED", time: text(fpu.verified_at), actor: "First productive use rules", tool: "", evidence: refs(c.evidence) })));
-  const blockers = [
-    ...list(object(s.discovery).findings).filter(f => f.category === "BLOCKER").map(f => `Discovery finding: ${text(f.title)}`),
+  const readiness = list(object(s.discovery).findings).filter(f => f.category === "BLOCKER").map(f => `Discovery finding: ${text(f.title)}`);
+  const migration = [
     ...list(object(s.execution).failures).filter(f => f.resolved !== true).map(f => `${text(f.code)}: ${text(f.summary)}`),
     ...list(object(s.execution).resolutions).filter(r => r.state === "ESCALATED").map(r => `Escalation: ${text(r.escalation_rule)}`),
+  ];
+  const verificationIssues = list(report?.checks).filter(c => c.status === "BLOCKED").length;
+  const blockers = [
+    ...readiness,
+    ...migration,
     ...checks.filter(c => c.status === "BLOCKED").map(c => `Check blocked: ${c.title}`),
     ...list(object(s.configuration).proposals).filter(p => ["REJECTED", "BLOCKED", "REVIEW_REQUIRED"].includes(text(p.state))).map(p => `Configuration ${text(p.state)}: ${text(p.label)}`),
     ...list(object(s.onboarding).tasks).filter(t => t.status !== "COMPLETED").map(t => `Onboarding ${text(t.status)}: ${text(t.label)}`),
   ];
   const events = list(s.events).map(e => ({ id: text(e.id), title: text(e.name).replaceAll("_", " "), kind: "Lifecycle audit reference", status: "Recorded", time: text(e.occurred_at), actor: "Workflow", tool: "", evidence: [] }));
-  return { id: expectedId, status, phase, sourceKind: s.source_kind === "user_upload" ? "User-provided data · synthetic target" : "Synthetic sample · synthetic target", activity, decisions, checks, blockers, events };
+  return { id: expectedId, status, phase, sourceKind: s.source_kind === "user_upload" ? "User-provided data · synthetic target" : "Synthetic sample · synthetic target", activity, decisions, checks, blockers, events, readinessIssues: readiness.length, migrationIssues: migration.length, verificationIssues };
 }
 
 export function useSessionView() {
