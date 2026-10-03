@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { DiscoverAssessExperience } from "./DiscoverAssessExperience";
@@ -127,19 +127,47 @@ describe("DiscoverAssessExperience", () => {
     fireEvent.click(screen.getByRole("button", { name: /Assess this migration/ }));
 
     expect(await screen.findByRole("heading", { name: "Migration readiness" })).toBeVisible();
+    expect(screen.getByText("Northstar Supplies can move forward. 1 item needs your review first.")).toBeVisible();
     expect(screen.getAllByText("NEEDS ATTENTION").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Potential duplicate customers need review").length).toBeGreaterThan(0);
+    // Technical evidence is available but secondary.
+    expect(screen.getByRole("heading", { name: "Activity and evidence" })).not.toBeVisible();
+    fireEvent.click(screen.getByText("Show technical evidence"));
     expect(screen.getByRole("heading", { name: "Activity and evidence" })).toBeVisible();
 
-    fireEvent.click(screen.getByRole("button", { name: /Continue to Planning/ }));
-    expect(screen.getByText("Planning is the next governed phase")).toBeVisible();
-    expect(screen.getByRole("link", { name: /Open Plan & Map workspace/ })).toHaveAttribute(
-      "href",
-      "/plan-map-approve?session=session-001",
-    );
+    const cta = screen.getByRole("link", { name: "Create my migration plan" });
+    expect(cta).toHaveAttribute("href", "/plan-map-approve?session=session-001");
+    cta.addEventListener("click", event => event.preventDefault());
+    fireEvent.click(cta);
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe("session-001");
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(5));
     expect(fetchMock.mock.calls[4][1]?.body).toContain("continue_to_plan_selected");
+  });
+
+  it("leads with outcome, readiness, blockers and one next action before any technical evidence", async () => {
+    const blocker = { ...discovery.findings[0], id: "finding:002", category: "BLOCKER", title: "An invoice references a missing customer", recommended_action: "Restore the customer or correct the invoice." };
+    window.history.replaceState(null, "", "?session=session-002");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({
+      id: "session-002", sample_company_id: "northstar-supplies", activity,
+      discovery: { ...discovery, findings: [discovery.findings[0], blocker] },
+      assessment: { ...assessment, readiness: "BLOCKED", blocker_count: 1 },
+    })));
+    render(<DiscoverAssessExperience />);
+    const readiness = await screen.findByRole("heading", { name: "Migration readiness" });
+    expect(screen.getByText("Northstar Supplies has 1 readiness blocker to resolve before anything moves.")).toBeVisible();
+    const issues = screen.getByRole("heading", { name: "What needs attention" });
+    const cta = screen.getByRole("link", { name: "Resolve 1 readiness issue" });
+    const evidence = screen.getByText("Show technical evidence");
+    const source = screen.getByRole("heading", { name: "Assess another source" });
+    const follows = (a: Element, b: Element) => Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(follows(readiness, issues) && follows(issues, cta) && follows(cta, evidence) && follows(evidence, source)).toBe(true);
+    expect(cta).toHaveAttribute("href", "/plan-map-approve?session=session-002");
+    expect(within(screen.getByRole("region", { name: "What needs attention" })).getByText("Restore the customer or correct the invoice.")).toBeVisible();
+    expect(screen.getByText(/holds migration until each blocker is resolved/)).toBeVisible();
+    expect(screen.getByText("No mapping, target write or approval has happened yet.")).toBeVisible();
+    expect(screen.getAllByRole("link").filter(link => link.classList.contains("button") && !link.classList.contains("secondary"))).toEqual([cta]);
+    expect(screen.getByRole("button", { name: /Start a new assessment/ })).toHaveClass("secondary");
+    expect(screen.getByRole("list", { name: "Migration journey" }).querySelector('[aria-current="step"]')).toHaveTextContent("PlanCurrent");
   });
 
   it("shows a recoverable error without inventing results", async () => {

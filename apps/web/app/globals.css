@@ -190,6 +190,9 @@ button, input, select, textarea { font: inherit; }
 .step-marker { z-index: 1; display: grid; flex: 0 0 auto; width: 1.5rem; height: 1.5rem; place-items: center; border: 1px solid var(--border-strong); border-radius: 999px; background: var(--surface); }
 .stepper .is-complete, .stepper .is-active { color: var(--primary); }
 .stepper .is-complete .step-marker, .stepper .is-active .step-marker { border-color: var(--primary); background: var(--primary-subtle); }
+.evidence-disclosure > summary { cursor: pointer; display: inline-flex; min-height: 2.75rem; align-items: center; border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 0.6rem 1rem; font-weight: 650; }
+.evidence-disclosure > summary:hover { border-color: var(--primary); background: var(--primary-subtle); }
+.evidence-disclosure[open] > summary { background: var(--surface-subtle); }
 .journey { display: grid; gap: 0.75rem; }
 .journey-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 1rem; }
 .stepper.journey-steps { grid-template-columns: repeat(9, minmax(0, 1fr)); }
