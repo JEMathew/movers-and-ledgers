@@ -30,6 +30,13 @@ export function journeyStepFor(status: string): number | null {
   return Object.prototype.hasOwnProperty.call(stepByStatus, status) ? stepByStatus[status] : null;
 }
 
+/** A stage page's own position, never ahead of the migration's authoritative status.
+ *  An unrecognised status gives null: no progress is assumed. */
+export function stepWithin(status: string, stageStep: number): number | null {
+  const step = journeyStepFor(status);
+  return step === null ? null : Math.min(step, stageStep);
+}
+
 export type HeldStep = { index: number; label: string };
 /** A step behind the current one that is not finished: a paused migration is never shown as completed. */
 export function journeyHeldFor(status: string): HeldStep | undefined {

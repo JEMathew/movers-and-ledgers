@@ -41,7 +41,7 @@ describe("governed onboarding and productive use", () => {
   it("resumes a posted checkpoint with the original key and renders verified evidence only", async () => {
     const posted = {...task,checkpoint:"POSTED" as const,attempts:1,idempotency_key:"original",decisions:[{action:"approve",actor:"demo-user"}]};
     await load({...prepared,onboarding:{faults:[],fpu:posted}});
-    vi.mocked(fetch).mockImplementationOnce(() => response({...prepared,verified_fpu:true,effective_status:"VERIFIED_FIRST_PRODUCTIVE_USE",onboarding:{faults:[],fpu:{...posted,checkpoint:"VERIFIED",posted_by:"demo-user",invoice:{total:"107.25"},checks:[{id:"posting",passed:true,explanation:"Matched",evidence:["invoice:hash"]}]}}}));
+    vi.mocked(fetch).mockImplementationOnce(() => response({...prepared,verified_fpu:true,workflow_status:"VERIFIED_FIRST_PRODUCTIVE_USE",effective_status:"VERIFIED_FIRST_PRODUCTIVE_USE",onboarding:{faults:[],fpu:{...posted,checkpoint:"VERIFIED",posted_by:"demo-user",invoice:{total:"107.25"},checks:[{id:"posting",passed:true,explanation:"Matched",evidence:["invoice:hash"]}]}}}));
     fireEvent.click(screen.getByRole("button",{name:"Resume verification"}));
     await screen.findByRole("heading",{name:"VERIFIED FIRST PRODUCTIVE USE"});
     expect(screen.getByRole("link",{name:"Review verified evidence"}).getAttribute("href")).toMatch(/^\/trust\?session=/);

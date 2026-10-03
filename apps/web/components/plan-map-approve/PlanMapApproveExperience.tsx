@@ -16,6 +16,7 @@ import type { AgentActivity } from "@/components/discover-assess/types";
 import { Alert, LoadingState } from "@/components/ui/feedback";
 import { Select } from "@/components/ui/forms";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
+import { journeyStepFor } from "@/components/journey/journey";
 import { ActionLink, NextAction } from "@/components/journey/NextAction";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
@@ -61,6 +62,7 @@ function phaseProductStatus(status: string) {
 export function PlanMapApproveExperience() {
   const [phase, setPhase] = useState<Phase>("idle");
   const [sessionId, setSessionId] = useState<string>();
+  const [loadedStatus, setLoadedStatus] = useState<string>();
   const [plan, setPlan] = useState<MigrationPlan>();
   const [mappings, setMappings] = useState<MappingProposal[]>([]);
   const [history, setHistory] = useState<MappingHistoryDecision[]>([]);
@@ -72,8 +74,8 @@ export function PlanMapApproveExperience() {
   useEffect(() => {
     const saved = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session");
     if (!saved) return;
-    void api<{id: string; plan?: MigrationPlan; mappings: MappingProposal[]; activity: AgentActivity[]; human_decisions?: MappingHistoryDecision[]}>(`/v1/migration-sessions/${saved}`).then(data => {
-      setSessionId(data.id); setPlan(data.plan ?? undefined); setMappings(data.mappings); setActivity(data.activity);
+    void api<{id: string; workflow_status?: string; plan?: MigrationPlan; mappings: MappingProposal[]; activity: AgentActivity[]; human_decisions?: MappingHistoryDecision[]}>(`/v1/migration-sessions/${saved}`).then(data => {
+      setSessionId(data.id); setLoadedStatus(data.workflow_status); setPlan(data.plan ?? undefined); setMappings(data.mappings); setActivity(data.activity);
       sessionStorage.setItem("movebooks-migration-session", data.id);
       setHistory(data.human_decisions ?? []);
       if (data.plan) setPhase("review");
@@ -143,7 +145,9 @@ export function PlanMapApproveExperience() {
   const handoffReady = decisionsComplete && plan !== undefined && plan.blockers.length === 0;
   // Plan until a plan exists, Map until the first decision, Approve until the handoff is ready.
   const anyDecided = mappings.some((item) => ["APPROVED", "MODIFIED", "REJECTED"].includes(item.state));
-  const journeyStep = !sessionId ? null : handoffReady ? 4 : !plan ? 1 : decisionsComplete || anyDecided ? 3 : 2;
+  // Without a plan the stage would claim Assess is done; a loaded CREATED/DISCOVERED status says otherwise.
+  const assessPending = !plan && loadedStatus !== undefined && journeyStepFor(loadedStatus) === 0;
+  const journeyStep = !sessionId ? null : assessPending ? 0 : handoffReady ? 4 : !plan ? 1 : decisionsComplete || anyDecided ? 3 : 2;
   const pending = mappings.filter((item) => !["APPROVED", "MODIFIED", "REJECTED"].includes(item.state)).length;
 
   return (

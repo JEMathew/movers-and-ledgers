@@ -34,3 +34,23 @@ describe.each([
     expect(screen.queryByText("Completed")).not.toBeInTheDocument();
   });
 });
+
+// A successful read of an earlier-stage migration must not let a later stage page claim its own position.
+describe.each([
+  ["Plan", PlanMapApproveExperience, "CREATED", 0],
+  ["Migrate", MigrateResolveExperience, "ASSESSED", 1],
+  ["Validate", ValidateConfigureExperience, "ASSESSED", 1],
+  ["Onboard", OnboardFpuExperience, "ASSESSED", 1],
+] as [string, ComponentType, string, number][])("%s stage with an earlier migration", (_name, Stage, status, expected) => {
+  it(`shows the migration's actual step for ${status}`, async () => {
+    sessionStorage.setItem("movebooks-migration-session", id);
+    vi.spyOn(globalThis, "fetch").mockImplementation(() => Promise.resolve(new Response(JSON.stringify({
+      id, session_id: id, company_name: "Harbor Light Books", workflow_status: status, effective_status: status,
+      activity: [], mappings: [], human_decisions: [], repairs: [], resolutions: [], tasks: [], customers: [], products: [],
+      onboarding: null, ready: false, verified_fpu: false, ready_for_onboarding: false,
+    }), { status: 200, headers: { "Content-Type": "application/json" } })));
+    render(<Stage />);
+    await waitFor(() => expect(steps()[expected]).toHaveAttribute("aria-current", "step"));
+    expect(steps().filter(step => step.classList.contains("is-complete"))).toHaveLength(expected);
+  });
+});
