@@ -1,4 +1,4 @@
-FROM cgr.dev/chainguard/python:latest-dev@sha256:87729167739190d9309588120a8ac0ffbf2eb95dd895abb9bada6bb9ecbf5a04 AS build
+FROM cgr.dev/chainguard/python:latest-dev@sha256:96cb9c155159daf6b21e70555f244081909ff161c5589112ddf308624c1a1c77 AS build
 USER root
 # Build-time download timeout only; preserve TLS verification and resolver failures.
 ENV PATH=/opt/venv/bin:$PATH PIP_DEFAULT_TIMEOUT=60
@@ -25,7 +25,7 @@ FROM build AS packaged
 RUN python -m pip uninstall -y pip
 
 # Matching vendor-patched Python 3.14 runtime; no shell, pip or build tools.
-FROM cgr.dev/chainguard/python:latest@sha256:be59f7abb600892c78e6ff0fe1a8f39549da13302dc003c8a5eb1c14b03d995c AS runtime
+FROM cgr.dev/chainguard/python:latest@sha256:1961420e5f93bd056d4b0b40eca12cdf01b3ed09177aa4d6ec71fab38cbf158f AS runtime
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PORT=8080 PYTHONPATH=/app:/app/services/api/src PATH=/opt/venv/bin:$PATH
 WORKDIR /app
 COPY --from=packaged /opt/venv /opt/venv
