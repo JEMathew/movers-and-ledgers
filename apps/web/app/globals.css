@@ -196,6 +196,8 @@ button, input, select, textarea { font: inherit; }
 .journey { display: grid; gap: 0.75rem; }
 .journey-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 1rem; }
 .stepper.journey-steps { grid-template-columns: repeat(9, minmax(0, 1fr)); }
+/* Label under the marker, so the connector joins markers and never crosses a label. */
+.stepper.journey-steps li { flex-direction: column; gap: 0.4rem; }
 .journey-steps .is-active strong { color: var(--foreground); }
 .journey-steps .is-active .step-marker { box-shadow: 0 0 0 3px var(--primary-subtle); }
 .journey-steps .is-held { color: var(--warning); }
