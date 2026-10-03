@@ -41,6 +41,26 @@ describe("ValidateConfigureExperience", () => {
     expect(mock.mock.calls[2][0]).toContain("/validation/resolutions/repair/approve");
   });
 
+  it("makes Complete setup the single dominant action once configured", async () => {
+    const configured: Snapshot = { ...review, workflow_status: "CONFIGURED", ready_for_onboarding: true, configuration: { ...review.configuration!, proposals: review.configuration!.proposals.map(p => ({ ...p, state: "APPLIED" })) } };
+    vi.spyOn(globalThis, "fetch").mockImplementationOnce(() => response(configured));
+    window.history.replaceState(null, "", "?session=session-vc");
+    render(<ValidateConfigureExperience />);
+    const complete = await screen.findByRole("link", { name: /Complete setup/ });
+    const primary = Array.from(document.querySelectorAll<HTMLElement>(".button")).filter(el => !["secondary", "ghost", "danger", "icon-button"].some(c => el.classList.contains(c)));
+    expect(primary).toEqual([complete]);
+    expect(screen.getByRole("button", { name: "Revalidate migration" })).toHaveClass("secondary");
+    expect(screen.getByText(/Revalidating reruns every check and discards the current configuration/)).toBeVisible();
+  });
+
+  it("keeps verification as the lead action while the books do not match", async () => {
+    vi.spyOn(globalThis, "fetch").mockImplementationOnce(() => response(blocked));
+    window.history.replaceState(null, "", "?session=session-vc");
+    render(<ValidateConfigureExperience />);
+    expect(await screen.findByRole("button", { name: "Revalidate migration" })).not.toHaveClass("secondary");
+    expect(screen.queryByText(/discards the current configuration/)).not.toBeInTheDocument();
+  });
+
   it("modifies high-risk configuration through a labeled, attributable review dialog", async () => {
     const modified = structuredClone(review);
     modified.configuration!.proposals[0].state = "MODIFIED";
