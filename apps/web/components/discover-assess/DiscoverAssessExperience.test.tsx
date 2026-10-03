@@ -114,6 +114,40 @@ describe("DiscoverAssessExperience", () => {
     expect(screen.getByRole("combobox", {name: "Synthetic business"})).toHaveValue("northstar-supplies");
   });
 
+  it.each([
+    ["CREATED", undefined],
+    ["DISCOVERED", "discovered"],
+  ])("resumes a %s migration in the same session instead of creating a new one", async (_status, found) => {
+    sessionStorage.clear();
+    window.history.replaceState(null, "", "?session=session-777");
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(jsonResponse({ id: "session-777", sample_company_id: "harbor-light-migrate-demo", activity: [], ...(found ? { discovery } : {}) }))
+      .mockResolvedValueOnce(jsonResponse(discovery))
+      .mockResolvedValueOnce(jsonResponse(assessment))
+      .mockResolvedValueOnce(jsonResponse(activity));
+    vi.stubGlobal("fetch", fetchMock);
+    render(<DiscoverAssessExperience />);
+
+    const resume = await screen.findByRole("button", { name: /Continue this assessment/ });
+    expect(resume).not.toHaveClass("secondary");
+    // Starting over stays available, but only as a separate, secondary action.
+    expect(screen.getByRole("button", { name: /Start a new assessment/ })).toHaveClass("secondary");
+    expect(screen.queryByRole("button", { name: /Assess this migration/ })).not.toBeInTheDocument();
+    fireEvent.click(resume);
+
+    expect(await screen.findByRole("heading", { name: "Migration readiness" })).toBeVisible();
+    const urls = fetchMock.mock.calls.map(call => String(call[0]));
+    expect(urls.slice(1)).toEqual([
+      expect.stringMatching(/\/v1\/migration-sessions\/session-777\/discovery$/),
+      expect.stringMatching(/\/v1\/migration-sessions\/session-777\/assessment$/),
+      expect.stringMatching(/\/v1\/migration-sessions\/session-777\/activity$/),
+    ]);
+    expect(urls.some(url => url.endsWith("/v1/migration-sessions"))).toBe(false);
+    expect(window.location.search).toBe("?session=session-777");
+    expect(sessionStorage.getItem("movebooks-migration-session")).toBe("session-777");
+    expect(screen.getByRole("link", { name: "Create my migration plan" })).toHaveAttribute("href", "/plan-map-approve?session=session-777");
+  });
+
   it("runs the API-backed journey and hands off to the governed planning workspace", async () => {
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(jsonResponse({ id: "session-001" }, 201))

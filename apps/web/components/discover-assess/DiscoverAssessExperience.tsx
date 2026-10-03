@@ -89,6 +89,33 @@ export function DiscoverAssessExperience() {
     loadExisting(saved);
   }, []);
 
+  // Discovery and assessment return the stored result when they have already run,
+  // so finishing an unfinished check never repeats or replaces earlier work.
+  const assess = async (id: string) => {
+    setPhase("discovering");
+    const discovered = await api<DiscoveryResult>(
+      `/v1/migration-sessions/${id}/discovery`,
+      { method: "POST" },
+    );
+    setDiscovery(discovered);
+    setPhase("assessing");
+    const assessed = await api<AssessmentResult>(
+      `/v1/migration-sessions/${id}/assessment`,
+      { method: "POST" },
+    );
+    setAssessment(assessed);
+    setActivity(
+      await api<AgentActivity[]>(`/v1/migration-sessions/${id}/activity`),
+    );
+    setPhase("complete");
+  };
+
+  const failed = (caught: unknown) => {
+    setError(caught instanceof Error ? caught.message : "The assessment could not be completed.");
+    setPhase("error");
+  };
+
+  // Creating a migration is always this explicit action; it never happens on resume.
   const startAssessment = async () => {
     setError(undefined);
     try {
@@ -100,25 +127,15 @@ export function DiscoverAssessExperience() {
       setSessionId(session.id);
       sessionStorage.setItem("movebooks-migration-session", session.id);
       window.history.replaceState(null, "", `?session=${encodeURIComponent(session.id)}`);
-      const discovered = await api<DiscoveryResult>(
-        `/v1/migration-sessions/${session.id}/discovery`,
-        { method: "POST" },
-      );
-      setDiscovery(discovered);
-      setPhase("assessing");
-      const assessed = await api<AssessmentResult>(
-        `/v1/migration-sessions/${session.id}/assessment`,
-        { method: "POST" },
-      );
-      setAssessment(assessed);
-      setActivity(
-        await api<AgentActivity[]>(`/v1/migration-sessions/${session.id}/activity`),
-      );
-      setPhase("complete");
-    } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "The assessment could not be completed.");
-      setPhase("error");
-    }
+      await assess(session.id);
+    } catch (caught) { failed(caught); }
+  };
+
+  // Continue the same migration (CREATED or DISCOVERED): no new session is created.
+  const resumeAssessment = async () => {
+    if (!sessionId) return;
+    setError(undefined);
+    try { await assess(sessionId); } catch (caught) { failed(caught); }
   };
 
   // Diagnostic event only. It never blocks or delays the navigation to planning.
@@ -136,6 +153,7 @@ export function DiscoverAssessExperience() {
   };
 
   const running = phase === "discovering" || phase === "assessing";
+  const resumable = !!sessionId && !assessment && !running;
   const blockers = discovery?.findings.filter((item) => item.category === "BLOCKER") ?? [];
   const warnings = discovery?.findings.filter((item) => item.category === "WARNING") ?? [];
   const issues = [...blockers, ...warnings];
@@ -305,10 +323,22 @@ export function DiscoverAssessExperience() {
         </>
       )}
 
-      <section aria-labelledby="sample-heading" className={assessment ? "mt-14" : "mt-8"}>
+      {resumable && (
+        <section className="panel mt-10 p-6" aria-labelledby="resume-heading">
+          <p className="eyebrow text-primary">Next step</p>
+          <h2 id="resume-heading" className="type-section mt-2">Finish your readiness check</h2>
+          <p className="mt-2 max-w-2xl leading-7 text-secondary">This migration has started, but its readiness check is not finished. Continue with the same migration; nothing new is created.</p>
+          <Button className="mt-4" onClick={resumeAssessment}>
+            Continue this assessment
+            <ArrowRight aria-hidden="true" size={17} />
+          </Button>
+        </section>
+      )}
+
+      <section aria-labelledby="sample-heading" className={assessment || resumable ? "mt-14" : "mt-8"}>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 id="sample-heading" className="type-section">{assessment ? "Assess another source" : "Choose a safe source"}</h2>
+            <h2 id="sample-heading" className="type-section">{assessment || resumable ? "Assess another source" : "Choose a safe source"}</h2>
             <p className="mt-2 text-secondary">No provider connection. Use samples or controlled, de-identified test exports only.</p>
           </div>
           {running && <LoadingState label={phase === "discovering" ? "Discovering source data" : "Calculating readiness"} />}
@@ -329,8 +359,8 @@ export function DiscoverAssessExperience() {
             <p className="mt-2 text-sm leading-6 text-secondary">
               {sample === "northstar-supplies" ? "A deliberately imperfect office-supply distributor with duplicates, a missing value, an invalid relationship, and an unsupported setting." : "One synthetic business from discovery to verified first use. You approve key decisions; a controlled migration exception demonstrates safe recovery."}
             </p>
-            <Button className="mt-6" variant={assessment ? "secondary" : "primary"} onClick={startAssessment} disabled={running}>
-              {phase === "complete" ? "Start a new assessment" : "Assess this migration"}
+            <Button className="mt-6" variant={assessment || sessionId ? "secondary" : "primary"} onClick={startAssessment} disabled={running}>
+              {assessment || sessionId ? "Start a new assessment" : "Assess this migration"}
               <ArrowRight aria-hidden="true" size={17} />
             </Button>
           </Card>
