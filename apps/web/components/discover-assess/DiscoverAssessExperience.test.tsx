@@ -97,7 +97,8 @@ describe("DiscoverAssessExperience", () => {
     expect(screen.getByRole("link", { name: "Try Your Data" })).toHaveAttribute("href", "/try-your-data");
     const journey = screen.getByRole("list", { name: "Migration journey" });
     expect(journey).toBeVisible();
-    expect(journey.querySelector('[aria-current="step"]')).toHaveTextContent("AssessCurrent");
+    expect(journey.querySelector('[aria-current="step"]')).toBeNull();
+    expect(screen.getByText("Progress not confirmed · nothing is assumed")).toBeVisible();
   });
 
   it("labels uploaded source honestly and retries failed reads without creating a sample", async () => {
