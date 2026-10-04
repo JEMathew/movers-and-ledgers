@@ -206,6 +206,15 @@ button, input, select, textarea { font: inherit; }
 .journey-steps .is-attention .step-marker { border-color: var(--warning); }
 .journey-steps .is-blocked, .journey-steps .is-blocked strong { color: var(--error); }
 .journey-steps .is-blocked .step-marker { border-color: var(--error); }
+/* Processing: a restrained ring turns around the current node only. Reduced motion shows the
+   same ring, still. Idle, completed, needs-attention and blocked steps never animate. */
+.journey-steps .is-processing .step-marker { position: relative; border-color: var(--primary); }
+.journey-steps .is-processing .step-marker::after { content: ""; position: absolute; inset: -4px; border-radius: 999px; border: 2px solid transparent; border-top-color: var(--primary); border-right-color: var(--primary); animation: mb-spin 1.1s linear infinite; }
+.journey-status { border: 1px solid var(--border); border-left: 3px solid var(--primary); border-radius: var(--radius-md); background: var(--surface); padding: 0.75rem 1rem; }
+.journey-stages { display: flex; flex-wrap: wrap; gap: 0.35rem 1.25rem; margin: 0.6rem 0 0; padding: 0; list-style: none; font-size: 0.8rem; color: var(--text-secondary); }
+.journey-stages li { display: inline-flex; align-items: center; gap: 0.4rem; }
+.journey-stages li[data-state="In progress"] { color: var(--foreground); font-weight: 600; }
+.journey-stages li[data-state="Done"] { color: var(--primary); }
 
 .alert { display: grid; grid-template-columns: auto 1fr; gap: 0.75rem; border: 1px solid currentColor; border-radius: var(--radius-md); padding: 0.85rem 1rem; font-size: 0.875rem; }
 .alert-success { background: var(--success-subtle); color: var(--success); }
@@ -244,26 +253,9 @@ button, input, select, textarea { font: inherit; }
 .trust-card { background: var(--marketing-dark); }
 .dark-section { background: var(--marketing-dark); color: var(--marketing-dark-foreground); }
 .dark-section .text-secondary { color: var(--marketing-dark-secondary); }
-.migration-orb {
-  position: relative; width: 7rem; height: 7rem; border: 1px solid var(--border);
-  border-radius: 999px; background: radial-gradient(circle at 35% 30%, var(--primary-subtle), var(--surface));
-  box-shadow: var(--shadow-md); overflow: hidden;
-}
-.migration-orb::before, .migration-orb::after, .migration-orb > span {
-  content: ""; position: absolute; inset: 1.15rem; border: 1px solid var(--primary);
-  border-radius: 999px; opacity: 0.55; animation: mb-orbit 8s linear infinite;
-}
-.migration-orb::after { inset: 2.25rem; background: var(--primary); opacity: 0.85; animation-duration: 5s; }
-.migration-orb > span { inset: 0.7rem 2.9rem; border-color: var(--agent); animation-direction: reverse; }
-.migration-orb.is-running { border-color: var(--primary); box-shadow: 0 0 0 0.35rem var(--primary-subtle), var(--shadow-md); }
-.migration-orb.is-running::before, .migration-orb.is-running::after { animation-duration: 1.8s; }
-.migration-orb.is-reasoning { border-color: var(--agent); background: radial-gradient(circle at 35% 30%, var(--agent-subtle), var(--surface)); }
-.migration-orb.is-reasoning::before, .migration-orb.is-reasoning > span { animation-duration: 3.2s; }
-.migration-orb.is-retrying::after { animation-duration: 1.2s; }
 .assessment-source-card { box-shadow: 0 0 0 1px var(--primary-subtle), var(--shadow-sm); }
 .finding-card { border-left: 3px solid var(--border-strong); }
 .assessment-summary { border-color: var(--primary); }
-@keyframes mb-orbit { to { transform: rotate(360deg); } }
 .mobile-nav > summary { list-style: none; }
 .account-trigger { width: min(18rem, calc(100vw - 6rem)); }
 .account-menu { position: relative; }
@@ -306,5 +298,6 @@ button, input, select, textarea { font: inherit; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .journey-steps .is-processing .step-marker::after { animation: none; border-color: var(--primary); }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
 }

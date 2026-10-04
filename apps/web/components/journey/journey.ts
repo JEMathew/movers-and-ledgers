@@ -37,6 +37,18 @@ export function journeyPosition({ selected, loading = false, failed = false, ste
   if (loading || failed) return null;
   return step ?? null;
 }
+/** Work MoveBooks is doing on the current step. Stage-based only: there is no measurable
+ *  percentage, so none is shown. Wording is business language, never internal machinery. */
+export type Processing = { action: string; title: string; detail: string; stages?: readonly string[]; stage?: number };
+export const PROCESSING = {
+  assess: { action: "Assessing…", title: "Assessing your migration readiness", detail: "Reviewing your books, identifying risks, and preparing recommendations.", stages: ["Reviewing your data", "Checking migration risks", "Preparing recommendations"] },
+  plan: { action: "Preparing…", title: "Preparing your migration plan", detail: "Defining what will move and highlighting decisions that need your review." },
+  map: { action: "Preparing…", title: "Preparing your mappings", detail: "Aligning accounts and business data for migration." },
+  migrate: { action: "Migrating…", title: "Migrating your approved data", detail: "Moving your records in safe, checkpointed batches." },
+  resolve: { action: "Resolving…", title: "Applying your decision", detail: "Recording your decision and preparing the next step." },
+  validate: { action: "Validating…", title: "Checking your migrated books", detail: "Confirming balances, records, and key business data." },
+} satisfies Record<string, Processing>;
+
 /** Why a position is unknown, for the journey heading. */
 export type UnknownProgress = "loading" | "unavailable";
 

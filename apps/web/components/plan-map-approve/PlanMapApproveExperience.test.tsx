@@ -147,6 +147,25 @@ describe("Plan → Map → Approve", () => {
     expect(fetch.mock.calls.every(([url]) => String(url).includes(id))).toBe(true);
   });
 
+  it("shows the Plan step working while the plan is prepared, then moves on", async () => {
+    let finish: (value: unknown) => void = () => undefined;
+    const fetch = read({ workflow_status: "ASSESSED", plan: null, mappings: [], activity: [] });
+    fetch.mockResolvedValueOnce(jsonResponse(snapshot({ workflow_status: "ASSESSED", plan: null, mappings: [], activity: [] })))
+      .mockReturnValueOnce(new Promise(resolvePlan => { finish = resolvePlan; }))
+      .mockResolvedValueOnce(jsonResponse(snapshot({ workflow_status: "PLANNED", mappings: [] })));
+    render(<PlanMapApproveExperience />);
+    const action = screen.getByRole("button", { name: "Create My Migration Plan" });
+    await waitFor(() => expect(action).toBeEnabled()); fireEvent.click(action);
+    const journey = screen.getByRole("list", { name: "Migration Journey" });
+    await waitFor(() => expect(journey.querySelector(".is-processing")).toHaveTextContent("PlanPreparing…"));
+    expect(screen.getByText("Preparing your migration plan")).toBeVisible();
+    expect(screen.getByText("Defining what will move and highlighting decisions that need your review.")).toBeVisible();
+    finish(jsonResponse(plan));
+    await screen.findByRole("heading", { name: "Your migration plan is ready." });
+    expect(journey.querySelector(".is-processing")).toBeNull();
+    expect(journey.querySelectorAll(".is-complete")).toHaveLength(2);
+  });
+
   it("shows source, destination, rationale, evidence and useful risk context", async () => {
     read(); render(<PlanMapApproveExperience />); await openMappings();
     expect(screen.getByLabelText("Northstar Retail mapping")).toHaveTextContent("Customer");

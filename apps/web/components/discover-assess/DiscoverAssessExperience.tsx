@@ -11,11 +11,11 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { Alert, LoadingState } from "@/components/ui/feedback";
+import { Alert } from "@/components/ui/feedback";
 import { Badge, Button, Card, Link, Panel } from "@/components/ui/primitives";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
 import { NextAction } from "@/components/journey/NextAction";
-import { assessHeldFor, journeyPosition } from "@/components/journey/journey";
+import { assessHeldFor, journeyPosition, PROCESSING } from "@/components/journey/journey";
 import { StatusBadge } from "@/components/ui/status";
 
 import type {
@@ -31,7 +31,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"
 import { authHeaders } from "@/lib/identity";
 import { ASSESSMENT_UNREACHABLE, reach } from "@/lib/reach";
 
-type Phase = "select" | "discovering" | "assessing" | "complete" | "error";
+type Phase = "select" | "discovering" | "assessing" | "recommending" | "complete" | "error";
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await reach(`${API_BASE}${path}`, {
@@ -110,6 +110,7 @@ export function DiscoverAssessExperience() {
       { method: "POST" },
     );
     setAssessment(assessed);
+    setPhase("recommending");
     setActivity(
       await api<AgentActivity[]>(`/v1/migration-sessions/${id}/activity`),
     );
@@ -159,7 +160,7 @@ export function DiscoverAssessExperience() {
     }).catch(() => undefined);
   };
 
-  const running = phase === "discovering" || phase === "assessing";
+  const running = phase === "discovering" || phase === "assessing" || phase === "recommending";
   const resumable = !!sessionId && !assessment && !running;
   const blockers = discovery?.findings.filter((item) => item.category === "BLOCKER") ?? [];
   const warnings = discovery?.findings.filter((item) => item.category === "WARNING") ?? [];
@@ -167,16 +168,13 @@ export function DiscoverAssessExperience() {
 
   return (
     <main className="shell min-h-[75vh] py-12 sm:py-16">
-      <header className="grid items-end gap-8 lg:grid-cols-[1fr_auto]">
+      <header>
         <div className="max-w-3xl">
           <p className="eyebrow text-primary">Assess</p>
           <h1 className="type-page mt-4">Assess My Migration</h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-secondary">
             See what can move, what needs attention, and what to address before migration.
           </p>
-        </div>
-        <div className="migration-orb" aria-hidden="true">
-          <span />
         </div>
       </header>
 
@@ -185,6 +183,7 @@ export function DiscoverAssessExperience() {
         current={journeyPosition({ selected: reading !== "none" || Boolean(sessionId), loading: reading === "loading", failed: reading === "failed", step: assessment ? 1 : 0 })}
         held={assessment ? assessHeldFor(assessment.blocker_count, assessment.warning_count) : undefined}
         unknown={reading === "loading" ? "loading" : "unavailable"}
+        processing={running ? { ...PROCESSING.assess, stage: ["discovering", "assessing", "recommending"].indexOf(phase) } : undefined}
       />
 
       {assessment && discovery && (
@@ -352,7 +351,6 @@ export function DiscoverAssessExperience() {
             <h2 id="sample-heading" className="type-section">{assessment || resumable ? "Check Another Business" : "Choose How to Check Your Books"}</h2>
             <p className="mt-2 text-secondary">MoveBooks never connects to your accounting provider. Use a sample business or a de-identified test export.</p>
           </div>
-          {running && <LoadingState label={phase === "discovering" ? "Reviewing your accounting data" : "Checking migration readiness"} />}
         </div>
         {discovery?.synthetic === false && <Alert tone="info" title="Current Workspace: Your Test Export"><p>The results above come from your test export, not the sample selector. Starting a sample creates a separate workspace.</p></Alert>}
         <div className="mt-5 grid gap-4 md:grid-cols-2">

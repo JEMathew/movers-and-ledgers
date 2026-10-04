@@ -15,7 +15,7 @@ import type { AgentActivity } from "@/components/discover-assess/types";
 import { Dialog } from "@/components/ui/dialog";
 import { Alert } from "@/components/ui/feedback";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
-import { journeyStepFor } from "@/components/journey/journey";
+import { journeyStepFor, PROCESSING } from "@/components/journey/journey";
 import { NextAction } from "@/components/journey/NextAction";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
@@ -54,6 +54,8 @@ export function MigrateResolveExperience() {
   const [session, setSession] = useState<DemoSession>();
   const [execution, setExecution] = useState<MigrationExecution>();
   const [busy, setBusy] = useState(false);
+  // What MoveBooks is doing right now, shown on the current journey step.
+  const [working, setWorking] = useState<"migrate" | "resolve">();
   const [error, setError] = useState<string>();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [activity, setActivity] = useState<AgentActivity[]>([]);
@@ -95,7 +97,7 @@ export function MigrateResolveExperience() {
 
   const start = async () => {
     if (!session) return;
-    setBusy(true);
+    setBusy(true); setWorking("migrate");
     setError(undefined);
     try {
       const started = await api<MigrationExecution>(
@@ -111,13 +113,13 @@ export function MigrateResolveExperience() {
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Migration could not start safely.");
     } finally {
-      setBusy(false);
+      setBusy(false); setWorking(undefined);
     }
   };
 
   const decide = async (approve: boolean) => {
     if (!session || !proposal) return;
-    setBusy(true);
+    setBusy(true); setWorking("resolve");
     setError(undefined);
     try {
       const updated = await api<MigrationExecution>(
@@ -136,13 +138,13 @@ export function MigrateResolveExperience() {
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "The decision was not recorded.");
     } finally {
-      setBusy(false);
+      setBusy(false); setWorking(undefined);
     }
   };
 
   const retry = async () => {
     if (!session) return;
-    setBusy(true);
+    setBusy(true); setWorking("migrate");
     setError(undefined);
     try {
       setExecution(
@@ -154,13 +156,13 @@ export function MigrateResolveExperience() {
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "The governed retry could not run.");
     } finally {
-      setBusy(false);
+      setBusy(false); setWorking(undefined);
     }
   };
 
   return (
     <main className="shell min-h-[75vh] py-12 sm:py-16">
-      <header className="grid items-end gap-8 lg:grid-cols-[1fr_auto]">
+      <header>
         <div className="max-w-3xl">
           <p className="eyebrow text-primary">Migrate → Resolve</p>
           <h1 ref={headingRef} tabIndex={-1} className="type-page mt-4">Execute visibly. Pause safely. Resolve with evidence.</h1>
@@ -169,15 +171,9 @@ export function MigrateResolveExperience() {
             remediation under your control. No accounting-provider writes occur in this Beta slice.
           </p>
         </div>
-        <div
-          className={`migration-orb ${busy ? "is-running" : resolving ? "is-reasoning" : retryPending ? "is-retrying" : ""}`}
-          aria-hidden="true"
-        >
-          <span />
-        </div>
       </header>
 
-      <MigrationJourney className="mt-10" current={!session ? null : complete ? 6 : paused ? 5 : execution ? 4 : journeyStepFor(session.workflow_status)} held={paused ? { index: 4, label: "Paused" } : undefined} />
+      <MigrationJourney className="mt-10" current={!session ? null : complete ? 6 : paused ? 5 : execution ? 4 : journeyStepFor(session.workflow_status)} held={paused ? { index: 4, label: "Paused" } : undefined} processing={working ? PROCESSING[working] : undefined} />
 
       {error && (
         <div className="mt-6">
