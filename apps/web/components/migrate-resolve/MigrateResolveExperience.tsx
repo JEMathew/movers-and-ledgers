@@ -165,7 +165,7 @@ export function MigrateResolveExperience() {
       <header>
         <div className="max-w-3xl">
           <p className="eyebrow text-primary">Migrate → Resolve</p>
-          <h1 ref={headingRef} tabIndex={-1} className="type-page mt-4">Execute visibly. Pause safely. Resolve with evidence.</h1>
+          <h1 ref={headingRef} tabIndex={-1} className="type-page mt-4">Execute Visibly. Pause Safely. Resolve with Evidence.</h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-secondary">
             Run an approved synthetic migration, inspect every batch, and keep consequential
             remediation under your control. No accounting-provider writes occur in this Beta slice.
@@ -188,7 +188,7 @@ export function MigrateResolveExperience() {
           <div className="flex items-start gap-4">
             <div className="activity-icon"><Database aria-hidden="true" size={19} /></div>
             <div>
-              <h2 className="type-section">Approved synthetic manifest</h2>
+              <h2 className="type-section">Approved Synthetic Manifest</h2>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-secondary">
                 Continue with your approved business session. Standalone demo loading replays prior
                 approvals in a new session; it is not evidence of completing the full journey.
@@ -219,7 +219,7 @@ export function MigrateResolveExperience() {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="eyebrow text-primary">Migration Agent</p>
-              <h2 id="progress-heading" className="type-section mt-2">Execution progress</h2>
+              <h2 id="progress-heading" className="type-section mt-2">Execution Progress</h2>
               <p className="mt-2 text-secondary">Current agent: {humanize(execution.current_agent)}</p>
             </div>
             <StatusBadge
@@ -281,7 +281,7 @@ export function MigrateResolveExperience() {
       {activity.length > 0 && (
         <section className="mt-12" aria-labelledby="activity-heading">
           <p className="eyebrow text-primary">Audit activity</p>
-          <h2 id="activity-heading" className="type-section mt-2">Evidence-backed actions</h2>
+          <h2 id="activity-heading" className="type-section mt-2">Evidence-Backed Actions</h2>
           <Panel className="mt-5">
             <ol>
               {activity.slice(-6).reverse().map((item) => (

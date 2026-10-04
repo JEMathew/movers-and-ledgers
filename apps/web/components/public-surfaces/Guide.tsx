@@ -70,7 +70,7 @@ export function Guide() {
         <Section id="what-is-movebooks">
           <p className="text-lg">MoveBooks AI guides a business through moving its accounting books to a new system — and proves the business can actually work afterward.</p>
           <p className="text-secondary">It is for business owners, bookkeepers and accountants who want a move they can inspect, not a black box. Agents do the coordination. Rules check the numbers. You make the consequential decisions.</p>
-          <Card className="flex items-start gap-3"><ShieldCheck aria-hidden="true" className="mt-1 shrink-0 text-primary" size={22}/><div><p className="font-bold">Outcome: Business Ready · Verified</p><p className="mt-1 text-sm text-secondary">Required checks pass and a first real task is completed with verified evidence. Formally: <strong>Verified First Productive Use</strong>. Moving records alone is never counted as success.</p></div></Card>
+          <Card className="flex items-start gap-3"><ShieldCheck aria-hidden="true" className="mt-1 shrink-0 text-primary" size={22}/><div><p className="font-bold">Outcome: Business Ready · Verified</p><p className="mt-1 text-sm text-secondary">Required checks pass and a first real task is completed with verified evidence. Moving records alone is never counted as success.</p></div></Card>
         </Section>
 
         <Section id="start-here">

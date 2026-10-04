@@ -85,6 +85,25 @@ describe("Plan-stage label casing", () => {
   });
 });
 
+describe("internal terms stay out of customer copy", () => {
+  it("never shows First Productive Use, FPU or first live cycle in UI source text", async () => {
+    const { readFileSync, readdirSync, statSync } = await import("node:fs");
+    const { join, resolve } = await import("node:path");
+    const root = resolve(__dirname, "..");
+    const files = (dir: string): string[] => readdirSync(dir).flatMap(name => {
+      const path = join(dir, name);
+      return statSync(path).isDirectory() ? files(path) : /\.tsx?$/.test(name) && !name.includes(".test.") ? [path] : [];
+    });
+    // Analytics contracts are internal and never rendered.
+    const sources = [...files(join(root, "app")), ...files(join(root, "components"))].filter(file => !file.endsWith("analytics.ts"));
+    const hits = sources.flatMap(file => readFileSync(file, "utf8").split("\n")
+      .filter(line => !line.trim().startsWith("//") && !line.trim().startsWith("*"))
+      .filter(line => /First Productive Use|first productive use|first live cycle|"[^"]*\bFPU\b[^"]*"|>[^<]*\bFPU\b/.test(line))
+      .map(line => `${file.replace(root, "")}: ${line.trim().slice(0, 80)}`));
+    expect(hits).toEqual([]);
+  });
+});
+
 describe("demo workspace entry", () => {
   it("explains the local demo workspace without identity jargon", async () => {
     render(await SignIn({ searchParams: Promise.resolve({ next: "/assess" }) }));

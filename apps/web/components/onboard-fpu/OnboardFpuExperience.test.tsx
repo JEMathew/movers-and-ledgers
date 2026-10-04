@@ -10,14 +10,21 @@ const response = (body: object, status=200) => Promise.resolve(new Response(JSON
 beforeAll(() => {HTMLDialogElement.prototype.showModal = function(){this.open=true;}; HTMLDialogElement.prototype.close = function(){this.open=false;};});
 beforeEach(() => {sessionStorage.clear(); window.history.replaceState(null,"","/onboard-fpu");});
 afterEach(() => vi.restoreAllMocks());
-async function load(value=initial) {vi.spyOn(globalThis,"fetch").mockImplementation(() => response(value)); render(<OnboardFpuExperience/>); fireEvent.click(screen.getByRole("button",{name:"Load synthetic scenario"})); await screen.findByText("Finish the essentials");}
+async function load(value=initial) {vi.spyOn(globalThis,"fetch").mockImplementation(() => response(value)); render(<OnboardFpuExperience/>); fireEvent.click(screen.getByRole("button",{name:"Load synthetic scenario"})); await screen.findByText("Finish the Essentials");}
 
 describe("governed onboarding and productive use", () => {
   it("shows scope and prevents preparation before prerequisites", async () => {
     await load();
     expect(screen.getByText(/No real provider writes/)).toBeInTheDocument();
     expect(screen.getByRole("button",{name:"Prepare invoice contract"})).toBeDisabled();
-    expect(screen.queryByRole("heading",{name:"VERIFIED FIRST PRODUCTIVE USE"})).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading",{name:"Business Ready · Verified"})).not.toBeInTheDocument();
+  });
+  it("presents the Start Using stage in business language", async () => {
+    await load();
+    expect(screen.getByRole("heading", { level: 1, name: "Start Using Your Books" })).toBeVisible();
+    expect(screen.getByText("Complete your first real task in your migrated books.")).toBeVisible();
+    expect(screen.getByText("Set Up → Start Using")).toBeVisible();
+    expect(document.body).not.toHaveTextContent(/First Productive Use|\bFPU\b|first live cycle/i);
   });
   it("attributes modified setup and sends only supported decision inputs", async () => {
     await load();
@@ -36,14 +43,14 @@ describe("governed onboarding and productive use", () => {
     fireEvent.click(screen.getByRole("button",{name:"Confirm approve"}));
     expect(await screen.findByRole("alert")).toHaveTextContent("Evidence changed");
     expect(screen.getByRole("dialog")).toBeInTheDocument();
-    expect(screen.queryByRole("heading",{name:"VERIFIED FIRST PRODUCTIVE USE"})).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading",{name:"Business Ready · Verified"})).not.toBeInTheDocument();
   });
   it("resumes a posted checkpoint with the original key and renders verified evidence only", async () => {
     const posted = {...task,checkpoint:"POSTED" as const,attempts:1,idempotency_key:"original",decisions:[{action:"approve",actor:"demo-user"}]};
     await load({...prepared,onboarding:{faults:[],fpu:posted}});
     vi.mocked(fetch).mockImplementationOnce(() => response({...prepared,verified_fpu:true,workflow_status:"VERIFIED_FIRST_PRODUCTIVE_USE",effective_status:"VERIFIED_FIRST_PRODUCTIVE_USE",onboarding:{faults:[],fpu:{...posted,checkpoint:"VERIFIED",posted_by:"demo-user",invoice:{total:"107.25"},checks:[{id:"posting",passed:true,explanation:"Matched",evidence:["invoice:hash"]}]}}}));
     fireEvent.click(screen.getByRole("button",{name:"Resume verification"}));
-    await screen.findByRole("heading",{name:"VERIFIED FIRST PRODUCTIVE USE"});
+    await screen.findByRole("heading",{name:"Business Ready · Verified"});
     expect(screen.getByRole("link",{name:"Review Verified Evidence"}).getAttribute("href")).toMatch(/^\/trust\?session=/);
     expect(screen.getByRole("list",{name:"Migration Journey"})).toHaveTextContent("Start UsingCompleted");
     expect((vi.mocked(fetch).mock.calls.at(-1)![1]!.headers as Record<string,string>)["Idempotency-Key"]).toBe("original");

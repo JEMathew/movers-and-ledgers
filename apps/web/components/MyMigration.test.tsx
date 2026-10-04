@@ -38,7 +38,9 @@ describe("My Migration", () => {
     // A paused migration is never shown as completed.
     expect(steps()[4]).not.toHaveClass("is-complete");
     expect(screen.getByRole("heading", { name: "Review Migration Issues" })).toBeVisible();
-    expect(screen.getByText("MB-DUPLICATE_CUSTOMER: Customer needs review")).toBeVisible();
+    // A plain title on the primary screen; the internal code stays in evidence only.
+    expect(screen.getByText("Possible duplicate customer")).toBeVisible();
+    expect(document.body).not.toHaveTextContent(/MB-DUPLICATE_CUSTOMER|DUPLICATE_CUSTOMER/);
     expect(screen.getByRole("link", { name: "Review Evidence and Audit History" })).toHaveAttribute("href", `/trust?session=${id}`);
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch.mock.calls[0][1]?.method).toBeUndefined();
@@ -126,7 +128,7 @@ describe("My Migration", () => {
     expect(screen.getByText(/You stay in control of important migration decisions\./)).toBeVisible();
     for (const name of ["Where Am I?", "What Needs My Attention?", "What Comes Next?"]) expect(screen.getByRole("heading", { name })).toBeVisible();
     expect(screen.getByText("What Do I Do Next?")).toBeVisible();
-    expect(screen.getByText("Check blocked: A/R totals")).toBeVisible();
+    expect(screen.getByText("Check didn't pass: A/R totals")).toBeVisible();
     // A blocked current step says so; later steps are part of this product, not a roadmap.
     expect(steps()[6]).toHaveTextContent("ValidateBlocked");
     expect(steps()[6]).toHaveClass("is-blocked");

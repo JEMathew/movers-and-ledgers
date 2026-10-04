@@ -22,7 +22,7 @@ describe("User Guide", () => {
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     for (const phase of phases) expect(screen.getByRole("link", { name: `Learn more about ${phase.name}` })).toHaveAttribute("href", `/learn#${phase.topic}`);
     expect(screen.getByText("Outcome: Business Ready · Verified")).toBeVisible();
-    expect(screen.getByText("Verified First Productive Use")).toBeVisible();
+    expect(document.body).not.toHaveTextContent(/First Productive Use|\bFPU\b|first live cycle/i);
   });
   it("links only to existing product routes", () => {
     render(<Guide/>);

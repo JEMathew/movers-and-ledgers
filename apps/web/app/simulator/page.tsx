@@ -4,7 +4,7 @@ import { Surface } from "@/components/public-surfaces/Surface";
 import { sampleEntry } from "@/components/public-surfaces/content";
 export default function Simulator() {
   return <Surface eyebrow="Explore" title="Try a migration with a sample business." intro="Harbor Light Books is a synthetic business with accounts, customers, suppliers, products and transactions. Experience the real Beta workflow—not a parallel mock."><div className="grid gap-5 md:grid-cols-2">{[
-    ["What you will experience", "Assess → Plan → Map → Approve → Migrate → Resolve → Validate → Set Up → Start Using, ending in Verified First Productive Use."],
+    ["What you will experience", "Assess → Plan → Map → Approve → Migrate → Resolve → Validate → Set Up → Start Using, ending when your first real task is verified."],
     ["What is synthetic", "Business records, source and target environments, and invoice posting are synthetic. Cloud mode uses real Google sign-in and durable synthetic workspaces; local demo sessions can expire on restart. No real accounting provider is contacted."],
     ["What you decide", "Review mappings, approve or reject a controlled duplicate-customer remedy, and govern configuration, onboarding and the first invoice. We never pre-approve these steps on entry."],
     ["What success looks like", "Business Ready · Verified in the synthetic environment: required checks pass and an approved first invoice has verified accounting evidence. Moving records alone is not completion."],
