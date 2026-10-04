@@ -314,3 +314,108 @@ def test_messages_never_echo_free_text_values(template):
     report, _ = check(files)
     assert report["status"] == "BLOCKED"
     assert hostile not in json.dumps(report)
+
+
+def config_with(template, edit_config):
+    config = json.loads(template["configuration.json"])
+    edit_config(config)
+    # json.dumps writes non-ASCII characters as \uXXXX escapes, exactly as an attacker would.
+    return {**template, "configuration.json": json.dumps(config).encode()}
+
+
+@pytest.mark.parametrize(
+    ("label", "edit_config", "path"),
+    [
+        (
+            "escaped NUL",
+            lambda c: c["company"].update(legal_name="Harbor\u0000Books"),
+            "company.legal_name",
+        ),
+        (
+            "escaped RTL override",
+            lambda c: c["company"].update(display_name="Harbor ‮skooB"),
+            "company.display_name",
+        ),
+        (
+            "escaped directional isolate in an array",
+            lambda c: c["taxes"][0].update(jurisdiction="CA⁦"),
+            "taxes[0].jurisdiction",
+        ),
+        (
+            "nested object value",
+            lambda c: c["settings"].update(payment_terms="NET_30‮"),
+            "settings.payment_terms",
+        ),
+        (
+            "key with a prohibited character",
+            lambda c: c["company"].update({"id‮": "x"}),
+            "company.(key)",
+        ),
+    ],
+)
+def test_escaped_hidden_characters_in_json_are_rejected(template, label, edit_config, path):
+    files = config_with(template, edit_config)
+    assert b"\\u" in files["configuration.json"], label  # stored escaped, not literal
+    issue = only(files, "HIDDEN_CHARACTERS")
+    assert issue["file"] == "configuration.json" and issue["key"] == path
+    assert issue["message"] == (
+        "This file contains hidden or unsupported characters. Remove them and try again."
+    )
+    # The finding names a safe path, never the raw value.
+    assert "skooB" not in json.dumps(issue)
+
+
+def test_escaped_and_literal_hidden_characters_are_treated_alike(template):
+    escaped = config_with(template, lambda c: c["company"].update(display_name="A‮B"))
+    literal = {
+        **template,
+        "configuration.json": escaped["configuration.json"]
+        .decode()
+        .replace("\\u202e", "‮")
+        .encode(),
+    }
+    assert [i["code"] for i in blockers(escaped)] == [i["code"] for i in blockers(literal)]
+    assert blockers(escaped)[0]["code"] == "HIDDEN_CHARACTERS"
+
+
+def test_escaped_hidden_characters_in_metadata_and_journal_entries(template):
+    metadata = {**template, "metadata.json": b'{"description": "Reveal\\u202e"}'}
+    assert only(metadata, "HIDDEN_CHARACTERS")["key"] == "description"
+    entries = edit(
+        template,
+        "transactions.csv",
+        '""account_id"": ""account-ar""',
+        '""account_id"": ""account-ar\\u0000""',
+    )
+    issue = only(entries, "HIDDEN_CHARACTERS")
+    assert (issue["file"], issue["column"]) == ("transactions.csv", "entries")
+
+
+def test_ordinary_escaped_characters_remain_valid(template):
+    files = config_with(template, lambda c: c["company"].update(display_name="Café Books\n\tLtd"))
+    assert b"\\u00e9" in files["configuration.json"]
+    report, source = check(files)
+    assert report["status"] == "READY" and source["company"]["display_name"] == "Café Books\n\tLtd"
+
+
+def test_escaped_hidden_characters_never_become_a_workspace(template):
+    import base64
+
+    from movebooks_api.discover_assess.service import discover_assess_service as service
+    from movebooks_api.intake_api import tickets
+
+    tickets.clear()
+    service.repository.clear()
+    client = TestClient(app)
+    files = config_with(template, lambda c: c["company"].update(display_name="A‮B"))
+    body = {
+        "files": [{"name": n, "content": base64.b64encode(d).decode()} for n, d in files.items()]
+    }
+    report = client.post("/v1/intake/validate", headers=AUTH, json=body).json()
+    assert report["status"] == "BLOCKED"
+    created = client.post(
+        f"/v1/intake/{report['package_id']}/workspace", headers=AUTH, json={"reviewed": True}
+    )
+    assert created.status_code == 409
+    assert not [s for s in getattr(service.repository, "_sessions", {}).values()]
+    tickets.clear()

@@ -93,7 +93,37 @@ SIGNATURES = (
 )
 # C0/C1 controls (except tab and line breaks), DEL and bidirectional overrides can hide or
 # reorder text on screen; accounting text never needs them.
-HIDDEN = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f‪-‮⁦-⁩]")
+HIDDEN = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f\u202a-\u202e\u2066-\u2069]")
+HIDDEN_MESSAGE = "This file contains hidden or unsupported characters. Remove them and try again."
+# JSON keys shown in finding paths; anything else is named "(key)" rather than echoed.
+SAFE_KEY = re.compile(r"[A-Za-z0-9_-]{1,64}\Z")
+
+
+def hidden_path(value, path=""):
+    """Safe path of the first decoded string or key holding a hidden character, else None.
+
+    JSON escapes such as \\u0000, \\u202e or \\u2066 only become characters when decoded, so
+    the raw-text check cannot see them; decoded values and keys get the same rule.
+    """
+    if isinstance(value, str):
+        return (path or "(value)") if HIDDEN.search(value) else None
+    if isinstance(value, list):
+        for index, item in enumerate(value):
+            found = hidden_path(item, f"{path}[{index}]")
+            if found:
+                return found
+    if isinstance(value, dict):
+        for key, item in value.items():
+            shown = key if isinstance(key, str) and SAFE_KEY.fullmatch(key) else "(key)"
+            child = f"{path}.{shown}" if path else shown
+            if isinstance(key, str) and HIDDEN.search(key):
+                return child
+            found = hidden_path(item, child)
+            if found:
+                return found
+    return None
+
+
 SINGULAR = {
     "customer_id": "customer",
     "vendor_id": "vendor",
@@ -249,7 +279,7 @@ def text_of(name, data):
         # Same rule as before (C0/C1 controls, DEL, bidirectional overrides); plain wording.
         raise Finding(
             "HIDDEN_CHARACTERS",
-            "This file contains hidden or unsupported characters. Remove them and try again.",
+            HIDDEN_MESSAGE,
             f"Look at line {line} of {name}, or re-export the file as plain UTF-8 text.",
         )
     return text
@@ -523,6 +553,14 @@ def validate_package(files):
             text = text_of(name, data)
             if name.endswith(".json"):
                 value = parse_json(name, text)
+                where = hidden_path(value)
+                if where:
+                    raise Finding(
+                        "HIDDEN_CHARACTERS",
+                        HIDDEN_MESSAGE,
+                        f"Look at {where} in {name}, including escaped characters such as \\u202e.",
+                        key=where,
+                    )
                 if name == "metadata.json":
                     ignored = validate_metadata(value)
                     issue(
@@ -783,6 +821,13 @@ def validate_row(entity, row):
                 f"Write entries {SAMPLE}.",
                 column="entries",
             ) from error
+        if hidden_path(entries):
+            raise Finding(
+                "HIDDEN_CHARACTERS",
+                HIDDEN_MESSAGE,
+                "Remove hidden or escaped control characters from the entries value.",
+                column="entries",
+            )
         if not isinstance(entries, list) or not 2 <= len(entries) <= 100:
             raise Finding(
                 "INVALID_VALUE",
