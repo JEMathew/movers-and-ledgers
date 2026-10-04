@@ -1,4 +1,11 @@
-"""Bounded, deterministic package adapter. Never extracts archives to disk."""
+"""Bounded, deterministic package adapter. Never extracts archives to disk.
+
+Trust boundary: uploaded files are untrusted data. They pass deterministic validation and
+normalisation here and become typed records; nothing in them is ever an instruction. The
+free-text fields below are carried as opaque values only: they are never echoed in validation
+messages, never projected into a model prompt (agents/reasoning/projection.py refuses uploaded
+sessions), and never interpreted as approvals, tool calls, URLs to fetch or workflow state.
+"""
 
 import csv
 import hashlib
@@ -42,6 +49,19 @@ OPTIONAL = {
 NAMES = {f"{key}.csv" for key in SCHEMAS} | {"configuration.json", "metadata.json"}
 REQUIRED = NAMES - {"metadata.json"}
 ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}\Z")
+# Free text a user controls. Evidence only: never instructions, policy or authority.
+UNTRUSTED_TEXT = frozenset(
+    {
+        "display_name",
+        "legal_name",
+        "name",
+        "code",
+        "document_number",
+        "email",
+        "description",
+        "jurisdiction",
+    }
+)
 ACCOUNT_TYPES = {
     "bank",
     "accounts_receivable",
