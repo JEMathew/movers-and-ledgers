@@ -10,8 +10,8 @@ describe("design-system accessibility contracts", () => {
   });
 
   it("exposes numeric progress to assistive technology", () => {
-    render(<Progress label="Migration readiness" value={68} />);
-    expect(screen.getByRole("progressbar", { name: "Migration readiness" })).toHaveAttribute("aria-valuenow", "68");
+    render(<Progress label="Migration Readiness" value={68} />);
+    expect(screen.getByRole("progressbar", { name: "Migration Readiness" })).toHaveAttribute("aria-valuenow", "68");
   });
 
   it("gives empty states an explicit heading", () => {

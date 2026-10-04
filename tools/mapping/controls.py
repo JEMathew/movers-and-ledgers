@@ -234,6 +234,23 @@ def enforce_approval_policy(
     )
 
 
+def supported_targets(proposal: MappingProposal, source_record: dict[str, Any]) -> list[str]:
+    """Recommended and alternative destinations that a changed decision would accept.
+
+    Uses validate_mapping_compatibility, the same rules apply_mapping_decision enforces, so
+    no listed destination can be refused by policy (for example a tax target that does not
+    match the declared jurisdiction).
+    """
+    candidates = dict.fromkeys([proposal.recommended_target, *proposal.alternatives])
+    return [
+        target
+        for target in candidates
+        if not validate_mapping_compatibility(
+            proposal.model_copy(update={"selected_target": target}), source_record
+        )
+    ]
+
+
 def apply_mapping_decision(
     proposal: MappingProposal,
     decision: MappingDecision,

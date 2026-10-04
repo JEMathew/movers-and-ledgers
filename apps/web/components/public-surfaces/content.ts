@@ -15,13 +15,13 @@ export const topics = [
   { id: "evidence", title: "What evidence means", body: "Evidence connects a finding to source facts, a rule result or an attributable decision. Explanations help you understand the evidence; they cannot replace it.", question: "Can I trace this recommendation to a fact or check?", phase: 0 },
   { id: "financial-truth", title: "Why financial truth is deterministic", body: "The same inputs and versioned rules must produce the same accounting result. Models may explain or suggest; exact calculations, reconciliation and approval controls decide whether work can proceed.", question: "Is this a suggestion or a verified result?", phase: 3 },
   { id: "recovery", title: "What happens when migration fails", body: "Work pauses at a safe boundary, preserving completed checkpoints and failure evidence. Review the proposed remedy. Consequential recovery needs your approval; retry only when the workflow permits it.", question: "What completed, what failed, and what will retry do?", phase: 2 },
-  { id: "business-ready", title: "What Business Ready · Verified means", body: "Required data, setup, access and onboarding checks pass, then an authorized user completes an agreed task with verified evidence. In this Beta that is a synthetic invoice—not proof of production readiness. The formal outcome is Verified First Productive Use.", question: "Has the productive task been verified, not merely posted?", phase: 4 },
+  { id: "business-ready", title: "What Business Ready · Verified means", body: "Required data, setup, access and onboarding checks pass, then an authorized user completes an agreed task with verified evidence. In this Beta that is a synthetic invoice—not proof of production readiness.", question: "Has the productive task been verified, not merely posted?", phase: 4 },
 ] as const;
 // Signed-out navigation. Route paths are unchanged for compatibility; labels are customer-facing.
-export const publicLinks = [["Explore", "/simulator"], ["How it works", "/guide"], ["Learn", "/learn"], ["Play", "/play"], ["Trust", "/trust"], ["Support", "/support"]] as const;
+export const publicLinks = [["Explore", "/simulator"], ["How It Works", "/guide"], ["Learn", "/learn"], ["Play", "/play"], ["Trust", "/trust"], ["Support", "/support"]] as const;
 // Signed-in navigation replaces the public marketing links. Account is the identity menu itself.
 export const memberLinks = [["My Migration", "/workspace"], ["Explore", "/simulator"], ["Learn", "/learn"], ["Help", "/support"]] as const;
-export const footerLinks = [["How it works", "/guide"], ["Support", "/support"], ["Feedback", "/feedback"], ["Beta limitations", "/trust#beta-limitations"]] as const;
+export const footerLinks = [["How It Works", "/guide"], ["Support", "/support"], ["Feedback", "/feedback"], ["Beta Limitations", "/trust#beta-limitations"]] as const;
 export const startMigrationHref = "/workspace";
 export const sampleEntry = "/assess?sample=harbor-light-migrate-demo";
 export const scope = "Synthetic Data · Public Reference · Beta. No live provider migration or production readiness claim.";

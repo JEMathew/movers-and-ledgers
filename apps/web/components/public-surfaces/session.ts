@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { authHeaders } from "@/lib/identity";
+import { pendingInReview } from "@/components/journey/journey";
 
 /** The migration the customer is working on, carried across navigation within the tab. */
 export const SELECTED_SESSION_KEY = "movebooks-migration-session";
@@ -19,10 +20,29 @@ const list = (value: unknown): RecordData[] => Array.isArray(value) ? value.map(
 const text = (value: unknown) => typeof value === "string" ? value.slice(0, 400) : "";
 const refs = (value: unknown) => Array.isArray(value) ? value.filter((x): x is string => typeof x === "string").slice(0, 12).map(x => x.slice(0, 160)) : [];
 export type TraceRow = { id: string; title: string; kind: string; status: string; time: string; actor: string; tool: string; evidence: string[] };
-export type SessionView = { id: string; status: string; phase: number; sourceKind: string; activity: TraceRow[]; decisions: TraceRow[]; checks: TraceRow[]; blockers: string[]; events: TraceRow[]; readinessIssues: number; migrationIssues: number; verificationIssues: number };
+export type SessionView = { id: string; status: string; phase: number; sourceKind: string; activity: TraceRow[]; decisions: TraceRow[]; checks: TraceRow[]; blockers: string[]; events: TraceRow[]; readinessIssues: number; migrationIssues: number; verificationIssues: number; mappingIssues: number | null; attention: Attention[] };
+/** Something needing the customer: a plain title for primary screens, internal detail for evidence. */
+export type Attention = { title: string; evidence: string };
 
 // Explicit presentation projection. Never stringify a session, prompt, payload,
 // model trace, invoice, selected value or raw reconciliation amount into the UI.
+/** Plain titles for migration failure codes (MB-<kind>). The code itself stays in evidence. */
+const MIGRATION_ISSUES: Record<string, string> = {
+  DUPLICATE_CUSTOMER: "Possible duplicate customer",
+  VALIDATION_DISCREPANCY: "Migrated records don't match the source",
+  MISSING_REFERENCE: "A linked record is missing",
+  UNSUPPORTED_TAX_CODE: "Unsupported tax code",
+  INVALID_CONFIGURATION_DEPENDENCY: "A setting depends on missing setup",
+  TRANSIENT_EXECUTION: "Temporary interruption during migration",
+  RETRYABLE_BATCH: "A batch needs to be retried",
+  NON_RETRYABLE_BLOCKED: "A batch can't continue without your review",
+  RETRY_LIMIT: "Retry limit reached",
+  VALIDATION_PAYLOAD: "A migrated record differs from the source",
+};
+export function migrationIssueTitle(code: string) {
+  return MIGRATION_ISSUES[code.replace(/^MB-/, "").replaceAll("-", "_")] ?? "A migration issue needs your review";
+}
+
 export function projectSession(raw: unknown, expectedId: string): SessionView {
   const s = object(raw);
   const status = text(s.workflow_status);
@@ -34,21 +54,24 @@ export function projectSession(raw: unknown, expectedId: string): SessionView {
   const checks = list(report?.checks).map(c => ({ id: text(c.id), title: text(c.label), kind: "Deterministic verification", status: text(c.status), time: text(report?.created_at), actor: "Validation rules", tool: "", evidence: refs(c.evidence) }));
   const fpu = object(object(s.onboarding).fpu);
   checks.push(...list(fpu.checks).map(c => ({ id: text(c.id), title: text(c.id).replaceAll("_", " "), kind: "Deterministic verification", status: c.passed === true ? "VERIFIED" : "BLOCKED", time: text(fpu.verified_at), actor: "First productive use rules", tool: "", evidence: refs(c.evidence) })));
-  const readiness = list(object(s.discovery).findings).filter(f => f.category === "BLOCKER").map(f => `Discovery finding: ${text(f.title)}`);
-  const migration = [
-    ...list(object(s.execution).failures).filter(f => f.resolved !== true).map(f => `${text(f.code)}: ${text(f.summary)}`),
-    ...list(object(s.execution).resolutions).filter(r => r.state === "ESCALATED").map(r => `Escalation: ${text(r.escalation_rule)}`),
+  // Each item has a plain title for primary screens and the internal detail (codes, states)
+  // kept as evidence for the Trust page and support.
+  const readiness: Attention[] = list(object(s.discovery).findings).filter(f => f.category === "BLOCKER").map(f => ({ title: `Readiness blocker: ${text(f.title)}`, evidence: `Discovery finding: ${text(f.title)}` }));
+  const migration: Attention[] = [
+    ...list(object(s.execution).failures).filter(f => f.resolved !== true).map(f => ({ title: migrationIssueTitle(text(f.code)), evidence: `${text(f.code)}: ${text(f.summary)}` })),
+    ...list(object(s.execution).resolutions).filter(r => r.state === "ESCALATED").map(r => ({ title: "A proposed fix needs your decision", evidence: `Escalation: ${text(r.escalation_rule)}` })),
   ];
   const verificationIssues = list(report?.checks).filter(c => c.status === "BLOCKED").length;
-  const blockers = [
+  const attention: Attention[] = [
     ...readiness,
     ...migration,
-    ...checks.filter(c => c.status === "BLOCKED").map(c => `Check blocked: ${c.title}`),
-    ...list(object(s.configuration).proposals).filter(p => ["REJECTED", "BLOCKED", "REVIEW_REQUIRED"].includes(text(p.state))).map(p => `Configuration ${text(p.state)}: ${text(p.label)}`),
-    ...list(object(s.onboarding).tasks).filter(t => t.status !== "COMPLETED").map(t => `Onboarding ${text(t.status)}: ${text(t.label)}`),
+    ...checks.filter(c => c.status === "BLOCKED").map(c => ({ title: `Check didn't pass: ${c.title}`, evidence: `Check blocked: ${c.title}` })),
+    ...list(object(s.configuration).proposals).filter(p => ["REJECTED", "BLOCKED", "REVIEW_REQUIRED"].includes(text(p.state))).map(p => ({ title: `Setting needs your review: ${text(p.label)}`, evidence: `Configuration ${text(p.state)}: ${text(p.label)}` })),
+    ...list(object(s.onboarding).tasks).filter(t => t.status !== "COMPLETED").map(t => ({ title: `Setup task to finish: ${text(t.label)}`, evidence: `Onboarding ${text(t.status)}: ${text(t.label)}` })),
   ];
+  const blockers = attention.map(item => item.title);
   const events = list(s.events).map(e => ({ id: text(e.id), title: text(e.name).replaceAll("_", " "), kind: "Lifecycle audit reference", status: "Recorded", time: text(e.occurred_at), actor: "Workflow", tool: "", evidence: [] }));
-  return { id: expectedId, status, phase, sourceKind: s.source_kind === "user_upload" ? "User-provided data · synthetic target" : "Synthetic sample · synthetic target", activity, decisions, checks, blockers, events, readinessIssues: readiness.length, migrationIssues: migration.length, verificationIssues };
+  return { id: expectedId, status, phase, sourceKind: s.source_kind === "user_upload" ? "User-provided data · synthetic target" : "Synthetic sample · synthetic target", activity, decisions, checks, blockers, events, readinessIssues: readiness.length, migrationIssues: migration.length, verificationIssues, mappingIssues: pendingInReview(s.mapping_review), attention };
 }
 
 export function useSessionView() {

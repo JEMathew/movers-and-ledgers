@@ -21,7 +21,7 @@ describe("ValidateConfigureExperience", () => {
     render(<ValidateConfigureExperience />);
     expect(screen.getByText(/No production readiness claim/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", {name: "Load discrepancy scenario"}));
-    fireEvent.click(await screen.findByRole("button", {name: "Verify my books"}));
+    fireEvent.click(await screen.findByRole("button", {name: "Verify My Books"}));
     expect(await screen.findByText("-20.00")).toBeInTheDocument();
     expect(screen.getByRole("button", {name: "Continue to configuration"})).toBeDisabled();
     expect(mock).toHaveBeenCalledTimes(2);
@@ -34,22 +34,22 @@ describe("ValidateConfigureExperience", () => {
     fireEvent.click(screen.getByRole("button", {name: "Load discrepancy scenario"}));
     fireEvent.click(await screen.findByRole("button", {name: "Review repair: invoices:invoice-001"}));
     expect(await screen.findByRole("dialog", {name: "Approve synthetic record restoration?"})).toBeInTheDocument();
-    expect(screen.getByRole("button", {name: "Revalidate migration"})).toBeDisabled();
+    expect(screen.getByRole("button", {name: "Revalidate Migration"})).toBeDisabled();
     fireEvent.click(screen.getByRole("button", {name: "Approve restoration"}));
-    await waitFor(() => expect(screen.getByRole("button", {name: "Revalidate migration"})).toBeEnabled());
+    await waitFor(() => expect(screen.getByRole("button", {name: "Revalidate Migration"})).toBeEnabled());
     expect(screen.getByRole("button", {name: "Continue to configuration"})).toBeDisabled();
     expect(mock.mock.calls[2][0]).toContain("/validation/resolutions/repair/approve");
   });
 
-  it("makes Complete setup the single dominant action once configured", async () => {
+  it("makes Complete Setup the single dominant action once configured", async () => {
     const configured: Snapshot = { ...review, workflow_status: "CONFIGURED", ready_for_onboarding: true, configuration: { ...review.configuration!, proposals: review.configuration!.proposals.map(p => ({ ...p, state: "APPLIED" })) } };
     vi.spyOn(globalThis, "fetch").mockImplementationOnce(() => response(configured));
     window.history.replaceState(null, "", "?session=session-vc");
     render(<ValidateConfigureExperience />);
-    const complete = await screen.findByRole("link", { name: /Complete setup/ });
+    const complete = await screen.findByRole("link", { name: /Complete Setup/ });
     const primary = Array.from(document.querySelectorAll<HTMLElement>(".button")).filter(el => !["secondary", "ghost", "danger", "icon-button"].some(c => el.classList.contains(c)));
     expect(primary).toEqual([complete]);
-    expect(screen.getByRole("button", { name: "Revalidate migration" })).toHaveClass("secondary");
+    expect(screen.getByRole("button", { name: "Revalidate Migration" })).toHaveClass("secondary");
     expect(screen.getByText(/Revalidating reruns every check and discards the current configuration/)).toBeVisible();
   });
 
@@ -57,7 +57,7 @@ describe("ValidateConfigureExperience", () => {
     vi.spyOn(globalThis, "fetch").mockImplementationOnce(() => response(blocked));
     window.history.replaceState(null, "", "?session=session-vc");
     render(<ValidateConfigureExperience />);
-    expect(await screen.findByRole("button", { name: "Revalidate migration" })).not.toHaveClass("secondary");
+    expect(await screen.findByRole("button", { name: "Revalidate Migration" })).not.toHaveClass("secondary");
     expect(screen.queryByText(/discards the current configuration/)).not.toBeInTheDocument();
   });
 
@@ -75,6 +75,45 @@ describe("ValidateConfigureExperience", () => {
     await screen.findByText("MODIFIED");
     expect(JSON.parse(mock.mock.calls[1][1]!.body as string)).toEqual({action: "modify", value: "FIFO", comment: "Reviewed synthetic policy"});
     expect(screen.getByRole("button", {name: "Apply reviewed configuration"})).toBeEnabled();
+  });
+
+  it("shows an approved setting as Approved and never sends the same approval twice", async () => {
+    const approved = structuredClone(review);
+    Object.assign(approved.configuration!.proposals[0], { state: "APPROVED", decision: "approve", decided_by: "demo-user" });
+    const mock = vi.spyOn(globalThis, "fetch").mockImplementationOnce(() => response(review)).mockImplementationOnce(() => response(approved));
+    render(<ValidateConfigureExperience />);
+    fireEvent.click(screen.getByRole("button", {name: "Load reconciled scenario"}));
+    // REVIEW_REQUIRED: approval is actionable.
+    fireEvent.click(await screen.findByRole("button", {name: "Approve inventory valuation"}));
+    fireEvent.click(screen.getByRole("button", {name: "Confirm approve"}));
+    // APPROVED: the identical approval is no longer offered; the setting reads Approved.
+    const done = await screen.findByRole("button", {name: "Inventory valuation approved"});
+    expect(done).toBeDisabled();
+    expect(done).toHaveTextContent("Approved");
+    expect(screen.queryByRole("button", {name: "Approve inventory valuation"})).not.toBeInTheDocument();
+    fireEvent.click(done);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(mock).toHaveBeenCalledTimes(2);
+    // Revising an approved setting stays possible, as the server allows it.
+    expect(screen.getByRole("button", {name: "Modify inventory valuation"})).toBeEnabled();
+    expect(screen.getByRole("button", {name: "Reject inventory valuation"})).toBeEnabled();
+    // The setting itself stays reviewable.
+    expect(screen.getAllByText("WEIGHTED_AVERAGE").length).toBeGreaterThan(0);
+  });
+
+  it.each([
+    ["BLOCKED", "disabled approve"],
+    ["APPLIED", "no decision actions"],
+  ])("keeps %s settings unchanged (%s)", async (state) => {
+    const snapshot = structuredClone(review);
+    snapshot.configuration!.proposals[0].state = state as never;
+    vi.spyOn(globalThis, "fetch").mockImplementationOnce(() => response(snapshot));
+    render(<ValidateConfigureExperience />);
+    fireEvent.click(screen.getByRole("button", {name: "Load reconciled scenario"}));
+    await screen.findByRole("button", {name: "Explain inventory valuation"});
+    expect(screen.queryByRole("button", {name: "Inventory valuation approved"})).not.toBeInTheDocument();
+    if (state === "BLOCKED") expect(screen.getByRole("button", {name: "Approve inventory valuation"})).toBeDisabled();
+    else for (const action of ["Approve", "Modify", "Reject"]) expect(screen.queryByRole("button", {name: `${action} inventory valuation`})).not.toBeInTheDocument();
   });
 
   it("keeps rejection blocked, then lets the user revise a decision", async () => {
@@ -105,15 +144,15 @@ describe("ValidateConfigureExperience", () => {
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
   });
 
-  it("hands off to onboarding with one Complete setup action once configuration is applied", async () => {
+  it("hands off to onboarding with one Complete Setup action once configuration is applied", async () => {
     const configured = { ...structuredClone(review), workflow_status: "CONFIGURED", ready_for_onboarding: true };
     configured.configuration!.proposals[0].state = "APPLIED";
     vi.spyOn(globalThis, "fetch").mockImplementation(() => response(configured));
     window.history.replaceState(null, "", "/validate-configure?session=session-vc");
     render(<ValidateConfigureExperience />);
-    expect(await screen.findByRole("link", {name: "Complete setup"})).toHaveAttribute("href", "/onboard-fpu?session=session-vc");
+    expect(await screen.findByRole("link", {name: "Complete Setup"})).toHaveAttribute("href", "/onboard-fpu?session=session-vc");
     expect(screen.queryByRole("link", {name: /Continue to Onboard/})).not.toBeInTheDocument();
-    expect(screen.getByRole("list", {name: "Migration journey"}).querySelector('[aria-current="step"]')).toHaveTextContent("Set upCurrent");
+    expect(screen.getByRole("list", {name: "Migration Journey"}).querySelector('[aria-current="step"]')).toHaveTextContent("Set UpCurrent");
   });
   it("keeps keyboard focus inside the review dialog in both directions", async () => {
     vi.spyOn(globalThis, "fetch").mockImplementation(() => response(review));

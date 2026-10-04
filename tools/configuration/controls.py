@@ -98,6 +98,28 @@ def apply_safe_configuration(plan) -> None:
         proposal.state = ConfigurationState.APPLIED
 
 
+DECIDED_STATE = {
+    "approve": ConfigurationState.APPROVED,
+    "modify": ConfigurationState.MODIFIED,
+    "reject": ConfigurationState.REJECTED,
+}
+
+
+def replays_decision(proposal, decision, actor: str) -> bool:
+    """True only when this exact decision is already the recorded one: same action and
+    resulting state, same value, same reviewer and same note. Replaying it changes no
+    authoritative state, so it is not recorded again. Anything else is a new decision."""
+    if decision.action != "modify" and decision.value is not None:
+        return False  # Invalid; the governed path rejects it.
+    return (
+        proposal.state is DECIDED_STATE[decision.action]
+        and proposal.decision == decision.action
+        and proposal.decided_by == actor
+        and (decision.action != "modify" or decision.value == proposal.selected_value)
+        and (decision.comment or None) == (proposal.comment or None)
+    )
+
+
 def decide_configuration(proposal, decision, actor: str) -> None:
     if proposal.state is ConfigurationState.APPLIED:
         raise ValueError("Applied settings cannot be changed without a new reviewed plan.")
@@ -114,11 +136,7 @@ def decide_configuration(proposal, decision, actor: str) -> None:
         or not validate_value(proposal.area, proposal.selected_value, proposal.source_value)
     ):
         raise ValueError("Missing evidence or unsupported configuration cannot be approved.")
-    proposal.state = {
-        "approve": ConfigurationState.APPROVED,
-        "modify": ConfigurationState.MODIFIED,
-        "reject": ConfigurationState.REJECTED,
-    }[decision.action]
+    proposal.state = DECIDED_STATE[decision.action]
     proposal.decision = decision.action
     proposal.decided_by = actor
     proposal.decided_at = datetime.now(UTC)

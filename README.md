@@ -217,9 +217,12 @@ Docker is optional.
 
 ```bash
 make setup
-make dev-api     # http://localhost:8000/docs
-make dev-web     # http://localhost:3000
+make dev         # API on http://localhost:8000/docs and web on http://localhost:3000
 ```
+
+`make dev-api` and `make dev-web` run them separately. Both must be running: the browser calls
+the local API directly. The web server stays on port 3000 (it stops if the port is busy), because
+the local API only accepts requests from `localhost:3000` or `127.0.0.1:3000`.
 
 Or use `docker compose up --build`. Default local development is deterministic and needs
 no Google credentials or paid cloud resources. Local demo identity is not public-Beta

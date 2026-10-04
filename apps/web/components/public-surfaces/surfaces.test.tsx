@@ -47,7 +47,7 @@ describe("public surface contracts", () => {
   it("presents the required business message, CTAs, full journey and scope without invented progress", () => {
     render(<Home/>);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Move your books.Keep your confidence.");
-    expect(screen.getByRole("link", { name: "Start my migration" })).toHaveAttribute("href", "/workspace");
+    expect(screen.getByRole("link", { name: "Start My Migration" })).toHaveAttribute("href", "/workspace");
     expect(screen.getByRole("link", { name: "Try a migration" })).toHaveAttribute("href", "/simulator");
     expect(screen.getByRole("link", { name: "See how it works" })).toHaveAttribute("href", "#how-it-works");
     expect(screen.getByText(/Bounded synthetic Beta · No production customer data/)).toBeVisible();
@@ -66,7 +66,7 @@ describe("public surface contracts", () => {
       for (const [name, href] of publicLinks) expect(within(nav).getByRole("link", { name, hidden: true })).toHaveAttribute("href", href);
       expect(within(nav).queryByRole("link", { name: /^(Product|Feedback|Guide|Simulator)$/, hidden: true })).not.toBeInTheDocument();
     }
-    expect(publicLinks.map(([label]) => label)).toEqual(["Explore", "How it works", "Learn", "Play", "Trust", "Support"]);
+    expect(publicLinks.map(([label]) => label)).toEqual(["Explore", "How It Works", "Learn", "Play", "Trust", "Support"]);
     expect(screen.getByRole("link", { name: "MoveBooks AI home" })).toHaveAttribute("href", "/");
     expect(screen.getByLabelText("Open navigation")).toHaveProperty("tagName", "SUMMARY");
     const menu = screen.getByLabelText("Open navigation").closest("details")!;
@@ -90,7 +90,7 @@ describe("public surface contracts", () => {
     window.history.replaceState(null, "", sampleEntry);
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<DiscoverAssessExperience/>);
-    expect(await screen.findByLabelText("Synthetic business")).toHaveValue("harbor-light-migrate-demo");
+    expect(await screen.findByLabelText("Sample business")).toHaveValue("harbor-light-migrate-demo");
     expect(fetch).not.toHaveBeenCalled();
   });
   it("offers sample entry without creating a session", async () => {
@@ -107,7 +107,7 @@ describe("public surface contracts", () => {
     sessionStorage.setItem("movebooks-migration-session", id);
     const fetch = vi.spyOn(globalThis, "fetch").mockImplementation(() => json(evidence));
     render(<ProductEntry/>);
-    expect(await screen.findByRole("link", { name: "Go to migration" })).toHaveAttribute("href", `/migrate-resolve?session=${id}`);
+    expect(await screen.findByRole("link", { name: "Continue My Migration" })).toHaveAttribute("href", `/migrate-resolve?session=${id}`);
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch.mock.calls[0][1]?.method).toBeUndefined();
   });
@@ -118,7 +118,7 @@ describe("public surface contracts", () => {
       expect(document.getElementById(topic.id)?.tagName).toBe("DETAILS");
     }
     // With no migration selected, each topic leads to My Migration, never the marketing Product page.
-    const links = screen.getAllByRole("link", { name: "Go to My Migration", hidden: true });
+    const links = screen.getAllByRole("link", { name: "Open My Migration", hidden: true });
     expect(links).toHaveLength(10);
     for (const link of links) expect(link).toHaveAttribute("href", "/workspace");
     expect(document.querySelector('a[href^="/product"]')).toBeNull();
@@ -128,10 +128,10 @@ describe("public surface contracts", () => {
     if (source === "query") window.history.replaceState(null, "", `/learn?session=${id}`);
     else { window.history.replaceState(null, "", "/learn"); sessionStorage.setItem("movebooks-migration-session", id); }
     render(<Learn/>);
-    const links = await screen.findAllByRole("link", { name: /in your migration$/, hidden: true });
+    const links = await screen.findAllByRole("link", { name: /in Your Migration$/, hidden: true });
     expect(links).toHaveLength(10);
     const reconciliation = within(document.getElementById("reconciliation") as HTMLElement).getByRole("link", { hidden: true });
-    expect(reconciliation).toHaveTextContent("Open Validate in your migration");
+    expect(reconciliation).toHaveTextContent("Open Validate in Your Migration");
     expect(reconciliation).toHaveAttribute("href", `/validate-configure?session=${id}`);
     const mappings = within(document.getElementById("mappings") as HTMLElement).getByRole("link", { hidden: true });
     expect(mappings).toHaveAttribute("href", `/plan-map-approve?session=${id}`);
@@ -141,27 +141,27 @@ describe("public surface contracts", () => {
   it("ignores an invalid stored session on Learn topic links", async () => {
     sessionStorage.setItem("movebooks-migration-session", "../../private");
     render(<Learn/>);
-    await waitFor(() => expect(screen.getAllByRole("link", { name: "Go to My Migration", hidden: true })).toHaveLength(10));
+    await waitFor(() => expect(screen.getAllByRole("link", { name: "Open My Migration", hidden: true })).toHaveLength(10));
     sessionStorage.clear();
   });
   it("returns from Learn to the referenced step without fetching or changing progress", () => {
     window.history.replaceState(null, "", `/learn?stage=3&session=${id}#reconciliation`);
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<Learn/>);
-    expect(screen.getByRole("link", { name: "Return to verify" })).toHaveAttribute("href", `/validate-configure?session=${id}`);
+    expect(screen.getByRole("link", { name: "Return to Verify" })).toHaveAttribute("href", `/validate-configure?session=${id}`);
     expect(fetch).not.toHaveBeenCalled();
   });
   it("does not invent a current migration from invalid Learn context", () => {
     window.history.replaceState(null, "", "/learn?stage=99&session=invalid");
     render(<Learn/>);
-    expect(screen.getByRole("link", { name: "Go to migration" })).toHaveAttribute("href", "/workspace");
+    expect(screen.getByRole("link", { name: "Go to My Migration" })).toHaveAttribute("href", "/workspace");
   });
   it("uses sentence-case landing headings and explicit hero destinations", () => {
     render(<Home/>);
     for (const name of ["The questions behind every move", "How MoveBooks works", "Trust by design"]) {
       expect(screen.getByRole("heading", { name })).toBeVisible();
     }
-    expect(screen.getByRole("link", { name: "Start my migration" })).toHaveAttribute("href", "/workspace");
+    expect(screen.getByRole("link", { name: "Start My Migration" })).toHaveAttribute("href", "/workspace");
     expect(screen.getByRole("link", { name: "See how it works" })).toHaveAttribute("href", "#how-it-works");
     for (const heading of screen.getAllByRole("heading")) expect(heading.className).not.toMatch(/uppercase|type-label|eyebrow/);
   });

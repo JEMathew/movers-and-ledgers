@@ -1,17 +1,20 @@
 """Deterministic migration-plan construction and validation."""
 
 from domain.discovery_assessment.models import AssessmentResult, DiscoveryResult, ReadinessStatus
+from domain.migration_resolution.policy import BATCH_ORDER
 from domain.planning_mapping.models import (
     MigrationPlan,
+    PlannedBatch,
     PlanPhase,
     PlanPhaseStatus,
     PlanStatus,
+    PlanSummary,
 )
 from domain.planning_mapping.policy import PLAN_PHASES, PLAN_POLICY_VERSION
 
 
 def build_migration_plan(
-    assessment: AssessmentResult, discovery: DiscoveryResult
+    assessment: AssessmentResult, discovery: DiscoveryResult, source: dict | None = None
 ) -> MigrationPlan:
     blockers = [
         finding.title for finding in discovery.findings if finding.category.value == "BLOCKER"
@@ -33,7 +36,7 @@ def build_migration_plan(
             [],
             first_status,
             blockers + warnings,
-            "Resolve or disposition every listed readiness finding.",
+            "Review readiness findings; correct hard blockers in the source before migration.",
             "Planning Agent",
             "Customer confirms prerequisite disposition",
         ),
@@ -115,7 +118,34 @@ def build_migration_plan(
         )
     )
     complexity = "High" if blockers else "Medium" if warnings else "Low"
+    profiles = {profile.dataset: profile for profile in discovery.profiles}
+    datasets = source.get("datasets", {}) if source else {}
+    order = (*BATCH_ORDER, "bills") if "bills" in datasets or "bills" in profiles else BATCH_ORDER
+    batches = [
+        PlannedBatch(
+            dataset=key,
+            label=profiles[key].label if key in profiles else key.replace("_", " ").title(),
+            record_count=len(datasets.get(key, []))
+            if source
+            else (profiles[key].record_count if key in profiles else 0),
+        )
+        for key in order
+    ]
+    mapping_datasets = {"accounts", "customers", "vendors", "products", "taxes", "configuration"}
+    summary = PlanSummary(
+        company_name=discovery.company_name,
+        record_count=sum(batch.record_count for batch in batches),
+        batches=batches,
+        mapping_review_count=sum(b.record_count for b in batches if b.dataset in mapping_datasets),
+        validation_expectations=[
+            "Match source and target record counts and mapping coverage",
+            "Reconcile invoice, transaction and bill totals where present",
+            "Check references, account types, tax treatment and configuration dependencies",
+            "Keep migration blocked when a deterministic validation check fails",
+        ],
+    )
     return MigrationPlan(
+        summary=summary,
         version=PLAN_POLICY_VERSION,
         status=PlanStatus.READY_FOR_MAPPING,
         phases=phases,
@@ -125,12 +155,11 @@ def build_migration_plan(
         blockers=blockers,
         risks=warnings + ["Synthetic target only; production operations are not implemented."],
         checkpoints=[
-            phase.approval_checkpoint
-            for phase in phases
-            if phase.approval_checkpoint is not None
+            phase.approval_checkpoint for phase in phases if phase.approval_checkpoint is not None
         ],
         approvals_required=[
             "All mapping proposals reviewed by the authenticated workspace owner",
+            "Explicit migration-plan approval by the authenticated workspace owner",
             "Explicit start of the approved manifest before synthetic target writes",
         ],
         customer_actions=list(dict.fromkeys(phase.customer_action for phase in phases)),

@@ -13,6 +13,8 @@ export type Proposal = {
 };
 export type Snapshot = {
   session_id: string; company_name: string; workflow_status: string;
+  /** Journey evidence every stage read carries; see journeyEvidenceFrom. */
+  mapping_review?: { total: number; pending: number } | null; readiness_blockers?: number;
   report?: { id: string; currency: string; status: Check["status"]; checks: Check[];
     blocking_discrepancies: number; policy_version: string } | null;
   configuration?: { id: string; proposals: Proposal[]; target_settings: Record<string, string> } | null;

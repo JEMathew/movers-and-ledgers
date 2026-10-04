@@ -70,6 +70,7 @@ class Journey:
     def approve_mappings(self):
         for mapping in self.get()["mappings"]:
             self.post(f"/mappings/{mapping['id']}/approve", {"comment": "Reviewed source evidence"})
+        self.post("/plan", {"action": "approve", "plan_id": self.get()["plan"]["id"]})
 
 
 @pytest.mark.parametrize("case", CASES)
@@ -199,7 +200,10 @@ def test_integrated_golden(case):
     final = journey.get()
     assert final["discovery"] == prepared["discovery"]
     assert final["assessment"] == prepared["assessment"]
-    assert final["plan"] == prepared["plan"]
+    assert final["plan"] == approved["plan"]
+    assert {k: v for k, v in final["plan"].items() if k != "approval"} == {
+        k: v for k, v in prepared["plan"].items() if k != "approval"
+    }
     assert final["mappings"] == approved["mappings"]
     assert len(final["onboarding"]["invoices"]) == len(final["onboarding"]["journals"]) == 1
     assert final["onboarding"]["fpu"]["invoice"]["total"] == "107.25"
@@ -290,6 +294,9 @@ def test_approval_cannot_authorize_unimplemented_currency_conversion():
             journey.post(f"/mappings/{mapping['id']}/modify", {"selected_target": "EUR"})
         else:
             journey.post(f"/mappings/{mapping['id']}/approve", {})
+    before = journey.get()
+    journey.post("/plan", {"action": "approve", "plan_id": before["plan"]["id"]}, status=409)
+    assert journey.get() == before
     journey.post("/migration/start", key="unsupported", status=409)
     assert journey.get()["execution"] is None
 

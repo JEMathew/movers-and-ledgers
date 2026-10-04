@@ -12,15 +12,15 @@ describe("Mapping reconsideration", () => {
   it("requires a reason and sends an explicit request without actor or automatic approval", async () => {
     const submit = vi.fn().mockResolvedValue(undefined);
     render(<MappingReconsideration mapping={mapping} history={[original]} submit={submit} />);
-    expect(screen.getByRole("button", {name: "Request reconsideration"})).toBeDisabled();
+    expect(screen.getByRole("button", {name: "Request Reconsideration"})).toBeDisabled();
     expect(screen.getByText(/Original rejection reason/)).toBeVisible();
     fireEvent.change(screen.getByLabelText("Reason for reconsideration"), {target: {value: "  "}});
-    expect(screen.getByRole("button", {name: "Request reconsideration"})).toBeDisabled();
+    expect(screen.getByRole("button", {name: "Request Reconsideration"})).toBeDisabled();
     fireEvent.change(screen.getByLabelText("Reason for reconsideration"), {target: {value: "Explicit human request"}});
-    fireEvent.click(screen.getByRole("button", {name: "Request reconsideration"}));
+    fireEvent.click(screen.getByRole("button", {name: "Request Reconsideration"}));
     await waitFor(() => expect(submit).toHaveBeenCalledOnce());
     expect(submit).toHaveBeenCalledWith("/reconsiderations", {request_id: expect.any(String), prior_decision_id: original.id, reason: "Explicit human request", proposed_target: "Service"});
-    expect(screen.queryByRole("button", {name: "Approve reconsideration"})).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", {name: "Approve Reconsideration"})).not.toBeInTheDocument();
   });
 
   it.each(["approve", "reject"])("requires a separate %s action and keeps original history visible", async action => {
@@ -29,12 +29,12 @@ describe("Mapping reconsideration", () => {
     expect(submit).not.toHaveBeenCalled();
     expect(screen.getByText(/Original rejection decision-original/)).toBeVisible();
     expect(screen.getByText(/Original evidence: source:service-001/)).toBeVisible();
-    fireEvent.click(screen.getByRole("button", {name: action === "approve" ? "Approve reconsideration" : "Reject reconsideration"}));
+    fireEvent.click(screen.getByRole("button", {name: action === "approve" ? "Approve Reconsideration" : "Reject Reconsideration"}));
     await waitFor(() => expect(submit).toHaveBeenCalledWith("/reconsiderations/request-001/review", {action, comment: expect.any(String)}));
     const state = action === "approve" ? "APPROVED" : "REJECTED";
     const newDecision = {...original, id: "decision-new", decision: state};
     rerender(<MappingReconsideration mapping={{...mapping, state, reconsiderations: [{...review, state, decision_id: newDecision.id, reviewed_by: original.actor, reviewed_at: "2026-09-28T14:01:00Z"}]}} history={[original, newDecision]} submit={submit} />);
-    expect(screen.getByRole("heading", {name: "Prior decision history"})).toHaveFocus();
+    expect(screen.getByRole("heading", {name: "Prior Decision History"})).toHaveFocus();
     expect(within(screen.getByRole("list")).getAllByRole("listitem")).toHaveLength(2);
     expect(screen.getByText("Original reason: Original rejection reason", {exact: true})).toBeVisible();
     expect(screen.getByText(/New decision decision-new/)).toBeVisible();
@@ -44,9 +44,9 @@ describe("Mapping reconsideration", () => {
     const submit = vi.fn().mockRejectedValue(new Error("Connection interrupted"));
     render(<MappingReconsideration mapping={mapping} history={[original]} submit={submit} />);
     fireEvent.change(screen.getByLabelText("Reason for reconsideration"), {target: {value: "Retry same request"}});
-    fireEvent.click(screen.getByRole("button", {name: "Request reconsideration"}));
+    fireEvent.click(screen.getByRole("button", {name: "Request Reconsideration"}));
     expect(await screen.findByRole("alert")).toHaveTextContent("No approval is assumed");
-    fireEvent.click(screen.getByRole("button", {name: "Request reconsideration"}));
+    fireEvent.click(screen.getByRole("button", {name: "Request Reconsideration"}));
     await waitFor(() => expect(submit).toHaveBeenCalledTimes(2));
     expect(submit.mock.calls[1]).toEqual(submit.mock.calls[0]);
   });

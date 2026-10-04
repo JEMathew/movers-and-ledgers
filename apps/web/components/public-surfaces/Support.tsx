@@ -11,7 +11,7 @@ const help = [
   { name: "Migration paused", phase: 2, topic: "recovery", why: "A batch failed or needs a governed remedy. Earlier completed checkpoints are preserved.", action: "Review the proposal in Move. Use Retry failed batch only if the workflow enables it after the required decision. Do not restart completed work." },
   { name: "Validation mismatch", phase: 3, topic: "reconciliation", why: "A rule found a difference between source evidence and the executed target.", action: "Inspect the failed check in Verify. Review a permitted repair and rerun validation. An approval cannot waive a financial mismatch." },
   { name: "Onboarding prerequisite", phase: 4, topic: "business-ready", why: "Required setup, access or onboarding decisions are incomplete or blocked.", action: "Open Start, review the prerequisite and record the required decision. The productive task stays unavailable until the checks pass." },
-  { name: "First productive use failed", phase: 4, topic: "business-ready", why: "The agreed task has not reached verified completion. Posting alone is insufficient.", action: "Read the task failure in Start. Review permitted remediation and resume only through its controls; an existing posting checkpoint must not be replayed." },
+  { name: "First real task failed", phase: 4, topic: "business-ready", why: "The agreed task has not reached verified completion. Posting alone is insufficient.", action: "Read the task failure in Start. Review permitted remediation and resume only through its controls; an existing posting checkpoint must not be replayed." },
 ];
 export function Support() {
   const [context, setContext] = useState<SafeContext>({});

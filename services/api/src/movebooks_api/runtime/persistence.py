@@ -86,6 +86,10 @@ class SqlSessionRepository:
             raise ValueError("Session already exists; refresh before retrying.") from error
         return session.model_copy(deep=True)
 
+    def create(self, session):
+        """put is already insert-only: an existing ID is a unique violation, never a replace."""
+        return self.put(session)
+
     def get(self, session_id, owner_subject):
         with self.engine.connect() as connection:
             row = connection.execute(

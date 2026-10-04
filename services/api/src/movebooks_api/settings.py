@@ -10,7 +10,9 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="MOVEBOOKS_", env_file=".env", extra="ignore")
 
     env: Literal["development", "local", "test", "cloud-dev", "staging", "production"] = "local"
-    cors_origins: list[str] = ["http://localhost:3000"]
+    # Local defaults only: the web dev server is pinned to port 3000, opened as localhost or
+    # 127.0.0.1. Cloud modes must set explicit HTTPS origins (validated below).
+    cors_origins: list[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
     demo_identity_enabled: bool = True
     persistence_backend: Literal["memory", "cloud-sql"] = "memory"
     storage_backend: Literal["memory", "gcs"] = "memory"

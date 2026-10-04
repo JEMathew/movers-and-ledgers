@@ -71,6 +71,15 @@ def test_local_modes_need_no_credentials(mode):
     assert not settings.cloud and settings.persistence_backend == "memory"
 
 
+def test_local_cors_allows_both_loopback_names_for_the_pinned_web_port():
+    # The browser calls the local API cross-origin; localhost and 127.0.0.1 are both used
+    # to open the dev app, and either one blocked surfaces only as "Failed to fetch".
+    origins = Settings(env="local", _env_file=None).cors_origins
+    assert origins == ["http://localhost:3000", "http://127.0.0.1:3000"]
+    with pytest.raises(ValidationError):
+        Settings(**{**CLOUD, "cors_origins": origins}, _env_file=None)
+
+
 @pytest.mark.parametrize("mode", ["cloud-dev", "staging", "production"])
 def test_cloud_modes_fail_closed(mode):
     with pytest.raises(ValidationError):

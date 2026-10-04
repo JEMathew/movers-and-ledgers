@@ -202,7 +202,7 @@ describe("shared Google authentication controls", () => {
     sessionStorage.setItem("unrelated", "keep"); mount();
     await enabled("Sign in with Google", within(screen.getByRole("banner"))); await act(async () => listener(user));
     fireEvent.click(screen.getByRole("button", { name: /^Account:/ }));
-    const signOut = screen.getByRole("button", { name: "Sign out" });
+    const signOut = screen.getByRole("button", { name: "Sign Out" });
     fireEvent.pointerDown(signOut); fireEvent.mouseDown(signOut);
     fireEvent.blur(screen.getByRole("button", { name: "Settings" }), { relatedTarget: null });
     fireEvent.mouseUp(signOut); fireEvent.click(signOut);
@@ -220,19 +220,19 @@ describe("shared Google authentication controls", () => {
     mocks.signOut.mockRejectedValue(new Error("SECRET")); mount();
     await enabled("Sign in with Google", within(screen.getByRole("banner")));
     await act(async () => listener(user));
-    fireEvent.click(screen.getByRole("button", { name: /^Account:/ })); fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Account:/ })); fireEvent.click(screen.getByRole("button", { name: "Sign Out" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Sign-out could not be confirmed");
     expect(screen.getByRole("alert")).not.toHaveTextContent("SECRET");
     expect(mocks.navigate).not.toHaveBeenCalled();
     expect(within(screen.getByRole("banner")).queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /^Account:/ }));
-    expect(screen.getByRole("button", { name: "Sign out" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Sign Out" })).toBeEnabled();
   });
   it("late identity verification cannot restore an account after sign-out", async () => {
     const verification = deferred<{subject: string; email: string}>(); mocks.verify.mockReturnValue(verification.promise);
     const signOut = deferred<void>(); mocks.signOut.mockReturnValue(signOut.promise);
     mount(); await enabled("Sign in with Google", within(screen.getByRole("banner")));
-    act(() => listener(user)); fireEvent.click(screen.getByRole("button", { name: /^Account:/ })); fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    act(() => listener(user)); fireEvent.click(screen.getByRole("button", { name: /^Account:/ })); fireEvent.click(screen.getByRole("button", { name: "Sign Out" }));
     expect(screen.getByRole("button", { name: "Account: signing out" })).toHaveTextContent("Signing out…");
     expect(screen.queryByRole("button", { name: "Account: verifying session" })).not.toBeInTheDocument();
     await act(async () => verification.resolve({ subject: "firebase:user-b", email: "stale@example.test" }));

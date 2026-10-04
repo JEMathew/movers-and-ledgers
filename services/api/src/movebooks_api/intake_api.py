@@ -19,6 +19,7 @@ from domain.discovery_assessment.models import MigrationSession
 from movebooks_api.discover_assess.api import AuthenticatedPrincipal
 from movebooks_api.discover_assess.fixtures import load_sample_company
 from movebooks_api.discover_assess.service import discover_assess_service as service
+from movebooks_api.discover_assess.service import mapping_review
 from movebooks_api.intake import MAX_TOTAL, SCHEMAS, strict_json, validate_package
 from movebooks_api.settings import get_settings
 from tools.migration import stable_checksum
@@ -193,6 +194,7 @@ def intake_trust(session_id: UUID, principal: AuthenticatedPrincipal):
         "source_kind": session.source_kind,
         "synthetic": session.synthetic,
         "intake_status": (session.intake_report or {}).get("status"),
+        "mapping_review": mapping_review(session),
         "activity": [
             {
                 "id": f"{session.id}-intake-{i}",

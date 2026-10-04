@@ -261,6 +261,84 @@ def test_safe_trust_and_capacity_and_expiry():
     assert upload(package()).status_code == 429
 
 
+def test_intake_trust_reports_authoritative_mapping_review_counts():
+    _, created = create()
+    root = f"/v1/migration-sessions/{created['session_id']}"
+
+    def review():
+        response = client.get(root + "/intake-trust", headers=AUTH)
+        assert response.status_code == 200
+        return response.json()["mapping_review"]
+
+    # Before mappings exist the count is unavailable, never a fabricated zero.
+    assert review() is None
+    assert client.post(root + "/plan", headers=AUTH).status_code == 200
+    mappings = client.post(root + "/mappings", headers=AUTH).json()
+    assert len(mappings) > 1
+    assert review() == {"total": len(mappings), "pending": len(mappings)}
+    first = client.post(root + f"/mappings/{mappings[0]['id']}/approve", headers=AUTH, json={})
+    assert first.status_code == 200, first.text
+    assert review() == {"total": len(mappings), "pending": len(mappings) - 1}
+    for mapping in mappings[1:]:
+        assert (
+            client.post(
+                root + f"/mappings/{mapping['id']}/approve", headers=AUTH, json={}
+            ).status_code
+            == 200
+        )
+    assert review() == {"total": len(mappings), "pending": 0}
+
+
+def test_legacy_blocked_mapping_recovers_with_derived_supported_targets():
+    files = package()
+    original = next(data for name, data in files if name.endswith("accounts.csv")).decode()
+    # A second income account duplicates the Sales Income target and blocks the accounts.
+    extra = original.rstrip("\r\n") + "\r\naccount-sales-2,4010,Service Revenue,income,0.00\r\n"
+    files = change(files, next(n for n, _ in files if n.endswith("accounts.csv")), extra.encode())
+    _, created = create(files)
+    session_id = UUID(created["session_id"])
+    root = f"/v1/migration-sessions/{session_id}"
+    assert client.post(root + "/plan", headers=AUTH).status_code == 200
+    assert client.post(root + "/mappings", headers=AUTH).status_code == 200
+
+    # Simulate a session stored before supported_targets existed.
+    stored = service.get_session("demo-user", session_id)
+    legacy = stored.model_copy(
+        update={
+            "mappings": [m.model_copy(update={"supported_targets": []}) for m in stored.mappings]
+        }
+    )
+    service.repository.put_if_unchanged(stored, legacy)
+    stored_shape = [
+        m.model_dump(mode="json") for m in service.get_session("demo-user", session_id).mappings
+    ]
+    assert all("supported_targets" not in m for m in stored_shape)
+
+    mappings = client.get(root, headers=AUTH).json()["mappings"]
+    blocked = [m for m in mappings if m["state"] == "BLOCKED"]
+    sales = next(m for m in blocked if m["source_label"] == "Service Revenue")
+    assert sales["supported_targets"] == ["Sales Income", "Other Income"]
+    # Reading derives targets without changing what is stored or checksummed.
+    assert [
+        m.model_dump(mode="json") for m in service.get_session("demo-user", session_id).mappings
+    ] == stored_shape
+    # A blocked mapping cannot be rejected; saving a compatible destination is the recovery path.
+    reject = client.post(root + f"/mappings/{sales['id']}/reject", headers=AUTH, json={})
+    assert reject.status_code == 409
+    for mapping in blocked:
+        target = "Other Income" if mapping is sales else mapping["supported_targets"][0]
+        assert target in mapping["supported_targets"]
+        saved = client.post(
+            root + f"/mappings/{mapping['id']}/modify",
+            headers=AUTH,
+            json={"selected_target": target, "comment": "Recovered from a stored blocked mapping"},
+        )
+        assert saved.status_code == 200, saved.text
+    after = {m["id"]: m for m in client.get(root, headers=AUTH).json()["mappings"]}
+    assert all(after[m["id"]]["state"] == "MODIFIED" for m in blocked)
+    assert after[sales["id"]]["selected_target"] == "Other Income"
+
+
 def test_uploaded_full_governed_journey_including_bills():
     _, created = create()
     root = f"/v1/migration-sessions/{created['session_id']}"
@@ -276,6 +354,7 @@ def test_uploaded_full_governed_journey_including_bills():
     mappings = post("/mappings")
     for mapping in mappings:
         post(f"/mappings/{mapping['id']}/approve", {})
+    post("/plan", {"action": "approve", "plan_id": post("/plan")["id"]})
     execution = post("/migration/start")
     assert execution["status"] == "MIGRATION_COMPLETE"
     assert len(execution["batches"]) == 9
@@ -365,6 +444,7 @@ def test_bill_tampering_blocks_validation_and_duplicate_retry_preserves_target()
     post("/plan")
     for mapping in post("/mappings").json():
         post(f"/mappings/{mapping['id']}/approve", {})
+    post("/plan", {"action": "approve", "plan_id": post("/plan").json()["id"]})
     first = post("/migration/start").json()
     assert post("/migration/start").json() == first
     session = service.get_session("demo-user", UUID(created["session_id"]))

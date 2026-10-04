@@ -63,7 +63,9 @@ export function AccountControls() {
   }
 
   return <div ref={controls} className="account-controls flex items-center gap-2">
-    {!cloud ? <button type="button" className="button ghost small" disabled aria-label="Sign in with Google" title="Google sign-in is not configured in this environment">Sign in</button>
+    {/* The local demo workspace has no Google sign-in, so it offers no dead Sign in control; its
+        entry is the demo workspace itself. Cloud keeps Google sign-in exactly as before. */}
+    {!cloud ? null
       : session.hasSession ? <div ref={root} className="account-menu" onKeyDown={event => {
         if (event.key === "Escape" && open) { event.preventDefault(); setOpenFor(null); trigger.current?.focus(); }
       }} onBlur={event => {
@@ -81,10 +83,10 @@ export function AccountControls() {
         {open && <div id={id} className="account-panel" aria-label="Account controls">
           <p role="status" className="mb-3 break-all text-sm text-secondary">{accountMessage}</p>
           <button ref={firstAction} type="button" className="button ghost small w-full" onClick={showSettings} aria-haspopup="dialog" aria-controls={settingsId}>Settings</button>
-          <button type="button" className="button secondary small mt-2 w-full" disabled={session.busy} onClick={() => { setOpenFor(null); session.signOut(); }}>Sign out</button>
+          <button type="button" className="button secondary small mt-2 w-full" disabled={session.busy} onClick={() => { setOpenFor(null); session.signOut(); }}>Sign Out</button>
         </div>}
       </div> : <GoogleSignIn compact />}
-    {!session.hasSession && <Link className="button small" href={startMigrationHref}>Start my migration</Link>}
+    {!session.hasSession && <Link className="button small" href={startMigrationHref}>{cloud ? "Start My Migration" : "My Migration"}</Link>}
     {!session.hasSession && <button ref={settingsTrigger} type="button" className="button ghost small appearance-trigger" aria-label="Change appearance" title="Change appearance"
       onClick={() => settingsOpen ? closeSettings() : showSettings()} aria-haspopup="dialog" aria-expanded={settingsOpen} aria-controls={settingsId}>
       <SunMoon size={18} aria-hidden="true" />

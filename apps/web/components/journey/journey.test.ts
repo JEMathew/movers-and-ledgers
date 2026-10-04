@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { phaseFor } from "@/components/public-surfaces/session";
-import { JOURNEY_COMPLETE, isSessionReference, journeyHeldFor, journeyStepFor, journeySteps, nextActionFor } from "./journey";
+import { JOURNEY_COMPLETE, isSessionReference, journeyHeldFor, journeyCurrentFor, journeyStepFor, journeySteps, nextActionFor } from "./journey";
 
 const id = "11111111-1111-4111-8111-111111111111";
 const state = (status: string, counts: Partial<{ readinessIssues: number; migrationIssues: number; verificationIssues: number }> = {}) =>
@@ -9,7 +9,7 @@ const statuses = ["CREATED", "DISCOVERED", "ASSESSED", "PLANNED", "MAPPING", "AW
 
 describe("operational migration journey", () => {
   it("has the nine customer-facing steps in order", () => {
-    expect(journeySteps.map(step => step.label)).toEqual(["Assess", "Plan", "Map", "Approve", "Migrate", "Resolve", "Validate", "Set up", "First use"]);
+    expect(journeySteps.map(step => step.label)).toEqual(["Assess", "Plan", "Map", "Approve", "Migrate", "Resolve", "Validate", "Set Up", "Start Using"]);
   });
   it("maps every workflow status the product knows to exactly one step, and nothing else", () => {
     for (const status of statuses) {
@@ -30,26 +30,26 @@ describe("operational migration journey", () => {
     }
   });
   it.each([
-    [state("CREATED"), "Check my readiness", `/assess?session=${id}`],
-    [state("ASSESSED", { readinessIssues: 3 }), "Review 3 readiness issues", `/plan-map-approve?session=${id}`],
-    [state("ASSESSED", { readinessIssues: 1 }), "Review 1 readiness issue", `/plan-map-approve?session=${id}`],
-    [state("ASSESSED"), "Create my migration plan", `/plan-map-approve?session=${id}`],
-    [state("MAPPING"), "Review mappings", `/plan-map-approve?session=${id}`],
-    [state("AWAITING_APPROVAL"), "Approve migration plan", `/plan-map-approve?session=${id}`],
-    [state("APPROVED"), "Start migration", `/migrate-resolve?session=${id}`],
-    [state("RESOLVING", { migrationIssues: 7 }), "Resolve 7 issues", `/migrate-resolve?session=${id}`],
-    [state("MIGRATION_COMPLETE"), "Verify my books", `/validate-configure?session=${id}`],
-    [state("VALIDATION_BLOCKED", { verificationIssues: 2 }), "Review 2 verification issues", `/validate-configure?session=${id}`],
-    [state("CONFIGURING"), "Complete setup", `/validate-configure?session=${id}`],
-    [state("ONBOARDING"), "Complete setup", `/onboard-fpu?session=${id}`],
-    [state("READY_FOR_FIRST_PRODUCTIVE_USE"), "Start my first task", `/onboard-fpu?session=${id}`],
-    [state("VERIFIED_FIRST_PRODUCTIVE_USE"), "Review verified evidence", `/trust?session=${id}`],
+    [state("CREATED"), "Check If My Books Are Ready to Migrate", `/assess?session=${id}`],
+    [state("ASSESSED", { readinessIssues: 3 }), "Review 3 Readiness Issues", `/plan-map-approve?session=${id}`],
+    [state("ASSESSED", { readinessIssues: 1 }), "Review 1 Readiness Issue", `/plan-map-approve?session=${id}`],
+    [state("ASSESSED"), "Create My Migration Plan", `/plan-map-approve?session=${id}`],
+    [state("MAPPING"), "Review Mappings", `/plan-map-approve?session=${id}`],
+    [{ ...state("AWAITING_APPROVAL"), mappingIssues: 0 }, "Approve Migration Plan", `/plan-map-approve?session=${id}`],
+    [state("APPROVED"), "Start Migration", `/migrate-resolve?session=${id}`],
+    [state("RESOLVING", { migrationIssues: 7 }), "Review 7 Migration Issues", `/migrate-resolve?session=${id}`],
+    [state("MIGRATION_COMPLETE"), "Verify My Books", `/validate-configure?session=${id}`],
+    [state("VALIDATION_BLOCKED", { verificationIssues: 2 }), "Review 2 Verification Issues", `/validate-configure?session=${id}`],
+    [state("CONFIGURING"), "Complete Setup", `/validate-configure?session=${id}`],
+    [state("ONBOARDING"), "Complete Setup", `/onboard-fpu?session=${id}`],
+    [state("READY_FOR_FIRST_PRODUCTIVE_USE"), "Start My First Task", `/onboard-fpu?session=${id}`],
+    [state("VERIFIED_FIRST_PRODUCTIVE_USE"), "Review Verified Evidence", `/trust?session=${id}`],
   ])("%#: %o -> %s", (input, label, href) => {
     expect(nextActionFor(input)).toMatchObject({ label, href });
   });
   it("starts with a readiness check when there is no migration or the status is unknown", () => {
-    expect(nextActionFor(undefined)).toMatchObject({ label: "Check my readiness", href: "/assess?sample=harbor-light-migrate-demo" });
-    expect(nextActionFor(state("MAYBE_COMPLETE"))).toMatchObject({ label: "Check my readiness", href: "/assess?sample=harbor-light-migrate-demo" });
+    expect(nextActionFor(undefined)).toMatchObject({ label: "Check If My Books Are Ready to Migrate", href: "/assess?sample=harbor-light-migrate-demo" });
+    expect(nextActionFor(state("MAYBE_COMPLETE"))).toMatchObject({ label: "Check If My Books Are Ready to Migrate", href: "/assess?sample=harbor-light-migrate-demo" });
   });
   it("holds Migrate as paused, never completed, while issues are being resolved", () => {
     for (const status of ["MIGRATION_PAUSED", "RESOLVING", "RETRY_PENDING", "MIGRATION_BLOCKED"]) expect(journeyHeldFor(status)).toEqual({ index: 4, label: "Paused" });
@@ -59,4 +59,19 @@ describe("operational migration journey", () => {
     expect(isSessionReference(id)).toBe(true);
     for (const value of ["", "../../private", "session-001", undefined, null, 42]) expect(isSessionReference(value)).toBe(false);
   });
+});
+
+it("keeps My Migration at Map until all mappings have human decisions", () => {
+  const pending = { ...state("AWAITING_APPROVAL"), mappingIssues: 2 };
+  expect(journeyCurrentFor(pending)).toBe(2);
+  expect(nextActionFor(pending)).toMatchObject({ label: "Review 2 Mappings", href: `/plan-map-approve?session=${id}` });
+  expect(journeyCurrentFor({ ...pending, mappingIssues: 0 })).toBe(3);
+  expect(nextActionFor({ ...pending, mappingIssues: 0, readinessIssues: 1 }).label).toBe("Review 1 Readiness Issue");
+});
+
+it.each([null, undefined])("never reads an unknown mapping count (%s) as zero pending", mappingIssues => {
+  const unknown = { ...state("AWAITING_APPROVAL"), mappingIssues };
+  expect(journeyCurrentFor(unknown)).toBe(2);
+  expect(nextActionFor(unknown)).toMatchObject({ heading: "Review Your Mappings", label: "Review Mappings", href: `/plan-map-approve?session=${id}` });
+  expect(nextActionFor(unknown).label).not.toMatch(/Approve/);
 });

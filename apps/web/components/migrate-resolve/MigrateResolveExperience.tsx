@@ -15,7 +15,7 @@ import type { AgentActivity } from "@/components/discover-assess/types";
 import { Dialog } from "@/components/ui/dialog";
 import { Alert } from "@/components/ui/feedback";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
-import { journeyStepFor } from "@/components/journey/journey";
+import { journeyStepFor, pendingMappingsIn, PROCESSING, projectJourney } from "@/components/journey/journey";
 import { NextAction } from "@/components/journey/NextAction";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
@@ -54,29 +54,44 @@ export function MigrateResolveExperience() {
   const [session, setSession] = useState<DemoSession>();
   const [execution, setExecution] = useState<MigrationExecution>();
   const [busy, setBusy] = useState(false);
+  // What MoveBooks is doing right now, shown on the current journey step.
+  const [working, setWorking] = useState<"migrate" | "resolve">();
   const [error, setError] = useState<string>();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [activity, setActivity] = useState<AgentActivity[]>([]);
 
+  // A user action supersedes a still-pending initial read; the late read is ignored.
+  const acted = useRef(0);
   useEffect(() => {
     const saved = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session");
     if (!saved) return;
+    let active = true;
+    const before = acted.current;
+    const fresh = () => active && acted.current === before;
     void api<DemoSession>(`/v1/migration-sessions/${saved}`).then(data => {
+      if (!fresh()) return;
       setSession(data); setExecution(data.execution ?? undefined); setActivity(data.activity);
       sessionStorage.setItem("movebooks-migration-session", data.id);
       window.history.replaceState(null, "", `?session=${encodeURIComponent(data.id)}`);
-    }).catch(caught => setError(caught.message));
+    }).catch(caught => { if (fresh()) setError(caught.message); });
+    return () => { active = false; };
   }, []);
 
+  // The execution's status is the live read while migrating. Otherwise the session's workflow
+  // status is authoritative: once the migration has moved on (for example to blocked validation)
+  // the execution still reads MIGRATION_COMPLETE, so it leads only when it is further along.
+  const ahead = (a: string, b: string) => (journeyStepFor(a) ?? -1) > (journeyStepFor(b) ?? -1);
+  const status = session && (execution && ahead(execution.status, session.workflow_status) ? execution.status : session.workflow_status);
+  const projection = session && status ? projectJourney({ status, mappingIssues: pendingMappingsIn(session.mappings), readinessIssues: session.assessment?.blocker_count ?? 0 }) : undefined;
   const proposal = execution?.resolutions.at(-1);
   const failure = execution?.failures.find((item) => item.id === proposal?.failure_id);
   const complete = execution?.status === "MIGRATION_COMPLETE";
   const resolving = execution?.status === "RESOLVING";
   const retryPending = execution?.status === "RETRY_PENDING";
-  const paused = resolving || retryPending || execution?.status === "MIGRATION_BLOCKED";
   const openIssues = execution?.failures.filter((item) => !item.resolved).length ?? 0;
 
   const loadDemo = async () => {
+    acted.current += 1;
     setBusy(true);
     setError(undefined);
     try {
@@ -94,8 +109,9 @@ export function MigrateResolveExperience() {
   };
 
   const start = async () => {
+    acted.current += 1;
     if (!session) return;
-    setBusy(true);
+    setBusy(true); setWorking("migrate");
     setError(undefined);
     try {
       const started = await api<MigrationExecution>(
@@ -111,13 +127,14 @@ export function MigrateResolveExperience() {
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Migration could not start safely.");
     } finally {
-      setBusy(false);
+      setBusy(false); setWorking(undefined);
     }
   };
 
   const decide = async (approve: boolean) => {
+    acted.current += 1;
     if (!session || !proposal) return;
-    setBusy(true);
+    setBusy(true); setWorking("resolve");
     setError(undefined);
     try {
       const updated = await api<MigrationExecution>(
@@ -136,13 +153,14 @@ export function MigrateResolveExperience() {
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "The decision was not recorded.");
     } finally {
-      setBusy(false);
+      setBusy(false); setWorking(undefined);
     }
   };
 
   const retry = async () => {
+    acted.current += 1;
     if (!session) return;
-    setBusy(true);
+    setBusy(true); setWorking("migrate");
     setError(undefined);
     try {
       setExecution(
@@ -154,30 +172,24 @@ export function MigrateResolveExperience() {
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "The governed retry could not run.");
     } finally {
-      setBusy(false);
+      setBusy(false); setWorking(undefined);
     }
   };
 
   return (
     <main className="shell min-h-[75vh] py-12 sm:py-16">
-      <header className="grid items-end gap-8 lg:grid-cols-[1fr_auto]">
+      <header>
         <div className="max-w-3xl">
           <p className="eyebrow text-primary">Migrate → Resolve</p>
-          <h1 ref={headingRef} tabIndex={-1} className="type-page mt-4">Execute visibly. Pause safely. Resolve with evidence.</h1>
+          <h1 ref={headingRef} tabIndex={-1} className="type-page mt-4">Execute Visibly. Pause Safely. Resolve with Evidence.</h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-secondary">
             Run an approved synthetic migration, inspect every batch, and keep consequential
             remediation under your control. No accounting-provider writes occur in this Beta slice.
           </p>
         </div>
-        <div
-          className={`migration-orb ${busy ? "is-running" : resolving ? "is-reasoning" : retryPending ? "is-retrying" : ""}`}
-          aria-hidden="true"
-        >
-          <span />
-        </div>
       </header>
 
-      <MigrationJourney className="mt-10" current={!session ? null : complete ? 6 : paused ? 5 : execution ? 4 : journeyStepFor(session.workflow_status)} held={paused ? { index: 4, label: "Paused" } : undefined} />
+      <MigrationJourney className="mt-10" current={projection?.current ?? null} held={projection?.held} currentLabel={projection?.currentLabel} processing={working ? PROCESSING[working] : undefined} />
 
       {error && (
         <div className="mt-6">
@@ -192,7 +204,7 @@ export function MigrateResolveExperience() {
           <div className="flex items-start gap-4">
             <div className="activity-icon"><Database aria-hidden="true" size={19} /></div>
             <div>
-              <h2 className="type-section">Approved synthetic manifest</h2>
+              <h2 className="type-section">Approved Synthetic Manifest</h2>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-secondary">
                 Continue with your approved business session. Standalone demo loading replays prior
                 approvals in a new session; it is not evidence of completing the full journey.
@@ -202,11 +214,11 @@ export function MigrateResolveExperience() {
           {!session ? (
             <Button onClick={loadDemo} disabled={busy}>Load reviewed manifest</Button>
           ) : !execution ? (
-            <Button onClick={start} disabled={busy} leadingIcon={Play}>Start migration</Button>
+            <Button onClick={start} disabled={busy} leadingIcon={Play}>Start Migration</Button>
           ) : retryPending ? (
             <Button onClick={retry} disabled={busy} leadingIcon={RefreshCw}>Retry failed batch</Button>
           ) : resolving && proposal ? (
-            <Button onClick={() => setDialogOpen(true)} disabled={busy} leadingIcon={Bot}>{openIssues > 1 ? `Resolve ${openIssues} issues` : "Resolve 1 issue"}</Button>
+            <Button onClick={() => setDialogOpen(true)} disabled={busy} leadingIcon={Bot}>{openIssues > 1 ? `Review ${openIssues} Migration Issues` : "Review 1 Migration Issue"}</Button>
           ) : null}
         </div>
         {session && (
@@ -223,7 +235,7 @@ export function MigrateResolveExperience() {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="eyebrow text-primary">Migration Agent</p>
-              <h2 id="progress-heading" className="type-section mt-2">Execution progress</h2>
+              <h2 id="progress-heading" className="type-section mt-2">Execution Progress</h2>
               <p className="mt-2 text-secondary">Current agent: {humanize(execution.current_agent)}</p>
             </div>
             <StatusBadge
@@ -276,7 +288,7 @@ export function MigrateResolveExperience() {
           <Alert tone="success" title="Synthetic migration complete">
             <p className="mt-1">All batches completed, no blocking exceptions remain, and the target state is inspectable.</p>
           </Alert>
-          <NextAction className="mt-4" label="Verify my books" href={`/validate-configure?session=${session?.id}`}>
+          <NextAction className="mt-4" label="Verify My Books" href={`/validate-configure?session=${session?.id}`}>
             <span className="flex items-start gap-3"><ShieldCheck aria-hidden="true" className="mt-1 shrink-0 text-primary" size={19} />Compare your migrated books with the source evidence before setting up the environment.</span>
           </NextAction>
         </section>
@@ -285,7 +297,7 @@ export function MigrateResolveExperience() {
       {activity.length > 0 && (
         <section className="mt-12" aria-labelledby="activity-heading">
           <p className="eyebrow text-primary">Audit activity</p>
-          <h2 id="activity-heading" className="type-section mt-2">Evidence-backed actions</h2>
+          <h2 id="activity-heading" className="type-section mt-2">Evidence-Backed Actions</h2>
           <Panel className="mt-5">
             <ol>
               {activity.slice(-6).reverse().map((item) => (

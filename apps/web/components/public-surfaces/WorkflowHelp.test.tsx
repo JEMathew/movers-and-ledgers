@@ -10,13 +10,13 @@ describe("context after a same-page new assessment", () => {
     sessionStorage.setItem("movebooks-migration-session", oldId);
     render(<WorkflowHelp/>);
     window.history.replaceState(null, "", `/assess?session=${newId}`);
-    const link = screen.getByRole("link", { name: "Trust & evidence" });
+    const link = screen.getByRole("link", { name: "Trust & Evidence" });
     // Stop actual navigation while exercising the real React click handler.
     link.addEventListener("click", event => event.preventDefault());
     fireEvent.click(link);
     expect(link).toHaveAttribute("href", `http://localhost:3000/trust?session=${newId}`);
     expect(link.getAttribute("href")).not.toContain(oldId);
-    const learn = screen.getByRole("link", { name: "Learn about Understand" });
+    const learn = screen.getByRole("link", { name: "Learn About Understand" });
     learn.addEventListener("click", event => event.preventDefault());
     fireEvent.click(learn);
     expect(learn).toHaveAttribute("href", `http://localhost:3000/learn?stage=0&session=${newId}#evidence`);

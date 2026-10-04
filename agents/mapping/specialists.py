@@ -49,6 +49,9 @@ class MappingSpecialist:
                 area=specialist_input.area,
                 source_id=source_id,
                 source_label=source_label,
+                source_value=str(record.get("value", ""))
+                if specialist_input.area is MappingArea.GENERAL_CONFIGURATION
+                else None,
                 recommended_target=str(recommendation["target"]),
                 selected_target=str(recommendation["target"]),
                 confidence=float(recommendation["confidence"]),

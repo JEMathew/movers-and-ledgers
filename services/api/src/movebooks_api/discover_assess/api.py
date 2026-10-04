@@ -1,10 +1,10 @@
 """Versioned HTTP contracts for the implemented migration journey."""
 
-from typing import Annotated
+from typing import Annotated, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Header, HTTPException, status
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from agents.orchestrator import WorkflowTransitionError
 from domain.discovery_assessment.models import (
@@ -35,6 +35,7 @@ from movebooks_api.auth import Principal, require_principal
 
 from .fixtures import sample_company_catalog
 from .service import (
+    CreationConflictError,
     DiscoveryRequiredError,
     MigrationSessionNotFoundError,
     SampleCompanyNotFoundError,
@@ -48,6 +49,18 @@ AuthenticatedPrincipal = Annotated[Principal, Depends(require_principal)]
 class CreateMigrationSessionRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     sample_company_id: str = Field(min_length=1)
+
+
+class PlanActionRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    action: Literal["create", "approve"] = "create"
+    plan_id: UUID | None = None
+
+    @model_validator(mode="after")
+    def require_reviewed_plan(self):
+        if self.action == "approve" and self.plan_id is None:
+            raise ValueError("Explicit approval requires the reviewed plan ID")
+        return self
 
 
 class RecordProductEventRequest(BaseModel):
@@ -91,20 +104,29 @@ def list_sample_companies(principal: AuthenticatedPrincipal) -> list[dict[str, s
     "/migration-sessions", response_model=MigrationSession, status_code=status.HTTP_201_CREATED
 )
 def create_migration_session(
-    request: CreateMigrationSessionRequest, principal: AuthenticatedPrincipal
+    request: CreateMigrationSessionRequest,
+    principal: AuthenticatedPrincipal,
+    # One explicit assessment start. Retrying with the same key returns the same session.
+    idempotency_key: Annotated[
+        str | None, Header(alias="Idempotency-Key", pattern=r"^[A-Za-z0-9._:-]{1,120}$")
+    ] = None,
 ) -> MigrationSession:
     try:
-        return discover_assess_service.create_session(principal.subject, request.sample_company_id)
+        return discover_assess_service.create_session(
+            principal.subject, request.sample_company_id, idempotency_key
+        )
     except SampleCompanyNotFoundError as error:
         raise _not_found(error) from error
+    except CreationConflictError as error:
+        raise _conflict(error) from error
 
 
 @router.get("/migration-sessions/{session_id}", response_model=MigrationSession)
-def get_migration_session(
-    session_id: UUID, principal: AuthenticatedPrincipal
-) -> MigrationSession:
+def get_migration_session(session_id: UUID, principal: AuthenticatedPrincipal) -> MigrationSession:
     try:
-        return discover_assess_service.get_session(principal.subject, session_id)
+        return discover_assess_service.with_supported_targets(
+            discover_assess_service.get_session(principal.subject, session_id)
+        )
     except MigrationSessionNotFoundError as error:
         raise _not_found(error) from error
 
@@ -173,12 +195,20 @@ def get_activity(session_id: UUID, principal: AuthenticatedPrincipal) -> list[Ag
 
 
 @router.post("/migration-sessions/{session_id}/plan", response_model=MigrationPlan)
-def create_plan(session_id: UUID, principal: AuthenticatedPrincipal) -> MigrationPlan:
+def create_plan(
+    session_id: UUID, principal: AuthenticatedPrincipal, request: PlanActionRequest | None = None
+) -> MigrationPlan:
     try:
-        session = discover_assess_service.plan(principal.subject, session_id)
+        if request is not None and request.action == "approve":
+            assert request.plan_id is not None
+            session = discover_assess_service.approve_plan(
+                principal.subject, session_id, request.plan_id
+            )
+        else:
+            session = discover_assess_service.plan(principal.subject, session_id)
         assert session.plan is not None
         return session.plan
-    except MigrationSessionNotFoundError as error:
+    except (MigrationSessionNotFoundError, SampleCompanyNotFoundError) as error:
         raise _not_found(error) from error
     except (DiscoveryRequiredError, ValueError) as error:
         raise _conflict(error) from error
@@ -216,7 +246,9 @@ def create_mappings(
     session_id: UUID, principal: AuthenticatedPrincipal
 ) -> list[MappingProposal]:
     try:
-        return discover_assess_service.map(principal.subject, session_id).mappings
+        return discover_assess_service.with_supported_targets(
+            discover_assess_service.map(principal.subject, session_id)
+        ).mappings
     except (MigrationSessionNotFoundError, SampleCompanyNotFoundError) as error:
         raise _not_found(error) from error
     except ValueError as error:

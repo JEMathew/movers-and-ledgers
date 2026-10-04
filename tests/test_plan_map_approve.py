@@ -205,6 +205,8 @@ def test_clean_plan_and_complete_approvals_reach_approved_handoff() -> None:
             "owner",
             source,
         )
+    assert session.workflow_status is WorkflowStatus.AWAITING_APPROVAL
+    session = orchestrator.approve_plan(session, "owner", session.plan.id)
     assert session.workflow_status is WorkflowStatus.APPROVED
     assert any(event.name.value == "ready_for_migration" for event in session.events)
 
@@ -391,6 +393,43 @@ def test_modify_cannot_bypass_canonical_entity_target_policy() -> None:
             "owner",
             record,
         )
+
+
+def test_supported_targets_only_offer_destinations_a_decision_accepts() -> None:
+    from agents.mapping.specialists import records_for_area
+
+    fixture = _clean_fixture()
+    proposals, _ = MappingAgent().run(uuid4(), fixture, ["evidence:test"])
+    records = {
+        (area, str(record["id"])): record
+        for area in MappingArea
+        for record in records_for_area(fixture, area)
+    }
+    tax = [p for p in proposals if p.area is MappingArea.TAX_CONFIGURATION]
+    assert tax
+    for proposal in tax:
+        # The specialist alternative stays visible as context but is not a selectable target.
+        assert "Manual tax specialist review" in proposal.alternatives
+        assert proposal.supported_targets == [proposal.recommended_target]
+    for proposal in proposals:
+        record = records[(proposal.area, proposal.source_id)]
+        for target in proposal.supported_targets:
+            decided = apply_mapping_decision(
+                proposal,
+                MappingDecision(decision=MappingState.MODIFIED, selected_target=target),
+                "owner",
+                record,
+            )
+            assert decided.state is MappingState.MODIFIED
+        rejected = set(proposal.alternatives) - set(proposal.supported_targets)
+        for target in rejected:
+            with pytest.raises(MappingPolicyError):
+                apply_mapping_decision(
+                    proposal,
+                    MappingDecision(decision=MappingState.MODIFIED, selected_target=target),
+                    "owner",
+                    record,
+                )
 
 
 def test_missing_required_entity_field_blocks_mapping() -> None:

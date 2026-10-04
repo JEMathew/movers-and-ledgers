@@ -51,7 +51,7 @@ describe("footer", () => {
   it("carries Feedback with Support and the Beta limits, outside the primary navigation", () => {
     render(<Footer />);
     const footer = screen.getByRole("navigation", { name: "Footer" });
-    for (const [name, href] of [["How it works", "/guide"], ["Support", "/support"], ["Feedback", "/feedback"], ["Beta limitations", "/trust#beta-limitations"]]) {
+    for (const [name, href] of [["How It Works", "/guide"], ["Support", "/support"], ["Feedback", "/feedback"], ["Beta Limitations", "/trust#beta-limitations"]]) {
       expect(within(footer).getByRole("link", { name })).toHaveAttribute("href", href);
     }
     expect(publicLinks.map(([label]) => label as string)).not.toContain("Feedback");

@@ -15,7 +15,7 @@ describe("truthful runtime identity", () => {
   it("retains credential-free local demo", async () => {
     expect(await authHeaders()).toEqual({Authorization:"Bearer demo-user"});
     render(<IdentityEntry destination="/workspace" />);
-    expect(screen.getByRole("link", {name:/enter local demo/i})).toBeInTheDocument();
+    expect(screen.getByRole("link", {name:/Enter Demo Workspace/i})).toBeInTheDocument();
   });
   it("does not use demo identity in a production build", async () => {
     vi.stubEnv("NODE_ENV", "production");
@@ -35,9 +35,9 @@ describe("truthful runtime identity", () => {
     render(<IdentityProvider><Nav /><IdentityEntry destination="/workspace" /><RuntimeNotice /></IdentityProvider>);
     for (const name of ["Sign in with Google", "Continue with Google"]) expect(screen.getByRole("button", {name})).toBeDisabled();
     expect(document.body).not.toHaveTextContent(/Preparing Google sign-in/);
-    expect(screen.queryByRole("link", {name:/enter local demo/i})).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", {name:/Enter Demo Workspace/i})).not.toBeInTheDocument();
     expect(screen.getByRole("complementary", {name:"Beta scope"})).toHaveTextContent(/safely using synthetic data/);
-    expect(screen.getByRole("link", {name:"Beta limitations"})).toHaveAttribute("href", "/trust#beta-limitations");
+    expect(screen.getByRole("link", {name:"Beta Limitations"})).toHaveAttribute("href", "/trust#beta-limitations");
   });
   it.each(["/", "/product", "/workspace", "/sign-in"])("does not duplicate the scope note on %s", path => {
     route.path = path;

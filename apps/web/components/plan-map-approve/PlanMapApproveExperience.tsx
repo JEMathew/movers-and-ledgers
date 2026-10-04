@@ -1,297 +1,162 @@
 "use client";
 
-import {
-  ArrowRight,
-  Bot,
-  CheckCircle2,
-  FileCheck2,
-  GitBranch,
-  LockKeyhole,
-  MessageCircleQuestion,
-  ShieldCheck,
-} from "lucide-react";
-import { useEffect, useState } from "react";
-
-import type { AgentActivity } from "@/components/discover-assess/types";
-import { Alert, LoadingState } from "@/components/ui/feedback";
-import { Select } from "@/components/ui/forms";
-import { MigrationJourney } from "@/components/journey/MigrationJourney";
-import { journeyStepFor } from "@/components/journey/journey";
-import { ActionLink, NextAction } from "@/components/journey/NextAction";
-import { isSessionId, projectSession, SELECTED_SESSION_KEY } from "@/components/public-surfaces/session";
-import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
-import { StatusBadge } from "@/components/ui/status";
-
-import { MappingReconsideration } from "./MappingReconsideration";
-import type { MappingHistoryDecision, MappingProposal, MappingState, MigrationPlan } from "./types";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+import { useEffect, useRef, useState } from "react";
 import { authHeaders } from "@/lib/identity";
+import { Alert, LoadingState } from "@/components/ui/feedback";
+import { Button, Panel } from "@/components/ui/primitives";
+import { MigrationJourney } from "@/components/journey/MigrationJourney";
+import { journeyStepFor, pendingMappingsIn, PROCESSING, projectJourney } from "@/components/journey/journey";
+import { ActionLink } from "@/components/journey/NextAction";
+import { isSessionId, projectSession, SELECTED_SESSION_KEY } from "@/components/public-surfaces/session";
+import { MappingReview, mappingReviewed } from "./MappingReview";
+import { ApprovalReview } from "./ApprovalReview";
+import { PlanSummary } from "./PlanSummary";
+import type { MappingHistoryDecision, MappingProposal, MigrationPlan } from "./types";
 
-type Phase = "idle" | "planning" | "mapping" | "review" | "error";
+type Snapshot = {
+  id: string; synthetic: boolean; workflow_status: string;
+  plan?: MigrationPlan | null; mappings: MappingProposal[];
+  human_decisions?: MappingHistoryDecision[];
+  assessment?: { blocker_count: number; readiness: string };
+};
+type View = "plan" | "map" | "approve";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
-    ...init,
-    headers: { ...await authHeaders(), "Content-Type": "application/json", ...init?.headers },
-  });
+  const response = await fetch(`${API_BASE}${path}`, { ...init, headers: { ...await authHeaders(), "Content-Type": "application/json", ...init?.headers } });
   if (!response.ok) {
-    const body = (await response.json().catch(() => null)) as { detail?: string } | null;
-    throw new Error(body?.detail ?? `Request failed with status ${response.status}`);
+    const body = await response.json().catch(() => null);
+    throw new Error(typeof body?.detail === "string" ? body.detail : `Request failed with status ${response.status}`);
   }
   return response.json() as Promise<T>;
 }
 
-function humanize(value: string): string {
-  return value.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
-}
-
-function mappingProductStatus(state: MappingState) {
-  if (state === "APPROVED" || state === "MODIFIED") return "COMPLETED" as const;
-  if (state === "BLOCKED" || state === "REJECTED") return "BLOCKED" as const;
-  return "REQUIRES APPROVAL" as const;
-}
-
-function phaseProductStatus(status: string) {
-  if (status === "READY") return "READY" as const;
-  if (status === "BLOCKED") return "BLOCKED" as const;
-  if (status === "NEEDS_ATTENTION") return "NEEDS ATTENTION" as const;
-  if (status === "FUTURE") return "NOT STARTED" as const;
-  return "IN PROGRESS" as const;
-}
-
 export function PlanMapApproveExperience() {
-  const [phase, setPhase] = useState<Phase>("idle");
-  const [sessionId, setSessionId] = useState<string>();
-  const [loadedStatus, setLoadedStatus] = useState<string>();
+  const [snapshot, setSnapshot] = useState<Snapshot>();
   const [readState, setReadState] = useState<"loading" | "ready" | "error">("loading");
-  const [plan, setPlan] = useState<MigrationPlan>();
-  const [mappings, setMappings] = useState<MappingProposal[]>([]);
-  const [history, setHistory] = useState<MappingHistoryDecision[]>([]);
-  const [activity, setActivity] = useState<AgentActivity[]>([]);
   const [error, setError] = useState<string>();
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-  const [modifications, setModifications] = useState<Record<string, string>>({});
+  const [view, setView] = useState<View>("plan");
+  const [busy, setBusy] = useState(false);
+  // The path MoveBooks is working on, so the journey can say what is happening.
+  const [working, setWorking] = useState<string>();
+  const mutation = useRef(false);
+  const mounted = useRef(false);
+  const sessionRef = useRef<string | undefined>(undefined);
+  const heading = useRef<HTMLHeadingElement>(null);
+
+  function validate(data: Snapshot, id: string) {
+    projectSession(data, id);
+    return { ...data, mappings: data.mappings ?? [] };
+  }
 
   useEffect(() => {
     const controller = new AbortController();
+    mounted.current = true;
     let active = true;
     async function read() {
       try {
-        const saved = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem(SELECTED_SESSION_KEY);
-        if (!saved) throw new Error("Start with Discover → Assess, then continue with the same business session.");
-        if (!isSessionId(saved)) throw new Error("Invalid session reference. Open an existing migration from My Migration.");
-        const data = await api<{id: string; workflow_status: string; plan?: MigrationPlan; mappings: MappingProposal[]; activity: AgentActivity[]; human_decisions?: MappingHistoryDecision[]}>(`/v1/migration-sessions/${saved}`, { signal: controller.signal });
-        const evidence = projectSession(data, saved);
+        const id = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem(SELECTED_SESSION_KEY);
+        if (!id) throw new Error("Start with Discover → Assess, then continue with the same business session.");
+        if (!isSessionId(id)) throw new Error("Invalid session reference. Open an existing migration from My Migration.");
+        sessionRef.current = id;
+        const data = validate(await api<Snapshot>(`/v1/migration-sessions/${id}`, { signal: controller.signal }), id);
         if (!active) return;
-        // Adoption belongs to a validated read, never to an attempted workflow mutation.
-        sessionStorage.setItem(SELECTED_SESSION_KEY, evidence.id);
-        setSessionId(evidence.id); setLoadedStatus(evidence.status); setPlan(data.plan ?? undefined); setMappings(data.mappings); setActivity(data.activity);
-        setHistory(data.human_decisions ?? []);
-        setReadState("ready");
-        if (data.plan) setPhase("review");
+        // Selection adoption belongs only to the validated initial read, never a mutation.
+        sessionStorage.setItem(SELECTED_SESSION_KEY, id);
+        setSnapshot(data); setReadState("ready");
       } catch (caught) {
         if (!active) return;
-        setReadState("error");
-        setError(caught instanceof Error ? caught.message : "Session unavailable.");
-        setPhase("error");
+        setReadState("error"); setError(caught instanceof Error ? caught.message : "Session unavailable.");
       }
     }
     void read();
-    return () => { active = false; controller.abort(); };
+    return () => { active = false; mounted.current = false; controller.abort(); };
   }, []);
 
-  const preparePlan = async () => {
-    if (readState !== "ready" || !sessionId) return;
-    setError(undefined);
+  async function refresh() {
+    const id = sessionRef.current;
+    if (!id) return;
+    setReadState("loading");
     try {
-      setPhase("planning");
-      const activeSession = sessionId;
-      const generatedPlan = await api<MigrationPlan>(
-        `/v1/migration-sessions/${activeSession}/plan`,
-        { method: "POST" },
-      );
-      setPlan(generatedPlan);
-      setPhase("mapping");
-      const generatedMappings = await api<MappingProposal[]>(
-        `/v1/migration-sessions/${activeSession}/mappings`,
-        { method: "POST" },
-      );
-      setMappings(generatedMappings);
-      setActivity(
-        await api<AgentActivity[]>(`/v1/migration-sessions/${activeSession}/activity`),
-      );
-      setPhase("review");
-    } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Planning could not be completed.");
-      setPhase("error");
-    }
-  };
-
-  const decide = async (
-    proposal: MappingProposal,
-    decision: "approve" | "reject" | "modify",
-  ) => {
-    if (readState !== "ready" || !sessionId) return;
-    setError(undefined);
-    try {
-      const body =
-        decision === "modify"
-          ? { selected_target: modifications[proposal.id], comment: "Customer-selected alternative" }
-          : { comment: decision === "approve" ? "Approved with displayed evidence" : "Rejected for review" };
-      const updated = await api<MappingProposal>(
-        `/v1/migration-sessions/${sessionId}/mappings/${proposal.id}/${decision}`,
-        { method: "POST", body: JSON.stringify(body) },
-      );
-      setMappings((current) => current.map((item) => (item.id === updated.id ? updated : item)));
-      setActivity(await api<AgentActivity[]>(`/v1/migration-sessions/${sessionId}/activity`));
-      if (decision === "reject") {
-        const snapshot = await api<{human_decisions: MappingHistoryDecision[]}>(`/v1/migration-sessions/${sessionId}`);
-        setHistory(snapshot.human_decisions);
+      const data = validate(await api<Snapshot>(`/v1/migration-sessions/${id}`), id);
+      if (mounted.current) {
+        // A successful retry of the initial read may adopt its validated deep link.
+        // Refreshes after decisions never replace a selection made elsewhere.
+        if (!snapshot) sessionStorage.setItem(SELECTED_SESSION_KEY, data.id);
+        setSnapshot(data); setReadState("ready");
       }
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "The mapping decision was not recorded.");
+      if (mounted.current) setReadState("error");
+      throw caught;
     }
-  };
+  }
 
-  const running = phase === "planning" || phase === "mapping";
-  const decisionsComplete = mappings.length > 0 && mappings.every((item) => ["APPROVED", "MODIFIED"].includes(item.state));
-  const handoffReady = decisionsComplete && plan !== undefined && plan.blockers.length === 0;
-  // Plan until a plan exists, Map until the first decision, Approve until the handoff is ready.
-  const anyDecided = mappings.some((item) => ["APPROVED", "MODIFIED", "REJECTED"].includes(item.state));
-  // Without a plan the stage would claim Assess is done; a loaded CREATED/DISCOVERED status says otherwise.
-  const assessPending = !plan && loadedStatus !== undefined && journeyStepFor(loadedStatus) === 0;
-  const journeyStep = readState !== "ready" ? null : assessPending ? 0 : handoffReady ? 4 : !plan ? 1 : decisionsComplete || anyDecided ? 3 : 2;
-  const pending = mappings.filter((item) => !["APPROVED", "MODIFIED", "REJECTED"].includes(item.state)).length;
+  async function mutate(path: string, body?: unknown) {
+    if (readState !== "ready" || !snapshot || mutation.current) return false;
+    mutation.current = true; setBusy(true); setWorking(path); setError(undefined);
+    try {
+      await api(`/v1/migration-sessions/${snapshot.id}${path}`, { method: "POST", ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
+      await refresh(); // POST responses never substitute for an authoritative session read.
+      return true;
+    } catch (caught) {
+      if (mounted.current) {
+        setError(caught instanceof Error ? caught.message : "The decision could not be confirmed.");
+        setReadState("error");
+      }
+      return false;
+    } finally {
+      mutation.current = false;
+      if (mounted.current) { setBusy(false); setWorking(undefined); }
+    }
+  }
 
-  return (
-    <main className="shell min-h-[75vh] py-12 sm:py-16">
-      <header className="grid items-end gap-8 lg:grid-cols-[1fr_auto]">
-        <div className="max-w-3xl">
-          <p className="eyebrow text-primary">Plan → Map &amp; Approve</p>
-          <h1 className="type-page mt-4">Build the governed migration handoff</h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-secondary">
-            Understand the sequence, review every source-to-target recommendation, and keep
-            consequential accounting decisions under human control.
-          </p>
-        </div>
-        <div className="migration-orb" aria-hidden="true"><span /></div>
-      </header>
+  function changeView(next: View) { setView(next); heading.current?.focus(); }
+  const plan = snapshot?.plan;
+  const mappings = snapshot?.mappings ?? [];
+  const status = snapshot?.workflow_status;
+  const ready = readState === "ready";
+  const editable = ready && status === "AWAITING_APPROVAL";
+  const reviewed = mappings.length > 0 && mappings.every(mappingReviewed);
+  const approved = ready && status !== undefined && (journeyStepFor(status) ?? 0) >= 4;
+  const projection = ready && snapshot ? projectJourney({ status: snapshot.workflow_status, mappingIssues: pendingMappingsIn(mappings), readinessIssues: snapshot.assessment?.blocker_count ?? 0 }) : undefined;
+  const current = projection?.current ?? null;
 
-      <MigrationJourney className="mt-10" current={journeyStep} />
+  async function reviewMappings() {
+    if (!ready || !plan || busy) return;
+    if (!mappings.length && status === "PLANNED" && !await mutate("/mappings")) return;
+    changeView("map");
+  }
 
-      <Panel className="mt-8 border-[var(--primary)]">
-        <div className="flex flex-wrap items-center justify-between gap-5">
-          <div className="flex items-start gap-4">
-            <div className="activity-icon"><GitBranch aria-hidden="true" size={19} /></div>
-            <div>
-              <h2 className="type-section">Migration Plan</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-secondary">
-                Planning explains what happens, why the sequence matters, and what you must do.
-                It does not execute a migration.
-              </p>
-            </div>
-          </div>
-          <Button variant={readState === "ready" ? "primary" : "secondary"} onClick={preparePlan} disabled={readState !== "ready" || running || Boolean(mappings.length)}>
-            {plan ? "Plan and mappings prepared" : "Create my migration plan"}
-            <ArrowRight aria-hidden="true" size={17} />
-          </Button>
-        </div>
-        {running && <div className="mt-5"><LoadingState label={phase === "planning" ? "Planning dependencies and checkpoints" : "Preparing mapping proposals"} /></div>}
-        {readState === "loading" && <div className="mt-5"><LoadingState label="Loading your migration" /></div>}
-      </Panel>
+  return <main id="main-content" className="shell min-h-[75vh] py-12 sm:py-16">
+    <header className="max-w-3xl"><p className="eyebrow text-primary">Plan → Map → Approve</p>
+      <h1 ref={heading} tabIndex={-1} className="type-page mt-4">{approved ? "Your Migration Plan Is Approved" : plan ? view === "map" ? "Choose Where Your Records Go" : view === "approve" ? "Review Your Migration Plan" : "Your Migration Plan Is Ready" : "Prepare Your Migration Plan"}</h1>
+      <p className="mt-5 text-lg leading-8 text-secondary">{approved ? (status === "APPROVED" || status === "MIGRATION_READY" ? "Your approval is recorded. Start Migration separately when you are ready." : "Your approved plan is retained with this migration. Return to My Migration for your current next step.") : "Review the scope and evidence, confirm each mapping, then explicitly approve your plan. Nothing moves during this review."}</p>
+    </header>
+    <MigrationJourney className="mt-8" current={current} held={projection?.held} currentLabel={projection?.currentLabel} unknown={readState === "loading" ? "loading" : "unavailable"} processing={working === "/plan" ? PROCESSING.plan : working === "/mappings" ? PROCESSING.map : undefined} />
+    {readState === "loading" && <div className="mt-6"><LoadingState label="Loading your migration" /></div>}
+    {error && <div className="mt-6"><Alert tone="error" title="Migration Review Stopped"><p>{error}</p><p className="mt-2">No new approval or progress is assumed. Read this migration again before recording another decision.</p>{sessionRef.current && <Button variant="secondary" className="mt-4" disabled={busy} onClick={() => { setError(undefined); void refresh().catch(caught => setError(caught instanceof Error ? caught.message : "Session unavailable.")); }}>Read migration again</Button>}<a className="ml-4 font-semibold underline" href="/workspace">My Migration</a></Alert></div>}
+    {!plan && <Panel className="mt-8"><h2 className="type-section">Create the Plan for This Migration</h2><p className="mt-2 text-secondary">Complete your assessment first. Planning preserves its blockers and prepares the scope for your review.</p><Button className="mt-4" variant={ready && status === "ASSESSED" ? "primary" : "secondary"} disabled={!ready || status !== "ASSESSED" || busy} onClick={() => void mutate("/plan")}>Create My Migration Plan</Button>{ready && ["CREATED", "DISCOVERED"].includes(status ?? "") && <ActionLink className="mt-4 sm:ml-4" label="Continue Assessment" href={`/assess?session=${snapshot?.id}`} />}</Panel>}
+    {plan && <>
+      <nav className="mt-6 flex flex-wrap gap-2" aria-label="Plan review views">
+        <Button variant="ghost" aria-current={view === "plan" ? "page" : undefined} onClick={() => changeView("plan")}>Plan Summary</Button>
+        {mappings.length > 0 && <Button variant="ghost" aria-current={view === "map" ? "page" : undefined} onClick={() => changeView("map")}>Mappings</Button>}
+        {reviewed && <Button variant="ghost" aria-current={view === "approve" ? "page" : undefined} onClick={() => changeView("approve")}>Approval Review</Button>}
+      </nav>
+      {view === "plan" && <><Panel className="mt-6 flex flex-wrap items-center justify-between gap-4"><p className="max-w-xl text-secondary">{approved ? "This scope is retained with the migration." : "Check the scope, blockers and review workload, then review the destination for every mapping."}</p>{!approved && <Button disabled={!ready || busy || !["PLANNED", "MAPPING", "AWAITING_APPROVAL"].includes(status ?? "")} onClick={() => void reviewMappings()}>Review Mappings</Button>}{approved && <ApprovedHandoff snapshot={snapshot!} />}</Panel><PlanSummary plan={plan} mappings={mappings} /></>}
+      {view === "map" && <MappingReview handoff={approved ? <ApprovedHandoff snapshot={snapshot!} /> : undefined} mappings={mappings} history={snapshot?.human_decisions ?? []} editable={editable} busy={busy} planApproved={approved} decide={async (mapping, action, target) => {
+        if (!editable) return;
+        await mutate(`/mappings/${mapping.id}/${action}`, action === "modify" ? { selected_target: target, comment: "Changed after reviewing the displayed evidence" } : { comment: action === "approve" ? "Reviewed the displayed mapping and evidence" : "Rejected after reviewing the displayed evidence" });
+      }} reconsider={async (mapping, path, body) => { if (!editable || !await mutate(`/mappings/${mapping.id}${path}`, body)) throw new Error("Reconsideration could not be confirmed. Read the migration again."); }} onReviewPlan={() => changeView("approve")} />}
+      {view === "approve" && <>
+        <ApprovalReview plan={plan} mappings={mappings} approved={approved} readConfirmed={ready} busy={busy} fallbackFocusRef={heading} assessmentBlocked={Boolean(snapshot?.assessment?.blocker_count) || snapshot?.assessment?.readiness === "BLOCKED"} canApprove={editable && reviewed && !plan.blockers.length} approve={() => mutate("/plan", { action: "approve", plan_id: plan.id })} />
+        {approved && <div className="mt-6"><ApprovedHandoff snapshot={snapshot!} /></div>}
+      </>}
+    </>}
+    {snapshot && <details className="mt-8"><summary className="cursor-pointer font-semibold">Recorded Human Decisions</summary><ul className="mt-4 space-y-3 break-words text-sm text-secondary">{(snapshot.human_decisions ?? []).map(decision => <li key={decision.id}>{decision.decision} · {decision.actor} · <time>{decision.occurred_at}</time> · Decision {decision.id}</li>)}</ul>{!snapshot.human_decisions?.length && <p className="mt-3 text-secondary">No human decisions recorded yet.</p>}</details>}
+    <p className="mt-10 border-t border-token pt-6 text-sm text-secondary">Deterministic controls remain authoritative. This review uses a synthetic target; no production accounting writes are enabled.</p>
+  </main>;
+}
 
-      {plan && pending > 0 && <NextAction label="Review mappings" href="#mapping-heading">{pending} of {mappings.length} {mappings.length === 1 ? "mapping needs" : "mappings need"} your decision. Approve, change or reject each recommendation; nothing moves until the plan is approved.</NextAction>}
-
-      {error && <div className="mt-6"><Alert tone="error" title="Governed workflow stopped"><p className="mt-1">{error}</p></Alert></div>}
-
-      {plan && (
-        <section className="mt-14 motion-enter" aria-labelledby="plan-heading">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div><p className="eyebrow text-primary">Planning Agent</p><h2 id="plan-heading" className="type-section mt-2">Seven-phase plan</h2></div>
-            <div className="flex gap-2"><Badge>{plan.version}</Badge><Badge>{plan.relative_complexity} relative complexity</Badge></div>
-          </div>
-          <ol className="mt-5 grid gap-4">
-            {plan.phases.map((item) => (
-              <li key={item.id}>
-                <Card>
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div><p className="type-meta">Sequence {item.sequence} · {item.agent_responsible}</p><h3 className="mt-1 type-card">{item.name}</h3></div>
-                    <StatusBadge status={phaseProductStatus(item.status)} />
-                  </div>
-                  <p className="mt-3 text-sm leading-6 text-secondary">{item.objective}</p>
-                  <dl className="mt-4 grid gap-3 border-t border-token pt-4 text-sm md:grid-cols-3">
-                    <div><dt className="font-bold">Depends on</dt><dd className="mt-1 text-secondary">{item.dependencies.join(", ") || "Assessment evidence"}</dd></div>
-                    <div><dt className="font-bold">Customer action</dt><dd className="mt-1 text-secondary">{item.customer_action}</dd></div>
-                    <div><dt className="font-bold">Approval checkpoint</dt><dd className="mt-1 text-secondary">{item.approval_checkpoint ?? "None"}</dd></div>
-                  </dl>
-                </Card>
-              </li>
-            ))}
-          </ol>
-        </section>
-      )}
-
-      {mappings.length > 0 && (
-        <section className="mt-14" aria-labelledby="mapping-heading">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div><p className="eyebrow text-primary">Mapping Agent + specialists</p><h2 id="mapping-heading" className="type-section mt-2">Review mapping proposals</h2><p className="mt-2 text-secondary">Confidence supports review; deterministic controls and your decision govern progression.</p></div>
-            <StatusBadge status={decisionsComplete ? "COMPLETED" : "REQUIRES APPROVAL"} />
-          </div>
-          <div className="mt-5 grid gap-4">
-            {mappings.map((item) => (
-              <Card key={item.id} aria-label={`${item.source_label} mapping`}>
-                <div className="grid gap-5 lg:grid-cols-[1fr_1fr_auto]">
-                  <div><p className="type-meta">Source · {humanize(item.area)}</p><h3 className="mt-1 type-card">{item.source_label}</h3><p className="mt-2 text-sm text-secondary">Specialist: {humanize(item.specialist)}</p></div>
-                  <div><p className="type-meta">Recommended target</p><p className="mt-1 font-bold">{item.selected_target}</p><p className="mt-2 text-sm text-secondary">Confidence {Math.round(item.confidence * 100)}% · {humanize(item.risk)} risk</p></div>
-                  <StatusBadge status={mappingProductStatus(item.state)} />
-                </div>
-                <p className="mt-4 text-sm leading-6 text-secondary">{item.rationale}</p>
-                {expanded[item.id] && <div className="mt-4 rounded-lg bg-[var(--surface-subtle)] p-4 text-sm"><strong>Evidence and policy</strong><ul className="mt-2 grid gap-1 text-secondary">{item.evidence.map((evidence) => <li key={evidence}>• {evidence}</li>)}{item.policy_reasons.map((reason) => <li key={reason}>• {reason}</li>)}</ul></div>}
-                <div className="mt-5 grid gap-4 border-t border-token pt-4 lg:grid-cols-[1fr_auto]">
-                  <div className="max-w-md">
-                    <Select label="Modify target" value={modifications[item.id] ?? ""} onChange={(event) => setModifications((current) => ({ ...current, [item.id]: event.target.value }))} disabled={item.state === "APPROVED" || item.state === "MODIFIED" || item.state === "REJECTED"}>
-                      <option value="">Choose a supported alternative</option>
-                      {[item.recommended_target, ...item.alternatives].filter((value, index, values) => values.indexOf(value) === index).map((option) => <option key={option} value={option}>{option}</option>)}
-                    </Select>
-                  </div>
-                  <div className="flex flex-wrap items-end gap-2">
-                    <Button size="small" variant="ghost" onClick={() => setExpanded((current) => ({ ...current, [item.id]: !current[item.id] }))}><MessageCircleQuestion aria-hidden="true" size={16} /> Ask for explanation</Button>
-                    <Button size="small" variant="secondary" onClick={() => decide(item, "reject")} disabled={["APPROVED", "MODIFIED", "REJECTED"].includes(item.state)}>Reject</Button>
-                    <Button size="small" variant="secondary" onClick={() => decide(item, "modify")} disabled={!modifications[item.id] || ["APPROVED", "MODIFIED", "REJECTED"].includes(item.state)}>Modify</Button>
-                    <Button size="small" onClick={() => decide(item, "approve")} disabled={item.state === "BLOCKED" || ["APPROVED", "MODIFIED", "REJECTED"].includes(item.state)}>Approve</Button>
-                  </div>
-                </div>
-                <MappingReconsideration mapping={item} history={history} submit={async (path, body) => {
-                  if (readState !== "ready" || !sessionId) throw new Error("Read the migration successfully before recording a decision.");
-                  await api(`/v1/migration-sessions/${sessionId}/mappings/${item.id}${path}`, {method: "POST", body: JSON.stringify(body)});
-                  const snapshot = await api<{mappings: MappingProposal[]; human_decisions: MappingHistoryDecision[]; activity: AgentActivity[]}>(`/v1/migration-sessions/${sessionId}`);
-                  setMappings(snapshot.mappings); setHistory(snapshot.human_decisions); setActivity(snapshot.activity);
-                }} />
-              </Card>
-            ))}
-          </div>
-          <div className="mt-6">
-            <Alert tone={handoffReady ? "success" : "warning"} title={handoffReady ? "Approved manifest ready for handoff" : "Migration remains stopped"}>
-              <p className="mt-1">{handoffReady ? "Your approved mappings and plan will be used by migration in this same business session. No target writes have occurred yet." : decisionsComplete ? "Mapping decisions are complete, but deterministic assessment blockers must be resolved before migration handoff." : "Every proposal must reach an approved or modified state. Blocked, rejected, or pending decisions prevent migration handoff."}</p>
-              {handoffReady && <ActionLink className="mt-4" label="Start migration" href={`/migrate-resolve?session=${sessionId}`} />}
-            </Alert>
-          </div>
-        </section>
-      )}
-
-      {activity.length > 0 && (
-        <section className="mt-14" aria-labelledby="planning-activity-heading">
-          <div className="flex items-center gap-3"><div className="activity-icon"><Bot aria-hidden="true" size={18} /></div><div><p className="eyebrow text-primary">Agent operations</p><h2 id="planning-activity-heading" className="type-section mt-1">Planning, mapping, and approval activity</h2></div></div>
-          <Panel className="mt-5"><ul>{activity.slice(-12).map((item) => <li className="activity-item" key={item.id}><div className="activity-icon"><CheckCircle2 aria-hidden="true" size={17} /></div><div><div className="flex flex-wrap items-center justify-between gap-2"><strong className="text-sm">{item.action}</strong><Badge>{humanize(item.risk)} risk</Badge></div><p className="mt-1 text-xs text-secondary">{humanize(item.agent)} · {humanize(item.tool)} · {item.provenance}</p></div></li>)}</ul></Panel>
-        </section>
-      )}
-
-      <footer className="mt-14 grid gap-3 border-t border-token py-8 text-sm text-secondary sm:grid-cols-3">
-        <div className="flex gap-2"><ShieldCheck aria-hidden="true" className="shrink-0 text-primary" size={19} /><span>Deterministic controls remain authoritative.</span></div>
-        <div className="flex gap-2"><LockKeyhole aria-hidden="true" className="shrink-0 text-primary" size={19} /><span>Human approval gates consequential mappings.</span></div>
-        <div className="flex gap-2"><FileCheck2 aria-hidden="true" className="shrink-0 text-primary" size={19} /><span>Synthetic evidence only; no target writes.</span></div>
-      </footer>
-    </main>
-  );
+function ApprovedHandoff({ snapshot }: { snapshot: Snapshot }) {
+  return ["APPROVED", "MIGRATION_READY"].includes(snapshot.workflow_status) ? <ActionLink label="Start Migration" href={`/migrate-resolve?session=${snapshot.id}`} /> : <ActionLink label="Return to My Migration" href={`/workspace?session=${snapshot.id}`} />;
 }
