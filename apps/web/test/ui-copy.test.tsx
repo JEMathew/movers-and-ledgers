@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import SignIn from "@/app/sign-in/page";
-import { assessHeldFor, journeyCurrentLabelFor, journeyHeldFor, journeySteps, nextActionFor } from "@/components/journey/journey";
+import { journeyCurrentLabelFor, journeyHeldFor, journeySteps, nextActionFor, projectJourney } from "@/components/journey/journey";
 import { footerLinks, memberLinks, publicLinks } from "@/components/public-surfaces/content";
 
 afterEach(() => vi.unstubAllEnvs());
@@ -53,9 +53,8 @@ describe("customer-facing label casing", () => {
     expect(journeyHeldFor("ASSESSED", 1)).toEqual({ index: 0, label: "Blocked" });
     expect(journeyHeldFor("AWAITING_APPROVAL", 2)).toEqual({ index: 0, label: "Blocked" });
     expect(journeyHeldFor("ASSESSED", 0)).toBeUndefined();
-    expect(assessHeldFor(1, 3)).toEqual({ index: 0, label: "Blocked" });
-    expect(assessHeldFor(0, 2)).toEqual({ index: 0, label: "Needs Attention" });
-    expect(assessHeldFor(0, 0)).toBeUndefined();
+    expect(projectJourney({ status: "ASSESSED", readinessIssues: 1 }).held).toEqual({ index: 0, label: "Blocked" });
+    expect(projectJourney({ status: "ASSESSED", readinessIssues: 0 }).held).toBeUndefined();
   });
   it("names every journey state as part of the current product", () => {
     expect(journeySteps.map(step => step.label)).toEqual(["Assess", "Plan", "Map", "Approve", "Migrate", "Resolve", "Validate", "Set Up", "Start Using"]);

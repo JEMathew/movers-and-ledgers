@@ -15,7 +15,7 @@ import type { AgentActivity } from "@/components/discover-assess/types";
 import { Dialog } from "@/components/ui/dialog";
 import { Alert } from "@/components/ui/feedback";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
-import { journeyCurrentLabelFor, journeyStepFor, PROCESSING } from "@/components/journey/journey";
+import { journeyStepFor, pendingMappingsIn, PROCESSING, projectJourney } from "@/components/journey/journey";
 import { NextAction } from "@/components/journey/NextAction";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
@@ -77,12 +77,17 @@ export function MigrateResolveExperience() {
     return () => { active = false; };
   }, []);
 
+  // The execution's status is the live read while migrating. Otherwise the session's workflow
+  // status is authoritative: once the migration has moved on (for example to blocked validation)
+  // the execution still reads MIGRATION_COMPLETE, so it leads only when it is further along.
+  const ahead = (a: string, b: string) => (journeyStepFor(a) ?? -1) > (journeyStepFor(b) ?? -1);
+  const status = session && (execution && ahead(execution.status, session.workflow_status) ? execution.status : session.workflow_status);
+  const projection = session && status ? projectJourney({ status, mappingIssues: pendingMappingsIn(session.mappings), readinessIssues: session.assessment?.blocker_count ?? 0 }) : undefined;
   const proposal = execution?.resolutions.at(-1);
   const failure = execution?.failures.find((item) => item.id === proposal?.failure_id);
   const complete = execution?.status === "MIGRATION_COMPLETE";
   const resolving = execution?.status === "RESOLVING";
   const retryPending = execution?.status === "RETRY_PENDING";
-  const paused = resolving || retryPending || execution?.status === "MIGRATION_BLOCKED";
   const openIssues = execution?.failures.filter((item) => !item.resolved).length ?? 0;
 
   const loadDemo = async () => {
@@ -184,7 +189,7 @@ export function MigrateResolveExperience() {
         </div>
       </header>
 
-      <MigrationJourney className="mt-10" current={!session ? null : complete ? 6 : paused ? 5 : execution ? 4 : journeyStepFor(session.workflow_status)} held={paused ? { index: 4, label: "Paused" } : undefined} currentLabel={session ? journeyCurrentLabelFor(execution?.status ?? session.workflow_status) : undefined} processing={working ? PROCESSING[working] : undefined} />
+      <MigrationJourney className="mt-10" current={projection?.current ?? null} held={projection?.held} currentLabel={projection?.currentLabel} processing={working ? PROCESSING[working] : undefined} />
 
       {error && (
         <div className="mt-6">

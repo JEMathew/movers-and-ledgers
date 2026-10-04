@@ -6,7 +6,7 @@ import { Alert } from "@/components/ui/feedback";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
-import { stepWithin } from "@/components/journey/journey";
+import { projectJourney } from "@/components/journey/journey";
 import { ActionLink } from "@/components/journey/NextAction";
 import type { Snapshot, Task } from "./types";
 import { authHeaders } from "@/lib/identity";
@@ -66,6 +66,7 @@ export function OnboardFpuExperience() {
   }
   function open(value: Review) { setError(undefined); setComment(""); setSelection("task" in value ? value.task.choices[0] ?? "" : ""); setReview(value); }
   const root = `/migration-sessions/${snapshot?.session_id}`;
+  const projection = snapshot ? projectJourney({ status: snapshot.workflow_status }) : undefined;
   const fpu = snapshot?.onboarding?.fpu;
   const complete = snapshot?.tasks.filter(t => t.status === "COMPLETED").length ?? 0;
   const frozen = !!fpu && (fpu.checkpoint !== "DRAFT" || fpu.attempts > 0);
@@ -74,7 +75,7 @@ export function OnboardFpuExperience() {
 
   return <main className="shell py-12">
     <div className="max-w-3xl"><p className="eyebrow text-primary">Set Up → Start Using</p><h1 className="type-page mt-3">Start Using Your Books</h1><p className="mt-5 type-body-secondary">Complete your first real task in your migrated books.</p></div>
-    <MigrationJourney className="mt-8" current={!snapshot ? null : stepWithin(snapshot.workflow_status, snapshot.verified_fpu ? 9 : snapshot.ready || fpu ? 8 : 7)} />
+    <MigrationJourney className="mt-8" current={projection?.current ?? null} held={projection?.held} currentLabel={projection?.currentLabel} />
     <Panel className="mt-8"><Badge>Synthetic public-reference Beta</Badge><p className="mt-3 text-sm text-secondary">No real provider writes, bank connection, or production readiness claim. Demo loading explicitly replays earlier migration and configuration approvals. All new onboarding and invoice decisions are yours, attributed to the API-verified workspace owner. Local demo sessions are process-local; cloud-mode synthetic sessions use durable state.</p><div className="mt-4 flex flex-wrap items-end gap-3"><label className="text-sm">Synthetic scenario<select className="field-control mt-2 block max-w-full" value={scenario} onChange={e => setScenario(e.target.value)}>{["clean", "posting_failure", "missing_customer", "missing_product", "invalid_tax", "invalid_mapping", "totals_mismatch", "missing_role", "incomplete_configuration", "verification_interrupted"].map(s => <option key={s} value={s}>{s.replaceAll("_", " ")}</option>)}</select></label><Button disabled={busy} variant="secondary" onClick={async () => { if (await perform("/onboarding-demo-sessions", {scenario})) { setEditing(false); setQuantity(1); setPrice("100.00"); } }}>Load synthetic scenario</Button></div></Panel>
     <div className="mt-4 min-h-6 text-sm" ref={statusRef} tabIndex={-1} role="status" aria-live="polite">{busy ? "Checking evidence and recording your action…" : snapshot ? `${snapshot.company_name} · ${snapshot.effective_status.replaceAll("_", " ")}` : "Choose a scenario or continue from Configure."}</div>
     {error && !review && <Alert tone="error" title="Action not completed"><p>{error}</p><p>No success is assumed. Review and retry.</p></Alert>}

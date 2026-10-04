@@ -7,7 +7,7 @@ import { Alert } from "@/components/ui/feedback";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
-import { PROCESSING, stepWithin } from "@/components/journey/journey";
+import { PROCESSING, projectJourney } from "@/components/journey/journey";
 import { ActionLink } from "@/components/journey/NextAction";
 import type { Check, Proposal, Snapshot } from "./types";
 import { authHeaders } from "@/lib/identity";
@@ -84,6 +84,7 @@ export function ValidateConfigureExperience() {
     } finally { setBusy(false); setChecking(false); }
   }
   const root = `/migration-sessions/${snapshot?.session_id}`;
+  const projection = snapshot ? projectJourney({ status: snapshot.workflow_status }) : undefined;
   const report = snapshot?.report;
   const plan = snapshot?.configuration;
   const approved = plan?.proposals.every(p => ["APPLIED", "APPROVED", "MODIFIED"].includes(p.state));
@@ -103,7 +104,7 @@ export function ValidateConfigureExperience() {
     <div className="max-w-3xl"><p className="eyebrow text-primary">Validate → Configure</p><h1 className="type-page mt-3">Know It Matches.<br />Make It Yours.</h1>
       <p className="mt-5 type-body-secondary">Compare the migrated books with their source, resolve differences, then review the settings that shape the working environment.</p>
     </div>
-    <MigrationJourney className="mt-8" current={!snapshot ? null : stepWithin(snapshot.workflow_status, plan ? 7 : 6)} processing={checking ? PROCESSING.validate : undefined} />
+    <MigrationJourney className="mt-8" current={projection?.current ?? null} held={projection?.held} currentLabel={projection?.currentLabel} processing={checking ? PROCESSING.validate : undefined} />
     <Panel className="mt-8"><Badge>Synthetic public-reference Beta</Badge><p className="mt-3 text-sm text-secondary">No provider writes. No production readiness claim. These scenarios explicitly replay earlier synthetic migration approvals; your validation repairs and configuration decisions remain interactive. Local demo sessions are process-local and may expire; cloud synthetic workspaces persist across restarts.</p>
       <div className="mt-4 flex flex-wrap gap-3"><Button disabled={busy} variant="secondary" onClick={() => perform("/validation-demo-sessions", { scenario: "ar_discrepancy" })}>Load discrepancy scenario</Button><Button disabled={busy} variant="ghost" onClick={() => perform("/validation-demo-sessions", { scenario: "clean" })}>Load reconciled scenario</Button></div>
     </Panel>

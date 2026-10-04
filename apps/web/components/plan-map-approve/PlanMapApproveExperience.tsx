@@ -5,7 +5,7 @@ import { authHeaders } from "@/lib/identity";
 import { Alert, LoadingState } from "@/components/ui/feedback";
 import { Button, Panel } from "@/components/ui/primitives";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
-import { journeyCurrentFor, journeyHeldFor, journeyStepFor, PROCESSING } from "@/components/journey/journey";
+import { journeyStepFor, pendingMappingsIn, PROCESSING, projectJourney } from "@/components/journey/journey";
 import { ActionLink } from "@/components/journey/NextAction";
 import { isSessionId, projectSession, SELECTED_SESSION_KEY } from "@/components/public-surfaces/session";
 import { MappingReview, mappingReviewed } from "./MappingReview";
@@ -118,7 +118,8 @@ export function PlanMapApproveExperience() {
   const editable = ready && status === "AWAITING_APPROVAL";
   const reviewed = mappings.length > 0 && mappings.every(mappingReviewed);
   const approved = ready && status !== undefined && (journeyStepFor(status) ?? 0) >= 4;
-  const current = ready && snapshot ? journeyCurrentFor({ id: snapshot.id, status: snapshot.workflow_status, mappingIssues: mappings.filter(mapping => !mappingReviewed(mapping)).length, readinessIssues: 0, migrationIssues: 0, verificationIssues: 0 }) : null;
+  const projection = ready && snapshot ? projectJourney({ status: snapshot.workflow_status, mappingIssues: pendingMappingsIn(mappings), readinessIssues: snapshot.assessment?.blocker_count ?? 0 }) : undefined;
+  const current = projection?.current ?? null;
 
   async function reviewMappings() {
     if (!ready || !plan || busy) return;
@@ -131,7 +132,7 @@ export function PlanMapApproveExperience() {
       <h1 ref={heading} tabIndex={-1} className="type-page mt-4">{approved ? "Your Migration Plan Is Approved" : plan ? view === "map" ? "Choose Where Your Records Go" : view === "approve" ? "Review Your Migration Plan" : "Your Migration Plan Is Ready" : "Prepare Your Migration Plan"}</h1>
       <p className="mt-5 text-lg leading-8 text-secondary">{approved ? (status === "APPROVED" || status === "MIGRATION_READY" ? "Your approval is recorded. Start Migration separately when you are ready." : "Your approved plan is retained with this migration. Return to My Migration for your current next step.") : "Review the scope and evidence, confirm each mapping, then explicitly approve your plan. Nothing moves during this review."}</p>
     </header>
-    <MigrationJourney className="mt-8" current={current} held={status && ready ? journeyHeldFor(status, plan?.blockers.length ?? 0) : undefined} unknown={readState === "loading" ? "loading" : "unavailable"} processing={working === "/plan" ? PROCESSING.plan : working === "/mappings" ? PROCESSING.map : undefined} />
+    <MigrationJourney className="mt-8" current={current} held={projection?.held} currentLabel={projection?.currentLabel} unknown={readState === "loading" ? "loading" : "unavailable"} processing={working === "/plan" ? PROCESSING.plan : working === "/mappings" ? PROCESSING.map : undefined} />
     {readState === "loading" && <div className="mt-6"><LoadingState label="Loading your migration" /></div>}
     {error && <div className="mt-6"><Alert tone="error" title="Migration Review Stopped"><p>{error}</p><p className="mt-2">No new approval or progress is assumed. Read this migration again before recording another decision.</p>{sessionRef.current && <Button variant="secondary" className="mt-4" disabled={busy} onClick={() => { setError(undefined); void refresh().catch(caught => setError(caught instanceof Error ? caught.message : "Session unavailable.")); }}>Read migration again</Button>}<a className="ml-4 font-semibold underline" href="/workspace">My Migration</a></Alert></div>}
     {!plan && <Panel className="mt-8"><h2 className="type-section">Create the Plan for This Migration</h2><p className="mt-2 text-secondary">Complete your assessment first. Planning preserves its blockers and prepares the scope for your review.</p><Button className="mt-4" variant={ready && status === "ASSESSED" ? "primary" : "secondary"} disabled={!ready || status !== "ASSESSED" || busy} onClick={() => void mutate("/plan")}>Create My Migration Plan</Button>{ready && ["CREATED", "DISCOVERED"].includes(status ?? "") && <ActionLink className="mt-4 sm:ml-4" label="Continue Assessment" href={`/assess?session=${snapshot?.id}`} />}</Panel>}

@@ -80,4 +80,6 @@ export type DemoSession = {
   workflow_status: string;
   activity: AgentActivity[];
   execution?: MigrationExecution | null;
+  mappings?: { state: string }[];
+  assessment?: { blocker_count: number } | null;
 };

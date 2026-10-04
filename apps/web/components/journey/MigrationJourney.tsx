@@ -14,7 +14,7 @@ export function MigrationJourney({ current, held, currentLabel = "Current", unkn
   const known = current !== null;
   const done = known && current >= JOURNEY_COMPLETE;
   // Only the step MoveBooks is working on animates; idle, completed and held steps never do.
-  const working = known && !done && processing ? processing : undefined;
+  const working = known && !done && processing && processing.step === current ? processing : undefined;
   useEffect(() => {
     // On narrow screens the steps scroll sideways; keep the current step in view without moving the page.
     const el = list.current?.querySelector<HTMLElement>('[aria-current="step"]');

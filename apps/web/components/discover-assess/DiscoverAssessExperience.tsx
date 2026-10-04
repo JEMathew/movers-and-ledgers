@@ -15,7 +15,7 @@ import { Alert } from "@/components/ui/feedback";
 import { Badge, Button, Card, Link, Panel } from "@/components/ui/primitives";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
 import { NextAction } from "@/components/journey/NextAction";
-import { assessHeldFor, journeyPosition, PROCESSING } from "@/components/journey/journey";
+import { journeyPosition, pendingMappingsIn, PROCESSING, projectJourney, type JourneyEvidence } from "@/components/journey/journey";
 import { StatusBadge } from "@/components/ui/status";
 
 import type {
@@ -31,7 +31,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"
 import { authHeaders } from "@/lib/identity";
 import { ASSESSMENT_UNREACHABLE, reach } from "@/lib/reach";
 
-type Phase = "select" | "discovering" | "assessing" | "recommending" | "complete" | "error";
+type Phase = "select" | "discovering" | "assessing" | "complete" | "error";
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await reach(`${API_BASE}${path}`, {
@@ -82,6 +82,8 @@ export function DiscoverAssessExperience() {
   const [reading, setReading] = useState<"none" | "loading" | "failed">("none");
   const [discovery, setDiscovery] = useState<DiscoveryResult>();
   const [assessment, setAssessment] = useState<AssessmentResult>();
+  // The authoritative journey evidence for the migration on screen.
+  const [evidence, setEvidence] = useState<JourneyEvidence>();
   const [activity, setActivity] = useState<AgentActivity[]>([]);
   const [error, setError] = useState<string>();
   const [sample, setSample] = useState("northstar-supplies");
@@ -95,9 +97,15 @@ export function DiscoverAssessExperience() {
     const op = begin(latest, inflight);
     setError(undefined);
     setReading("loading");
-    void api<{id: string; sample_company_id: string; discovery?: DiscoveryResult; assessment?: AssessmentResult; activity: AgentActivity[]}>(`/v1/migration-sessions/${saved}`, { signal: op.signal }).then(data => {
+    void api<{id: string; sample_company_id: string; workflow_status?: string; discovery?: DiscoveryResult; assessment?: AssessmentResult; mappings?: { state: string }[]; activity: AgentActivity[]}>(`/v1/migration-sessions/${saved}`, { signal: op.signal }).then(data => {
       if (!op.current()) return;
       setSessionId(data.id); setDiscovery(data.discovery); setAssessment(data.assessment);
+      // Keep the fetched workflow status: a migration that has moved on must not read as just assessed.
+      setEvidence({
+        status: data.workflow_status ?? (data.assessment ? "ASSESSED" : data.discovery ? "DISCOVERED" : "CREATED"),
+        mappingIssues: pendingMappingsIn(data.mappings),
+        readinessIssues: data.assessment?.blocker_count ?? 0,
+      });
       sessionStorage.setItem("movebooks-migration-session", data.id);
       if (["northstar-supplies", "harbor-light-migrate-demo"].includes(data.sample_company_id)) setSample(data.sample_company_id);
       setActivity(data.activity); setPhase(data.assessment ? "complete" : "select");
@@ -131,11 +139,11 @@ export function DiscoverAssessExperience() {
     );
     if (!op.current()) return;
     setAssessment(assessed);
-    setPhase("recommending");
-    const recorded = await api<AgentActivity[]>(`/v1/migration-sessions/${id}/activity`, { signal: op.signal });
-    if (!op.current()) return;
-    setActivity(recorded);
+    setEvidence({ status: "ASSESSED", readinessIssues: assessed.blocker_count });
+    // The assessment is done; the activity record is secondary evidence, not assessing work.
     setPhase("complete");
+    const recorded = await api<AgentActivity[]>(`/v1/migration-sessions/${id}/activity`, { signal: op.signal }).catch(() => [] as AgentActivity[]);
+    if (op.current()) setActivity(recorded);
   };
 
   const failed = (caught: unknown, op: Operation) => {
@@ -149,6 +157,7 @@ export function DiscoverAssessExperience() {
   const startAssessment = async () => {
     const op = begin(latest, inflight);
     setError(undefined);
+    setEvidence(undefined);
     // A new assessment is a different migration: never show the previous one's results while it runs.
     setDiscovery(undefined); setAssessment(undefined); setActivity([]);
     try {
@@ -160,6 +169,7 @@ export function DiscoverAssessExperience() {
       });
       if (!op.current()) return;
       setSessionId(session.id);
+      setEvidence({ status: "CREATED" });
       setReading("none");
       sessionStorage.setItem("movebooks-migration-session", session.id);
       window.history.replaceState(null, "", `?session=${encodeURIComponent(session.id)}`);
@@ -189,7 +199,8 @@ export function DiscoverAssessExperience() {
     }).catch(() => undefined);
   };
 
-  const running = phase === "discovering" || phase === "assessing" || phase === "recommending";
+  const running = phase === "discovering" || phase === "assessing";
+  const projection = evidence ? projectJourney(evidence) : undefined;
   const resumable = !!sessionId && !assessment && !running;
   const blockers = discovery?.findings.filter((item) => item.category === "BLOCKER") ?? [];
   const warnings = discovery?.findings.filter((item) => item.category === "WARNING") ?? [];
@@ -209,10 +220,11 @@ export function DiscoverAssessExperience() {
 
       <MigrationJourney
         className="mt-10"
-        current={journeyPosition({ selected: reading !== "none" || Boolean(sessionId), loading: reading === "loading", failed: reading === "failed", step: assessment ? 1 : 0 })}
-        held={assessment ? assessHeldFor(assessment.blocker_count, assessment.warning_count) : undefined}
+        current={journeyPosition({ selected: reading !== "none" || Boolean(sessionId), loading: reading === "loading", failed: reading === "failed", step: projection?.current ?? 0 })}
+        held={projection?.held}
+        currentLabel={projection?.currentLabel}
         unknown={reading === "loading" ? "loading" : "unavailable"}
-        processing={running ? { ...PROCESSING.assess, stage: ["discovering", "assessing", "recommending"].indexOf(phase) } : undefined}
+        processing={running ? { ...PROCESSING.assess, stage: phase === "assessing" ? 1 : 0 } : undefined}
       />
 
       {assessment && discovery && (

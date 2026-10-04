@@ -39,14 +39,16 @@ export function journeyPosition({ selected, loading = false, failed = false, ste
 }
 /** Work MoveBooks is doing on the current step. Stage-based only: there is no measurable
  *  percentage, so none is shown. Wording is business language, never internal machinery. */
-export type Processing = { action: string; title: string; detail: string; stages?: readonly string[]; stage?: number };
+export type Processing = { step: number; action: string; title: string; detail: string; stages?: readonly string[]; stage?: number };
+/** Each operation belongs to one journey step. It is shown only while that step is the
+ *  current one, so a secondary read never puts "Assessing…" on Plan. */
 export const PROCESSING = {
-  assess: { action: "Assessing…", title: "Assessing your migration readiness", detail: "Reviewing your books, identifying risks, and preparing recommendations.", stages: ["Reviewing your data", "Checking migration risks", "Preparing recommendations"] },
-  plan: { action: "Preparing…", title: "Preparing your migration plan", detail: "Defining what will move and highlighting decisions that need your review." },
-  map: { action: "Preparing…", title: "Preparing your mappings", detail: "Aligning accounts and business data for migration." },
-  migrate: { action: "Migrating…", title: "Migrating your approved data", detail: "Moving your records in safe, checkpointed batches." },
-  resolve: { action: "Resolving…", title: "Applying your decision", detail: "Recording your decision and preparing the next step." },
-  validate: { action: "Validating…", title: "Checking your migrated books", detail: "Confirming balances, records, and key business data." },
+  assess: { step: 0, action: "Assessing…", title: "Assessing your migration readiness", detail: "Reviewing your books, identifying risks, and preparing recommendations.", stages: ["Reviewing your data", "Checking risks and preparing recommendations"] },
+  plan: { step: 1, action: "Preparing…", title: "Preparing your migration plan", detail: "Defining what will move and highlighting decisions that need your review." },
+  map: { step: 2, action: "Preparing…", title: "Preparing your mappings", detail: "Aligning accounts and business data for migration." },
+  migrate: { step: 4, action: "Migrating…", title: "Migrating your approved data", detail: "Moving your records in safe, checkpointed batches." },
+  resolve: { step: 5, action: "Resolving…", title: "Applying your decision", detail: "Recording your decision and preparing the next step." },
+  validate: { step: 6, action: "Validating…", title: "Checking your migrated books", detail: "Confirming balances, records, and key business data." },
 } satisfies Record<string, Processing>;
 
 /** Why a position is unknown, for the journey heading. */
@@ -82,9 +84,23 @@ export function journeyHeldFor(status: string, readinessIssues = 0): HeldStep | 
   const step = journeyStepFor(status);
   return readinessIssues > 0 && step !== null && step >= 1 && step <= 3 ? { index: 0, label: "Blocked" } : undefined;
 }
-/** How Assess reads once its result is known: blockers hold it, items to review mark it. */
-export function assessHeldFor(blockers: number, warnings: number): HeldStep | undefined {
-  return blockers > 0 ? { index: 0, label: "Blocked" } : warnings > 0 ? { index: 0, label: "Needs Attention" } : undefined;
+/** What a page knows about a migration: its authoritative workflow status, plus what the
+ *  status alone cannot say. Every page builds this from the session it read. */
+export type JourneyEvidence = { status: string; mappingIssues?: number | null; readinessIssues?: number };
+export type JourneyProjection = { current: number | null; held?: HeldStep; currentLabel: CurrentStepLabel };
+/** The one journey projection. My Migration and every stage page use it, so the same migration
+ *  shows the same position, held steps and current-step label everywhere: pending mappings keep
+ *  Map current, blocked validation reads Blocked, and nothing completed ever regresses. */
+export function projectJourney({ status, mappingIssues, readinessIssues = 0 }: JourneyEvidence): JourneyProjection {
+  return {
+    current: journeyCurrentFor({ id: "", status, readinessIssues, migrationIssues: 0, verificationIssues: 0, mappingIssues }),
+    held: journeyHeldFor(status, readinessIssues),
+    currentLabel: journeyCurrentLabelFor(status),
+  };
+}
+/** Mapping reviews still pending in a page's own mapping list; unknown when none are listed. */
+export function pendingMappingsIn(mappings?: readonly { state: string }[] | null): number | null {
+  return mappings?.length ? mappings.filter(mapping => !["APPROVED", "MODIFIED"].includes(mapping.state)).length : null;
 }
 
 const SESSION = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
