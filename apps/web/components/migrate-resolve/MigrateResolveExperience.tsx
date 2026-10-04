@@ -60,14 +60,21 @@ export function MigrateResolveExperience() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [activity, setActivity] = useState<AgentActivity[]>([]);
 
+  // A user action supersedes a still-pending initial read; the late read is ignored.
+  const acted = useRef(0);
   useEffect(() => {
     const saved = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session");
     if (!saved) return;
+    let active = true;
+    const before = acted.current;
+    const fresh = () => active && acted.current === before;
     void api<DemoSession>(`/v1/migration-sessions/${saved}`).then(data => {
+      if (!fresh()) return;
       setSession(data); setExecution(data.execution ?? undefined); setActivity(data.activity);
       sessionStorage.setItem("movebooks-migration-session", data.id);
       window.history.replaceState(null, "", `?session=${encodeURIComponent(data.id)}`);
-    }).catch(caught => setError(caught.message));
+    }).catch(caught => { if (fresh()) setError(caught.message); });
+    return () => { active = false; };
   }, []);
 
   const proposal = execution?.resolutions.at(-1);
@@ -79,6 +86,7 @@ export function MigrateResolveExperience() {
   const openIssues = execution?.failures.filter((item) => !item.resolved).length ?? 0;
 
   const loadDemo = async () => {
+    acted.current += 1;
     setBusy(true);
     setError(undefined);
     try {
@@ -96,6 +104,7 @@ export function MigrateResolveExperience() {
   };
 
   const start = async () => {
+    acted.current += 1;
     if (!session) return;
     setBusy(true); setWorking("migrate");
     setError(undefined);
@@ -118,6 +127,7 @@ export function MigrateResolveExperience() {
   };
 
   const decide = async (approve: boolean) => {
+    acted.current += 1;
     if (!session || !proposal) return;
     setBusy(true); setWorking("resolve");
     setError(undefined);
@@ -143,6 +153,7 @@ export function MigrateResolveExperience() {
   };
 
   const retry = async () => {
+    acted.current += 1;
     if (!session) return;
     setBusy(true); setWorking("migrate");
     setError(undefined);

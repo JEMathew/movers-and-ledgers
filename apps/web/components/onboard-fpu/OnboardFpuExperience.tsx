@@ -41,14 +41,19 @@ export function OnboardFpuExperience() {
     setCustomer(data.onboarding?.fpu?.inputs.customer_id ?? data.customers[0]?.id ?? "");
     setProduct(data.onboarding?.fpu?.inputs.product_id ?? data.products[0]?.id ?? "");
   }
+  // A user action supersedes a still-pending initial read; the late read is ignored.
+  const acted = useRef(0);
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session") ?? sessionStorage.getItem(STORAGE);
     if (!id) return;
     let active = true;
-    request(`/migration-sessions/${encodeURIComponent(id)}/onboarding`, undefined, "GET").then(data => { if (active) { accept(data); sessionStorage.setItem("movebooks-migration-session", data.session_id); } }).catch(() => { if (active) setError("Saved session unavailable. Start a new synthetic scenario."); });
+    const before = acted.current;
+    const fresh = () => active && acted.current === before;
+    request(`/migration-sessions/${encodeURIComponent(id)}/onboarding`, undefined, "GET").then(data => { if (fresh()) { accept(data); sessionStorage.setItem("movebooks-migration-session", data.session_id); } }).catch(() => { if (fresh()) setError("Saved session unavailable. Start a new synthetic scenario."); });
     return () => { active = false; };
   }, []);
   async function perform(path: string, body?: object, key?: string) {
+    acted.current += 1;
     setBusy(true); setError(undefined);
     try {
       const data = await request(path, body, "POST", key); accept(data);

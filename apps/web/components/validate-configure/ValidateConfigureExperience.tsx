@@ -53,17 +53,22 @@ export function ValidateConfigureExperience() {
   const [selected, setSelected] = useState("");
   const [comment, setComment] = useState("");
 
+  // A user action supersedes a still-pending initial read; the late read is ignored.
+  const acted = useRef(0);
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session") ?? sessionStorage.getItem(STORAGE_KEY);
     if (!id) return;
     let active = true;
+    const before = acted.current;
+    const fresh = () => active && acted.current === before;
     request(`/migration-sessions/${encodeURIComponent(id)}/validation-configuration`, undefined, "GET")
-      .then(data => { if (active) { setSnapshot(data); sessionStorage.setItem("movebooks-migration-session", data.session_id); } })
-      .catch(() => { if (active) setError("The saved demo session is unavailable. Start a new synthetic scenario below."); });
+      .then(data => { if (fresh()) { setSnapshot(data); sessionStorage.setItem("movebooks-migration-session", data.session_id); } })
+      .catch(() => { if (fresh()) setError("The saved demo session is unavailable. Start a new synthetic scenario below."); });
     return () => { active = false; };
   }, []);
 
   async function perform(path: string, body?: object, close = false) {
+    acted.current += 1;
     // Checking the books is the one long-running step worth naming on the journey.
     setBusy(true); setChecking(/\/(re)?validation$/.test(path)); setError(undefined);
     try {

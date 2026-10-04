@@ -9,7 +9,7 @@ import {
   ShieldCheck,
   Upload,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { type RefObject, useEffect, useRef, useState } from "react";
 
 import { Alert } from "@/components/ui/feedback";
 import { Badge, Button, Card, Link, Panel } from "@/components/ui/primitives";
@@ -45,6 +45,17 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+/** Starts a read or assessment run. Only the latest may change what is shown, selected, stored
+ *  or in the address; a superseded response is dropped silently and its request aborted, so an
+ *  old migration can never replace the one the user just chose. */
+function begin(latest: RefObject<number>, inflight: RefObject<AbortController | null>) {
+  inflight.current?.abort();
+  const controller = new AbortController();
+  inflight.current = controller;
+  const token = ++latest.current;
+  return { signal: controller.signal, current: () => token === latest.current };
+}
+
 function findingStatus(category: FindingCategory): ReadinessStatus {
   if (category === "BLOCKER") return "BLOCKED";
   if (category === "WARNING") return "NEEDS ATTENTION";
@@ -75,16 +86,23 @@ export function DiscoverAssessExperience() {
   const [error, setError] = useState<string>();
   const [sample, setSample] = useState("northstar-supplies");
 
+  // Every read or assessment run starts a new operation (see begin). Unmounting supersedes them all.
+  const latest = useRef(0);
+  const inflight = useRef<AbortController | null>(null);
+  useEffect(() => () => { latest.current += 1; inflight.current?.abort(); }, []);
+
   const loadExisting = (saved: string) => {
+    const op = begin(latest, inflight);
     setError(undefined);
     setReading("loading");
-    void api<{id: string; sample_company_id: string; discovery?: DiscoveryResult; assessment?: AssessmentResult; activity: AgentActivity[]}>(`/v1/migration-sessions/${saved}`).then(data => {
+    void api<{id: string; sample_company_id: string; discovery?: DiscoveryResult; assessment?: AssessmentResult; activity: AgentActivity[]}>(`/v1/migration-sessions/${saved}`, { signal: op.signal }).then(data => {
+      if (!op.current()) return;
       setSessionId(data.id); setDiscovery(data.discovery); setAssessment(data.assessment);
       sessionStorage.setItem("movebooks-migration-session", data.id);
       if (["northstar-supplies", "harbor-light-migrate-demo"].includes(data.sample_company_id)) setSample(data.sample_company_id);
       setActivity(data.activity); setPhase(data.assessment ? "complete" : "select");
       setReading("none");
-    }).catch(caught => { setError(caught.message); setPhase("error"); setReading("failed"); });
+    }).catch(caught => { if (!op.current()) return; setError(caught.message); setPhase("error"); setReading("failed"); });
   };
 
   useEffect(() => {
@@ -97,33 +115,39 @@ export function DiscoverAssessExperience() {
 
   // Discovery and assessment return the stored result when they have already run,
   // so finishing an unfinished check never repeats or replaces earlier work.
-  const assess = async (id: string) => {
+  type Operation = ReturnType<typeof begin>;
+  const assess = async (id: string, op: Operation) => {
     setPhase("discovering");
     const discovered = await api<DiscoveryResult>(
       `/v1/migration-sessions/${id}/discovery`,
-      { method: "POST" },
+      { method: "POST", signal: op.signal },
     );
+    if (!op.current()) return;
     setDiscovery(discovered);
     setPhase("assessing");
     const assessed = await api<AssessmentResult>(
       `/v1/migration-sessions/${id}/assessment`,
-      { method: "POST" },
+      { method: "POST", signal: op.signal },
     );
+    if (!op.current()) return;
     setAssessment(assessed);
     setPhase("recommending");
-    setActivity(
-      await api<AgentActivity[]>(`/v1/migration-sessions/${id}/activity`),
-    );
+    const recorded = await api<AgentActivity[]>(`/v1/migration-sessions/${id}/activity`, { signal: op.signal });
+    if (!op.current()) return;
+    setActivity(recorded);
     setPhase("complete");
   };
 
-  const failed = (caught: unknown) => {
+  const failed = (caught: unknown, op: Operation) => {
+    // A superseded operation is not a failure the user needs to see.
+    if (!op.current()) return;
     setError(caught instanceof Error ? caught.message : "The assessment could not be completed.");
     setPhase("error");
   };
 
   // Creating a migration is always this explicit action; it never happens on resume.
   const startAssessment = async () => {
+    const op = begin(latest, inflight);
     setError(undefined);
     // A new assessment is a different migration: never show the previous one's results while it runs.
     setDiscovery(undefined); setAssessment(undefined); setActivity([]);
@@ -132,20 +156,23 @@ export function DiscoverAssessExperience() {
       const session = await api<{ id: string }>("/v1/migration-sessions", {
         method: "POST",
         body: JSON.stringify({ sample_company_id: sample }),
+        signal: op.signal,
       });
+      if (!op.current()) return;
       setSessionId(session.id);
       setReading("none");
       sessionStorage.setItem("movebooks-migration-session", session.id);
       window.history.replaceState(null, "", `?session=${encodeURIComponent(session.id)}`);
-      await assess(session.id);
-    } catch (caught) { failed(caught); }
+      await assess(session.id, op);
+    } catch (caught) { failed(caught, op); }
   };
 
   // Continue the same migration (CREATED or DISCOVERED): no new session is created.
   const resumeAssessment = async () => {
     if (!sessionId) return;
+    const op = begin(latest, inflight);
     setError(undefined);
-    try { await assess(sessionId); } catch (caught) { failed(caught); }
+    try { await assess(sessionId, op); } catch (caught) { failed(caught, op); }
   };
 
   // Diagnostic event only. It never blocks or delays the navigation to planning.
