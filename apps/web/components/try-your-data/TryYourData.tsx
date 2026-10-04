@@ -154,9 +154,14 @@ export function TryYourData() {
       <summary className="cursor-pointer font-semibold">View Supported File Format and Limits</summary>
       <div className="mt-4 space-y-4 text-sm leading-6 [overflow-wrap:anywhere]">
         <p>Use the sample package as a reference. File names and column headers must match exactly. A CSV with only its header row means that dataset is empty.</p>
-        <table className="w-full text-left"><thead><tr><th className="py-1 pr-4">Required file</th><th className="py-1 pr-4">Required columns</th><th className="py-1">Optional columns</th></tr></thead>
-          <tbody>{contract.files.map(file => <tr key={file.name} className="border-t border-token align-top"><td className="py-2 pr-4"><code>{file.name}</code></td><td className="py-2 pr-4">{file.required.join(", ")}</td><td className="py-2">{file.optional.join(", ") || "None"}</td></tr>)}
-            <tr className="border-t border-token align-top"><td className="py-2 pr-4"><code>{contract.configuration.name}</code></td><td className="py-2 pr-4">{contract.configuration.keys.join(", ")}</td><td className="py-2">None</td></tr></tbody></table>
+        <h3 className="font-semibold">Required Files</h3>
+        <ul className="divide-y divide-[var(--border)] border-y border-token" aria-label="Required files">
+          {contract.files.map(file => <li key={file.name} className="py-3"><code className="font-semibold">{file.name}</code>
+            <p className="mt-1"><span className="text-secondary">Required columns:</span> {file.required.join(", ")}</p>
+            {file.optional.length > 0 && <p><span className="text-secondary">Optional columns:</span> {file.optional.join(", ")}</p>}</li>)}
+          <li className="py-3"><code className="font-semibold">{contract.configuration.name}</code>
+            <p className="mt-1"><span className="text-secondary">Required keys:</span> {contract.configuration.keys.join(", ")}</p></li>
+        </ul>
         <p><code>configuration.json</code> company keys: {contract.configuration.company.join(", ")}. Settings: {contract.configuration.settings.join(", ")}. Each tax entry: {contract.configuration.taxes.join(", ")}.</p>
         <p>Optional file: <code>{contract.optional_files.join(", ")}</code> (package_version and description only).</p>
         <ul className="list-disc space-y-1 pl-5">

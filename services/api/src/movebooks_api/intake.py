@@ -609,8 +609,10 @@ def validate_package(files):
         for row in rows:
             index = row_locations[(entity, row["id"])]
             for field, target in REFERENCES.items():
-                # Referenced values passed the identifier pattern in validate_row.
-                if field in row and row[field] not in known.get(target, set()):
+                # Referenced values passed the identifier pattern in validate_row. A target file
+                # that is missing or unreadable is already reported once; checking references
+                # against it would only repeat that problem for every row that points to it.
+                if field in row and target in known and row[field] not in known[target]:
                     value = row[field]
                     issue(
                         f"{entity}.csv",
@@ -622,7 +624,7 @@ def validate_package(files):
                         column=field,
                     )
             for entry in row.get("entries", []):
-                if entry["account_id"] not in known.get("accounts", set()):
+                if "accounts" in known and entry["account_id"] not in known["accounts"]:
                     value = entry["account_id"]
                     issue(
                         "transactions.csv",

@@ -219,6 +219,8 @@ describe("DiscoverAssessExperience", () => {
     const alert = await screen.findByRole("alert");
     expect(alert).toHaveTextContent("MoveBooks couldn't reach the assessment service. Your migration was not changed.");
     expect(alert).not.toHaveTextContent("Failed to fetch");
+    // No progress is claimed after a failed start.
+    expect(screen.getByRole("list", { name: "Migration Journey" }).querySelector(".is-complete")).toBeNull();
     // Nothing advanced: no result, no selected migration, no session in the address.
     expect(screen.queryByRole("heading", { name: "Migration Readiness" })).not.toBeInTheDocument();
     expect(sessionStorage.getItem("movebooks-migration-session")).toBeNull();

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { cloudIdentity, safeDestination } from "@/lib/identity";
+import { cloudIdentity, demoEntry, safeDestination } from "@/lib/identity";
 import { Button } from "@/components/ui";
 import { useIdentity } from "./IdentityProvider";
 
@@ -28,9 +28,6 @@ export function IdentityFeedback() {
   useEffect(() => { if (error) errorRef.current?.focus(); }, [error]);
   return error ? <p ref={errorRef} tabIndex={-1} role="alert" className="mt-3">{error}</p> : null;
 }
-
-/** The local demo workspace is offered only outside production and only without Google identity. */
-export const demoEntry = () => !cloudIdentity() && process.env.NODE_ENV !== "production";
 
 export function IdentityEntry({ destination }: { destination: string }) {
   return <>{cloudIdentity() ? <GoogleSignIn destination={destination} /> : demoEntry() ? <a className="button mt-7 w-full" href={`/api/auth/demo?next=${encodeURIComponent(safeDestination(destination))}`}>Enter Demo Workspace →</a> : <p role="status" className="mt-7">Sign-in is not configured. Demo access is disabled.</p>}

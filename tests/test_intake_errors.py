@@ -275,6 +275,24 @@ def test_unsafe_zip_reports_only_the_archive():
     assert [i["code"] for i in report["issues"]] == ["UNSAFE_ARCHIVE"]
 
 
+@pytest.mark.parametrize(
+    ("name", "content", "code"),
+    [
+        ("accounts.csv", b"PK\x03\x04\x14\x00", "BINARY_CONTENT"),
+        ("vendors.csv", b"", "EMPTY_FILE"),
+        ("customers.csv", b"\xff\xfe", "INVALID_ENCODING"),
+    ],
+)
+def test_one_unreadable_file_is_one_problem_not_a_cascade(template, name, content, code):
+    issues = blockers({**template, name: content})
+    assert [(i["file"], i["code"]) for i in issues] == [(name, code)]
+
+
+def test_missing_file_does_not_cascade_into_reference_errors(template):
+    issues = blockers({k: v for k, v in template.items() if k != "accounts.csv"})
+    assert [i["code"] for i in issues] == ["MISSING_FILE"]
+
+
 def test_many_problems_are_all_reported(template):
     files = edit(template, "invoices.csv", ",customer-001,", ",C104,")
     files = {**files, "customers.csv": b"id\r\nc1\r\n"}

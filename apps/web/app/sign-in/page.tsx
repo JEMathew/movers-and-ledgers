@@ -1,4 +1,5 @@
-import { demoEntry, IdentityEntry } from "@/components/IdentityEntry";
+import { IdentityEntry } from "@/components/IdentityEntry";
+import { demoEntry } from "@/lib/identity";
 export default async function SignIn({searchParams}: {searchParams: Promise<{next?: string}>}) {
   const {next = "/workspace"} = await searchParams;
   return <main className="shell grid min-h-[65vh] place-items-center py-16">

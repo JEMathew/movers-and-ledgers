@@ -3,6 +3,12 @@ export function cloudIdentity() {
   return process.env.NEXT_PUBLIC_IDENTITY_MODE === "firebase";
 }
 
+/** The local demo workspace is offered only outside production and only without Google identity.
+ *  Plain function, usable from server pages and client components alike. */
+export function demoEntry() {
+  return !cloudIdentity() && process.env.NODE_ENV !== "production";
+}
+
 let prepared: Promise<GoogleIdentityRuntime> | undefined;
 
 async function initializeGoogleIdentity() {
