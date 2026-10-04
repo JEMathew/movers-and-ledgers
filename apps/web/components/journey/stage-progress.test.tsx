@@ -18,7 +18,7 @@ describe("failed deep links", () => {
   const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status });
   const assertUnconfirmed = () => {
     expect(steps().some(step => step.hasAttribute("aria-current") || step.classList.contains("is-complete"))).toBe(false);
-    expect(screen.getByText("Progress not confirmed · nothing is assumed")).toBeVisible();
+    expect(screen.getByText(/^(Checking your progress…|Progress unavailable · nothing is assumed)$/)).toBeVisible();
   };
 
   it.each([404, 500])("keeps the selected migration and prevents Plan advances after a failed read (%s)", async status => {
@@ -105,7 +105,7 @@ describe.each([
     render(<Stage />);
     const assertNoProgress = () => {
       expect(steps().some(step => step.hasAttribute("aria-current") || step.classList.contains("is-complete"))).toBe(false);
-      expect(screen.getByText("Progress not confirmed · nothing is assumed")).toBeVisible();
+      expect(screen.getByText(/^(Checking your progress…|Progress unavailable · nothing is assumed)$/)).toBeVisible();
     };
     assertNoProgress();
     await waitFor(() => expect(fetch).toHaveBeenCalled());

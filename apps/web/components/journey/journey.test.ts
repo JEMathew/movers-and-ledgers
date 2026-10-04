@@ -9,7 +9,7 @@ const statuses = ["CREATED", "DISCOVERED", "ASSESSED", "PLANNED", "MAPPING", "AW
 
 describe("operational migration journey", () => {
   it("has the nine customer-facing steps in order", () => {
-    expect(journeySteps.map(step => step.label)).toEqual(["Assess", "Plan", "Map", "Approve", "Migrate", "Resolve", "Validate", "Set Up", "First Use"]);
+    expect(journeySteps.map(step => step.label)).toEqual(["Assess", "Plan", "Map", "Approve", "Migrate", "Resolve", "Validate", "Set Up", "Start Using"]);
   });
   it("maps every workflow status the product knows to exactly one step, and nothing else", () => {
     for (const status of statuses) {

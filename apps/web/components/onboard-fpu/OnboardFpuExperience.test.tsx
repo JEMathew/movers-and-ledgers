@@ -45,7 +45,7 @@ describe("governed onboarding and productive use", () => {
     fireEvent.click(screen.getByRole("button",{name:"Resume verification"}));
     await screen.findByRole("heading",{name:"VERIFIED FIRST PRODUCTIVE USE"});
     expect(screen.getByRole("link",{name:"Review Verified Evidence"}).getAttribute("href")).toMatch(/^\/trust\?session=/);
-    expect(screen.getByRole("list",{name:"Migration Journey"})).toHaveTextContent("First UseCompleted");
+    expect(screen.getByRole("list",{name:"Migration Journey"})).toHaveTextContent("Start UsingCompleted");
     expect((vi.mocked(fetch).mock.calls.at(-1)![1]!.headers as Record<string,string>)["Idempotency-Key"]).toBe("original");
     expect(screen.getByText("Posted invoice, journal and accounting impact")).toBeInTheDocument();
   });

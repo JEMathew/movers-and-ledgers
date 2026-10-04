@@ -97,8 +97,10 @@ describe("DiscoverAssessExperience", () => {
     expect(screen.getByRole("link", { name: "Choose Test Files" })).toHaveAttribute("href", "/try-your-data");
     const journey = screen.getByRole("list", { name: "Migration Journey" });
     expect(journey).toBeVisible();
-    expect(journey.querySelector('[aria-current="step"]')).toBeNull();
-    expect(screen.getByText("Progress not confirmed · nothing is assumed")).toBeVisible();
+    // A fresh user is at the start of a real journey, exactly as My Migration shows it.
+    expect(journey.querySelector('[aria-current="step"]')).toHaveTextContent("AssessCurrent");
+    expect(screen.getByText("Step 1 of 9 · Assess: Understand readiness and risks")).toBeVisible();
+    expect(screen.queryByText(/Progress not confirmed|Progress unavailable/)).not.toBeInTheDocument();
   });
 
   it("labels uploaded source honestly and retries failed reads without creating a sample", async () => {
@@ -205,6 +207,10 @@ describe("DiscoverAssessExperience", () => {
     expect(screen.getAllByRole("link").filter(link => link.classList.contains("button") && !link.classList.contains("secondary"))).toEqual([cta]);
     expect(screen.getByRole("button", { name: /Start a New Assessment/ })).toHaveClass("secondary");
     expect(screen.getByRole("list", { name: "Migration Journey" }).querySelector('[aria-current="step"]')).toHaveTextContent("PlanCurrent");
+    // Readiness blockers keep Assess from reading as completed while planning goes on.
+    const assess = within(screen.getByRole("list", { name: "Migration Journey" })).getAllByRole("listitem")[0];
+    expect(assess).toHaveTextContent("AssessBlocked");
+    expect(assess).toHaveClass("is-blocked");
   });
 
   it.each(["northstar-supplies", "harbor-light-migrate-demo"])("explains an unreachable assessment service for %s and recovers on retry", async sample => {

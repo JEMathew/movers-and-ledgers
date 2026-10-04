@@ -18,7 +18,7 @@ export function LearningReturn() {
 }
 
 /** Operational journey step for each explanatory phase. */
-const stepLabels = ["Assess", "Plan", "Migrate", "Validate", "First use"] as const;
+const stepLabels = ["Assess", "Plan", "Migrate", "Validate", "Start Using"] as const;
 
 /** A Learn topic's way back to work: the matching journey step of the customer's migration,
  *  or My Migration when no migration is selected. Never the marketing Product page. */

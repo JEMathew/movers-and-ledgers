@@ -22,8 +22,8 @@ describe("My Migration", () => {
     expect(cta).toHaveAttribute("href", "/assess?sample=harbor-light-migrate-demo");
     expect(cta).toHaveClass("button");
     expect(screen.getAllByRole("link").filter(link => link.classList.contains("button"))).toHaveLength(1);
-    expect(steps().map(step => step.textContent)).toEqual(["AssessCurrent", "PlanNot Started", "MapNot Started", "ApproveNot Started", "MigrateNot Started", "ResolveNot Started", "ValidateNot Started", "Set UpNot Started", "First UseNot Started"]);
-    expect(screen.getByText("Step 1 of 9 · Assess")).toBeVisible();
+    expect(steps().map(step => step.textContent)).toEqual(["AssessCurrent", "PlanNot Started", "MapNot Started", "ApproveNot Started", "MigrateNot Started", "ResolveNot Started", "ValidateNot Started", "Set UpNot Started", "Start UsingNot Started"]);
+    expect(screen.getByText("Step 1 of 9 · Assess: Understand readiness and risks")).toBeVisible();
     expect(screen.getByText(/Bounded synthetic Beta/)).toBeVisible();
     expect(fetch).not.toHaveBeenCalled();
   });
@@ -51,7 +51,7 @@ describe("My Migration", () => {
     expect(screen.getByText("No progress is assumed.")).toBeVisible();
     // An expired or unreadable migration shows no completed or current step.
     expect(steps().some(step => step.hasAttribute("aria-current"))).toBe(false);
-    expect(screen.getByText("Progress not confirmed · nothing is assumed")).toBeVisible();
+    expect(screen.getByText(/^(Checking your progress…|Progress unavailable · nothing is assumed)$/)).toBeVisible();
     expect(screen.queryByText(/Completed|Current/)).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Check If My Books Are Ready to Migrate/ })).toHaveAttribute("href", "/assess?sample=harbor-light-migrate-demo");
     fireEvent.click(screen.getByRole("button", { name: "Try Again" }));
@@ -130,7 +130,7 @@ describe("My Migration", () => {
     // A blocked current step says so; later steps are part of this product, not a roadmap.
     expect(steps()[6]).toHaveTextContent("ValidateBlocked");
     expect(steps()[6]).toHaveClass("is-blocked");
-    expect(steps()[8]).toHaveTextContent("First UseNot Started");
+    expect(steps()[8]).toHaveTextContent("Start UsingNot Started");
     expect(screen.getByText("Set Up:")).toBeVisible();
     expect(document.body).not.toHaveTextContent(/Upcoming|One journey from readiness/);
   });

@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import SignIn from "@/app/sign-in/page";
-import { journeyCurrentLabelFor, journeySteps, nextActionFor } from "@/components/journey/journey";
+import { assessHeldFor, journeyCurrentLabelFor, journeyHeldFor, journeySteps, nextActionFor } from "@/components/journey/journey";
 import { footerLinks, memberLinks, publicLinks } from "@/components/public-surfaces/content";
 
 afterEach(() => vi.unstubAllEnvs());
@@ -35,8 +35,30 @@ describe("customer-facing label casing", () => {
       detail: "We'll review your accounting data and identify anything that could block or complicate the migration.",
     });
   });
+  it("describes the nine steps in customer language", () => {
+    expect(journeySteps.map(step => `${step.label} — ${step.summary}`)).toEqual([
+      "Assess — Understand readiness and risks",
+      "Plan — Define what will move",
+      "Map — Align your accounts and data",
+      "Approve — Confirm the migration plan",
+      "Migrate — Move your approved data",
+      "Resolve — Fix items needing attention",
+      "Validate — Confirm balances and accuracy",
+      "Set Up — Complete your business setup",
+      "Start Using — Start working in your migrated books",
+    ]);
+    expect(JSON.stringify(journeySteps)).not.toMatch(/FPU|first live cycle|First Use/);
+  });
+  it("holds Assess when readiness blockers remain, on every page that shows the journey", () => {
+    expect(journeyHeldFor("ASSESSED", 1)).toEqual({ index: 0, label: "Blocked" });
+    expect(journeyHeldFor("AWAITING_APPROVAL", 2)).toEqual({ index: 0, label: "Blocked" });
+    expect(journeyHeldFor("ASSESSED", 0)).toBeUndefined();
+    expect(assessHeldFor(1, 3)).toEqual({ index: 0, label: "Blocked" });
+    expect(assessHeldFor(0, 2)).toEqual({ index: 0, label: "Needs Attention" });
+    expect(assessHeldFor(0, 0)).toBeUndefined();
+  });
   it("names every journey state as part of the current product", () => {
-    expect(journeySteps.map(step => step.label)).toEqual(["Assess", "Plan", "Map", "Approve", "Migrate", "Resolve", "Validate", "Set Up", "First Use"]);
+    expect(journeySteps.map(step => step.label)).toEqual(["Assess", "Plan", "Map", "Approve", "Migrate", "Resolve", "Validate", "Set Up", "Start Using"]);
     expect(journeyCurrentLabelFor("VALIDATION_BLOCKED")).toBe("Blocked");
     expect(journeyCurrentLabelFor("MIGRATION_BLOCKED")).toBe("Blocked");
     expect(journeyCurrentLabelFor("RESOLVING")).toBe("Needs Attention");

@@ -203,7 +203,7 @@ describe("Plan → Map → Approve", () => {
     fetch.mockResolvedValueOnce(jsonResponse(reviewed)).mockResolvedValueOnce(jsonResponse({ detail: "Session unreadable" }, 500));
     fireEvent.click(screen.getByRole("button", { name: "Confirm Mapping" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Session unreadable");
-    expect(screen.getByText("Progress not confirmed · nothing is assumed")).toBeVisible();
+    expect(screen.getByText(/^(Checking your progress…|Progress unavailable · nothing is assumed)$/)).toBeVisible();
     expect(screen.queryByRole("link", { name: "Start Migration" })).not.toBeInTheDocument();
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe(id);
   });
@@ -260,7 +260,7 @@ describe("authoritative approval failures and resume", () => {
     fetch.mockResolvedValueOnce(jsonResponse({ detail: "A concurrent change prevented approval" }, 409));
     fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Approve Migration Plan" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("concurrent change");
-    expect(screen.getByText("Progress not confirmed · nothing is assumed")).toBeVisible();
+    expect(screen.getByText(/^(Checking your progress…|Progress unavailable · nothing is assumed)$/)).toBeVisible();
     expect(screen.queryByRole("link", { name: "Start Migration" })).not.toBeInTheDocument();
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe(id);
   });

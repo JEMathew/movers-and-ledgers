@@ -15,6 +15,7 @@ import { Alert, LoadingState } from "@/components/ui/feedback";
 import { Badge, Button, Card, Link, Panel } from "@/components/ui/primitives";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
 import { NextAction } from "@/components/journey/NextAction";
+import { assessHeldFor, journeyPosition } from "@/components/journey/journey";
 import { StatusBadge } from "@/components/ui/status";
 
 import type {
@@ -66,7 +67,8 @@ function outcomeFor(company: string, assessment: AssessmentResult) {
 export function DiscoverAssessExperience() {
   const [phase, setPhase] = useState<Phase>("select");
   const [sessionId, setSessionId] = useState<string>();
-  const [journeyStep, setJourneyStep] = useState<number | null>(null);
+  // Reading a migration named in the address; "none" when there is no such migration.
+  const [reading, setReading] = useState<"none" | "loading" | "failed">("none");
   const [discovery, setDiscovery] = useState<DiscoveryResult>();
   const [assessment, setAssessment] = useState<AssessmentResult>();
   const [activity, setActivity] = useState<AgentActivity[]>([]);
@@ -75,14 +77,14 @@ export function DiscoverAssessExperience() {
 
   const loadExisting = (saved: string) => {
     setError(undefined);
-    setJourneyStep(null);
+    setReading("loading");
     void api<{id: string; sample_company_id: string; discovery?: DiscoveryResult; assessment?: AssessmentResult; activity: AgentActivity[]}>(`/v1/migration-sessions/${saved}`).then(data => {
       setSessionId(data.id); setDiscovery(data.discovery); setAssessment(data.assessment);
       sessionStorage.setItem("movebooks-migration-session", data.id);
       if (["northstar-supplies", "harbor-light-migrate-demo"].includes(data.sample_company_id)) setSample(data.sample_company_id);
       setActivity(data.activity); setPhase(data.assessment ? "complete" : "select");
-      setJourneyStep(data.assessment ? 1 : 0);
-    }).catch(caught => { setError(caught.message); setPhase("error"); });
+      setReading("none");
+    }).catch(caught => { setError(caught.message); setPhase("error"); setReading("failed"); });
   };
 
   useEffect(() => {
@@ -108,7 +110,6 @@ export function DiscoverAssessExperience() {
       { method: "POST" },
     );
     setAssessment(assessed);
-    setJourneyStep(1);
     setActivity(
       await api<AgentActivity[]>(`/v1/migration-sessions/${id}/activity`),
     );
@@ -123,7 +124,6 @@ export function DiscoverAssessExperience() {
   // Creating a migration is always this explicit action; it never happens on resume.
   const startAssessment = async () => {
     setError(undefined);
-    setJourneyStep(null);
     try {
       setPhase("discovering");
       const session = await api<{ id: string }>("/v1/migration-sessions", {
@@ -131,7 +131,7 @@ export function DiscoverAssessExperience() {
         body: JSON.stringify({ sample_company_id: sample }),
       });
       setSessionId(session.id);
-      setJourneyStep(0);
+      setReading("none");
       sessionStorage.setItem("movebooks-migration-session", session.id);
       window.history.replaceState(null, "", `?session=${encodeURIComponent(session.id)}`);
       await assess(session.id);
@@ -180,7 +180,12 @@ export function DiscoverAssessExperience() {
         </div>
       </header>
 
-      <MigrationJourney className="mt-10" current={journeyStep} />
+      <MigrationJourney
+        className="mt-10"
+        current={journeyPosition({ selected: reading !== "none" || Boolean(sessionId), loading: reading === "loading", failed: reading === "failed", step: assessment ? 1 : 0 })}
+        held={assessment ? assessHeldFor(assessment.blocker_count, assessment.warning_count) : undefined}
+        unknown={reading === "loading" ? "loading" : "unavailable"}
+      />
 
       {assessment && discovery && (
         <>

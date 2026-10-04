@@ -3,7 +3,7 @@ import { Alert, LoadingState } from "@/components/ui/feedback";
 import { Button } from "@/components/ui/primitives";
 import { MigrationJourney } from "./journey/MigrationJourney";
 import { ActionLink } from "./journey/NextAction";
-import { JOURNEY_COMPLETE, journeyCurrentFor, journeyCurrentLabelFor, journeyHeldFor, journeySteps, nextActionFor, withSession } from "./journey/journey";
+import { JOURNEY_COMPLETE, journeyCurrentFor, journeyCurrentLabelFor, journeyHeldFor, journeyPosition, journeySteps, nextActionFor, withSession } from "./journey/journey";
 import { useSessionView } from "./public-surfaces/session";
 
 /** The signed-in home. It answers four questions from authoritative evidence only:
@@ -11,7 +11,7 @@ import { useSessionView } from "./public-surfaces/session";
 export function MyMigration() {
   const { view, loading, error, refresh } = useSessionView();
   // Progress comes only from an authoritative read; with no migration selected, the journey starts at Assess.
-  const step = view ? journeyCurrentFor(view) : loading || error ? null : 0;
+  const step = journeyPosition({ selected: Boolean(view || loading || error), loading, failed: Boolean(error), step: view ? journeyCurrentFor(view) : null });
   const action = nextActionFor(view);
   const following = step === null ? undefined : step + 1 < JOURNEY_COMPLETE ? journeySteps[step + 1] : null;
   return <main id="main-content" className="shell min-h-[70vh] py-12 sm:py-16">
@@ -22,7 +22,7 @@ export function MyMigration() {
     </header>
     <section className="mt-10" aria-labelledby="where-title">
       <h2 id="where-title" className="type-card">Where Am I?</h2>
-      <MigrationJourney current={step} held={view ? journeyHeldFor(view.status) : undefined} currentLabel={view ? journeyCurrentLabelFor(view.status) : undefined} className="mt-3" />
+      <MigrationJourney current={step} held={view ? journeyHeldFor(view.status, view.readinessIssues) : undefined} currentLabel={view ? journeyCurrentLabelFor(view.status) : undefined} unknown={loading ? "loading" : "unavailable"} className="mt-3" />
     </section>
     {loading && <div className="mt-8"><LoadingState label="Loading your migration" /></div>}
     {error && <div className="mt-8"><Alert tone="error" title="Migration Unavailable"><p>{error}</p><p className="mt-1">No progress is assumed.</p><Button className="mt-3" size="small" variant="secondary" onClick={refresh}>Try Again</Button></Alert></div>}

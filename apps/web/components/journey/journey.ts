@@ -1,15 +1,16 @@
 // The operational journey a signed-in customer moves through. The five marketing phases
 // (Understand, Prepare, Move, Verify, Start) stay in explanatory content only.
 export const journeySteps = [
-  { label: "Assess", route: "/assess", summary: "Check whether your books are ready to migrate." },
-  { label: "Plan", route: "/plan-map-approve", summary: "Set the scope and order of the move." },
-  { label: "Map", route: "/plan-map-approve", summary: "Confirm where each record goes in your new books." },
-  { label: "Approve", route: "/plan-map-approve", summary: "Approve the plan. Nothing moves before you do." },
-  { label: "Migrate", route: "/migrate-resolve", summary: "Move your records in safe, checkpointed batches." },
-  { label: "Resolve", route: "/migrate-resolve", summary: "Review anything the migration paused on." },
-  { label: "Validate", route: "/validate-configure", summary: "Confirm every total matches your source books." },
-  { label: "Set Up", route: "/validate-configure", summary: "Review the settings for your new books." },
-  { label: "First Use", route: "/onboard-fpu", summary: "Complete and verify your first real task." },
+  { label: "Assess", route: "/assess", summary: "Understand readiness and risks" },
+  { label: "Plan", route: "/plan-map-approve", summary: "Define what will move" },
+  { label: "Map", route: "/plan-map-approve", summary: "Align your accounts and data" },
+  { label: "Approve", route: "/plan-map-approve", summary: "Confirm the migration plan" },
+  { label: "Migrate", route: "/migrate-resolve", summary: "Move your approved data" },
+  { label: "Resolve", route: "/migrate-resolve", summary: "Fix items needing attention" },
+  { label: "Validate", route: "/validate-configure", summary: "Confirm balances and accuracy" },
+  { label: "Set Up", route: "/validate-configure", summary: "Complete your business setup" },
+  // Internally this is First Productive Use (FPU); customers see Start Using.
+  { label: "Start Using", route: "/onboard-fpu", summary: "Start working in your migrated books" },
 ] as const;
 /** Index meaning every step is complete. */
 export const JOURNEY_COMPLETE = journeySteps.length;
@@ -24,6 +25,20 @@ const stepByStatus: Record<string, number> = {
   READY_FOR_FIRST_PRODUCTIVE_USE: 8, FIRST_PRODUCTIVE_USE_IN_PROGRESS: 8, FIRST_PRODUCTIVE_USE_BLOCKED: 8,
   VERIFIED_FIRST_PRODUCTIVE_USE: JOURNEY_COMPLETE,
 };
+
+/** A page's position in the journey. With no migration selected the user is at the start, so
+ *  Assess is current; that is a real state, never "unknown". Null is reserved for a selected
+ *  migration that is still being read, or whose read failed. Every page uses this rule, so My
+ *  Migration and the stage pages cannot disagree about where a new user stands. */
+export function journeyPosition({ selected, loading = false, failed = false, step }: {
+  selected: boolean; loading?: boolean; failed?: boolean; step?: number | null;
+}): number | null {
+  if (!selected) return 0;
+  if (loading || failed) return null;
+  return step ?? null;
+}
+/** Why a position is unknown, for the journey heading. */
+export type UnknownProgress = "loading" | "unavailable";
 
 /** Current step for an authoritative workflow status, or null when the status is unknown. */
 export function journeyStepFor(status: string): number | null {
@@ -46,10 +61,18 @@ export function journeyCurrentLabelFor(status: string): CurrentStepLabel {
   return "Current";
 }
 
-export type HeldStep = { index: number; label: string };
-/** A step behind the current one that is not finished: a paused migration is never shown as completed. */
-export function journeyHeldFor(status: string): HeldStep | undefined {
-  return ["MIGRATION_PAUSED", "RESOLVING", "RETRY_PENDING", "MIGRATION_BLOCKED"].includes(status) ? { index: 4, label: "Paused" } : undefined;
+export type HeldStep = { index: number; label: "Paused" | "Needs Attention" | "Blocked" };
+/** A step behind the current one that is not finished: a paused migration is never shown as
+ *  completed, and an assessment with readiness blockers stays Blocked while planning goes on
+ *  (migration cannot start until the source data is corrected). */
+export function journeyHeldFor(status: string, readinessIssues = 0): HeldStep | undefined {
+  if (["MIGRATION_PAUSED", "RESOLVING", "RETRY_PENDING", "MIGRATION_BLOCKED"].includes(status)) return { index: 4, label: "Paused" };
+  const step = journeyStepFor(status);
+  return readinessIssues > 0 && step !== null && step >= 1 && step <= 3 ? { index: 0, label: "Blocked" } : undefined;
+}
+/** How Assess reads once its result is known: blockers hold it, items to review mark it. */
+export function assessHeldFor(blockers: number, warnings: number): HeldStep | undefined {
+  return blockers > 0 ? { index: 0, label: "Blocked" } : warnings > 0 ? { index: 0, label: "Needs Attention" } : undefined;
 }
 
 const SESSION = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
