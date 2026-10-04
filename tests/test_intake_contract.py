@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from movebooks_api import intake
+
 from tools.configuration.controls import AREAS
 
 CONTRACT = Path(__file__).resolve().parents[1] / (
@@ -26,4 +27,6 @@ def test_documented_package_contract_matches_the_validator():
     assert limits["max_file_bytes"] == intake.MAX_FILE
     assert limits["max_total_bytes"] == intake.MAX_TOTAL
     assert limits["max_rows"] == intake.MAX_ROWS
-    assert limits["max_files"] == len(intake.NAMES)
+    assert limits["max_files"] == intake.MAX_FILES == len(intake.NAMES)
+    assert limits["max_columns"] == intake.MAX_COLUMNS
+    assert limits["max_text_length"] == intake.MAX_TEXT

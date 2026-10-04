@@ -9,7 +9,7 @@ import stat
 import zipfile
 import zlib
 from datetime import date
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 from tools.validation.checks import ledger, money
 
@@ -17,6 +17,10 @@ VERSION = "controlled-package-v1"
 MAX_FILE = 256 * 1024
 MAX_TOTAL = 2 * 1024 * 1024
 MAX_ROWS = 1000
+MAX_FILES = 9
+MAX_COLUMNS = 32
+MAX_CELL = 8192
+MAX_TEXT = 200
 SCHEMAS = {
     "customers": ("id", "display_name"),
     "vendors": ("id", "display_name"),
@@ -51,6 +55,67 @@ ACCOUNT_TYPES = {
 }
 
 
+SAMPLE = "using the Sample Package as a reference"
+HEADER = re.compile(r"[a-z][a-z0-9_]{0,63}\Z")
+SAFE_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}\Z")
+# Leading bytes of formats that are sometimes renamed to .csv or .json. Text never starts so.
+SIGNATURES = (
+    (b"PK\x03\x04", "an Excel workbook or ZIP archive"),
+    (b"%PDF-", "a PDF document"),
+    (b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1", "an older Excel or Office document"),
+    (b"\x7fELF", "a program file"),
+    (b"MZ", "a Windows program"),
+    (b"\x1f\x8b", "a compressed archive"),
+    (b"\x89PNG", "an image"),
+    (b"\xff\xd8\xff", "an image"),
+    (b"GIF8", "an image"),
+    (b"{\\rtf", "a rich-text document"),
+)
+# C0/C1 controls (except tab and line breaks), DEL and bidirectional overrides can hide or
+# reorder text on screen; accounting text never needs them.
+HIDDEN = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f‪-‮⁦-⁩]")
+SINGULAR = {
+    "customer_id": "customer",
+    "vendor_id": "vendor",
+    "receivable_account_id": "account",
+    "payable_account_id": "account",
+    "income_account_id": "account",
+    "expense_account_id": "account",
+    "parent_id": "account",
+    "product_id": "product",
+    "invoice_id": "invoice",
+    "bill_id": "bill",
+    "transaction_id": "transaction",
+}
+REFERENCES = {
+    "customer_id": "customers",
+    "vendor_id": "vendors",
+    "receivable_account_id": "accounts",
+    "payable_account_id": "accounts",
+    "income_account_id": "accounts",
+    "expense_account_id": "accounts",
+    "parent_id": "accounts",
+    "product_id": "products",
+    "invoice_id": "invoices",
+    "bill_id": "bills",
+    "transaction_id": "transactions",
+}
+
+
+class Finding(ValueError):
+    """One specific, deterministic validation finding.
+
+    Messages name only schema columns, schema keys and identifiers that already passed the ID
+    pattern. Free-text values from uploaded files are never echoed: they are data, and a
+    message must not become a channel for them.
+    """
+
+    def __init__(self, code, message, fix, *, column=None, key=None, row=None):
+        super().__init__(message)
+        self.code, self.message, self.fix = code, message, fix
+        self.column, self.key, self.row = column, key, row
+
+
 def strict_json(text):
     def pairs(items):
         result = {}
@@ -75,7 +140,7 @@ def unpack(files):
         try:
             with zipfile.ZipFile(io.BytesIO(content)) as archive:
                 entries = archive.infolist()
-                if len(entries) > 9 or sum(e.file_size for e in entries) > MAX_TOTAL:
+                if len(entries) > MAX_FILES or sum(e.file_size for e in entries) > MAX_TOTAL:
                     raise ValueError("Archive exceeds file-count or expanded-size limit.")
                 result = []
                 for entry in entries:
@@ -103,95 +168,356 @@ def unpack(files):
     return files
 
 
+def unsupported_name(name):
+    """Plain guidance for a file outside the package; echoes the name only if it is inert."""
+    lower = name.lower()
+    shown = name if SAFE_NAME.fullmatch(name) else "This file"
+    if lower in NAMES:
+        return (
+            f"{shown} has the wrong capitalisation; file names are case-sensitive.",
+            f"Rename it to {lower}.",
+        )
+    if lower.endswith((".xlsx", ".xls", ".xlsm", ".ods", ".numbers")):
+        return (
+            f"{shown} is a spreadsheet workbook; MoveBooks reads CSV files.",
+            "Save each sheet as a UTF-8 CSV with the exact file name from the Sample Package.",
+        )
+    if lower.endswith(".zip"):
+        return (
+            "A ZIP must be the only file you choose.",
+            "Choose just the ZIP, or the individual CSV and JSON files.",
+        )
+    return (
+        f"{shown} isn't part of the supported package.",
+        "Remove it, and use only the file names listed in the expected format.",
+    )
+
+
+def text_of(name, data):
+    """Decode one package file as UTF-8 text or explain exactly why it isn't."""
+    kind = "JSON" if name.endswith(".json") else "CSV"
+    if len(data) > MAX_FILE:
+        raise Finding(
+            "FILE_TOO_LARGE",
+            f"{name} is larger than 256 KiB.",
+            "Reduce the file to 256 KiB or less, for example by removing unused rows.",
+        )
+    for magic, what in SIGNATURES:
+        if data.startswith(magic) and (magic != b"MZ" or b"\x00" in data[:256]):
+            raise Finding(
+                "BINARY_CONTENT",
+                f"{name} is {what}, not {kind} text.",
+                f"Export the data as UTF-8 {kind} and save it as {name}.",
+            )
+    try:
+        text = data.decode("utf-8-sig", errors="strict")
+    except UnicodeDecodeError as error:
+        raise Finding(
+            "INVALID_ENCODING",
+            f"{name} isn't UTF-8 text (unreadable bytes at position {error.start}).",
+            "Save the file with UTF-8 encoding (for example, CSV UTF-8 in a spreadsheet app).",
+        ) from error
+    if not text.strip():
+        raise Finding(
+            "EMPTY_FILE",
+            f"{name} is empty.",
+            f"Add at least the header row, {SAMPLE}.",
+        )
+    hidden = HIDDEN.search(text)
+    if hidden:
+        line = text.count("\n", 0, hidden.start()) + 1
+        raise Finding(
+            "BINARY_CONTENT",
+            f"{name} contains hidden control or text-direction characters on line {line}.",
+            "Remove the hidden characters, or re-export the file as plain UTF-8 text.",
+        )
+    return text
+
+
+def parse_json(name, text):
+    try:
+        return strict_json(text)
+    except json.JSONDecodeError as error:
+        raise Finding(
+            "MALFORMED_JSON",
+            f"{name} isn't valid JSON (line {error.lineno}, column {error.colno}).",
+            f"Check for a missing comma, quote or bracket, {SAMPLE}.",
+        ) from error
+    except RecursionError as error:
+        raise Finding(
+            "MALFORMED_JSON",
+            f"{name} is nested too deeply to read.",
+            "Use the flat structure shown in the Sample Package.",
+        ) from error
+    except ValueError as error:
+        duplicate = str(error) == "Duplicate JSON key"
+        raise Finding(
+            "MALFORMED_JSON",
+            f"{name} has the same key twice." if duplicate else f"{name} uses NaN or Infinity.",
+            "Keep each key once." if duplicate else "Use ordinary numbers or decimal text.",
+        ) from error
+
+
+def validate_metadata(value):
+    if not isinstance(value, dict):
+        raise Finding(
+            "INVALID_TYPE", "metadata.json must be a JSON object.", f"Use an object {SAMPLE}."
+        )
+    extra = sorted(set(value) - {"package_version", "description"})
+    if extra:
+        raise Finding(
+            "UNSUPPORTED_KEY",
+            "metadata.json may contain only package_version and description.",
+            "Remove the other keys.",
+            key=extra[0] if HEADER.fullmatch(extra[0]) else None,
+        )
+    if value.get("package_version", VERSION) != VERSION:
+        raise Finding(
+            "INVALID_VALUE",
+            f"package_version must be {VERSION}.",
+            f"Set package_version to {VERSION} or remove it.",
+            key="package_version",
+        )
+    for key, item in value.items():
+        if not isinstance(item, str) or len(item) > 500:
+            raise Finding(
+                "INVALID_VALUE",
+                f"{key} must be text of up to 500 characters.",
+                f"Shorten or correct {key}.",
+                key=key,
+            )
+    return sorted(value)
+
+
+def read_csv(name, text, add):
+    """Parse one CSV file, reporting header and row problems; returns rows or None."""
+    entity = name[:-4]
+    reader = csv.reader(io.StringIO(text, newline=""), strict=True)
+    try:
+        header = next(reader)
+    except csv.Error as error:
+        raise Finding(
+            "MALFORMED_CSV",
+            f"{name} can't be read as CSV on line 1.",
+            "Check quotes and commas in the header row, or re-export the file as CSV.",
+        ) from error
+    if len(header) > MAX_COLUMNS:
+        raise Finding(
+            "TOO_MANY_COLUMNS",
+            f"{name} has {len(header)} columns; the limit is {MAX_COLUMNS}.",
+            "Remove columns that aren't in the expected format.",
+        )
+    for position, column in enumerate(header, 1):
+        if not HEADER.fullmatch(column):
+            raise Finding(
+                "INVALID_HEADER",
+                f"Column {position} of {name} isn't a valid column name.",
+                "Use lowercase letters, digits and underscores, exactly as in the Sample Package.",
+            )
+    duplicates = sorted({column for column in header if header.count(column) > 1})
+    for column in duplicates:
+        add(
+            Finding(
+                "DUPLICATE_HEADER",
+                f"Column {column} appears more than once.",
+                f"Keep one {column} column and remove the others.",
+                column=column,
+            )
+        )
+    missing = [column for column in SCHEMAS[entity] if column not in header]
+    for column in missing:
+        add(
+            Finding(
+                "MISSING_COLUMN",
+                f"Missing required column: {column}.",
+                f"Add {column} {SAMPLE}.",
+                column=column,
+            )
+        )
+    if duplicates or missing:
+        return None, []
+    ignored = sorted(set(header) - set(SCHEMAS[entity]) - OPTIONAL[entity])
+    rows, ids, raws = [], {}, []
+    count = 0
+    try:
+        for index, cells in enumerate(reader, 2):
+            count += 1
+            if count > MAX_ROWS:
+                raise Finding(
+                    "ROW_LIMIT",
+                    f"{name} has more than {MAX_ROWS:,} rows.",
+                    f"Split the data so each file has {MAX_ROWS:,} rows or fewer.",
+                )
+            if len(cells) != len(header):
+                add(
+                    Finding(
+                        "MALFORMED_ROW",
+                        f"Row {index} has {len(cells)} values, but the header has "
+                        f"{len(header)} columns.",
+                        "Check for missing or extra commas, or an unquoted comma in a value.",
+                        row=index,
+                    )
+                )
+                continue
+            long = next((h for h, c in zip(header, cells, strict=True) if len(c) > MAX_CELL), None)
+            if long:
+                add(
+                    Finding(
+                        "TEXT_TOO_LONG",
+                        f"{long} is longer than {MAX_CELL:,} characters.",
+                        "Shorten the value.",
+                        column=long,
+                        row=index,
+                    )
+                )
+                continue
+            raw = dict(zip(header, cells, strict=True))
+            row = {k: v for k, v in raw.items() if k not in ignored and v != ""}
+            try:
+                validate_row(entity, row)
+            except Finding as finding:
+                finding.row = index
+                add(finding)
+                continue
+            if row["id"] in ids:
+                add(
+                    Finding(
+                        "DUPLICATE_ID",
+                        f"Identifier {row['id']} appears more than once in {name} "
+                        f"(first on row {ids[row['id']]}).",
+                        "Give each record its own identifier, or remove the duplicate row.",
+                        column="id",
+                        row=index,
+                    )
+                )
+                continue
+            ids[row["id"]] = index
+            rows.append(row)
+            raws.append((index, raw))
+    except csv.Error as error:
+        raise Finding(
+            "MALFORMED_CSV",
+            f"{name} can't be read as CSV near line {reader.line_num}.",
+            "Check for an unclosed quote, or re-export the file as CSV.",
+        ) from error
+    return (rows, raws, ignored, count), ignored
+
+
 def validate_package(files):
     """Return a safe report and private normalized source; no persistence or agent calls."""
     issues, detected, lineage = [], [], []
 
-    def issue(file, row, code, message, warning=False):
+    def issue(file, row, code, message, warning=False, *, fix=None, column=None, key=None):
+        fix = fix or (
+            "Review and replace the named file, then validate again."
+            if file in NAMES
+            else "Remove unsupported content and validate again."
+        )
         issues.append(
             {
                 "file": file if file in NAMES else "unsupported file",
                 "row": row,
+                "column": column,
+                "key": key,
                 "code": code,
                 "severity": "WARNING" if warning else "BLOCKER",
                 "message": message,
+                "fix": fix,
                 "why": "Accounting meaning and evidence must be preserved.",
-                "action": "Review and replace the named file, then validate again."
-                if file in NAMES
-                else "Remove unsupported content and validate again.",
+                "action": fix,
                 "can_continue": warning,
             }
         )
 
+    def found(file, finding):
+        issue(
+            file,
+            finding.row,
+            finding.code,
+            finding.message,
+            fix=finding.fix,
+            column=finding.column,
+            key=finding.key,
+        )
+
+    package_ok = True
     try:
         files = unpack(files)
     except (ValueError, OSError, EOFError) as error:
-        issue("package", None, "UNSAFE_ARCHIVE", str(error))
-        files = []
-    if not 1 <= len(files) <= 9 or sum(len(data) for _, data in files) > MAX_TOTAL:
+        issue(
+            "package",
+            None,
+            "UNSAFE_ARCHIVE",
+            str(error),
+            fix="Use one ZIP that contains only the package files, with no folders.",
+        )
+        files, package_ok = [], False
+    if package_ok and not 1 <= len(files) <= MAX_FILES:
         issue(
             "package",
             None,
             "PACKAGE_LIMIT",
-            "Use 8 required files, optional metadata, up to 2 MiB.",
+            f"This package has {len(files)} files; the limit is {MAX_FILES}.",
+            fix="Use the 8 required files and, optionally, metadata.json.",
         )
-        files = []
+        files, package_ok = [], False
+    if package_ok and sum(len(data) for _, data in files) > MAX_TOTAL:
+        issue(
+            "package",
+            None,
+            "PACKAGE_LIMIT",
+            "This package is larger than 2 MiB in total.",
+            fix="Reduce the files to 2 MiB in total.",
+        )
+        files, package_ok = [], False
     names = [name for name, _ in files]
-    for missing in sorted(REQUIRED - set(names)):
-        issue(missing, None, "MISSING_FILE", "Required package file is missing.")
+    if package_ok:
+        for missing in sorted(REQUIRED - set(names)):
+            issue(
+                missing,
+                None,
+                "MISSING_FILE",
+                f"Required file {missing} is missing.",
+                fix=f"Add {missing} {SAMPLE}.",
+            )
     datasets, config = {}, None
     for name, data in files:
         if name not in NAMES:
-            issue(
-                name, None, "UNSUPPORTED_FILE", "Only the documented exact filenames are supported."
-            )
+            message, fix = unsupported_name(name)
+            issue(name, None, "UNSUPPORTED_FILE", message, fix=fix)
             continue
         row_count = 0
         ignored = []
         before = len(issues)
         if names.count(name) > 1:
-            issue(name, None, "DUPLICATE_FILENAME", "Each filename must occur exactly once.")
+            issue(
+                name,
+                None,
+                "DUPLICATE_FILENAME",
+                f"{name} was included more than once.",
+                fix="Keep one copy of the file.",
+            )
             continue
         try:
-            if len(data) > MAX_FILE:
-                raise ValueError("File exceeds 256 KiB.")
-            text = data.decode("utf-8-sig", errors="strict")
-            if any(ord(c) < 32 and c not in "\r\n\t" for c in text):
-                raise ValueError("Binary/control content is not supported.")
+            text = text_of(name, data)
             if name.endswith(".json"):
-                value = strict_json(text)
+                value = parse_json(name, text)
                 if name == "metadata.json":
-                    if not isinstance(value, dict) or set(value) - {
-                        "package_version",
-                        "description",
-                    }:
-                        raise ValueError("Metadata permits package_version and description only.")
-                    if value.get("package_version", VERSION) != VERSION:
-                        raise ValueError("Unsupported package version.")
-                    if any(not isinstance(v, str) or len(v) > 500 for v in value.values()):
-                        raise ValueError("Metadata values must be bounded text.")
-                    ignored = sorted(value)
+                    ignored = validate_metadata(value)
                     issue(
                         name,
                         None,
                         "METADATA_ONLY",
-                        "Metadata is evidence only, not workflow authority.",
+                        "Metadata is kept as evidence only; it can't change the migration.",
                         True,
+                        fix="No change needed.",
                     )
                 else:
                     config = validate_config(value)
                 row_count = 1
             else:
                 entity = name[:-4]
-                reader = csv.reader(io.StringIO(text, newline=""), strict=True)
-                header = next(reader)
-                if len(header) > 32 or len(set(header)) != len(header):
-                    raise ValueError("Duplicate or excessive columns.")
-                if set(SCHEMAS[entity]) - set(header):
-                    raise ValueError("Missing required columns. Use the versioned template.")
-                if any(not re.fullmatch(r"[a-z][a-z0-9_]{0,63}", h) for h in header):
-                    raise ValueError("Column names must be lowercase schema identifiers.")
-                ignored = sorted(set(header) - set(SCHEMAS[entity]) - OPTIONAL[entity])
+                parsed, ignored = read_csv(name, text, lambda f, n=name: found(n, f))
                 if ignored:
                     issue(
                         name,
@@ -201,25 +527,11 @@ def validate_package(files):
                         + ", ".join(ignored)
                         + ". Explicit review is required.",
                         True,
+                        fix="Remove these columns, or continue knowing they won't migrate.",
                     )
-                rows, ids = [], set()
-                for index, cells in enumerate(reader, 2):
-                    row_count += 1
-                    if row_count > MAX_ROWS:
-                        raise ValueError("File exceeds 1,000 records.")
-                    if len(cells) != len(header) or any(len(c) > 8192 for c in cells):
-                        issue(
-                            name, index, "MALFORMED_ROW", "Row width or field size violates schema."
-                        )
-                        continue
-                    raw = dict(zip(header, cells, strict=True))
-                    row = {k: v for k, v in raw.items() if k not in ignored and v != ""}
-                    try:
-                        validate_row(entity, row)
-                        if row["id"] in ids:
-                            raise ValueError("Duplicate identifier.")
-                        ids.add(row["id"])
-                        rows.append(row)
+                if parsed is not None:
+                    rows, raws, ignored, row_count = parsed
+                    for row, (index, raw) in zip(rows, raws, strict=True):
                         lineage.append(
                             {
                                 "entity": entity,
@@ -239,15 +551,9 @@ def validate_package(files):
                                 "ignored_fields": ignored,
                             }
                         )
-                    except (ValueError, TypeError, KeyError, ArithmeticError):
-                        issue(
-                            name,
-                            index,
-                            "INVALID_RECORD",
-                            "Missing/duplicate identifier, invalid "
-                            "type, amount, date, enum or unbalanced journal. Consult the schema.",
-                        )
-                datasets[entity] = rows
+                    datasets[entity] = rows
+        except Finding as finding:
+            found(name, finding)
         except (
             ValueError,
             UnicodeError,
@@ -262,8 +568,8 @@ def validate_package(files):
                 name,
                 None,
                 "INVALID_SCHEMA",
-                "Invalid UTF-8, CSV/JSON structure, required columns, "
-                "configuration schema, or size. Use the documented template.",
+                f"{name} doesn't match the expected format.",
+                fix="Compare the file with the Sample Package and validate again.",
             )
         detected.append(
             {
@@ -278,37 +584,34 @@ def validate_package(files):
             }
         )
     row_locations = {(item["entity"], item["id"]): item["row"] for item in lineage}
+    known = {entity: {r["id"] for r in rows} for entity, rows in datasets.items()}
     for entity, rows in datasets.items():
         for row in rows:
             index = row_locations[(entity, row["id"])]
-            references = {
-                "customer_id": "customers",
-                "vendor_id": "vendors",
-                "receivable_account_id": "accounts",
-                "payable_account_id": "accounts",
-                "income_account_id": "accounts",
-                "expense_account_id": "accounts",
-                "parent_id": "accounts",
-                "product_id": "products",
-                "invoice_id": "invoices",
-                "bill_id": "bills",
-                "transaction_id": "transactions",
-            }
-            for field, target in references.items():
-                if field in row and row[field] not in {r["id"] for r in datasets.get(target, [])}:
+            for field, target in REFERENCES.items():
+                # Referenced values passed the identifier pattern in validate_row.
+                if field in row and row[field] not in known.get(target, set()):
+                    value = row[field]
                     issue(
                         f"{entity}.csv",
                         index,
                         "BROKEN_REFERENCE",
-                        f"{field} must resolve in {target}.csv.",
+                        f"Row {index} references {SINGULAR[field]} {value}, but {value} "
+                        f"does not exist in {target}.csv.",
+                        fix=f"Add {value} to {target}.csv or correct the reference.",
+                        column=field,
                     )
             for entry in row.get("entries", []):
-                if entry["account_id"] not in {r["id"] for r in datasets.get("accounts", [])}:
+                if entry["account_id"] not in known.get("accounts", set()):
+                    value = entry["account_id"]
                     issue(
                         "transactions.csv",
                         index,
                         "BROKEN_REFERENCE",
-                        "Journal account must exist in accounts.csv.",
+                        f"Row {index} posts to account {value}, but {value} does not exist "
+                        "in accounts.csv.",
+                        fix=f"Add {value} to accounts.csv or correct the journal line.",
+                        column="entries",
                     )
             for field, expected in (
                 ("receivable_account_id", "accounts_receivable"),
@@ -322,8 +625,11 @@ def validate_package(files):
                         f"{entity}.csv",
                         index,
                         "ACCOUNT_ROLE",
-                        "Document control account "
-                        "has an incompatible accounting type. Correct source evidence.",
+                        f"Row {index} uses account {account['id']} as its "
+                        f"{field.removesuffix('_id').replace('_', ' ')}, but that account's type "
+                        f"isn't {expected}.",
+                        fix=f"Use an account whose account_type is {expected}.",
+                        column=field,
                     )
     source = None
     if config and REQUIRED <= set(names) and not any(i["severity"] == "BLOCKER" for i in issues):
@@ -336,8 +642,10 @@ def validate_package(files):
                 "transactions.csv",
                 None,
                 "ACCOUNTING_EVIDENCE",
-                "Supply valid balanced opening "
-                "balances, accounts and balanced journals; no automatic balancing is performed.",
+                "Opening balances and journals don't balance to zero; MoveBooks never balances "
+                "books automatically.",
+                fix="Correct opening_balance values in accounts.csv or the journals in "
+                "transactions.csv so that the books balance.",
             )
         source = {
             "fixture_version": VERSION,
@@ -369,101 +677,282 @@ def validate_package(files):
     }, None if blocked else source
 
 
+def amount(value, column):
+    try:
+        return money(value)
+    except (ValueError, ArithmeticError) as error:
+        raise Finding(
+            "INVALID_NUMBER",
+            f"{column} must be a decimal amount such as 1250.00, with at most two decimal places.",
+            f"Correct the {column} value.",
+            column=column,
+        ) from error
+
+
 def validate_row(entity, row):
-    if any(not row.get(k) for k in SCHEMAS[entity]):
-        raise ValueError("Missing field")
+    for column in SCHEMAS[entity]:
+        if not row.get(column):
+            raise Finding(
+                "MISSING_VALUE",
+                f"{column} is required but empty.",
+                f"Add a {column} value.",
+                column=column,
+            )
     for key, value in row.items():
         if key == "id" or key.endswith("_id"):
             if not ID.fullmatch(value):
-                raise ValueError("Invalid identifier")
-        elif key not in {"entries"} and len(value) > 200:
-            raise ValueError("Text limit")
+                raise Finding(
+                    "INVALID_IDENTIFIER",
+                    f"{key} must use letters, digits, hyphens or underscores "
+                    "(up to 64 characters).",
+                    f"Correct the {key} value.",
+                    column=key,
+                )
+        elif key not in {"entries"} and len(value) > MAX_TEXT:
+            raise Finding(
+                "TEXT_TOO_LONG",
+                f"{key} is longer than {MAX_TEXT} characters.",
+                f"Shorten {key} to {MAX_TEXT} characters or fewer.",
+                column=key,
+            )
     if entity == "accounts":
         if row["account_type"] not in ACCOUNT_TYPES:
-            raise ValueError("Account type")
-        money(row["opening_balance"])
+            raise Finding(
+                "INVALID_TYPE",
+                "account_type must be one of: " + ", ".join(sorted(ACCOUNT_TYPES)) + ".",
+                "Use one of the listed account types.",
+                column="account_type",
+            )
+        amount(row["opening_balance"], "opening_balance")
     if entity == "products" and row["item_type"] not in {"service", "inventory", "non_inventory"}:
-        raise ValueError("Item type")
+        raise Finding(
+            "INVALID_TYPE",
+            "item_type must be one of: inventory, non_inventory, service.",
+            "Use one of the listed item types.",
+            column="item_type",
+        )
     if entity in {"invoices", "bills"}:
-        if not 0 <= money(row.get("paid", "0")) <= money(row["total"]):
-            raise ValueError("Total/payment")
+        total = amount(row["total"], "total")
+        paid = amount(row.get("paid", "0"), "paid")
+        if not 0 <= paid <= total:
+            raise Finding(
+                "INVALID_VALUE",
+                "paid must be between 0 and the document total.",
+                "Correct paid or total.",
+                column="paid",
+            )
     if entity == "transactions":
-        date.fromisoformat(row["transaction_date"])
-        entries = strict_json(row["entries"])
+        try:
+            date.fromisoformat(row["transaction_date"])
+        except ValueError as error:
+            raise Finding(
+                "INVALID_DATE",
+                "transaction_date must be a date in YYYY-MM-DD format.",
+                "Correct the date, for example 2026-01-31.",
+                column="transaction_date",
+            ) from error
+        try:
+            entries = strict_json(row["entries"])
+        except (ValueError, RecursionError) as error:
+            raise Finding(
+                "INVALID_TYPE",
+                "entries must be a JSON list of journal lines.",
+                f"Write entries {SAMPLE}.",
+                column="entries",
+            ) from error
         if not isinstance(entries, list) or not 2 <= len(entries) <= 100:
-            raise ValueError("Journal size")
+            raise Finding(
+                "INVALID_VALUE",
+                "entries must be a list of 2 to 100 journal lines.",
+                "Give each journal between 2 and 100 lines.",
+                column="entries",
+            )
         debit = credit = Decimal(0)
         for entry in entries:
             if not isinstance(entry, dict) or set(entry) != {"account_id", "debit", "credit"}:
-                raise ValueError("Entry schema")
+                raise Finding(
+                    "INVALID_TYPE",
+                    "Each journal line needs exactly account_id, debit and credit.",
+                    f"Write each journal line {SAMPLE}.",
+                    column="entries",
+                )
             if not isinstance(entry["account_id"], str) or not ID.fullmatch(entry["account_id"]):
-                raise ValueError("Entry reference")
+                raise Finding(
+                    "INVALID_IDENTIFIER",
+                    "Each journal line's account_id must be a valid identifier.",
+                    "Correct the account_id in the journal line.",
+                    column="entries",
+                )
             if not isinstance(entry["debit"], str) or not isinstance(entry["credit"], str):
-                raise ValueError("Journal money requires decimal text")
-            d, c = money(entry["debit"]), money(entry["credit"])
+                raise Finding(
+                    "INVALID_TYPE",
+                    'Journal debit and credit must be decimal text, such as "125.00".',
+                    "Put each debit and credit amount in quotes.",
+                    column="entries",
+                )
+            d, c = amount(entry["debit"], "entries"), amount(entry["credit"], "entries")
             if min(d, c) < 0 or (d > 0) == (c > 0):
-                raise ValueError("Entry sides")
+                raise Finding(
+                    "INVALID_VALUE",
+                    "Each journal line needs either a debit or a credit, not both or neither.",
+                    "Set one side of each line to 0.00.",
+                    column="entries",
+                )
             debit += d
             credit += c
         if debit != credit:
-            raise ValueError("Unbalanced journal")
+            raise Finding(
+                "UNBALANCED_JOURNAL",
+                "This journal's debits and credits don't balance.",
+                "Make total debits equal total credits.",
+                column="entries",
+            )
         row["entries"] = entries
+
+
+def keys(value, required, path, label):
+    """Exact key set for a configuration object, reported by key path."""
+    if not isinstance(value, dict):
+        raise Finding(
+            "INVALID_TYPE",
+            f"{label} must be a JSON object.",
+            f"Write {label} {SAMPLE}.",
+            key=path or None,
+        )
+    prefix = f"{path}." if path else ""
+    for key in required:
+        if key not in value:
+            raise Finding(
+                "MISSING_KEY",
+                f"Missing required key: {prefix}{key}.",
+                f"Add {prefix}{key} {SAMPLE}.",
+                key=f"{prefix}{key}",
+            )
+    for key in value:
+        if key not in required:
+            shown = f"{prefix}{key}" if isinstance(key, str) and HEADER.fullmatch(key) else None
+            raise Finding(
+                "UNSUPPORTED_KEY",
+                f"Unsupported key{': ' + shown if shown else ''}. Configuration can't set "
+                "workflow, approval or other product state.",
+                f"Remove {shown or 'the key'}.",
+                key=shown,
+            )
 
 
 def validate_config(value):
     from tools.configuration.controls import AREAS, validate_value
 
-    if not isinstance(value, dict) or set(value) != {"company", "settings", "taxes"}:
-        raise ValueError("Configuration shape")
+    keys(value, ("company", "settings", "taxes"), "", "configuration.json")
     company, settings, taxes = value["company"], value["settings"], value["taxes"]
-    if not isinstance(company, dict) or set(company) != {
-        "id",
-        "legal_name",
-        "display_name",
-        "base_currency",
-        "fiscal_year_start_month",
-    }:
-        raise ValueError("Company schema")
-    if (
-        not isinstance(company["id"], str)
-        or not ID.fullmatch(company["id"])
-        or any(
-            not isinstance(company[k], str) or not 1 <= len(company[k]) <= 200
-            for k in ("legal_name", "display_name")
+    keys(
+        company,
+        ("id", "legal_name", "display_name", "base_currency", "fiscal_year_start_month"),
+        "company",
+        "company",
+    )
+    if not isinstance(company["id"], str) or not ID.fullmatch(company["id"]):
+        raise Finding(
+            "INVALID_IDENTIFIER",
+            "company.id must use letters, digits, hyphens or underscores.",
+            "Correct company.id.",
+            key="company.id",
         )
-        or type(company["fiscal_year_start_month"]) is not int
-        or not 1 <= company["fiscal_year_start_month"] <= 12
-    ):
-        raise ValueError("Company types")
-    if not isinstance(settings, dict) or set(settings) != set(AREAS):
-        raise ValueError("Settings schema")
-    if any(not isinstance(v, str) or not validate_value(k, v, v) for k, v in settings.items()):
-        raise ValueError("Unsupported settings")
-    if (
-        company["base_currency"] != settings["base_currency"]
-        or str(company["fiscal_year_start_month"]) != settings["fiscal_year"]
-    ):
-        raise ValueError("Inconsistent configuration")
+    for key in ("legal_name", "display_name"):
+        if not isinstance(company[key], str) or not 1 <= len(company[key]) <= MAX_TEXT:
+            raise Finding(
+                "INVALID_VALUE",
+                f"company.{key} must be text of 1 to {MAX_TEXT} characters.",
+                f"Correct company.{key}.",
+                key=f"company.{key}",
+            )
+    month = company["fiscal_year_start_month"]
+    if type(month) is not int or not 1 <= month <= 12:
+        raise Finding(
+            "INVALID_TYPE",
+            "company.fiscal_year_start_month must be a whole number from 1 to 12.",
+            "Use a number such as 1 for January, without quotes.",
+            key="company.fiscal_year_start_month",
+        )
+    keys(settings, tuple(AREAS), "settings", "settings")
+    for key, item in settings.items():
+        if not isinstance(item, str) or not validate_value(key, item, item):
+            raise Finding(
+                "INVALID_VALUE",
+                f"settings.{key} must be one of: " + ", ".join(AREAS[key][1]) + ".",
+                f"Use one of the listed values for settings.{key}.",
+                key=f"settings.{key}",
+            )
+    if company["base_currency"] != settings["base_currency"]:
+        raise Finding(
+            "INVALID_VALUE",
+            "company.base_currency must match settings.base_currency.",
+            "Use the same currency in both places.",
+            key="company.base_currency",
+        )
+    if str(month) != settings["fiscal_year"]:
+        raise Finding(
+            "INVALID_VALUE",
+            "company.fiscal_year_start_month must match settings.fiscal_year.",
+            "Use the same month in both places.",
+            key="company.fiscal_year_start_month",
+        )
     if not isinstance(taxes, list) or len(taxes) > 20:
-        raise ValueError("Tax limit")
+        raise Finding(
+            "INVALID_TYPE",
+            "taxes must be a list of up to 20 tax entries.",
+            f"Write taxes {SAMPLE}.",
+            key="taxes",
+        )
     ids = set()
-    for tax in taxes:
-        if not isinstance(tax, dict) or set(tax) != {"id", "code", "rate", "jurisdiction"}:
-            raise ValueError("Tax schema")
-        if (
-            any(not isinstance(v, str) or not 1 <= len(v) <= 64 for v in tax.values())
-            or not ID.fullmatch(tax["id"])
-            or tax["id"] in ids
-            or not Decimal(tax["rate"]).is_finite()
-            or not 0 <= Decimal(tax["rate"]) <= 1
-        ):
-            raise ValueError("Tax value")
+    for position, tax in enumerate(taxes):
+        path = f"taxes[{position}]"
+        keys(tax, ("id", "code", "rate", "jurisdiction"), path, path)
+        for key, item in tax.items():
+            if not isinstance(item, str) or not 1 <= len(item) <= 64:
+                raise Finding(
+                    "INVALID_VALUE",
+                    f"{path}.{key} must be text of 1 to 64 characters.",
+                    f"Correct {path}.{key}.",
+                    key=f"{path}.{key}",
+                )
+        if not ID.fullmatch(tax["id"]):
+            raise Finding(
+                "INVALID_IDENTIFIER",
+                f"{path}.id must use letters, digits, hyphens or underscores.",
+                f"Correct {path}.id.",
+                key=f"{path}.id",
+            )
+        if tax["id"] in ids:
+            raise Finding(
+                "DUPLICATE_ID",
+                f"Tax identifier {tax['id']} appears more than once.",
+                "Give each tax its own id.",
+                key=f"{path}.id",
+            )
+        try:
+            rate = Decimal(tax["rate"])
+            valid = rate.is_finite() and 0 <= rate <= 1
+        except InvalidOperation:
+            valid = False
+        if not valid:
+            raise Finding(
+                "INVALID_NUMBER",
+                f"{path}.rate must be a decimal between 0 and 1, such as 0.0725.",
+                f"Correct {path}.rate.",
+                key=f"{path}.rate",
+            )
         ids.add(tax["id"])
     if (
         not (settings["tax_setup"] == "NONE" and not taxes)
         and sum(t["code"] == settings["tax_setup"] for t in taxes) != 1
     ):
-        raise ValueError("Tax configuration reference")
+        raise Finding(
+            "INVALID_VALUE",
+            "settings.tax_setup must match exactly one tax code, or be NONE with no taxes.",
+            "Make settings.tax_setup match one entry's code in taxes.",
+            key="settings.tax_setup",
+        )
     return {
         **value,
         "configuration": [
