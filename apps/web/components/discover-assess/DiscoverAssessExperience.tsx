@@ -28,14 +28,15 @@ import type {
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 import { authHeaders } from "@/lib/identity";
+import { ASSESSMENT_UNREACHABLE, reach } from "@/lib/reach";
 
 type Phase = "select" | "discovering" | "assessing" | "complete" | "error";
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await reach(`${API_BASE}${path}`, {
     ...init,
     headers: { ...await authHeaders(), "Content-Type": "application/json", ...init?.headers },
-  });
+  }, ASSESSMENT_UNREACHABLE);
   if (!response.ok) {
     const body = (await response.json().catch(() => null)) as { detail?: string } | null;
     throw new Error(body?.detail ?? `Request failed with status ${response.status}`);

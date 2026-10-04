@@ -207,6 +207,32 @@ describe("DiscoverAssessExperience", () => {
     expect(screen.getByRole("list", { name: "Migration journey" }).querySelector('[aria-current="step"]')).toHaveTextContent("PlanCurrent");
   });
 
+  it.each(["northstar-supplies", "harbor-light-migrate-demo"])("explains an unreachable assessment service for %s and recovers on retry", async sample => {
+    sessionStorage.clear();
+    window.history.replaceState(null, "", "/assess");
+    // fetch rejects with a TypeError ("Failed to fetch") when the API is down or the origin is blocked.
+    const fetchMock = vi.fn().mockRejectedValueOnce(new TypeError("Failed to fetch"));
+    vi.stubGlobal("fetch", fetchMock);
+    render(<DiscoverAssessExperience />);
+    fireEvent.change(screen.getByRole("combobox", { name: "Synthetic business" }), { target: { value: sample } });
+    fireEvent.click(screen.getByRole("button", { name: /Assess this migration/ }));
+    const alert = await screen.findByRole("alert");
+    expect(alert).toHaveTextContent("MoveBooks couldn't reach the assessment service. Your migration was not changed.");
+    expect(alert).not.toHaveTextContent("Failed to fetch");
+    // Nothing advanced: no result, no selected migration, no session in the address.
+    expect(screen.queryByRole("heading", { name: "Migration readiness" })).not.toBeInTheDocument();
+    expect(sessionStorage.getItem("movebooks-migration-session")).toBeNull();
+    expect(window.location.search).toBe("");
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ id: "session-001" }, 201))
+      .mockResolvedValueOnce(jsonResponse(discovery))
+      .mockResolvedValueOnce(jsonResponse(assessment))
+      .mockResolvedValueOnce(jsonResponse(activity));
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
+    expect(await screen.findByRole("heading", { name: "Migration readiness" })).toBeVisible();
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body).sample_company_id).toBe(sample);
+  });
+
   it("shows a recoverable error without inventing results", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ detail: "API unavailable" }, 503)));
     render(<DiscoverAssessExperience />);

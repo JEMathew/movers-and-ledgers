@@ -4,11 +4,12 @@ import { useRef, useState } from "react";
 import { Alert, Button, Card, Checkbox, Input } from "@/components/ui";
 const API = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 import { authHeaders, cloudIdentity } from "@/lib/identity";
+import { INTAKE_UNREACHABLE, reach } from "@/lib/reach";
 type Issue = { file: string; row: number | null; severity: string; message: string; why: string; action: string; can_continue: boolean };
 type Report = { package_id: string; status: string; files: { name: string; type: string; rows: number; schema_status: string; ignored_fields: string[] }[]; issues: Issue[]; activity: string[] };
 const names = ["customers.csv", "vendors.csv", "accounts.csv", "products.csv", "invoices.csv", "bills.csv", "transactions.csv", "configuration.json"];
 async function request(path: string, init?: RequestInit) {
-  const response = await fetch(`${API}/v1${path}`, { ...init, headers: { ...await authHeaders(), ...init?.headers } });
+  const response = await reach(`${API}/v1${path}`, { ...init, headers: { ...await authHeaders(), ...init?.headers } }, INTAKE_UNREACHABLE);
   if (!response.ok) throw new Error(response.status === 429 ? "Local capacity reached. Discard a package or restart the local API." : response.status === 404 ? "Package expired. Validate your files again." : "Request failed. Check local API access, limits and format, then retry. No downstream stage was authorized.");
   return response;
 }

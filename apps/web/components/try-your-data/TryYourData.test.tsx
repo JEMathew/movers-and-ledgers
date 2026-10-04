@@ -67,6 +67,13 @@ describe("controlled intake", () => {
     await screen.findByText(/Package expired/);
     expect(screen.queryByRole("link", { name: "Review Discover → Assess" })).not.toBeInTheDocument();
   });
+  it("explains an unreachable file-checking service instead of a raw network error", async () => {
+    fetchMock.mockRejectedValue(new TypeError("Failed to fetch"));
+    render(<TryYourData/>); select(); consent(); fireEvent.click(screen.getByRole("button", { name: "Validate package" }));
+    expect(await screen.findByText("MoveBooks couldn't reach the file-checking service. Nothing was imported or changed.")).toBeInTheDocument();
+    expect(screen.queryByText(/Failed to fetch/)).not.toBeInTheDocument();
+    expect(sessionStorage.getItem("movebooks-migration-session")).toBeNull();
+  });
   it("defines ten uninstrumented contracts with server-owned outcomes", () => {
     expect(Object.keys(intakeEvents)).toHaveLength(10);
     expect(intakeEvents.workspace_created_from_upload.source).toBe("server");

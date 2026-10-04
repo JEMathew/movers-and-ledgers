@@ -1,10 +1,15 @@
-.PHONY: setup dev-web dev-api test lint format
+.PHONY: setup dev dev-web dev-api test lint format
 
 PYTHON ?= python3.11
 
 setup:
 	cd apps/web && npm install
 	$(PYTHON) -m venv .venv && .venv/bin/pip install -e '.[dev]'
+
+# Local API and web together. The web port is pinned to 3000: the API's local CORS allows only
+# that port, and a silently moved dev server makes every API call fail with "Failed to fetch".
+dev:
+	@trap 'kill 0' INT TERM EXIT; $(MAKE) dev-api & $(MAKE) dev-web & wait
 
 dev-web:
 	cd apps/web && npm run dev
