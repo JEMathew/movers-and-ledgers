@@ -40,6 +40,30 @@ from .repository import InMemoryMigrationSessionRepository as InMemoryMigrationS
 from .repository import MigrationSessionRepository
 
 
+def mapping_review(session: MigrationSession) -> dict[str, int] | None:
+    """Authoritative mapping review counts, or None before mappings exist.
+
+    Uses the plan-approval rule (mapping_ready_for_handoff): only APPROVED or MODIFIED
+    mappings are reviewed; every other state is still pending.
+    """
+    if not session.mappings:
+        return None
+    reviewed = {MappingState.APPROVED, MappingState.MODIFIED}
+    return {
+        "total": len(session.mappings),
+        "pending": sum(mapping.state not in reviewed for mapping in session.mappings),
+    }
+
+
+def journey_evidence(session: MigrationSession) -> dict:
+    """What the shared journey needs beyond the workflow status. Every stage read carries the
+    same evidence, so no page infers mapping or readiness state on its own."""
+    return {
+        "mapping_review": mapping_review(session),
+        "readiness_blockers": session.assessment.blocker_count if session.assessment else 0,
+    }
+
+
 class MigrationSessionNotFoundError(LookupError):
     pass
 

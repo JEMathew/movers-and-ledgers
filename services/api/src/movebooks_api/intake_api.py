@@ -16,10 +16,10 @@ from fastapi import APIRouter, HTTPException, Request, Response
 
 from agents.orchestrator.audit import record_decision
 from domain.discovery_assessment.models import MigrationSession
-from domain.planning_mapping.models import MappingState
 from movebooks_api.discover_assess.api import AuthenticatedPrincipal
 from movebooks_api.discover_assess.fixtures import load_sample_company
 from movebooks_api.discover_assess.service import discover_assess_service as service
+from movebooks_api.discover_assess.service import mapping_review
 from movebooks_api.intake import MAX_TOTAL, SCHEMAS, strict_json, validate_package
 from movebooks_api.settings import get_settings
 from tools.migration import stable_checksum
@@ -181,21 +181,6 @@ async def workspace(package_id: UUID, request: Request, principal: Authenticated
         }
 
 
-def _mapping_review(session: MigrationSession) -> dict[str, int] | None:
-    """Authoritative mapping review counts, or None before mappings exist.
-
-    Uses the plan-approval rule (mapping_ready_for_handoff): only APPROVED or MODIFIED
-    mappings are reviewed; every other state is still pending.
-    """
-    if not session.mappings:
-        return None
-    reviewed = {MappingState.APPROVED, MappingState.MODIFIED}
-    return {
-        "total": len(session.mappings),
-        "pending": sum(mapping.state not in reviewed for mapping in session.mappings),
-    }
-
-
 @router.get("/migration-sessions/{session_id}/intake-trust")
 def intake_trust(session_id: UUID, principal: AuthenticatedPrincipal):
     try:
@@ -209,7 +194,7 @@ def intake_trust(session_id: UUID, principal: AuthenticatedPrincipal):
         "source_kind": session.source_kind,
         "synthetic": session.synthetic,
         "intake_status": (session.intake_report or {}).get("status"),
-        "mapping_review": _mapping_review(session),
+        "mapping_review": mapping_review(session),
         "activity": [
             {
                 "id": f"{session.id}-intake-{i}",

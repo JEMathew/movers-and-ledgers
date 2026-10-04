@@ -98,6 +98,23 @@ export function projectJourney({ status, mappingIssues, readinessIssues = 0 }: J
     currentLabel: journeyCurrentLabelFor(status),
   };
 }
+/** Pending mapping reviews from the server's own count. Authoritative only as a consistent
+ *  { total > 0, 0 <= pending <= total }; any other shape is unknown (null), never zero. */
+export function pendingInReview(value: unknown): number | null {
+  const { total, pending } = (value && typeof value === "object" ? value : {}) as Record<string, unknown>;
+  const whole = (n: unknown): n is number => typeof n === "number" && Number.isInteger(n);
+  return whole(total) && whole(pending) && total > 0 && pending >= 0 && pending <= total ? pending : null;
+}
+/** Journey evidence from a stage read (Validate, Start Using): the authoritative workflow status
+ *  with the same mapping review and readiness evidence My Migration reads. Unknown stays unknown. */
+export function journeyEvidenceFrom(read: { workflow_status: string; mapping_review?: unknown; readiness_blockers?: unknown }): JourneyEvidence {
+  const blockers = read.readiness_blockers;
+  return {
+    status: read.workflow_status,
+    mappingIssues: pendingInReview(read.mapping_review),
+    readinessIssues: typeof blockers === "number" && Number.isInteger(blockers) && blockers > 0 ? blockers : 0,
+  };
+}
 /** Mapping reviews still pending in a page's own mapping list; unknown when none are listed. */
 export function pendingMappingsIn(mappings?: readonly { state: string }[] | null): number | null {
   return mappings?.length ? mappings.filter(mapping => !["APPROVED", "MODIFIED"].includes(mapping.state)).length : null;

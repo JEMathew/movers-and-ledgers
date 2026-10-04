@@ -14,6 +14,7 @@ from tools.activation.invoice import verify_accounting_impact
 from tools.onboarding.checks import operating_context
 
 from .service import discover_assess_service as service
+from .service import journey_evidence
 from .validate_configure import DemoRequest, context
 from .validate_configure import demo as migration_demo
 from .validate_configure import orchestrator as configure_orchestrator
@@ -65,6 +66,7 @@ def view(session, fixture):
         "effective_status": "FIRST_PRODUCTIVE_USE_BLOCKED"
         if gate_error or stale_success
         else session.workflow_status,
+        **journey_evidence(session),
         "gate_error": gate_error
         or ("Previously verified evidence changed; investigate." if stale_success else None),
         "tasks": tasks,

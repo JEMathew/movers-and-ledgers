@@ -6,7 +6,7 @@ import { Alert } from "@/components/ui/feedback";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
-import { projectJourney } from "@/components/journey/journey";
+import { journeyEvidenceFrom, projectJourney } from "@/components/journey/journey";
 import { ActionLink } from "@/components/journey/NextAction";
 import type { Snapshot, Task } from "./types";
 import { authHeaders } from "@/lib/identity";
@@ -66,7 +66,7 @@ export function OnboardFpuExperience() {
   }
   function open(value: Review) { setError(undefined); setComment(""); setSelection("task" in value ? value.task.choices[0] ?? "" : ""); setReview(value); }
   const root = `/migration-sessions/${snapshot?.session_id}`;
-  const projection = snapshot ? projectJourney({ status: snapshot.workflow_status }) : undefined;
+  const projection = snapshot ? projectJourney(journeyEvidenceFrom(snapshot)) : undefined;
   const fpu = snapshot?.onboarding?.fpu;
   const complete = snapshot?.tasks.filter(t => t.status === "COMPLETED").length ?? 0;
   const frozen = !!fpu && (fpu.checkpoint !== "DRAFT" || fpu.attempts > 0);

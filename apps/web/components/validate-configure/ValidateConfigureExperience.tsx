@@ -7,7 +7,7 @@ import { Alert } from "@/components/ui/feedback";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
-import { PROCESSING, projectJourney } from "@/components/journey/journey";
+import { journeyEvidenceFrom, PROCESSING, projectJourney } from "@/components/journey/journey";
 import { ActionLink } from "@/components/journey/NextAction";
 import type { Check, Proposal, Snapshot } from "./types";
 import { authHeaders } from "@/lib/identity";
@@ -84,7 +84,7 @@ export function ValidateConfigureExperience() {
     } finally { setBusy(false); setChecking(false); }
   }
   const root = `/migration-sessions/${snapshot?.session_id}`;
-  const projection = snapshot ? projectJourney({ status: snapshot.workflow_status }) : undefined;
+  const projection = snapshot ? projectJourney(journeyEvidenceFrom(snapshot)) : undefined;
   const report = snapshot?.report;
   const plan = snapshot?.configuration;
   const approved = plan?.proposals.every(p => ["APPLIED", "APPROVED", "MODIFIED"].includes(p.state));

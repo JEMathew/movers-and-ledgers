@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { authHeaders } from "@/lib/identity";
+import { pendingInReview } from "@/components/journey/journey";
 
 /** The migration the customer is working on, carried across navigation within the tab. */
 export const SELECTED_SESSION_KEY = "movebooks-migration-session";
@@ -25,14 +26,6 @@ export type Attention = { title: string; evidence: string };
 
 // Explicit presentation projection. Never stringify a session, prompt, payload,
 // model trace, invoice, selected value or raw reconciliation amount into the UI.
-const count = (value: unknown): value is number => typeof value === "number" && Number.isInteger(value);
-/** Pending mapping reviews from the server's own count. Authoritative only as a consistent
- *  { total > 0, 0 <= pending <= total }; any other shape is unknown (null), never zero. */
-function pendingMappings(value: unknown): number | null {
-  const { total, pending } = object(value);
-  return count(total) && count(pending) && total > 0 && pending >= 0 && pending <= total ? pending : null;
-}
-
 /** Plain titles for migration failure codes (MB-<kind>). The code itself stays in evidence. */
 const MIGRATION_ISSUES: Record<string, string> = {
   DUPLICATE_CUSTOMER: "Possible duplicate customer",
@@ -78,7 +71,7 @@ export function projectSession(raw: unknown, expectedId: string): SessionView {
   ];
   const blockers = attention.map(item => item.title);
   const events = list(s.events).map(e => ({ id: text(e.id), title: text(e.name).replaceAll("_", " "), kind: "Lifecycle audit reference", status: "Recorded", time: text(e.occurred_at), actor: "Workflow", tool: "", evidence: [] }));
-  return { id: expectedId, status, phase, sourceKind: s.source_kind === "user_upload" ? "User-provided data · synthetic target" : "Synthetic sample · synthetic target", activity, decisions, checks, blockers, events, readinessIssues: readiness.length, migrationIssues: migration.length, verificationIssues, mappingIssues: pendingMappings(s.mapping_review), attention };
+  return { id: expectedId, status, phase, sourceKind: s.source_kind === "user_upload" ? "User-provided data · synthetic target" : "Synthetic sample · synthetic target", activity, decisions, checks, blockers, events, readinessIssues: readiness.length, migrationIssues: migration.length, verificationIssues, mappingIssues: pendingInReview(s.mapping_review), attention };
 }
 
 export function useSessionView() {

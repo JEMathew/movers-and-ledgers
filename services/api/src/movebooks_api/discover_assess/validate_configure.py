@@ -13,6 +13,7 @@ from movebooks_api.auth import Principal, require_principal
 
 from .fixtures import load_sample_company
 from .service import discover_assess_service as service
+from .service import journey_evidence
 
 router = APIRouter(prefix="/v1", tags=["validate-configure"])
 PrincipalDependency = Annotated[Principal, Depends(require_principal)]
@@ -47,6 +48,7 @@ def view(session, fixture):
         "session_id": session.id,
         "company_name": session.company_name,
         "workflow_status": session.workflow_status,
+        **journey_evidence(session),
         "report": report,
         "configuration": session.configuration,
         "activity": session.activity[-12:],

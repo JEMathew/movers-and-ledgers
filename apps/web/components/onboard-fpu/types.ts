@@ -14,6 +14,8 @@ export type Fpu = {
 };
 export type Snapshot = {
   session_id: string; company_name: string; workflow_status: string; effective_status: string;
+  /** Journey evidence every stage read carries; see journeyEvidenceFrom. */
+  mapping_review?: { total: number; pending: number } | null; readiness_blockers?: number;
   gate_error?: string | null; ready: boolean; verified_fpu: boolean; tasks: Task[];
   onboarding?: { fpu?: Fpu | null; faults: string[] } | null;
   customers: {id: string; display_name: string}[]; products: {id: string; name: string}[];
