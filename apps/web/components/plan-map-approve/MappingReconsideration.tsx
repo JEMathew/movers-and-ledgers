@@ -33,7 +33,7 @@ export function MappingReconsideration({ mapping, history, submit }: {
   }
 
   return <section className="mt-5 border-t border-token pt-4" aria-label={`${mapping.source_label} reconsideration`}>
-    <h4 ref={heading} tabIndex={-1} className="font-bold">Prior decision history</h4>
+    <h4 ref={heading} tabIndex={-1} className="font-bold">Prior Decision History</h4>
     <p className="mt-2 text-sm">A final rejection is retained. Requesting reconsideration does not approve it or allow migration.</p>
     <ul className="mt-2 space-y-2 text-sm">{history.filter(d => d.affected_entity === mapping.id).map(d => <li key={d.id}>
       {d.decision} · {d.selected_value} · {d.actor} · <time>{d.occurred_at}</time> · Decision {d.id}
@@ -50,8 +50,8 @@ export function MappingReconsideration({ mapping, history, submit }: {
       {r.reviewed_at && <p>New decision {r.decision_id}: {r.reviewed_by} · {r.reviewed_at}</p>}
     </div>)}
     {pending ? <div className="mt-3 flex flex-wrap gap-2">
-      <Button variant="secondary" disabled={busy} onClick={() => perform(`/reconsiderations/${pending.id}/review`, {action: "approve", comment: "Explicit human review of the displayed reconsideration"})}>Approve reconsideration</Button>
-      <Button disabled={busy} variant="secondary" onClick={() => perform(`/reconsiderations/${pending.id}/review`, {action: "reject", comment: "Reconsideration rejected after human review"})}>Reject reconsideration</Button>
+      <Button variant="secondary" disabled={busy} onClick={() => perform(`/reconsiderations/${pending.id}/review`, {action: "approve", comment: "Explicit human review of the displayed reconsideration"})}>Approve Reconsideration</Button>
+      <Button disabled={busy} variant="secondary" onClick={() => perform(`/reconsiderations/${pending.id}/review`, {action: "reject", comment: "Reconsideration rejected after human review"})}>Reject Reconsideration</Button>
     </div> : mapping.state === "REJECTED" && <form className="mt-3" onSubmit={event => {
       event.preventDefault();
       if (!prior || !reason.trim() || busy) return;
@@ -64,7 +64,7 @@ export function MappingReconsideration({ mapping, history, submit }: {
       <label className="mt-2 block text-sm">Reason for reconsideration
         <textarea required maxLength={1000} className="field-control mt-2 w-full" value={reason} onChange={event => setReason(event.target.value)} />
       </label>
-      <Button variant="secondary" className="mt-2" type="submit" disabled={busy || !reason.trim() || !prior}>Request reconsideration</Button>
+      <Button variant="secondary" className="mt-2" type="submit" disabled={busy || !reason.trim() || !prior}>Request Reconsideration</Button>
     </form>}
     {error && <p className="mt-2" role="alert">{error} No approval is assumed. Refresh after a concurrent change.</p>}
     <p className="mt-2 text-sm text-secondary" role="status">{busy ? "Recording governed review…" : "Only the authenticated workspace owner may request or review. A separate explicit approval is required."}</p>

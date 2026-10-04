@@ -126,9 +126,9 @@ describe("Plan → Map → Approve", () => {
 
   it("leads with a ready outcome and one primary action", async () => {
     read(); render(<PlanMapApproveExperience />);
-    expect(await screen.findByRole("heading", { name: "Your migration plan is ready." })).toBeVisible();
-    expect(screen.getByRole("heading", { name: "Migration scope" })).toBeVisible();
-    expect(screen.getByRole("heading", { name: "What needs human review" })).toBeVisible();
+    expect(await screen.findByRole("heading", { name: "Your Migration Plan Is Ready" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Migration Scope" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "What Needs Human Review" })).toBeVisible();
     expect(screen.getByRole("button", { name: "Review Mappings" })).toBeEnabled();
     expect(document.querySelectorAll('main .button:not(.secondary):not(.ghost):not(.danger)')).toHaveLength(1);
   });
@@ -141,7 +141,7 @@ describe("Plan → Map → Approve", () => {
     render(<PlanMapApproveExperience />);
     const action = screen.getByRole("button", { name: "Create My Migration Plan" });
     await waitFor(() => expect(action).toBeEnabled()); fireEvent.click(action);
-    await screen.findByRole("heading", { name: "Your migration plan is ready." });
+    await screen.findByRole("heading", { name: "Your Migration Plan Is Ready" });
     expect(fetch).toHaveBeenCalledTimes(3);
     expect(fetch.mock.calls.filter(([, init]) => init.method === "POST")).toHaveLength(1);
     expect(fetch.mock.calls.every(([url]) => String(url).includes(id))).toBe(true);
@@ -161,7 +161,7 @@ describe("Plan → Map → Approve", () => {
     expect(screen.getByText("Preparing your migration plan")).toBeVisible();
     expect(screen.getByText("Defining what will move and highlighting decisions that need your review.")).toBeVisible();
     finish(jsonResponse(plan));
-    await screen.findByRole("heading", { name: "Your migration plan is ready." });
+    await screen.findByRole("heading", { name: "Your Migration Plan Is Ready" });
     expect(journey.querySelector(".is-processing")).toBeNull();
     expect(journey.querySelectorAll(".is-complete")).toHaveLength(2);
   });
@@ -199,7 +199,7 @@ describe("Plan → Map → Approve", () => {
     const approval = { plan_id: plan.id, decision_id: "server-decision", actor: "firebase:owner-a", approved_at: "2026-10-04T01:23:00Z", mapping_decision_ids: ["mapping-decision"], manifest_checksum: "checksum" };
     fetch.mockResolvedValueOnce(jsonResponse({ ...plan, approval })).mockResolvedValueOnce(jsonResponse(snapshot({ workflow_status: "APPROVED", plan: { ...plan, approval }, mappings: [reviewed] })));
     fireEvent.click(within(dialog).getByRole("button", { name: "Approve Migration Plan" }));
-    await screen.findByRole("heading", { name: "Your migration plan is approved." });
+    await screen.findByRole("heading", { name: "Your Migration Plan Is Approved" });
     expect(screen.getByText(/firebase:owner-a/)).toBeVisible();
     expect(screen.getByText(approval.approved_at)).toBeVisible();
     expect(screen.getByRole("link", { name: "Start Migration" })).toHaveAttribute("href", `/migrate-resolve?session=${id}`);
@@ -253,11 +253,11 @@ describe("reconsideration stays separately governed", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<PlanMapApproveExperience />);
     await openMappings();
-    await screen.findByRole("button", {name: "Request reconsideration"});
+    await screen.findByRole("button", {name: "Request Reconsideration"});
     expect(screen.queryByRole("button", {name: "Confirm Mapping"})).not.toBeInTheDocument();
     fireEvent.change(screen.getByLabelText("Reason for reconsideration"), {target: {value: "Explicit reconsideration"}});
-    fireEvent.click(screen.getByRole("button", {name: "Request reconsideration"}));
-    const approveReview = await screen.findByRole("button", {name: "Approve reconsideration"});
+    fireEvent.click(screen.getByRole("button", {name: "Request Reconsideration"}));
+    const approveReview = await screen.findByRole("button", {name: "Approve Reconsideration"});
     expect(screen.queryByRole("link", {name: "Start Migration"})).not.toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(3);
     fireEvent.click(approveReview);
@@ -435,7 +435,7 @@ describe("initial-read recovery", () => {
     await screen.findByRole("alert");
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe(selected);
     fireEvent.click(screen.getByRole("button", { name: "Read migration again" }));
-    await screen.findByRole("heading", { name: "Your migration plan is ready." });
+    await screen.findByRole("heading", { name: "Your Migration Plan Is Ready" });
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe(id);
   });
 });

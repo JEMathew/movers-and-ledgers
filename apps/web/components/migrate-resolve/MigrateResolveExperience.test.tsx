@@ -36,6 +36,11 @@ describe("MigrateResolveExperience", () => {
     expect(screen.queryByRole("button", {name:/load reviewed manifest/i})).not.toBeInTheDocument();
     const step = screen.getByText("Migrate", {selector:"strong"}).closest("li");
     expect(step).not.toHaveClass("is-complete");
+    // Same reading as My Migration for a paused migration: Resolve needs attention.
+    const resolve = screen.getByText("Resolve", {selector:"strong"}).closest("li");
+    expect(resolve).toHaveTextContent("ResolveNeeds Attention");
+    expect(resolve).toHaveClass("is-attention");
+    expect(document.querySelector(".migration-orb")).toBeNull();
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock.mock.calls[0][1]?.method).toBeUndefined();
   });

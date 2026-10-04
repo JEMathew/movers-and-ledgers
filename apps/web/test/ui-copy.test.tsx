@@ -67,6 +67,24 @@ describe("customer-facing label casing", () => {
   });
 });
 
+describe("Plan-stage label casing", () => {
+  it("keeps Plan, Map and Approve headings and buttons in Title Case", async () => {
+    const { readFileSync, readdirSync } = await import("node:fs");
+    const { join, resolve } = await import("node:path");
+    const dir = resolve(__dirname, "../components/plan-map-approve");
+    const labels = readdirSync(dir).filter(name => name.endsWith(".tsx") && !name.includes(".test.")).flatMap(name => {
+      const source = readFileSync(join(dir, name), "utf8");
+      return [
+        ...[...source.matchAll(/<h[1-4][^>]*>([^<{]+)<\/h[1-4]>/g)].map(match => match[1].trim()),
+        ...[...source.matchAll(/<Button[^>]*>([A-Z][^<{]+)<\/Button>/g)].map(match => match[1].trim()),
+        ...[...source.matchAll(/title="([^"]+)"/g)].map(match => match[1]),
+      ];
+    });
+    expect(labels.length).toBeGreaterThan(10);
+    expect(labels.filter(label => !titleCase(label.replace(/[?.]$/, "")))).toEqual([]);
+  });
+});
+
 describe("demo workspace entry", () => {
   it("explains the local demo workspace without identity jargon", async () => {
     render(await SignIn({ searchParams: Promise.resolve({ next: "/assess" }) }));

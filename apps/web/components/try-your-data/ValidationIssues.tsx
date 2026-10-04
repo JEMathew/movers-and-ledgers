@@ -12,7 +12,7 @@ export type Issue = {
 const TITLES: Record<string, string> = {
   MISSING_FILE: "Missing Required File", UNSUPPORTED_FILE: "Unsupported File", DUPLICATE_FILENAME: "Duplicate File",
   PACKAGE_LIMIT: "Package Too Large", UNSAFE_ARCHIVE: "Unsafe ZIP", FILE_TOO_LARGE: "File Too Large",
-  EMPTY_FILE: "Empty File", INVALID_ENCODING: "Not UTF-8 Text", BINARY_CONTENT: "Not a Text File",
+  EMPTY_FILE: "Empty File", INVALID_ENCODING: "Not UTF-8 Text", BINARY_CONTENT: "Not a Text File", HIDDEN_CHARACTERS: "Hidden Characters",
   MALFORMED_CSV: "Malformed CSV", MALFORMED_JSON: "Malformed JSON", MISSING_COLUMN: "Missing Required Column",
   DUPLICATE_HEADER: "Duplicate Column", INVALID_HEADER: "Invalid Column Name", TOO_MANY_COLUMNS: "Too Many Columns",
   ROW_LIMIT: "Too Many Rows", MALFORMED_ROW: "Malformed Row", MISSING_VALUE: "Missing Required Value",

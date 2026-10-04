@@ -125,6 +125,8 @@ export function DiscoverAssessExperience() {
   // Creating a migration is always this explicit action; it never happens on resume.
   const startAssessment = async () => {
     setError(undefined);
+    // A new assessment is a different migration: never show the previous one's results while it runs.
+    setDiscovery(undefined); setAssessment(undefined); setActivity([]);
     try {
       setPhase("discovering");
       const session = await api<{ id: string }>("/v1/migration-sessions", {

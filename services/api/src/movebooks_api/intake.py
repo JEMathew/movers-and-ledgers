@@ -246,10 +246,11 @@ def text_of(name, data):
     hidden = HIDDEN.search(text)
     if hidden:
         line = text.count("\n", 0, hidden.start()) + 1
+        # Same rule as before (C0/C1 controls, DEL, bidirectional overrides); plain wording.
         raise Finding(
-            "BINARY_CONTENT",
-            f"{name} contains hidden control or text-direction characters on line {line}.",
-            "Remove the hidden characters, or re-export the file as plain UTF-8 text.",
+            "HIDDEN_CHARACTERS",
+            "This file contains hidden or unsupported characters. Remove them and try again.",
+            f"Look at line {line} of {name}, or re-export the file as plain UTF-8 text.",
         )
     return text
 

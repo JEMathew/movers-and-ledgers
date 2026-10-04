@@ -63,6 +63,26 @@ describe("Assess processing", () => {
   });
 });
 
+describe("starting a new assessment", () => {
+  it("clears the previous result instead of mixing it with the new business while processing", async () => {
+    const json = (value: unknown, status = 200) => ({ ok: status < 400, status, json: async () => value });
+    window.history.replaceState(null, "", "?session=old-session");
+    const discovery = (company: string) => ({ company_name: company, findings: [], profiles: [], fixture_version: "v1", synthetic: true });
+    const blocked = { readiness: "BLOCKED", blocker_count: 1, warning_count: 0, decision_basis: [], recommended_next_actions: [], ready_areas: [], policy_version: "p1" };
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(json({ id: "old-session", sample_company_id: "northstar-supplies", discovery: discovery("Northstar Supplies"), assessment: blocked, activity: [] }))
+      .mockResolvedValueOnce(json({ id: "new-session" }, 201))
+      .mockReturnValueOnce(new Promise(() => undefined));
+    vi.stubGlobal("fetch", fetchMock);
+    render(<DiscoverAssessExperience />);
+    await screen.findByText("Northstar Supplies has 1 blocker to fix before migration.");
+    fireEvent.click(screen.getByRole("button", { name: /Start a New Assessment/ }));
+    await waitFor(() => expect(steps()[0]).toHaveTextContent("AssessAssessing…"));
+    expect(screen.queryByRole("heading", { name: "Migration Readiness" })).not.toBeInTheDocument();
+    expect(steps()[0]).not.toHaveClass("is-blocked");
+  });
+});
+
 describe("motion", () => {
   const css = readFileSync(resolve(__dirname, "../../app/globals.css"), "utf8");
   it("has no decorative orbit left", () => {

@@ -15,7 +15,7 @@ import type { AgentActivity } from "@/components/discover-assess/types";
 import { Dialog } from "@/components/ui/dialog";
 import { Alert } from "@/components/ui/feedback";
 import { MigrationJourney } from "@/components/journey/MigrationJourney";
-import { journeyStepFor, PROCESSING } from "@/components/journey/journey";
+import { journeyCurrentLabelFor, journeyStepFor, PROCESSING } from "@/components/journey/journey";
 import { NextAction } from "@/components/journey/NextAction";
 import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
 import { StatusBadge } from "@/components/ui/status";
@@ -173,7 +173,7 @@ export function MigrateResolveExperience() {
         </div>
       </header>
 
-      <MigrationJourney className="mt-10" current={!session ? null : complete ? 6 : paused ? 5 : execution ? 4 : journeyStepFor(session.workflow_status)} held={paused ? { index: 4, label: "Paused" } : undefined} processing={working ? PROCESSING[working] : undefined} />
+      <MigrationJourney className="mt-10" current={!session ? null : complete ? 6 : paused ? 5 : execution ? 4 : journeyStepFor(session.workflow_status)} held={paused ? { index: 4, label: "Paused" } : undefined} currentLabel={session ? journeyCurrentLabelFor(execution?.status ?? session.workflow_status) : undefined} processing={working ? PROCESSING[working] : undefined} />
 
       {error && (
         <div className="mt-6">

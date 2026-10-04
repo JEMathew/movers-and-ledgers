@@ -235,8 +235,14 @@ def test_binary_renamed_as_csv(template, content, what):
 @pytest.mark.parametrize("hidden", ["\x00", "\x1b", "\x85", "‮", "⁦"])
 def test_hidden_control_characters(template, hidden):
     content = f"id,display_name\r\nc1,Cedar{hidden}School\r\n".encode()
-    issue = only({**template, "customers.csv": content}, "BINARY_CONTENT")
-    assert "hidden control or text-direction characters on line 2" in issue["message"]
+    issue = only({**template, "customers.csv": content}, "HIDDEN_CHARACTERS")
+    assert issue["message"] == (
+        "This file contains hidden or unsupported characters. Remove them and try again."
+    )
+    assert issue["fix"] == (
+        "Look at line 2 of customers.csv, or re-export the file as plain UTF-8 text."
+    )
+    assert issue["file"] == "customers.csv"
 
 
 def test_row_limit(template):

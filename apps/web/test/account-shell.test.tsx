@@ -22,6 +22,14 @@ beforeEach(() => {
 afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); });
 
 describe("global account and settings shell", () => {
+  it("in the local demo workspace offers My Migration and no dead Sign in control", () => {
+    vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "demo");
+    render(shell());
+    const banner = screen.getByRole("banner");
+    expect(within(banner).queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
+    expect(within(banner).queryByRole("link", { name: "Start My Migration" })).not.toBeInTheDocument();
+    expect(within(banner).getByRole("link", { name: "My Migration" })).toHaveAttribute("href", "/workspace");
+  });
   it("shows Sign in, a primary Start My Migration action and a compact appearance icon, with no Settings text", () => {
     render(shell());
     const signIn = screen.getByRole("button", { name: "Sign in with Google" });
