@@ -1,19 +1,23 @@
 """Real PostgreSQL-only gates. Opt-in locally; CI requires the database URL explicitly."""
 
+import json
 import os
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 from threading import Barrier
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import pytest
 from fastapi.testclient import TestClient
+from movebooks_api.discover_assess.service import DiscoverAssessService
 from movebooks_api.discover_assess.service import discover_assess_service as service
 from movebooks_api.main import app
 from movebooks_api.runtime.persistence import SqlSessionRepository, metadata, sessions
-from sqlalchemy import create_engine, event, inspect, select, text
+from sqlalchemy import create_engine, delete, event, insert, inspect, select, text
 from sqlalchemy.exc import DBAPIError
 
 from domain.discovery_assessment.models import MigrationSession
+from domain.planning_mapping.models import MappingDecision, MappingState
 
 
 @pytest.fixture(params=["legacy", "cloud-dbapi"])
@@ -137,3 +141,40 @@ def test_actual_postgres_statement_failure_is_redacted_without_memory_fallback(
     assert service.repository is repository
     with engine.connect() as connection:
         assert connection.execute(select(sessions.c.id).limit(1)) is not None
+
+
+def test_previous_release_rows_advance_and_still_conflict(postgres):
+    """Golden rows written by the previous release, on real PostgreSQL: reads keep their
+    concurrency identity, legitimate steps succeed after a restart, stale writers still fail."""
+    _, engine = postgres
+    fixture = Path(__file__).parent / "fixtures" / "persisted_sessions" / "b0753d0.json"
+    rows = json.loads(fixture.read_text())["rows"]
+    for name in ("planned", "mappings_in_review", "approved_legacy"):
+        stored = rows[name]
+        with engine.begin() as connection:  # Disposable CI database; fixture IDs are fixed.
+            connection.execute(delete(sessions).where(sessions.c.id == stored["id"]))
+            connection.execute(
+                insert(sessions).values(
+                    id=stored["id"],
+                    owner=stored["owner"],
+                    digest=stored["digest"],
+                    snapshot=stored["snapshot"],
+                )
+            )
+        sid, owner = UUID(stored["id"]), stored["owner"]
+        stale = SqlSessionRepository(engine).get(sid, owner)
+        restarted = DiscoverAssessService(SqlSessionRepository(engine))
+        if name == "planned":
+            assert restarted.map(owner, sid).workflow_status == "AWAITING_APPROVAL"
+        elif name == "mappings_in_review":
+            pending = [m for m in stale.mappings if m.state != "APPROVED"]
+            decided = restarted.decide_mapping(
+                owner, sid, pending[0].id, MappingDecision(decision=MappingState.APPROVED)
+            )
+            assert sum(m.state != "APPROVED" for m in decided.mappings) == len(pending) - 1
+        else:
+            assert restarted.start_migration(owner, sid, f"pg-{sid}").execution is not None
+        changed = stale.model_copy(deep=True)
+        changed.stage = "stale-writer"
+        with pytest.raises(ValueError, match="changed concurrently"):
+            SqlSessionRepository(engine).put_if_unchanged(stale, changed)

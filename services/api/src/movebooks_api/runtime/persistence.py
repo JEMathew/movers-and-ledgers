@@ -20,7 +20,13 @@ sessions = Table(
 )
 
 
-def encode(session):
+# Optional plan fields added in V1.0. Rows written before them have no such keys, so an
+# unset value is not stored: a harmless read never changes a row's concurrency identity, and
+# a session that does not use them stays in the shape the previous release can still write.
+OPTIONAL_PLAN_FIELDS = ("summary", "approval")
+
+
+def encode(session, *, explicit_nulls=False):
     # Private fields intentionally excluded from API serialization must not be lost.
     # Raw uploads cannot enter durable storage by reusing the ordinary session port.
     if session.source_kind != "synthetic_sample" or session.uploaded_source is not None:
@@ -37,6 +43,11 @@ def encode(session):
             mapping.pop("reconsiderations")
     if not payload["session"]["reasoning_records"]:
         payload["session"].pop("reasoning_records")
+    plan = payload["session"]["plan"]
+    if plan and not explicit_nulls:
+        for key in OPTIONAL_PLAN_FIELDS:
+            if plan[key] is None:
+                plan.pop(key)
     encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"))
     if len(encoded.encode()) > 16 * 1024 * 1024:
         raise ValueError("Session evidence capacity reached; no state was committed.")
@@ -45,6 +56,13 @@ def encode(session):
 
 def digest(encoded):
     return hashlib.sha256(encoded.encode()).hexdigest()
+
+
+def stored_digests(session):
+    """Every digest a stored row may carry for exactly this state: the canonical encoding,
+    and the V1.0 (3bd23d0) encoding that wrote unset optional plan fields as explicit nulls.
+    Each encodes the same state, so compare-and-swap still fails on any real concurrent change."""
+    return {digest(encode(session)), digest(encode(session, explicit_nulls=True))}
 
 
 def decode(encoded, owner):
@@ -112,7 +130,7 @@ class SqlSessionRepository:
                 .where(
                     sessions.c.id == str(original.id),
                     sessions.c.owner == original.owner_subject,
-                    sessions.c.digest == digest(encode(original)),
+                    sessions.c.digest.in_(stored_digests(original)),
                 )
                 .values(snapshot=encoded, digest=digest(encoded))
             )
