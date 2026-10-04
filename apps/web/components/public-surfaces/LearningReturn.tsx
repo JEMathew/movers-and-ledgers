@@ -13,7 +13,7 @@ export function LearningReturn() {
   useEffect(() => setContext(safeContext(new URLSearchParams(window.location.search))), []);
   const phase = context.stage === undefined ? undefined : phases[Number(context.stage)];
   return <div><Link className="button" href={context.session && phase ? `${phase.route}?session=${context.session}` : withSession("/workspace", context.session)}>
-    {context.session && phase ? `Return to ${phase.name.toLowerCase()}` : "Go to migration"}
+    {context.session && phase ? `Return to ${phase.name}` : "Go to My Migration"}
   </Link><p className="mt-3 text-sm text-muted">Learning does not change migration progress. Review decisions in the migration itself.</p></div>;
 }
 
@@ -31,6 +31,6 @@ export function LearnTopicLink({ phase }: { phase: number }) {
   }, []);
   const label = stepLabels[phase];
   return <Link className="button secondary small mt-5" href={session ? withSession(phases[phase].route, session) : "/workspace"}>
-    {session ? `Open ${label} in your migration` : "Go to My Migration"}
+    {session ? `Open ${label} in Your Migration` : "Open My Migration"}
   </Link>;
 }

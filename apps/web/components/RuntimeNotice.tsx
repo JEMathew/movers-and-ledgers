@@ -11,7 +11,7 @@ function CloudNotice() {
   return <div className="shell text-sm text-secondary">
     {!hasScopeNote && <aside aria-label="Beta scope" className="py-3">
       <span className="font-semibold">MoveBooks AI Beta</span> · Explore the migration journey safely using synthetic data.{" "}
-      <Link className="underline" href="/trust#beta-limitations">Beta limitations</Link>
+      <Link className="underline" href="/trust#beta-limitations">Beta Limitations</Link>
     </aside>}
     <IdentityFeedback />
   </div>;

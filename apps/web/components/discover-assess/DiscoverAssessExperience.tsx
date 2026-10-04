@@ -58,7 +58,7 @@ const count = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? on
 
 /** One plain-language sentence for the assessment result. Derived only from the deterministic counts. */
 function outcomeFor(company: string, assessment: AssessmentResult) {
-  if (assessment.blocker_count > 0) return `${company} has ${count(assessment.blocker_count, "readiness blocker")} to resolve before anything moves.`;
+  if (assessment.blocker_count > 0) return `${company} has ${count(assessment.blocker_count, "blocker")} to fix before migration.`;
   if (assessment.warning_count > 0) return `${company} can move forward. ${count(assessment.warning_count, "item")} ${assessment.warning_count === 1 ? "needs" : "need"} your review first.`;
   return `${company} is ready to plan its migration.`;
 }
@@ -172,8 +172,7 @@ export function DiscoverAssessExperience() {
           <p className="eyebrow text-primary">Assess</p>
           <h1 className="type-page mt-4">Assess My Migration</h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-secondary">
-            Find out what can move, what needs attention and what to do next—before any plan,
-            mapping or target write exists.
+            See what can move, what needs attention, and what to address before migration.
           </p>
         </div>
         <div className="migration-orb" aria-hidden="true">
@@ -188,8 +187,8 @@ export function DiscoverAssessExperience() {
           {/* 1. Outcome and 2. readiness */}
           <section className="mt-10 motion-enter" aria-labelledby="readiness-heading">
             <Panel className="assessment-summary">
-              <p className="eyebrow text-primary">Your readiness result</p>
-              <h2 id="readiness-heading" className="type-section mt-2">Migration readiness</h2>
+              <p className="eyebrow text-primary">Are Your Books Ready to Migrate?</p>
+              <h2 id="readiness-heading" className="type-section mt-2">Migration Readiness</h2>
               <p className="mt-3 max-w-3xl text-xl leading-8">{outcomeFor(discovery.company_name, assessment)}</p>
               <div className="mt-6 flex flex-wrap items-center gap-8">
                 <StatusBadge status={assessment.readiness} />
@@ -202,7 +201,7 @@ export function DiscoverAssessExperience() {
           {/* 3. Blockers and items to review */}
           {issues.length > 0 && (
             <section id="readiness-issues" className="mt-8 scroll-mt-8" aria-labelledby="issues-heading">
-              <h2 id="issues-heading" className="type-section">What needs attention</h2>
+              <h2 id="issues-heading" className="type-section">What Needs Attention</h2>
               <ul className="mt-4 grid gap-3">
                 {issues.map((finding) => (
                   <li key={finding.id}>
@@ -222,12 +221,12 @@ export function DiscoverAssessExperience() {
           {/* 4. Next recommended action */}
           <NextAction
             className="mt-8"
-            label={blockers.length ? `Review ${count(blockers.length, "readiness issue")}` : "Create my migration plan"}
+            label={blockers.length ? `Review ${count(blockers.length, "Readiness Issue")}` : "Create My Migration Plan"}
             href={`/plan-map-approve?session=${sessionId}`}
             onClick={recordPlanSelection}
           >
             <p>{blockers.length ? "Planning keeps each blocker visible beside your plan. Migration stays blocked until the source data is corrected; nothing here can waive a blocker." : "Next, the plan sequences your records and proposes mappings for you to approve."}</p>
-            <p className="mt-1 text-sm">No mapping, target write or approval has happened yet.</p>
+            <p className="mt-1 text-sm">Nothing has moved, and nothing is approved yet.</p>
           </NextAction>
 
           {/* Technical evidence comes second, behind native disclosure. */}
@@ -333,10 +332,10 @@ export function DiscoverAssessExperience() {
       {resumable && (
         <section className="panel mt-10 p-6" aria-labelledby="resume-heading">
           <p className="eyebrow text-primary">Next step</p>
-          <h2 id="resume-heading" className="type-section mt-2">Finish your readiness check</h2>
+          <h2 id="resume-heading" className="type-section mt-2">Finish Checking If Your Books Are Ready</h2>
           <p className="mt-2 max-w-2xl leading-7 text-secondary">This migration has started, but its readiness check is not finished. Continue with the same migration; nothing new is created.</p>
           <Button className="mt-4" onClick={resumeAssessment}>
-            Continue this assessment
+            Continue This Assessment
             <ArrowRight aria-hidden="true" size={17} />
           </Button>
         </section>
@@ -345,62 +344,62 @@ export function DiscoverAssessExperience() {
       <section aria-labelledby="sample-heading" className={assessment || resumable ? "mt-14" : "mt-8"}>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 id="sample-heading" className="type-section">{assessment || resumable ? "Assess another source" : "Choose a safe source"}</h2>
-            <p className="mt-2 text-secondary">No provider connection. Use samples or controlled, de-identified test exports only.</p>
+            <h2 id="sample-heading" className="type-section">{assessment || resumable ? "Check Another Business" : "Choose How to Check Your Books"}</h2>
+            <p className="mt-2 text-secondary">MoveBooks never connects to your accounting provider. Use a sample business or a de-identified test export.</p>
           </div>
-          {running && <LoadingState label={phase === "discovering" ? "Discovering source data" : "Calculating readiness"} />}
+          {running && <LoadingState label={phase === "discovering" ? "Reviewing your accounting data" : "Checking migration readiness"} />}
         </div>
-        {discovery?.synthetic === false && <Alert tone="info" title="Current workspace: user-provided source"><p>The evidence above belongs to your uploaded package, not the sample selector. Target operations remain synthetic. Starting a new sample creates a separate workspace.</p></Alert>}
+        {discovery?.synthetic === false && <Alert tone="info" title="Current Workspace: Your Test Export"><p>The results above come from your test export, not the sample selector. Starting a sample creates a separate workspace.</p></Alert>}
         <div className="mt-5 grid gap-4 md:grid-cols-2">
           <Card className="assessment-source-card border-[var(--primary)]" aria-label="Synthetic business selection">
             <div className="flex items-start justify-between gap-4">
               <div className="metric-icon"><Database aria-hidden="true" size={18} /></div>
-              <Badge>{discovery?.synthetic === false ? "Optional new sample workspace" : "Synthetic sample company · selected"}</Badge>
+              <Badge>Synthetic Data Only</Badge>
             </div>
-            <label className="mt-8 block font-bold">Synthetic business
+            <h3 className="mt-8 text-xl font-bold">Try a Sample Business</h3>
+            <label className="mt-4 block font-bold">Sample business
               <select className="field-control mt-2 block w-full" value={sample} disabled={running} onChange={event => setSample(event.target.value)}>
-                <option value="northstar-supplies">Northstar Supplies — readiness blockers</option>
-                <option value="harbor-light-migrate-demo">Harbor Light Books — complete governed journey</option>
+                <option value="northstar-supplies">Northstar Supplies — Needs Attention</option>
+                <option value="harbor-light-migrate-demo">Harbor Light Books — Ready to Migrate</option>
               </select>
             </label>
             <p className="mt-2 text-sm leading-6 text-secondary">
               {sample === "northstar-supplies" ? "A deliberately imperfect office-supply distributor with duplicates, a missing value, an invalid relationship, and an unsupported setting." : "One synthetic business from discovery to verified first use. You approve key decisions; a controlled migration exception demonstrates safe recovery."}
             </p>
             <Button className="mt-6" variant={assessment || sessionId ? "secondary" : "primary"} onClick={startAssessment} disabled={running}>
-              {assessment || sessionId ? "Start a new assessment" : "Assess this migration"}
+              {assessment || sessionId ? "Start a New Assessment" : "Check If My Books Are Ready to Migrate"}
               <ArrowRight aria-hidden="true" size={17} />
             </Button>
           </Card>
-          <Card aria-label="Try Your Data entry">
+          <Card aria-label="Use My Test Export">
             <div className="flex items-start justify-between gap-4">
               <div className="metric-icon"><Upload aria-hidden="true" size={18} /></div>
-              <Badge>Controlled package · Local Beta</Badge>
+              <Badge>De-Identified Test Data Only</Badge>
             </div>
-            <h3 className="mt-8 text-xl font-bold">Upload your data</h3>
+            <h3 className="mt-8 text-xl font-bold">Use My Test Export</h3>
             <p className="mt-2 text-sm leading-6 text-secondary">
-              Validate a supported de-identified CSV/JSON package before creating a governed workspace.
-              No live provider connection or production storage is available.
+              Use supported de-identified accounting files to test the migration flow.
             </p>
-            <Link className="button secondary mt-6" href="/try-your-data">Try Your Data</Link>
+            <Link className="button secondary mt-6" href="/try-your-data">Choose Test Files</Link>
           </Card>
         </div>
       </section>
 
       {error && (
         <div className="mt-8">
-          <Alert tone="error" title="Assessment stopped">
+          <Alert tone="error" title="Assessment Stopped">
             <p className="mt-1">{error}</p>
             <Button className="mt-3" size="small" variant="secondary" onClick={() => {
               const saved = new URLSearchParams(window.location.search).get("session");
               if (saved) loadExisting(saved); else void startAssessment();
-            }}>Try again</Button>
+            }}>Try Again</Button>
           </Alert>
         </div>
       )}
 
       <footer className="mt-14 flex items-start gap-3 border-t border-token py-8 text-sm text-secondary">
         <ShieldCheck aria-hidden="true" className="mt-0.5 shrink-0 text-primary" size={20} />
-        <p>This independent local Beta uses ephemeral demo storage. Uploaded records are user-provided; sample records and all target operations remain synthetic. It does not connect to any accounting provider. No data is sent to an LLM.</p>
+        <p>This local Beta keeps data in temporary storage and never connects to an accounting provider. Sample businesses are synthetic, test exports must be de-identified, and every migration result stays in a synthetic workspace. No data is sent to an AI model.</p>
       </footer>
     </main>
   );

@@ -18,10 +18,10 @@ export const topics = [
   { id: "business-ready", title: "What Business Ready · Verified means", body: "Required data, setup, access and onboarding checks pass, then an authorized user completes an agreed task with verified evidence. In this Beta that is a synthetic invoice—not proof of production readiness. The formal outcome is Verified First Productive Use.", question: "Has the productive task been verified, not merely posted?", phase: 4 },
 ] as const;
 // Signed-out navigation. Route paths are unchanged for compatibility; labels are customer-facing.
-export const publicLinks = [["Explore", "/simulator"], ["How it works", "/guide"], ["Learn", "/learn"], ["Play", "/play"], ["Trust", "/trust"], ["Support", "/support"]] as const;
+export const publicLinks = [["Explore", "/simulator"], ["How It Works", "/guide"], ["Learn", "/learn"], ["Play", "/play"], ["Trust", "/trust"], ["Support", "/support"]] as const;
 // Signed-in navigation replaces the public marketing links. Account is the identity menu itself.
 export const memberLinks = [["My Migration", "/workspace"], ["Explore", "/simulator"], ["Learn", "/learn"], ["Help", "/support"]] as const;
-export const footerLinks = [["How it works", "/guide"], ["Support", "/support"], ["Feedback", "/feedback"], ["Beta limitations", "/trust#beta-limitations"]] as const;
+export const footerLinks = [["How It Works", "/guide"], ["Support", "/support"], ["Feedback", "/feedback"], ["Beta Limitations", "/trust#beta-limitations"]] as const;
 export const startMigrationHref = "/workspace";
 export const sampleEntry = "/assess?sample=harbor-light-migrate-demo";
 export const scope = "Synthetic Data · Public Reference · Beta. No live provider migration or production readiness claim.";

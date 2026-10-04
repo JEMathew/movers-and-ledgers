@@ -42,8 +42,8 @@ export function MappingReview({ mappings, history, editable, busy, planApproved,
   const datasetByArea: Record<string, string> = { chart_of_accounts: "accounts", customers: "customers", vendors: "vendors", products_services: "products", tax_configuration: "taxes", general_configuration: "configuration" };
   return <section className="mt-8" aria-labelledby="mapping-heading">
     <div className="panel flex flex-wrap items-center justify-between gap-5 p-6">
-      <div><h2 id="mapping-heading" className="type-section">Review your mappings</h2><p className="mt-2 text-secondary">{mappings.length - pending.length} of {mappings.length} reviewed. Confirming a mapping does not approve the migration plan.</p></div>
-      {handoff ?? (pending.length ? <Button disabled={!editable || busy} onClick={reviewNext}>Review {pending.length} {pending.length === 1 ? "mapping" : "mappings"}</Button> : <Button disabled={busy || !mappings.length} onClick={onReviewPlan}>Review migration plan</Button>)}
+      <div><h2 id="mapping-heading" className="type-section">Review Your Mappings</h2><p className="mt-2 text-secondary">{mappings.length - pending.length} of {mappings.length} reviewed. Confirming a mapping does not approve the migration plan.</p></div>
+      {handoff ?? (pending.length ? <Button disabled={!editable || busy} onClick={reviewNext}>Review {pending.length} {pending.length === 1 ? "Mapping" : "Mappings"}</Button> : <Button disabled={busy || !mappings.length} onClick={onReviewPlan}>Review Migration Plan</Button>)}
     </div>
     {areas.map(area => <section key={area} className="mt-8" aria-label={areaLabel(area)}>
       <h3 className="type-card">{areaLabel(area)}</h3>
@@ -80,9 +80,9 @@ export function MappingReview({ mappings, history, editable, busy, planApproved,
                 </Select> : <p className="text-sm text-secondary">{blocked ? "No compatible destination is available. This mapping stays blocked until the source data is corrected; it cannot be confirmed or rejected here." : "No other supported destination. Confirm this mapping, or reject it to keep it out of the plan."}</p>}
                 {identityOnly && <p className="mt-2 text-sm text-secondary">This synthetic adapter retains the source product or configuration treatment. Conversions and changed treatments are unavailable.</p>}
                 <div className="mt-4 flex flex-wrap gap-2">
-                  <Button variant="secondary" disabled={!canDecide || mapping.state === "BLOCKED"} onClick={() => void decide(mapping, "approve")}>Confirm mapping</Button>
-                  {destinations.length > 0 && <Button variant="secondary" disabled={!canDecide || !targets[mapping.id] || !destinations.includes(targets[mapping.id])} onClick={() => void decide(mapping, "modify", targets[mapping.id])}>Save changed mapping</Button>}
-                  {!blocked && <Button variant="ghost" disabled={!canDecide} onClick={() => void decide(mapping, "reject")}>Reject mapping</Button>}
+                  <Button variant="secondary" disabled={!canDecide || mapping.state === "BLOCKED"} onClick={() => void decide(mapping, "approve")}>Confirm Mapping</Button>
+                  {destinations.length > 0 && <Button variant="secondary" disabled={!canDecide || !targets[mapping.id] || !destinations.includes(targets[mapping.id])} onClick={() => void decide(mapping, "modify", targets[mapping.id])}>Save Changed Mapping</Button>}
+                  {!blocked && <Button variant="ghost" disabled={!canDecide} onClick={() => void decide(mapping, "reject")}>Reject Mapping</Button>}
                 </div>
                 {blocked && destinations.length > 0 && <p className="mt-3 text-sm text-secondary">This recommendation is blocked. Save a compatible destination to clear it; a blocked mapping cannot be confirmed or rejected as it stands.</p>}
               </div>}

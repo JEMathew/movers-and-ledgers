@@ -44,8 +44,8 @@ describe("governed onboarding and productive use", () => {
     vi.mocked(fetch).mockImplementationOnce(() => response({...prepared,verified_fpu:true,workflow_status:"VERIFIED_FIRST_PRODUCTIVE_USE",effective_status:"VERIFIED_FIRST_PRODUCTIVE_USE",onboarding:{faults:[],fpu:{...posted,checkpoint:"VERIFIED",posted_by:"demo-user",invoice:{total:"107.25"},checks:[{id:"posting",passed:true,explanation:"Matched",evidence:["invoice:hash"]}]}}}));
     fireEvent.click(screen.getByRole("button",{name:"Resume verification"}));
     await screen.findByRole("heading",{name:"VERIFIED FIRST PRODUCTIVE USE"});
-    expect(screen.getByRole("link",{name:"Review verified evidence"}).getAttribute("href")).toMatch(/^\/trust\?session=/);
-    expect(screen.getByRole("list",{name:"Migration journey"})).toHaveTextContent("First useCompleted");
+    expect(screen.getByRole("link",{name:"Review Verified Evidence"}).getAttribute("href")).toMatch(/^\/trust\?session=/);
+    expect(screen.getByRole("list",{name:"Migration Journey"})).toHaveTextContent("First UseCompleted");
     expect((vi.mocked(fetch).mock.calls.at(-1)![1]!.headers as Record<string,string>)["Idempotency-Key"]).toBe("original");
     expect(screen.getByText("Posted invoice, journal and accounting impact")).toBeInTheDocument();
   });

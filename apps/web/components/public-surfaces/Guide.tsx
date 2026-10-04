@@ -62,7 +62,7 @@ function Next({ links }: { links: [string, string][] }) {
 
 export function Guide() {
   return <Surface eyebrow="User Guide" title="Your guide to a verified move." intro="Everything a first-time user needs for Beta V1.0, in about ten minutes. Skim the headings, open the details when you want more.">
-    <div><NextLink className="button" href="/workspace">Go to migration</NextLink></div>
+    <div><NextLink className="button" href="/workspace">Go to My Migration</NextLink></div>
     <div className="grid items-start gap-10 lg:grid-cols-[15rem_1fr]">
       <nav aria-label="User guide contents" className="panel p-5 lg:sticky lg:top-6"><h2 className="text-sm font-semibold text-muted">Contents</h2><ol className="mt-3 grid gap-1 text-sm sm:grid-cols-2 lg:grid-cols-1">{guideSections.map((section, i) => <li key={section.id}><a className="flex min-h-9 items-center gap-2 rounded-md px-2 font-semibold hover:bg-[var(--surface-subtle)]" href={`#${section.id}`}><span aria-hidden="true" className="w-4 text-muted">{String.fromCharCode(65 + i)}</span>{section.title}</a></li>)}</ol></nav>
       <div className="min-w-0 space-y-12">

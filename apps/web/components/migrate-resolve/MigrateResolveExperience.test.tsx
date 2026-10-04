@@ -100,7 +100,7 @@ describe("MigrateResolveExperience", () => {
     expect(fetchMock).toHaveBeenCalledTimes(3);
     expect(screen.getByText("Migration paused safely")).toBeVisible();
     // One dominant action while paused: resolve the open issue through the governed review.
-    const resolveCta = screen.getByRole("button", { name: "Resolve 1 issue" });
+    const resolveCta = screen.getByRole("button", { name: "Review 1 Migration Issue" });
     expect(resolveCta).not.toHaveClass("secondary", "ghost");
     fireEvent.click(resolveCta);
     expect(screen.getByRole("dialog", { name: /review proposed resolution/i })).toBeInTheDocument();
@@ -122,7 +122,7 @@ describe("MigrateResolveExperience", () => {
       await waitFor(() => expect(retry).toBeEnabled());
       fireEvent.click(retry);
       expect(await screen.findByText("Synthetic migration complete")).toBeVisible();
-      expect(screen.getByRole("link", { name: "Verify my books" })).toHaveAttribute("href", expect.stringMatching(/^\/validate-configure\?session=/));
+      expect(screen.getByRole("link", { name: "Verify My Books" })).toHaveAttribute("href", expect.stringMatching(/^\/validate-configure\?session=/));
       expect(screen.queryByRole("link", { name: /Continue to Validate/ })).not.toBeInTheDocument();
       expect(fetchMock.mock.calls[5][0]).toContain("/migration/resume");
       expect(fetchMock.mock.calls[5][1]?.method).toBe("POST");

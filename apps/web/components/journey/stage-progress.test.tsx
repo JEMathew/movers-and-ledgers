@@ -9,7 +9,7 @@ import { DiscoverAssessExperience } from "@/components/discover-assess/DiscoverA
 import { MyMigration } from "@/components/MyMigration";
 
 const id = "33333333-3333-4333-8333-333333333333";
-const steps = () => within(screen.getByRole("list", { name: "Migration journey" })).getAllByRole("listitem");
+const steps = () => within(screen.getByRole("list", { name: "Migration Journey" })).getAllByRole("listitem");
 
 afterEach(() => { vi.restoreAllMocks(); sessionStorage.clear(); window.history.replaceState(null, "", "/"); });
 
@@ -29,7 +29,7 @@ describe("failed deep links", () => {
       .mockImplementationOnce(() => new Promise<Response>(resolve => { finishRead = resolve; }))
       .mockResolvedValue(json({ id, synthetic: true, workflow_status: "ASSESSED" }));
     const plan = render(<PlanMapApproveExperience />);
-    const advance = screen.getByRole("button", { name: "Create my migration plan" });
+    const advance = screen.getByRole("button", { name: "Create My Migration Plan" });
     assertUnconfirmed();
     expect(advance).toBeDisabled();
     await waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
@@ -43,7 +43,7 @@ describe("failed deep links", () => {
     plan.unmount();
     window.history.replaceState(null, "", "/workspace");
     render(<MyMigration />);
-    expect(await screen.findByRole("link", { name: "Create my migration plan" })).toHaveAttribute("href", `/plan-map-approve?session=${id}`);
+    expect(await screen.findByRole("link", { name: "Create My Migration Plan" })).toHaveAttribute("href", `/plan-map-approve?session=${id}`);
     expect(String(fetch.mock.calls[1][0])).toContain(`/migration-sessions/${id}/intake-trust`);
   });
 
@@ -58,7 +58,7 @@ describe("failed deep links", () => {
     render(<PlanMapApproveExperience />);
     expect(await screen.findByRole("alert")).toHaveTextContent("Unsupported session evidence");
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe(id);
-    expect(screen.getByRole("button", { name: "Create my migration plan" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Create My Migration Plan" })).toBeDisabled();
     assertUnconfirmed();
   });
 
@@ -68,7 +68,7 @@ describe("failed deep links", () => {
       .mockResolvedValueOnce(json({ id, synthetic: true, workflow_status: "ASSESSED", mappings: [], activity: [] }))
       .mockResolvedValueOnce(json({ detail: "Plan unavailable" }, 500));
     render(<PlanMapApproveExperience />);
-    const advance = screen.getByRole("button", { name: "Create my migration plan" });
+    const advance = screen.getByRole("button", { name: "Create My Migration Plan" });
     await waitFor(() => expect(advance).toBeEnabled());
     // Another navigation may have selected a different valid migration since the read.
     sessionStorage.setItem("movebooks-migration-session", expired);

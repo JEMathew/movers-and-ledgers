@@ -9,7 +9,7 @@ export function GoogleSignIn({ destination, compact = false }: { destination?: s
   // The label is always the real action. Until the SDK is ready the button is disabled, never clickable,
   // so the first enabled click can open the popup synchronously (Safari). A failed start is not "busy".
   const preparing = !ready && !error;
-  if (identity) return compact ? null : <a className="button mt-7" href={safeDestination(destination ?? "/workspace")}>Go to migration</a>;
+  if (identity) return compact ? null : <a className="button mt-7" href={safeDestination(destination ?? "/workspace")}>Go to My Migration</a>;
   if (hasSession) return compact ? null : <p role="status" className="mt-7">{!ready || busy ? "Verifying your account…" : "Your session needs attention. Use the account control above to sign out and try again."}</p>;
   // The header shows a short "Sign in"; its accessible name still states the provider. Start my migration is the
   // header's primary action, so the compact sign-in stays visually secondary.
@@ -29,7 +29,10 @@ export function IdentityFeedback() {
   return error ? <p ref={errorRef} tabIndex={-1} role="alert" className="mt-3">{error}</p> : null;
 }
 
+/** The local demo workspace is offered only outside production and only without Google identity. */
+export const demoEntry = () => !cloudIdentity() && process.env.NODE_ENV !== "production";
+
 export function IdentityEntry({ destination }: { destination: string }) {
-  return <>{cloudIdentity() ? <GoogleSignIn destination={destination} /> : process.env.NODE_ENV !== "production" ? <a className="button mt-7 w-full" href={`/api/auth/demo?next=${encodeURIComponent(safeDestination(destination))}`}>Enter local demo →</a> : <p role="status" className="mt-7">Sign-in is not configured. Demo access is disabled.</p>}
-    <p className="mt-4 text-xs text-muted">{cloudIdentity() ? "Bounded synthetic Beta · No production customer data" : "Local demo identity · controlled de-identified test exports only"}</p></>;
+  return <>{cloudIdentity() ? <GoogleSignIn destination={destination} /> : demoEntry() ? <a className="button mt-7 w-full" href={`/api/auth/demo?next=${encodeURIComponent(safeDestination(destination))}`}>Enter Demo Workspace →</a> : <p role="status" className="mt-7">Sign-in is not configured. Demo access is disabled.</p>}
+    <p className="mt-4 text-xs text-muted">{cloudIdentity() ? "Bounded synthetic Beta · No production customer data" : "Synthetic Data Only"}</p></>;
 }

@@ -22,13 +22,13 @@ beforeEach(() => {
 afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); });
 
 describe("global account and settings shell", () => {
-  it("shows Sign in, a primary Start my migration action and a compact appearance icon, with no Settings text", () => {
+  it("shows Sign in, a primary Start My Migration action and a compact appearance icon, with no Settings text", () => {
     render(shell());
     const signIn = screen.getByRole("button", { name: "Sign in with Google" });
     expect(signIn).toBeEnabled();
     expect(signIn).toHaveTextContent(/^Sign in$/);
     expect(signIn).toHaveClass("button", "small", "ghost");
-    const start = screen.getByRole("link", { name: "Start my migration" });
+    const start = screen.getByRole("link", { name: "Start My Migration" });
     expect(start).toHaveAttribute("href", "/workspace");
     expect(start).toHaveClass("button", "small");
     expect(start).not.toHaveClass("ghost", "secondary");
@@ -80,12 +80,12 @@ describe("global account and settings shell", () => {
     expect(account()).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByRole("button", { name: "Settings" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Change appearance" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Sign out" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Sign Out" })).not.toBeInTheDocument();
     fireEvent.click(account());
     expect(account()).toHaveAttribute("aria-expanded", "true");
     expect(screen.getAllByRole("button", { name: "Settings" })).toHaveLength(1);
     expect(screen.getByRole("status")).toHaveTextContent("Signed in as verified@example.test");
-    expect(screen.getByRole("button", { name: "Sign out" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Sign Out" })).toBeEnabled();
     expect(screen.queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
     expect(document.body).not.toHaveTextContent("internal-only");
   });
@@ -100,21 +100,21 @@ describe("global account and settings shell", () => {
     fireEvent.pointerDown(screen.getByRole("button", { name: "Outside control" }));
     expect(account()).toHaveAttribute("aria-expanded", "false");
     fireEvent.click(account());
-    fireEvent.blur(screen.getByRole("button", { name: "Sign out" }), { relatedTarget: screen.getByRole("button", { name: "Outside control" }) });
+    fireEvent.blur(screen.getByRole("button", { name: "Sign Out" }), { relatedTarget: screen.getByRole("button", { name: "Outside control" }) });
     expect(account()).toHaveAttribute("aria-expanded", "false");
   });
   it("invokes existing sign-out and removes account identity when the session clears", () => {
     signedIn(); const view = render(shell()); fireEvent.click(account());
-    fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    fireEvent.click(screen.getByRole("button", { name: "Sign Out" }));
     expect(session.signOut).toHaveBeenCalledTimes(1);
     session.identity = null; session.hasSession = false; view.rerender(shell());
     expect(screen.queryByText(/verified@example.test/)).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Sign out" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Sign Out" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Sign in with Google" })).toBeEnabled();
   });
   it("keeps Sign out mounted through Safari's non-focusing pointer click", () => {
     signedIn(); render(shell()); fireEvent.click(account());
-    const signOut = screen.getByRole("button", { name: "Sign out" });
+    const signOut = screen.getByRole("button", { name: "Sign Out" });
     fireEvent.pointerDown(signOut);
     fireEvent.mouseDown(signOut);
     // Safari can blur the focused Settings button without focusing the clicked button.
@@ -129,7 +129,7 @@ describe("global account and settings shell", () => {
     expect(screen.queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent("MoveBooks could not verify your account");
     expect(account()).toHaveTextContent("Session needs attention");
-    expect(screen.getByRole("button", { name: "Sign out" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Sign Out" })).toBeEnabled();
   });
   it("keeps pending verification distinct from an attention/error state", () => {
     session.hasSession = true; session.ready = false;
@@ -139,7 +139,7 @@ describe("global account and settings shell", () => {
     fireEvent.click(account());
     expect(screen.getByRole("status")).toHaveTextContent("Verifying your account…");
     expect(screen.queryByText(/Session needs attention|could not verify/)).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Sign out" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Sign Out" })).toBeEnabled();
     expect(screen.queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
   });
   it("offers System, Light and Dark from the signed-out appearance icon and nothing about motion", () => {
@@ -256,10 +256,10 @@ describe("global account and settings shell", () => {
     const view = render(shell());
     const links = (name: string | RegExp) => screen.queryAllByRole("link", { name, hidden: true });
     expect(links("My Migration")).toHaveLength(0);
-    expect(links("How it works")).toHaveLength(2);
+    expect(links("How It Works")).toHaveLength(2);
     session.hasSession = true; session.ready = false; view.rerender(shell());
     expect(links("My Migration")).toHaveLength(0);
-    expect(links("Start my migration")).toHaveLength(0);
+    expect(links("Start My Migration")).toHaveLength(0);
     signedIn(); session.ready = true; view.rerender(shell());
     expect(links("My Migration")).toHaveLength(2);
     for (const link of links("My Migration")) expect(link).toHaveAttribute("href", "/workspace");
@@ -267,7 +267,7 @@ describe("global account and settings shell", () => {
       expect(links(name)).toHaveLength(2);
       for (const link of links(name)) expect(link).toHaveAttribute("href", href);
     }
-    for (const name of ["How it works", "Play", "Trust", "Support", "Start my migration", /Go to migration/]) expect(links(name)).toHaveLength(0);
+    for (const name of ["How It Works", "Play", "Trust", "Support", "Start My Migration", /Go to My Migration/]) expect(links(name)).toHaveLength(0);
     expect(account()).toHaveAccessibleName("Account: verified@example.test");
     expect(fetch).not.toHaveBeenCalled();
     fetch.mockRestore();

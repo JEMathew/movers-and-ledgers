@@ -202,6 +202,10 @@ button, input, select, textarea { font: inherit; }
 .journey-steps .is-active .step-marker { box-shadow: 0 0 0 3px var(--primary-subtle); }
 .journey-steps .is-held { color: var(--warning); }
 .journey-steps .is-held .step-marker { border-color: var(--warning); }
+.journey-steps .is-attention, .journey-steps .is-attention strong { color: var(--warning); }
+.journey-steps .is-attention .step-marker { border-color: var(--warning); }
+.journey-steps .is-blocked, .journey-steps .is-blocked strong { color: var(--error); }
+.journey-steps .is-blocked .step-marker { border-color: var(--error); }
 
 .alert { display: grid; grid-template-columns: auto 1fr; gap: 0.75rem; border: 1px solid currentColor; border-radius: var(--radius-md); padding: 0.85rem 1rem; font-size: 0.875rem; }
 .alert-success { background: var(--success-subtle); color: var(--success); }

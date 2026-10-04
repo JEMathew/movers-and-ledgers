@@ -45,7 +45,7 @@ describe("User Guide", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<Guide/>);
     expect(fetch).not.toHaveBeenCalled();
-    expect(publicLinks).toContainEqual(["How it works", "/guide"]);
+    expect(publicLinks).toContainEqual(["How It Works", "/guide"]);
     expect(middleware(new NextRequest("http://localhost/guide")).headers.get("location")).toBeNull();
   });
   it("explains merged pre-execution reconsideration without suggesting an approval bypass", () => {
