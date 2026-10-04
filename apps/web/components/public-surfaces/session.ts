@@ -19,10 +19,18 @@ const list = (value: unknown): RecordData[] => Array.isArray(value) ? value.map(
 const text = (value: unknown) => typeof value === "string" ? value.slice(0, 400) : "";
 const refs = (value: unknown) => Array.isArray(value) ? value.filter((x): x is string => typeof x === "string").slice(0, 12).map(x => x.slice(0, 160)) : [];
 export type TraceRow = { id: string; title: string; kind: string; status: string; time: string; actor: string; tool: string; evidence: string[] };
-export type SessionView = { id: string; status: string; phase: number; sourceKind: string; activity: TraceRow[]; decisions: TraceRow[]; checks: TraceRow[]; blockers: string[]; events: TraceRow[]; readinessIssues: number; migrationIssues: number; verificationIssues: number };
+export type SessionView = { id: string; status: string; phase: number; sourceKind: string; activity: TraceRow[]; decisions: TraceRow[]; checks: TraceRow[]; blockers: string[]; events: TraceRow[]; readinessIssues: number; migrationIssues: number; verificationIssues: number; mappingIssues: number | null };
 
 // Explicit presentation projection. Never stringify a session, prompt, payload,
 // model trace, invoice, selected value or raw reconciliation amount into the UI.
+const count = (value: unknown): value is number => typeof value === "number" && Number.isInteger(value);
+/** Pending mapping reviews from the server's own count. Authoritative only as a consistent
+ *  { total > 0, 0 <= pending <= total }; any other shape is unknown (null), never zero. */
+function pendingMappings(value: unknown): number | null {
+  const { total, pending } = object(value);
+  return count(total) && count(pending) && total > 0 && pending >= 0 && pending <= total ? pending : null;
+}
+
 export function projectSession(raw: unknown, expectedId: string): SessionView {
   const s = object(raw);
   const status = text(s.workflow_status);
@@ -48,7 +56,7 @@ export function projectSession(raw: unknown, expectedId: string): SessionView {
     ...list(object(s.onboarding).tasks).filter(t => t.status !== "COMPLETED").map(t => `Onboarding ${text(t.status)}: ${text(t.label)}`),
   ];
   const events = list(s.events).map(e => ({ id: text(e.id), title: text(e.name).replaceAll("_", " "), kind: "Lifecycle audit reference", status: "Recorded", time: text(e.occurred_at), actor: "Workflow", tool: "", evidence: [] }));
-  return { id: expectedId, status, phase, sourceKind: s.source_kind === "user_upload" ? "User-provided data · synthetic target" : "Synthetic sample · synthetic target", activity, decisions, checks, blockers, events, readinessIssues: readiness.length, migrationIssues: migration.length, verificationIssues };
+  return { id: expectedId, status, phase, sourceKind: s.source_kind === "user_upload" ? "User-provided data · synthetic target" : "Synthetic sample · synthetic target", activity, decisions, checks, blockers, events, readinessIssues: readiness.length, migrationIssues: migration.length, verificationIssues, mappingIssues: pendingMappings(s.mapping_review) };
 }
 
 export function useSessionView() {

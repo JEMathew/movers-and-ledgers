@@ -39,7 +39,9 @@ class PlanMapApproveOrchestrator:
         self.planning_agent = PlanningAgent()
         self.mapping_agent = MappingAgent()
 
-    def create_plan(self, session: MigrationSession) -> MigrationSession:
+    def create_plan(
+        self, session: MigrationSession, source: dict | None = None
+    ) -> MigrationSession:
         if session.discovery is None or session.assessment is None:
             raise WorkflowTransitionError("Discovery and assessment are required before planning.")
         if session.workflow_status is not WorkflowStatus.ASSESSED:
@@ -47,7 +49,9 @@ class PlanMapApproveOrchestrator:
         session.events.append(
             ProductEvent(migration_session_id=session.id, name=ProductEventName.PLAN_STARTED)
         )
-        plan, activity = self.planning_agent.run(session.id, session.assessment, session.discovery)
+        plan, activity = self.planning_agent.run(
+            session.id, session.assessment, session.discovery, source
+        )
         session.plan = plan
         session.activity.append(activity)
         session.workflow_status = WorkflowStatus.PLANNED
@@ -159,23 +163,91 @@ class PlanMapApproveOrchestrator:
                 human_approval_required=True,
             )
         )
-        if (
-            mapping_ready_for_handoff(session.mappings)
-            and session.plan
-            and not session.plan.blockers
-        ):
-            session.workflow_status = WorkflowStatus.APPROVED
-            session.events.append(
-                ProductEvent(
-                    migration_session_id=session.id,
-                    name=ProductEventName.READY_FOR_MIGRATION,
-                    attributes={
-                        "plan_id": str(session.plan.id) if session.plan else "",
-                        "mapping_count": len(session.mappings),
-                        "target_writes_performed": False,
-                    },
-                )
+        return session
+
+    def approve_plan(
+        self, session: MigrationSession, actor: str, plan_id: UUID
+    ) -> MigrationSession:
+        from domain.planning_mapping.models import PlanApproval
+        from tools.migration import stable_checksum
+
+        from .audit import record_decision
+
+        if actor != session.owner_subject:
+            raise WorkflowTransitionError("Only the authenticated workspace owner may approve.")
+        if session.plan is None or session.plan.id != plan_id:
+            raise WorkflowTransitionError(
+                "Read and review the current migration plan before approval."
             )
+        if session.plan.approval is not None:
+            return session  # A retry returns the original consent; no duplicate audit entry.
+        if session.workflow_status is not WorkflowStatus.AWAITING_APPROVAL:
+            raise WorkflowTransitionError("Plan approval requires AWAITING_APPROVAL state.")
+        if (
+            session.assessment is None
+            or session.assessment.blocker_count
+            or session.assessment.readiness.value == "BLOCKED"
+            or session.plan.blockers
+            or not mapping_ready_for_handoff(session.mappings)
+        ):
+            raise WorkflowTransitionError(
+                "Review all mappings and clear hard blockers before approval."
+            )
+        decisions = []
+        for mapping in session.mappings:
+            audit = next(
+                (
+                    d
+                    for d in reversed(session.human_decisions)
+                    if d.affected_entity == str(mapping.id)
+                    and d.decision == mapping.state.value
+                    and d.actor == mapping.decided_by
+                    and d.selected_value == mapping.selected_target
+                ),
+                None,
+            )
+            if audit is None or mapping.decided_at is None:
+                raise WorkflowTransitionError("Every mapping needs an attributable human decision.")
+            decisions.append(audit.id)
+        checksum = stable_checksum(
+            {
+                "plan": session.plan.model_dump(mode="json", exclude={"approval"}),
+                "source_checksum": session.source_checksum,
+                "mappings": [m.model_dump(mode="json") for m in session.mappings],
+            }
+        )
+        record_decision(
+            session,
+            actor,
+            "PLAN_APPROVED",
+            "approve",
+            session.plan.id,
+            [*session.plan.evidence_references, *map(str, decisions)],
+            checksum,
+        )
+        audit = session.human_decisions[-1]
+        session.plan.approval = PlanApproval(
+            plan_id=session.plan.id,
+            decision_id=audit.id,
+            actor=audit.actor,
+            approved_at=audit.occurred_at,
+            mapping_decision_ids=decisions,
+            manifest_checksum=checksum,
+        )
+        session.workflow_status = WorkflowStatus.APPROVED
+        session.stage = "approve"
+        session.events.append(
+            ProductEvent(
+                migration_session_id=session.id,
+                name=ProductEventName.READY_FOR_MIGRATION,
+                attributes={
+                    "plan_id": str(session.plan.id),
+                    "mapping_count": len(session.mappings),
+                    "approval_decision_id": str(audit.id),
+                    "target_writes_performed": False,
+                },
+            )
+        )
         return session
 
 

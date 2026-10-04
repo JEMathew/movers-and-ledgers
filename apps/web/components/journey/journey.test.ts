@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { phaseFor } from "@/components/public-surfaces/session";
-import { JOURNEY_COMPLETE, isSessionReference, journeyHeldFor, journeyStepFor, journeySteps, nextActionFor } from "./journey";
+import { JOURNEY_COMPLETE, isSessionReference, journeyHeldFor, journeyCurrentFor, journeyStepFor, journeySteps, nextActionFor } from "./journey";
 
 const id = "11111111-1111-4111-8111-111111111111";
 const state = (status: string, counts: Partial<{ readinessIssues: number; migrationIssues: number; verificationIssues: number }> = {}) =>
@@ -35,7 +35,7 @@ describe("operational migration journey", () => {
     [state("ASSESSED", { readinessIssues: 1 }), "Review 1 readiness issue", `/plan-map-approve?session=${id}`],
     [state("ASSESSED"), "Create my migration plan", `/plan-map-approve?session=${id}`],
     [state("MAPPING"), "Review mappings", `/plan-map-approve?session=${id}`],
-    [state("AWAITING_APPROVAL"), "Approve migration plan", `/plan-map-approve?session=${id}`],
+    [{ ...state("AWAITING_APPROVAL"), mappingIssues: 0 }, "Approve migration plan", `/plan-map-approve?session=${id}`],
     [state("APPROVED"), "Start migration", `/migrate-resolve?session=${id}`],
     [state("RESOLVING", { migrationIssues: 7 }), "Resolve 7 issues", `/migrate-resolve?session=${id}`],
     [state("MIGRATION_COMPLETE"), "Verify my books", `/validate-configure?session=${id}`],
@@ -59,4 +59,19 @@ describe("operational migration journey", () => {
     expect(isSessionReference(id)).toBe(true);
     for (const value of ["", "../../private", "session-001", undefined, null, 42]) expect(isSessionReference(value)).toBe(false);
   });
+});
+
+it("keeps My Migration at Map until all mappings have human decisions", () => {
+  const pending = { ...state("AWAITING_APPROVAL"), mappingIssues: 2 };
+  expect(journeyCurrentFor(pending)).toBe(2);
+  expect(nextActionFor(pending)).toMatchObject({ label: "Review 2 mappings", href: `/plan-map-approve?session=${id}` });
+  expect(journeyCurrentFor({ ...pending, mappingIssues: 0 })).toBe(3);
+  expect(nextActionFor({ ...pending, mappingIssues: 0, readinessIssues: 1 }).label).toBe("Review 1 readiness issue");
+});
+
+it.each([null, undefined])("never reads an unknown mapping count (%s) as zero pending", mappingIssues => {
+  const unknown = { ...state("AWAITING_APPROVAL"), mappingIssues };
+  expect(journeyCurrentFor(unknown)).toBe(2);
+  expect(nextActionFor(unknown)).toMatchObject({ heading: "Review your mappings", label: "Review mappings", href: `/plan-map-approve?session=${id}` });
+  expect(nextActionFor(unknown).label).not.toMatch(/Approve/);
 });

@@ -50,7 +50,7 @@ export function MappingReconsideration({ mapping, history, submit }: {
       {r.reviewed_at && <p>New decision {r.decision_id}: {r.reviewed_by} · {r.reviewed_at}</p>}
     </div>)}
     {pending ? <div className="mt-3 flex flex-wrap gap-2">
-      <Button disabled={busy} onClick={() => perform(`/reconsiderations/${pending.id}/review`, {action: "approve", comment: "Explicit human review of the displayed reconsideration"})}>Approve reconsideration</Button>
+      <Button variant="secondary" disabled={busy} onClick={() => perform(`/reconsiderations/${pending.id}/review`, {action: "approve", comment: "Explicit human review of the displayed reconsideration"})}>Approve reconsideration</Button>
       <Button disabled={busy} variant="secondary" onClick={() => perform(`/reconsiderations/${pending.id}/review`, {action: "reject", comment: "Reconsideration rejected after human review"})}>Reject reconsideration</Button>
     </div> : mapping.state === "REJECTED" && <form className="mt-3" onSubmit={event => {
       event.preventDefault();
@@ -64,7 +64,7 @@ export function MappingReconsideration({ mapping, history, submit }: {
       <label className="mt-2 block text-sm">Reason for reconsideration
         <textarea required maxLength={1000} className="field-control mt-2 w-full" value={reason} onChange={event => setReason(event.target.value)} />
       </label>
-      <Button className="mt-2" type="submit" disabled={busy || !reason.trim() || !prior}>Request reconsideration</Button>
+      <Button variant="secondary" className="mt-2" type="submit" disabled={busy || !reason.trim() || !prior}>Request reconsideration</Button>
     </form>}
     {error && <p className="mt-2" role="alert">{error} No approval is assumed. Refresh after a concurrent change.</p>}
     <p className="mt-2 text-sm text-secondary" role="status">{busy ? "Recording governed review…" : "Only the authenticated workspace owner may request or review. A separate explicit approval is required."}</p>

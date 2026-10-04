@@ -80,6 +80,43 @@ describe("My Migration", () => {
     expect(await screen.findByText("Migration unavailable")).toBeVisible();
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe(selected);
   });
+  // Shape of GET /intake-trust: mapping_review is { total, pending } once mappings exist, otherwise null.
+  const awaiting = (mapping_review?: Record<string, unknown> | null) => ({
+    ...evidence, workflow_status: "AWAITING_APPROVAL", execution: {},
+    ...(mapping_review === undefined ? {} : { mapping_review }),
+  });
+  const label = (step: HTMLElement) => step.textContent?.replace(/^(.*?)(Completed|Current|Upcoming|Paused)$/, "$2");
+  it.each([
+    ["absent", undefined],
+    ["unavailable", null],
+    ["pending without total", { pending: 0 }],
+    ["zero total", { total: 0, pending: 0 }],
+    ["negative pending", { total: 5, pending: -1 }],
+    ["pending above total", { total: 2, pending: 3 }],
+  ])("keeps Map open and never offers approval when the mapping count is %s", async (_case, review) => {
+    sessionStorage.setItem("movebooks-migration-session", id);
+    vi.spyOn(globalThis, "fetch").mockImplementation(() => json(awaiting(review)));
+    render(<MyMigration />);
+    expect(await screen.findByRole("link", { name: /^Review mappings/ })).toHaveAttribute("href", `/plan-map-approve?session=${id}`);
+    expect(label(steps()[2])).toBe("Current");
+    expect(steps()[2]).not.toHaveClass("is-complete");
+    expect(screen.queryByText(/Approve migration plan/)).not.toBeInTheDocument();
+  });
+  it("keeps Map open while mapping reviews are pending", async () => {
+    sessionStorage.setItem("movebooks-migration-session", id);
+    vi.spyOn(globalThis, "fetch").mockImplementation(() => json(awaiting({ total: 5, pending: 2 })));
+    render(<MyMigration />);
+    expect(await screen.findByRole("link", { name: /^Review 2 mappings/ })).toBeVisible();
+    expect(label(steps()[2])).toBe("Current");
+    expect(screen.queryByText(/Approve migration plan/)).not.toBeInTheDocument();
+  });
+  it("completes Map and offers approval only when no mapping review is pending", async () => {
+    sessionStorage.setItem("movebooks-migration-session", id);
+    vi.spyOn(globalThis, "fetch").mockImplementation(() => json(awaiting({ total: 5, pending: 0 })));
+    render(<MyMigration />);
+    expect(await screen.findByRole("link", { name: /^Approve migration plan/ })).toBeVisible();
+    expect(steps().map(label).slice(0, 4)).toEqual(["Completed", "Completed", "Completed", "Current"]);
+  });
   it("rejects an invalid session reference without a request", async () => {
     window.history.replaceState(null, "", "/workspace?session=../../private");
     const fetch = vi.spyOn(globalThis, "fetch");

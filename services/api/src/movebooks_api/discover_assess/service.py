@@ -1,5 +1,6 @@
 """Application service coordinating synthetic fixtures, agents, and persistence."""
 
+from collections import Counter
 from uuid import UUID
 
 from agents.assessment import AssessmentAgent
@@ -31,7 +32,7 @@ from domain.planning_mapping.models import (
 )
 from movebooks_api.runtime.persistence import session_repository as make_repository
 from movebooks_api.settings import get_settings
-from tools.mapping import MappingPolicyError
+from tools.mapping import MappingPolicyError, supported_targets
 from tools.migration import stable_checksum
 
 from .fixtures import load_sample_company
@@ -170,7 +171,53 @@ class DiscoverAssessService:
         if session.plan is not None:
             return session
         original = session.model_copy(deep=True)
-        session = self.orchestrator.create_plan(session)
+        session = self.orchestrator.create_plan(session, self.source_for(session))
+        return self.repository.put_if_unchanged(original, session)
+
+    def approve_plan(self, owner_subject: str, session_id: UUID, plan_id: UUID) -> MigrationSession:
+        session = self.get_session(owner_subject, session_id)
+        original = session.model_copy(deep=True)
+        if session.plan is not None and session.plan.approval is None:
+            from tools.mapping.controls import lookup_mapping_rule, validate_mapping_compatibility
+
+            fixture = self.source_for(session)
+            if fixture is None:
+                raise SampleCompanyNotFoundError(session.sample_company_id)
+            if session.source_checksum and session.source_checksum != stable_checksum(
+                fixture["datasets"]
+            ):
+                raise MappingPolicyError("Source evidence changed; review a fresh assessment.")
+            expected = Counter(
+                (area, str(record.get("id") or record.get("key")))
+                for area in MappingArea
+                for record in records_for_area(fixture, area)
+            )
+            if expected != Counter((m.area, m.source_id) for m in session.mappings):
+                raise MappingPolicyError("Every source object needs exactly one reviewed mapping.")
+            for mapping in session.mappings:
+                if mapping.decided_by != owner_subject or mapping.decided_at is None:
+                    raise MappingPolicyError("Every mapping needs an authenticated owner decision.")
+                source = next(
+                    (
+                        record
+                        for record in records_for_area(fixture, mapping.area)
+                        if str(record.get("id") or record.get("key")) == mapping.source_id
+                    ),
+                    None,
+                )
+                if source is None or validate_mapping_compatibility(mapping, source):
+                    raise MappingPolicyError("Mapping evidence must pass deterministic checks.")
+                if mapping.area in {
+                    MappingArea.GENERAL_CONFIGURATION,
+                    MappingArea.PRODUCTS_SERVICES,
+                } and (
+                    mapping.selected_target != lookup_mapping_rule(mapping.area, source)["target"]
+                ):
+                    raise MappingPolicyError(
+                        "The synthetic adapter cannot apply a changed product or configuration "
+                        "treatment. Review the supported scope before approving."
+                    )
+        session = self.orchestrator.approve_plan(session, owner_subject, plan_id)
         return self.repository.put_if_unchanged(original, session)
 
     def get_plan(self, owner_subject: str, session_id: UUID) -> MigrationPlan:
@@ -194,7 +241,42 @@ class DiscoverAssessService:
         session = self.get_session(owner_subject, session_id)
         if not session.mappings:
             raise DiscoveryRequiredError("Mapping proposals have not been generated")
-        return session.mappings
+        return self.with_supported_targets(session).mappings
+
+    def with_supported_targets(self, session: MigrationSession) -> MigrationSession:
+        """A read-only response copy in which mappings stored before supported_targets
+        existed carry targets derived with the same compatibility rules as fresh mappings.
+
+        The stored session is never changed, so persisted mapping shapes and executed
+        manifest checksums stay exactly as they were.
+        """
+        if all(mapping.supported_targets for mapping in session.mappings):
+            return session
+        fixture = self.source_for(session)
+        if fixture is None:
+            return session
+        mappings = []
+        for mapping in session.mappings:
+            record = (
+                None
+                if mapping.supported_targets
+                else next(
+                    (
+                        item
+                        for item in records_for_area(fixture, MappingArea(mapping.area))
+                        if str(item.get("id") or item.get("key")) == mapping.source_id
+                    ),
+                    None,
+                )
+            )
+            mappings.append(
+                mapping
+                if record is None
+                else mapping.model_copy(
+                    update={"supported_targets": supported_targets(mapping, record)}
+                )
+            )
+        return session.model_copy(update={"mappings": mappings})
 
     def decide_mapping(
         self,
@@ -300,7 +382,8 @@ class DiscoverAssessService:
                     comment="Reviewed synthetic demonstration manifest",
                 ),
             )
-        return session
+        assert session.plan is not None
+        return self.approve_plan(owner_subject, session.id, session.plan.id)
 
     def start_migration(
         self, owner_subject: str, session_id: UUID, idempotency_key: str

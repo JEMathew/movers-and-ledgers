@@ -52,6 +52,16 @@ class MigrateResolveOrchestrator:
             raise WorkflowTransitionError("A clear assessed plan is required.")
         if session.assessment.blocker_count:
             raise WorkflowTransitionError("Readiness blockers prevent migration.")
+        # Legacy approved sessions retain their existing contract. New explicit approvals
+        # bind the scope and mapping evidence to the immutable server consent snapshot.
+        if session.plan.approval:
+            checksum = stable_checksum({
+                "plan": session.plan.model_dump(mode="json", exclude={"approval"}),
+                "source_checksum": session.source_checksum,
+                "mappings": [m.model_dump(mode="json") for m in session.mappings],
+            })
+            if checksum != session.plan.approval.manifest_checksum:
+                raise WorkflowTransitionError("Plan or mappings changed after explicit approval.")
         if validate_mapping_completeness(session, fixture["datasets"]).status != "VERIFIED":
             raise WorkflowTransitionError("The approved manifest is incomplete or changed.")
         if session.execution.plan_id != session.plan.id:

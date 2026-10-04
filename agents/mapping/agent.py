@@ -14,6 +14,7 @@ from domain.planning_mapping.models import MappingArea, MappingProposal, Mapping
 from tools.mapping import (
     detect_duplicate_targets,
     enforce_approval_policy,
+    supported_targets,
     validate_mapping_compatibility,
 )
 
@@ -65,6 +66,9 @@ class MappingAgent:
             )
             for record, proposal in zip(records, output.proposals, strict=True):
                 errors = validate_mapping_compatibility(proposal, record)
+                proposal = proposal.model_copy(
+                    update={"supported_targets": supported_targets(proposal, record)}
+                )
                 proposals.append(enforce_approval_policy(proposal, errors))
             activities.append(
                 AgentActivity(

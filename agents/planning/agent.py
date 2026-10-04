@@ -27,8 +27,9 @@ class PlanningAgent:
         session_id: UUID,
         assessment: AssessmentResult,
         discovery: DiscoveryResult,
+        source: dict | None = None,
     ) -> tuple[MigrationPlan, AgentActivity]:
-        plan = build_migration_plan(assessment, discovery)
+        plan = build_migration_plan(assessment, discovery, source)
         errors = validate_migration_plan(plan)
         if errors:
             raise ValueError(" ".join(errors))

@@ -156,6 +156,8 @@ def test_same_workspace_handoff_and_no_execution_rewind(rejected):
     j.post(path + "/reconsiderations", payload)
     j.post("/migration/start", key="guarded-reconsideration", status=409)
     j.post(review_path(path, payload), {"action": "approve"})
+    assert j.get()["workflow_status"] == "AWAITING_APPROVAL"
+    j.post("/plan", {"action": "approve", "plan_id": before["plan"]["id"]})
     assert j.get()["id"] == before["id"] and j.get()["workflow_status"] == "APPROVED"
     j.post("/migration/start", key="guarded-reconsideration")
     executed = j.get()

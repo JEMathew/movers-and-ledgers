@@ -5,7 +5,7 @@ from enum import StrEnum
 from typing import Literal
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class WorkflowStatus(StrEnum):
@@ -87,9 +87,36 @@ class PlanPhase(BaseModel):
     approval_checkpoint: str | None = None
 
 
+class PlannedBatch(BaseModel):
+    dataset: str
+    label: str
+    record_count: int = Field(ge=0)
+
+
+class PlanSummary(BaseModel):
+    company_name: str
+    record_count: int = Field(ge=0)
+    batches: list[PlannedBatch]
+    mapping_review_count: int = Field(ge=0)
+    validation_expectations: list[str]
+
+
+class PlanApproval(BaseModel):
+    """Immutable consent snapshot; identity/time originate in the server audit record."""
+
+    plan_id: UUID
+    decision_id: UUID
+    actor: str
+    approved_at: datetime
+    mapping_decision_ids: list[UUID]
+    manifest_checksum: str
+
+
 class MigrationPlan(BaseModel):
     id: UUID = Field(default_factory=uuid4)
     version: str
+    summary: PlanSummary | None = None
+    approval: PlanApproval | None = None
     status: PlanStatus
     phases: list[PlanPhase]
     sequence: list[str]
@@ -146,6 +173,7 @@ class MappingProposal(BaseModel):
     area: MappingArea
     source_id: str
     source_label: str
+    source_value: str | None = None
     recommended_target: str
     selected_target: str
     confidence: float = Field(ge=0, le=1)
@@ -153,6 +181,9 @@ class MappingProposal(BaseModel):
     evidence: list[str]
     rationale: str
     alternatives: list[str] = Field(default_factory=list)
+    # Destinations a reviewer may select: those that pass the deterministic
+    # compatibility rules a decision must pass. Empty when unknown.
+    supported_targets: list[str] = Field(default_factory=list)
     required_target_fields: list[str] = Field(default_factory=list)
     state: MappingState = MappingState.PROPOSED
     approval_required: bool = True
@@ -163,6 +194,17 @@ class MappingProposal(BaseModel):
     decided_at: datetime | None = None
     decision_comment: str | None = None
     reconsiderations: list[MappingReconsideration] = Field(default_factory=list)
+
+    @model_serializer(mode="wrap")
+    def preserve_legacy_manifest_shape(self, handler):
+        data = handler(self)
+        # Existing executed manifests hash the serialized mapping. An absent new
+        # display-only source value must not change their checksum after reload.
+        if self.source_value is None:
+            data.pop("source_value", None)
+        if not self.supported_targets:
+            data.pop("supported_targets", None)
+        return data
 
 
 class MappingDecision(BaseModel):

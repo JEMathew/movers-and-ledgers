@@ -53,7 +53,16 @@ const count = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? on
 export type JourneyState = {
   id: string; status: string;
   readinessIssues: number; migrationIssues: number; verificationIssues: number;
+  /** Mappings still awaiting review. Null or absent means unknown, which is never read as zero. */
+  mappingIssues?: number | null;
 };
+/** Pending mapping decisions remain at Map, even though the backend accepts decisions in
+ * AWAITING_APPROVAL. Map counts as complete only on authoritative evidence that none are pending.
+ * The server status still caps all progress. */
+export function journeyCurrentFor(state: JourneyState): number | null {
+  const step = journeyStepFor(state.status);
+  return state.status === "AWAITING_APPROVAL" && state.mappingIssues !== 0 ? 2 : step;
+}
 export type NextAction = { heading: string; detail: string; label: string; href: string };
 
 const sampleEntry = "/assess?sample=harbor-light-migrate-demo";
@@ -75,6 +84,8 @@ export function nextActionFor(state?: JourneyState): NextAction {
     case "PLANNED": case "MAPPING":
       return { heading: "Review your mappings", detail: "Check where each record goes. Approve, change or reject each recommendation.", label: "Review mappings", href: at("/plan-map-approve") };
     case "AWAITING_APPROVAL":
+      if (state.mappingIssues !== 0) return { heading: "Review your mappings", detail: "Review every source-to-destination recommendation before approving the complete plan.", label: state.mappingIssues ? `Review ${count(state.mappingIssues, "mapping")}` : "Review mappings", href: at("/plan-map-approve") };
+      if (ready) return { heading: "Review readiness blockers", detail: "Mapping review cannot waive source-data blockers. Migration remains stopped.", label: `Review ${count(ready, "readiness issue")}`, href: at("/plan-map-approve") };
       return { heading: "Approve your migration plan", detail: "Nothing moves until you approve. Review the evidence for each decision.", label: "Approve migration plan", href: at("/plan-map-approve") };
     case "APPROVED": case "MIGRATION_READY":
       return { heading: "Start your migration", detail: "Your plan is approved. The migration runs in safe, checkpointed batches.", label: "Start migration", href: at("/migrate-resolve") };

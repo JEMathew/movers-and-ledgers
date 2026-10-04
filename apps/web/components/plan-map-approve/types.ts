@@ -35,6 +35,21 @@ export type MigrationPlan = {
   id: string;
   version: string;
   status: "DRAFT" | "READY_FOR_MAPPING";
+  summary?: {
+    company_name: string;
+    record_count: number;
+    batches: { dataset: string; label: string; record_count: number }[];
+    mapping_review_count: number;
+    validation_expectations: string[];
+  } | null;
+  approval?: {
+    plan_id: string;
+    decision_id: string;
+    actor: string;
+    approved_at: string;
+    mapping_decision_ids: string[];
+    manifest_checksum: string;
+  } | null;
   phases: PlanPhase[];
   blockers: string[];
   risks: string[];
@@ -51,6 +66,7 @@ export type MappingProposal = {
   area: string;
   source_id: string;
   source_label: string;
+  source_value?: string | null;
   recommended_target: string;
   selected_target: string;
   confidence: number;
@@ -58,6 +74,8 @@ export type MappingProposal = {
   evidence: string[];
   rationale: string;
   alternatives: string[];
+  /** Destinations the server's compatibility rules accept. Absent on older mappings: none are offered. */
+  supported_targets?: string[];
   state: MappingState;
   approval_required: boolean;
   policy_reasons: string[];
