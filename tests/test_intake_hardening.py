@@ -182,3 +182,15 @@ def test_fixed_package_can_be_retried_after_rejection(template):
         f"/v1/intake/{good.json()['package_id']}/workspace", headers=AUTH, json={"reviewed": True}
     )
     assert created.status_code == 201 and created.json()["workflow_status"] == "ASSESSED"
+
+
+def test_retrying_a_workspace_after_a_lost_response_returns_the_same_one(template):
+    # The client cannot see whether its first request completed; retrying the same ticket must
+    # find that workspace, not create a second one.
+    package = post(template).json()["package_id"]
+    path = f"/v1/intake/{package}/workspace"
+    first = client.post(path, headers=AUTH, json={"reviewed": True})
+    retry = client.post(path, headers=AUTH, json={"reviewed": True})
+    assert first.status_code == retry.status_code == 201
+    assert first.json()["session_id"] == retry.json()["session_id"]
+    assert sessions() == 1

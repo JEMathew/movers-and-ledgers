@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { Alert, Badge, Button, Card, Checkbox, Input } from "@/components/ui";
 import { authHeaders, cloudIdentity } from "@/lib/identity";
-import { INTAKE_UNREACHABLE, reach } from "@/lib/reach";
+import { changes, INTAKE_UNREACHABLE, reach, UNCONFIRMED } from "@/lib/reach";
 import contract from "./package-contract.json";
 import { ValidationIssues, type Issue } from "./ValidationIssues";
 
@@ -18,6 +18,8 @@ const LIMIT_TEXT = `Choose up to ${limits.max_files} files (${kib(limits.max_fil
 async function request(path: string, init?: RequestInit) {
   const response = await reach(`${API}/v1${path}`, { ...init, headers: { ...await authHeaders(), ...init?.headers } }, INTAKE_UNREACHABLE);
   if (!response.ok) {
+    // A server failure on a request that changes something may have happened after the change.
+    if (changes(init) && response.status >= 500) throw new Error(UNCONFIRMED);
     const message = {
       400: "MoveBooks couldn't read this package. Choose supported CSV and JSON files, or one ZIP, and try again. Nothing was imported or changed.",
       404: "This check has expired. Validate your files again.",
@@ -40,6 +42,8 @@ export function TryYourData() {
   const [files, setFiles] = useState<File[]>([]);
   const [report, setReport] = useState<Report>();
   const [error, setError] = useState("");
+  // The workspace step's own outcome, shown with that step.
+  const [continueError, setContinueError] = useState("");
   const [busy, setBusy] = useState(false);
   const [permission, setPermission] = useState(false);
   const [reviewed, setReviewed] = useState(false);
@@ -52,10 +56,10 @@ export function TryYourData() {
     if (report) await request(`/intake/${report.package_id}/discard`, { method: "POST" }).catch(() => undefined);
   }
   function changeFiles(next: File[]) {
-    void discard(); setReport(undefined); setReviewed(false); setSession(undefined); setError(""); setFiles(next);
+    void discard(); setReport(undefined); setReviewed(false); setSession(undefined); setError(""); setContinueError(""); setFiles(next);
   }
   async function validate() {
-    setBusy(true); setError(""); setReviewed(false); setSession(undefined);
+    setBusy(true); setError(""); setContinueError(""); setReviewed(false); setSession(undefined);
     try {
       if (cloudIdentity()) throw new Error("Test exports can only be checked in the local Beta. No files were sent.");
       if (!permission) throw new Error("Confirm that you're using de-identified test data before validating.");
@@ -68,14 +72,17 @@ export function TryYourData() {
   }
   async function continueToAssessment() {
     if (!report || !reviewed || report.status === "BLOCKED") return;
-    setBusy(true); setError("");
+    setBusy(true); setContinueError("");
     try {
+      // The same package ticket is replayed: if an earlier attempt created the workspace but its
+      // response was lost, this returns that workspace instead of creating another.
       const response = await request(`/intake/${report.package_id}/workspace`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ reviewed: true }) });
       const data = await response.json();
       setSession(data.session_id); sessionStorage.setItem("movebooks-migration-session", data.session_id);
-    } catch (caught) { setError(caught instanceof Error ? caught.message : "MoveBooks couldn't start the assessment. Nothing was changed."); }
+    } catch (caught) { setContinueError(caught instanceof Error ? caught.message : UNCONFIRMED); }
     finally { setBusy(false); focusResults(); }
   }
+
   async function downloadSample() {
     try {
       const response = await request("/intake/template");
@@ -143,7 +150,8 @@ export function TryYourData() {
       {!session ? <>
         <p className="mt-2 text-secondary">We&apos;ll create a workspace from these files and check whether the books are ready to migrate. Every later step still needs your approval.</p>
         <div className="mt-4"><Checkbox label="I reviewed the results, including any columns that won't migrate." checked={reviewed} disabled={busy} onChange={event => setReviewed(event.target.checked)}/></div>
-        <Button className="mt-4" disabled={busy || !reviewed} onClick={continueToAssessment}>Continue to Assessment</Button>
+        {continueError && <div className="mt-4" role="alert"><Alert tone="warning" title={continueError === UNCONFIRMED ? "We Couldn't Confirm This Step" : "Assessment Not Started"}><p>{continueError}</p>{continueError === UNCONFIRMED && <p className="mt-2">Trying again is safe: it returns the same workspace if it was already created.</p>}</Alert></div>}
+        <Button className="mt-4" disabled={busy || !reviewed} onClick={continueToAssessment}>{continueError === UNCONFIRMED ? "Try Again" : "Continue to Assessment"}</Button>
       </> : <>
         <p className="mt-2 text-secondary">Your workspace is ready and its migration readiness has been checked. Accepted files don&apos;t mean the books are ready to migrate; review the assessment next.</p>
         <div className="mt-4 flex flex-wrap gap-3"><Link className="button" href={`/assess?session=${session}`}>View Assessment Results</Link><Link className="button secondary" href={`/trust?session=${session}`}>View Intake Evidence</Link></div>

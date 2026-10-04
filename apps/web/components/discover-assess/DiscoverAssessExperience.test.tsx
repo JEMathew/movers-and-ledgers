@@ -213,7 +213,7 @@ describe("DiscoverAssessExperience", () => {
     expect(assess).toHaveClass("is-blocked");
   });
 
-  it.each(["northstar-supplies", "harbor-light-migrate-demo"])("explains an unreachable assessment service for %s and recovers on retry", async sample => {
+  it.each(["northstar-supplies", "harbor-light-migrate-demo"])("does not promise nothing changed when starting %s fails without a response", async sample => {
     sessionStorage.clear();
     window.history.replaceState(null, "", "/assess");
     // fetch rejects with a TypeError ("Failed to fetch") when the API is down or the origin is blocked.
@@ -223,7 +223,9 @@ describe("DiscoverAssessExperience", () => {
     fireEvent.change(screen.getByRole("combobox", { name: "Sample business" }), { target: { value: sample } });
     fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
     const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent("MoveBooks couldn't reach the assessment service. Your migration was not changed.");
+    // Creating a migration may have succeeded with only the response lost: no rollback promise.
+    expect(alert).toHaveTextContent("We couldn't confirm whether this step completed. Your request may have been received. Try again or check your migration status.");
+    expect(alert).not.toHaveTextContent(/not changed|Nothing was/);
     expect(alert).not.toHaveTextContent("Failed to fetch");
     // No progress is claimed after a failed start.
     expect(screen.getByRole("list", { name: "Migration Journey" }).querySelector(".is-complete")).toBeNull();
@@ -264,6 +266,13 @@ describe("DiscoverAssessExperience", () => {
     const page = outcome.closest("main")!;
     expect(page).toHaveClass("min-w-0", "[overflow-wrap:anywhere]");
     expect(page.className).not.toMatch(/overflow-hidden|truncate/);
+  });
+
+  it("keeps the no-change assurance for a read that fails without a response", async () => {
+    window.history.replaceState(null, "", "?session=session-777");
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("Failed to fetch")));
+    render(<DiscoverAssessExperience />);
+    expect(await screen.findByRole("alert")).toHaveTextContent("MoveBooks couldn't reach the assessment service. Your migration was not changed.");
   });
 
   it("shows a recoverable error without inventing results", async () => {

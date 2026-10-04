@@ -123,7 +123,7 @@ describe("test export check", () => {
     [404, "This check has expired. Validate your files again."],
     [413, "These files are larger than this Beta accepts."],
     [400, "MoveBooks couldn't read this package."],
-    [500, "MoveBooks couldn't check these files right now. Nothing was imported or changed; try again."],
+    [500, "We couldn't confirm whether this step completed. Your request may have been received. Try again or check your migration status."],
   ])("explains an HTTP %i without fabricating a workspace", async (status, text) => {
     fetchMock.mockResolvedValue(response({ detail: "ignored" }, status));
     render(<TryYourData/>); select(); consent(); validate();
@@ -131,12 +131,36 @@ describe("test export check", () => {
     expect(screen.queryByRole("link", { name: "View Assessment Results" })).not.toBeInTheDocument();
     expect(sessionStorage.getItem("movebooks-migration-session")).toBeNull();
   });
-  it("explains an unreachable file-checking service instead of a raw network error", async () => {
+  it("explains a lost response to validation without promising nothing changed", async () => {
     fetchMock.mockRejectedValue(new TypeError("Failed to fetch"));
     render(<TryYourData/>); select(); consent(); validate();
-    expect(await screen.findByText("MoveBooks couldn't reach the file-checking service. Nothing was imported or changed.")).toBeInTheDocument();
+    expect(await screen.findByText("We couldn't confirm whether this step completed. Your request may have been received. Try again or check your migration status.")).toBeInTheDocument();
+    expect(screen.queryByText(/Nothing was imported or changed/)).not.toBeInTheDocument();
     expect(screen.queryByText(/Failed to fetch/)).not.toBeInTheDocument();
     expect(sessionStorage.getItem("movebooks-migration-session")).toBeNull();
+  });
+  it("recovers a workspace whose creation succeeded but whose response was lost, without a duplicate", async () => {
+    fetchMock.mockResolvedValueOnce(response(report))
+      // The server created the workspace; the browser never saw the response.
+      .mockRejectedValueOnce(new TypeError("Failed to fetch"))
+      // Retrying the same ticket replays the existing workspace.
+      .mockResolvedValueOnce(response({ session_id: id, workflow_status: "ASSESSED" }));
+    render(<TryYourData/>); select(); consent(); validate();
+    await screen.findByText("Your Files Are Ready");
+    fireEvent.click(screen.getByRole("checkbox", { name: /I reviewed the results/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Continue to Assessment" }));
+    const alert = await screen.findByRole("alert");
+    expect(alert).toHaveTextContent("We Couldn't Confirm This Step");
+    expect(alert).toHaveTextContent("Your request may have been received.");
+    expect(alert).not.toHaveTextContent(/Nothing was (imported or )?changed/);
+    expect(sessionStorage.getItem("movebooks-migration-session")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Try Again" }));
+    expect(await screen.findByRole("link", { name: "View Assessment Results" })).toHaveAttribute("href", `/assess?session=${id}`);
+    const creates = fetchMock.mock.calls.filter(([url]) => String(url).endsWith("/workspace"));
+    // Both attempts used the same package ticket; no second package or new workspace was requested.
+    expect(creates.map(([url]) => url)).toEqual([expect.stringContaining(`/intake/${id}/workspace`), expect.stringContaining(`/intake/${id}/workspace`)]);
+    expect(fetchMock.mock.calls.filter(([url]) => String(url).endsWith("/intake/validate"))).toHaveLength(1);
+    expect(sessionStorage.getItem("movebooks-migration-session")).toBe(id);
   });
   it("defines ten uninstrumented contracts with server-owned outcomes", () => {
     expect(Object.keys(intakeEvents)).toHaveLength(10);

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { reach } from "./reach";
+import { reach, UNCONFIRMED } from "./reach";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -7,6 +7,13 @@ describe("reach", () => {
   it("replaces a network failure with the caller's plain-language message", async () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("Failed to fetch")));
     await expect(reach("http://localhost:8000/v1/x", undefined, "Service unreachable.")).rejects.toThrow("Service unreachable.");
+  });
+  it("never promises nothing changed when a changing request loses its response", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("Failed to fetch")));
+    for (const method of ["POST", "PUT", "DELETE", "post"]) {
+      await expect(reach("http://localhost:8000/v1/x", { method }, "Service unreachable. Nothing changed.")).rejects.toThrow(UNCONFIRMED);
+    }
+    await expect(reach("http://localhost:8000/v1/x", { method: "GET" }, "Service unreachable.")).rejects.toThrow("Service unreachable.");
   });
   it("returns HTTP error responses unchanged so their own handling still applies", async () => {
     const response = new Response("{}", { status: 503 });
