@@ -33,6 +33,7 @@ from tools.configuration.controls import (
     apply_safe_configuration,
     decide_configuration,
     record_configuration_event,
+    replays_decision,
     validate_value,
 )
 from tools.migration import stable_checksum
@@ -216,6 +217,10 @@ class ValidateConfigureOrchestrator:
         proposal = next((p for p in plan.proposals if p.id == proposal_id), None)
         if proposal is None:
             raise LookupError("Configuration proposal not found.")
+        if actor == session.owner_subject and replays_decision(proposal, decision, actor):
+            # The same decision is already recorded: succeed without a second decision, event
+            # or activity, and without rewriting who decided or when.
+            return plan
         decide_configuration(proposal, decision, actor)
         from .audit import record_decision
 

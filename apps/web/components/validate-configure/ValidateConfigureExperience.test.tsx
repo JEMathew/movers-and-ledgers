@@ -77,6 +77,45 @@ describe("ValidateConfigureExperience", () => {
     expect(screen.getByRole("button", {name: "Apply reviewed configuration"})).toBeEnabled();
   });
 
+  it("shows an approved setting as Approved and never sends the same approval twice", async () => {
+    const approved = structuredClone(review);
+    Object.assign(approved.configuration!.proposals[0], { state: "APPROVED", decision: "approve", decided_by: "demo-user" });
+    const mock = vi.spyOn(globalThis, "fetch").mockImplementationOnce(() => response(review)).mockImplementationOnce(() => response(approved));
+    render(<ValidateConfigureExperience />);
+    fireEvent.click(screen.getByRole("button", {name: "Load reconciled scenario"}));
+    // REVIEW_REQUIRED: approval is actionable.
+    fireEvent.click(await screen.findByRole("button", {name: "Approve inventory valuation"}));
+    fireEvent.click(screen.getByRole("button", {name: "Confirm approve"}));
+    // APPROVED: the identical approval is no longer offered; the setting reads Approved.
+    const done = await screen.findByRole("button", {name: "Inventory valuation approved"});
+    expect(done).toBeDisabled();
+    expect(done).toHaveTextContent("Approved");
+    expect(screen.queryByRole("button", {name: "Approve inventory valuation"})).not.toBeInTheDocument();
+    fireEvent.click(done);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(mock).toHaveBeenCalledTimes(2);
+    // Revising an approved setting stays possible, as the server allows it.
+    expect(screen.getByRole("button", {name: "Modify inventory valuation"})).toBeEnabled();
+    expect(screen.getByRole("button", {name: "Reject inventory valuation"})).toBeEnabled();
+    // The setting itself stays reviewable.
+    expect(screen.getAllByText("WEIGHTED_AVERAGE").length).toBeGreaterThan(0);
+  });
+
+  it.each([
+    ["BLOCKED", "disabled approve"],
+    ["APPLIED", "no decision actions"],
+  ])("keeps %s settings unchanged (%s)", async (state) => {
+    const snapshot = structuredClone(review);
+    snapshot.configuration!.proposals[0].state = state as never;
+    vi.spyOn(globalThis, "fetch").mockImplementationOnce(() => response(snapshot));
+    render(<ValidateConfigureExperience />);
+    fireEvent.click(screen.getByRole("button", {name: "Load reconciled scenario"}));
+    await screen.findByRole("button", {name: "Explain inventory valuation"});
+    expect(screen.queryByRole("button", {name: "Inventory valuation approved"})).not.toBeInTheDocument();
+    if (state === "BLOCKED") expect(screen.getByRole("button", {name: "Approve inventory valuation"})).toBeDisabled();
+    else for (const action of ["Approve", "Modify", "Reject"]) expect(screen.queryByRole("button", {name: `${action} inventory valuation`})).not.toBeInTheDocument();
+  });
+
   it("keeps rejection blocked, then lets the user revise a decision", async () => {
     const rejected = structuredClone(review);
     rejected.configuration!.proposals[0].state = "REJECTED";
