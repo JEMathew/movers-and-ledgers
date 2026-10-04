@@ -1,7 +1,8 @@
 """Application service coordinating synthetic fixtures, agents, and persistence."""
 
+import json
 from collections import Counter
-from uuid import UUID
+from uuid import UUID, uuid5
 
 from agents.assessment import AssessmentAgent
 from agents.discovery import DiscoveryAgent
@@ -64,6 +65,19 @@ def journey_evidence(session: MigrationSession) -> dict:
     }
 
 
+# Names one explicit assessment-creation intent. The owner is part of the name, so the same key
+# from another owner names a different session and can never replay this one.
+CREATION_NAMESPACE = UUID("6f1c2a52-8d0e-4c3b-9a57-2b1f0c9e7d41")
+
+
+def creation_id(owner_subject: str, creation_key: str) -> UUID:
+    return uuid5(CREATION_NAMESPACE, json.dumps([owner_subject, creation_key]))
+
+
+class CreationConflictError(ValueError):
+    pass
+
+
 class MigrationSessionNotFoundError(LookupError):
     pass
 
@@ -84,11 +98,17 @@ class DiscoverAssessService:
         self.orchestrator = PlanMapApproveOrchestrator()
         self.migration_orchestrator = MigrateResolveOrchestrator()
 
-    def create_session(self, owner_subject: str, sample_company_id: str) -> MigrationSession:
+    def create_session(
+        self, owner_subject: str, sample_company_id: str, creation_key: str | None = None
+    ) -> MigrationSession:
+        """Create a migration. With a creation key, a retry of the same intent returns the
+        session that was created first (its response may have been lost) and creates nothing."""
         fixture = load_sample_company(sample_company_id)
         if fixture is None:
             raise SampleCompanyNotFoundError(sample_company_id)
+        identity = {"id": creation_id(owner_subject, creation_key)} if creation_key else {}
         session = MigrationSession(
+            **identity,
             owner_subject=owner_subject,
             sample_company_id=sample_company_id,
             company_name=str(fixture["company"]["display_name"]),
@@ -101,7 +121,19 @@ class DiscoverAssessService:
                 attributes={"sample_company_id": sample_company_id},
             )
         )
-        return self.repository.put(session)
+        if not creation_key:
+            return self.repository.put(session)
+        try:
+            return self.repository.create(session)
+        except ValueError:
+            # Atomic insert lost: this owner already created a session for this key.
+            existing = self.repository.get(session.id, owner_subject)
+        if existing is None or existing.sample_company_id != sample_company_id:
+            raise CreationConflictError(
+                "This request was already used to start a different assessment. "
+                "Start a new assessment."
+            )
+        return existing
 
     def get_session(self, owner_subject: str, session_id: UUID) -> MigrationSession:
         session = self.repository.get(session_id, owner_subject)

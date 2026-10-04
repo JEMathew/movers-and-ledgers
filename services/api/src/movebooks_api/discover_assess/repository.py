@@ -12,6 +12,10 @@ class MigrationSessionRepository(Protocol):
 
     def put(self, session: MigrationSession) -> MigrationSession: ...
 
+    def create(self, session: MigrationSession) -> MigrationSession:
+        """Insert only: raises ValueError when a session with this ID already exists."""
+        ...
+
     def get(self, session_id: UUID, owner_subject: str) -> MigrationSession | None: ...
 
     def put_if_unchanged(
@@ -32,6 +36,12 @@ class InMemoryMigrationSessionRepository:
         with self._lock:
             self._sessions[session.id] = session.model_copy(deep=True)
         return session.model_copy(deep=True)
+
+    def create(self, session: MigrationSession) -> MigrationSession:
+        with self._lock:
+            if session.id in self._sessions:
+                raise ValueError("Session already exists; refresh before retrying.")
+            return self.put(session)
 
     def get(self, session_id: UUID, owner_subject: str) -> MigrationSession | None:
         with self._lock:

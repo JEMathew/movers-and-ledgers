@@ -279,7 +279,10 @@ describe("DiscoverAssessExperience", () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ detail: "API unavailable" }, 503)));
     render(<DiscoverAssessExperience />);
     fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
-    expect(await screen.findByRole("alert")).toHaveTextContent("API unavailable");
+    // A server failure while starting may follow a committed create: never claim it did not happen.
+    const alert = await screen.findByRole("alert");
+    expect(alert).toHaveTextContent("We Couldn't Confirm This Step");
+    expect(alert).toHaveTextContent("We couldn't confirm whether this step completed.");
     expect(screen.queryByRole("heading", { name: "Migration Readiness" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Try Again" })).toBeEnabled();
   });

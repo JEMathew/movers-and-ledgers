@@ -35,6 +35,7 @@ from movebooks_api.auth import Principal, require_principal
 
 from .fixtures import sample_company_catalog
 from .service import (
+    CreationConflictError,
     DiscoveryRequiredError,
     MigrationSessionNotFoundError,
     SampleCompanyNotFoundError,
@@ -103,12 +104,21 @@ def list_sample_companies(principal: AuthenticatedPrincipal) -> list[dict[str, s
     "/migration-sessions", response_model=MigrationSession, status_code=status.HTTP_201_CREATED
 )
 def create_migration_session(
-    request: CreateMigrationSessionRequest, principal: AuthenticatedPrincipal
+    request: CreateMigrationSessionRequest,
+    principal: AuthenticatedPrincipal,
+    # One explicit assessment start. Retrying with the same key returns the same session.
+    idempotency_key: Annotated[
+        str | None, Header(alias="Idempotency-Key", pattern=r"^[A-Za-z0-9._:-]{1,120}$")
+    ] = None,
 ) -> MigrationSession:
     try:
-        return discover_assess_service.create_session(principal.subject, request.sample_company_id)
+        return discover_assess_service.create_session(
+            principal.subject, request.sample_company_id, idempotency_key
+        )
     except SampleCompanyNotFoundError as error:
         raise _not_found(error) from error
+    except CreationConflictError as error:
+        raise _conflict(error) from error
 
 
 @router.get("/migration-sessions/{session_id}", response_model=MigrationSession)

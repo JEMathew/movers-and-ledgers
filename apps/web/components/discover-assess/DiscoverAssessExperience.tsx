@@ -29,15 +29,19 @@ import type {
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 import { authHeaders } from "@/lib/identity";
-import { ASSESSMENT_UNREACHABLE, reach } from "@/lib/reach";
+import { ASSESSMENT_UNREACHABLE, changes, reach, UNCONFIRMED } from "@/lib/reach";
 
 type Phase = "select" | "discovering" | "assessing" | "complete" | "error";
+/** One explicit "start an assessment" action. Its key makes retries return the same migration. */
+type CreationIntent = { key: string; sample: string };
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await reach(`${API_BASE}${path}`, {
     ...init,
     headers: { ...await authHeaders(), "Content-Type": "application/json", ...init?.headers },
   }, ASSESSMENT_UNREACHABLE);
+  // A change whose response failed may still have happened on the server.
+  if (changes(init) && response.status >= 500) throw new Error(UNCONFIRMED);
   if (!response.ok) {
     const body = (await response.json().catch(() => null)) as { detail?: string } | null;
     throw new Error(body?.detail ?? `Request failed with status ${response.status}`);
@@ -91,6 +95,8 @@ export function DiscoverAssessExperience() {
   // Every read or assessment run starts a new operation (see begin). Unmounting supersedes them all.
   const latest = useRef(0);
   const inflight = useRef<AbortController | null>(null);
+  // The assessment the user started whose migration has not been adopted yet.
+  const creating = useRef<CreationIntent | null>(null);
   useEffect(() => () => { latest.current += 1; inflight.current?.abort(); }, []);
 
   const loadExisting = (saved: string) => {
@@ -154,27 +160,46 @@ export function DiscoverAssessExperience() {
   };
 
   // Creating a migration is always this explicit action; it never happens on resume.
-  const startAssessment = async () => {
+  // Each explicit start is a new intent with a new key.
+  const startAssessment = () => create({ key: crypto.randomUUID(), sample });
+
+  // Creates (or, on retry, recovers) the migration for one intent. A retry after a lost
+  // response returns the migration the server already created; it never creates another
+  // and never falls back to the migration that was open before.
+  const create = async (intent: CreationIntent) => {
     const op = begin(latest, inflight);
+    creating.current = intent;
     setError(undefined);
     setEvidence(undefined);
-    // A new assessment is a different migration: never show the previous one's results while it runs.
+    // A new assessment is a different migration: never show or offer the previous one while it runs.
+    setSessionId(undefined); setReading("none");
     setDiscovery(undefined); setAssessment(undefined); setActivity([]);
+    window.history.replaceState(null, "", window.location.pathname);
     try {
       setPhase("discovering");
       const session = await api<{ id: string }>("/v1/migration-sessions", {
         method: "POST",
-        body: JSON.stringify({ sample_company_id: sample }),
+        headers: { "Idempotency-Key": intent.key },
+        body: JSON.stringify({ sample_company_id: intent.sample }),
         signal: op.signal,
       });
       if (!op.current()) return;
+      // Adopted: this start is complete, and the next start is a new assessment.
+      creating.current = null;
       setSessionId(session.id);
       setEvidence({ status: "CREATED" });
-      setReading("none");
       sessionStorage.setItem("movebooks-migration-session", session.id);
       window.history.replaceState(null, "", `?session=${encodeURIComponent(session.id)}`);
       await assess(session.id, op);
     } catch (caught) { failed(caught, op); }
+  };
+
+  // Try Again continues what failed: an unconfirmed start is retried with the same intent;
+  // otherwise the migration in the address is read again.
+  const retry = () => {
+    if (creating.current) { void create(creating.current); return; }
+    const saved = new URLSearchParams(window.location.search).get("session");
+    if (saved) loadExisting(saved);
   };
 
   // Continue the same migration (CREATED or DISCOVERED): no new session is created.
@@ -432,13 +457,11 @@ export function DiscoverAssessExperience() {
       </section>
 
       {error && (
-        <div className="mt-8">
-          <Alert tone="error" title="Assessment Stopped">
+        <div className="mt-8" role={error === UNCONFIRMED ? "alert" : undefined}>
+          <Alert tone={error === UNCONFIRMED ? "warning" : "error"} title={error === UNCONFIRMED ? "We Couldn't Confirm This Step" : "Assessment Stopped"}>
             <p className="mt-1">{error}</p>
-            <Button className="mt-3" size="small" variant="secondary" onClick={() => {
-              const saved = new URLSearchParams(window.location.search).get("session");
-              if (saved) loadExisting(saved); else void startAssessment();
-            }}>Try Again</Button>
+            {error === UNCONFIRMED && <p className="mt-2">Trying again is safe: it continues the same assessment and never starts a second one.</p>}
+            <Button className="mt-3" size="small" variant="secondary" onClick={retry}>Try Again</Button>
           </Alert>
         </div>
       )}
