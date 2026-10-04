@@ -254,6 +254,18 @@ describe("DiscoverAssessExperience", () => {
     expect(document.body).not.toHaveTextContent(/target write|Upload your data|orchestrat/i);
   });
 
+  it("wraps a maximum-length unbroken company name instead of widening the page", async () => {
+    const company = "C".repeat(200);
+    window.history.replaceState(null, "", "?session=session-long");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ id: "session-long", sample_company_id: "user-upload", workflow_status: "ASSESSED", activity, discovery: { ...discovery, company_name: company, synthetic: false }, assessment })));
+    render(<DiscoverAssessExperience />);
+    const outcome = await screen.findByText(`${company} can move forward. 1 item needs your review first.`);
+    // jsdom has no layout: assert the wrap rule the browser check measured (no page overflow at 390px and 1280px).
+    const page = outcome.closest("main")!;
+    expect(page).toHaveClass("min-w-0", "[overflow-wrap:anywhere]");
+    expect(page.className).not.toMatch(/overflow-hidden|truncate/);
+  });
+
   it("shows a recoverable error without inventing results", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ detail: "API unavailable" }, 503)));
     render(<DiscoverAssessExperience />);

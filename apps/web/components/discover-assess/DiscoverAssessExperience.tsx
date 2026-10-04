@@ -207,7 +207,9 @@ export function DiscoverAssessExperience() {
   const issues = [...blockers, ...warnings];
 
   return (
-    <main className="shell min-h-[75vh] py-12 sm:py-16">
+    // Company and record names come from the user's files and can be 200 unbroken characters:
+    // wrap them anywhere (as Plan does) rather than widen or hide.
+    <main className="shell min-h-[75vh] min-w-0 py-12 [overflow-wrap:anywhere] sm:py-16">
       <header>
         <div className="max-w-3xl">
           <p className="eyebrow text-primary">Assess</p>
