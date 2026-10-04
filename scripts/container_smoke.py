@@ -267,7 +267,13 @@ def run(gate):
         post(f"/{stage}")
     for mapping in get()["mappings"]:
         post(f"/mappings/{mapping['id']}/approve", {"comment": "Synthetic governed review"})
+    # Reviewed mappings are not consent: migration stays gated until the plan is approved.
+    post("/migration/start", key="preapproval-migration", expected=409)
+    plan_id = get()["plan"]["id"]
+    approval = post("/plan", {"action": "approve", "plan_id": plan_id})["approval"]
+    assert approval["plan_id"] == plan_id and approval["actor"] == "runtime-owner-a"
     before = get()
+    assert before["workflow_status"] == "APPROVED" and before["plan"]["approval"] == approval
     assert before["human_decisions"] and before["events"] and before["plan"]
     gate.stop(active, graceful=True)
     active, base = gate.start("journey-2", "movebooks-harness:validation", 18763, env=env)
