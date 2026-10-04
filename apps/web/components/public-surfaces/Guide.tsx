@@ -14,7 +14,7 @@ export const guideSections = [
   { id: "reconsideration", title: "Reconsidering a decision" },
   { id: "simulator", title: "Simulator" },
   { id: "play", title: "Play" },
-  { id: "try-your-data", title: "Try your data" },
+  { id: "try-your-data", title: "Use My Test Export" },
   { id: "trust", title: "Trust & evidence" },
   { id: "support-feedback", title: "Support and feedback" },
   { id: "limitations", title: "Beta limitations and data guidance" },
@@ -145,7 +145,7 @@ export function Guide() {
         </Section>
 
         <Section id="try-your-data">
-          <p className="text-secondary">In local development, Try Your Data checks a de-identified test package against a fixed template, then hands the reviewed data to the same discovery and assessment used by Simulator. All target operations stay synthetic. Cloud Try Your Data uploads remain disabled, including for signed-in users.</p>
+          <p className="text-secondary">In local development, Use My Test Export checks a de-identified test package against a fixed template, then hands the reviewed data to the same discovery and assessment used by Simulator. All target operations stay synthetic. Cloud Try Your Data uploads remain disabled, including for signed-in users.</p>
           <ol className="list-decimal space-y-2 pl-5 text-secondary">
             <li>Download the synthetic package template and shape your test export to match it.</li>
             <li>Add your files, confirm the local Beta notice and validate.</li>
@@ -154,7 +154,7 @@ export function Guide() {
           </ol>
           <Alert tone="warning" title="Test exports only"><p>Use synthetic or de-identified data. This is a local evaluation, not a secure production intake service.</p></Alert>
           <More summary="File formats and limits"><p>CSV or JSON files, or one flat ZIP. Eight required files; <code>metadata.json</code> is optional.</p><p>Up to 9 files, 1,000 rows and 256 KiB per file, 2 MiB in total. No PDFs, images, macros, binaries, folders or nested ZIPs.</p></More>
-          <Next links={[["Review local data requirements", "/try-your-data"]]}/>
+          <Next links={[["Check My Test Export", "/try-your-data"]]}/>
         </Section>
 
         <Section id="trust">
@@ -187,7 +187,7 @@ export function Guide() {
               "Not production-ready, and not a live migration to any accounting provider.",
               "Target systems and invoice posting are synthetic; cloud Google sign-in uses real authenticated identities.",
               "Local demo sessions can expire on restart. Cloud synthetic workspaces persist; availability follows the current deployment status, without a production uptime guarantee.",
-              "Cloud Try Your Data uploads remain disabled. Test exports are for local development only.",
+              "Cloud test-export uploads remain disabled. Test exports are for local development only.",
               "AI suggestions are advisory, never approval or financial verification.",
               "Gemini guidance is disabled by default and limited to explicitly configured synthetic dev/test advice. Managed ADK remains disabled.",
               "Not accounting, tax or legal advice.",

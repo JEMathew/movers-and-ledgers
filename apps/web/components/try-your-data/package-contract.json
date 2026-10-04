@@ -1,0 +1,136 @@
+{
+  "version": "controlled-package-v1",
+  "files": [
+    {
+      "name": "accounts.csv",
+      "required": [
+        "id",
+        "code",
+        "name",
+        "account_type",
+        "opening_balance"
+      ],
+      "optional": [
+        "parent_id"
+      ]
+    },
+    {
+      "name": "customers.csv",
+      "required": [
+        "id",
+        "display_name"
+      ],
+      "optional": [
+        "email"
+      ]
+    },
+    {
+      "name": "vendors.csv",
+      "required": [
+        "id",
+        "display_name"
+      ],
+      "optional": [
+        "email"
+      ]
+    },
+    {
+      "name": "products.csv",
+      "required": [
+        "id",
+        "name",
+        "item_type"
+      ],
+      "optional": [
+        "expense_account_id",
+        "income_account_id"
+      ]
+    },
+    {
+      "name": "invoices.csv",
+      "required": [
+        "id",
+        "customer_id",
+        "receivable_account_id",
+        "document_number",
+        "total"
+      ],
+      "optional": [
+        "paid",
+        "product_id",
+        "transaction_id"
+      ]
+    },
+    {
+      "name": "bills.csv",
+      "required": [
+        "id",
+        "vendor_id",
+        "payable_account_id",
+        "document_number",
+        "total"
+      ],
+      "optional": [
+        "paid",
+        "product_id",
+        "transaction_id"
+      ]
+    },
+    {
+      "name": "transactions.csv",
+      "required": [
+        "id",
+        "transaction_date",
+        "entries"
+      ],
+      "optional": [
+        "bill_id",
+        "customer_id",
+        "invoice_id",
+        "vendor_id"
+      ]
+    }
+  ],
+  "configuration": {
+    "name": "configuration.json",
+    "keys": [
+      "company",
+      "settings",
+      "taxes"
+    ],
+    "company": [
+      "id",
+      "legal_name",
+      "display_name",
+      "base_currency",
+      "fiscal_year_start_month"
+    ],
+    "settings": [
+      "fiscal_year",
+      "base_currency",
+      "tax_setup",
+      "payment_terms",
+      "inventory",
+      "invoice_preferences",
+      "user_roles",
+      "integrations"
+    ],
+    "taxes": [
+      "id",
+      "code",
+      "rate",
+      "jurisdiction"
+    ]
+  },
+  "optional_files": [
+    "metadata.json"
+  ],
+  "limits": {
+    "max_files": 9,
+    "max_file_bytes": 262144,
+    "max_total_bytes": 2097152,
+    "max_rows": 1000,
+    "max_columns": 32,
+    "max_text_length": 200
+  }
+}
