@@ -421,9 +421,11 @@ class DiscoverAssessService:
         self.repository.put_if_unchanged(original, session)
         return event
 
-    def create_migration_demo_session(self, owner_subject: str) -> MigrationSession:
+    def create_migration_demo_session(
+        self, owner_subject: str, creation_key: str | None = None
+    ) -> MigrationSession:
         """Create a reviewed, synthetic manifest for the Migrate → Resolve demonstration."""
-        session = self.create_session(owner_subject, "harbor-light-migrate-demo")
+        session = self.create_session(owner_subject, "harbor-light-migrate-demo", creation_key)
         session = self.discover(owner_subject, session.id)
         session = self.assess(owner_subject, session.id)
         session = self.plan(owner_subject, session.id)

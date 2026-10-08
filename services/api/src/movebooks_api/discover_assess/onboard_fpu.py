@@ -13,10 +13,10 @@ from movebooks_api.auth import Principal, require_principal
 from tools.activation.invoice import verify_accounting_impact
 from tools.onboarding.checks import operating_context
 
+from .demo_creation import create_demo
 from .service import discover_assess_service as service
 from .service import journey_evidence
-from .validate_configure import DemoRequest, context
-from .validate_configure import demo as migration_demo
+from .validate_configure import build_demo, context
 from .validate_configure import orchestrator as configure_orchestrator
 
 router = APIRouter(prefix="/v1", tags=["onboard-fpu"])
@@ -93,25 +93,41 @@ def mutate(session_id, principal, operation):
 
 
 @router.post("/onboarding-demo-sessions", status_code=201)
-def demo(request: DemoInput, principal: Auth):
-    # Clearly disclosed replay only. New onboarding and invoice approvals are never seeded.
-    previous = migration_demo(DemoRequest(scenario="clean"), principal)
-    session, fixture = context(previous["session_id"], principal)
-    configure_orchestrator.validate(session, fixture)
-    configure_orchestrator.configure(session, fixture)
-    for proposal in session.configuration.proposals:
-        if proposal.state != "APPLIED":
-            configure_orchestrator.decide(
-                session,
-                fixture,
-                proposal.id,
-                ConfigurationDecision(action="approve", comment="Synthetic prior-stage replay"),
-                principal.subject,
-            )
-    configure_orchestrator.apply(session, fixture)
-    orchestrator.start(session, fixture, [] if request.scenario == "clean" else [request.scenario])
-    service.repository.put(session)
-    return view(session, fixture)
+def demo(
+    request: DemoInput,
+    principal: Auth,
+    idempotency_key: Annotated[str | None, Header(min_length=1, max_length=120)] = None,
+):
+    # Only prior synthetic approvals are replayed; onboarding/FPU still require the owner.
+    def build(staged, creation_key):
+        session = build_demo(staged, principal.subject, creation_key)
+        fixture = staged.source_for(session)
+        configure_orchestrator.validate(session, fixture)
+        configure_orchestrator.configure(session, fixture)
+        for proposal in session.configuration.proposals:
+            if proposal.state != "APPLIED":
+                configure_orchestrator.decide(
+                    session,
+                    fixture,
+                    proposal.id,
+                    ConfigurationDecision(action="approve", comment="Synthetic prior-stage replay"),
+                    principal.subject,
+                )
+        configure_orchestrator.apply(session, fixture)
+        orchestrator.start(
+            session, fixture, [] if request.scenario == "clean" else [request.scenario]
+        )
+        return session
+
+    return create_demo(
+        service.repository,
+        principal.subject,
+        "onboarding",
+        request.scenario,
+        idempotency_key,
+        build,
+        lambda s: view(s, service.source_for(s)),
+    )
 
 
 @router.get("/migration-sessions/{session_id}/onboarding")

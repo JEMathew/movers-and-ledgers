@@ -9,6 +9,7 @@ import { MigrationJourney } from "@/components/journey/MigrationJourney";
 import { journeyEvidenceFrom, projectJourney } from "@/components/journey/journey";
 import { ActionLink } from "@/components/journey/NextAction";
 import type { Snapshot, Task } from "./types";
+import { demoCreationKey, finishDemoCreation } from "@/lib/demo-creation";
 import { authHeaders } from "@/lib/identity";
 
 const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
@@ -56,7 +57,10 @@ export function OnboardFpuExperience() {
     acted.current += 1;
     setBusy(true); setError(undefined);
     try {
-      const data = await request(path, body, "POST", key); accept(data);
+      const demo = path === "/onboarding-demo-sessions";
+      const data = await request(path, body, "POST", demo ? demoCreationKey(path, body) : key);
+      if (demo) finishDemoCreation(path);
+      accept(data);
       sessionStorage.setItem(STORAGE, data.session_id);
       sessionStorage.setItem("movebooks-migration-session", data.session_id);
       window.history.replaceState(null, "", `?session=${encodeURIComponent(data.session_id)}`);
