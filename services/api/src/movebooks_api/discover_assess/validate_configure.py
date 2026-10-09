@@ -3,7 +3,7 @@
 from typing import Annotated, Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 
 from agents.orchestrator.validate_configure import ValidateConfigureOrchestrator
@@ -11,6 +11,7 @@ from domain.migration_resolution.models import ResolutionDecision
 from domain.validation_configuration.models import ConfigurationDecision
 from movebooks_api.auth import Principal, require_principal
 
+from .demo_creation import create_demo
 from .fixtures import load_sample_company
 from .service import discover_assess_service as service
 from .service import journey_evidence
@@ -58,25 +59,42 @@ def view(session, fixture):
     }
 
 
-@router.post("/validation-demo-sessions", status_code=201)
-def demo(request: DemoRequest, principal: PrincipalDependency):
-    """Explicit synthetic replay of completed earlier stages; never a production approval."""
-    session = service.create_migration_demo_session(principal.subject)
-    session = service.start_migration(
-        principal.subject, session.id, f"validation-demo:{session.id}"
-    )
-    resolution = session.execution.resolutions[-1]
-    service.decide_resolution(
-        principal.subject,
+def build_demo(staged, owner, creation_key=None):
+    """Replay prior synthetic approvals in a private repository, using normal CAS steps."""
+    session = staged.create_migration_demo_session(owner, creation_key)
+    session = staged.start_migration(owner, session.id, f"validation-demo:{session.id}")
+    staged.decide_resolution(
+        owner,
         session.id,
-        resolution.id,
+        session.execution.resolutions[-1].id,
         ResolutionDecision(approve=True, comment="Synthetic scenario replay"),
     )
-    session = service.retry_migration(principal.subject, session.id)
-    if request.scenario == "ar_discrepancy":
-        session.execution.target_state["invoices"][0]["payload"]["total"] = "400.00"
-    session = service.repository.put(session)
-    return view(session, load_sample_company(session.sample_company_id))
+    return staged.retry_migration(owner, session.id)
+
+
+@router.post("/validation-demo-sessions", status_code=201)
+def demo(
+    request: DemoRequest,
+    principal: PrincipalDependency,
+    idempotency_key: Annotated[str | None, Header(min_length=1, max_length=120)] = None,
+):
+    """Publish one complete synthetic replay; keyed retries only read the existing session."""
+
+    def build(staged, creation_key):
+        session = build_demo(staged, principal.subject, creation_key)
+        if request.scenario == "ar_discrepancy":
+            session.execution.target_state["invoices"][0]["payload"]["total"] = "400.00"
+        return session
+
+    return create_demo(
+        service.repository,
+        principal.subject,
+        "validation",
+        request.scenario,
+        idempotency_key,
+        build,
+        lambda s: view(s, load_sample_company(s.sample_company_id)),
+    )
 
 
 @router.get("/migration-sessions/{session_id}/validation-configuration")

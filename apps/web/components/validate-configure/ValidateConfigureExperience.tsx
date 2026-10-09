@@ -10,14 +10,15 @@ import { MigrationJourney } from "@/components/journey/MigrationJourney";
 import { journeyEvidenceFrom, PROCESSING, projectJourney } from "@/components/journey/journey";
 import { ActionLink } from "@/components/journey/NextAction";
 import type { Check, Proposal, Snapshot } from "./types";
+import { demoCreationKey, finishDemoCreation } from "@/lib/demo-creation";
 import { authHeaders } from "@/lib/identity";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 const STORAGE_KEY = "movebooks-validation-session";
 
-async function request(path: string, body?: object, method = "POST"): Promise<Snapshot> {
+async function request(path: string, body?: object, method = "POST", key?: string): Promise<Snapshot> {
   const response = await fetch(`${API_BASE}/v1${path}`, {
-    method, headers: { ...await authHeaders(), "Content-Type": "application/json" },
+    method, headers: { ...await authHeaders(), "Content-Type": "application/json", ...(key ? { "Idempotency-Key": key } : {}) },
     body: body ? JSON.stringify(body) : undefined,
   });
   if (!response.ok) {
@@ -72,7 +73,10 @@ export function ValidateConfigureExperience() {
     // Checking the books is the one long-running step worth naming on the journey.
     setBusy(true); setChecking(/\/(re)?validation$/.test(path)); setError(undefined);
     try {
-      const data = await request(path, body);
+      const demo = path === "/validation-demo-sessions";
+      const key = demo ? demoCreationKey(path, body) : undefined;
+      const data = await request(path, body, "POST", key);
+      if (demo) finishDemoCreation(path);
       setSnapshot(data);
       sessionStorage.setItem(STORAGE_KEY, data.session_id);
       sessionStorage.setItem("movebooks-migration-session", data.session_id);

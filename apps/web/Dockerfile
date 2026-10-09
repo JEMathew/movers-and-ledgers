@@ -14,7 +14,7 @@ FROM build AS development
 ENV NODE_ENV=development NEXT_PUBLIC_IDENTITY_MODE=demo NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
 CMD ["npm", "run", "dev", "--", "--hostname", "0.0.0.0", "--port", "8080"]
 
-FROM cgr.dev/chainguard/wolfi-base:latest@sha256:08df5982c3d27e70a4ce1607e3bb9af09d746f8722cf135a7694afef879fc5a2 AS runtime
+FROM cgr.dev/chainguard/wolfi-base:latest@sha256:05d24163df148be377275af8374c16523a1dc7e19bf4f1c689784791553c5e45 AS runtime
 ENV NODE_ENV=production PORT=8080 HOSTNAME=0.0.0.0 NEXT_TELEMETRY_DISABLED=1
 # Keep Node 22, use the vendor-patched shared zlib, and never install runtime npm.
 # Both stages are glibc-based so standalone native dependencies use the same ABI family.
