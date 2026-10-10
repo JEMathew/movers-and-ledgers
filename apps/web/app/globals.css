@@ -417,3 +417,46 @@ button, input, select, textarea { font: inherit; }
   .guided-demo .type-page { margin-top: .375rem; }
   .demo-actions { margin-block: .5rem; }
 }
+
+/* PR04: read-only migration home; existing phase tasks and consent are untouched. */
+.member-home { padding-block: 1.5rem 2rem; max-width: 65rem; font-size: 1rem; }
+.member-home header { max-width: 52rem; }
+.member-home .type-page { margin-top: .5rem; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; }
+.member-reference, .member-freshness, .member-boundary { color: var(--text-secondary); margin-top: .6rem; overflow-wrap: anywhere; }
+.member-task { max-width: 52rem; margin-top: .75rem; line-height: 1.5; }
+.member-task > .button { margin-top: .75rem; min-height: 2.75rem; }
+.member-task > p + p { margin-top: .5rem; }
+.member-text-button { min-height: 2.75rem; font-weight: 600; color: var(--primary); text-decoration: underline; cursor: pointer; }
+.member-status { margin-top: 1rem; }
+.member-attention { max-width: 52rem; margin-top: 1rem; line-height: 1.5; }
+.member-home h2 { font-size: 1.125rem; font-weight: 700; }
+.member-attention ul { padding-left: 1.2rem; list-style: disc; }
+.member-progress { margin-top: 1rem; scroll-margin-top: 5rem; }
+.member-progress > p { margin-top: .35rem; color: var(--text-secondary); }
+.member-progress ol { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .35rem; margin-top: .6rem; }
+.member-progress li > a, .member-progress li > span { display: flex; flex-direction: column; justify-content: center; min-height: 3.5rem; padding: .5rem; border: 1px solid var(--border-strong); border-radius: var(--radius-md); }
+.member-progress small { display: block; font-size: 1rem; color: var(--text-secondary); }
+.member-progress [aria-current] > a { border-color: var(--primary); background: var(--primary-subtle); }
+.member-progress [data-state="Blocked"] > a { border-color: var(--warning); }
+.member-shortcuts { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1rem; margin-top: .75rem; }
+.member-shortcuts a { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--primary); text-decoration: underline; font-weight: 600; }
+.member-details { margin-top: .75rem; max-width: 52rem; border-top: 1px solid var(--border-strong); }
+.member-details summary { min-height: 2.75rem; padding-block: .65rem; color: var(--primary); cursor: pointer; font-weight: 600; }
+.member-details p, .member-details .field-label, .member-details .button, .member-details h2 { margin-block: .6rem; line-height: 1.5; }
+.member-details .field-label { display: grid; gap: .4rem; }
+.member-details .field-control { width: 100%; min-width: 0; font-size: 1rem; }
+.member-progress-mobile { display: none; }
+@media (max-width: 599px) {
+  .member-progress > ol { display: none; }
+  .member-progress-mobile { display: block; }
+  .member-progress-mobile summary { min-height: 2.75rem; padding-block: .65rem; cursor: pointer; color: var(--primary); }
+  .member-progress-mobile ol { grid-template-columns: 1fr; }
+  .member-progress-mobile li > a, .member-progress-mobile li > span { flex-direction: row; justify-content: space-between; gap: .5rem; min-height: 2.75rem; }
+  .member-home { padding-top: 1rem; }
+}
+
+/* Expanded operational history stays in the page flow, including narrow screens. */
+.member-details .stepper.journey-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); overflow: visible; }
+.member-details .journey-steps li { flex-direction: row; padding-bottom: .75rem; }
+.member-details .journey-steps li::after { display: none; }
+.member-details .journey-steps small { font-size: 1rem; }
