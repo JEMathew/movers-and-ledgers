@@ -1,0 +1,44 @@
+{
+  "environment": "local disposable synthetic API, deterministic-only, in-memory; demo identity",
+  "method": "SHA256 of sorted JSON for the same six authoritative snapshot fields before and after contextual evidence/help navigation and one explicit fallback advisory request. Activity/events may append advice audit records. No financial actions performed in browser.",
+  "fields": [
+    "workflow_status",
+    "human_decisions",
+    "discovery",
+    "execution",
+    "configuration",
+    "onboarding"
+  ],
+  "results": [
+    {
+      "phase": "understand",
+      "before": "e4846431f3bd2dddb6fe7797bafe40386be65a5d58b7bdaad9d488ebeb7c09a4",
+      "after": "e4846431f3bd2dddb6fe7797bafe40386be65a5d58b7bdaad9d488ebeb7c09a4",
+      "unchanged": true
+    },
+    {
+      "phase": "prepare",
+      "before": "51de3de90809c5a82e60a8c6d3d2787253de72f34cfc444e73ef6c21745fb395",
+      "after": "51de3de90809c5a82e60a8c6d3d2787253de72f34cfc444e73ef6c21745fb395",
+      "unchanged": true
+    },
+    {
+      "phase": "move",
+      "before": "ec7ffdace1b2cee1c24deb0e32509fb73e25aa999439ab215de56c0dded13576",
+      "after": "ec7ffdace1b2cee1c24deb0e32509fb73e25aa999439ab215de56c0dded13576",
+      "unchanged": true
+    },
+    {
+      "phase": "verify",
+      "before": "0bbd21a63977c394b78de950f3489723a9b3439822089f324c11e8dcc74948f4",
+      "after": "0bbd21a63977c394b78de950f3489723a9b3439822089f324c11e8dcc74948f4",
+      "unchanged": true
+    },
+    {
+      "phase": "start",
+      "before": "9dd852164884d3e6ce509a4c209e58860d0744f8ebfd7556239bf785edb413bf",
+      "after": "9dd852164884d3e6ce509a4c209e58860d0744f8ebfd7556239bf785edb413bf",
+      "unchanged": true
+    }
+  ]
+}

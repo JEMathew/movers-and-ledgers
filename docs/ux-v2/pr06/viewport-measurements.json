@@ -1,0 +1,187 @@
+{
+  "method": "Rendered DOM after hydration. Document height includes closed summaries and footer; visible main words exclude closed details. Actual local synthetic snapshots, no mocked screenshot payloads.",
+  "before": [
+    {
+      "screen": "evidence",
+      "documentHeight": 16406,
+      "h1": 1,
+      "height": 900,
+      "primary": [
+        {
+          "bottom": 635.0703125,
+          "label": "Return to migration"
+        }
+      ],
+      "scrollWidth": 1440,
+      "visibleWords": 1216,
+      "width": 1440
+    },
+    {
+      "screen": "help",
+      "documentHeight": 1082,
+      "h1": 1,
+      "height": 900,
+      "primary": [
+        {
+          "bottom": 442.1171875,
+          "label": "Open Move for this issue"
+        }
+      ],
+      "scrollWidth": 1440,
+      "visibleWords": 140,
+      "width": 1440
+    },
+    {
+      "screen": "help",
+      "documentHeight": 1306,
+      "h1": 1,
+      "height": 844,
+      "primary": [
+        {
+          "bottom": 468.8359375,
+          "label": "Open Move for this issue"
+        }
+      ],
+      "scrollWidth": 390,
+      "visibleWords": 140,
+      "width": 390
+    },
+    {
+      "screen": "evidence",
+      "documentHeight": 18927,
+      "h1": 1,
+      "height": 844,
+      "primary": [
+        {
+          "bottom": 647.8671875,
+          "label": "Return to migration"
+        }
+      ],
+      "scrollWidth": 677,
+      "visibleWords": 1216,
+      "width": 390
+    }
+  ],
+  "after": [
+    {
+      "screen": "evidence",
+      "documentHeight": 2553,
+      "h1": 1,
+      "height": 844,
+      "primary": [
+        {
+          "bottom": 417.4765625,
+          "label": "Return to migration"
+        }
+      ],
+      "scrollWidth": 390,
+      "visibleWords": 239,
+      "width": 390
+    },
+    {
+      "screen": "help",
+      "documentHeight": 1587,
+      "h1": 1,
+      "height": 844,
+      "primary": [
+        {
+          "bottom": 560.8359375,
+          "label": "Open Move for this issue"
+        }
+      ],
+      "scrollWidth": 390,
+      "visibleWords": 168,
+      "width": 390
+    },
+    {
+      "screen": "help",
+      "documentHeight": 1283,
+      "h1": 1,
+      "height": 900,
+      "primary": [
+        {
+          "bottom": 510.1171875,
+          "label": "Open Move for this issue"
+        }
+      ],
+      "scrollWidth": 1440,
+      "visibleWords": 168,
+      "width": 1440
+    },
+    {
+      "screen": "evidence",
+      "documentHeight": 2381,
+      "h1": 1,
+      "height": 900,
+      "primary": [
+        {
+          "bottom": 404.6796875,
+          "label": "Return to migration"
+        }
+      ],
+      "scrollWidth": 1440,
+      "visibleWords": 239,
+      "width": 1440
+    },
+    {
+      "screen": "evidence",
+      "documentHeight": 2337,
+      "h1": 1,
+      "height": 1024,
+      "primary": [
+        {
+          "bottom": 373.4765625,
+          "label": "Return to migration"
+        }
+      ],
+      "scrollWidth": 768,
+      "visibleWords": 239,
+      "width": 768
+    },
+    {
+      "screen": "help",
+      "documentHeight": 1267,
+      "h1": 1,
+      "height": 1024,
+      "primary": [
+        {
+          "bottom": 492.8359375,
+          "label": "Open Move for this issue"
+        }
+      ],
+      "scrollWidth": 768,
+      "visibleWords": 168,
+      "width": 768
+    },
+    {
+      "screen": "help",
+      "documentHeight": 1763,
+      "h1": 1,
+      "height": 700,
+      "primary": [
+        {
+          "bottom": 588.8359375,
+          "label": "Open Move for this issue"
+        }
+      ],
+      "scrollWidth": 320,
+      "visibleWords": 168,
+      "width": 320
+    },
+    {
+      "screen": "evidence",
+      "documentHeight": 2861,
+      "h1": 1,
+      "height": 700,
+      "primary": [
+        {
+          "bottom": 480.03125,
+          "label": "Return to migration"
+        }
+      ],
+      "scrollWidth": 320,
+      "visibleWords": 239,
+      "width": 320
+    }
+  ]
+}

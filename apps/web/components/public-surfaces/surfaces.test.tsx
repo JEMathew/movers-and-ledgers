@@ -30,7 +30,7 @@ const evidence = {
   chain_of_thought: "PRIVATE_REASONING", prompt: "PRIVATE_PROMPT", secret: "PRIVATE_SECRET",
 };
 
-vi.mock("next/navigation", () => ({ useRouter: () => ({ replace: vi.fn() }), usePathname: () => window.location.pathname }));
+vi.mock("next/navigation", () => ({ useSearchParams: () => new URLSearchParams(window.location.search), useRouter: () => ({ replace: vi.fn() }), usePathname: () => window.location.pathname }));
 
 describe("public surface contracts", () => {
   it.each([
@@ -187,7 +187,10 @@ describe("public surface contracts", () => {
     window.history.replaceState(null, "", `/trust?session=${id}`);
     const fetch = vi.spyOn(globalThis, "fetch").mockImplementation(() => json(evidence));
     render(<Trust evidenceMode/>);
-    expect(await screen.findByText("Assessment Agent reviewed source evidence")).toBeVisible();
+    await screen.findByRole("heading", { name: "Current journey stage: Move" });
+    fireEvent.change(screen.getByLabelText("Evidence category"), { target: { value: "activity" } });
+    expect(screen.getByText("Assessment Agent reviewed source evidence")).toBeVisible();
+    fireEvent.click(screen.getByText("Assessment Agent reviewed source evidence"));
     expect(screen.getByRole("heading", { name: "Current journey stage: Move" })).toBeVisible();
     expect(screen.getByText("Tool: check_balance")).toBeVisible();
     expect(document.body.textContent).not.toContain("PRIVATE_");
@@ -252,7 +255,7 @@ describe("public surface contracts", () => {
     render(<Support/>);
     expect(screen.getByRole("heading", { name: "Validation mismatch" })).toBeVisible();
     expect(screen.getByRole("link", { name: "Open Verify for this issue" })).toHaveAttribute("href", `/validate-configure?session=${id}`);
-    expect(screen.getByRole("link", { name: "Learn about this step" })).toHaveAttribute("href", "/learn#reconciliation");
+    expect(screen.getByRole("link", { name: "Learn about this step" })).toHaveAttribute("href", `/learn?session=${id}&stage=3#reconciliation`);
     expect(screen.getByRole("link", { name: "Prepare unsent issue draft" }).getAttribute("href")).not.toContain("raw_data");
     expect(fetch).not.toHaveBeenCalled();
   });

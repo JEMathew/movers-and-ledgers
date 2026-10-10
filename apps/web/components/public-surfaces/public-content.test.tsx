@@ -11,7 +11,7 @@ import { topics } from "./content";
 import * as identityLib from "@/lib/identity";
 const id = "11111111-1111-4111-8111-111111111111";
 const state = vi.hoisted(() => ({ replace: vi.fn(), identity: null as null | { uid: string } }));
-vi.mock("next/navigation", () => ({ redirect: (url: string) => { throw new Error(`REDIRECT:${url}`); } }));
+vi.mock("next/navigation", () => ({ useSearchParams: () => new URLSearchParams(window.location.search), redirect: (url: string) => { throw new Error(`REDIRECT:${url}`); } }));
 vi.mock("@/components/IdentityProvider", () => ({ useIdentity: () => ({ identity: state.identity, ready: false, busy: false, hasSession: false, error: "", signIn: vi.fn() }) }));
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllEnvs(); state.identity = null; state.replace.mockReset(); });
 

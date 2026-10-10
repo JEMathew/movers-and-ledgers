@@ -493,3 +493,9 @@ button, input, select, textarea { font: inherit; }
   .phase-progress > ol { display: none; }
   .phase-progress .phase-mobile-history { display: grid !important; grid-template-columns: 1fr; }
 }
+
+/* Redacted evidence is a readable snapshot, including long supplied references. */
+.evidence-records, .evidence-record, .public-detail { min-width: 0; overflow-wrap: anywhere; }
+.evidence-record > summary { padding: .75rem; border: 1px solid var(--border); border-radius: .5rem; }
+.evidence-record > summary strong, .evidence-record .public-detail { font-size: 1rem; }
+.evidence-record .badge { white-space: normal; }

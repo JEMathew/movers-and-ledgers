@@ -48,12 +48,12 @@ export function projectSession(raw: unknown, expectedId: string): SessionView {
   const status = text(s.workflow_status);
   const phase = phaseFor(status);
   if (s.id !== expectedId || s.synthetic !== true || phase === null) throw new Error("Unsupported session evidence. Open the original workflow; no success is inferred.");
-  const activity = list(s.activity).map(a => ({ id: text(a.id), title: text(a.action), kind: a.provenance === "DETERMINISTIC" ? "Rule-backed agent action" : a.provenance === "HUMAN" ? "Human decision" : "AI recommendation", status: text(a.status), time: text(a.occurred_at), actor: text(a.agent), tool: text(a.tool), evidence: refs(a.evidence_references) }));
+  const activity = list(s.activity).map(a => ({ id: text(a.id), title: text(a.action), kind: a.provenance === "DETERMINISTIC" ? "Rule-backed agent action" : a.provenance === "HUMAN" ? "Human decision" : ["AI_ML", "GENAI"].includes(text(a.provenance)) ? "AI recommendation" : "Provenance not supplied", status: text(a.status), time: text(a.occurred_at), actor: text(a.agent), tool: text(a.tool), evidence: refs(a.evidence_references) }));
   const decisions = list(s.human_decisions).map(d => ({ id: text(d.id), title: `${text(d.stage)} · ${text(d.decision)}`, kind: "Human decision", status: text(d.decision), time: text(d.occurred_at), actor: text(d.actor), tool: "", evidence: refs(d.evidence) }));
   const report = list(s.validation_reports).at(-1);
   const checks = list(report?.checks).map(c => ({ id: text(c.id), title: text(c.label), kind: "Deterministic verification", status: text(c.status), time: text(report?.created_at), actor: "Validation rules", tool: "", evidence: refs(c.evidence) }));
   const fpu = object(object(s.onboarding).fpu);
-  checks.push(...list(fpu.checks).map(c => ({ id: text(c.id), title: text(c.id).replaceAll("_", " "), kind: "Deterministic verification", status: c.passed === true ? "VERIFIED" : "BLOCKED", time: text(fpu.verified_at), actor: "First productive use rules", tool: "", evidence: refs(c.evidence) })));
+  checks.push(...list(fpu.checks).map(c => ({ id: text(c.id), title: text(c.id).replaceAll("_", " "), kind: "Deterministic verification", status: c.passed === true ? "VERIFIED" : c.passed === false ? "BLOCKED" : "UNCONFIRMED", time: text(fpu.verified_at), actor: "First productive use rules", tool: "", evidence: refs(c.evidence) })));
   // Each item has a plain title for primary screens and the internal detail (codes, states)
   // kept as evidence for the Trust page and support.
   const readiness: Attention[] = list(object(s.discovery).findings).filter(f => f.category === "BLOCKER").map(f => ({ title: `Readiness blocker: ${text(f.title)}`, evidence: `Discovery finding: ${text(f.title)}` }));

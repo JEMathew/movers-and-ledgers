@@ -1,0 +1,51 @@
+{
+  "baseline": "9c8e88d4ca01d1873240b3c1d6c19a65d03da518",
+  "prerequisite": {
+    "pr": 34,
+    "merged": true,
+    "mergedAt": "2026-10-10T20:55:53Z",
+    "verification": "GitHub API get_pr_info; one verification before branch creation"
+  },
+  "initialTree": "clean",
+  "checks": {
+    "focusedFrontend": "59 tests / 4 files passed",
+    "fullFrontend": "583 tests / 45 files passed",
+    "lint": "passed",
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "financialAuthorizationRecovery": "242 tests passed; one inherited Starlette/httpx deprecation warning"
+  },
+  "financialTestFiles": [
+    "test_journey_evidence.py",
+    "test_mapping_reconsideration.py",
+    "test_explicit_plan_approval.py",
+    "test_plan_map_approve.py",
+    "test_migrate_resolve.py",
+    "test_validate_configure.py",
+    "test_onboard_fpu.py",
+    "test_onboard_cloud_owner.py",
+    "test_beta_v1_integration.py",
+    "test_assessment_idempotency.py",
+    "test_live_reasoning.py"
+  ],
+  "unchangedContracts": {
+    "services": true,
+    "domain": true,
+    "agents": true,
+    "tools": true,
+    "tests": true,
+    "infra": true,
+    ".github": true,
+    "apps/web/lib/identity.ts": true,
+    "apps/web/components/IdentityProvider.tsx": true,
+    "apps/web/components/journey": true,
+    "apps/web/components/phases": true,
+    "apps/web/package.json": true,
+    "apps/web/package-lock.json": true,
+    "Dockerfile": true,
+    "docker-compose.yml": true
+  },
+  "browser": "Local synthetic in-memory API, demo identity, deterministic-only; no financial browser writes; cloud auth visual not performed",
+  "deployed": false,
+  "merged": false
+}

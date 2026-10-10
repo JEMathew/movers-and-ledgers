@@ -11,6 +11,11 @@ const capabilities: Record<string, string[]> = {
   "/validate-configure": ["configuration"],
   "/onboard-fpu": ["onboarding"],
 };
+const nextActions: Record<string, string> = {
+  REVIEW_EXISTING_PROPOSAL: "Review the existing proposal",
+  REQUEST_MORE_EVIDENCE: "Review missing evidence in the current task",
+  ESCALATE: "Stop for human review in the current task",
+};
 type Result = {
   state: string; provider: string; model: string | null; requested_at: string;
   context_hash: string; failure_category: string | null; confidence_note: string;
@@ -54,27 +59,31 @@ function WorkspaceAdvice({ path, session }: { path: string; session: string }) {
   }
   return <section className="panel mt-4 p-5" aria-label="Optional reasoning guidance">
     <h2 className="type-card">Reasoning guidance · advisory only</h2>
-    <p className="mt-2 text-sm text-secondary">Optional explanations of existing synthetic proposals. Rules remain authoritative; approvals and workflow actions stay in the controls above. No uploads are sent. Live Gemini requires explicit operator configuration; otherwise versioned fallback guidance is shown.</p>
+    <p className="mt-2 text-sm text-secondary">Optional advice about the current proposal. It cannot approve, retry, post or verify. The public Beta uses deterministic fallback; live Gemini requires explicit operator configuration.</p>
     <div className="mt-3 flex flex-wrap gap-2">{capabilities[path].map(capability => <button className="button secondary small" type="button" key={capability} disabled={busy} onClick={() => request(capability)}>Explain {capability}</button>)}</div>
     <p role="status" className="mt-2 text-sm">{busy ? "Preparing bounded guidance…" : result ? `Guidance: ${result.state}` : "No reasoning requested."}</p>
     {error && <p role="alert" className="mt-3">{error}</p>}
     {result && <div className="mt-4 space-y-3 text-sm">
       <p className="font-semibold">{result.state === "UNAVAILABLE" ? "Guidance unavailable — no recommendation" : result.provider === "gemini-adk" && result.state !== "FALLBACK" ? "AI-generated recommendation" : "Deterministic fallback — not live AI"} · Human review required</p>
-      <p>Snapshot from {result.requested_at}. AI text is unverified guidance, not a current approval or financial verification result; recheck the workflow before deciding.</p>
+      <p>Snapshot from {result.requested_at}. Guidance is not a current approval or financial verification result; recheck the workflow before deciding.</p>
       {result.failure_category && <p>Fallback/unavailable category: {result.failure_category}</p>}
-      {result.advice && <>
-        <p><strong>Observation:</strong> {result.advice.observation}</p>
-        <p><strong>Inference:</strong> {result.advice.inference}</p>
+      {result.advice && result.state !== "UNAVAILABLE" && <>
         <p><strong>Recommendation:</strong> {result.advice.recommendation}</p>
-        <p><strong>Why:</strong> {result.advice.rationale}</p>
         <p>Confidence: {result.advice.confidence}. {result.confidence_note}</p>
-        <p>Next step: {result.advice.next_action.replaceAll("_", " ")}</p>
-        <p>Uncertainty: {result.advice.uncertainty.join(" · ")}</p>
-        <p>Alternatives: {result.advice.alternatives.join(" · ")}</p>
-        <details><summary className="cursor-pointer">Evidence and deterministic boundaries</summary>
-          <ul className="mt-2 break-words">{result.advice.evidence_references.map(ref => <li key={ref}>{ref}{result.evidence?.find(fact => fact.reference === ref) ? ` — ${result.evidence.find(fact => fact.reference === ref)?.observation}` : ""}</li>)}</ul>
-          <ul className="mt-2">{result.deterministic_results.map(item => <li key={item}>{item}</li>)}</ul>
-        </details>
+        <p>Uncertainty: {result.advice.uncertainty.join(" · ") || "Not supplied"}</p>
+        <p>Next step: {nextActions[result.advice.next_action] ?? "Review the current task; no action is authorized by this advice"}</p>
+        <details className="public-disclosure"><summary>Explanation and alternatives</summary><div className="public-detail">
+          <p><strong>Observation:</strong> {result.advice.observation}</p>
+          <p><strong>Inference:</strong> {result.advice.inference}</p>
+          <p><strong>Why:</strong> {result.advice.rationale}</p>
+          <p>Alternatives: {result.advice.alternatives.join(" · ")}</p>
+        </div></details>
+        <details className="public-disclosure"><summary>Evidence and deterministic boundaries</summary><div className="public-detail">
+          <ul className="break-words">{result.advice.evidence_references.map(ref => <li key={ref}>{ref}{result.evidence?.find(fact => fact.reference === ref) ? ` — ${result.evidence.find(fact => fact.reference === ref)?.observation}` : ""}</li>)}</ul>
+          <ul>{result.deterministic_results.map(item => <li key={item}>{item}</li>)}</ul>
+          <p>Context reference: {result.context_hash || "Not supplied"}. Advice belongs to this snapshot; review fresh task evidence before any decision.</p>
+          <p>Supplied next-action code: {result.advice.next_action || "Not supplied"}</p>
+        </div></details>
       </>}
     </div>}
   </section>;
