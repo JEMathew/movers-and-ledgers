@@ -1,5 +1,5 @@
-// The operational journey a signed-in customer moves through. The five marketing phases
-// (Understand, Prepare, Move, Verify, Start) stay in explanatory content only.
+// Stable operational steps shared by all reads and task pages. Customer-facing
+// Understand → Prepare → Move → Verify → Start projects these into five phases.
 export const journeySteps = [
   { label: "Assess", route: "/assess", summary: "Understand readiness and risks" },
   { label: "Plan", route: "/plan-map-approve", summary: "Define what will move" },

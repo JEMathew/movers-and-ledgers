@@ -1,0 +1,51 @@
+{
+  "baseline": "146dbd2ebbdb55893c8559d3ed1cc10c2c932858",
+  "frontend": {
+    "tests": 558,
+    "files": 44,
+    "result": "PASS",
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "production_build": "PASS"
+  },
+  "financial_regressions": {
+    "tests": 184,
+    "result": "PASS",
+    "warning": "Inherited Starlette/httpx deprecation"
+  },
+  "browser": "Actual local API, demo identity, in-memory synthetic state, deterministic-only; no cloud resources",
+  "repository_checks": {
+    "markdown": 105,
+    "text_files": 462,
+    "findings": 0,
+    "result": "PASS"
+  },
+  "whitespace": "PASS",
+  "recommendation": "ACCEPT for review; required CI remains authoritative",
+  "images": {
+    "count": 29,
+    "pixel_dimensions": "PASS"
+  },
+  "navigation": {
+    "routes": [
+      "/",
+      "/assess",
+      "/feedback",
+      "/guide",
+      "/learn",
+      "/migrate-resolve",
+      "/onboard-fpu",
+      "/plan-map-approve",
+      "/play",
+      "/simulator",
+      "/support",
+      "/trust",
+      "/try-your-data",
+      "/validate-configure",
+      "/workspace"
+    ],
+    "missing": [],
+    "result": "PASS",
+    "workflow_browser_handoffs": "Understand\u2192Prepare\u2192Move\u2192Verify\u2192Start\u2192Trust; Help retained selected reference"
+  }
+}

@@ -460,3 +460,36 @@ button, input, select, textarea { font: inherit; }
 .member-details .journey-steps li { flex-direction: row; padding-bottom: .75rem; }
 .member-details .journey-steps li::after { display: none; }
 .member-details .journey-steps small { font-size: 1rem; }
+
+/* PR05: compact task pages, with optional history in the document flow. */
+.migration-task { padding-block: 1.5rem; min-width: 0; overflow-wrap: anywhere; }
+.migration-task .type-page { margin-top: .5rem; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; }
+.migration-task header p:not(.eyebrow) { margin-top: .5rem; font-size: 1rem; line-height: 1.5; }
+.migration-task .button, .migration-task summary { min-height: 2.75rem; font-size: 1rem; }
+.migration-task summary { display: flex; align-items: center; cursor: pointer; padding-block: .5rem; font-weight: 650; }
+.migration-task .field-control { font-size: 1rem; min-width: 0; }
+.migration-task .task-context { display: flex; flex-wrap: wrap; gap: .25rem 1rem; margin-top: .5rem; }
+.task-context a { min-height: 2.75rem; display: inline-flex; align-items: center; text-decoration: underline; }
+.phase-progress { margin-block: 1rem; }
+.phase-progress .operational-history { margin-top: .35rem; }
+.phase-progress .journey-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
+.phase-progress .journey-steps li { min-width: 0; }
+.phase-progress .journey-steps strong { overflow-wrap: anywhere; }
+.task-outcome { margin-top: 1rem; }
+.task-outcome h2 { font-size: 1.25rem; }
+.task-outcome p { line-height: 1.5; }
+.review-queue { display: grid; gap: .75rem; margin-top: 1rem; }
+.review-queue > label { font-weight: 650; }
+.migration-task pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .migration-task { padding-block: 1rem; }
+  .phase-progress .journey-steps { grid-template-columns: 1fr; }
+  .migration-task .panel, .migration-task .card { padding: 1rem; }
+}
+.migration-task > div:first-child > p:not(.eyebrow) { margin-top: .5rem; font-size: 1rem; line-height: 1.5; }
+.migration-task .assessment-summary .type-financial { font-size: 1.5rem; line-height: 1.2; }
+.phase-mobile-history { display: none !important; }
+@media (max-width: 600px) {
+  .phase-progress > ol { display: none; }
+  .phase-progress .phase-mobile-history { display: grid !important; grid-template-columns: 1fr; }
+}

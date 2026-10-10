@@ -1,0 +1,523 @@
+[
+  {
+    "phase": "understand",
+    "links": [
+      {
+        "href": "/",
+        "label": "MMoveBooks AI"
+      },
+      {
+        "href": "/play",
+        "label": "Play"
+      },
+      {
+        "href": "/simulator",
+        "label": "Explore Demo"
+      },
+      {
+        "href": "/play",
+        "label": "Play"
+      },
+      {
+        "href": "/learn",
+        "label": "Learn"
+      },
+      {
+        "href": "/trust",
+        "label": "Trust"
+      },
+      {
+        "href": "/support",
+        "label": "Help"
+      },
+      {
+        "href": "/workspace",
+        "label": "My Migration"
+      },
+      {
+        "href": "/workspace?session=0e6eeca9-b171-52c8-8370-5d2c721d2574",
+        "label": "My Migration"
+      },
+      {
+        "href": "/support?session=0e6eeca9-b171-52c8-8370-5d2c721d2574&stage=0",
+        "label": "Help"
+      },
+      {
+        "href": "/trust?view=evidence&session=0e6eeca9-b171-52c8-8370-5d2c721d2574",
+        "label": "Evidence"
+      },
+      {
+        "href": "/assess?session=0e6eeca9-b171-52c8-8370-5d2c721d2574",
+        "label": "UnderstandCompleted"
+      },
+      {
+        "href": "/plan-map-approve?session=0e6eeca9-b171-52c8-8370-5d2c721d2574",
+        "label": "PrepareCurrent"
+      },
+      {
+        "href": "/assess?session=0e6eeca9-b171-52c8-8370-5d2c721d2574",
+        "label": "UnderstandCompleted"
+      },
+      {
+        "href": "/plan-map-approve?session=0e6eeca9-b171-52c8-8370-5d2c721d2574",
+        "label": "PrepareCurrent"
+      },
+      {
+        "href": "/plan-map-approve?session=0e6eeca9-b171-52c8-8370-5d2c721d2574",
+        "label": "Create My Migration Plan"
+      },
+      {
+        "href": "/try-your-data",
+        "label": "Choose Test Files"
+      },
+      {
+        "href": "/learn?stage=0#evidence",
+        "label": "Learn About Understand"
+      },
+      {
+        "href": "/trust",
+        "label": "Trust & Evidence"
+      },
+      {
+        "href": "/support?stage=0",
+        "label": "Get Help with This Step"
+      },
+      {
+        "href": "/guide",
+        "label": "Getting Started Guide"
+      },
+      {
+        "href": "/support",
+        "label": "Help"
+      },
+      {
+        "href": "/feedback",
+        "label": "Feedback"
+      },
+      {
+        "href": "/trust#beta-limitations",
+        "label": "Beta Limitations"
+      }
+    ]
+  },
+  {
+    "phase": "prepare",
+    "links": [
+      {
+        "href": "/",
+        "label": "MMoveBooks AI"
+      },
+      {
+        "href": "/play",
+        "label": "Play"
+      },
+      {
+        "href": "/simulator",
+        "label": "Explore Demo"
+      },
+      {
+        "href": "/play",
+        "label": "Play"
+      },
+      {
+        "href": "/learn",
+        "label": "Learn"
+      },
+      {
+        "href": "/trust",
+        "label": "Trust"
+      },
+      {
+        "href": "/support",
+        "label": "Help"
+      },
+      {
+        "href": "/workspace",
+        "label": "My Migration"
+      },
+      {
+        "href": "/workspace?session=3d685219-4eee-5edf-a3a9-999b7bb9402c",
+        "label": "My Migration"
+      },
+      {
+        "href": "/support?session=3d685219-4eee-5edf-a3a9-999b7bb9402c&stage=1",
+        "label": "Help"
+      },
+      {
+        "href": "/trust?view=evidence&session=3d685219-4eee-5edf-a3a9-999b7bb9402c",
+        "label": "Evidence"
+      },
+      {
+        "href": "/assess?session=3d685219-4eee-5edf-a3a9-999b7bb9402c",
+        "label": "UnderstandCompleted"
+      },
+      {
+        "href": "/plan-map-approve?session=3d685219-4eee-5edf-a3a9-999b7bb9402c",
+        "label": "PrepareCurrent"
+      },
+      {
+        "href": "/assess?session=3d685219-4eee-5edf-a3a9-999b7bb9402c",
+        "label": "UnderstandCompleted"
+      },
+      {
+        "href": "/plan-map-approve?session=3d685219-4eee-5edf-a3a9-999b7bb9402c",
+        "label": "PrepareCurrent"
+      },
+      {
+        "href": "/learn?stage=1#mappings",
+        "label": "Learn About Prepare"
+      },
+      {
+        "href": "/trust",
+        "label": "Trust & Evidence"
+      },
+      {
+        "href": "/support?stage=1",
+        "label": "Get Help with This Step"
+      },
+      {
+        "href": "/guide",
+        "label": "Getting Started Guide"
+      },
+      {
+        "href": "/support",
+        "label": "Help"
+      },
+      {
+        "href": "/feedback",
+        "label": "Feedback"
+      },
+      {
+        "href": "/trust#beta-limitations",
+        "label": "Beta Limitations"
+      }
+    ]
+  },
+  {
+    "phase": "move",
+    "links": [
+      {
+        "href": "/",
+        "label": "MMoveBooks AI"
+      },
+      {
+        "href": "/play",
+        "label": "Play"
+      },
+      {
+        "href": "/simulator",
+        "label": "Explore Demo"
+      },
+      {
+        "href": "/play",
+        "label": "Play"
+      },
+      {
+        "href": "/learn",
+        "label": "Learn"
+      },
+      {
+        "href": "/trust",
+        "label": "Trust"
+      },
+      {
+        "href": "/support",
+        "label": "Help"
+      },
+      {
+        "href": "/workspace",
+        "label": "My Migration"
+      },
+      {
+        "href": "/workspace?session=62c1caed-ec2c-4a85-8d83-b8ea112dd6c0",
+        "label": "My Migration"
+      },
+      {
+        "href": "/support?session=62c1caed-ec2c-4a85-8d83-b8ea112dd6c0&stage=2",
+        "label": "Help"
+      },
+      {
+        "href": "/trust?view=evidence&session=62c1caed-ec2c-4a85-8d83-b8ea112dd6c0",
+        "label": "Evidence"
+      },
+      {
+        "href": "/assess?session=62c1caed-ec2c-4a85-8d83-b8ea112dd6c0",
+        "label": "UnderstandCompleted"
+      },
+      {
+        "href": "/plan-map-approve?session=62c1caed-ec2c-4a85-8d83-b8ea112dd6c0",
+        "label": "PrepareCompleted"
+      },
+      {
+        "href": "/migrate-resolve?session=62c1caed-ec2c-4a85-8d83-b8ea112dd6c0",
+        "label": "MoveNeeds Attention"
+      },
+      {
+        "href": "/assess?session=62c1caed-ec2c-4a85-8d83-b8ea112dd6c0",
+        "label": "UnderstandCompleted"
+      },
+      {
+        "href": "/plan-map-approve?session=62c1caed-ec2c-4a85-8d83-b8ea112dd6c0",
+        "label": "PrepareCompleted"
+      },
+      {
+        "href": "/migrate-resolve?session=62c1caed-ec2c-4a85-8d83-b8ea112dd6c0",
+        "label": "MoveNeeds Attention"
+      },
+      {
+        "href": "/learn?stage=2#recovery",
+        "label": "Learn About Move"
+      },
+      {
+        "href": "/trust",
+        "label": "Trust & Evidence"
+      },
+      {
+        "href": "/support?stage=2",
+        "label": "Get Help with This Step"
+      },
+      {
+        "href": "/guide",
+        "label": "Getting Started Guide"
+      },
+      {
+        "href": "/support",
+        "label": "Help"
+      },
+      {
+        "href": "/feedback",
+        "label": "Feedback"
+      },
+      {
+        "href": "/trust#beta-limitations",
+        "label": "Beta Limitations"
+      }
+    ]
+  },
+  {
+    "phase": "verify",
+    "links": [
+      {
+        "href": "/",
+        "label": "MMoveBooks AI"
+      },
+      {
+        "href": "/play",
+        "label": "Play"
+      },
+      {
+        "href": "/simulator",
+        "label": "Explore Demo"
+      },
+      {
+        "href": "/play",
+        "label": "Play"
+      },
+      {
+        "href": "/learn",
+        "label": "Learn"
+      },
+      {
+        "href": "/trust",
+        "label": "Trust"
+      },
+      {
+        "href": "/support",
+        "label": "Help"
+      },
+      {
+        "href": "/workspace",
+        "label": "My Migration"
+      },
+      {
+        "href": "/workspace?session=85d1aa8f-41eb-5fc8-abe8-e65322e2d7d9",
+        "label": "My Migration"
+      },
+      {
+        "href": "/support?session=85d1aa8f-41eb-5fc8-abe8-e65322e2d7d9&stage=3",
+        "label": "Help"
+      },
+      {
+        "href": "/trust?view=evidence&session=85d1aa8f-41eb-5fc8-abe8-e65322e2d7d9",
+        "label": "Evidence"
+      },
+      {
+        "href": "/assess?session=85d1aa8f-41eb-5fc8-abe8-e65322e2d7d9",
+        "label": "UnderstandCompleted"
+      },
+      {
+        "href": "/plan-map-approve?session=85d1aa8f-41eb-5fc8-abe8-e65322e2d7d9",
+        "label": "PrepareCompleted"
+      },
+      {
+        "href": "/migrate-resolve?session=85d1aa8f-41eb-5fc8-abe8-e65322e2d7d9",
+        "label": "MoveCompleted"
+      },
+      {
+        "href": "/validate-configure?session=85d1aa8f-41eb-5fc8-abe8-e65322e2d7d9",
+        "label": "VerifyNeeds Attention"
+      },
+      {
+        "href": "/assess?session=85d1aa8f-41eb-5fc8-abe8-e65322e2d7d9",
+        "label": "UnderstandCompleted"
+      },
+      {
+        "href": "/plan-map-approve?session=85d1aa8f-41eb-5fc8-abe8-e65322e2d7d9",
+        "label": "PrepareCompleted"
+      },
+      {
+        "href": "/migrate-resolve?session=85d1aa8f-41eb-5fc8-abe8-e65322e2d7d9",
+        "label": "MoveCompleted"
+      },
+      {
+        "href": "/validate-configure?session=85d1aa8f-41eb-5fc8-abe8-e65322e2d7d9",
+        "label": "VerifyNeeds Attention"
+      },
+      {
+        "href": "/learn?stage=3#reconciliation",
+        "label": "Learn About Verify"
+      },
+      {
+        "href": "/trust",
+        "label": "Trust & Evidence"
+      },
+      {
+        "href": "/support?stage=3",
+        "label": "Get Help with This Step"
+      },
+      {
+        "href": "/guide",
+        "label": "Getting Started Guide"
+      },
+      {
+        "href": "/support",
+        "label": "Help"
+      },
+      {
+        "href": "/feedback",
+        "label": "Feedback"
+      },
+      {
+        "href": "/trust#beta-limitations",
+        "label": "Beta Limitations"
+      }
+    ]
+  },
+  {
+    "phase": "start",
+    "links": [
+      {
+        "href": "/",
+        "label": "MMoveBooks AI"
+      },
+      {
+        "href": "/play",
+        "label": "Play"
+      },
+      {
+        "href": "/simulator",
+        "label": "Explore Demo"
+      },
+      {
+        "href": "/play",
+        "label": "Play"
+      },
+      {
+        "href": "/learn",
+        "label": "Learn"
+      },
+      {
+        "href": "/trust",
+        "label": "Trust"
+      },
+      {
+        "href": "/support",
+        "label": "Help"
+      },
+      {
+        "href": "/workspace",
+        "label": "My Migration"
+      },
+      {
+        "href": "/workspace?session=77d03dd6-9a46-5d50-90c1-5dca98f2bfd1",
+        "label": "My Migration"
+      },
+      {
+        "href": "/support?session=77d03dd6-9a46-5d50-90c1-5dca98f2bfd1&stage=4",
+        "label": "Help"
+      },
+      {
+        "href": "/trust?view=evidence&session=77d03dd6-9a46-5d50-90c1-5dca98f2bfd1",
+        "label": "Evidence"
+      },
+      {
+        "href": "/assess?session=77d03dd6-9a46-5d50-90c1-5dca98f2bfd1",
+        "label": "UnderstandCompleted"
+      },
+      {
+        "href": "/plan-map-approve?session=77d03dd6-9a46-5d50-90c1-5dca98f2bfd1",
+        "label": "PrepareCompleted"
+      },
+      {
+        "href": "/migrate-resolve?session=77d03dd6-9a46-5d50-90c1-5dca98f2bfd1",
+        "label": "MoveCompleted"
+      },
+      {
+        "href": "/validate-configure?session=77d03dd6-9a46-5d50-90c1-5dca98f2bfd1",
+        "label": "VerifyCompleted"
+      },
+      {
+        "href": "/onboard-fpu?session=77d03dd6-9a46-5d50-90c1-5dca98f2bfd1",
+        "label": "StartCurrent"
+      },
+      {
+        "href": "/assess?session=77d03dd6-9a46-5d50-90c1-5dca98f2bfd1",
+        "label": "UnderstandCompleted"
+      },
+      {
+        "href": "/plan-map-approve?session=77d03dd6-9a46-5d50-90c1-5dca98f2bfd1",
+        "label": "PrepareCompleted"
+      },
+      {
+        "href": "/migrate-resolve?session=77d03dd6-9a46-5d50-90c1-5dca98f2bfd1",
+        "label": "MoveCompleted"
+      },
+      {
+        "href": "/validate-configure?session=77d03dd6-9a46-5d50-90c1-5dca98f2bfd1",
+        "label": "VerifyCompleted"
+      },
+      {
+        "href": "/onboard-fpu?session=77d03dd6-9a46-5d50-90c1-5dca98f2bfd1",
+        "label": "StartCurrent"
+      },
+      {
+        "href": "/learn?stage=4#business-ready",
+        "label": "Learn About Start"
+      },
+      {
+        "href": "/trust",
+        "label": "Trust & Evidence"
+      },
+      {
+        "href": "/support?stage=4",
+        "label": "Get Help with This Step"
+      },
+      {
+        "href": "/guide",
+        "label": "Getting Started Guide"
+      },
+      {
+        "href": "/support",
+        "label": "Help"
+      },
+      {
+        "href": "/feedback",
+        "label": "Feedback"
+      },
+      {
+        "href": "/trust#beta-limitations",
+        "label": "Beta Limitations"
+      }
+    ]
+  }
+]

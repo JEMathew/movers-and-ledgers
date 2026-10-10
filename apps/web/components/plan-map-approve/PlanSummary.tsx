@@ -23,7 +23,7 @@ export function PlanSummary({ plan, mappings }: { plan: MigrationPlan; mappings:
     <Alert tone={plan.blockers.length ? "warning" : "success"} title={plan.blockers.length ? "Known blockers · migration stays blocked" : "No hard readiness blockers recorded"}>
       {plan.blockers.length ? <><ul className="mt-2 list-disc space-y-1 pl-5">{plan.blockers.map(blocker => <li key={blocker}>{blocker}</li>)}</ul><p className="mt-3">Review these findings and correct the source data. Mapping review and plan approval cannot waive a hard blocker.</p></> : <p className="mt-2">Every mapping still needs your review, followed by explicit plan approval.</p>}
     </Alert>
-    <div className="grid gap-6 lg:grid-cols-2">
+    <details><summary className="cursor-pointer font-semibold">Sequence, review workload and planning evidence</summary><div className="mt-4 grid gap-6 lg:grid-cols-2">
       <Card><h2 className="type-section">Migration Sequence</h2><p className="mt-2 text-sm text-secondary">The synthetic executor processes one dataset per batch in this order, preserving checkpoints if a batch pauses.</p>
         {summary ? <ol className="mt-4 space-y-2">{summary.batches.map((batch, index) => <li key={batch.dataset} className="flex gap-3 text-sm"><span className="font-bold text-primary">{index + 1}.</span><span>{batch.label} · {batch.record_count} records</span></li>)}</ol> : <p className="mt-4 text-sm text-secondary">Batch counts are unavailable for this earlier plan.</p>}
       </Card>
@@ -31,6 +31,6 @@ export function PlanSummary({ plan, mappings }: { plan: MigrationPlan; mappings:
         <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-secondary"><li>Source-to-destination recommendations and supporting evidence</li><li>Warnings and any configuration differences</li><li>Scope, validation expectations and the consequence of plan approval</li></ul>
         <details className="mt-4"><summary className="cursor-pointer text-sm font-semibold">Planning Evidence and Checkpoints</summary><ul className="mt-3 space-y-2 break-words text-sm text-secondary">{plan.risks.map(risk => <li key={risk}>{risk}</li>)}{plan.approvals_required.map(action => <li key={action}>{action}</li>)}{plan.evidence_references.map(evidence => <li key={evidence}>{evidence}</li>)}</ul></details>
       </Card>
-    </div>
+    </div></details>
   </section>;
 }

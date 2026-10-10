@@ -92,14 +92,15 @@ describe("DiscoverAssessExperience", () => {
   });
   it("starts with a synthetic company and routes uploads through controlled intake", () => {
     render(<DiscoverAssessExperience />);
-    expect(screen.getByRole("heading", { name: "Assess My Migration" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Understand Your Books" })).toBeVisible();
     expect(screen.getByRole("combobox", { name: "Sample business" })).toHaveValue("northstar-supplies");
     expect(screen.getByRole("link", { name: "Choose Test Files" })).toHaveAttribute("href", "/try-your-data");
     const journey = screen.getByRole("list", { name: "Migration Journey" });
-    expect(journey).toBeVisible();
+    expect(journey).not.toBeVisible();
+    expect(screen.getAllByRole("list", { name: "Five-phase migration journey" })[0]).toBeVisible();
     // A fresh user is at the start of a real journey, exactly as My Migration shows it.
     expect(journey.querySelector('[aria-current="step"]')).toHaveTextContent("AssessCurrent");
-    expect(screen.getByText("Step 1 of 9 · Assess: Understand readiness and risks")).toBeVisible();
+    expect(screen.getByText("1 of 5 · Understand · Current")).toBeVisible();
     expect(screen.queryByText(/Progress not confirmed|Progress unavailable/)).not.toBeInTheDocument();
   });
 
@@ -197,13 +198,13 @@ describe("DiscoverAssessExperience", () => {
     const evidence = screen.getByText("Show technical evidence");
     const source = screen.getByRole("heading", { name: "Check Another Business" });
     const follows = (a: Element, b: Element) => Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(follows(readiness, issues) && follows(issues, cta) && follows(cta, evidence) && follows(evidence, source)).toBe(true);
+    expect(follows(readiness, cta) && follows(cta, issues) && follows(issues, evidence) && follows(evidence, source)).toBe(true);
     expect(cta).toHaveAttribute("href", "/plan-map-approve?session=session-002");
     expect(within(screen.getByRole("region", { name: "What Needs Attention" })).getByText("Restore the customer or correct the invoice.")).toBeVisible();
     // The CTA reviews blockers; it never claims a repair this product cannot perform.
-    expect(screen.getByText(/Migration stays blocked until the source data is corrected; nothing here can waive a blocker/)).toBeVisible();
+    expect(screen.getByText(/Planning preserves these blockers; migration cannot start until source data is corrected/)).toBeVisible();
     expect(screen.queryByRole("link", { name: /^Resolve/ })).not.toBeInTheDocument();
-    expect(screen.getByText("Nothing has moved, and nothing is approved yet.")).toBeVisible();
+    expect(screen.getByText(/Deterministic assessment/)).toBeVisible();
     expect(screen.getAllByRole("link").filter(link => link.classList.contains("button") && !link.classList.contains("secondary"))).toEqual([cta]);
     expect(screen.getByRole("button", { name: /Start a New Assessment/ })).toHaveClass("secondary");
     expect(screen.getByRole("list", { name: "Migration Journey" }).querySelector('[aria-current="step"]')).toHaveTextContent("PlanCurrent");
@@ -264,7 +265,7 @@ describe("DiscoverAssessExperience", () => {
     const outcome = await screen.findByText(`${company} can move forward. 1 item needs your review first.`);
     // jsdom has no layout: assert the wrap rule the browser check measured (no page overflow at 390px and 1280px).
     const page = outcome.closest("main")!;
-    expect(page).toHaveClass("min-w-0", "[overflow-wrap:anywhere]");
+    expect(page).toHaveClass("migration-task");
     expect(page.className).not.toMatch(/overflow-hidden|truncate/);
   });
 

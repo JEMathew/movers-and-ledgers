@@ -33,7 +33,7 @@ describe("MigrateResolveExperience", () => {
     const fetchMock = vi.spyOn(globalThis,"fetch").mockImplementation(() => jsonResponse({...session,execution:resolving}));
     render(<MigrateResolveExperience />);
     expect(await screen.findByText("Migration paused safely")).toBeVisible();
-    expect(screen.queryByRole("button", {name:/load reviewed manifest/i})).not.toBeInTheDocument();
+    expect(screen.getByText("Standalone synthetic scenario · separate migration").closest("details")).not.toHaveAttribute("open");
     const step = screen.getByText("Migrate", {selector:"strong"}).closest("li");
     expect(step).not.toHaveClass("is-complete");
     // Same reading as My Migration for a paused migration: Resolve needs attention.
@@ -46,8 +46,8 @@ describe("MigrateResolveExperience", () => {
   });
   it("shows the synthetic-only scope and journey before execution", () => {
     render(<MigrateResolveExperience />);
-    expect(screen.getByRole("heading", { name: /execute visibly/i })).toBeInTheDocument();
-    expect(screen.getByText(/no accounting-provider writes/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Move Your Approved Books/i })).toBeInTheDocument();
+    expect(screen.getByText(/no provider writes/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /load reviewed manifest/i })).toBeInTheDocument();
   });
 
@@ -65,7 +65,7 @@ describe("MigrateResolveExperience", () => {
     expect(screen.getByRole("button", { name: /approve resolution/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/25% migration progress/i)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", {name:"Close dialog"}));
-    await waitFor(() => expect(screen.getByRole("heading", {name:/execute visibly/i})).toHaveFocus());
+    await waitFor(() => expect(screen.getByRole("heading", {name:/Move Your Approved Books/i})).toHaveFocus());
   });
 
   it.each([true, false])("keeps evidence governed while activity is pending and records approval=%s before any retry", async (approve) => {
@@ -83,7 +83,7 @@ describe("MigrateResolveExperience", () => {
       .mockImplementationOnce(() => activityResponse)
       .mockImplementationOnce(() => jsonResponse(decided))
       .mockImplementationOnce(() => jsonResponse([]))
-      .mockImplementationOnce(() => jsonResponse({ ...decided, status: "MIGRATION_COMPLETE", progress_percent: 100 }))
+      .mockImplementationOnce(() => jsonResponse({ ...decided, status: "MIGRATION_COMPLETE", safe_to_validate: true, progress_percent: 100 }))
       .mockImplementationOnce(() => jsonResponse([]));
     render(<MigrateResolveExperience />);
     fireEvent.click(screen.getByRole("button", { name: /load reviewed manifest/i }));
@@ -99,7 +99,7 @@ describe("MigrateResolveExperience", () => {
     // Closing or Escape is not a decision, and a late read must not reopen it.
     fireEvent(dialog, new Event("cancel", { cancelable: true, bubbles: true }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /execute visibly/i })).toHaveFocus();
+    expect(screen.getByRole("heading", { name: /Move Your Approved Books/i })).toHaveFocus();
     await act(async () => { finishActivity(await jsonResponse([])); });
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(3);
@@ -111,7 +111,7 @@ describe("MigrateResolveExperience", () => {
     expect(screen.getByRole("dialog", { name: /review proposed resolution/i })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Close dialog" }));
 
-    fireEvent.click(screen.getByRole("button", { name: "Review Resolution Agent proposal" }));
+    fireEvent.click(screen.getByRole("button", { name: "Review 1 Migration Issue" }));
     const reopened = screen.getByRole("dialog", { name: /review proposed resolution/i });
     const decision = within(reopened).getByRole("button", { name: approve ? "Approve resolution" : "Reject and block" });
     expect(decision).toBeEnabled();
@@ -134,7 +134,7 @@ describe("MigrateResolveExperience", () => {
       expect(fetchMock).toHaveBeenCalledTimes(7);
     } else {
       expect(screen.queryByRole("button", { name: /retry failed batch/i })).not.toBeInTheDocument();
-      expect(screen.getByRole("button", { name: "Review Resolution Agent proposal" })).toBeDisabled();
+      expect(screen.queryByRole("button", { name: "Review 1 Migration Issue" })).not.toBeInTheDocument();
       expect(screen.queryByText("Synthetic migration complete")).not.toBeInTheDocument();
     }
   });

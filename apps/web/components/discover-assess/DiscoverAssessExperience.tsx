@@ -13,8 +13,8 @@ import { type RefObject, useEffect, useRef, useState } from "react";
 
 import { Alert } from "@/components/ui/feedback";
 import { Badge, Button, Card, Link, Panel } from "@/components/ui/primitives";
-import { MigrationJourney } from "@/components/journey/MigrationJourney";
-import { NextAction } from "@/components/journey/NextAction";
+import { PhaseProgress, TaskContext } from "@/components/journey/PhaseProgress";
+import { ActionLink } from "@/components/journey/NextAction";
 import { journeyPosition, pendingMappingsIn, PROCESSING, projectJourney, type JourneyEvidence } from "@/components/journey/journey";
 import { StatusBadge } from "@/components/ui/status";
 
@@ -226,27 +226,76 @@ export function DiscoverAssessExperience() {
 
   const running = phase === "discovering" || phase === "assessing";
   const projection = evidence ? projectJourney(evidence) : undefined;
+  const pastAssessment = evidence && !["CREATED", "DISCOVERED", "ASSESSED"].includes(evidence.status);
   const resumable = !!sessionId && !assessment && !running;
   const blockers = discovery?.findings.filter((item) => item.category === "BLOCKER") ?? [];
   const warnings = discovery?.findings.filter((item) => item.category === "WARNING") ?? [];
   const issues = [...blockers, ...warnings];
 
+  const sourcePicker = (
+<section aria-labelledby="sample-heading" className={assessment || resumable ? "mt-14" : "mt-8"}>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h2 id="sample-heading" className="type-section">{assessment || resumable ? "Check Another Business" : "Choose How to Check Your Books"}</h2>
+            <p className="mt-2 text-secondary">MoveBooks never connects to your accounting provider. Use a sample business or a de-identified test export.</p>
+          </div>
+        </div>
+        {discovery?.synthetic === false && <Alert tone="info" title="Current Workspace: Your Test Export"><p>The results above come from your test export, not the sample selector. Starting a sample creates a separate workspace.</p></Alert>}
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <Card className="assessment-source-card border-[var(--primary)]" aria-label="Synthetic business selection">
+            <div className="flex items-start justify-between gap-4">
+              <div className="metric-icon"><Database aria-hidden="true" size={18} /></div>
+              <Badge>Synthetic Data Only</Badge>
+            </div>
+            <h3 className="mt-3 text-xl font-bold">Try a Sample Business</h3>
+            <label className="mt-4 block font-bold">Sample business
+              <select className="field-control mt-2 block w-full" value={sample} disabled={running} onChange={event => setSample(event.target.value)}>
+                <option value="northstar-supplies">Northstar Supplies — Needs Attention</option>
+                <option value="harbor-light-migrate-demo">Harbor Light Books — Ready to Migrate</option>
+              </select>
+            </label>
+            <Button className="mt-6" variant={assessment || sessionId || reading !== "none" ? "secondary" : "primary"} onClick={startAssessment} disabled={running}>
+              {assessment || sessionId ? "Start a New Assessment" : "Check If My Books Are Ready to Migrate"}
+              <ArrowRight aria-hidden="true" size={17} />
+            </Button>
+            <p className="mt-2 text-sm leading-6 text-secondary">
+              {sample === "northstar-supplies" ? "A deliberately imperfect office-supply distributor with duplicates, a missing value, an invalid relationship, and an unsupported setting." : "One synthetic business from discovery to verified first use. You approve key decisions; a controlled migration exception demonstrates safe recovery."}
+            </p>
+
+          </Card>
+          <Card aria-label="Use My Test Export">
+            <div className="flex items-start justify-between gap-4">
+              <div className="metric-icon"><Upload aria-hidden="true" size={18} /></div>
+              <Badge>De-Identified Test Data Only</Badge>
+            </div>
+            <h3 className="mt-3 text-xl font-bold">Use My Test Export</h3>
+            <p className="mt-2 text-sm leading-6 text-secondary">
+              Use supported de-identified accounting files to test the migration flow.
+            </p>
+            <Link className="button secondary mt-6" href="/try-your-data">Choose Test Files</Link>
+          </Card>
+        </div>
+      </section>
+  );
+
   return (
     // Company and record names come from the user's files and can be 200 unbroken characters:
     // wrap them anywhere (as Plan does) rather than widen or hide.
-    <main className="shell min-h-[75vh] min-w-0 py-12 [overflow-wrap:anywhere] sm:py-16">
+    <main className="shell migration-task min-h-[75vh]">
       <header>
         <div className="max-w-3xl">
-          <p className="eyebrow text-primary">Assess</p>
-          <h1 className="type-page mt-4">Assess My Migration</h1>
+          <p className="eyebrow text-primary">Understand</p>
+          <h1 className="type-page mt-4">Understand Your Books</h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-secondary">
             See what can move, what needs attention, and what to address before migration.
           </p>
         </div>
       </header>
 
-      <MigrationJourney
-        className="mt-10"
+      <TaskContext phase={0} session={sessionId} />
+      <p className="mt-2 text-secondary">Synthetic Beta · no real customer or production provider data.</p>
+      <PhaseProgress
+        session={sessionId} status={evidence?.status}
         current={journeyPosition({ selected: reading !== "none" || Boolean(sessionId), loading: reading === "loading", failed: reading === "failed", step: projection?.current ?? 0 })}
         held={projection?.held}
         currentLabel={projection?.currentLabel}
@@ -257,16 +306,21 @@ export function DiscoverAssessExperience() {
       {assessment && discovery && (
         <>
           {/* 1. Outcome and 2. readiness */}
-          <section className="mt-10 motion-enter" aria-labelledby="readiness-heading">
-            <Panel className="assessment-summary">
+          <section className="mt-4 motion-enter" aria-labelledby="readiness-heading">
+            <Panel className="assessment-summary task-outcome">
               <p className="eyebrow text-primary">Are Your Books Ready to Migrate?</p>
               <h2 id="readiness-heading" className="type-section mt-2">Migration Readiness</h2>
-              <p className="mt-3 max-w-3xl text-xl leading-8">{outcomeFor(discovery.company_name, assessment)}</p>
-              <div className="mt-6 flex flex-wrap items-center gap-8">
+              <p className="mt-2 max-w-3xl leading-6">{outcomeFor(discovery.company_name, assessment)}</p>
+              <div className="mt-3 flex flex-wrap items-center gap-5">
                 <StatusBadge status={assessment.readiness} />
                 <div><p className="type-financial">{assessment.blocker_count}</p><p className="type-meta">blockers</p></div>
                 <div><p className="type-financial">{assessment.warning_count}</p><p className="type-meta">warnings</p></div>
               </div>
+              <ActionLink className="mt-4" label={pastAssessment ? "Return to My Migration" : assessment.blocker_count ? `Review ${count(assessment.blocker_count, "Readiness Issue")}` : "Create My Migration Plan"} href={`${pastAssessment ? "/workspace" : "/plan-map-approve"}?session=${sessionId}`} onClick={recordPlanSelection} />
+              <p className="mt-3 text-secondary">Source: {discovery.synthetic ? "synthetic sample" : "de-identified test export"} · {discovery.fixture_version}. {discovery.profiles.length} datasets · {discovery.profiles.reduce((total, profile) => total + profile.record_count, 0)} records profiled. Full dataset counts in technical evidence.</p>
+              <p className="mt-2 text-secondary">Deterministic assessment · Policy {assessment.policy_version}</p>
+              <p className="mt-3 text-secondary">{assessment.blocker_count ? "Planning preserves these blockers; migration cannot start until source data is corrected." : "This assessment does not move data or approve a plan."}</p>
+
             </Panel>
           </section>
 
@@ -289,17 +343,6 @@ export function DiscoverAssessExperience() {
               </ul>
             </section>
           )}
-
-          {/* 4. Next recommended action */}
-          <NextAction
-            className="mt-8"
-            label={blockers.length ? `Review ${count(blockers.length, "Readiness Issue")}` : "Create My Migration Plan"}
-            href={`/plan-map-approve?session=${sessionId}`}
-            onClick={recordPlanSelection}
-          >
-            <p>{blockers.length ? "Planning keeps each blocker visible beside your plan. Migration stays blocked until the source data is corrected; nothing here can waive a blocker." : "Next, the plan sequences your records and proposes mappings for you to approve."}</p>
-            <p className="mt-1 text-sm">Nothing has moved, and nothing is approved yet.</p>
-          </NextAction>
 
           {/* Technical evidence comes second, behind native disclosure. */}
           <details className="evidence-disclosure mt-10">
@@ -388,7 +431,7 @@ export function DiscoverAssessExperience() {
                           <div className="min-w-0">
                             <div className="flex flex-wrap items-center justify-between gap-2"><strong className="text-sm">{item.action}</strong><Badge>{humanize(item.risk)} risk</Badge></div>
                             <p className="mt-1 text-xs text-secondary">{humanize(item.agent)} used {humanize(item.tool)} · {item.provenance}</p>
-                            <p className="mt-1 truncate type-meta">Evidence: {item.evidence_references.join(", ")}</p>
+                            <p className="mt-1 truncate text-sm">Evidence: {item.evidence_references.join(", ")}</p>
                           </div>
                         </li>
                       ))}
@@ -413,48 +456,7 @@ export function DiscoverAssessExperience() {
         </section>
       )}
 
-      <section aria-labelledby="sample-heading" className={assessment || resumable ? "mt-14" : "mt-8"}>
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h2 id="sample-heading" className="type-section">{assessment || resumable ? "Check Another Business" : "Choose How to Check Your Books"}</h2>
-            <p className="mt-2 text-secondary">MoveBooks never connects to your accounting provider. Use a sample business or a de-identified test export.</p>
-          </div>
-        </div>
-        {discovery?.synthetic === false && <Alert tone="info" title="Current Workspace: Your Test Export"><p>The results above come from your test export, not the sample selector. Starting a sample creates a separate workspace.</p></Alert>}
-        <div className="mt-5 grid gap-4 md:grid-cols-2">
-          <Card className="assessment-source-card border-[var(--primary)]" aria-label="Synthetic business selection">
-            <div className="flex items-start justify-between gap-4">
-              <div className="metric-icon"><Database aria-hidden="true" size={18} /></div>
-              <Badge>Synthetic Data Only</Badge>
-            </div>
-            <h3 className="mt-8 text-xl font-bold">Try a Sample Business</h3>
-            <label className="mt-4 block font-bold">Sample business
-              <select className="field-control mt-2 block w-full" value={sample} disabled={running} onChange={event => setSample(event.target.value)}>
-                <option value="northstar-supplies">Northstar Supplies — Needs Attention</option>
-                <option value="harbor-light-migrate-demo">Harbor Light Books — Ready to Migrate</option>
-              </select>
-            </label>
-            <p className="mt-2 text-sm leading-6 text-secondary">
-              {sample === "northstar-supplies" ? "A deliberately imperfect office-supply distributor with duplicates, a missing value, an invalid relationship, and an unsupported setting." : "One synthetic business from discovery to verified first use. You approve key decisions; a controlled migration exception demonstrates safe recovery."}
-            </p>
-            <Button className="mt-6" variant={assessment || sessionId ? "secondary" : "primary"} onClick={startAssessment} disabled={running}>
-              {assessment || sessionId ? "Start a New Assessment" : "Check If My Books Are Ready to Migrate"}
-              <ArrowRight aria-hidden="true" size={17} />
-            </Button>
-          </Card>
-          <Card aria-label="Use My Test Export">
-            <div className="flex items-start justify-between gap-4">
-              <div className="metric-icon"><Upload aria-hidden="true" size={18} /></div>
-              <Badge>De-Identified Test Data Only</Badge>
-            </div>
-            <h3 className="mt-8 text-xl font-bold">Use My Test Export</h3>
-            <p className="mt-2 text-sm leading-6 text-secondary">
-              Use supported de-identified accounting files to test the migration flow.
-            </p>
-            <Link className="button secondary mt-6" href="/try-your-data">Choose Test Files</Link>
-          </Card>
-        </div>
-      </section>
+      {(assessment || resumable || reading !== "none") && !running ? <details className="mt-6"><summary>Check another business · starts a separate assessment</summary>{sourcePicker}</details> : reading === "none" && !running ? sourcePicker : null}
 
       {error && (
         <div className="mt-8" role={error === UNCONFIRMED ? "alert" : undefined}>
@@ -468,7 +470,7 @@ export function DiscoverAssessExperience() {
 
       <footer className="mt-14 flex items-start gap-3 border-t border-token py-8 text-sm text-secondary">
         <ShieldCheck aria-hidden="true" className="mt-0.5 shrink-0 text-primary" size={20} />
-        <p>This local Beta keeps data in temporary storage and never connects to an accounting provider. Sample businesses are synthetic, test exports must be de-identified, and every migration result stays in a synthetic workspace. No data is sent to an AI model.</p>
+        <p>This synthetic Beta never connects to an accounting provider. Sample businesses are synthetic, test exports must be de-identified, and every migration result stays in a synthetic workspace. No data is sent to an AI model.</p>
       </footer>
     </main>
   );

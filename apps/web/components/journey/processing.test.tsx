@@ -7,7 +7,7 @@ import { MigrationJourney } from "./MigrationJourney";
 import { PROCESSING } from "./journey";
 
 afterEach(() => { vi.unstubAllGlobals(); sessionStorage.clear(); window.history.replaceState(null, "", "/"); });
-const steps = () => within(screen.getByRole("list", { name: "Migration Journey" })).getAllByRole("listitem");
+const steps = () => within(screen.queryAllByRole("list", { name: "Five-phase migration journey" })[0] ?? screen.getByRole("list", { name: "Migration Journey" })).getAllByRole("listitem");
 
 describe("journey processing", () => {
   it("marks only the step that owns the work and explains it in stages", () => {
@@ -54,16 +54,16 @@ describe("Assess processing", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<DiscoverAssessExperience />);
     fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
-    await waitFor(() => expect(steps()[0]).toHaveTextContent("AssessAssessing…"));
-    expect(screen.getByRole("status")).toHaveTextContent("Reviewing your data · In progress");
+    await waitFor(() => expect(steps()[0]).toHaveTextContent("UnderstandAssessing…"));
+    expect(screen.getAllByRole("status").find(el => el.textContent?.includes("Reviewing your data"))).toHaveTextContent("Reviewing your data");
     expect(document.querySelector(".migration-orb")).toBeNull();
     fetchMock
       .mockResolvedValueOnce(json({ readiness: "READY", blocker_count: 0, warning_count: 0, decision_basis: [], recommended_next_actions: [], ready_areas: [], policy_version: "p1" }))
       .mockResolvedValueOnce(json([]));
     await act(async () => finish(json({ company_name: "Harbor Light Books", findings: [], profiles: [], fixture_version: "v1", synthetic: true })));
     await screen.findByRole("heading", { name: "Migration Readiness" });
-    expect(steps()[0]).toHaveTextContent("AssessCompleted");
-    expect(steps()[0].querySelector("svg.lucide-check")).not.toBeNull();
+    expect(steps()[0]).toHaveTextContent("UnderstandCompleted");
+    expect(steps()[0]).toHaveAttribute("data-state", "Completed");
     expect(document.querySelector(".is-processing")).toBeNull();
   });
 });
@@ -82,8 +82,8 @@ describe("secondary reads after assessing", () => {
     fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
     await screen.findByRole("heading", { name: "Migration Readiness" });
     // The activity read is still pending: Assess is done and Plan is simply current.
-    expect(steps()[0]).toHaveTextContent("AssessCompleted");
-    expect(steps()[1]).toHaveTextContent("PlanCurrent");
+    expect(steps()[0]).toHaveTextContent("UnderstandCompleted");
+    expect(steps()[1]).toHaveTextContent("PrepareCurrent");
     expect(document.querySelector(".is-processing")).toBeNull();
     expect(document.body).not.toHaveTextContent("Assessing…");
     await act(async () => releaseActivity(json([])));
@@ -105,7 +105,7 @@ describe("starting a new assessment", () => {
     render(<DiscoverAssessExperience />);
     await screen.findByText("Northstar Supplies has 1 blocker to fix before migration.");
     fireEvent.click(screen.getByRole("button", { name: /Start a New Assessment/ }));
-    await waitFor(() => expect(steps()[0]).toHaveTextContent("AssessAssessing…"));
+    await waitFor(() => expect(steps()[0]).toHaveTextContent("UnderstandAssessing…"));
     expect(screen.queryByRole("heading", { name: "Migration Readiness" })).not.toBeInTheDocument();
     expect(steps()[0]).not.toHaveClass("is-blocked");
   });

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { authHeaders } from "@/lib/identity";
 import { Alert, LoadingState } from "@/components/ui/feedback";
 import { Button, Panel } from "@/components/ui/primitives";
-import { MigrationJourney } from "@/components/journey/MigrationJourney";
+import { PhaseProgress, TaskContext } from "@/components/journey/PhaseProgress";
 import { journeyStepFor, pendingMappingsIn, PROCESSING, projectJourney } from "@/components/journey/journey";
 import { ActionLink } from "@/components/journey/NextAction";
 import { isSessionId, projectSession, SELECTED_SESSION_KEY } from "@/components/public-surfaces/session";
@@ -56,7 +56,7 @@ export function PlanMapApproveExperience() {
     async function read() {
       try {
         const id = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem(SELECTED_SESSION_KEY);
-        if (!id) throw new Error("Start with Discover → Assess, then continue with the same business session.");
+        if (!id) throw new Error("Start with Understand, then continue with the same migration.");
         if (!isSessionId(id)) throw new Error("Invalid session reference. Open an existing migration from My Migration.");
         sessionRef.current = id;
         const data = validate(await api<Snapshot>(`/v1/migration-sessions/${id}`, { signal: controller.signal }), id);
@@ -127,12 +127,14 @@ export function PlanMapApproveExperience() {
     changeView("map");
   }
 
-  return <main id="main-content" className="shell min-h-[75vh] py-12 sm:py-16">
-    <header className="max-w-3xl"><p className="eyebrow text-primary">Plan → Map → Approve</p>
+  return <main id="main-content" className="shell migration-task min-h-[75vh]">
+    <header className="max-w-3xl"><p className="eyebrow text-primary">Prepare</p>
       <h1 ref={heading} tabIndex={-1} className="type-page mt-4">{approved ? "Your Migration Plan Is Approved" : plan ? view === "map" ? "Choose Where Your Records Go" : view === "approve" ? "Review Your Migration Plan" : "Your Migration Plan Is Ready" : "Prepare Your Migration Plan"}</h1>
       <p className="mt-5 text-lg leading-8 text-secondary">{approved ? (status === "APPROVED" || status === "MIGRATION_READY" ? "Your approval is recorded. Start Migration separately when you are ready." : "Your approved plan is retained with this migration. Return to My Migration for your current next step.") : "Review the scope and evidence, confirm each mapping, then explicitly approve your plan. Nothing moves during this review."}</p>
     </header>
-    <MigrationJourney className="mt-8" current={current} held={projection?.held} currentLabel={projection?.currentLabel} unknown={readState === "loading" ? "loading" : "unavailable"} processing={working === "/plan" ? PROCESSING.plan : working === "/mappings" ? PROCESSING.map : undefined} />
+    <p className="mt-2 text-secondary">Synthetic Beta · plan review never starts migration.</p>
+    <TaskContext phase={1} session={snapshot?.id} />
+    <PhaseProgress session={snapshot?.id} status={status} current={current} held={projection?.held} currentLabel={projection?.currentLabel} unknown={readState === "loading" ? "loading" : "unavailable"} processing={working === "/plan" ? PROCESSING.plan : working === "/mappings" ? PROCESSING.map : undefined} />
     {readState === "loading" && <div className="mt-6"><LoadingState label="Loading your migration" /></div>}
     {error && <div className="mt-6"><Alert tone="error" title="Migration Review Stopped"><p>{error}</p><p className="mt-2">No new approval or progress is assumed. Read this migration again before recording another decision.</p>{sessionRef.current && <Button variant="secondary" className="mt-4" disabled={busy} onClick={() => { setError(undefined); void refresh().catch(caught => setError(caught instanceof Error ? caught.message : "Session unavailable.")); }}>Read migration again</Button>}<a className="ml-4 font-semibold underline" href="/workspace">My Migration</a></Alert></div>}
     {!plan && <Panel className="mt-8"><h2 className="type-section">Create the Plan for This Migration</h2><p className="mt-2 text-secondary">Complete your assessment first. Planning preserves its blockers and prepares the scope for your review.</p><Button className="mt-4" variant={ready && status === "ASSESSED" ? "primary" : "secondary"} disabled={!ready || status !== "ASSESSED" || busy} onClick={() => void mutate("/plan")}>Create My Migration Plan</Button>{ready && ["CREATED", "DISCOVERED"].includes(status ?? "") && <ActionLink className="mt-4 sm:ml-4" label="Continue Assessment" href={`/assess?session=${snapshot?.id}`} />}</Panel>}
@@ -148,8 +150,8 @@ export function PlanMapApproveExperience() {
         await mutate(`/mappings/${mapping.id}/${action}`, action === "modify" ? { selected_target: target, comment: "Changed after reviewing the displayed evidence" } : { comment: action === "approve" ? "Reviewed the displayed mapping and evidence" : "Rejected after reviewing the displayed evidence" });
       }} reconsider={async (mapping, path, body) => { if (!editable || !await mutate(`/mappings/${mapping.id}${path}`, body)) throw new Error("Reconsideration could not be confirmed. Read the migration again."); }} onReviewPlan={() => changeView("approve")} />}
       {view === "approve" && <>
+        {approved && <div className="mt-4"><ApprovedHandoff snapshot={snapshot!} /></div>}
         <ApprovalReview plan={plan} mappings={mappings} approved={approved} readConfirmed={ready} busy={busy} fallbackFocusRef={heading} assessmentBlocked={Boolean(snapshot?.assessment?.blocker_count) || snapshot?.assessment?.readiness === "BLOCKED"} canApprove={editable && reviewed && !plan.blockers.length} approve={() => mutate("/plan", { action: "approve", plan_id: plan.id })} />
-        {approved && <div className="mt-6"><ApprovedHandoff snapshot={snapshot!} /></div>}
       </>}
     </>}
     {snapshot && <details className="mt-8"><summary className="cursor-pointer font-semibold">Recorded Human Decisions</summary><ul className="mt-4 space-y-3 break-words text-sm text-secondary">{(snapshot.human_decisions ?? []).map(decision => <li key={decision.id}>{decision.decision} · {decision.actor} · <time>{decision.occurred_at}</time> · Decision {decision.id}</li>)}</ul>{!snapshot.human_decisions?.length && <p className="mt-3 text-secondary">No human decisions recorded yet.</p>}</details>}
@@ -158,5 +160,5 @@ export function PlanMapApproveExperience() {
 }
 
 function ApprovedHandoff({ snapshot }: { snapshot: Snapshot }) {
-  return ["APPROVED", "MIGRATION_READY"].includes(snapshot.workflow_status) ? <ActionLink label="Start Migration" href={`/migrate-resolve?session=${snapshot.id}`} /> : <ActionLink label="Return to My Migration" href={`/workspace?session=${snapshot.id}`} />;
+  return ["APPROVED", "MIGRATION_READY"].includes(snapshot.workflow_status) ? <ActionLink label="Continue to Move" href={`/migrate-resolve?session=${snapshot.id}`} /> : <ActionLink label="Return to My Migration" href={`/workspace?session=${snapshot.id}`} />;
 }
