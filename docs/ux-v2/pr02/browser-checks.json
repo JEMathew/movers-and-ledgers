@@ -1,0 +1,266 @@
+{
+  "checks": [
+    {
+      "check": "320px Enter opens navigation and focuses Explore Demo",
+      "focused": "Explore Demo",
+      "outline": "3px"
+    },
+    {
+      "check": "Escape returns focus to menu",
+      "label": "Open navigation"
+    },
+    {
+      "check": "Mobile menu selects Demo and closes",
+      "url": "http://127.0.0.1:3012/simulator"
+    },
+    {
+      "check": "Demo CTA enters existing Google sign-in with exact sample next destination",
+      "url": "http://127.0.0.1:3012/sign-in?next=%2Fassess%3Fsample%3Dharbor-light-migrate-demo"
+    },
+    {
+      "check": "Help concept opens Learn disclosure and focuses summary",
+      "bodyFont": "16px",
+      "focused": "Why mappings matter",
+      "hash": "#mappings",
+      "opened": true,
+      "outline": "3px",
+      "summaryHeight": 48
+    },
+    {
+      "check": "Enter closes native topic disclosure",
+      "opened": false
+    },
+    {
+      "check": "Enter reopens disclosure with visible keyboard focus",
+      "opened": true,
+      "outline": "3px"
+    },
+    {
+      "check": "Explicit evidence mode requires verified Google identity",
+      "heading": "Sign in to inspect your migration."
+    },
+    {
+      "check": "Same-route transition returns to public Trust",
+      "url": "http://127.0.0.1:3012/trust",
+      "heading": "A move you can inspect."
+    },
+    {
+      "check": "Same-page Footer Beta link opens and focuses its disclosure",
+      "focused": "Beta limitations",
+      "hash": "#beta-limitations",
+      "opened": true
+    },
+    {
+      "check": "Guide reconsideration opens by keyboard with full safeguards",
+      "body": "Reconsidering a decision\n\nDuring mapping review, before migration starts, a final rejected mapping can be reconsidered. This does not undo an executed migration.\n\nReview the mapping, enter a reason, then choose Request reconsideration.\nPrior history retains the original rejection, actor, timestamp, reason and evidence. The request itself approves nothing.\nThe owner separately chooses Approve reconsideration or Reject reconsideration. Only the authenticated owner can request or review.\nApproval records a new decision; it never overwrites the original rejection or bypasses the remaining checks. Rejection keeps the mapping blocked.",
+      "opened": true,
+      "outline": "3px"
+    }
+  ],
+  "linkDestinations": [
+    {
+      "requested": "http://127.0.0.1:3012/",
+      "disclosure": null,
+      "hashTarget": null,
+      "heading": "Move your books.Keep your confidence.",
+      "url": "/"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/play",
+      "disclosure": null,
+      "hashTarget": null,
+      "heading": "Small choices. Meaningful consequences.",
+      "url": "/play"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/simulator",
+      "disclosure": null,
+      "hashTarget": null,
+      "heading": "Meet your sample business.",
+      "url": "/simulator"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/learn",
+      "disclosure": null,
+      "hashTarget": null,
+      "heading": "Understand one decision.",
+      "url": "/learn"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/trust",
+      "disclosure": null,
+      "hashTarget": null,
+      "heading": "A move you can inspect.",
+      "url": "/trust"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/support",
+      "disclosure": null,
+      "hashTarget": null,
+      "heading": "Find a safe next step.",
+      "url": "/support"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/trust#beta-limitations",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "A move you can inspect.",
+      "url": "/trust#beta-limitations"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/workspace",
+      "disclosure": null,
+      "hashTarget": null,
+      "heading": "Sign in to continue your migration",
+      "url": "/workspace"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/guide",
+      "disclosure": null,
+      "hashTarget": null,
+      "heading": "Find your next step.",
+      "url": "/guide"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/learn#why-migrate",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "Understand one decision.",
+      "url": "/learn#why-migrate"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/feedback",
+      "disclosure": null,
+      "hashTarget": null,
+      "heading": "Prepare unsent feedback.",
+      "url": "/feedback"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/sign-in?next=%2Fassess%3Fsample%3Dharbor-light-migrate-demo",
+      "disclosure": null,
+      "hashTarget": null,
+      "heading": "Sign in to continue your migration",
+      "url": "/sign-in?next=%2Fassess%3Fsample%3Dharbor-light-migrate-demo"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/guide#journey",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "Find your next step.",
+      "url": "/guide#journey"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/assess?sample=harbor-light-migrate-demo",
+      "disclosure": null,
+      "hashTarget": null,
+      "heading": "Assess My Migration",
+      "url": "/assess?sample=harbor-light-migrate-demo"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/learn#business-ready",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "Understand one decision.",
+      "url": "/learn#business-ready"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/#product-vision",
+      "disclosure": null,
+      "hashTarget": true,
+      "heading": "Move your books.Keep your confidence.",
+      "url": "/#product-vision"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/learn#evidence",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "Understand one decision.",
+      "url": "/learn#evidence"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/learn#mappings",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "Understand one decision.",
+      "url": "/learn#mappings"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/learn#recovery",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "Understand one decision.",
+      "url": "/learn#recovery"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/learn#reconciliation",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "Understand one decision.",
+      "url": "/learn#reconciliation"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/learn#approvals",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "Understand one decision.",
+      "url": "/learn#approvals"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/trust#financial-controls",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "A move you can inspect.",
+      "url": "/trust#financial-controls"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/try-your-data",
+      "disclosure": null,
+      "hashTarget": null,
+      "heading": "Cloud export uploads are unavailable.",
+      "url": "/try-your-data"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/trust#ai-boundaries",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "A move you can inspect.",
+      "url": "/trust#ai-boundaries"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/guide#trust",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "Find your next step.",
+      "url": "/guide#trust"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/learn#confidence",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "Understand one decision.",
+      "url": "/learn#confidence"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/guide#start-here",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "Find your next step.",
+      "url": "/guide#start-here"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/feedback?kind=issue&",
+      "disclosure": null,
+      "hashTarget": null,
+      "heading": "Prepare unsent feedback.",
+      "url": "/feedback?kind=issue&"
+    },
+    {
+      "requested": "http://127.0.0.1:3012/guide#try-your-data",
+      "disclosure": true,
+      "hashTarget": true,
+      "heading": "Find your next step.",
+      "url": "/guide#try-your-data"
+    }
+  ],
+  "media": "Original video/poster unchanged; repository asset checks and existing media tests retained."
+}

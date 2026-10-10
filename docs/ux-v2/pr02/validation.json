@@ -1,0 +1,26 @@
+{
+  "baseline": "eb41081a1f3c98b3096e30f38b0eeef183324459",
+  "baselineTests": {
+    "files": 40,
+    "tests": 456,
+    "result": "passed"
+  },
+  "finalTests": {
+    "files": 41,
+    "tests": 499,
+    "result": "passed"
+  },
+  "commands": {
+    "npm run lint": "passed",
+    "npm run typecheck": "passed",
+    "npm run build": "passed",
+    "python3 scripts/repository_checks.py": "passed",
+    "git diff --check": "passed"
+  },
+  "browserDestinations": 29,
+  "viewportCases": 32,
+  "overflowCases": 0,
+  "narrowFeedbackActionBottom": 866,
+  "authenticatedValidation": "source/unit only; no live sign-in or workflow mutations",
+  "screenshots": "32 direct JPEG captures; before development / after local production frontend"
+}
