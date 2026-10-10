@@ -1,0 +1,92 @@
+[
+  {
+    "action": "Create My Migration Plan",
+    "actionBottom": 915.0078125,
+    "documentHeight": 2078,
+    "height": 900,
+    "overflow": false,
+    "phase": "understand",
+    "width": 1440
+  },
+  {
+    "action": "Review Mappings",
+    "actionBottom": 639.359375,
+    "documentHeight": 2412,
+    "height": 900,
+    "overflow": false,
+    "phase": "prepare",
+    "width": 1440
+  },
+  {
+    "action": "Review 1 Migration Issue",
+    "actionBottom": 703.3203125,
+    "documentHeight": 3253,
+    "height": 900,
+    "overflow": false,
+    "phase": "move",
+    "width": 1440
+  },
+  {
+    "action": "Approve base currency",
+    "actionBottom": 1503.1634521484375,
+    "documentHeight": 4371,
+    "height": 900,
+    "overflow": false,
+    "phase": "verify",
+    "width": 1440
+  },
+  {
+    "action": "Resume verification",
+    "actionBottom": 2895.4130859375,
+    "documentHeight": 4644,
+    "height": 900,
+    "overflow": false,
+    "phase": "start",
+    "width": 1440
+  },
+  {
+    "action": "Create My Migration Plan",
+    "actionBottom": 980.7578125,
+    "documentHeight": 2661,
+    "height": 844,
+    "overflow": false,
+    "phase": "understand",
+    "width": 390
+  },
+  {
+    "action": "Review Mappings",
+    "actionBottom": 780.28125,
+    "documentHeight": 3729,
+    "height": 844,
+    "overflow": false,
+    "phase": "prepare",
+    "width": 390
+  },
+  {
+    "action": "Review 1 Migration Issue",
+    "actionBottom": 917.1171875,
+    "documentHeight": 4639,
+    "height": 844,
+    "overflow": false,
+    "phase": "move",
+    "width": 390
+  },
+  {
+    "action": "Approve base currency",
+    "actionBottom": 2255.955810546875,
+    "documentHeight": 6880,
+    "height": 844,
+    "overflow": false,
+    "phase": "verify",
+    "width": 390
+  },
+  {
+    "action": "Resume verification",
+    "actionBottom": 5237.01220703125,
+    "documentHeight": 7235,
+    "height": 844,
+    "overflow": false,
+    "phase": "start",
+    "width": 390
+  }
+]

@@ -1,0 +1,262 @@
+[
+  {
+    "action": "Create My Migration Plan",
+    "actionBottom": 688.7658081054688,
+    "documentHeight": 1541,
+    "h1Count": 1,
+    "height": 900,
+    "overflow": false,
+    "phase": "understand",
+    "primaryActions": [
+      "Create My Migration Plan"
+    ],
+    "width": 1440
+  },
+  {
+    "action": "Create My Migration Plan",
+    "actionBottom": 674.0639038085938,
+    "documentHeight": 1586,
+    "h1Count": 1,
+    "height": 1024,
+    "overflow": false,
+    "phase": "understand",
+    "primaryActions": [
+      "Create My Migration Plan"
+    ],
+    "width": 768
+  },
+  {
+    "action": "Create My Migration Plan",
+    "actionBottom": 653.709228515625,
+    "documentHeight": 1787,
+    "h1Count": 1,
+    "height": 844,
+    "overflow": false,
+    "phase": "understand",
+    "primaryActions": [
+      "Create My Migration Plan"
+    ],
+    "width": 390
+  },
+  {
+    "action": "Create My Migration Plan",
+    "actionBottom": 695.4520263671875,
+    "documentHeight": 1961,
+    "h1Count": 1,
+    "height": 700,
+    "overflow": false,
+    "phase": "understand",
+    "primaryActions": [
+      "Create My Migration Plan"
+    ],
+    "width": 320
+  },
+  {
+    "action": "Review Mappings",
+    "actionBottom": 635.1640625,
+    "documentHeight": 1922,
+    "h1Count": 1,
+    "height": 900,
+    "overflow": false,
+    "phase": "prepare",
+    "primaryActions": [
+      "Review Mappings"
+    ],
+    "width": 1440
+  },
+  {
+    "action": "Review Mappings",
+    "actionBottom": 684.7578125,
+    "documentHeight": 2108,
+    "h1Count": 1,
+    "height": 1024,
+    "overflow": false,
+    "phase": "prepare",
+    "primaryActions": [
+      "Review Mappings"
+    ],
+    "width": 768
+  },
+  {
+    "action": "Review Mappings",
+    "actionBottom": 665.1640625,
+    "documentHeight": 2657,
+    "h1Count": 1,
+    "height": 844,
+    "overflow": false,
+    "phase": "prepare",
+    "primaryActions": [
+      "Review Mappings"
+    ],
+    "width": 390
+  },
+  {
+    "action": "Review Mappings",
+    "actionBottom": 722.7578125,
+    "documentHeight": 2889,
+    "h1Count": 1,
+    "height": 700,
+    "overflow": false,
+    "phase": "prepare",
+    "primaryActions": [
+      "Review Mappings"
+    ],
+    "width": 320
+  },
+  {
+    "action": "Review 1 Migration Issue",
+    "actionBottom": 524.671875,
+    "documentHeight": 1739,
+    "h1Count": 1,
+    "height": 900,
+    "overflow": false,
+    "phase": "move",
+    "primaryActions": [
+      "Review 1 Migration Issue"
+    ],
+    "width": 1440
+  },
+  {
+    "action": "Review 1 Migration Issue",
+    "actionBottom": 580.5625,
+    "documentHeight": 1796,
+    "h1Count": 1,
+    "height": 1024,
+    "overflow": false,
+    "phase": "move",
+    "primaryActions": [
+      "Review 1 Migration Issue"
+    ],
+    "width": 768
+  },
+  {
+    "action": "Review 1 Migration Issue",
+    "actionBottom": 533.96875,
+    "documentHeight": 2030,
+    "h1Count": 1,
+    "height": 844,
+    "overflow": false,
+    "phase": "move",
+    "primaryActions": [
+      "Review 1 Migration Issue"
+    ],
+    "width": 390
+  },
+  {
+    "action": "Review 1 Migration Issue",
+    "actionBottom": 611.7578125,
+    "documentHeight": 2269,
+    "h1Count": 1,
+    "height": 700,
+    "overflow": false,
+    "phase": "move",
+    "primaryActions": [
+      "Review 1 Migration Issue"
+    ],
+    "width": 320
+  },
+  {
+    "action": "Approve base currency",
+    "actionBottom": 797.4154663085938,
+    "documentHeight": 1661,
+    "h1Count": 1,
+    "height": 900,
+    "overflow": false,
+    "phase": "verify",
+    "primaryActions": [
+      "Approve base currency"
+    ],
+    "width": 1440
+  },
+  {
+    "action": "Approve base currency",
+    "actionBottom": 768.4999389648438,
+    "documentHeight": 1725,
+    "h1Count": 1,
+    "height": 1024,
+    "overflow": false,
+    "phase": "verify",
+    "primaryActions": [
+      "Approve base currency"
+    ],
+    "width": 768
+  },
+  {
+    "action": "Approve base currency",
+    "actionBottom": 720.5493774414062,
+    "documentHeight": 1978,
+    "h1Count": 1,
+    "height": 844,
+    "overflow": false,
+    "phase": "verify",
+    "primaryActions": [
+      "Approve base currency"
+    ],
+    "width": 390
+  },
+  {
+    "action": "Approve base currency",
+    "actionBottom": 744.4302978515625,
+    "documentHeight": 2090,
+    "h1Count": 1,
+    "height": 700,
+    "overflow": false,
+    "phase": "verify",
+    "primaryActions": [
+      "Approve base currency"
+    ],
+    "width": 320
+  },
+  {
+    "action": "Resume verification",
+    "actionBottom": 738.0011596679688,
+    "documentHeight": 1725,
+    "h1Count": 1,
+    "height": 900,
+    "overflow": false,
+    "phase": "start",
+    "primaryActions": [
+      "Resume verification"
+    ],
+    "width": 1440
+  },
+  {
+    "action": "Resume verification",
+    "actionBottom": 709.3524780273438,
+    "documentHeight": 1753,
+    "h1Count": 1,
+    "height": 1024,
+    "overflow": false,
+    "phase": "start",
+    "primaryActions": [
+      "Resume verification"
+    ],
+    "width": 768
+  },
+  {
+    "action": "Resume verification",
+    "actionBottom": 705.2957153320312,
+    "documentHeight": 2114,
+    "h1Count": 1,
+    "height": 844,
+    "overflow": false,
+    "phase": "start",
+    "primaryActions": [
+      "Resume verification"
+    ],
+    "width": 390
+  },
+  {
+    "action": "Resume verification",
+    "actionBottom": 705.2079467773438,
+    "documentHeight": 2262,
+    "h1Count": 1,
+    "height": 700,
+    "overflow": false,
+    "phase": "start",
+    "primaryActions": [
+      "Resume verification"
+    ],
+    "width": 320
+  }
+]

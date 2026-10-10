@@ -1,0 +1,78 @@
+{
+  "journey": [
+    {
+      "stage": "Understand→Prepare",
+      "url": "http://127.0.0.1:3006/plan-map-approve?session=65c7e2ab-9b45-5740-aae7-db76ea85fb67"
+    },
+    {
+      "stage": "Prepare",
+      "mappingDecisions": 11,
+      "selectionIsNotApproval": true
+    },
+    {
+      "stage": "Approved→Move",
+      "url": "http://127.0.0.1:3006/migrate-resolve?session=65c7e2ab-9b45-5740-aae7-db76ea85fb67",
+      "requiresSeparateStart": true
+    },
+    {
+      "stage": "Move",
+      "resolutionApproved": true,
+      "separateRetry": true,
+      "completed": true
+    },
+    {
+      "stage": "Verify",
+      "exactChecks": 17,
+      "configurationAreas": 8,
+      "humanConfigurationDecisions": 5,
+      "separateApply": true
+    },
+    {
+      "stage": "Start",
+      "onboardingPrerequisites": 10,
+      "explicitSetupDecisions": 5,
+      "invoice": {
+        "subtotal": "100.00",
+        "tax": "7.25",
+        "total": "107.25",
+        "currency": "USD"
+      },
+      "postingDisabledBeforeApproval": true,
+      "separatePosting": true,
+      "verified": true
+    },
+    {
+      "stage": "POSTED→VERIFIED",
+      "sameSession": "aa2c7d3b-62ee-5ee3-bd44-ef5f451d3782",
+      "postingAttempts": 1,
+      "requiresNoNewConsent": true
+    }
+  ],
+  "keyboard": {
+    "trap": {
+      "active": "Keep Reviewing",
+      "dialog": true,
+      "outline": "3px"
+    },
+    "escape": {
+      "active": "Approve Migration Plan",
+      "dialogOpen": false
+    }
+  },
+  "expanded": {
+    "focus": "Five phases and operational steps",
+    "operationalOpen": true,
+    "outline": "3px",
+    "overflow": false,
+    "width": 320
+  },
+  "checkpoint": {
+    "before": "POSTED",
+    "after": "VERIFIED",
+    "attemptsBefore": 1,
+    "attemptsAfter": 1,
+    "sameInvoice": true,
+    "sameKey": true
+  },
+  "authentication": "Local demo only; cloud identity and owner isolation verified in source/tests."
+}
