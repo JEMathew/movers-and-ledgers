@@ -22,8 +22,8 @@ describe("governed onboarding and productive use", () => {
   it("presents the Start Using stage in business language", async () => {
     await load();
     expect(screen.getByRole("heading", { level: 1, name: "Start Using Your Books" })).toBeVisible();
-    expect(screen.getByText("Complete your first real task in your migrated books.")).toBeVisible();
-    expect(screen.getByText("Set Up → Start Using")).toBeVisible();
+    expect(screen.getByText("Finish the essentials, then post and verify your first synthetic invoice.")).toBeVisible();
+    expect(screen.getAllByText("Start")[0]).toBeVisible();
     expect(document.body).not.toHaveTextContent(/First Productive Use|\bFPU\b|first live cycle/i);
   });
   it("attributes modified setup and sends only supported decision inputs", async () => {
@@ -51,7 +51,7 @@ describe("governed onboarding and productive use", () => {
     vi.mocked(fetch).mockImplementationOnce(() => response({...prepared,verified_fpu:true,workflow_status:"VERIFIED_FIRST_PRODUCTIVE_USE",effective_status:"VERIFIED_FIRST_PRODUCTIVE_USE",onboarding:{faults:[],fpu:{...posted,checkpoint:"VERIFIED",posted_by:"demo-user",invoice:{total:"107.25"},checks:[{id:"posting",passed:true,explanation:"Matched",evidence:["invoice:hash"]}]}}}));
     fireEvent.click(screen.getByRole("button",{name:"Resume verification"}));
     await screen.findByRole("heading",{name:"Business Ready · Verified"});
-    expect(screen.getByRole("link",{name:"Review Verified Evidence"}).getAttribute("href")).toMatch(/^\/trust\?session=/);
+    expect(screen.getByRole("link",{name:"Review Verified Evidence"}).getAttribute("href")).toMatch(/^\/trust\?view=evidence&session=/);
     expect(screen.getByRole("list",{name:"Migration Journey"})).toHaveTextContent("Start UsingCompleted");
     expect((vi.mocked(fetch).mock.calls.at(-1)![1]!.headers as Record<string,string>)["Idempotency-Key"]).toBe("original");
     expect(screen.getByText("Posted invoice, journal and accounting impact")).toBeInTheDocument();
@@ -73,4 +73,26 @@ describe("governed onboarding and productive use", () => {
     fireEvent.click(screen.getByRole("button",{name:"Modify invoice"}));
     expect(screen.getByRole("button",{name:"Post and verify invoice"})).toBeDisabled();
   });
+});
+
+it("keeps every prerequisite reachable without granting consent on checklist selection", async () => {
+  const other = { ...initial.tasks[0], id: "report", label: "Financial report readiness", status: "COMPLETED" as const, approval_required: false };
+  await load({ ...initial, tasks: [initial.tasks[0], other] });
+  const queue = screen.getByRole("combobox", { name: "Onboarding checklist · 1 of 2 complete" });
+  expect(queue.querySelectorAll("option")).toHaveLength(2);
+  fireEvent.change(queue, { target: { value: "report" } });
+  expect(screen.getByRole("heading", { name: "Financial report readiness" })).toBeVisible();
+  expect(screen.queryByRole("button", { name: "Approve invoice access" })).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Review next prerequisite" }));
+  expect(queue).toHaveValue("role_access");
+  expect(fetch).toHaveBeenCalledTimes(1);
+});
+
+it("shows exact material terms inside invoice consent and cannot infer success", async () => {
+  await load(prepared);
+  fireEvent.click(screen.getByRole("button", { name: "Review invoice approval" }));
+  const consent = screen.getByRole("dialog", { name: "Review productive transaction" });
+  for (const term of ["c1", "p1", "100.00", "7.25", "107.25", "USD", "0.0725", "CA-SALES", "NET_30", "hash", "DRAFT"]) expect(consent).toHaveTextContent(term);
+  expect(screen.getByRole("button", { name: "Post and verify invoice" })).toBeDisabled();
+  expect(fetch).toHaveBeenCalledTimes(1);
 });
