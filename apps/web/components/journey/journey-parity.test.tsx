@@ -10,15 +10,14 @@ const journey = () => within(screen.getByRole("list", { name: "Migration Journey
 const fresh = ["AssessCurrent", "PlanNot Started", "MapNot Started", "ApproveNot Started", "MigrateNot Started", "ResolveNot Started", "ValidateNot Started", "Set UpNot Started", "Start UsingNot Started"];
 
 describe("journey starting state", () => {
-  it("is the same on My Migration and Assess for a user who has not started", async () => {
+  it("keeps the empty home explicit and starts the operational journey only in Assess", async () => {
     vi.spyOn(globalThis, "fetch");
     render(<MyMigration />);
-    await screen.findByRole("link", { name: /Check If My Books Are Ready to Migrate/ });
-    const home = journey();
+    expect(await screen.findByRole("link", { name: "Start a sample migration" })).toHaveAttribute("href", "/assess?sample=harbor-light-migrate-demo");
+    expect(screen.queryByRole("list", { name: "Migration Journey" })).not.toBeInTheDocument();
     cleanup();
     render(<DiscoverAssessExperience />);
-    expect(journey()).toEqual(home);
-    expect(home).toEqual(fresh);
+    expect(journey()).toEqual(fresh);
     expect(document.body).not.toHaveTextContent(/Progress not confirmed|Progress unavailable/);
     expect(fetch).not.toHaveBeenCalled();
   });

@@ -1,4 +1,4 @@
-import { cleanup, render, screen, waitFor, within } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import type { ComponentType } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { DiscoverAssessExperience } from "@/components/discover-assess/DiscoverAssessExperience";
@@ -88,6 +88,7 @@ describe.each([
     window.history.replaceState(null, "", `/stage?session=${id}`);
     vi.spyOn(globalThis, "fetch").mockImplementation(input => respond(migration, String(input)));
     render(<Page />);
+    if (Page === MyMigration) fireEvent.click(await screen.findByText("Operational steps"));
     await waitFor(() => expect(steps()).toEqual(journey));
   });
 });
