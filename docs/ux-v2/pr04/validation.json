@@ -1,0 +1,76 @@
+{
+  "baseline_sha": "472045680081c29668f0286bbbb5bf48b8a08da7",
+  "branch": "feature/ux-v2-member-home",
+  "checks": {
+    "full_frontend": {
+      "result": "PASS",
+      "tests": 539,
+      "files": 43
+    },
+    "focused_identity_navigation_home_parity": {
+      "result": "PASS",
+      "tests": 195,
+      "files": 7
+    },
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "production_build": "PASS",
+    "repository_links_and_credential_patterns": "PASS",
+    "whitespace": "PASS",
+    "route_files": {
+      "result": "PASS",
+      "routes": [
+        "/workspace",
+        "/assess",
+        "/plan-map-approve",
+        "/migrate-resolve",
+        "/validate-configure",
+        "/onboard-fpu",
+        "/trust",
+        "/support",
+        "/play",
+        "/sign-in",
+        "/simulator",
+        "/learn",
+        "/guide"
+      ]
+    }
+  },
+  "browser": {
+    "runtime": "local frontend and read-only synthetic home fixtures; local demo entry only",
+    "viewports": [
+      [
+        1440,
+        900
+      ],
+      [
+        768,
+        1024
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        700
+      ]
+    ],
+    "keyboard": "Tab visible 3px outline; Enter native disclosures",
+    "page_overflow": "none",
+    "protected_header": "source/tests only",
+    "live_authentication": "NOT EXERCISED",
+    "live_cloud_workspace_mutation": "NONE"
+  },
+  "boundaries": {
+    "engine_changed": false,
+    "backend_or_authorization_changed": false,
+    "provider_contract_changed": false,
+    "dependencies_or_configuration_changed": false,
+    "docker_infrastructure_or_ci_changed": false,
+    "deployment_performed": false,
+    "merged": false
+  },
+  "p0_p1_local_regressions": [],
+  "recommendation": "ACCEPT for review, subject to required CI and human review"
+}
