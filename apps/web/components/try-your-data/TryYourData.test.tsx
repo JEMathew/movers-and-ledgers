@@ -19,9 +19,21 @@ function consent() { fireEvent.click(screen.getByRole("checkbox", { name: /de-id
 function response(data: unknown, status = 200) { return { ok: status < 400, status, json: async () => data }; }
 const validate = () => fireEvent.click(screen.getByRole("button", { name: "Validate Files" }));
 beforeEach(() => { vi.stubGlobal("fetch", fetchMock); fetchMock.mockReset(); sessionStorage.clear(); });
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
 
 describe("test export check", () => {
+  it("offers a truthful cloud boundary with no chooser, download, validation or intake request", () => {
+    vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "firebase");
+    render(<TryYourData/>);
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Cloud export uploads are unavailable.");
+    expect(screen.queryByLabelText("Test files")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Validate Files" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Download Sample Package" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Try the Beta" })).toHaveAttribute("href", "/workspace");
+    fireEvent.click(screen.getByText("Local evaluation and file limits"));
+    expect(screen.getByText(/1,000 rows|1000 rows/)).toBeVisible();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
   it("leads with four plain steps and keeps format detail behind a disclosure", () => {
     render(<TryYourData/>);
     expect(screen.getByRole("heading", { level: 1, name: "Check Your Export Before Migration" })).toBeVisible();

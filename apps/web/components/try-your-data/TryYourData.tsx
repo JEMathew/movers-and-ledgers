@@ -5,6 +5,8 @@ import { Alert, Badge, Button, Card, Checkbox, Input } from "@/components/ui";
 import { authHeaders, cloudIdentity } from "@/lib/identity";
 import { changes, INTAKE_UNREACHABLE, reach, UNCONFIRMED } from "@/lib/reach";
 import contract from "./package-contract.json";
+import { Surface } from "@/components/public-surfaces/Surface";
+import { AnchoredDetails } from "@/components/public-surfaces/AnchoredDetails";
 import { ValidationIssues, type Issue } from "./ValidationIssues";
 
 const API = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
@@ -100,6 +102,10 @@ export function TryYourData() {
     format.current?.querySelector("summary")?.focus();
   }
   const blocked = report?.status === "BLOCKED";
+
+  if (cloudIdentity()) return <Surface compact eyebrow="Local evaluation" title="Cloud export uploads are unavailable." intro="Use built-in synthetic samples in the public Beta; test files can only be checked locally." action={<Link className="button" href="/workspace">Try the Beta</Link>}>
+    <AnchoredDetails id="local-export-limits" title="Local evaluation and file limits"><p>Local development accepts synthetic or de-identified CSV/JSON files or one flat ZIP. Eight required files plus optional metadata.json; up to {limits.max_files} files, {limits.max_rows} rows and {kib(limits.max_file_bytes)} per file, {mib(limits.max_total_bytes)} total.</p><p>Keep the template, validation report, repair, explicit package review and assessment handoff in the local evaluation. No files are selected or sent here.</p><Link className="public-text-link" href="/guide#try-your-data">Local test-export instructions</Link></AnchoredDetails>
+  </Surface>;
 
   return <main className="shell space-y-8 py-12 sm:py-16">
     <header className="max-w-3xl">
