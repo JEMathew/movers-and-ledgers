@@ -44,12 +44,12 @@ describe("public surface contracts", () => {
       for (const heading of screen.getAllByRole("heading")) expect(heading.className).not.toMatch(/uppercase|type-label|eyebrow/);
     });
   });
-  it("presents one Beta launch, an honest Demo introduction and prominent public Play", () => {
+  it("presents one Beta launch, a read-only five-phase Demo and prominent public Play", () => {
     render(<Home/>);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Move your books.Keep your confidence.");
     expect(screen.getByRole("link", { name: "Try the Beta" })).toHaveAttribute("href", "/workspace");
     expect(screen.getByRole("link", { name: "Explore Demo" })).toHaveAttribute("href", "/simulator");
-    expect(screen.getByRole("link", { name: "Explore Demo" })).toHaveAccessibleDescription("Demo introduction only. Sign-in is required to run the Beta workflow.");
+    expect(screen.getByRole("link", { name: "Explore Demo" })).toHaveAccessibleDescription("Read-only five-phase Demo. No sign-in; the working synthetic Beta requires sign-in.");
     expect(screen.getByRole("link", { name: "Open Play" })).toHaveAttribute("href", "/play");
     expect(screen.getByText("V1.0 Bounded Synthetic Public Beta")).toBeVisible();
     expect(screen.getByText(/Do not use real customer or production provider data/)).toBeVisible();
@@ -81,16 +81,15 @@ describe("public surface contracts", () => {
     fireEvent.click(demo);
     expect(menu).toHaveAttribute("aria-expanded", "false");
   });
-  it("routes Simulator to ordinary discovery with no requests or automatic approvals", () => {
+  it("opens the public read-only Demo without requests or automatic approvals", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<Simulator/>);
-    expect(screen.getByRole("link", { name: "Try the Beta with this sample" })).toHaveAttribute("href", `/sign-in?next=${encodeURIComponent(sampleEntry)}`);
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Meet your sample business.");
-    fireEvent.click(screen.getByText("What you will experience"));
+    expect(screen.getByRole("button", { name: "Start demo" })).toBeEnabled();
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("See a move before you make one.");
+    fireEvent.click(screen.getByText("Demo and Beta are different"));
     expect(screen.getByText(/Nothing is pre-approved/)).toBeVisible();
-    fireEvent.click(screen.getByText("What is synthetic"));
-    expect(screen.getByText(/Cloud mode uses real Google sign-in and durable owner-protected workspaces/)).toBeVisible();
-    expect(screen.queryByText(/Sessions expire when the API restarts/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByText("Synthetic Beta boundaries"));
+    expect(screen.getByText(/Cloud Beta uses real Google sign-in/)).toBeVisible();
     expect(fetch).not.toHaveBeenCalled();
   });
   it("preselects Harbor Light without creating a session or running a demo loader", async () => {
