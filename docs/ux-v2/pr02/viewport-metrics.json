@@ -1,0 +1,1410 @@
+[
+  {
+    "version": "before",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 699,
+        "href": "/assess?sample=harbor-light-migrate-demo",
+        "label": "Start a sample migration",
+        "top": 653
+      }
+    ],
+    "mainHeight": 1576,
+    "overflow": false,
+    "pageHeight": 1856,
+    "url": "/product",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 238
+  },
+  {
+    "version": "before",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 1000,
+        "href": "/assess?sample=harbor-light-migrate-demo",
+        "label": "Try a migration",
+        "top": 954
+      }
+    ],
+    "mainHeight": 1089,
+    "overflow": false,
+    "pageHeight": 1414,
+    "url": "/simulator",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 210
+  },
+  {
+    "version": "before",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 528,
+        "href": "/workspace",
+        "label": "Go to My Migration",
+        "top": 482
+      }
+    ],
+    "mainHeight": 7531,
+    "overflow": false,
+    "pageHeight": 7855,
+    "url": "/guide",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 1497
+  },
+  {
+    "version": "before",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 588,
+        "href": "/workspace",
+        "label": "Go to My Migration",
+        "top": 543
+      }
+    ],
+    "mainHeight": 1354,
+    "overflow": false,
+    "pageHeight": 1679,
+    "url": "/learn",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 163
+  },
+  {
+    "version": "before",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 1395,
+        "href": "/product",
+        "label": "Review migration options",
+        "top": 1350
+      }
+    ],
+    "mainHeight": 1382,
+    "overflow": false,
+    "pageHeight": 1707,
+    "url": "/trust",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 220
+  },
+  {
+    "version": "before",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 922,
+        "href": "/product",
+        "label": "Review migration options",
+        "top": 876
+      }
+    ],
+    "mainHeight": 1051,
+    "overflow": false,
+    "pageHeight": 1376,
+    "url": "/support",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 165
+  },
+  {
+    "version": "before",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 1040,
+        "href": null,
+        "label": "Prepare feedback draft",
+        "top": 994
+      }
+    ],
+    "mainHeight": 1112,
+    "overflow": false,
+    "pageHeight": 1436,
+    "url": "/feedback",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 173
+  },
+  {
+    "version": "before",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 1106,
+        "href": null,
+        "label": "Validate Files",
+        "top": 1061
+      }
+    ],
+    "mainHeight": 1338,
+    "overflow": false,
+    "pageHeight": 1663,
+    "url": "/try-your-data",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 165
+  },
+  {
+    "version": "before",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 661,
+        "href": "/assess?sample=harbor-light-migrate-demo",
+        "label": "Start a sample migration",
+        "top": 616
+      }
+    ],
+    "mainHeight": 2563,
+    "overflow": false,
+    "pageHeight": 2916,
+    "url": "/product",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 238
+  },
+  {
+    "version": "before",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 1579,
+        "href": "/assess?sample=harbor-light-migrate-demo",
+        "label": "Try a migration",
+        "top": 1534
+      }
+    ],
+    "mainHeight": 1677,
+    "overflow": false,
+    "pageHeight": 2094,
+    "url": "/simulator",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 210
+  },
+  {
+    "version": "before",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 608,
+        "href": "/workspace",
+        "label": "Go to My Migration",
+        "top": 563
+      }
+    ],
+    "mainHeight": 11842,
+    "overflow": false,
+    "pageHeight": 12259,
+    "url": "/guide",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 1497
+  },
+  {
+    "version": "before",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 576,
+        "href": "/workspace",
+        "label": "Go to My Migration",
+        "top": 531
+      }
+    ],
+    "mainHeight": 2132,
+    "overflow": false,
+    "pageHeight": 2549,
+    "url": "/learn",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 163
+  },
+  {
+    "version": "before",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 1920,
+        "href": "/product",
+        "label": "Review migration options",
+        "top": 1875
+      }
+    ],
+    "mainHeight": 1855,
+    "overflow": false,
+    "pageHeight": 2272,
+    "url": "/trust",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 220
+  },
+  {
+    "version": "before",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 1012,
+        "href": "/product",
+        "label": "Review migration options",
+        "top": 967
+      }
+    ],
+    "mainHeight": 1267,
+    "overflow": false,
+    "pageHeight": 1684,
+    "url": "/support",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 165
+  },
+  {
+    "version": "before",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 1214,
+        "href": null,
+        "label": "Prepare feedback draft",
+        "top": 1168
+      }
+    ],
+    "mainHeight": 1274,
+    "overflow": false,
+    "pageHeight": 1690,
+    "url": "/feedback",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 173
+  },
+  {
+    "version": "before",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 1100,
+        "href": null,
+        "label": "Validate Files",
+        "top": 1054
+      }
+    ],
+    "mainHeight": 1443,
+    "overflow": false,
+    "pageHeight": 1860,
+    "url": "/try-your-data",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 165
+  },
+  {
+    "version": "before",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 626,
+        "href": "/assess?sample=harbor-light-migrate-demo",
+        "label": "Start a sample migration",
+        "top": 581
+      }
+    ],
+    "mainHeight": 1630,
+    "overflow": false,
+    "pageHeight": 1926,
+    "url": "/product",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 238
+  },
+  {
+    "version": "before",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 1025,
+        "href": "/assess?sample=harbor-light-migrate-demo",
+        "label": "Try a migration",
+        "top": 980
+      }
+    ],
+    "mainHeight": 1135,
+    "overflow": false,
+    "pageHeight": 1475,
+    "url": "/simulator",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 210
+  },
+  {
+    "version": "before",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 502,
+        "href": "/workspace",
+        "label": "Go to My Migration",
+        "top": 456
+      }
+    ],
+    "mainHeight": 8216,
+    "overflow": false,
+    "pageHeight": 8556,
+    "url": "/guide",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 1497
+  },
+  {
+    "version": "before",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 502,
+        "href": "/workspace",
+        "label": "Go to My Migration",
+        "top": 456
+      }
+    ],
+    "mainHeight": 1364,
+    "overflow": false,
+    "pageHeight": 1704,
+    "url": "/learn",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 163
+  },
+  {
+    "version": "before",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 1417,
+        "href": "/product",
+        "label": "Review migration options",
+        "top": 1372
+      }
+    ],
+    "mainHeight": 1404,
+    "overflow": false,
+    "pageHeight": 1744,
+    "url": "/trust",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 220
+  },
+  {
+    "version": "before",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 849,
+        "href": "/product",
+        "label": "Review migration options",
+        "top": 804
+      }
+    ],
+    "mainHeight": 1000,
+    "overflow": false,
+    "pageHeight": 1340,
+    "url": "/support",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 165
+  },
+  {
+    "version": "before",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 1035,
+        "href": null,
+        "label": "Prepare feedback draft",
+        "top": 989
+      }
+    ],
+    "mainHeight": 1107,
+    "overflow": false,
+    "pageHeight": 1448,
+    "url": "/feedback",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 173
+  },
+  {
+    "version": "before",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 978,
+        "href": null,
+        "label": "Validate Files",
+        "top": 933
+      }
+    ],
+    "mainHeight": 1252,
+    "overflow": false,
+    "pageHeight": 1593,
+    "url": "/try-your-data",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 165
+  },
+  {
+    "version": "before",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 803,
+        "href": "/assess?sample=harbor-light-migrate-demo",
+        "label": "Start a sample migration",
+        "top": 758
+      }
+    ],
+    "mainHeight": 2838,
+    "overflow": false,
+    "pageHeight": 3206,
+    "url": "/product",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 238
+  },
+  {
+    "version": "before",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 1763,
+        "href": "/assess?sample=harbor-light-migrate-demo",
+        "label": "Try a migration",
+        "top": 1718
+      }
+    ],
+    "mainHeight": 1861,
+    "overflow": false,
+    "pageHeight": 2314,
+    "url": "/simulator",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 210
+  },
+  {
+    "version": "before",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 648,
+        "href": "/workspace",
+        "label": "Go to My Migration",
+        "top": 603
+      }
+    ],
+    "mainHeight": 13326,
+    "overflow": false,
+    "pageHeight": 13779,
+    "url": "/guide",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 1497
+  },
+  {
+    "version": "before",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 683,
+        "href": "/workspace",
+        "label": "Go to My Migration",
+        "top": 637
+      }
+    ],
+    "mainHeight": 2431,
+    "overflow": false,
+    "pageHeight": 2884,
+    "url": "/learn",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 163
+  },
+  {
+    "version": "before",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 2254,
+        "href": "/product",
+        "label": "Review migration options",
+        "top": 2209
+      }
+    ],
+    "mainHeight": 2169,
+    "overflow": false,
+    "pageHeight": 2622,
+    "url": "/trust",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 220
+  },
+  {
+    "version": "before",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 1230,
+        "href": "/product",
+        "label": "Review migration options",
+        "top": 1185
+      }
+    ],
+    "mainHeight": 1507,
+    "overflow": false,
+    "pageHeight": 1960,
+    "url": "/support",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 165
+  },
+  {
+    "version": "before",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 1325,
+        "href": null,
+        "label": "Prepare feedback draft",
+        "top": 1279
+      }
+    ],
+    "mainHeight": 1430,
+    "overflow": false,
+    "pageHeight": 1883,
+    "url": "/feedback",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 173
+  },
+  {
+    "version": "before",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 1219,
+        "href": null,
+        "label": "Validate Files",
+        "top": 1173
+      }
+    ],
+    "mainHeight": 1629,
+    "overflow": false,
+    "pageHeight": 2082,
+    "url": "/try-your-data",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 165
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/product",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 444,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 399
+      }
+    ],
+    "mainHeight": 1608,
+    "overflow": false,
+    "pageHeight": 1889,
+    "url": "/",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 154
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/simulator",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 371,
+        "href": "/sign-in?next=%2Fassess%3Fsample%3Dharbor-light-migrate-demo",
+        "label": "Try the Beta with this sample",
+        "top": 326
+      }
+    ],
+    "mainHeight": 806,
+    "overflow": false,
+    "pageHeight": 1087,
+    "url": "/simulator",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 98
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/guide",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 371,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 326
+      }
+    ],
+    "mainHeight": 967,
+    "overflow": false,
+    "pageHeight": 1248,
+    "url": "/guide",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 80
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/learn",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 343,
+        "href": "/workspace",
+        "label": "Go to My Migration",
+        "top": 298
+      }
+    ],
+    "mainHeight": 981,
+    "overflow": false,
+    "pageHeight": 1262,
+    "url": "/learn",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 100
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/trust",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 371,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 326
+      }
+    ],
+    "mainHeight": 782,
+    "overflow": false,
+    "pageHeight": 1063,
+    "url": "/trust",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 89
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/support",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 442,
+        "href": "/learn#mappings",
+        "label": "Read related concept",
+        "top": 397
+      }
+    ],
+    "mainHeight": 801,
+    "overflow": false,
+    "pageHeight": 1082,
+    "url": "/support",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 131
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/feedback",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 689,
+        "href": null,
+        "label": "Prepare feedback draft",
+        "top": 644
+      }
+    ],
+    "mainHeight": 806,
+    "overflow": false,
+    "pageHeight": 1087,
+    "url": "/feedback",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 99
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/try-your-data",
+    "size": "desktop",
+    "actions": [
+      {
+        "bottom": 343,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 298
+      }
+    ],
+    "mainHeight": 400,
+    "overflow": false,
+    "pageHeight": 900,
+    "url": "/try-your-data",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "words": 49
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/product",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 426,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 381
+      }
+    ],
+    "mainHeight": 1420,
+    "overflow": false,
+    "pageHeight": 1772,
+    "url": "/",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 154
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/simulator",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 432,
+        "href": "/sign-in?next=%2Fassess%3Fsample%3Dharbor-light-migrate-demo",
+        "label": "Try the Beta with this sample",
+        "top": 387
+      }
+    ],
+    "mainHeight": 899,
+    "overflow": false,
+    "pageHeight": 1252,
+    "url": "/simulator",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 98
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/guide",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 398,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 352
+      }
+    ],
+    "mainHeight": 978,
+    "overflow": false,
+    "pageHeight": 1330,
+    "url": "/guide",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 80
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/learn",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 370,
+        "href": "/workspace",
+        "label": "Go to My Migration",
+        "top": 324
+      }
+    ],
+    "mainHeight": 1060,
+    "overflow": false,
+    "pageHeight": 1412,
+    "url": "/learn",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 100
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/trust",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 398,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 352
+      }
+    ],
+    "mainHeight": 889,
+    "overflow": false,
+    "pageHeight": 1242,
+    "url": "/trust",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 89
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/support",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 469,
+        "href": "/learn#mappings",
+        "label": "Read related concept",
+        "top": 423
+      }
+    ],
+    "mainHeight": 954,
+    "overflow": false,
+    "pageHeight": 1306,
+    "url": "/support",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 131
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/feedback",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 779,
+        "href": null,
+        "label": "Prepare feedback draft",
+        "top": 734
+      }
+    ],
+    "mainHeight": 904,
+    "overflow": false,
+    "pageHeight": 1257,
+    "url": "/feedback",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 99
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/try-your-data",
+    "size": "mobile",
+    "actions": [
+      {
+        "bottom": 404,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 359
+      }
+    ],
+    "mainHeight": 445,
+    "overflow": false,
+    "pageHeight": 844,
+    "url": "/try-your-data",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "words": 49
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/product",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 389,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 344
+      }
+    ],
+    "mainHeight": 1433,
+    "overflow": false,
+    "pageHeight": 1730,
+    "url": "/",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 154
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/simulator",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 354,
+        "href": "/sign-in?next=%2Fassess%3Fsample%3Dharbor-light-migrate-demo",
+        "label": "Try the Beta with this sample",
+        "top": 308
+      }
+    ],
+    "mainHeight": 789,
+    "overflow": false,
+    "pageHeight": 1085,
+    "url": "/simulator",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 98
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/guide",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 354,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 308
+      }
+    ],
+    "mainHeight": 950,
+    "overflow": false,
+    "pageHeight": 1246,
+    "url": "/guide",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 80
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/learn",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 326,
+        "href": "/workspace",
+        "label": "Go to My Migration",
+        "top": 280
+      }
+    ],
+    "mainHeight": 964,
+    "overflow": false,
+    "pageHeight": 1260,
+    "url": "/learn",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 100
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/trust",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 354,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 308
+      }
+    ],
+    "mainHeight": 765,
+    "overflow": false,
+    "pageHeight": 1062,
+    "url": "/trust",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 89
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/support",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 425,
+        "href": "/learn#mappings",
+        "label": "Read related concept",
+        "top": 379
+      }
+    ],
+    "mainHeight": 770,
+    "overflow": false,
+    "pageHeight": 1066,
+    "url": "/support",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 131
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/feedback",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 672,
+        "href": null,
+        "label": "Prepare feedback draft",
+        "top": 626
+      }
+    ],
+    "mainHeight": 789,
+    "overflow": false,
+    "pageHeight": 1086,
+    "url": "/feedback",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 99
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/try-your-data",
+    "size": "tablet",
+    "actions": [
+      {
+        "bottom": 326,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 280
+      }
+    ],
+    "mainHeight": 383,
+    "overflow": false,
+    "pageHeight": 1024,
+    "url": "/try-your-data",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "words": 49
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/product",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 485,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 439
+      }
+    ],
+    "mainHeight": 1563,
+    "overflow": false,
+    "pageHeight": 1932,
+    "url": "/",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 154
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/simulator",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 432,
+        "href": "/sign-in?next=%2Fassess%3Fsample%3Dharbor-light-migrate-demo",
+        "label": "Try the Beta with this sample",
+        "top": 387
+      }
+    ],
+    "mainHeight": 927,
+    "overflow": false,
+    "pageHeight": 1296,
+    "url": "/simulator",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 98
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/guide",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 414,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 368
+      }
+    ],
+    "mainHeight": 994,
+    "overflow": false,
+    "pageHeight": 1363,
+    "url": "/guide",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 80
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/learn",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 404,
+        "href": "/workspace",
+        "label": "Go to My Migration",
+        "top": 359
+      }
+    ],
+    "mainHeight": 1166,
+    "overflow": false,
+    "pageHeight": 1535,
+    "url": "/learn",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 100
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/trust",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 432,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 387
+      }
+    ],
+    "mainHeight": 971,
+    "overflow": false,
+    "pageHeight": 1340,
+    "url": "/trust",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 89
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/support",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 497,
+        "href": "/learn#mappings",
+        "label": "Read related concept",
+        "top": 451
+      }
+    ],
+    "mainHeight": 1062,
+    "overflow": false,
+    "pageHeight": 1430,
+    "url": "/support",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 131
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/feedback",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 866,
+        "href": null,
+        "label": "Prepare feedback draft",
+        "top": 820
+      }
+    ],
+    "mainHeight": 1072,
+    "overflow": false,
+    "pageHeight": 1441,
+    "url": "/feedback",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 99
+  },
+  {
+    "version": "after",
+    "environment": "local production frontend",
+    "requestedRoute": "/try-your-data",
+    "size": "narrow",
+    "actions": [
+      {
+        "bottom": 432,
+        "href": "/workspace",
+        "label": "Try the Beta",
+        "top": 387
+      }
+    ],
+    "mainHeight": 473,
+    "overflow": false,
+    "pageHeight": 842,
+    "url": "/try-your-data",
+    "viewport": {
+      "height": 568,
+      "width": 320
+    },
+    "words": 49
+  }
+]

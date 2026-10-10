@@ -1,0 +1,35 @@
+{
+  "baseline": "eb41081a1f3c98b3096e30f38b0eeef183324459",
+  "unchangedContractsAndCapabilities": {
+    "apps/web/components/Nav.tsx": true,
+    "apps/web/components/AccountControls.tsx": true,
+    "apps/web/components/IdentityProvider.tsx": true,
+    "apps/web/lib/identity.ts": true,
+    "apps/web/middleware.ts": true,
+    "apps/web/components/public-surfaces/session.ts": true,
+    "apps/web/components/public-surfaces/context.ts": true,
+    "apps/web/components/public-surfaces/Play.tsx": true,
+    "apps/web/components/public-surfaces/WorkflowHelp.tsx": true,
+    "apps/web/components/Footer.tsx": true,
+    "apps/web/app/page.tsx": true,
+    "apps/web/components/public-surfaces/ProductVision.tsx": true,
+    "apps/web/package.json": true,
+    "apps/web/package-lock.json": true
+  },
+  "originalMedia": {
+    "apps/web/public/media/movebooks-ai-product-vision-poster.webp": {
+      "unchanged": true,
+      "bytes": 92446
+    },
+    "apps/web/public/media/movebooks-ai-product-vision.mp4": {
+      "unchanged": true,
+      "bytes": 6593004
+    }
+  },
+  "contrast": "Existing semantic palette unchanged; prior PR01 source-checks.json records light/dark contrast pairs. Browser observed 16px disclosure body, 48px summary target and 3px keyboard focus.",
+  "pr30CI": {
+    "run": 38058275985,
+    "jobs": 7,
+    "result": "all completed successfully"
+  }
+}

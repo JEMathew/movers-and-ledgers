@@ -14,7 +14,7 @@ export function LearningReturn() {
   const phase = context.stage === undefined ? undefined : phases[Number(context.stage)];
   return <div><Link className="button" href={context.session && phase ? `${phase.route}?session=${context.session}` : withSession("/workspace", context.session)}>
     {context.session && phase ? `Return to ${phase.name}` : "Go to My Migration"}
-  </Link><p className="mt-3 text-sm text-muted">Learning does not change migration progress. Review decisions in the migration itself.</p></div>;
+  </Link><p className="mt-2 text-muted">Learning leaves migration progress unchanged.</p></div>;
 }
 
 /** Operational journey step for each explanatory phase. */

@@ -1,71 +1,48 @@
-import { render, screen, within } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { NextRequest } from "next/server";
-import { middleware } from "@/middleware";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { Guide, guideSections } from "./Guide";
-import { footerLinks, phases, publicLinks } from "./content";
+import { phases } from "./content";
 
-afterEach(() => vi.restoreAllMocks());
-
-describe("User Guide", () => {
-  it("lists every section in a keyboard-reachable contents nav with matching labelled anchors", () => {
-    render(<Guide/>);
-    expect(guideSections).toHaveLength(12);
-    const toc = screen.getByRole("navigation", { name: "User guide contents" });
-    for (const section of guideSections) {
-      expect(within(toc).getByRole("link", { name: new RegExp(section.title) })).toHaveAttribute("href", `#${section.id}`);
-      expect(screen.getByRole("region", { name: section.title })).toHaveAttribute("id", section.id);
-    }
-  });
-  it("has one page heading and presents all five stages with their Learn topics", () => {
-    render(<Guide/>);
-    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
-    for (const phase of phases) expect(screen.getByRole("link", { name: `Learn more about ${phase.name}` })).toHaveAttribute("href", `/learn#${phase.topic}`);
-    expect(screen.getByText("Outcome: Business Ready · Verified")).toBeVisible();
-    expect(document.body).not.toHaveTextContent(/First Productive Use|\bFPU\b|first live cycle/i);
-  });
-  it("links only to existing product routes", () => {
-    render(<Guide/>);
-    const known = new Set([...publicLinks.map(([, href]) => href), ...footerLinks.map(([, href]) => href.split("#")[0]), "/try-your-data", "/learn", "/workspace", "/product"]);
-    for (const link of screen.getAllByRole("link")) {
-      const href = link.getAttribute("href")!;
-      if (href.startsWith("#")) continue;
-      expect(known.has(href.split("#")[0])).toBe(true);
-    }
-  });
-  it("keeps technical detail behind native disclosure and states Beta limits honestly", () => {
-    render(<Guide/>);
-    expect(document.querySelectorAll("details > summary").length).toBeGreaterThanOrEqual(4);
-    expect(screen.getByText(/Not production-ready, and not a live migration/)).toBeInTheDocument();
-    expect(screen.getByText("AI suggestions are advisory, never approval or financial verification.")).toBeInTheDocument();
-    expect(screen.getByText(/The request itself approves nothing/)).toBeVisible();
-    expect(screen.queryByText(/QuickBooks|Intuit/i)).not.toBeInTheDocument();
-  });
-  it("makes no requests and stays publicly discoverable through the guide link", () => {
+describe("compact task guide", () => {
+  it("retains twelve stable instructions as keyboard-reachable native disclosures", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<Guide/>);
+    expect(guideSections).toHaveLength(12);
+    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+    expect(screen.getByRole("link", { name: "Try the Beta" })).toHaveAttribute("href", "/workspace");
+    for (const section of guideSections) {
+      const details = document.getElementById(section.id)!;
+      expect(details.tagName).toBe("DETAILS");
+      expect(details).not.toHaveAttribute("open");
+      expect(details.querySelector("summary")).toHaveTextContent(section.title);
+      expect(details).toHaveAttribute("aria-labelledby", `${section.id}-heading`);
+    }
     expect(fetch).not.toHaveBeenCalled();
-    expect(footerLinks).toContainEqual(["Getting Started Guide", "/guide"]);
-    expect(middleware(new NextRequest("http://localhost/guide")).headers.get("location")).toBeNull();
+    fetch.mockRestore();
   });
-  it("explains merged pre-execution reconsideration without suggesting an approval bypass", () => {
+  it.each(guideSections)("opens and focuses legacy #$id without any workflow request", ({ id }) => {
+    window.history.replaceState(null, "", `/guide#${id}`);
     render(<Guide/>);
-    const section = within(screen.getByRole("region", { name: "Reconsidering a decision" }));
-    expect(section.getByText(/before migration starts/)).toBeVisible();
-    expect(section.getByText(/enter a reason, then choose Request reconsideration/)).toBeVisible();
-    expect(section.getByText(/original rejection, actor, timestamp, reason and evidence/)).toBeVisible();
-    expect(section.getByText(/Only the authenticated owner can request or review/)).toBeVisible();
-    expect(section.getByText(/never overwrites the original rejection or bypasses the remaining checks/)).toBeVisible();
-    expect(screen.queryByText(/Rolling out in Beta|your build does not include it yet/)).not.toBeInTheDocument();
+    const details = document.getElementById(id)!;
+    expect(details).toHaveAttribute("open");
+    expect(details.querySelector("summary")).toHaveFocus();
+    expect(document.querySelectorAll("details[open]")).toHaveLength(1);
   });
-  it("distinguishes local and cloud identity, persistence and intake without activating either", () => {
+  it("keeps phase destinations, reconsideration controls and local limits accessible", () => {
     render(<Guide/>);
-    expect(screen.getByText(/Production builds without configured identity disable sign-in/)).toBeVisible();
-    expect(screen.getByText(/cloud Google sign-in uses real authenticated identities/)).toBeVisible();
-    expect(screen.getByText(/persists synthetic workspaces, approvals and checkpoints across restarts/)).toBeInTheDocument();
-    expect(screen.getByText(/uploads remain disabled, including for signed-in users/)).toBeVisible();
-    expect(screen.getByText(/availability follows the current deployment status/)).toBeVisible();
-    expect(screen.queryByText(/cloud access is limited to authorized validation windows/)).not.toBeInTheDocument();
-    expect(screen.getByText("Gemini guidance is disabled by default and limited to explicitly configured synthetic dev/test advice. Managed ADK remains disabled.")).toBeVisible();
+    fireEvent.click(screen.getByText("The five-phase journey"));
+    for (const phase of phases) expect(screen.getByRole("link", { name: `Learn more about ${phase.name}` })).toHaveAttribute("href", `/learn#${phase.topic}`);
+    fireEvent.click(screen.getByText("Reconsidering a decision"));
+    for (const copy of [/before migration starts/, /enter a reason/, /original rejection, actor, timestamp, reason and evidence/, /The request itself approves nothing/, /Only the authenticated owner/, /never overwrites the original rejection or bypasses/]) expect(screen.getByText(copy)).toBeVisible();
+    fireEvent.click(screen.getByText("Local test-export evaluation"));
+    expect(screen.getByText(/Cloud uploads are unavailable, including for signed-in users/)).toBeVisible();
+    expect(screen.getByText(/1,000 rows and 256 KiB/)).toBeVisible();
+    expect(document.body).not.toHaveTextContent(/first real task|First Productive Use|FPU|QuickBooks|Intuit/);
+  });
+  it("assigns full concept/control explanations to Learn and Trust", () => {
+    render(<Guide/>);
+    fireEvent.click(screen.getByText("Approvals and human control"));
+    expect(screen.getByRole("link", { name: "Why approvals matter" })).toHaveAttribute("href", "/learn#approvals");
+    expect(screen.getByRole("link", { name: "Financial controls and accountability" })).toHaveAttribute("href", "/trust#financial-controls");
   });
 });

@@ -359,3 +359,23 @@ button, input, select, textarea { font: inherit; }
   .play-preview h2 { font-size: 1.25rem; }
   .product-vision { padding-top: 1.5rem; }
 }
+
+/* PR02: scoped public reference pages; workflow and Play task layouts are unchanged. */
+.public-content { padding-block: 2rem 3rem; }
+.public-content .type-page { font-size: clamp(2rem, 3.4vw, 3rem); }
+.public-content-body { display: grid; gap: 1.25rem; margin-top: 1.5rem; }
+.public-content-body > section { min-width: 0; }
+.public-disclosure { max-width: 56rem; border-top: 1px solid var(--border); }
+.public-disclosure > summary { cursor: pointer; min-height: 2.75rem; padding-block: .75rem; font-size: 1rem; font-weight: 650; }
+.public-disclosure > summary h2 { display: inline; font: inherit; }
+.public-detail { display: grid; gap: .75rem; padding-bottom: 1rem; max-width: 70ch; font-size: 1rem; line-height: 1.75; }
+.public-detail ol { list-style: decimal; padding-left: 1.5rem; }
+.public-detail li + li { margin-top: .5rem; }
+.public-text-link { display: inline-flex; align-items: center; min-height: 2.75rem; font-weight: 600; color: var(--primary); text-decoration: underline; text-underline-offset: 4px; }
+.public-content .field-label, .public-content .choice-control { font-size: 1rem; }
+.public-content .field-hint { font-size: 1rem; font-weight: 400; }
+.trust-principles { display: grid; gap: .65rem; max-width: 70ch; }
+@media (max-width: 639px) { .public-content { padding-block: 1.5rem 2rem; } }
+.public-content header > p,
+.public-content-body > p,
+.public-content-body > section > p { max-width: 70ch; }

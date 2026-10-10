@@ -7,7 +7,7 @@ import { RuntimeNotice } from "@/components/RuntimeNotice";
 import { Nav } from "@/components/Nav";
 import { IdentityProvider } from "@/components/IdentityProvider";
 import { GET } from "@/app/api/auth/demo/route";
-const route = vi.hoisted(() => ({ path: "/trust" }));
+const route = vi.hoisted(() => ({ path: "/assess" }));
 vi.mock("next/navigation", () => ({ usePathname: () => route.path, useRouter: () => ({ replace: vi.fn() }) }));
 
 afterEach(() => vi.unstubAllEnvs());
@@ -39,12 +39,12 @@ describe("truthful runtime identity", () => {
     expect(screen.getByRole("complementary", {name:"Beta scope"})).toHaveTextContent(/safely using synthetic data/);
     expect(screen.getByRole("link", {name:"Beta Limitations"})).toHaveAttribute("href", "/trust#beta-limitations");
   });
-  it.each(["/", "/product", "/workspace", "/sign-in"])("does not duplicate the scope note on %s", path => {
+  it.each(["/", "/product", "/workspace", "/sign-in", "/simulator", "/guide", "/learn", "/trust", "/support", "/feedback", "/try-your-data"])("does not duplicate the scope note on %s", path => {
     route.path = path;
     vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "firebase");
     render(<IdentityProvider><RuntimeNotice /></IdentityProvider>);
     expect(screen.queryByRole("complementary", {name:"Beta scope"})).not.toBeInTheDocument();
-    route.path = "/trust";
+    route.path = "/assess";
   });
   it.each(["//evil.example", "/\\evil.example", "https://evil.example", "/\n/evil.example", "/\t/evil.example"])("rejects redirect %s", value => {
     expect(safeDestination(value)).toBe("/workspace");
