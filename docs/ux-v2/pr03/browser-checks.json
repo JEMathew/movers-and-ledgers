@@ -1,0 +1,167 @@
+{
+  "environment": "Local production frontend; no live authenticated session",
+  "keyboard": [
+    {
+      "action": "Start with Enter",
+      "focus": "H1",
+      "heading": "Check readiness."
+    },
+    {
+      "action": "Next then Previous with Enter",
+      "focus": "H1",
+      "heading": "Check readiness."
+    },
+    {
+      "action": "Tab from phase heading",
+      "focused": "Preview Understand, phase 1 of 5",
+      "outline": "3px"
+    },
+    {
+      "action": "Phase chooser and guidance with Enter",
+      "bodyFont": "16px",
+      "guidanceOpen": true,
+      "heading": "Check exact totals."
+    },
+    {
+      "action": "Menu Enter",
+      "focus": "Explore Demo"
+    },
+    {
+      "action": "Menu Escape",
+      "focused": "Open navigation"
+    },
+    {
+      "action": "Debrief Previous",
+      "heading": "Verify the first task."
+    }
+  ],
+  "navigation": [
+    {
+      "action": "Authenticated handoff",
+      "url": "http://127.0.0.1:3003/sign-in?next=%2Fassess%3Fsample%3Dharbor-light-migrate-demo",
+      "heading": "Sign in to continue your migration",
+      "signInUnavailable": true
+    },
+    {
+      "action": "Back to Home",
+      "url": "http://127.0.0.1:3003/",
+      "heading": "Move your books.\nKeep your confidence."
+    },
+    {
+      "action": "Practice three decisions in Play",
+      "url": "http://127.0.0.1:3003/play",
+      "heading": "Small choices. Meaningful consequences."
+    },
+    {
+      "action": "Learn",
+      "url": "http://127.0.0.1:3003/learn",
+      "heading": "Understand one decision."
+    },
+    {
+      "action": "Conceptual Product Vision video",
+      "url": "http://127.0.0.1:3003/#product-vision",
+      "heading": "Move your books.\nKeep your confidence."
+    },
+    {
+      "action": "Understand learning",
+      "url": "http://127.0.0.1:3003/learn#evidence",
+      "target": {
+        "focused": true,
+        "open": true
+      }
+    },
+    {
+      "action": "Prepare learning",
+      "url": "http://127.0.0.1:3003/learn#mappings",
+      "target": {
+        "focused": true,
+        "open": true
+      }
+    },
+    {
+      "action": "Move learning",
+      "url": "http://127.0.0.1:3003/learn#recovery",
+      "target": {
+        "focused": true,
+        "open": true
+      }
+    },
+    {
+      "action": "Verify learning",
+      "url": "http://127.0.0.1:3003/learn#reconciliation",
+      "target": {
+        "focused": true,
+        "open": true
+      }
+    },
+    {
+      "action": "Start learning",
+      "url": "http://127.0.0.1:3003/learn#business-ready",
+      "target": {
+        "focused": true,
+        "open": true
+      }
+    },
+    {
+      "action": "Existing sample deep link",
+      "url": "http://localhost:3003/sign-in?next=%2Fassess%3Fsample%3Dharbor-light-migrate-demo",
+      "heading": "Sign in to continue your migration",
+      "result": "Existing authentication gate; no assessment created"
+    },
+    {
+      "action": "Legacy #sample-journey",
+      "url": "http://127.0.0.1:3003/simulator#sample-journey",
+      "target": {
+        "focused": true,
+        "open": true
+      }
+    },
+    {
+      "action": "Legacy #sample-boundaries",
+      "url": "http://127.0.0.1:3003/simulator#sample-boundaries",
+      "target": {
+        "focused": true,
+        "open": true
+      }
+    },
+    {
+      "action": "Legacy #sample-success",
+      "url": "http://127.0.0.1:3003/simulator#sample-success",
+      "target": {
+        "focused": true,
+        "open": true
+      }
+    },
+    {
+      "action": "Five-phase Guide",
+      "url": "http://127.0.0.1:3003/guide#journey",
+      "target": {
+        "focused": true,
+        "open": true
+      }
+    },
+    {
+      "action": "Homepage Demo entry",
+      "url": "http://127.0.0.1:3003/simulator",
+      "startVisible": true
+    },
+    {
+      "action": "Public menu Trust",
+      "url": "http://127.0.0.1:3003/trust",
+      "heading": "A move you can inspect."
+    },
+    {
+      "action": "Public menu Help",
+      "url": "http://127.0.0.1:3003/support",
+      "heading": "Find a safe next step."
+    },
+    {
+      "action": "Completion boundary explanation",
+      "url": "http://127.0.0.1:3003/learn#business-ready",
+      "target": {
+        "focused": true,
+        "open": true
+      }
+    }
+  ]
+}
