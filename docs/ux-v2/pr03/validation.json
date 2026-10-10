@@ -1,0 +1,48 @@
+{
+  "baseline": "51e34222a6108c912eaf0f6cbb44d48d088b764b",
+  "branch": "feature/ux-v2-guided-demo",
+  "frontend": {
+    "focusedTests": 51,
+    "files": 42,
+    "fullTests": 504,
+    "result": "pass",
+    "lint": "pass",
+    "typecheck": "pass",
+    "build": "pass"
+  },
+  "browser": {
+    "environment": "local production frontend; identity unconfigured; no live authenticated visual validation",
+    "layouts": 28,
+    "belowFoldPrimaryActions": 0,
+    "horizontalOverflow": 0,
+    "navigationCases": 19,
+    "keyboardCases": 7,
+    "screenshots": 14,
+    "formalScreenReaderStudy": false,
+    "participantTimingStudy": false
+  },
+  "unchangedContracts": {
+    "apps/web/components/Nav.tsx": true,
+    "apps/web/components/AccountControls.tsx": true,
+    "apps/web/components/IdentityProvider.tsx": true,
+    "apps/web/components/IdentityEntry.tsx": true,
+    "apps/web/lib/identity.ts": true,
+    "apps/web/middleware.ts": true,
+    "apps/web/components/public-surfaces/content.ts": true,
+    "apps/web/components/public-surfaces/session.ts": true,
+    "apps/web/components/public-surfaces/context.ts": true,
+    "apps/web/components/public-surfaces/Play.tsx": true,
+    "apps/web/components/public-surfaces/WorkflowHelp.tsx": true,
+    "apps/web/components/Footer.tsx": true,
+    "apps/web/components/public-surfaces/ProductVision.tsx": true,
+    "apps/web/package.json": true,
+    "apps/web/package-lock.json": true,
+    "services": true,
+    "agents": true,
+    ".github": true,
+    "infra": true,
+    "Dockerfile": true
+  },
+  "publicBoundary": "React page memory only; isolated tour tests observe zero fetch, XHR, storage writes and window event dispatches across all five phases and debrief; identity/session hooks throw if used",
+  "scope": "Frontend authored preview, scoped CSS, truthful Home/Guide wording, tests and review evidence only; no engine/auth/backend/infra/dependency changes"
+}
