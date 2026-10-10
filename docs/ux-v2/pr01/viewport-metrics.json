@@ -1,0 +1,98 @@
+[
+  {
+    "version": "before",
+    "label": "desktop",
+    "headerHeight": 80,
+    "horizontalOverflow": false,
+    "mainWords": 522,
+    "pageHeight": 4296,
+    "primaryBottom": 659.9453125,
+    "primaryHref": "/workspace",
+    "primaryLabel": "Start My Migration",
+    "primaryTop": 614.5546875,
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "version": "before",
+    "label": "mobile",
+    "headerHeight": 124,
+    "horizontalOverflow": false,
+    "mainWords": 522,
+    "pageHeight": 6849,
+    "primaryBottom": 610.890625,
+    "primaryHref": "/workspace",
+    "primaryLabel": "Start My Migration",
+    "primaryTop": 565.5,
+    "viewport": {
+      "height": 844,
+      "width": 390
+    }
+  },
+  {
+    "version": "before",
+    "label": "narrow",
+    "headerHeight": 168,
+    "horizontalOverflow": false,
+    "mainWords": 522,
+    "pageHeight": 7679,
+    "primaryBottom": 746.890625,
+    "primaryHref": "/workspace",
+    "primaryLabel": "Start My Migration",
+    "primaryTop": 701.5,
+    "viewport": {
+      "height": 568,
+      "width": 320
+    }
+  },
+  {
+    "version": "after",
+    "label": "desktop",
+    "headerHeight": 64,
+    "horizontalOverflow": false,
+    "mainWords": 154,
+    "pageHeight": 1879,
+    "primaryBottom": 438.890625,
+    "primaryHref": "/workspace",
+    "primaryLabel": "Try the Beta",
+    "primaryTop": 393.5,
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  {
+    "version": "after",
+    "label": "mobile",
+    "headerHeight": 64,
+    "horizontalOverflow": false,
+    "mainWords": 154,
+    "pageHeight": 1772,
+    "primaryBottom": 426,
+    "primaryHref": "/workspace",
+    "primaryLabel": "Try the Beta",
+    "primaryTop": 380.609375,
+    "viewport": {
+      "height": 844,
+      "width": 390
+    }
+  },
+  {
+    "version": "after",
+    "label": "narrow",
+    "headerHeight": 64,
+    "horizontalOverflow": false,
+    "mainWords": 154,
+    "pageHeight": 1932,
+    "primaryBottom": 484.5546875,
+    "primaryHref": "/workspace",
+    "primaryLabel": "Try the Beta",
+    "primaryTop": 439.1640625,
+    "viewport": {
+      "height": 568,
+      "width": 320
+    }
+  }
+]

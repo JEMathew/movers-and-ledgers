@@ -1,0 +1,130 @@
+{
+  "routeAndAssetExistence": [
+    {
+      "url": "/",
+      "exists": true
+    },
+    {
+      "url": "/assess",
+      "exists": true
+    },
+    {
+      "url": "/assess?sample=harbor-light-migrate-demo",
+      "exists": true
+    },
+    {
+      "url": "/feedback",
+      "exists": true
+    },
+    {
+      "url": "/guide",
+      "exists": true
+    },
+    {
+      "url": "/learn",
+      "exists": true
+    },
+    {
+      "url": "/learn#why-migrate",
+      "exists": true
+    },
+    {
+      "url": "/media/movebooks-ai-product-vision-poster.webp",
+      "exists": true
+    },
+    {
+      "url": "/media/movebooks-ai-product-vision.mp4",
+      "exists": true
+    },
+    {
+      "url": "/migrate-resolve",
+      "exists": true
+    },
+    {
+      "url": "/onboard-fpu",
+      "exists": true
+    },
+    {
+      "url": "/plan-map-approve",
+      "exists": true
+    },
+    {
+      "url": "/play",
+      "exists": true
+    },
+    {
+      "url": "/simulator",
+      "exists": true
+    },
+    {
+      "url": "/support",
+      "exists": true
+    },
+    {
+      "url": "/trust",
+      "exists": true
+    },
+    {
+      "url": "/trust#beta-limitations",
+      "exists": true
+    },
+    {
+      "url": "/validate-configure",
+      "exists": true
+    },
+    {
+      "url": "/workspace",
+      "exists": true
+    }
+  ],
+  "semanticTokenContrast": [
+    {
+      "theme": "light",
+      "foreground": "text-secondary",
+      "background": "background",
+      "ratio": 7.18
+    },
+    {
+      "theme": "light",
+      "foreground": "on-primary",
+      "background": "primary",
+      "ratio": 5.41
+    },
+    {
+      "theme": "light",
+      "foreground": "primary",
+      "background": "primary-subtle",
+      "ratio": 4.78
+    },
+    {
+      "theme": "light",
+      "foreground": "focus-ring",
+      "background": "background",
+      "ratio": 4.9
+    },
+    {
+      "theme": "dark",
+      "foreground": "text-secondary",
+      "background": "background",
+      "ratio": 12.17
+    },
+    {
+      "theme": "dark",
+      "foreground": "on-primary",
+      "background": "primary",
+      "ratio": 7.43
+    },
+    {
+      "theme": "dark",
+      "foreground": "primary",
+      "background": "primary-subtle",
+      "ratio": 5.73
+    },
+    {
+      "theme": "dark",
+      "foreground": "focus-ring",
+      "background": "background",
+      "ratio": 9.18
+    }
+  ]
+}

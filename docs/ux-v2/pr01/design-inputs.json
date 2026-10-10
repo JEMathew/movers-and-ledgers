@@ -1,0 +1,22 @@
+[
+  {
+    "file": "MoveBooks-IA-v2-final.md",
+    "sha256": "6122f4245b08fca977cf436e8884aee1a6e020b21d2bb8fc6fe0964e6274aa19"
+  },
+  {
+    "file": "MoveBooks-UX-v2-specification.md",
+    "sha256": "663af22745c35296b5d008b20032f94dc9fb7f81b4843a4d49e51cb5af72f941"
+  },
+  {
+    "file": "wireframes-v2.html",
+    "sha256": "0c58ced2e0a2799f8c5e38212ccb7c82632f91667cbe970440465d2a834c85af"
+  },
+  {
+    "file": "MoveBooks-UX-v2-implementation-plan.md",
+    "sha256": "12abf5940098e7fa71b80cee15e57e7f4487335f69fc7b98b4737a403aeb6cbd"
+  },
+  {
+    "file": "MoveBooks-UX-v2-decision-register.md",
+    "sha256": "081bb0b8f3b9a8af55bcd78c029b81bd2793e7fd23ac4093e40a4b19b00d98af"
+  }
+]
