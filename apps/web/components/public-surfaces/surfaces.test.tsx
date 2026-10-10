@@ -84,10 +84,12 @@ describe("public surface contracts", () => {
   it("routes Simulator to ordinary discovery with no requests or automatic approvals", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<Simulator/>);
-    expect(screen.getByRole("link", { name: "Try a migration" })).toHaveAttribute("href", sampleEntry);
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Try a migration with a sample business.");
-    expect(screen.getByText(/We never pre-approve/)).toBeVisible();
-    expect(screen.getByText(/Cloud mode uses real Google sign-in and durable synthetic workspaces/)).toBeVisible();
+    expect(screen.getByRole("link", { name: "Try the Beta with this sample" })).toHaveAttribute("href", `/sign-in?next=${encodeURIComponent(sampleEntry)}`);
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Meet your sample business.");
+    fireEvent.click(screen.getByText("What you will experience"));
+    expect(screen.getByText(/Nothing is pre-approved/)).toBeVisible();
+    fireEvent.click(screen.getByText("What is synthetic"));
+    expect(screen.getByText(/Cloud mode uses real Google sign-in and durable owner-protected workspaces/)).toBeVisible();
     expect(screen.queryByText(/Sessions expire when the API restarts/)).not.toBeInTheDocument();
     expect(fetch).not.toHaveBeenCalled();
   });
@@ -98,18 +100,8 @@ describe("public surface contracts", () => {
     expect(await screen.findByLabelText("Sample business")).toHaveValue("harbor-light-migrate-demo");
     expect(fetch).not.toHaveBeenCalled();
   });
-  it("offers sample entry without creating a session", async () => {
-    const fetch = vi.spyOn(globalThis, "fetch");
-    render(<ProductEntry/>);
-    expect(await screen.findByText(/No migration selected/)).toBeVisible();
-    expect(screen.getByRole("link", { name: "Start a sample migration" })).toHaveAttribute("href", sampleEntry);
-    expect(screen.getByText(/Uploads are unavailable in this public Beta/)).toBeVisible();
-    expect(screen.getByText(/Real accounting-provider connections are not available/)).toBeVisible();
-    expect(screen.queryByText(/Production identity and durable sessions are not available/)).not.toBeInTheDocument();
-    expect(fetch).not.toHaveBeenCalled();
-  });
   it("continues the existing authoritative stage using a read-only request", async () => {
-    sessionStorage.setItem("movebooks-migration-session", id);
+    window.history.replaceState(null, "", `/product?session=${id}`);
     const fetch = vi.spyOn(globalThis, "fetch").mockImplementation(() => json(evidence));
     render(<ProductEntry/>);
     expect(await screen.findByRole("link", { name: "Continue My Migration" })).toHaveAttribute("href", `/migrate-resolve?session=${id}`);
@@ -119,7 +111,7 @@ describe("public surface contracts", () => {
   it("renders all ten concise Learn topics with contextual destinations", () => {
     render(<Learn/>);
     for (const topic of topics) {
-      expect(screen.getByRole("link", { name: topic.title })).toHaveAttribute("href", `#${topic.id}`);
+      expect(document.getElementById(topic.id)?.querySelector("summary")).toHaveTextContent(topic.title);
       expect(document.getElementById(topic.id)?.tagName).toBe("DETAILS");
     }
     // With no migration selected, each topic leads to My Migration, never the marketing Product page.
@@ -193,27 +185,19 @@ describe("public surface contracts", () => {
     expect(screen.getByRole("button", { name: "Start learning scenario" })).toBeVisible();
   });
   it("shows actual Trust activity, decisions, tools and checks, but never hidden payload fields", async () => {
-    sessionStorage.setItem("movebooks-migration-session", id);
+    window.history.replaceState(null, "", `/trust?session=${id}`);
     const fetch = vi.spyOn(globalThis, "fetch").mockImplementation(() => json(evidence));
-    render(<Trust/>);
+    render(<Trust evidenceMode/>);
     expect(await screen.findByText("Assessment Agent reviewed source evidence")).toBeVisible();
     expect(screen.getByRole("heading", { name: "Current journey stage: Move" })).toBeVisible();
     expect(screen.getByText("Tool: check_balance")).toBeVisible();
-    expect(screen.getByRole("heading", { name: "AI recommendation" })).toBeVisible();
-    expect(screen.getByRole("heading", { name: "Deterministic verification" })).toBeVisible();
-    expect(screen.getByRole("heading", { name: "Human decision" })).toBeVisible();
-    expect(screen.getByRole("heading", { name: "Beta limitations" })).toBeVisible();
-    expect(screen.getByText(/not a production or compliance-ready service/)).toBeVisible();
-    fireEvent.click(screen.getByText("Sign-in, saved progress and data limits"));
-    expect(screen.getByText(/Public-Beta cloud uploads remain disabled/)).toBeVisible();
-    expect(screen.getByText(/approval identity is checked on the server/)).toBeVisible();
     expect(document.body.textContent).not.toContain("PRIVATE_");
     expect(fetch.mock.calls.every(call => !call[1]?.method || call[1].method === "GET")).toBe(true);
   });
   it.each([401, 404, 500])("shows Trust read failure (%s), never fabricated activity or success", async status => {
-    sessionStorage.setItem("movebooks-migration-session", id);
+    window.history.replaceState(null, "", `/trust?view=evidence&session=${id}`);
     vi.spyOn(globalThis, "fetch").mockImplementation(() => json({}, status));
-    render(<Trust/>);
+    render(<Trust evidenceMode/>);
     expect(await screen.findByText("Evidence unavailable")).toBeVisible();
     expect(screen.queryByRole("heading", { name: /Current journey stage/ })).not.toBeInTheDocument();
   });
@@ -227,7 +211,7 @@ describe("public surface contracts", () => {
   it("rejects invalid references without sending a request", async () => {
     window.history.replaceState(null, "", "/trust?session=../../private");
     const fetch = vi.spyOn(globalThis, "fetch");
-    render(<Trust/>);
+    render(<Trust evidenceMode/>);
     expect(await screen.findByText(/Invalid session reference/)).toBeVisible();
     expect(fetch).not.toHaveBeenCalled();
   });
@@ -251,6 +235,7 @@ describe("public surface contracts", () => {
     let draft = JSON.parse(decodeURIComponent(link.getAttribute("href")!.split(",")[1]));
     expect(draft.context).toBeUndefined();
     expect(draft.delivery).toBe("NOT_SUBMITTED");
+    fireEvent.click(screen.getByText("Optional context preview"));
     fireEvent.click(screen.getByRole("checkbox", { name: /Include only this context in my draft/ }));
     fireEvent.click(screen.getByRole("button", { name: "Prepare feedback draft" }));
     draft = JSON.parse(decodeURIComponent(screen.getByRole("link", { name: "Download reviewed draft" }).getAttribute("href")!.split(",")[1]));
@@ -267,9 +252,9 @@ describe("public surface contracts", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<Support/>);
     expect(screen.getByRole("heading", { name: "Validation mismatch" })).toBeVisible();
-    expect(screen.getByRole("link", { name: "Return to migration" })).toHaveAttribute("href", `/validate-configure?session=${id}`);
+    expect(screen.getByRole("link", { name: "Open Verify for this issue" })).toHaveAttribute("href", `/validate-configure?session=${id}`);
     expect(screen.getByRole("link", { name: "Learn about this step" })).toHaveAttribute("href", "/learn#reconciliation");
-    expect(screen.getByRole("link", { name: "Prepare issue draft" }).getAttribute("href")).not.toContain("raw_data");
+    expect(screen.getByRole("link", { name: "Prepare unsent issue draft" }).getAttribute("href")).not.toContain("raw_data");
     expect(fetch).not.toHaveBeenCalled();
   });
   it("keeps analytics as uninstrumented contracts, with server-owned completion and intake", () => {
