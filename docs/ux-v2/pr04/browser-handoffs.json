@@ -1,0 +1,34 @@
+[
+  {
+    "task": "approval",
+    "url": "http://localhost:3004/plan-map-approve?session=22222222-2222-4222-8222-222222222222",
+    "headings": [
+      "Prepare Your Migration Plan",
+      "Create the Plan for This Migration",
+      "Reasoning guidance · advisory only"
+    ]
+  },
+  {
+    "task": "verify",
+    "url": "http://localhost:3004/validate-configure?session=33333333-3333-4333-8333-333333333333",
+    "headings": [
+      "Know It Matches.Make It Yours.",
+      "Reasoning guidance · advisory only"
+    ]
+  },
+  {
+    "task": "onboarding",
+    "url": "http://localhost:3004/onboard-fpu?session=44444444-4444-4444-8444-444444444444",
+    "headings": [
+      "Start Using Your Books",
+      "Reasoning guidance · advisory only"
+    ]
+  },
+  {
+    "task": "verified",
+    "url": "http://localhost:3004/trust?view=evidence&session=55555555-5555-4555-8555-555555555555",
+    "headings": [
+      "Review what happened."
+    ]
+  }
+]

@@ -90,7 +90,7 @@ describe("shared Google authentication controls", () => {
     expect(screen.getByRole("main")).toHaveTextContent("Use your Google account to securely access your MoveBooks migration.");
     expect(screen.getByRole("main")).toHaveTextContent("Bounded synthetic Beta · No production customer data");
     expect(screen.getByRole("main")).not.toHaveTextContent(/workspace ownership|API verifies|durable storage/);
-    expect(button).toHaveClass("secondary");
+    expect(button).not.toHaveClass("secondary");
     expect(button).not.toHaveClass("w-full");
     fireEvent.click(button);
     expect(mocks.popup).toHaveBeenCalledTimes(1);

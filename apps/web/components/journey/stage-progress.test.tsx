@@ -43,7 +43,7 @@ describe("failed deep links", () => {
     plan.unmount();
     window.history.replaceState(null, "", "/workspace");
     render(<MyMigration />);
-    expect(await screen.findByRole("link", { name: "Create My Migration Plan" })).toHaveAttribute("href", `/plan-map-approve?session=${id}`);
+    expect(await screen.findByRole("link", { name: "Review readiness and plan" })).toHaveAttribute("href", `/plan-map-approve?session=${id}`);
     expect(String(fetch.mock.calls[1][0])).toContain(`/migration-sessions/${id}/intake-trust`);
   });
 

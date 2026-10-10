@@ -1,0 +1,38 @@
+[
+  {
+    "documentHeight": 1090,
+    "h1Count": 1,
+    "height": 900,
+    "primaryBottom": 287.1796875,
+    "primaryCount": 1,
+    "scrollWidth": 1440,
+    "width": 1440
+  },
+  {
+    "documentHeight": 1091,
+    "h1Count": 1,
+    "height": 1024,
+    "primaryBottom": 272.7734375,
+    "primaryCount": 1,
+    "scrollWidth": 768,
+    "width": 768
+  },
+  {
+    "documentHeight": 1205,
+    "h1Count": 1,
+    "height": 844,
+    "primaryBottom": 288.7734375,
+    "primaryCount": 1,
+    "scrollWidth": 390,
+    "width": 390
+  },
+  {
+    "documentHeight": 1398,
+    "h1Count": 1,
+    "height": 700,
+    "primaryBottom": 346.3671875,
+    "primaryCount": 1,
+    "scrollWidth": 320,
+    "width": 320
+  }
+]
