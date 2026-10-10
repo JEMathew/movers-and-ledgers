@@ -11,9 +11,8 @@ export function GoogleSignIn({ destination, compact = false }: { destination?: s
   const preparing = !ready && !error;
   if (identity) return compact ? null : <a className="button mt-7" href={safeDestination(destination ?? "/workspace")}>Go to My Migration</a>;
   if (hasSession) return compact ? null : <p role="status" className="mt-7">{!ready || busy ? "Verifying your account…" : "Your session needs attention. Use the account control above to sign out and try again."}</p>;
-  // The header shows a short "Sign in"; its accessible name still states the provider. Start my migration is the
-  // header's primary action, so the compact sign-in stays visually secondary.
-  return <Button className={compact ? undefined : "mt-7"} size={compact ? "small" : "default"} variant={compact ? "ghost" : "secondary"}
+  // The page owns the primary authentication task; the header stays a utility.
+  return <Button className={compact ? undefined : "mt-7"} size={compact ? "small" : "default"} variant={compact ? "ghost" : "primary"}
     aria-label={compact && !busy ? "Sign in with Google" : undefined}
     disabled={!ready || busy} aria-busy={preparing || undefined} title={preparing ? "Getting Google sign-in ready" : undefined} onClick={() => signIn(destination ?? (window.location.pathname === "/sign-in"
       ? new URLSearchParams(window.location.search).get("next") ?? "/workspace"
