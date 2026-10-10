@@ -1,0 +1,62 @@
+[
+  {
+    "screen": "evidence",
+    "documentHeight": 16406,
+    "h1": 1,
+    "height": 900,
+    "primary": [
+      {
+        "bottom": 635.0703125,
+        "label": "Return to migration"
+      }
+    ],
+    "scrollWidth": 1440,
+    "visibleWords": 1216,
+    "width": 1440
+  },
+  {
+    "screen": "help",
+    "documentHeight": 1082,
+    "h1": 1,
+    "height": 900,
+    "primary": [
+      {
+        "bottom": 442.1171875,
+        "label": "Open Move for this issue"
+      }
+    ],
+    "scrollWidth": 1440,
+    "visibleWords": 140,
+    "width": 1440
+  },
+  {
+    "screen": "help",
+    "documentHeight": 1306,
+    "h1": 1,
+    "height": 844,
+    "primary": [
+      {
+        "bottom": 468.8359375,
+        "label": "Open Move for this issue"
+      }
+    ],
+    "scrollWidth": 390,
+    "visibleWords": 140,
+    "width": 390
+  },
+  {
+    "screen": "evidence",
+    "documentHeight": 18927,
+    "h1": 1,
+    "height": 844,
+    "primary": [
+      {
+        "bottom": 647.8671875,
+        "label": "Return to migration"
+      }
+    ],
+    "scrollWidth": 677,
+    "visibleWords": 1216,
+    "width": 390
+  }
+]

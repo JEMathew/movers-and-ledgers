@@ -1,0 +1,172 @@
+[
+  {
+    "file": "after-advisory-390.jpg",
+    "dimensions": [
+      390,
+      844
+    ],
+    "bytes": 58864,
+    "sha256": "95c7b77c8ed321a97a40256fdb06e489a5f416265cd98d47d6a514ec028790d4",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "after-evidence-1440.jpg",
+    "dimensions": [
+      1440,
+      900
+    ],
+    "bytes": 93307,
+    "sha256": "f78b85d79f3497bd27c5827456b595700532b8b481f8c16410792f9326037e4c",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "after-evidence-320.jpg",
+    "dimensions": [
+      320,
+      700
+    ],
+    "bytes": 37240,
+    "sha256": "d2c2a48a2ef978f36346012cc47fa73e855c3aa6f88ab3e0821fc07707897e84",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "after-evidence-390.jpg",
+    "dimensions": [
+      390,
+      844
+    ],
+    "bytes": 59452,
+    "sha256": "86c9c13cb25ec144429c3b2dcb4b239b3d703104a9d65b5a91c56bf9ccc87899",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "after-evidence-768.jpg",
+    "dimensions": [
+      768,
+      1024
+    ],
+    "bytes": 88332,
+    "sha256": "aac650cf160bf6dfb48e1bc22d34373a078cabd26deee7c103f20708f2b1fe91",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "after-help-1440.jpg",
+    "dimensions": [
+      1440,
+      900
+    ],
+    "bytes": 83051,
+    "sha256": "34eb97bc5562db0d0f1d9a96075eeb3fccc66a9505ec23fc42a1256d6122fecb",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "after-help-320.jpg",
+    "dimensions": [
+      320,
+      700
+    ],
+    "bytes": 40733,
+    "sha256": "1cca200d558dc3cc19a5af80e9f8e532d64e8b7f2c14c258a75835924ac5f069",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "after-help-390.jpg",
+    "dimensions": [
+      390,
+      844
+    ],
+    "bytes": 56046,
+    "sha256": "559d71591a8cfaf672206c076db4655af8d1708275dd25b36b20067a6a127541",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "after-help-768.jpg",
+    "dimensions": [
+      768,
+      1024
+    ],
+    "bytes": 79007,
+    "sha256": "4e1df28cadb5764320c9b9351bbdd582b0883ed9512fc73272ff82e8dd16f24d",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "after-older-evidence-1440.jpg",
+    "dimensions": [
+      1440,
+      900
+    ],
+    "bytes": 95709,
+    "sha256": "e1db735135ba4234cf9775b1063c41279d86a61ea58d3a5d219b2b6296bd826f",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "after-posted-checkpoint-390.jpg",
+    "dimensions": [
+      390,
+      844
+    ],
+    "bytes": 43250,
+    "sha256": "0cc919929c31d897f6f44dcbcfc34196af6b1f3dd09ea270ea534c6e1ec5e3e9",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "after-recovery-guidance-320.jpg",
+    "dimensions": [
+      320,
+      700
+    ],
+    "bytes": 41277,
+    "sha256": "e9e872a0cf962a805b3e2697133e87300aa75699ffb5fd9c85807bb3af6abd0c",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "after-unavailable-320.jpg",
+    "dimensions": [
+      320,
+      700
+    ],
+    "bytes": 37970,
+    "sha256": "283d858e11512fe89b314e759471f4dc10baa4f232757c93eb70fc6022fbe945",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "before-evidence-1440.jpg",
+    "dimensions": [
+      1440,
+      900
+    ],
+    "bytes": 100081,
+    "sha256": "1c96bd8229f5d6994dbd87910e2c7716599a40ca94409347025c83fca4d377de",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "before-evidence-390.jpg",
+    "dimensions": [
+      390,
+      844
+    ],
+    "bytes": 55780,
+    "sha256": "612dc31cbe079e50f83d6ac37f2ce657636529091ef16ee7e937e1e0d87245c6",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "before-help-1440.jpg",
+    "dimensions": [
+      1440,
+      900
+    ],
+    "bytes": 79031,
+    "sha256": "7723a8ac9ed8003ae8134729dba94c787a28ffaaba8e11dd308808270877773d",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  },
+  {
+    "file": "before-help-390.jpg",
+    "dimensions": [
+      390,
+      844
+    ],
+    "bytes": 54180,
+    "sha256": "ea1cb81fa471e3f4178bb913f50856a0b362d5dcb30fec4c91430a896e6e77fb",
+    "source": "Actual browser screenshot; unedited local synthetic UI"
+  }
+]

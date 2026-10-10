@@ -1,0 +1,38 @@
+{
+  "keyboard": {
+    "focusOutline": "3px",
+    "focused": "Agent activity and tools"
+  },
+  "learnReturn": {
+    "focused": "What happens when migration fails",
+    "openTopic": "recovery",
+    "returnHref": "/migrate-resolve?session=b27ae378-34ca-4a93-b431-5f1ed0ebef6b",
+    "url": "http://127.0.0.1:3007/learn?session=b27ae378-34ca-4a93-b431-5f1ed0ebef6b&stage=2#recovery"
+  },
+  "advice": {
+    "state": "FALLBACK",
+    "category": "live_disabled",
+    "provider": "deterministic",
+    "explicitRequests": 1,
+    "financialActions": 0
+  },
+  "viewports": [
+    [
+      1440,
+      900
+    ],
+    [
+      768,
+      1024
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      320,
+      700
+    ]
+  ],
+  "cloudSignedInVisual": false
+}
