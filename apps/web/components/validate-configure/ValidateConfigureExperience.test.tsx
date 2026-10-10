@@ -50,6 +50,7 @@ describe("ValidateConfigureExperience", () => {
     const primary = Array.from(document.querySelectorAll<HTMLElement>(".button")).filter(el => !["secondary", "ghost", "danger", "icon-button"].some(c => el.classList.contains(c)));
     expect(primary).toEqual([complete]);
     expect(screen.getByRole("button", { name: "Revalidate Migration" })).toHaveClass("secondary");
+    fireEvent.click(screen.getByText("Verified financial report · exact source, target and evidence"));
     expect(screen.getByText(/Revalidating reruns every check and discards the current configuration/)).toBeVisible();
   });
 
@@ -57,7 +58,8 @@ describe("ValidateConfigureExperience", () => {
     vi.spyOn(globalThis, "fetch").mockImplementationOnce(() => response(blocked));
     window.history.replaceState(null, "", "?session=session-vc");
     render(<ValidateConfigureExperience />);
-    expect(await screen.findByRole("button", { name: "Revalidate Migration" })).not.toHaveClass("secondary");
+    expect(await screen.findByRole("button", { name: "Review repair: invoices:invoice-001" })).not.toHaveClass("secondary");
+    expect(screen.getByRole("button", { name: "Revalidate Migration" })).toHaveClass("secondary");
     expect(screen.queryByText(/discards the current configuration/)).not.toBeInTheDocument();
   });
 
@@ -139,9 +141,9 @@ describe("ValidateConfigureExperience", () => {
     fireEvent.click(screen.getByRole("button", {name: "Confirm approve"}));
     expect(await screen.findByRole("alert")).toHaveTextContent("Evidence changed");
     expect(screen.getByRole("dialog")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", {name: "Confirm approve"}));
-    await screen.findByText("APPROVED");
-    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(screen.getByRole("button", {name: "Confirm approve"})).toBeDisabled();
+    expect(screen.queryByText("APPROVED")).not.toBeInTheDocument();
+    expect(screen.getByRole("link", {name: "Read current evidence"})).toHaveAttribute("href", "/validate-configure?session=session-vc");
   });
 
   it("hands off to onboarding with one Complete Setup action once configuration is applied", async () => {
@@ -170,4 +172,19 @@ describe("ValidateConfigureExperience", () => {
     fireEvent(screen.getByRole("dialog"), new Event("cancel", {bubbles: true, cancelable: true}));
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
   });
+});
+
+it("keeps all settings reachable and offers the next pending setting after a recorded review", async () => {
+  const multiple = structuredClone(review);
+  multiple.configuration!.proposals.push({ ...multiple.configuration!.proposals[0], id: "currency", label: "Base currency", state: "APPROVED" });
+  vi.spyOn(globalThis, "fetch").mockImplementationOnce(() => response(multiple));
+  window.history.replaceState(null, "", "?session=session-vc");
+  render(<ValidateConfigureExperience />);
+  const queue = await screen.findByRole("combobox", { name: /Settings queue/ });
+  expect(queue.querySelectorAll("option")).toHaveLength(2);
+  fireEvent.change(queue, { target: { value: "currency" } });
+  expect(screen.getByRole("button", { name: "Base currency approved" })).toBeDisabled();
+  fireEvent.click(screen.getByRole("button", { name: "Review next setting" }));
+  expect(queue).toHaveValue("inventory");
+  expect(fetch).toHaveBeenCalledTimes(1);
 });
