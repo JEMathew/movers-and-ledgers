@@ -18,5 +18,5 @@ export function safeContext(query: URLSearchParams): SafeContext {
   return result;
 }
 export function contextQuery(context: SafeContext) {
-  return new URLSearchParams(Object.entries(context).map(([key, value]) => [key, String(value)])).toString();
+  return new URLSearchParams(Object.entries(context).filter(([, value]) => value !== undefined).map(([key, value]) => [key, String(value)])).toString();
 }

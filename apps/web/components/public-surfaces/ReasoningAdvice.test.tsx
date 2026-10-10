@@ -56,4 +56,26 @@ describe("bounded reasoning guidance", () => {
     expect(screen.queryByText(/AI-generated recommendation/)).not.toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent("No reasoning requested");
   });
+  it("keeps uncertainty visible while disclosing supplied explanation and alternatives", async () => {
+    const fetcher = vi.fn().mockResolvedValue({ok: true, json: async () => ({...response("FALLBACK"), context_hash:"context:actual"})});
+    vi.stubGlobal("fetch", fetcher); render(<ReasoningAdvice path="/plan-map-approve"/>);
+    fireEvent.click(screen.getByRole("button", {name:"Explain planning"}));
+    expect(await screen.findByText(/Confidence: 0.9. Uncalibrated/)).toBeVisible();
+    expect(screen.getByText(/Uncertainty: Human judgement/)).toBeVisible();
+    expect(screen.getByText(/Existing proposal/)).not.toBeVisible();
+    fireEvent.click(screen.getByText("Explanation and alternatives"));
+    expect(screen.getByText(/Existing proposal/)).toBeVisible();
+    expect(screen.getByText(/Alternatives: Escalate/)).toBeVisible();
+    fireEvent.click(screen.getByText("Evidence and deterministic boundaries"));
+    expect(screen.getByText(/context:actual/)).toBeVisible();
+    expect(fetcher).toHaveBeenCalledTimes(1);
+  });
+  it("does not display a recommendation if the supplied state says unavailable", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ok:true,json:async()=>({...response("UNAVAILABLE"),advice})}));
+    render(<ReasoningAdvice path="/plan-map-approve"/>);
+    fireEvent.click(screen.getByRole("button",{name:"Explain planning"}));
+    expect(await screen.findByText(/Guidance unavailable/)).toBeVisible();
+    expect(screen.queryByText(/Recommendation:/)).not.toBeInTheDocument();
+  });
+
 });
