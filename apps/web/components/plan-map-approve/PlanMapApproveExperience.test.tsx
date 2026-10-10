@@ -119,7 +119,7 @@ describe("Plan → Map → Approve", () => {
   it("never creates a replacement business when no migration is selected", async () => {
     const fetch = vi.fn(); vi.stubGlobal("fetch", fetch);
     render(<PlanMapApproveExperience />);
-    expect(await screen.findByRole("alert")).toHaveTextContent("same business session");
+    expect(await screen.findByRole("alert")).toHaveTextContent("same migration");
     expect(screen.getByRole("button", { name: "Create My Migration Plan" })).toBeDisabled();
     expect(fetch).not.toHaveBeenCalled();
   });
@@ -128,6 +128,8 @@ describe("Plan → Map → Approve", () => {
     read(); render(<PlanMapApproveExperience />);
     expect(await screen.findByRole("heading", { name: "Your Migration Plan Is Ready" })).toBeVisible();
     expect(screen.getByRole("heading", { name: "Migration Scope" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "What Needs Human Review" })).not.toBeVisible();
+    fireEvent.click(screen.getByText("Sequence, review workload and planning evidence"));
     expect(screen.getByRole("heading", { name: "What Needs Human Review" })).toBeVisible();
     expect(screen.getByRole("button", { name: "Review Mappings" })).toBeEnabled();
     expect(document.querySelectorAll('main .button:not(.secondary):not(.ghost):not(.danger)')).toHaveLength(1);
@@ -156,14 +158,14 @@ describe("Plan → Map → Approve", () => {
     render(<PlanMapApproveExperience />);
     const action = screen.getByRole("button", { name: "Create My Migration Plan" });
     await waitFor(() => expect(action).toBeEnabled()); fireEvent.click(action);
-    const journey = screen.getByRole("list", { name: "Migration Journey" });
-    await waitFor(() => expect(journey.querySelector(".is-processing")).toHaveTextContent("PlanPreparing…"));
+    const journey = screen.getAllByRole("list", { name: "Five-phase migration journey" })[0];
+    await waitFor(() => expect(journey.querySelector(".is-processing")).toHaveTextContent("PreparePreparing…"));
     expect(screen.getByText("Preparing your migration plan")).toBeVisible();
     expect(screen.getByText("Defining what will move and highlighting decisions that need your review.")).toBeVisible();
     finish(jsonResponse(plan));
     await screen.findByRole("heading", { name: "Your Migration Plan Is Ready" });
     expect(journey.querySelector(".is-processing")).toBeNull();
-    expect(journey.querySelectorAll(".is-complete")).toHaveLength(2);
+    expect(journey.querySelectorAll('[data-state="Completed"]')).toHaveLength(1);
   });
 
   it("shows source, destination, rationale, evidence and useful risk context", async () => {
@@ -182,7 +184,7 @@ describe("Plan → Map → Approve", () => {
     fetch.mockResolvedValueOnce(jsonResponse(reviewed)).mockResolvedValueOnce(jsonResponse(snapshot({ mappings: [reviewed] })));
     fireEvent.click(screen.getByRole("button", { name: "Confirm Mapping" }));
     await screen.findByRole("button", { name: "Review Migration Plan" });
-    expect(screen.queryByRole("link", { name: "Start Migration" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Continue to Move" })).not.toBeInTheDocument();
     expect(screen.getByRole("list", { name: "Migration Journey" }).querySelectorAll(".is-complete")).toHaveLength(3);
     fireEvent.click(screen.getByRole("button", { name: "Review Migration Plan" }));
     expect(screen.getByRole("button", { name: "Approve Migration Plan" })).toBeEnabled();
@@ -202,7 +204,7 @@ describe("Plan → Map → Approve", () => {
     await screen.findByRole("heading", { name: "Your Migration Plan Is Approved" });
     expect(screen.getByText(/firebase:owner-a/)).toBeVisible();
     expect(screen.getByText(approval.approved_at)).toBeVisible();
-    expect(screen.getByRole("link", { name: "Start Migration" })).toHaveAttribute("href", `/migrate-resolve?session=${id}`);
+    expect(screen.getByRole("link", { name: "Continue to Move" })).toHaveAttribute("href", `/migrate-resolve?session=${id}`);
     expect(JSON.parse(fetch.mock.calls.at(-2)![1].body)).toEqual({ action: "approve", plan_id: plan.id });
   });
 
@@ -213,7 +215,7 @@ describe("Plan → Map → Approve", () => {
       fireEvent.click(screen.getByRole("button", { name: "Review Migration Plan" }));
       expect(screen.getByRole("button", { name: "Approve Migration Plan" })).toBeDisabled();
     } else expect(screen.queryByRole("button", { name: "Review Migration Plan" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: "Start Migration" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Continue to Move" })).not.toBeInTheDocument();
   });
 
   it("never shows approved progress when the post-mutation read fails", async () => {
@@ -222,15 +224,15 @@ describe("Plan → Map → Approve", () => {
     fetch.mockResolvedValueOnce(jsonResponse(reviewed)).mockResolvedValueOnce(jsonResponse({ detail: "Session unreadable" }, 500));
     fireEvent.click(screen.getByRole("button", { name: "Confirm Mapping" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Session unreadable");
-    expect(screen.getByText(/^(Checking your progress…|Progress unavailable · nothing is assumed)$/)).toBeVisible();
-    expect(screen.queryByRole("link", { name: "Start Migration" })).not.toBeInTheDocument();
+    expect(screen.getAllByText(/^(Checking your progress…|Progress unavailable · nothing is assumed)$/)[0]).toBeVisible();
+    expect(screen.queryByRole("link", { name: "Continue to Move" })).not.toBeInTheDocument();
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe(id);
   });
 
   it("resumes approved and later-stage sessions without writes", async () => {
     const fetch = read({ workflow_status: "APPROVED", mappings: [reviewed] });
     render(<PlanMapApproveExperience />);
-    await screen.findByRole("link", { name: "Start Migration" });
+    await screen.findByRole("link", { name: "Continue to Move" });
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch.mock.calls[0][1].method).toBeUndefined();
   });
@@ -258,11 +260,11 @@ describe("reconsideration stays separately governed", () => {
     fireEvent.change(screen.getByLabelText("Reason for reconsideration"), {target: {value: "Explicit reconsideration"}});
     fireEvent.click(screen.getByRole("button", {name: "Request Reconsideration"}));
     const approveReview = await screen.findByRole("button", {name: "Approve Reconsideration"});
-    expect(screen.queryByRole("link", {name: "Start Migration"})).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", {name: "Continue to Move"})).not.toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(3);
     fireEvent.click(approveReview);
     expect(await screen.findByRole("button", {name: "Review Migration Plan"})).toBeVisible();
-    expect(screen.queryByRole("link", {name: "Start Migration"})).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", {name: "Continue to Move"})).not.toBeInTheDocument();
     expect(screen.getByText("Original reason: Original rejection", {exact: true})).toBeVisible();
     expect(fetchMock.mock.calls[1][0]).toContain("/mappings/mapping-001/reconsiderations");
     expect(fetchMock.mock.calls[3][0]).toContain("/reconsiderations/request-001/review");
@@ -279,14 +281,14 @@ describe("authoritative approval failures and resume", () => {
     fetch.mockResolvedValueOnce(jsonResponse({ detail: "A concurrent change prevented approval" }, 409));
     fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Approve Migration Plan" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("concurrent change");
-    expect(screen.getByText(/^(Checking your progress…|Progress unavailable · nothing is assumed)$/)).toBeVisible();
-    expect(screen.queryByRole("link", { name: "Start Migration" })).not.toBeInTheDocument();
+    expect(screen.getAllByText(/^(Checking your progress…|Progress unavailable · nothing is assumed)$/)[0]).toBeVisible();
+    expect(screen.queryByRole("link", { name: "Continue to Move" })).not.toBeInTheDocument();
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe(id);
   });
   it("does not restart migration from an already executed session", async () => {
     read({ workflow_status: "MIGRATION_COMPLETE", mappings: [reviewed] }); render(<PlanMapApproveExperience />);
     expect(await screen.findByRole("link", { name: "Return to My Migration" })).toHaveAttribute("href", `/workspace?session=${id}`);
-    expect(screen.queryByRole("link", { name: "Start Migration" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Continue to Move" })).not.toBeInTheDocument();
   });
   it("stops early session actions at the authoritative Assess stage", async () => {
     const fetch = read({ workflow_status: "DISCOVERED", plan: null, mappings: [] }); render(<PlanMapApproveExperience />);
@@ -306,7 +308,7 @@ describe("mapping changes and adapter limits", () => {
     fetch.mockResolvedValueOnce(jsonResponse(changed)).mockResolvedValueOnce(jsonResponse(snapshot({ mappings: [changed] })));
     fireEvent.click(screen.getByRole("button", { name: "Save Changed Mapping" }));
     expect(await screen.findByText("Changed", { exact: true })).toBeVisible();
-    expect(screen.queryByRole("link", { name: "Start Migration" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Continue to Move" })).not.toBeInTheDocument();
     expect(JSON.parse(fetch.mock.calls.at(-2)![1].body).selected_target).toBe("Other Income");
   });
   it("never offers an unsupported tax destination and lets review continue with a valid choice", async () => {
@@ -442,9 +444,24 @@ describe("initial-read recovery", () => {
 
 it("keeps Start Migration dominant when inspecting approved mappings", async () => {
   read({ workflow_status: "APPROVED", mappings: [reviewed] }); render(<PlanMapApproveExperience />);
-  await screen.findByRole("link", { name: "Start Migration" });
+  await screen.findByRole("link", { name: "Continue to Move" });
   fireEvent.click(screen.getByRole("button", { name: "Mappings" }));
-  expect(screen.getByRole("link", { name: "Start Migration" })).toHaveAttribute("href", `/migrate-resolve?session=${id}`);
+  expect(screen.getByRole("link", { name: "Continue to Move" })).toHaveAttribute("href", `/migrate-resolve?session=${id}`);
   expect(screen.queryByRole("button", { name: "Review Migration Plan" })).not.toBeInTheDocument();
   expect(screen.getByText("Approved", { exact: true })).toBeVisible();
+});
+
+describe("compact mapping queue", () => {
+  it("shows one item and retains every pending and reviewed destination without writes on selection", async () => {
+    read({ mappings: [proposal, { ...reviewed, id: "reviewed-2", source_label: "Earlier reviewed account" }] }); render(<PlanMapApproveExperience />); await openMappings();
+    const queue = screen.getByRole("combobox", { name: /Mapping queue/ });
+    const options = Array.from(queue.querySelectorAll("option"));
+    expect(options).toHaveLength(2);
+    expect(screen.getAllByRole("article").filter(card => card.getAttribute("aria-label")?.endsWith(" mapping"))).toHaveLength(1);
+    const before = vi.mocked(fetch).mock.calls.length;
+    fireEvent.change(queue, { target: { value: options.at(-1)!.value } });
+    expect(vi.mocked(fetch)).toHaveBeenCalledTimes(before);
+    expect(queue).toHaveValue(options.at(-1)!.value);
+    expect(screen.getAllByRole("article").filter(card => card.getAttribute("aria-label")?.endsWith(" mapping"))).toHaveLength(1);
+  });
 });
