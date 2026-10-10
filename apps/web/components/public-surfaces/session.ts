@@ -20,7 +20,7 @@ const list = (value: unknown): RecordData[] => Array.isArray(value) ? value.map(
 const text = (value: unknown) => typeof value === "string" ? value.slice(0, 400) : "";
 const refs = (value: unknown) => Array.isArray(value) ? value.filter((x): x is string => typeof x === "string").slice(0, 12).map(x => x.slice(0, 160)) : [];
 export type TraceRow = { id: string; title: string; kind: string; status: string; time: string; actor: string; tool: string; evidence: string[] };
-export type SessionView = { id: string; status: string; phase: number; sourceKind: string; activity: TraceRow[]; decisions: TraceRow[]; checks: TraceRow[]; blockers: string[]; events: TraceRow[]; readinessIssues: number; migrationIssues: number; verificationIssues: number; mappingIssues: number | null; attention: Attention[] };
+export type SessionView = { id: string; status: string; phase: number; sourceKind: string; activity: TraceRow[]; decisions: TraceRow[]; checks: TraceRow[]; blockers: string[]; events: TraceRow[]; readinessIssues: number; migrationIssues: number; verificationIssues: number; mappingIssues: number | null; attention: Attention[]; attentionComplete: boolean; readinessKnown: boolean };
 /** Something needing the customer: a plain title for primary screens, internal detail for evidence. */
 export type Attention = { title: string; evidence: string };
 
@@ -71,37 +71,50 @@ export function projectSession(raw: unknown, expectedId: string): SessionView {
   ];
   const blockers = attention.map(item => item.title);
   const events = list(s.events).map(e => ({ id: text(e.id), title: text(e.name).replaceAll("_", " "), kind: "Lifecycle audit reference", status: "Recorded", time: text(e.occurred_at), actor: "Workflow", tool: "", evidence: [] }));
-  return { id: expectedId, status, phase, sourceKind: s.source_kind === "user_upload" ? "User-provided data · synthetic target" : "Synthetic sample · synthetic target", activity, decisions, checks, blockers, events, readinessIssues: readiness.length, migrationIssues: migration.length, verificationIssues, mappingIssues: pendingInReview(s.mapping_review), attention };
+  const readinessKnown = Array.isArray(object(s.discovery).findings);
+  const attentionComplete = readinessKnown && Array.isArray(object(s.execution).failures) && Array.isArray(s.validation_reports) && Array.isArray(object(s.configuration).proposals) && Array.isArray(object(s.onboarding).tasks);
+  return { id: expectedId, status, phase, sourceKind: s.source_kind === "user_upload" ? "User-provided data · synthetic target" : "Synthetic sample · synthetic target", activity, decisions, checks, blockers, events, readinessIssues: readiness.length, migrationIssues: migration.length, verificationIssues, mappingIssues: pendingInReview(s.mapping_review), attention, attentionComplete, readinessKnown };
 }
 
-export function useSessionView() {
+export type SessionReadFailure = "identity" | "unavailable" | "invalid" | "unsupported" | "network";
+class ReadFailure extends Error { constructor(message: string, readonly kind: SessionReadFailure) { super(message); } }
+export function useSessionView(reference?: string) {
   const [view, setView] = useState<SessionView>();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [revision, setRevision] = useState(0);
+  const [errorKind, setErrorKind] = useState<SessionReadFailure>();
+  const [readAt, setReadAt] = useState<string>();
+  const [selectedReference, setSelectedReference] = useState<string>();
   useEffect(() => {
     const controller = new AbortController();
     let active = true;
     async function read() {
-      setLoading(true); setView(undefined); setError("");
+      setLoading(true); setView(undefined); setError(""); setErrorKind(undefined); setReadAt(undefined); setSelectedReference(undefined);
       try {
-        const linked = new URLSearchParams(window.location.search).get("session");
+        const linked = reference ?? new URLSearchParams(window.location.search).get("session");
         const id = linked ?? sessionStorage.getItem(SELECTED_SESSION_KEY);
-        if (!id) return;
-        if (!isSessionId(id)) throw new Error("Invalid session reference. Start or open a synthetic session from Product.");
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"}/v1/migration-sessions/${id}/intake-trust`, { headers: await authHeaders(), signal: controller.signal });
-        if (!response.ok) throw new Error(response.status === 404 ? "Session unavailable or expired. No replacement session was created." : "Session could not be read. Check local demo access and the API, then refresh.");
-        const projection = projectSession(await response.json(), id);
+        if (id === null) return;
+        if (!isSessionId(id)) throw new ReadFailure("Invalid session reference. Open a valid owned migration link; no replacement was created.", "invalid");
+        setSelectedReference(id);
+        const headers = await authHeaders();
+        if (!active) return;
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"}/v1/migration-sessions/${id}/intake-trust`, { headers, signal: controller.signal });
+        if (!response.ok) throw new ReadFailure(response.status === 401 ? "Your access needs verification. Sign in again to resume this destination." : [403, 404].includes(response.status) ? "Migration unavailable for this account. Check your owned reference; no replacement was created." : "Migration could not be read. Check your connection, then refresh the same migration.", response.status === 401 ? "identity" : [403, 404].includes(response.status) ? "unavailable" : "network");
+        const raw = await response.json();
+        let projection: SessionView;
+        try { projection = projectSession(raw, id); }
+        catch { throw new ReadFailure("Unsupported session evidence. Open the original workflow; no success is inferred.", "unsupported"); }
         if (!active) return;
         // Adopt a deep-linked migration only once it has been read and validated, so an
         // invalid or expired link never replaces the migration already selected in this tab.
         if (linked) sessionStorage.setItem(SELECTED_SESSION_KEY, id);
-        setView(projection);
-      } catch (caught) { if (active) setError(caught instanceof Error ? caught.message : "Session unavailable."); }
+        setView(projection); setReadAt(new Date().toISOString());
+      } catch (caught) { if (active) { setError(caught instanceof ReadFailure ? caught.message : "Migration could not be read. Check your connection, then refresh the same migration."); setErrorKind(caught instanceof ReadFailure ? caught.kind : "network"); } }
       finally { if (active) setLoading(false); }
     }
     void read();
     return () => { active = false; controller.abort(); };
-  }, [revision]);
-  return { view, error, loading, refresh: () => setRevision(x => x + 1) };
+  }, [revision, reference]);
+  return { view, error, errorKind, readAt, selectedReference, loading, refresh: () => setRevision(x => x + 1) };
 }
