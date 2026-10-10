@@ -3,7 +3,7 @@ export const phases = [
   { name: "Prepare", detail: "Plan + Map & Approve", route: "/plan-map-approve", topic: "mappings", copy: "Review the plan. You approve key decisions." },
   { name: "Move", detail: "Migrate + Resolve", route: "/migrate-resolve", topic: "recovery", copy: "Move in safe steps. Resolve blockers before moving forward." },
   { name: "Verify", detail: "Validate + Configure", route: "/validate-configure", topic: "reconciliation", copy: "We verify your numbers and review your setup." },
-  { name: "Start", detail: "Onboard + First Real Task", route: "/onboard-fpu", topic: "business-ready", copy: "Complete and verify your first productive task." },
+  { name: "Start", detail: "Onboard + First Synthetic Task", route: "/onboard-fpu", topic: "business-ready", copy: "Complete and verify your first productive task." },
 ] as const;
 export const topics = [
   { id: "why-migrate", title: "Why businesses migrate", body: "Growth, collaboration and connected workflows can outgrow the current accounting setup. A move should solve an operating problem, not simply replace software.", question: "What will your team be able to do afterward?", phase: 0 },
@@ -18,10 +18,11 @@ export const topics = [
   { id: "business-ready", title: "What Business Ready · Verified means", body: "Required data, setup, access and onboarding checks pass, then an authorized user completes an agreed task with verified evidence. In this Beta that is a synthetic invoice—not proof of production readiness.", question: "Has the productive task been verified, not merely posted?", phase: 4 },
 ] as const;
 // Signed-out navigation. Route paths are unchanged for compatibility; labels are customer-facing.
-export const publicLinks = [["Explore", "/simulator"], ["How It Works", "/guide"], ["Learn", "/learn"], ["Play", "/play"], ["Trust", "/trust"], ["Support", "/support"]] as const;
+export const publicLinks = [["Explore Demo", "/simulator"], ["Play", "/play"], ["Learn", "/learn"], ["Trust", "/trust"]] as const;
 // Signed-in navigation replaces the public marketing links. Account is the identity menu itself.
-export const memberLinks = [["My Migration", "/workspace"], ["Explore", "/simulator"], ["Learn", "/learn"], ["Help", "/support"]] as const;
-export const footerLinks = [["How It Works", "/guide"], ["Support", "/support"], ["Feedback", "/feedback"], ["Beta Limitations", "/trust#beta-limitations"]] as const;
+export const memberLinks = [["My Migration", "/workspace"], ["Play", "/play"]] as const;
+export const exploreLinks = [["Product Overview", "/"], ["Explore Demo", "/simulator"], ["Learn", "/learn"], ["Trust", "/trust"], ["Getting Started Guide", "/guide"]] as const;
+export const footerLinks = [["Getting Started Guide", "/guide"], ["Help", "/support"], ["Feedback", "/feedback"], ["Beta Limitations", "/trust#beta-limitations"]] as const;
 export const startMigrationHref = "/workspace";
 export const sampleEntry = "/assess?sample=harbor-light-migrate-demo";
 export const scope = "Synthetic Data · Public Reference · Beta. No live provider migration or production readiness claim.";

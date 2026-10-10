@@ -8,6 +8,7 @@ import Home from "@/app/page";
 const session = vi.hoisted(() => ({ ready: true, busy: false, hasSession: false,
   identity: null as null | { subject: string; email: string }, error: "", signIn: vi.fn(), signOut: vi.fn() }));
 vi.mock("@/components/IdentityProvider", () => ({ useIdentity: () => session }));
+vi.mock("next/navigation", () => ({ usePathname: () => window.location.pathname }));
 function shell() { return <ThemeProvider><Nav /><button>Outside control</button></ThemeProvider>; }
 function account() { return screen.getByRole("button", { name: /^Account:/ }); }
 function signedIn() { session.hasSession = true; session.identity = { subject: "firebase:internal-only", email: "verified@example.test" }; }
@@ -30,28 +31,18 @@ describe("global account and settings shell", () => {
     expect(within(banner).queryByRole("link", { name: "Start My Migration" })).not.toBeInTheDocument();
     expect(within(banner).getByRole("link", { name: "My Migration" })).toHaveAttribute("href", "/workspace");
   });
-  it("shows Sign in, a primary Start My Migration action and a compact appearance icon, with no Settings text", () => {
+  it("keeps sign-in and appearance utilities without a competing header launch", () => {
     render(shell());
-    const signIn = screen.getByRole("button", { name: "Sign in with Google" });
+    const banner = screen.getByRole("banner");
+    const signIn = within(banner).getByRole("button", { name: "Sign in with Google" });
     expect(signIn).toBeEnabled();
-    expect(signIn).toHaveTextContent(/^Sign in$/);
-    expect(signIn).toHaveClass("button", "small", "ghost");
-    const start = screen.getByRole("link", { name: "Start My Migration" });
-    expect(start).toHaveAttribute("href", "/workspace");
-    expect(start).toHaveClass("button", "small");
-    expect(start).not.toHaveClass("ghost", "secondary");
-    expect(signIn.compareDocumentPosition(start) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(signIn).toHaveClass("ghost");
+    expect(within(banner).queryByRole("link", { name: "Start My Migration" })).not.toBeInTheDocument();
+    expect(within(banner).queryByRole("link", { name: "Try the Beta" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Change appearance" })).toHaveAttribute("aria-haspopup", "dialog");
     expect(screen.queryByRole("button", { name: "Settings" })).not.toBeInTheDocument();
-    expect(screen.queryByText("Settings")).not.toBeInTheDocument();
-    const appearance = screen.getByRole("button", { name: "Change appearance" });
-    expect(appearance).toBeVisible();
-    expect(screen.getAllByRole("button", { name: "Change appearance" })).toHaveLength(1);
-    expect(appearance).toHaveTextContent("");
-    expect(appearance).toHaveAttribute("aria-haspopup", "dialog");
-    expect(appearance).toHaveAttribute("aria-expanded", "false");
-    // The icon sits next to Sign in, after it, so Sign in stays the first and primary control.
-    expect(signIn.compareDocumentPosition(appearance) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(screen.queryByRole("button", { name: /Account:|Sign out/ })).not.toBeInTheDocument();
+    fireEvent.click(signIn);
+    expect(session.signIn).toHaveBeenCalledWith("/");
   });
   it("uses customer-facing sign-in copy and preserves the protected destination", async () => {
     render(await SignIn({ searchParams: Promise.resolve({ next: "/onboard-fpu?session=preserved" }) }));
@@ -83,7 +74,7 @@ describe("global account and settings shell", () => {
   it("uses verified identity only and keeps sign-out inside the disclosure", () => {
     signedIn(); render(shell());
     expect(account()).toHaveAccessibleName("Account: verified@example.test");
-    expect(account()).toHaveTextContent("verified@example.test");
+    expect(account()).toHaveTextContent("Account");
     expect(screen.queryByText("Session needs attention")).not.toBeInTheDocument();
     expect(account()).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByRole("button", { name: "Settings" })).not.toBeInTheDocument();
@@ -240,6 +231,7 @@ describe("global account and settings shell", () => {
   });
   it("explains migration reasons and the three concrete customer questions", () => {
     render(<Home />);
+    fireEvent.click(screen.getByText("Why businesses migrate").closest("summary")!);
     expect(screen.getByRole("heading", { name: "Why businesses migrate" })).toBeVisible();
     for (const copy of [
       "Outgrown systems, fragmented data, manual processes and limited visibility can make everyday accounting harder to operate and scale.",
@@ -259,25 +251,60 @@ describe("global account and settings shell", () => {
     expect(screen.getByRole("button", { name: "Change appearance" })).toBeEnabled();
     expect(screen.getByRole("button", { name: "Sign in with Google" })).toBeEnabled();
   });
-  it("swaps public navigation for the signed-in product navigation only after verification, without fetching", () => {
+  it("uses verified member navigation even on Play, without fetching or starting a task", () => {
+    window.history.replaceState(null, "", "/play");
     const fetch = vi.spyOn(globalThis, "fetch");
     const view = render(shell());
-    const links = (name: string | RegExp) => screen.queryAllByRole("link", { name, hidden: true });
-    expect(links("My Migration")).toHaveLength(0);
-    expect(links("How It Works")).toHaveLength(2);
+    const primary = () => screen.getByRole("navigation", { name: "Primary navigation" });
+    expect(within(primary()).queryByRole("link", { name: "My Migration" })).not.toBeInTheDocument();
+    expect(within(primary()).getByRole("link", { name: "Explore Demo" })).toHaveAttribute("href", "/simulator");
     session.hasSession = true; session.ready = false; view.rerender(shell());
-    expect(links("My Migration")).toHaveLength(0);
-    expect(links("Start My Migration")).toHaveLength(0);
+    expect(within(primary()).queryByRole("link", { name: "My Migration" })).not.toBeInTheDocument();
     signedIn(); session.ready = true; view.rerender(shell());
-    expect(links("My Migration")).toHaveLength(2);
-    for (const link of links("My Migration")) expect(link).toHaveAttribute("href", "/workspace");
-    for (const [name, href] of [["Explore", "/simulator"], ["Learn", "/learn"], ["Help", "/support"]]) {
-      expect(links(name)).toHaveLength(2);
-      for (const link of links(name)) expect(link).toHaveAttribute("href", href);
+    expect(within(primary()).getAllByRole("link").map(a => a.textContent)).toEqual(["My Migration", "Play"]);
+    expect(within(primary()).getByRole("link", { name: "My Migration" })).toHaveAttribute("href", "/workspace");
+    expect(within(primary()).getByRole("link", { name: "Play" })).toHaveAttribute("href", "/play");
+    expect(within(primary()).getByRole("link", { name: "Play" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "MoveBooks AI My Migration" })).toHaveAttribute("href", "/workspace");
+    fireEvent.click(account());
+    const explore = screen.getByRole("navigation", { name: "Explore MoveBooks" });
+    for (const [name, href] of [["Product Overview", "/"], ["Explore Demo", "/simulator"], ["Learn", "/learn"], ["Trust", "/trust"], ["Getting Started Guide", "/guide"]]) {
+      expect(within(explore).getByRole("link", { name })).toHaveAttribute("href", href);
     }
-    for (const name of ["How It Works", "Play", "Trust", "Support", "Start My Migration", /Go to My Migration/]) expect(links(name)).toHaveLength(0);
-    expect(account()).toHaveAccessibleName("Account: verified@example.test");
+    expect(session.signIn).not.toHaveBeenCalled();
+    expect(session.signOut).not.toHaveBeenCalled();
     expect(fetch).not.toHaveBeenCalled();
     fetch.mockRestore();
+  });
+  it("closes navigation on Escape and returns focus to the menu trigger", () => {
+    render(shell());
+    const menu = screen.getByRole("button", { name: "Open navigation" });
+    fireEvent.click(menu);
+    expect(menu).toHaveAttribute("aria-expanded", "true");
+    const demo = within(screen.getByRole("navigation", { name: "Primary navigation" })).getByRole("link", { name: "Explore Demo" });
+    expect(demo).toHaveFocus();
+    fireEvent.keyDown(demo, { key: "Escape" });
+    expect(menu).toHaveAttribute("aria-expanded", "false");
+    expect(menu).toHaveFocus();
+  });
+  it("closes the mobile menu when resizing to desktop", () => {
+    render(shell());
+    const menu = screen.getByRole("button", { name: "Open navigation" });
+    fireEvent.click(menu);
+    expect(menu).toHaveAttribute("aria-expanded", "true");
+    fireEvent(window, new Event("resize"));
+    expect(menu).toHaveAttribute("aria-expanded", "false");
+  });
+  it("closes navigation on selection, outside pointer and focus exit", () => {
+    render(shell());
+    const menu = screen.getByRole("button", { name: "Open navigation" });
+    const demo = within(screen.getByRole("navigation", { name: "Primary navigation" })).getByRole("link", { name: "Explore Demo" });
+    demo.addEventListener("click", event => event.preventDefault());
+    fireEvent.click(menu); fireEvent.click(demo);
+    expect(menu).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(menu); fireEvent.pointerDown(screen.getByRole("button", { name: "Outside control" }));
+    expect(menu).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(menu); fireEvent.blur(demo, { relatedTarget: screen.getByRole("button", { name: "Outside control" }) });
+    expect(menu).toHaveAttribute("aria-expanded", "false");
   });
 });

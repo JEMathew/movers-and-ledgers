@@ -41,11 +41,11 @@ describe("User Guide", () => {
     expect(screen.getByText(/The request itself approves nothing/)).toBeVisible();
     expect(screen.queryByText(/QuickBooks|Intuit/i)).not.toBeInTheDocument();
   });
-  it("makes no requests and is a public route in the navigation", () => {
+  it("makes no requests and stays publicly discoverable through the guide link", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<Guide/>);
     expect(fetch).not.toHaveBeenCalled();
-    expect(publicLinks).toContainEqual(["How It Works", "/guide"]);
+    expect(footerLinks).toContainEqual(["Getting Started Guide", "/guide"]);
     expect(middleware(new NextRequest("http://localhost/guide")).headers.get("location")).toBeNull();
   });
   it("explains merged pre-execution reconsideration without suggesting an approval bypass", () => {

@@ -7,7 +7,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { cloudIdentity } from "@/lib/identity";
 import { useIdentity } from "./IdentityProvider";
 import { GoogleSignIn } from "./IdentityEntry";
-import { startMigrationHref } from "./public-surfaces/content";
+import { exploreLinks } from "./public-surfaces/content";
 
 const themes = [["system", "System"], ["light", "Light"], ["dark", "Dark"]] as const;
 
@@ -77,16 +77,17 @@ export function AccountControls() {
           aria-expanded={open} aria-controls={id} aria-label={accountLabel}
           onClick={() => { setSettingsOpen(false); setOpenFor(open ? null : accountKey); }}>
           <UserRound size={17} aria-hidden="true" />
-          <span className="truncate" aria-live="polite">{session.identity?.email ?? (verifying ? "Verifying your account…" : session.busy ? "Signing out…" : "Session needs attention")}</span>
+          <span className="truncate" aria-live="polite">{session.identity ? "Account" : verifying ? "Verifying your account…" : session.busy ? "Signing out…" : "Session needs attention"}</span>
           <ChevronDown size={15} aria-hidden="true" />
         </button>
         {open && <div id={id} className="account-panel" aria-label="Account controls">
           <p role="status" className="mb-3 break-all text-sm text-secondary">{accountMessage}</p>
           <button ref={firstAction} type="button" className="button ghost small w-full" onClick={showSettings} aria-haspopup="dialog" aria-controls={settingsId}>Settings</button>
+          {session.identity && <nav aria-label="Explore MoveBooks" className="account-explore"><p className="mt-3 mb-1 text-sm font-semibold">Explore MoveBooks</p>{exploreLinks.map(([label, href]) => <Link key={href} href={href} onClick={() => setOpenFor(null)}>{label}</Link>)}</nav>}
           <button type="button" className="button secondary small mt-2 w-full" disabled={session.busy} onClick={() => { setOpenFor(null); session.signOut(); }}>Sign Out</button>
         </div>}
       </div> : <GoogleSignIn compact />}
-    {!session.hasSession && <Link className="button small" href={startMigrationHref}>{cloud ? "Start My Migration" : "My Migration"}</Link>}
+    {!cloud && !session.hasSession && <Link className="nav-link" href="/workspace">My Migration</Link>}
     {!session.hasSession && <button ref={settingsTrigger} type="button" className="button ghost small appearance-trigger" aria-label="Change appearance" title="Change appearance"
       onClick={() => settingsOpen ? closeSettings() : showSettings()} aria-haspopup="dialog" aria-expanded={settingsOpen} aria-controls={settingsId}>
       <SunMoon size={18} aria-hidden="true" />

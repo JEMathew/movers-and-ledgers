@@ -48,10 +48,10 @@ describe("legacy /approvals and /reports routes", () => {
 });
 
 describe("footer", () => {
-  it("carries Feedback with Support and the Beta limits, outside the primary navigation", () => {
+  it("carries Feedback with Help and the Beta limits, outside the primary navigation", () => {
     render(<Footer />);
     const footer = screen.getByRole("navigation", { name: "Footer" });
-    for (const [name, href] of [["How It Works", "/guide"], ["Support", "/support"], ["Feedback", "/feedback"], ["Beta Limitations", "/trust#beta-limitations"]]) {
+    for (const [name, href] of [["Getting Started Guide", "/guide"], ["Help", "/support"], ["Feedback", "/feedback"], ["Beta Limitations", "/trust#beta-limitations"]]) {
       expect(within(footer).getByRole("link", { name })).toHaveAttribute("href", href);
     }
     expect(publicLinks.map(([label]) => label as string)).not.toContain("Feedback");

@@ -1,0 +1,184 @@
+{
+  "environment": "Local development server; Firebase cloud-mode signed-out; no live authenticated validation",
+  "checks": [
+    {
+      "check": "Mobile Enter opens menu, focuses first link; Escape restores trigger",
+      "focus": "Open navigation"
+    },
+    {
+      "check": "Desktop resize closes mobile menu",
+      "expanded": "false"
+    },
+    {
+      "check": "Header Explore Demo",
+      "href": "/simulator",
+      "url": "http://127.0.0.1:3011/simulator",
+      "heading": [
+        "Try a migration with a sample business.",
+        "What you will experience",
+        "What is synthetic",
+        "What you decide",
+        "What success looks like"
+      ],
+      "error": false
+    },
+    {
+      "check": "Header Play",
+      "href": "/play",
+      "url": "http://127.0.0.1:3011/play",
+      "heading": [
+        "Small choices. Meaningful consequences.",
+        "Choose your exercise",
+        "Harbor Light: a safer move"
+      ],
+      "error": false
+    },
+    {
+      "check": "Header Learn",
+      "href": "/learn",
+      "url": "http://127.0.0.1:3011/learn",
+      "heading": [
+        "Understand the decision in front of you."
+      ],
+      "error": false
+    },
+    {
+      "check": "Header Trust",
+      "href": "/trust",
+      "url": "http://127.0.0.1:3011/trust",
+      "heading": [
+        "See what happened. Understand why.",
+        "AI recommendation",
+        "Deterministic verification",
+        "Human decision",
+        "Beta limitations",
+        "Advice stays within your controls."
+      ],
+      "error": false
+    },
+    {
+      "check": "Header Help",
+      "href": "/support",
+      "url": "http://127.0.0.1:3011/support",
+      "heading": [
+        "Understand the blocker. Find the safe next step.",
+        "Readiness or mapping blocker",
+        "What you can do next"
+      ],
+      "error": false
+    },
+    {
+      "check": "Primary Beta CTA",
+      "url": "http://127.0.0.1:3011/workspace",
+      "signInGate": true
+    },
+    {
+      "check": "Footer Getting Started Guide",
+      "url": "http://127.0.0.1:3011/guide",
+      "heading": [
+        "Your guide to a verified move.",
+        "Contents",
+        "What is MoveBooks AI?",
+        "Start here",
+        "Just curious",
+        "See the real workflow",
+        "Check a test export",
+        "The five-stage journey",
+        "Understand · Discover + Assess",
+        "Prepare · Plan + Map & Approve",
+        "Move · Migrate + Resolve",
+        "Verify · Validate + Configure",
+        "Start · Onboard + First Synthetic Task",
+        "Approvals and human control",
+        "Who does what",
+        "Recovering from issues",
+        "Reconsidering a decision",
+        "Simulator",
+        "Play",
+        "Use My Test Export",
+        "Trust & evidence",
+        "Support and feedback",
+        "Support",
+        "Feedback",
+        "Beta limitations and data guidance",
+        "What this Beta is not",
+        "Keep your data safe"
+      ]
+    },
+    {
+      "check": "Footer Feedback",
+      "url": "http://127.0.0.1:3011/feedback",
+      "heading": [
+        "Help make the next move better."
+      ]
+    },
+    {
+      "check": "Footer Beta Limitations",
+      "url": "http://127.0.0.1:3011/trust#beta-limitations",
+      "heading": [
+        "See what happened. Understand why.",
+        "AI recommendation",
+        "Deterministic verification",
+        "Human decision",
+        "Beta limitations",
+        "Advice stays within your controls."
+      ]
+    },
+    {
+      "check": "Homepage Play CTA",
+      "url": "http://127.0.0.1:3011/play"
+    },
+    {
+      "check": "Homepage secondary Demo CTA",
+      "url": "http://127.0.0.1:3011/simulator"
+    },
+    {
+      "check": "Native journey disclosure keyboard toggle",
+      "open": true
+    }
+  ],
+  "responsive": [
+    {
+      "headerHeight": 64,
+      "horizontalOverflow": false,
+      "mainWords": 154,
+      "pageHeight": 1730,
+      "primaryBottom": 389.125,
+      "primaryHref": "/workspace",
+      "primaryLabel": "Try the Beta",
+      "primaryTop": 343.734375,
+      "viewport": {
+        "height": 1024,
+        "width": 768
+      }
+    },
+    {
+      "headerHeight": 64,
+      "horizontalOverflow": false,
+      "mainWords": 154,
+      "pageHeight": 1847,
+      "primaryBottom": 414,
+      "primaryHref": "/workspace",
+      "primaryLabel": "Try the Beta",
+      "primaryTop": 368.609375,
+      "viewport": {
+        "height": 768,
+        "width": 1024
+      }
+    },
+    {
+      "headerHeight": 64,
+      "horizontalOverflow": false,
+      "mainWords": 154,
+      "pageHeight": 1889,
+      "primaryBottom": 444.078125,
+      "primaryHref": "/workspace",
+      "primaryLabel": "Try the Beta",
+      "primaryTop": 398.6875,
+      "viewport": {
+        "height": 900,
+        "width": 1440
+      }
+    }
+  ]
+}

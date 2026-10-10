@@ -1,32 +1,57 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
+import { useEffect, useId, useRef, useState } from "react";
 import { AccountControls } from "@/components/AccountControls";
 import { useIdentity } from "@/components/IdentityProvider";
 import { memberLinks, publicLinks } from "@/components/public-surfaces/content";
 
 export function Nav() {
   const { identity } = useIdentity();
-  // Only an API-verified identity switches to the product navigation; a pending session keeps public links.
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const root = useRef<HTMLElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const panelId = useId();
+  // Navigation reflects API-verified identity, including on public Play and Help.
   const links = identity ? memberLinks : publicLinks;
-  return <header className="shell relative flex min-h-20 flex-wrap items-center justify-between gap-3 py-4">
-    <Link href="/" aria-label="MoveBooks AI home" className="flex items-center gap-3 font-black tracking-tight">
-      <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--primary)] text-[var(--on-primary)]">M</span>
+  useEffect(() => { setOpen(false); }, [pathname, identity?.subject]);
+  useEffect(() => {
+    if (!open) return;
+    panel.current?.querySelector<HTMLAnchorElement>("nav a")?.focus();
+    const outside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !root.current?.contains(event.target)) setOpen(false);
+    };
+    const resize = () => { if (window.innerWidth >= 1024) setOpen(false); };
+    window.addEventListener("resize", resize);
+    document.addEventListener("pointerdown", outside);
+    return () => { window.removeEventListener("resize", resize); document.removeEventListener("pointerdown", outside); };
+  }, [open]);
+  return <header ref={root} className="shell site-header" onKeyDown={event => {
+    if (event.key === "Escape" && open) { event.preventDefault(); setOpen(false); trigger.current?.focus(); }
+  }}>
+    <Link href={identity ? "/workspace" : "/"} aria-label={identity ? "MoveBooks AI My Migration" : "MoveBooks AI home"} className="site-brand">
+      <span className="brand-mark" aria-hidden="true">M</span>
       <span>MoveBooks <span className="font-semibold text-primary">AI</span></span>
     </Link>
-    <div className="flex max-w-full flex-wrap items-center gap-2">
-      <nav aria-label="Primary navigation" className="site-nav hidden items-center gap-1 text-sm font-semibold xl:flex">
-        {links.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}
+    <div className="mobile-discovery-controls">
+      <Link className="nav-link" href="/play" aria-current={pathname === "/play" ? "page" : undefined}>Play</Link>
+      <button ref={trigger} type="button" className="button ghost icon-button" aria-label="Open navigation" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen(value => !value)}><Menu aria-hidden="true" size={20}/></button>
+    </div>
+    <div ref={panel} id={panelId} className={`navigation-panel${open ? " is-open" : ""}`} onClick={event => {
+      if ((event.target as HTMLElement).closest("a")) setOpen(false);
+    }} onBlur={event => {
+      if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget) && event.relatedTarget !== trigger.current) setOpen(false);
+    }}>
+      <nav aria-label="Primary navigation" className="site-nav">
+        {links.map(([label, href]) => <Link key={href} className={href === "/play" ? "desktop-play" : undefined} href={href} aria-current={pathname === href ? "page" : undefined}>{label}</Link>)}
       </nav>
-      <AccountControls />
-      <details className="mobile-nav xl:hidden">
-        <summary className="button ghost icon-button" aria-label="Open navigation">
-          <Menu aria-hidden="true" size={19} />
-        </summary>
-        <nav aria-label="Mobile primary navigation" className="mobile-nav-panel" onClick={event => { if ((event.target as HTMLElement).closest("a")) event.currentTarget.closest("details")?.removeAttribute("open"); }}>
-          {links.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}
-        </nav>
-      </details>
+      <div className="nav-utilities">
+        <Link className="nav-link" href="/support" aria-current={pathname === "/support" ? "page" : undefined}>Help</Link>
+        <AccountControls />
+      </div>
     </div>
   </header>;
 }
