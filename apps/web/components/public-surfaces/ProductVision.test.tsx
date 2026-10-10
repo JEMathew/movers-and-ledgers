@@ -5,7 +5,7 @@ import { resolve } from "node:path";
 import Home from "@/app/page";
 
 describe("Product Vision media", () => {
-  it("places the approved vision directly after the hero with native, bounded playback", () => {
+  it("preserves conceptual vision after product entry and Play with native, bounded playback", () => {
     render(<Home/>);
     const video = screen.getByLabelText("MoveBooks AI Product Vision");
     expect(video.tagName).toBe("VIDEO");
@@ -19,11 +19,11 @@ describe("Product Vision media", () => {
     expect(video).toHaveAttribute("poster", "/media/movebooks-ai-product-vision-poster.webp");
     expect(video.querySelector("source")).toHaveAttribute("src", "/media/movebooks-ai-product-vision.mp4");
     expect(screen.getByText(/Product Vision shows the intended customer experience/)).toBeVisible();
-    expect(screen.getAllByText("AI that assists. Rules that verify. People who decide.")).toHaveLength(1);
-    expect(screen.getByText("Built with Google Cloud, Gemini and Google ADK")).toBeVisible();
-    const sections = [...document.querySelectorAll("main > section")];
-    expect(sections[1]).toBe(document.querySelector("#product-vision"));
-    expect(sections[2]).toHaveAttribute("aria-labelledby", "why-migrate");
+    expect(screen.getByText("Conceptual product vision · 25 sec")).toBeVisible();
+    const vision = document.querySelector("#product-vision")!;
+    const play = screen.getByRole("heading", { name: "Learn through MoveBooks Play" }).closest("section")!;
+    expect(play.compareDocumentPosition(vision) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(video).toHaveAttribute("aria-describedby", "vision-boundary");
   });
   it("ships one bounded H.264 fast-start asset and a small poster", () => {
     const root = resolve(process.cwd(), "public/media");
