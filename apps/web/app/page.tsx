@@ -12,7 +12,7 @@ export default function Home() {
       <p className="hero-value">Provider-neutral, AI-assisted accounting migration and onboarding. Review decisions, verify your numbers, and complete a first task with synthetic data.</p>
       <p className="hero-boundary">Synthetic Beta only. Do not use real customer or production provider data. <Link href="/trust#beta-limitations">Beta limitations</Link></p>
       <div className="hero-actions"><Link href={startMigrationHref} className="button">Try the Beta <ArrowRight size={18} aria-hidden="true"/></Link><Link href="/simulator" className="button secondary" aria-describedby="demo-intro">Explore Demo</Link></div>
-      <p id="demo-intro" className="demo-intro">Demo introduction only. Sign-in is required to run the Beta workflow.</p>
+      <p id="demo-intro" className="demo-intro">Read-only five-phase Demo. No sign-in; the working synthetic Beta requires sign-in.</p>
     </section>
     <section className="shell play-preview" aria-labelledby="play-heading">
       <div className="panel"><Gamepad2 className="text-primary" size={28} aria-hidden="true"/><div><h2 id="play-heading" className="type-section">Learn through MoveBooks Play</h2><p>Practice three decisions about mappings, safe recovery and financial checks. No sign-in; nothing changes your migration.</p></div><Link className="button secondary" href="/play">Open Play <ArrowRight size={17} aria-hidden="true"/></Link></div>

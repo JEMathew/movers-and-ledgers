@@ -379,3 +379,41 @@ button, input, select, textarea { font: inherit; }
 .public-content header > p,
 .public-content-body > p,
 .public-content-body > section > p { max-width: 70ch; }
+
+/* PR03: authored public Demo only; no workflow or global task style changes. */
+.guided-demo { max-width: 60rem; padding-block: 1.5rem 2rem; scroll-margin-top: 4rem; }
+.guided-demo header, .demo-more { max-width: 52rem; }
+.guided-demo .type-page { margin-top: .5rem; font-size: clamp(1.75rem, 3vw, 2.75rem); line-height: 1.15; }
+.demo-mode { margin-top: .5rem; color: var(--text-secondary); font-size: 1rem; }
+.demo-scenario { margin-top: .65rem; max-width: 65ch; line-height: 1.5; }
+.demo-caption { margin-top: .75rem; color: var(--text-secondary); line-height: 1.5; }
+.demo-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-block: .75rem; }
+.demo-actions .button { min-height: 2.75rem; font-size: 1rem; }
+.demo-card { max-width: 52rem; margin-top: .75rem; padding: 1rem; border: 1px solid var(--border-strong); border-radius: var(--radius-lg); background: var(--surface); }
+.demo-card h2 { font-size: 1.125rem; font-weight: 700; }
+.demo-card > p { margin-top: .5rem; line-height: 1.5; }
+.demo-phase-nav { margin-top: .75rem; max-width: 52rem; }
+.demo-phase-nav ol { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .35rem; }
+.demo-phase-button { display: flex; width: 100%; min-height: 2.75rem; align-items: center; justify-content: center; gap: .4rem; border: 1px solid var(--border-strong); border-radius: var(--radius-md); cursor: pointer; font-size: 1rem; }
+.demo-phase-button:hover, .demo-phase-button[aria-current=step] { background: var(--primary-subtle); border-color: var(--primary); color: var(--primary); }
+.demo-evidence { display: grid; gap: .5rem; }
+.demo-evidence > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: .75rem; line-height: 1.5; }
+.demo-evidence dt { color: var(--text-secondary); }
+.demo-evidence dd { font-weight: 650; }
+.demo-insight { padding-top: .65rem; border-top: 1px solid var(--border); }
+.demo-more { margin-top: 1rem; }
+.demo-related { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; }
+.guided-demo .public-detail { line-height: 1.6; }
+.guided-demo .public-disclosure { margin-top: .5rem; }
+@media (max-width: 599px) {
+  .guided-demo { padding-top: 1rem; }
+  .demo-phase-name { display: none; }
+  .demo-card { padding: .75rem; }
+  .demo-evidence > div { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: .5rem; }
+}
+
+@media (max-width: 359px) {
+  .guided-demo { padding-top: .75rem; }
+  .guided-demo .type-page { margin-top: .375rem; }
+  .demo-actions { margin-block: .5rem; }
+}
