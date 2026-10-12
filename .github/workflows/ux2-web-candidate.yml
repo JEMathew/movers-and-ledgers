@@ -1,17 +1,8 @@
-# PROPOSAL ONLY. Add as .github/workflows/ux2-web-candidate.yml after review.
+# Build/scan only; production promotion remains a separate operator action.
 # No GCP authentication, push or deployment: none is wired into current CI.
 name: UX v2 exact-source web candidate
 'on':
-  workflow_dispatch:
-    inputs:
-      firebase_api_key:
-        description: Existing movebooks-ai PUBLIC Firebase browser API key, operator verified
-        required: true
-        type: string
-      firebase_auth_domain:
-        description: Existing reviewed Firebase authDomain (hostname only)
-        required: true
-        type: string
+  workflow_dispatch: {}
 permissions:
   contents: read
 concurrency:
@@ -23,8 +14,8 @@ jobs:
     timeout-minutes: 30
     env:
       SOURCE_SHA: f78fa3d55f851f50114f03cee886486f53d9f30e
-      FIREBASE_API_KEY: ${{ inputs.firebase_api_key }}
-      FIREBASE_AUTH_DOMAIN: ${{ inputs.firebase_auth_domain }}
+      FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+      FIREBASE_AUTH_DOMAIN: ${{ vars.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
       CONTROL_SHA: ${{ github.workflow_sha }}
     steps:
       - uses: actions/checkout@v4
@@ -44,6 +35,22 @@ jobs:
           [[ -z $(git status --porcelain=v1 --untracked-files=all) ]]
           [[ "$FIREBASE_API_KEY" =~ ^AIza[A-Za-z0-9_-]{35}$ ]]
           [[ "$FIREBASE_AUTH_DOMAIN" =~ ^[a-zA-Z0-9]([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$ ]]
+          # Read-only comparison; never print or persist the Hosting SDK configuration.
+          python3 - <<'PY'
+          import json, os, sys, urllib.request
+          try:
+            url='https://movebooks-si.web.app/__/firebase/init.json'
+            with urllib.request.urlopen(url,timeout=20) as response:
+              if response.geturl()!=url: raise ValueError('Unexpected redirect')
+              config=json.load(response)
+            if not (config.get('projectId')=='movebooks-ai'
+                    and config.get('apiKey')==os.environ['FIREBASE_API_KEY']
+                    and config.get('authDomain')==os.environ['FIREBASE_AUTH_DOMAIN']):
+              raise ValueError('Configuration mismatch')
+          except Exception:
+            sys.exit('Production Firebase configuration verification failed; no build permitted.')
+          print('Production Firebase configuration verified for movebooks-ai; values omitted.')
+          PY
           mkdir -p "$EVIDENCE" "$CONTEXT"
           printf '%s\n' '082a407dbc2cc5ed9a091d8e0f2982967336eeb5bf8c19e43c617c62452a6eac  apps/web/Dockerfile' 'fef6c87effc3c848f56dd5f2de117cceed4acd6aad8964e348eea1d1de335ebf  .github/workflows/ci.yml' '78028e7d510f9061d273dceea797cbf324ea2a6d2978cc878a55d5e382366512  .dockerignore' | sha256sum -c - > "$EVIDENCE/build-input-verification.txt"
           git archive --format=tar "$SOURCE_SHA" > "$EVIDENCE/source.tar"
@@ -62,9 +69,9 @@ jobs:
             'platform':'linux/amd64','dockerfile':'apps/web/Dockerfile','pull':True,'no_cache':True,
             'build_args':{'NEXT_PUBLIC_IDENTITY_MODE':'firebase','NEXT_PUBLIC_API_BASE_URL':'/api',
               'NEXT_PUBLIC_FIREBASE_PROJECT_ID':'movebooks-ai',
-              'NEXT_PUBLIC_FIREBASE_API_KEY':os.environ['FIREBASE_API_KEY'],
               'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN':os.environ['FIREBASE_AUTH_DOMAIN']},
-            'firebase_project_ownership':'operator reviewed before dispatch; CI has no GCP identity',
+            'firebase_project_ownership':'matched canonical Hosting SDK configuration before build; CI has no GCP identity',
+            'firebase_api_key':'omitted; repository secret, embedded only in deployable image',
             'registry_push':'NOT PERFORMED','deployment':'NOT PERFORMED'}
           (p/'source-and-build-record.json').write_text(json.dumps(record,indent=2)+'\n')
           PY
@@ -81,7 +88,12 @@ jobs:
             --build-arg NEXT_PUBLIC_FIREBASE_PROJECT_ID=movebooks-ai \
             --build-arg "NEXT_PUBLIC_FIREBASE_API_KEY=$FIREBASE_API_KEY" \
             --build-arg "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=$FIREBASE_AUTH_DOMAIN" \
-            "$CONTEXT" 2>&1 | tee "$EVIDENCE/build.log"
+            "$CONTEXT" 2>&1 | python3 -u -c '
+          import os, sys
+          key=os.environ["FIREBASE_API_KEY"]
+          for line in sys.stdin:
+            sys.stdout.write(line.replace(key,"[REDACTED_FIREBASE_API_KEY]"))
+          ' | tee "$EVIDENCE/build.log"
           docker image inspect "$tag" --format '{{.Id}}' > "$EVIDENCE/image-id.txt"
           docker image inspect "$tag" > "$EVIDENCE/image-inspect.json"
           # Retain the actual deployable bytes, not just their checksums.
@@ -134,8 +146,33 @@ jobs:
           assert result['gate']=='PASS', 'Mandatory gate failed; stop without remediation or promotion'
           PY
           (cd "$EVIDENCE"; sha256sum -c image-archive-sha256.txt)
-      - name: Retain exact image and evidence even if the gate fails
+      - name: Exclude Firebase key from supplemental evidence
         if: always()
+        id: evidence_privacy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, pathlib, sys
+          p=pathlib.Path(os.environ['EVIDENCE'])
+          key=os.environ.get('FIREBASE_API_KEY','').encode()
+          if not key or not p.is_dir():
+            sys.exit('Missing configuration/evidence; artifact upload blocked.')
+          for file in p.rglob('*'):
+            if not file.is_file(): continue
+            # The approved deployable-image exception preserves the exact scanned bytes.
+            if file.name=='image.tar': continue
+            data=file.read_bytes()
+            if key in data:
+              if file.name=='source.tar':
+                sys.exit('Firebase key found in source archive; artifact upload blocked.')
+              file.write_bytes(data.replace(key,b'[REDACTED_FIREBASE_API_KEY]'))
+          if (p/'image.tar').exists():
+            import subprocess
+            subprocess.run(['sha256sum','-c','image-archive-sha256.txt'],cwd=p,check=True)
+          PY
+      - name: Retain exact image and evidence even if the gate fails
+        if: always() && steps.evidence_privacy.outcome == 'success'
         id: archive
         uses: actions/upload-artifact@v4
         with:
