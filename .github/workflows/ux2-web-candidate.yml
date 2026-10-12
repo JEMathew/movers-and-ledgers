@@ -1,0 +1,191 @@
+# Build/scan only; production promotion remains a separate operator action.
+# No GCP authentication, push or deployment: none is wired into current CI.
+name: UX v2 exact-source web candidate
+'on':
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency:
+  group: movebooks-ux2-web-candidate
+  cancel-in-progress: false
+jobs:
+  web-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SOURCE_SHA: f78fa3d55f851f50114f03cee886486f53d9f30e
+      FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+      FIREBASE_AUTH_DOMAIN: ${{ vars.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+      CONTROL_SHA: ${{ github.workflow_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: f78fa3d55f851f50114f03cee886486f53d9f30e
+          persist-credentials: false
+      - name: Set job-local paths
+        shell: bash
+        run: |
+          printf 'EVIDENCE=%s/ux2-evidence\nCONTEXT=%s/ux2-context\n' "$RUNNER_TEMP" "$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - name: Verify accepted source and reviewed public build inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ $(git rev-parse HEAD) == "$SOURCE_SHA" ]]
+          [[ $(git rev-parse 'HEAD^{tree}') == bcdcd0e426df8123c6083f6ab405f2ef15ce9de6 ]]
+          [[ -z $(git status --porcelain=v1 --untracked-files=all) ]]
+          [[ "$FIREBASE_API_KEY" =~ ^AIza[A-Za-z0-9_-]{35}$ ]]
+          [[ "$FIREBASE_AUTH_DOMAIN" =~ ^[a-zA-Z0-9]([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$ ]]
+          # Read-only comparison; never print or persist the Hosting SDK configuration.
+          python3 - <<'PY'
+          import json, os, sys, urllib.request
+          try:
+            url='https://movebooks-si.web.app/__/firebase/init.json'
+            with urllib.request.urlopen(url,timeout=20) as response:
+              if response.geturl()!=url: raise ValueError('Unexpected redirect')
+              config=json.load(response)
+            if not (config.get('projectId')=='movebooks-ai'
+                    and config.get('apiKey')==os.environ['FIREBASE_API_KEY']
+                    and config.get('authDomain')==os.environ['FIREBASE_AUTH_DOMAIN']):
+              raise ValueError('Configuration mismatch')
+          except Exception:
+            sys.exit('Production Firebase configuration verification failed; no build permitted.')
+          print('Production Firebase configuration verified for movebooks-ai; values omitted.')
+          PY
+          mkdir -p "$EVIDENCE" "$CONTEXT"
+          printf '%s\n' '082a407dbc2cc5ed9a091d8e0f2982967336eeb5bf8c19e43c617c62452a6eac  apps/web/Dockerfile' 'fef6c87effc3c848f56dd5f2de117cceed4acd6aad8964e348eea1d1de335ebf  .github/workflows/ci.yml' '78028e7d510f9061d273dceea797cbf324ea2a6d2978cc878a55d5e382366512  .dockerignore' | sha256sum -c - > "$EVIDENCE/build-input-verification.txt"
+          git archive --format=tar "$SOURCE_SHA" > "$EVIDENCE/source.tar"
+          (cd "$EVIDENCE"; sha256sum source.tar > source-archive-sha256.txt)
+          tar -xf "$EVIDENCE/source.tar" -C "$CONTEXT"
+          git show -s --format=fuller HEAD > "$EVIDENCE/source-commit.txt"
+          cp apps/web/Dockerfile "$EVIDENCE/approved-Dockerfile"
+          cp .github/workflows/ci.yml "$EVIDENCE/approved-ci.yml"
+          docker version --format '{{json .}}' > "$EVIDENCE/docker-version.json"
+          python3 - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path(os.environ['EVIDENCE'])
+          record={'source_sha':os.environ['SOURCE_SHA'],'workflow_control_sha':os.environ['CONTROL_SHA'],
+            'run_id':os.environ['GITHUB_RUN_ID'],'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'],
+            'accepted_ci_run':'https://github.com/JEMathew/movers-and-ledgers/actions/runs/38087163298',
+            'platform':'linux/amd64','dockerfile':'apps/web/Dockerfile','pull':True,'no_cache':True,
+            'build_args':{'NEXT_PUBLIC_IDENTITY_MODE':'firebase','NEXT_PUBLIC_API_BASE_URL':'/api',
+              'NEXT_PUBLIC_FIREBASE_PROJECT_ID':'movebooks-ai',
+              'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN':os.environ['FIREBASE_AUTH_DOMAIN']},
+            'firebase_project_ownership':'matched canonical Hosting SDK configuration before build; CI has no GCP identity',
+            'firebase_api_key':'omitted; repository secret, embedded only in deployable image',
+            'registry_push':'NOT PERFORMED','deployment':'NOT PERFORMED'}
+          (p/'source-and-build-record.json').write_text(json.dumps(record,indent=2)+'\n')
+          PY
+      - name: Build the unchanged production web Dockerfile once
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="movebooks-ux2-web:run-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          printf '%s\n' "$tag" > "$EVIDENCE/local-tag.txt"
+          BUILDKIT_PROGRESS=plain docker build --platform linux/amd64 --pull --no-cache \
+            -f "$CONTEXT/apps/web/Dockerfile" -t "$tag" \
+            --build-arg NEXT_PUBLIC_IDENTITY_MODE=firebase \
+            --build-arg NEXT_PUBLIC_API_BASE_URL=/api \
+            --build-arg NEXT_PUBLIC_FIREBASE_PROJECT_ID=movebooks-ai \
+            --build-arg "NEXT_PUBLIC_FIREBASE_API_KEY=$FIREBASE_API_KEY" \
+            --build-arg "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=$FIREBASE_AUTH_DOMAIN" \
+            "$CONTEXT" 2>&1 | python3 -u -c '
+          import os, sys
+          key=os.environ["FIREBASE_API_KEY"]
+          for line in sys.stdin:
+            sys.stdout.write(line.replace(key,"[REDACTED_FIREBASE_API_KEY]"))
+          ' | tee "$EVIDENCE/build.log"
+          docker image inspect "$tag" --format '{{.Id}}' > "$EVIDENCE/image-id.txt"
+          docker image inspect "$tag" > "$EVIDENCE/image-inspect.json"
+          # Retain the actual deployable bytes, not just their checksums.
+          docker save "$tag" -o "$EVIDENCE/image.tar"
+          chmod 644 "$EVIDENCE/image.tar"
+          (cd "$EVIDENCE"; sha256sum image.tar > image-archive-sha256.txt)
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, tarfile
+          p=pathlib.Path(os.environ['EVIDENCE']); image=json.loads((p/'image-inspect.json').read_text())[0]
+          assert image['Id']==(p/'image-id.txt').read_text().strip()
+          assert image['Os']=='linux' and image['Architecture']=='amd64' and image['Config']['User']=='65532:65532'
+          with tarfile.open(p/'image.tar','r') as t:
+            entries=json.load(t.extractfile('manifest.json')); assert len(entries)==1
+            raw=t.extractfile(entries[0]['Config']).read(); config=json.loads(raw)
+            config_digest='sha256:'+hashlib.sha256(raw).hexdigest()
+            assert config['rootfs']['diff_ids']==image['RootFS']['Layers']
+          # Docker may report an index ID. It need not equal the configuration ID.
+          record={'docker_reported_id':image['Id'],'configuration_digest':config_digest,
+            'image_size_bytes':image['Size'],'rootfs_diff_ids':image['RootFS']['Layers'],
+            'registry_manifest_digest':None,'provenance':'exact-source CI build record; not signed independent attestation'}
+          (p/'image-record.json').write_text(json.dumps(record,indent=2)+'\n')
+          PY
+      - name: Mandatory pinned Grype High gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          if docker run --rm --user=0:0 --cap-drop=ALL --security-opt=no-new-privileges \
+            --memory=2g -e GRYPE_CHECK_FOR_APP_UPDATE=false \
+            -v "$EVIDENCE:/scan:ro" \
+            anchore/grype@sha256:8c2c9234a345577a6d321a4753aa3ee1276d8975c8452d2344a56b57733ecad3 \
+            docker-archive:/scan/image.tar --fail-on high -o json \
+            > "$EVIDENCE/grype.json" 2> "$EVIDENCE/grype.stderr.log"; then scan_rc=0; else scan_rc=$?; fi
+          printf '%s\n' "$scan_rc" > "$EVIDENCE/scan-exit-code.txt"
+          export scan_rc
+          python3 - <<'PY'
+          import collections, json, os, pathlib
+          p=pathlib.Path(os.environ['EVIDENCE']); scan=json.loads((p/'grype.json').read_text())
+          assert isinstance(scan.get('matches'),list)
+          counts=collections.Counter(m['vulnerability']['severity'] for m in scan['matches'])
+          image=json.loads((p/'image-record.json').read_text())
+          scanned_id=scan['source']['target']['imageID']
+          assert scanned_id==image['configuration_digest'], 'Scanner did not identify the exported configuration'
+          result={'scan_exit_code':int(os.environ['scan_rc']),'Critical':counts['Critical'],'High':counts['High'],
+            'severity_counts':dict(counts),'scanned_configuration_digest':scanned_id,
+            'scanner_image':'anchore/grype@sha256:8c2c9234a345577a6d321a4753aa3ee1276d8975c8452d2344a56b57733ecad3',
+            'database':scan.get('descriptor',{}).get('db')}
+          result['gate']='PASS' if result['scan_exit_code']==0 and result['Critical']==0 and result['High']==0 else 'BLOCK'
+          (p/'security-results.json').write_text(json.dumps(result,indent=2)+'\n')
+          print(json.dumps(result))
+          assert result['gate']=='PASS', 'Mandatory gate failed; stop without remediation or promotion'
+          PY
+          (cd "$EVIDENCE"; sha256sum -c image-archive-sha256.txt)
+      - name: Exclude Firebase key from supplemental evidence
+        if: always()
+        id: evidence_privacy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, pathlib, sys
+          p=pathlib.Path(os.environ['EVIDENCE'])
+          key=os.environ.get('FIREBASE_API_KEY','').encode()
+          if not key or not p.is_dir():
+            sys.exit('Missing configuration/evidence; artifact upload blocked.')
+          for file in p.rglob('*'):
+            if not file.is_file(): continue
+            # The approved deployable-image exception preserves the exact scanned bytes.
+            if file.name=='image.tar': continue
+            data=file.read_bytes()
+            if key in data:
+              if file.name=='source.tar':
+                sys.exit('Firebase key found in source archive; artifact upload blocked.')
+              file.write_bytes(data.replace(key,b'[REDACTED_FIREBASE_API_KEY]'))
+          if (p/'image.tar').exists():
+            import subprocess
+            subprocess.run(['sha256sum','-c','image-archive-sha256.txt'],cwd=p,check=True)
+          PY
+      - name: Retain exact image and evidence even if the gate fails
+        if: always() && steps.evidence_privacy.outcome == 'success'
+        id: archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: ux2-web-f78fa3d-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ux2-evidence/
+          retention-days: 14
+          compression-level: 0
+          if-no-files-found: error
+      - name: Record retained artifact identity
+        if: always() && steps.archive.outcome == 'success'
+        env:
+          ARTIFACT_ID: ${{ steps.archive.outputs.artifact-id }}
+          ARTIFACT_DIGEST: ${{ steps.archive.outputs.artifact-digest }}
+        run: |
+          printf 'Artifact ID: %s\nArtifact ZIP SHA256: %s\n' "$ARTIFACT_ID" "$ARTIFACT_DIGEST" >> "$GITHUB_STEP_SUMMARY"
+          printf 'Source: %s\nNo registry push or deployment performed. Gate/job success is required before promotion.\n' "$SOURCE_SHA" >> "$GITHUB_STEP_SUMMARY"
