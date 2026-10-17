@@ -28,7 +28,8 @@ class Settings(BaseSettings):
     sql_iam_user: str = ""
     storage_bucket: str = ""
     reasoning_project: str = ""
-    reasoning_location: Literal["asia-southeast1"] = "asia-southeast1"
+    # Global is an explicit processing-location choice; Singapore remains the default.
+    reasoning_location: Literal["asia-southeast1", "global"] = "asia-southeast1"
     reasoning_models: dict[str, str] = Field(default_factory=dict)
     reasoning_timeout_seconds: float = Field(default=30, ge=1, le=60)
     reasoning_max_runs: int = Field(default=10, ge=1, le=10)
@@ -69,6 +70,13 @@ class Settings(BaseSettings):
                 for m in self.reasoning_models.values()
             ):
                 raise ValueError("Only explicit Gemini model IDs are supported")
+            if (
+                "gemini-3.5-flash-lite" in self.reasoning_models.values()
+                and self.reasoning_location != "global"
+            ):
+                raise ValueError(
+                    "gemini-3.5-flash-lite requires explicit global reasoning location"
+                )
             if any(
                 os.environ.get(k)
                 for k in (

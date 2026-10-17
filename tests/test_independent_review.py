@@ -191,7 +191,8 @@ def test_deterministic_review_not_live_model_evidence():
     assert result.state == "FALLBACK" and result.model_calls == 0 and provider.calls == 0
 
 
-def test_real_adk_reviewer_uses_separate_output_contract_offline():
+@pytest.mark.parametrize("model", ["offline-reviewer", "gemini-3.5-flash-lite"])
+def test_real_adk_reviewer_uses_separate_output_contract_offline(model, monkeypatch):
     pytest.importorskip("google.adk")
     from google.adk.models.base_llm import BaseLlm
     from google.adk.models.llm_response import LlmResponse
@@ -199,8 +200,15 @@ def test_real_adk_reviewer_uses_separate_output_contract_offline():
 
     from agents.reasoning.adk import run_advisor
     from agents.reviewer.agent import INSTRUCTION
+    from domain.reasoning.models import Capability
     from domain.reasoning.reviewer import ReviewFinding
 
+    def no_client(*args, **kwargs):
+        pytest.fail("Offline Reviewer tests must never construct a provider client")
+
+    from google import genai
+
+    monkeypatch.setattr(genai, "Client", no_client)
     _, session, mapping = setup()
     context = review_context(session, mapping.id)
     expected = independent_check(context)
@@ -211,17 +219,33 @@ def test_real_adk_reviewer_uses_separate_output_contract_offline():
 
         async def generate_content_async(self, llm_request, stream=False):
             self.calls += 1
+            if model == "gemini-3.5-flash-lite":
+                assert llm_request.config.temperature is None
+                assert llm_request.config.thinking_config.thinking_level == types.ThinkingLevel.LOW
+                assert llm_request.config.thinking_config.thinking_budget is None
+                assert llm_request.config.max_output_tokens == 2048
+                assert llm_request.contents[-1].role == "user"
             if self.calls == 1:
                 part = types.Part(function_call=types.FunctionCall(name="read_evidence", args={}))
             else:
                 part = types.Part(text=expected.model_dump_json())
             yield LlmResponse(content=types.Content(role="model", parts=[part]))
 
+    settings = Settings(
+        _env_file=None,
+        model_provider_mode="gemini-adk",
+        reasoning_project="synthetic-test",
+        reasoning_location="global" if model == "gemini-3.5-flash-lite" else "asia-southeast1",
+        reasoning_models={
+            c.value: model if model == "gemini-3.5-flash-lite" else "gemini-test-model"
+            for c in Capability
+        },
+    )
     output = asyncio.run(
         run_advisor(
             context,
-            "offline-reviewer",
-            configured(),
+            model,
+            settings,
             llm=ScriptedReviewer(),
             output_contract=ReviewFinding,
             role_instruction=INSTRUCTION,

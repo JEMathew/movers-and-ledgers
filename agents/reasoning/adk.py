@@ -32,10 +32,33 @@ def vertex_client(settings):
         project=settings.reasoning_project,
         location=settings.reasoning_location,
         http_options=types.HttpOptions(
-            base_url=f"https://{settings.reasoning_location}-aiplatform.googleapis.com",
+            base_url=(
+                "https://aiplatform.googleapis.com"
+                if settings.reasoning_location == "global"
+                else f"https://{settings.reasoning_location}-aiplatform.googleapis.com"
+            ),
             timeout=int(settings.reasoning_timeout_seconds * 1000),
             retry_options=types.HttpRetryOptions(attempts=1),
         ),
+    )
+
+
+def generation_config(model):
+    from google.genai import types
+
+    if model == "gemini-3.5-flash-lite":
+        # Exact verified replacement only: Gemini 3 uses levels, not token budgets.
+        # Omit temperature/top-p/top-k: this model ignores custom sampling values.
+        return types.GenerateContentConfig(
+            max_output_tokens=2048,
+            thinking_config=types.ThinkingConfig(
+                include_thoughts=False, thinking_level=types.ThinkingLevel.LOW
+            ),
+        )
+    return types.GenerateContentConfig(
+        temperature=0,
+        max_output_tokens=2048,
+        thinking_config=types.ThinkingConfig(include_thoughts=False, thinking_budget=128),
     )
 
 
@@ -131,11 +154,7 @@ async def run_advisor(
         disallow_transfer_to_peers=True,
         before_model_callback=before_model,
         after_model_callback=after_model,
-        generate_content_config=types.GenerateContentConfig(
-            temperature=0,
-            max_output_tokens=2048,
-            thinking_config=types.ThinkingConfig(include_thoughts=False, thinking_budget=128),
-        ),
+        generate_content_config=generation_config(model),
     )
     sessions = InMemorySessionService()
     user_id, session_id = "synthetic-advisor", str(uuid4())
