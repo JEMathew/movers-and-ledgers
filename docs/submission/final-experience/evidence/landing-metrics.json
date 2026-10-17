@@ -1,0 +1,163 @@
+{
+ "before-desktop": {
+  "h1": 1,
+  "primaryButtonsInFold": [
+   "Try the Beta"
+  ],
+  "allLinksInFold": [
+   "Beta limitations",
+   "Try the Beta",
+   "Explore Demo",
+   "Open Play",
+   "How MoveBooks works"
+  ],
+  "hscroll": false,
+  "docHeight": 1880,
+  "play": true,
+  "badge": true
+ },
+ "before-tab-order": [
+  "MMoveBooks AI",
+  "Explore Demo",
+  "Play",
+  "Learn",
+  "Trust",
+  "Help",
+  "My Migration",
+  "Change appearance"
+ ],
+ "before-mobile": {
+  "h1": 1,
+  "primaryButtonsInFold": [
+   "Try the Beta"
+  ],
+  "allLinksInFold": [
+   "Beta limitations",
+   "Try the Beta",
+   "Explore Demo",
+   "Open Play",
+   "How MoveBooks works"
+  ],
+  "hscroll": false,
+  "docHeight": 1816,
+  "play": true,
+  "badge": true
+ },
+ "before-zoom200": {
+  "h1": 1,
+  "primaryButtonsInFold": [
+   "Try the Beta"
+  ],
+  "allLinksInFold": [
+   "Beta limitations",
+   "Try the Beta",
+   "Explore Demo"
+  ],
+  "hscroll": false,
+  "docHeight": 1766,
+  "play": true,
+  "badge": true
+ },
+ "before-reduced": {
+  "h1": 1,
+  "primaryButtonsInFold": [
+   "Try the Beta"
+  ],
+  "allLinksInFold": [
+   "Beta limitations",
+   "Try the Beta",
+   "Explore Demo",
+   "Open Play",
+   "How MoveBooks works"
+  ],
+  "hscroll": false,
+  "docHeight": 1880,
+  "play": true,
+  "badge": true
+ },
+ "after-desktop": {
+  "h1": 1,
+  "primaryButtonsInFold": [
+   "Start a sample migration"
+  ],
+  "allLinksInFold": [
+   "Start a sample migration",
+   "Explore Demo, no sign-in required",
+   "Beta limitations",
+   "How MoveBooks works",
+   "Watch the product vision",
+   "Why businesses migrate",
+   "Trust by design",
+   "Beta boundaries and architecture"
+  ],
+  "hscroll": false,
+  "docHeight": 959,
+  "play": false,
+  "badge": false
+ },
+ "after-tab-order": [
+  "MMoveBooks AI",
+  "Explore Demo",
+  "Play",
+  "Learn",
+  "Trust",
+  "Help",
+  "My Migration",
+  "Change appearance"
+ ],
+ "after-mobile": {
+  "h1": 1,
+  "primaryButtonsInFold": [
+   "Start a sample migration"
+  ],
+  "allLinksInFold": [
+   "Start a sample migration",
+   "Explore Demo, no sign-in required",
+   "Beta limitations",
+   "How MoveBooks works",
+   "Watch the product vision",
+   "Why businesses migrate",
+   "Trust by design",
+   "Beta boundaries and architecture"
+  ],
+  "hscroll": false,
+  "docHeight": 1042,
+  "play": false,
+  "badge": false
+ },
+ "after-zoom200": {
+  "h1": 1,
+  "primaryButtonsInFold": [
+   "Start a sample migration"
+  ],
+  "allLinksInFold": [
+   "Start a sample migration",
+   "Explore Demo, no sign-in required",
+   "Beta limitations"
+  ],
+  "hscroll": false,
+  "docHeight": 944,
+  "play": false,
+  "badge": false
+ },
+ "after-reduced": {
+  "h1": 1,
+  "primaryButtonsInFold": [
+   "Start a sample migration"
+  ],
+  "allLinksInFold": [
+   "Start a sample migration",
+   "Explore Demo, no sign-in required",
+   "Beta limitations",
+   "How MoveBooks works",
+   "Watch the product vision",
+   "Why businesses migrate",
+   "Trust by design",
+   "Beta boundaries and architecture"
+  ],
+  "hscroll": false,
+  "docHeight": 959,
+  "play": false,
+  "badge": false
+ }
+}
