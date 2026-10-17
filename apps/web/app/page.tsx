@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Check, Cloud, Eye, Network, TrendingUp } from "lucide-react";
+import { ArrowRight, Cloud, Eye, Network, ShieldCheck, Sparkles, TrendingUp, UserCheck } from "lucide-react";
 import { Card } from "@/components/ui";
 import { phases, startMigrationHref } from "@/components/public-surfaces/content";
 import { ProductVision } from "@/components/public-surfaces/ProductVision";
@@ -12,7 +12,7 @@ export default function Home() {
       <div className="hero-body">
         <p className="hero-value">Understand what needs to move, stay in control, and verify your numbers before starting fresh.</p>
         <div className="hero-actions"><Link href={startMigrationHref} className="button">Start a sample migration <ArrowRight size={18} aria-hidden="true"/></Link><Link href="/simulator" className="public-text-link">Explore Demo, no sign-in required</Link></div>
-        <ul className="hero-assurances" aria-label="How MoveBooks keeps you in control">{["You approve every consequential change", "Rules verify your numbers", "AI guidance is advisory"].map(item => <li key={item}><Check size={16} aria-hidden="true"/>{item}</li>)}</ul>
+        <ul className="hero-assurances" aria-label="How MoveBooks keeps you in control">{[[UserCheck, "You approve"], [ShieldCheck, "Rules verify"], [Sparkles, "AI advises"]].map(([Icon, text]) => { const I = Icon as typeof UserCheck; return <li key={text as string}><I size={16} aria-hidden="true"/>{text as string}</li>; })}</ul>
         <p className="hero-boundary">Synthetic Beta only. Do not use real customer or production provider data. <Link href="/trust#beta-limitations">Beta limitations</Link></p>
       </div>
     </section>

@@ -11,7 +11,8 @@ describe("Product Vision media", () => {
     const vision = document.querySelector("#product-vision")!;
     expect(hero.contains(vision)).toBe(true);
     expect(document.querySelector("details#product-vision-disclosure")).toBeNull();
-    expect(screen.getByRole("heading", { name: "The MoveBooks AI vision" })).toBeVisible();
+    expect(screen.getByText("Our vision · 25 sec")).toBeVisible();
+    expect(document.querySelector("#product-vision")).toHaveAccessibleName("Our vision · 25 sec");
     // DOM order: headline, then video, then CTA (mobile reads the video directly under the headline).
     const order = [...hero.querySelectorAll("h1, video, a.button")].map(node => node.tagName);
     expect(order).toEqual(["H1", "VIDEO", "A"]);
@@ -27,9 +28,12 @@ describe("Product Vision media", () => {
     expect(video).toHaveAttribute("height", "1080");
     expect(video).toHaveAttribute("poster", "/media/movebooks-ai-product-vision-poster.webp");
     expect(video.querySelector("source")).toHaveAttribute("src", "/media/movebooks-ai-product-vision.mp4");
-    expect(screen.getByText(/not a walkthrough of the current Beta/)).toBeVisible();
-    expect(screen.getByText("Concept · 25 sec")).toBeVisible();
-    expect(video).toHaveAttribute("aria-describedby", "vision-boundary");
+    // No visible description paragraph; the accessible description lives in a discreet disclosure.
+    expect(document.querySelector("#vision-boundary")).toBeNull();
+    const description = screen.getByText("Video description").closest("details")!;
+    expect(description.open).toBe(false);
+    expect(description).toHaveTextContent("From Migration Uncertainty to Business-Ready Accounting");
+    expect(description).toHaveTextContent("spoken captions are not provided yet");
     expect(screen.getByRole("button", { name: "Play the vision" })).toBeVisible();
   });
   it("hides the play prompt once playback starts and restores it when the video ends", () => {
