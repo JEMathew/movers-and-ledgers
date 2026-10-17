@@ -1,6 +1,6 @@
 # Firestore provisioning proposal — approval required
 
-17 October 2026. Source implementation `0c189f2` (named-database/completion fix `dac9815`). Configuration hashes: [approval manifest](../../infra/firestore/proposal-manifest.json). **Proposed, not executed.** The user elected to
+17 October 2026. Source implementation `0c189f2` (named-database/completion fix `dac9815`). Configuration hashes: [approval manifest](../../infra/firestore/proposal-manifest.json). **Original approval proposal.** The owner subsequently approved dormant Phase A only; [execution evidence](../submission/firestore-phase-a-evidence.md) records accepted dormant Phase A. Cloud Phase B IAM and Phase C remain unapproved; local Phase B integration/testing is authorized. The user elected to
 retain the API enabled after the disclosed inspection side effect. This does not authorize a
 new database, IAM, service/configuration change, model inference or public release. The
 [drift record](../../infra/firestore/api-drift-record.json) preserves the prior disabled state,
@@ -101,8 +101,7 @@ conservatively; restoring an old backup must not restore spend capacity.
 
 Checked 17 October 2026 on [Google's public Standard pricing page](https://cloud.google.com/firestore/pricing),
 with **Singapore**, **Monthly**, **Default** consumption selected. [Pricing capture](../submission/evidence/firestore-singapore-pricing.png).
-The estimate assumes no free quota or commitment discounts. The published named-database pricing
-section excludes free quota; account-specific billing/currency/taxes must be checked before creation.
+The estimate assumes no free quota or commitment discounts. The actual created database subsequently reported `freeTier:true` in the owner update. No-free-quota arithmetic is retained as a conservative scenario; it is not the account's actual bill. Account-specific billing, remaining allowances, currency and taxes are not measured here.
 
 | Item | USD price used |
 | --- | ---: |
@@ -172,3 +171,7 @@ is authorized by this document.
 ## Review and local verification
 
 A separate read-only review found no blocking defect in dormant phase A, the scoped later IAM proposal or the captured cost arithmetic. The reviewed named-database/precondition source was `dac9815`; subsequent `0c189f2` additionally rejects cloud emulator routing. Focused model-controls/activity/runtime tests:105passed. Full backend results are recorded in [the test log](../submission/evidence/backend-tests.txt). These remain local SDK-port/double tests; no provisioning or live-model claim follows.
+
+## Execution disposition
+
+Dormant Phase A is accepted and closed on 17 October 2026. All specified database fields, Active deny-client rules, Ready owner/time index and two false controls were verified. [Acceptance evidence](../submission/firestore-phase-a-evidence.md), [structured resource state](../../infra/firestore/phase-a-execution.json). The initial protection deviation was resolved by the owner. This document preserves the original review scope and configuration hashes. Local Phase B tests are now authorized; IAM grants, live test writes, inference and deployment remain excluded.

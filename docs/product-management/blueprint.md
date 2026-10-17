@@ -82,7 +82,7 @@ Learn/Play: conceptual learning and isolated game progress. Intake: package vali
 | MB-08 | P0 | PM/PRFAQ, editable diagrams, reviewable deck/PDF and authentic 3–4 minute video |
 | MB-09 | P0 release gate | Official template, portal constraints, public URLs and deployment acceptance |
 | MB-10 | P0 release gate | Hosted-upload isolation, malware protection, retention/deletion, abuse/concurrency and negative tests |
-| MB-11 | P1 | Approved Firestore operational activation, event authentication and outage behavior |
+| MB-11 | P1 | Dormant setup accepted; local controls/outbox emulator tests pass. Cloud phase adapter/schema/index/API/UI/worker and separately approved IAM/activation remain required |
 | MB-12 | Later | Provider adapters and real-data operating/legal/security approval |
 
 ## 12 Feature PRDs and Acceptance Criteria

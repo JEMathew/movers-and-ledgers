@@ -1,6 +1,6 @@
 # Bounded model controls — local implementation candidate
 
-17 October 2026. Implementation owner: integration. **No database, IAM, deployment or model activation has occurred.** The API was auto-enabled during inspection and the owner subsequently directed it remain enabled; [drift record](../../infra/firestore/api-drift-record.json).
+17 October 2026. Implementation owner: integration. **Dormant Phase A is provisioned and accepted; runtime IAM, deployment and model activation remain gated.** The API was auto-enabled during inspection and the owner subsequently directed it remain enabled; [drift record](../../infra/firestore/api-drift-record.json).
 
 The existing five-context advisor remains synthetic-only and user-triggered. The separate account
 Reviewer challenges a proposal without consuming the advisor's output. Neither has business-write
@@ -61,9 +61,13 @@ Hosted uploads retain a separate release gate and never enter model context.
 
 Source integration `1a24a2c` adds owner-filtered readback, explicit refresh in owner-keyed Trust
 Evidence, controlled reservation/outcome states and a strict response projection. Source rules
-deny all direct client reads/writes; source indexes are unprovisioned. These are not financial
+deny all direct client reads/writes; the approved owner/time index is Ready in the dormant database. These are not financial
 audit records, model-call proof or real-cloud acceptance. See [activity evidence](operational-activity-delivery.md).
 
 `dac9815` explicitly selects `MOVEBOOKS_FIRESTORE_DATABASE` (proposed `movebooks-operations`) and caches clients by project/database. No database is created by the SDK initializer. Terminal updates carry the read snapshot update-time precondition; competing stale writes fail without refunds or financial effect. [Provisioning proposal](firestore-provisioning-proposal.md) separates dormant resources, IAM verification and runtime activation.
 
 `0c189f2` also rejects Firestore emulator routing in cloud modes, matching the existing identity-emulator prohibition. Local emulator testing, when a Java runtime is available, must use an explicitly isolated test configuration; no cloud-mode bypass is introduced.
+
+Dormant infrastructure status: [Phase A accepted and closed](../submission/firestore-phase-a-evidence.md), with both controls false and deletion protection enabled. Local Phase B integration is authorized; no live activity, workload IAM isolation or model-generation acceptance is implied.
+
+Current follow-up `6575004`: [Dormant Phase A closed](../submission/firestore-phase-a-evidence.md); [local Phase B](../submission/firestore-phase-b-local.md) passes13real SDK/emulator cases,8client-denial checks and34offline phase-outbox cases. Full backend628passed/71skipped, with13emulator skips passed separately and58original optional gates still unverified. The phase mirror is a default-disabled local SQLite/emulator slice only; cloud/PostgreSQL/schema/new-index/API/UI/worker delivery and cloud IAM remain separate gaps. Earlier checkpoints above are historical, not current provisioning status.

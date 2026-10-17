@@ -1,6 +1,6 @@
 # Scoped cloud validation and release authorization plan
 
-Prepared against local integration code `1a24a2c`. **Only the user-authorized inventory has been performed; resource/release changes remain unapproved.**
+Prepared against local integration code `0c189f2`. **Dormant Firestore Phase A is accepted and closed; local Phase B testing is authorized. Runtime IAM, model activation, cloud app/config deployment and public release remain unapproved.**
 Existing public Beta and its traffic remain untouched. Read-only reachability checks returned
 HTTP 200 for the Beta and public repository; they do not identify the deployed source or prove
 signed-in execution. Current environment has no usable ADC credentials or gcloud executable.
@@ -12,15 +12,14 @@ Scope the work to project `movebooks-ai` and workload
 
 **Incident:** opening the Firestore database inventory automatically enabled `firestore.googleapis.com` despite no Enable action. This exceeded read-only scope; it was disclosed immediately. The owner explicitly elected to retain it enabled and forbade disabling it. The [drift record](../../infra/firestore/api-drift-record.json) records that disposition. No database, IAM or deployment change was made. Avoid any product page that can auto-enable disabled services.
 
-[Firestore provisioning proposal](../security/firestore-provisioning-proposal.md) now supplies exact dormant resource/rule/index/policy, later conditional IAM, costs and rollback for review. No provisioning approval has been received.
+[Firestore provisioning proposal](../security/firestore-provisioning-proposal.md) now supplies exact dormant resource/rule/index/policy, later conditional IAM, costs and rollback for review. Dormant provisioning was explicitly approved and accepted; [execution evidence](firestore-phase-a-evidence.md) records the exact named resource, resolved initial deletion-protection deviation and active rules/Ready index/false controls. Local Phase B integration is authorized; IAM grants and live application activation are not.
 
-**Model gate:** Google's documentation lists `gemini-2.5-flash` retirement on 20 October2026. Evaluate a supported regional replacement with the existing safety/structured-output contract and current price bounds before proposing live configuration. The API remains deterministic-only.
+**Model gate:** Google's documentation lists `gemini-2.5-flash` retirement on 20 October2026. Evaluate a supported regional replacement with the existing safety/structured-output contract and current price bounds before proposing live configuration. The API remains deterministic-only. [Model replacement gate](../security/model-replacement-gate.md) records current candidates, prices and the unresolved Singapore-versus-global endpoint decision; no replacement has been applied.
 
 The following mutations require a **separate explicit approval after that inventory**, not a
 blanket grant from this document:
 
-- Firestore API/database creation or configuration, region/retention, client rules, indexes and
-  narrowly scoped workload access. No broad project Owner/Editor or public grants.
+- Any Firestore resource/rule/index/policy change beyond accepted dormant Phase A, plus narrowly scoped workload access. No broad project Owner/Editor or public grants.
 - Vertex inference permissions or selected regional model changes; verify access using the
   attached workload, not a developer identity. API enablement alone is insufficient.
 - Synthetic authorization flag, Firestore policy document, owner/global quotas and conservative
@@ -61,3 +60,7 @@ Public upload remains disabled throughout the verification and release steps abo
 approval plus parser isolation, malware protection, authentication/tenant isolation,
 retention/deletion, abuse prevention, bounded concurrency and negative security tests. The
 browser-local fallback remains available while that capability is unfinished.
+
+## Current local test boundary
+
+Local Phase B uses a disposable loopback Firestore emulator, demo project IDs and explicit anonymous server credentials. Direct-client denial is tested separately with the Firebase web SDK. These tests do not validate cloud IAM, deployed client-rule enforcement, production index execution, model access or public activation. No operator credentials or live project data may be used by the local runner.

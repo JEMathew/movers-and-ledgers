@@ -31,5 +31,7 @@
     "write_usd": 0.0013284,
     "storage_usd": 0.01846,
     "total_usd": 0.2426275
-  }
+  },
+  "actual_database_free_tier_reported": true,
+  "free_tier_interpretation": "Owner update metadata reports freeTier:true. Original no-free-quota arithmetic is deliberately conservative, not an actual bill or a claim this database lacks free quota."
 }

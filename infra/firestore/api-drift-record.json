@@ -13,5 +13,7 @@
   "iam_changed_by_agent": false,
   "services_deployed_by_agent": false,
   "correction_request": "CLOSED_OWNER_DECLINED_DISABLE",
-  "evidence": "docs/submission/cloud-inspection-2026-10-17.md"
+  "evidence": "docs/submission/cloud-inspection-2026-10-17.md",
+  "record_scope": "Historical inspection incident only; fields describe actions before later dormant Phase A approval",
+  "later_authorized_provisioning": "infra/firestore/phase-a-execution.json"
 }

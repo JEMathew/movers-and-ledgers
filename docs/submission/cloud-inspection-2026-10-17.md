@@ -94,3 +94,7 @@ No-Go for its remaining mandatory inputs and release gates. The owner resolved t
 ## Owner disposition after inspection
 
 The user explicitly directed: leave `firestore.googleapis.com` enabled and do not disable it. This accepts the enabled API as the new desired baseline; it does not retroactively authorize the inspection side effect. [Structured drift record](../../infra/firestore/api-drift-record.json). Database creation, IAM, service deployment and other configuration remain unapproved. The [concrete provisioning proposal](../security/firestore-provisioning-proposal.md) must be reviewed before any provisioning.
+
+## Later dormant provisioning approval
+
+After this inspection, the owner explicitly approved Phase A only. The named database was created, exact deny-client rules published, owner/time index creation started and the two false policy controls seeded. [Execution evidence](firestore-phase-a-evidence.md) records accepted dormant Phase A, including owner-enabled deletion protection and reconfirmed Active rules/Ready index/false controls. The historical inspection scope and API incident above remain unchanged; no IAM, service deployment or model activation was authorized by the later Phase A approval.

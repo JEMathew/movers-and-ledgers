@@ -2,22 +2,22 @@
   "version": "submission-evidence-v1",
   "date": "2026-10-17",
   "timezone": "Asia/Kolkata",
-  "code_commit": "0c189f2",
+  "code_commit": "6575004",
   "branch": "delivery/submission-integration",
   "overall_submission": "NO_GO",
   "public_beta_modified": false,
   "deployment_authorized": false,
-  "source_status": "Local unpublished core0c189f2; existing deck/media retain earlier recorded checkpoints; no public branch publication",
+  "source_status": "Local unpublished core6575004; media retain earlier recorded checkpoints; no public branch publication",
   "verification": {
     "backend": {
       "command": "python -m pytest -q",
-      "passed": 594,
-      "skipped": 58,
+      "passed": 628,
+      "skipped": 71,
       "warnings": 1,
-      "evidence": "docs/submission/evidence/backend-tests.txt",
-      "limitations": "Skipped PostgreSQL/external gates not passed",
-      "seconds": 23.17,
-      "code_commit": "0c189f2"
+      "seconds": 28.95,
+      "code_commit": "65750048ce76bb7aeaf5046314aada129cfc4037",
+      "evidence": "docs/submission/evidence/backend-phase-b-tests.txt",
+      "limitations": "13 default-suite emulator skips passed separately; 58 original optional/external gates remain unverified"
     },
     "frontend": {
       "commands": [
@@ -83,22 +83,32 @@
       "evidence": "docs/submission/agent-quality-evidence.json",
       "not_a_model_accuracy_benchmark": true
     },
-    "presentation_finalization": "docs/submission/evidence/presentation-finalization.json",
+    "presentation_finalization": "docs/submission/evidence/official-template-finalization.json",
     "repository_checks": {
       "status": "PASS",
-      "output": "Checked 134 Markdown files and 618 text files; 0 findings.",
-      "evidence": "docs/submission/evidence/firestore-proposal-validation.json"
+      "output": "Checked 138 Markdown files and 637 text files; 0 findings.",
+      "evidence": "docs/submission/evidence/submission-checkpoint-validation.json"
     },
     "control_followup": {
       "status": "PASS",
       "scope": "Named database/cache isolation, SDK stale-completion precondition and cloud emulator rejection; backend594/58skips",
       "code_commit": "0c189f2",
       "live_firestore_tests": false,
-      "emulator": "NOT_RUN_JAVA_RUNTIME_UNAVAILABLE",
+      "emulator": "PASSED_SEPARATE_LOCAL_PHASE_B; no cloud IAM proof",
       "focused_tests_passed": 105,
       "focused_seconds": 6.94,
       "evidence": "docs/submission/evidence/firestore-proposal-validation.json"
-    }
+    },
+    "local_firestore_phase_b": {
+      "status": "PASS_LOCAL_SCOPE_ONLY",
+      "emulator_sdk_tests_passed": 13,
+      "direct_client_denial_checks_passed": 8,
+      "offline_outbox_cases_passed": 34,
+      "code_commit": "65750048ce76bb7aeaf5046314aada129cfc4037",
+      "evidence": "docs/submission/evidence/firestore-phase-b-local.json",
+      "live_cloud_validation": false
+    },
+    "historical_presentation_finalization": "docs/submission/evidence/presentation-finalization.json"
   },
   "public_links": [
     {
@@ -120,11 +130,11 @@
     "gcloud_available": false,
     "current_effective_vertex_permissions": "Project Allow row includes Agent Platform user; effective inference not tested",
     "current_supported_model_region": "Google model documentation lists asia-southeast1 for gemini-2.5-flash; retirement2026-10-20; replacement evaluation needed",
-    "firestore_activation": "API_ENABLED_OWNER_DIRECTED_RETAIN; database/operational backend not provisioned or activated",
-    "operational_activity_stream": "IMPLEMENTED_GATED_SOURCE; owner-scoped SDK-port/UI/proxy tests passed, live validation not run",
+    "firestore_activation": "DORMANT_PHASE_A_ACCEPTED_CLOSED; Standard Native asia-southeast1; deletion protection enabled; rules ACTIVE; index READY; policy enabled=false/synthetic_beta_authorized=false; runtime not activated",
+    "operational_activity_stream": "Advisory controls owner-scoped SDK/UI source remains gated; default-disabled local SQLite migration outbox/emulator slice passed; general cloud migration phase stream remains incomplete",
     "sql_authority": "Existing implementation; current deployed persistence acceptance unverified",
     "public_mode": "CONFIRMED_SERVING_REVISION_CONFIG_DETERMINISTIC_ONLY",
-    "source_index_rules": "infra/firestore (not deployed)",
+    "source_index_rules": "infra/firestore (rules published; index READY; see phase-a-execution.json)",
     "signed_in_browser_inventory": "AUTHORIZED_AND_INSPECTED; user explicit read-only permission; see cloud-inspection-2026-10-17.md",
     "cloud_inspection_evidence": "docs/submission/cloud-inspection-2026-10-17.md",
     "sql_health": "Available/Runnable PostgreSQL17; no automated backup policy; HA disabled; no data/connection test",
@@ -133,20 +143,33 @@
     "incident_screenshot": "docs/submission/evidence/firestore-auto-enabled-console.png",
     "incident_screenshot_sha256": "1950077122b8081d8b64675c3d358a95d0b5b1d96ea534cd440a1f89f6a25e19",
     "drift_record": "infra/firestore/api-drift-record.json",
-    "proposed_database": "movebooks-operations; asia-southeast1; Standard Native; NOT_PROVISIONED",
+    "proposed_database": "projects/movebooks-ai/databases/movebooks-operations; Standard Native asia-southeast1; DORMANT_ACCEPTED",
     "provisioning_proposal": "docs/security/firestore-provisioning-proposal.md",
     "provisioning_approval_manifest": "infra/firestore/proposal-manifest.json",
-    "migration_phase_event_mirror": "REQUIRED_IMPLEMENTATION_GAP; advisory operations implemented; SQL workflow activity independent"
+    "migration_phase_event_mirror": "DEFAULT_DISABLED_LOCAL_SQLITE_OUTBOX_AND_EMULATOR_SLICE_PASS; cloud/PostgreSQL adapter, schema, new index, API/UI and worker remain required gaps",
+    "firestore_phase_a_execution": "infra/firestore/phase-a-execution.json",
+    "firestore_free_tier": true,
+    "firestore_realtime_updates": "REALTIME_UPDATES_MODE_ENABLED; database metadata only; client rules deny and app admission disabled",
+    "model_replacement_gate": "docs/security/model-replacement-gate.md; no model or region change applied",
+    "credentials_scope": "Local CLI/ADC unavailable; existing signed-in Console used read-only; no new sign-in"
   },
   "release_gates": [
     {
       "id": "OFFICIAL_TEMPLATE",
-      "status": "BLOCKED_MISSING_INPUT",
+      "status": "PASS_PRESCRIBED_16_SLIDE_TEMPLATE_APPLIED",
       "required": "Submission Template | AI Builder Cup.pptx"
     },
     {
       "id": "TEAM_ROSTER_CONTACT",
-      "status": "BLOCKED_MISSING_INPUT"
+      "status": "ROSTER_CONFIRMED_CONTACT_PENDING",
+      "team": {
+        "team_name": "MoveBooks AI",
+        "team_lead": "Jincen E Mathew",
+        "team_member": "Kunal Nangia",
+        "contact": null,
+        "contact_status": "pending owner input",
+        "source": "explicit user-confirmed roster relayed by integration owner"
+      }
     },
     {
       "id": "FULL_BROWSER_AND_VIDEO",
@@ -162,7 +185,7 @@
     },
     {
       "id": "FIRESTORE_ACTIVITY",
-      "status": "SOURCE_IMPLEMENTED_LIVE_VALIDATION_GATED"
+      "status": "LOCAL_CONTROLS_AND_SQLITE_OUTBOX_SLICE_PASS; CLOUD_PHASE_STREAM_INTEGRATION_PENDING"
     },
     {
       "id": "HOSTED_UPLOAD",
@@ -187,20 +210,31 @@
     },
     {
       "id": "FIRESTORE_PROVISIONING",
-      "status": "CONCRETE_PHASE_A_PROPOSAL_AWAITS_EXPLICIT_APPROVAL",
-      "proposal": "docs/security/firestore-provisioning-proposal.md"
+      "status": "DORMANT_PHASE_A_ACCEPTED_CLOSED",
+      "proposal": "docs/security/firestore-provisioning-proposal.md",
+      "execution": "docs/submission/firestore-phase-a-evidence.md"
+    },
+    {
+      "id": "LOCAL_PHASE_B",
+      "status": "PASS_LOCAL_CONTROLS_AND_STATED_OUTBOX_SCOPE; NO_IAM_OR_CLOUD_ACTIVATION"
+    },
+    {
+      "id": "MIGRATION_PHASE_MIRROR",
+      "status": "LOCAL_SQLITE_SLICE_PASS; CLOUD_ADAPTER_SCHEMA_INDEX_API_UI_WORKER_PENDING"
     }
   ],
   "assets": [
     {
       "path": "docs/submission/assets/movebooks-submission-draft.pdf",
       "bytes": 1412574,
-      "sha256": "6e47c64c670d876076f10c6a8779e36b34bb755e585c8ef39c40f97c26540b0f"
+      "sha256": "6e47c64c670d876076f10c6a8779e36b34bb755e585c8ef39c40f97c26540b0f",
+      "status": "HISTORICAL_PREPARATION_SUPERSEDED_AS_PRIMARY_DECK"
     },
     {
       "path": "docs/submission/assets/movebooks-submission-draft.pptx",
       "bytes": 520897,
-      "sha256": "639350a5fc2c29597630c759f4a661ce9921942f391657f62d79765d80885c4a"
+      "sha256": "639350a5fc2c29597630c759f4a661ce9921942f391657f62d79765d80885c4a",
+      "status": "HISTORICAL_PREPARATION_SUPERSEDED_AS_PRIMARY_DECK"
     },
     {
       "path": "docs/submission/assets/play-local-candidate.png",
@@ -226,6 +260,24 @@
       "path": "docs/submission/assets/working-product-demo.srt",
       "bytes": 2406,
       "sha256": "966c5e57b1b4af0e314ae31cef3e6b8fc4b8e8a57ddf813452219c11563f19f6"
+    },
+    {
+      "path": "docs/submission/assets/movebooks-official-template-review.pptx",
+      "bytes": 1597049,
+      "sha256": "492ee03eab3648daece2e5f6fb059d225e33cbb67a41a5494ebe3e19858ea5b3",
+      "status": "PRIMARY_REVIEW_ASSET"
+    },
+    {
+      "path": "docs/submission/assets/movebooks-official-template-review.pdf",
+      "bytes": 2347471,
+      "sha256": "716375c484c68de22241cd78b2cfe1f9e13920c939f82ee0cb299219e547d528",
+      "status": "PRIMARY_REVIEW_ASSET"
+    },
+    {
+      "path": "docs/submission/source/Submission Template | AI Builder Cup.pptx",
+      "bytes": 960223,
+      "sha256": "9d4f6fc09dd68da4b38bffe3599cb6eb22951fe5a0f66c661005c3176b9c6bb4",
+      "status": "PRESCRIBED_SOURCE_TEMPLATE"
     }
   ],
   "description_characters": 953,
@@ -236,5 +288,29 @@
     "docs/submission/product-quality-judge.md",
     "docs/submission/release-authorization-plan.md",
     "docs/submission/cloud-inspection-2026-10-17.md"
-  ]
+  ],
+  "primary_deck": {
+    "pptx": "docs/submission/assets/movebooks-official-template-review.pptx",
+    "pdf": "docs/submission/assets/movebooks-official-template-review.pdf"
+  },
+  "official_template": {
+    "source_path": "docs/submission/source/Submission Template | AI Builder Cup.pptx",
+    "bytes": 960223,
+    "sha256": "9d4f6fc09dd68da4b38bffe3599cb6eb22951fe5a0f66c661005c3176b9c6bb4",
+    "source_slides": 16,
+    "dimensions_emu": [
+      9144000,
+      5143500
+    ],
+    "status": "preserved and populated with confirmed roster; contact pending",
+    "comparison": "manual per-slide source/final comparison; no invented automated template-coverage ratio"
+  },
+  "team": {
+    "team_name": "MoveBooks AI",
+    "team_lead": "Jincen E Mathew",
+    "team_member": "Kunal Nangia",
+    "contact": null,
+    "contact_status": "pending owner input",
+    "source": "explicit user-confirmed roster relayed by integration owner"
+  }
 }

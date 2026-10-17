@@ -758,7 +758,7 @@
       ],
       [
         "firestore",
-        "Firestore: API enabled, owner retained; named database and activation approval pending"
+        "Firestore: dormant movebooks-operations in Singapore; deny-client rules and index verified; runtime activation gated"
       ],
       [
         "gcs",

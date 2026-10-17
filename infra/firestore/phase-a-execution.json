@@ -1,0 +1,156 @@
+{
+  "version": "firestore-phase-a-execution-v1",
+  "date": "2026-10-17",
+  "status": "ACCEPTED_CLOSED_DORMANT",
+  "approval": "Explicit owner approval of dormant Phase A only; infra/firestore/proposal-manifest.json hashes preserved",
+  "database": {
+    "name": "projects/movebooks-ai/databases/movebooks-operations",
+    "locationId": "asia-southeast1",
+    "databaseEdition": "STANDARD",
+    "type": "FIRESTORE_NATIVE",
+    "status": "AVAILABLE_READY",
+    "creation_time_console_ist": "2026-10-17 16:03:17",
+    "encryption": "GOOGLE_MANAGED",
+    "deleteProtectionState": "DELETE_PROTECTION_ENABLED",
+    "pointInTimeRecoveryEnablement": "POINT_IN_TIME_RECOVERY_DISABLED",
+    "backup_schedules": [],
+    "ttl_policies": [],
+    "concurrencyMode": "PESSIMISTIC",
+    "appEngineIntegrationMode": "DISABLED",
+    "freeTier": true,
+    "realtimeUpdatesMode": "REALTIME_UPDATES_MODE_ENABLED",
+    "createTime": "2026-10-17T10:33:17.682856Z",
+    "updateTime": "2026-10-17T10:45:57.048785Z",
+    "versionRetentionPeriod": "3600s"
+  },
+  "rules": {
+    "status": "ACTIVE",
+    "published_time_console_ist": "2026-10-17 16:04:41",
+    "source": "infra/firestore/firestore.rules",
+    "source_sha256": "e2e4d57004343221057b6e946bd66cacfe9c471fd26291be3f3b4f28763d7ffc",
+    "verification": "Console active source readback; not a live client denial test",
+    "reconfirmed_at": "2026-10-17T10:49:38Z"
+  },
+  "index": {
+    "id": "CICAgOjXh4EK",
+    "collectionGroup": "movebooks_model_controls",
+    "queryScope": "COLLECTION",
+    "fields": [
+      {
+        "fieldPath": "owner_hash",
+        "order": "ASCENDING"
+      },
+      {
+        "fieldPath": "created_at",
+        "order": "DESCENDING"
+      },
+      {
+        "fieldPath": "__name__",
+        "order": "DESCENDING",
+        "implicit": true
+      }
+    ],
+    "status": "READY",
+    "reconfirmed_at": "2026-10-17T10:49:38Z"
+  },
+  "policy": {
+    "document": "movebooks_model_controls/policy",
+    "fields": {
+      "enabled": false,
+      "synthetic_beta_authorized": false
+    },
+    "field_types": "BOOLEAN",
+    "other_documents_written": 0,
+    "reconfirmed_at": "2026-10-17T10:49:38Z"
+  },
+  "deviations": [
+    "RESOLVED: Console initially created deletion protection disabled; owner enabled it and done:true plus refreshed Console confirm the approved final target",
+    "Observed freeTier:true and realtimeUpdatesMode:REALTIME_UPDATES_MODE_ENABLED are explicit resource metadata; no runtime/public feature was activated"
+  ],
+  "auth_blocker": {
+    "standard_sdk_oauth_rejected_by_auto_review": true,
+    "reason": "Broad cloud-platform, App Engine admin, SQL login, Compute and reauthentication scopes exceed Phase A",
+    "consent_completed": false,
+    "credential_exchange_completed": false,
+    "narrower_sign_in_or_owner_execution": "OWNER_EXECUTED_AND_RESULT_VERIFIED; NO_FURTHER_SIGN_IN_AUTHORIZED",
+    "broad_sign_in_prompt_cancelled": true,
+    "status": "RESOLVED_BY_OWNER_EXECUTION_NO_AGENT_SIGN_IN"
+  },
+  "excluded_actions_performed": {
+    "iam_grants": false,
+    "service_deployment": false,
+    "application_env_changes": false,
+    "gemini_activation": false,
+    "paid_model_invocation": false,
+    "public_activation": false,
+    "api_disable": false,
+    "other_api_enable": false
+  },
+  "report": "docs/submission/firestore-phase-a-evidence.md",
+  "screenshots": [
+    {
+      "path": "docs/submission/evidence/firestore-phase-a-database-accepted.png",
+      "sha256": "42551f7f243eada9c2614b1791ea38bfcbe3c7777864917d16d46dbddcfea88b",
+      "bytes": 63292
+    },
+    {
+      "path": "docs/submission/evidence/firestore-phase-a-database.png",
+      "sha256": "08fb95f85ea81e1ebd218407f320736e3de73cb3dc1b28bdbb06f218f94b116a",
+      "bytes": 89097
+    },
+    {
+      "path": "docs/submission/evidence/firestore-phase-a-index-accepted.png",
+      "sha256": "1b4809824d590e338eefb5b149c340e96d09002f068a517b0097f23d6c195567",
+      "bytes": 80441
+    },
+    {
+      "path": "docs/submission/evidence/firestore-phase-a-index.png",
+      "sha256": "5858b97a7e9b6717a7a1d6ee5899a6132804d35572488a9a170f60c3f1763d17",
+      "bytes": 80137
+    },
+    {
+      "path": "docs/submission/evidence/firestore-phase-a-owner-update.png",
+      "sha256": "0150417d3be429d01d7a93ec6769bb70c490524b580317f225c851c83f5c8d58",
+      "bytes": 210970
+    },
+    {
+      "path": "docs/submission/evidence/firestore-phase-a-policy-accepted.png",
+      "sha256": "4e2f1d000643a81970985e2d8d412eb84fc54666c01d628cdf5665474b2e2515",
+      "bytes": 80779
+    },
+    {
+      "path": "docs/submission/evidence/firestore-phase-a-policy.png",
+      "sha256": "7a1b602544642521b6747020ddefdae2a059b68229735b3717345c828f6ac001",
+      "bytes": 88591
+    },
+    {
+      "path": "docs/submission/evidence/firestore-phase-a-recovery.png",
+      "sha256": "ebf357eb0faa58ac0a8067d2e66037a20cd50403c285e919526f78edd5babd90",
+      "bytes": 103142
+    },
+    {
+      "path": "docs/submission/evidence/firestore-phase-a-rules-accepted.png",
+      "sha256": "9dde0a2925d99124c9dddb198079ca1245eb009f31f4f26e558badb70368bccd",
+      "bytes": 104961
+    },
+    {
+      "path": "docs/submission/evidence/firestore-phase-a-rules.png",
+      "sha256": "efdd0fafcfd48a42eba04316a7e18e65f4fd7bb4f7a79accf863afc71f970981",
+      "bytes": 111621
+    },
+    {
+      "path": "docs/submission/evidence/firestore-phase-a-ttl.png",
+      "sha256": "2cf9f90d67bb623adee1fcee15b856badee07265270e3a76193271afa9149c70",
+      "bytes": 81113
+    }
+  ],
+  "accepted_at": "2026-10-17T10:49:38Z",
+  "owner_update": {
+    "done": true,
+    "operation": "projects/movebooks-ai/databases/movebooks-operations/operations/BhAXoczoEAbWzaPlCAsKDxo",
+    "verification": "Owner-reported configuration independently read in existing Console Cloud Shell output; refreshed Database details confirms Enabled",
+    "source": "docs/submission/evidence/firestore-phase-a-owner-update.png"
+  },
+  "local_phase_b_authorized": true,
+  "cloud_phase_b_iam_or_activation_authorized": false
+}
