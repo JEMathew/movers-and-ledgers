@@ -29,7 +29,7 @@ curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
 gcloud services list --enabled --project movebooks-ai | grep aiplatform   # expect aiplatform.googleapis.com
 
 # 1. ★ The run (after approval). Repo at the approved commit, Python env with '.[cloud,agents]'.
-export MOVEBOOKS_ENV=dev MOVEBOOKS_MODEL_PROVIDER_MODE=gemini-adk \
+export MOVEBOOKS_ENV=local MOVEBOOKS_MODEL_PROVIDER_MODE=gemini-adk \
   MOVEBOOKS_REASONING_PROJECT=movebooks-ai MOVEBOOKS_REASONING_LOCATION=global \
   MOVEBOOKS_REASONING_MODELS='{"planning":"gemini-3.5-flash-lite","mapping":"gemini-3.5-flash-lite","resolution":"gemini-3.5-flash-lite","configuration":"gemini-3.5-flash-lite","onboarding":"gemini-3.5-flash-lite"}'
 PYTHONPATH=.:services/api/src python scripts/live_advisor_reviewer_demo.py --live \
