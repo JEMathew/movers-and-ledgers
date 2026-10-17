@@ -1,0 +1,20 @@
+flowchart LR
+  hosting["Firebase Hosting: public Beta URL documented"]
+  web["Cloud Run web service: candidate evidence required"]
+  api["Cloud Run API: cloud-dev / deterministic-only last known"]
+  auth["Firebase Auth: owner identity"]
+  sql["Cloud SQL: financial and session authority"]
+  vertex["Vertex AI API enabled last known; inference permission / region unverified"]
+  firestore["Firestore: API disabled last known; gated operational controls"]
+  gcs["Cloud Storage: adapter boundary"]
+  secret["Secret Manager: allowlisted adapter"]
+  logs["Logging stdout; Monitoring activation evidence separate"]
+  hosting -->|"frontend hosting integration"| web
+  web -->|"authenticated API proxy"| api
+  auth -->|"verified token"| api
+  api -->|"transactional repository"| sql
+  api -->|"activation gated"| vertex
+  api -->|"activation gated"| firestore
+  api -->|"reviewed artifacts only"| gcs
+  api -->|"named secret access if configured"| secret
+  api -->|"sanitized execution events"| logs

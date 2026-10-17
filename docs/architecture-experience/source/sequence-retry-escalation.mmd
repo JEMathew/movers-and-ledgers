@@ -1,0 +1,14 @@
+sequenceDiagram
+  autonumber
+  participant Workflow
+  participant Tool
+  participant Policy
+  participant Accountant
+  participant Audit
+  Workflow->>Tool: Execute approved idempotent batch
+  Tool->>Policy: Classified failure and checkpoint
+  Policy->>Workflow: Transient and permitted: bounded automatic retry
+  Workflow->>Tool: Reuse intent and idempotency key
+  Policy->>Accountant: Consequential, unknown or exhausted: escalate
+  Accountant->>Workflow: Review/approve remediation if permitted
+  Workflow->>Audit: Record attempts, decisions and recovery evidence

@@ -1,0 +1,55 @@
+flowchart LR
+  subgraph lane0["Accountant"]
+    direction LR
+    n0_0["Request / context: Initiates journey and advice"]
+    n0_1["Bounded proposal: Inspects alternatives"]
+    n0_2["Human decision: Approve / reject / modify"]
+    n0_3["Execution / recovery: Required escalation decision"]
+    n0_4["Evidence / outcome: Reads verified outcome"]
+    n0_0 --> n0_1 --> n0_2 --> n0_3 --> n0_4
+  end
+  subgraph lane1["Python parent roles"]
+    direction LR
+    n1_0["Request / context: Discover / Assess / Plan"]
+    n1_1["Bounded proposal: Map / Configure proposals"]
+    n1_2["Human decision: Guard current authority"]
+    n1_3["Execution / recovery: Migrate / Resolve"]
+    n1_4["Evidence / outcome: Validate / Onboard / FPU"]
+    n1_0 --> n1_1 --> n1_2 --> n1_3 --> n1_4
+  end
+  subgraph lane2["Mapping specialists"]
+    direction LR
+    n2_0["Request / context: Account / Tax context"]
+    n2_1["Bounded proposal: Entity / Configuration rules"]
+    n2_2["Human decision: No approval authority"]
+    n2_3["Execution / recovery: No direct financial write"]
+    n2_4["Evidence / outcome: Evidence and uncertainty"]
+    n2_0 --> n2_1 --> n2_2 --> n2_3 --> n2_4
+  end
+  subgraph lane3["Resolution specialists"]
+    direction LR
+    n3_0["Request / context: Duplicate / Referential Integrity"]
+    n3_1["Bounded proposal: Tax-Configuration proposal"]
+    n3_2["Human decision: Human if consequential"]
+    n3_3["Execution / recovery: Retry Recovery / Coordinator"]
+    n3_4["Evidence / outcome: Resolution lineage"]
+    n3_0 --> n3_1 --> n3_2 --> n3_3 --> n3_4
+  end
+  subgraph lane4["Gemini and Reviewer"]
+    direction LR
+    n4_0["Request / context: Explicit user request only"]
+    n4_1["Bounded proposal: Advice / separate review contract"]
+    n4_2["Human decision: Returns to accountant"]
+    n4_3["Execution / recovery: No execution authority"]
+    n4_4["Evidence / outcome: Validated references / fallback"]
+    n4_0 --> n4_1 --> n4_2 --> n4_3 --> n4_4
+  end
+  subgraph lane5["Knowledge / governance"]
+    direction LR
+    n5_0["Request / context: Versioned knowledge"]
+    n5_1["Bounded proposal: Policy and evidence guards"]
+    n5_2["Human decision: Attributable approvals"]
+    n5_3["Execution / recovery: Bounded retry / safe stop"]
+    n5_4["Evidence / outcome: Audit; not an LLM runtime"]
+    n5_0 --> n5_1 --> n5_2 --> n5_3 --> n5_4
+  end

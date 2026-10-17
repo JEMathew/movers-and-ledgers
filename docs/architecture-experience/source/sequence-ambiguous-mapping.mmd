@@ -1,0 +1,13 @@
+sequenceDiagram
+  autonumber
+  participant Accountant
+  participant UI
+  participant API
+  participant Mapping
+  Accountant->>UI: Inspect 1200 Misc Clearing proposal
+  UI->>API: Read owner-scoped proposal and evidence
+  API->>Mapping: Build deterministic specialist proposal
+  Mapping->>UI: Evidence, uncertainty and alternatives
+  Accountant->>UI: Request advice or independent review
+  UI->>Accountant: Show explanation and findings
+  Accountant->>API: Approve, reject or modify current version

@@ -1,0 +1,14 @@
+flowchart LR
+  users["Accountant / bookkeeper / owner"]
+  system["MoveBooks AI: learning to verified FPU"]
+  identity["Firebase Authentication boundary"]
+  gemini["Vertex Gemini advisory boundary"]
+  source["Synthetic source environment"]
+  target["Synthetic target environment"]
+  future["Future real providers: unsupported today"]
+  users -->|"learn / review / authorize"| system
+  system -->|"verify authenticated owner"| identity
+  system -->|"user-requested permitted synthetic context"| gemini
+  system -->|"read-only adapter"| source
+  system -->|"approved deterministic adapter"| target
+  future -->|"future adapter contracts; no active connection"| system

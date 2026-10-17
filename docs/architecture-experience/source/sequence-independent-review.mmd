@@ -1,0 +1,13 @@
+sequenceDiagram
+  autonumber
+  participant Accountant
+  participant UI
+  participant API
+  participant Reviewer
+  Accountant->>UI: Request second opinion
+  UI->>API: Authenticated owner request
+  API->>Reviewer: Separate review contract and allowed evidence
+  Reviewer->>Reviewer: Challenge assumptions and contradictions
+  Reviewer->>API: Outcome, references, concerns, uncertainty, next action
+  API->>Accountant: Review finding; no state mutation
+  Accountant->>API: Separate explicit financial decision if desired

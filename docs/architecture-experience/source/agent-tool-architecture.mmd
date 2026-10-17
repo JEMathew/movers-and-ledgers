@@ -1,0 +1,19 @@
+flowchart LR
+  ui["Accountant / UI"]
+  advisor["Gemini + Google ADK advisory boundary"]
+  reviewer["Independent mapping Reviewer candidate"]
+  orchestrator["Deterministic orchestrator"]
+  tools["Allowlisted deterministic financial tools"]
+  human["Attributable human decisions"]
+  eval["Offline Agent Quality Judge"]
+  taste["Internal Product Quality Judge"]
+  ui -->|"explicit request"| advisor
+  advisor -->|"structured validated explanation"| ui
+  ui -->|"request allowed-evidence review"| reviewer
+  reviewer -->|"concerns / uncertainty / next action"| ui
+  ui -->|"approve / reject / modify"| human
+  human -->|"authorized current intent"| orchestrator
+  orchestrator -->|"policy-controlled execution"| tools
+  advisor -->|"sanitized output / traces"| eval
+  reviewer -->|"separate review cases"| eval
+  ui -->|"actual product evidence; no execution authority"| taste

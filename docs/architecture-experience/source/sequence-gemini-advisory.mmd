@@ -1,0 +1,16 @@
+sequenceDiagram
+  autonumber
+  participant Accountant
+  participant UI
+  participant API
+  participant Policy
+  participant Advisor
+  participant Gemini
+  Accountant->>UI: Request explanation in supported context
+  UI->>API: Authenticated advisory request
+  API->>Policy: Synthetic authorization, quota, budget, kill switch
+  Policy->>Advisor: Allowlisted synthetic projection if permitted
+  Advisor->>Gemini: Bounded ADK invocation
+  Gemini->>Advisor: Structured untrusted output
+  Advisor->>API: Validate evidence references or safe fallback
+  API->>Accountant: Advice only; no automatic workflow consumption

@@ -1,0 +1,55 @@
+flowchart LR
+  subgraph lane0["Accountant"]
+    direction LR
+    n0_0["Understand: Inspect readiness"]
+    n0_1["Prepare: Approve / reject / modify"]
+    n0_2["Move: Authorize; resolve escalation"]
+    n0_3["Verify: Approve sensitive settings"]
+    n0_4["Start: Approve productive invoice"]
+    n0_0 --> n0_1 --> n0_2 --> n0_3 --> n0_4
+  end
+  subgraph lane1["Product UI"]
+    direction LR
+    n1_0["Understand: Inventory and findings"]
+    n1_1["Prepare: Evidence and alternatives"]
+    n1_2["Move: Progress and exceptions"]
+    n1_3["Verify: Controls and next steps"]
+    n1_4["Start: Preview and receipt"]
+    n1_0 --> n1_1 --> n1_2 --> n1_3 --> n1_4
+  end
+  subgraph lane2["API / orchestration"]
+    direction LR
+    n2_0["Understand: Owner and state guards"]
+    n2_1["Prepare: Versioned decision guards"]
+    n2_2["Move: Approved manifest / idempotency"]
+    n2_3["Verify: Verification prerequisite guards"]
+    n2_4["Start: FPU contract and approvals"]
+    n2_0 --> n2_1 --> n2_2 --> n2_3 --> n2_4
+  end
+  subgraph lane3["Specialist components"]
+    direction LR
+    n3_0["Understand: Discovery / Assessment"]
+    n3_1["Prepare: Planning / Mapping specialists"]
+    n3_2["Move: Migration / Resolution specialists"]
+    n3_3["Verify: Validation / Configuration"]
+    n3_4["Start: Onboarding / Activation"]
+    n3_0 --> n3_1 --> n3_2 --> n3_3 --> n3_4
+  end
+  subgraph lane4["Financial tools"]
+    direction LR
+    n4_0["Understand: Schema and compatibility"]
+    n4_1["Prepare: Deterministic mapping rules"]
+    n4_2["Move: Scoped load / safe retries"]
+    n4_3["Verify: Exact reconciliation"]
+    n4_4["Start: Once-only invoice effect"]
+    n4_0 --> n4_1 --> n4_2 --> n4_3 --> n4_4
+  end
+  subgraph lane5["Adapters and audit"]
+    direction LR
+    n5_0["Understand: Read-only source adapter"]
+    n5_1["Prepare: Decision / lineage records"]
+    n5_2["Move: Separate target / checkpoints"]
+    n5_3["Verify: Validation / configuration audit"]
+    n5_4["Start: Verified FPU receipt"]
+    n5_0 --> n5_1 --> n5_2 --> n5_3 --> n5_4
+  end

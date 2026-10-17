@@ -1,0 +1,22 @@
+# Working-product video storyboard
+
+Target runtime **3 minutes 30 seconds**, within the required 3–4 minutes. Status: production script and caption source; **not a completed video**. Authentic footage must show the accepted candidate. Any segment unavailable in the candidate must remain clearly labeled unavailable rather than be simulated as real. The existing 25-second product-vision film is conceptual artwork and cannot substitute for working-product footage.
+
+| Time | Authentic footage / action | Narration |
+| --- | --- | --- |
+| 00:00–00:15 | Current landing page, synthetic boundary and three entry choices | MoveBooks AI helps accountants move their books and keep their confidence. This is a bounded synthetic Beta by Movers & Ledgers. |
+| 00:15–00:40 | Play character movement, desk/ledger/cabinet interaction, evidence puzzle, success unlock | An accountant starts in a small office. Explore the records, collect evidence and solve a mapping problem. The opening mission teaches migration without touching financial approval state. |
+| 00:40–01:05 | Try Your Data template, browser-local upload/selection, visible issue, replace/revalidate and review | Try Your Data checks a documented CSV and JSON package. Use only permitted synthetic or de-identified records. The fallback validates in the browser. Hosted uploads remain closed until independent security gates pass. |
+| 01:05–01:25 | Explore Harbor Light Books, discovery/readiness, versioned plan | Explore Demo follows one canonical journey: Understand, Prepare, Move, Verify and Start. Discovery and readiness make unsupported records and decisions visible before execution. |
+| 01:25–01:55 | Account 1200 ambiguity, explicit Gemini click, output/evidence/mode visible, independent Reviewer output if live | Account 1200, Misc Clearing, needs an informed choice. The accountant can request an explanation and an independent review. Advice cites permitted evidence and makes uncertainty visible. Mode and availability are explicit. Neither advisor nor reviewer approves a mapping. |
+| 01:55–02:15 | Human approve/reject/modify, approved manifest and migrate action | The authorized person reviews the impact and approves the current plan. Deterministic tools perform the approved synthetic migration. The model cannot trigger a financial write. |
+| 02:15–02:35 | Checkpoint, transient automatic retry or human escalation on supported case | Checkpoints and idempotency protect recovery. Policy retries permitted transient failures. Consequential or uncertain cases stop for a human decision. |
+| 02:35–02:55 | Reconciliation controls, then sensitive configuration approval | Deterministic reconciliation checks records, relationships and balances. A mismatch blocks progress. Sensitive configuration requires approval before the journey continues. |
+| 02:55–03:15 | Onboarding, invoice preview, explicit approval, verified FPU receipt | Completion means more than moving records. After required controls pass, the owner approves a synthetic invoice. The system verifies the receipt and its accounting effect as First Productive Use. |
+| 03:15–03:30 | Real cloud console/config evidence with redacted sensitive details, repository/architecture | Cloud SQL is financial authority. Google Cloud hosts the application boundaries. Gemini and operational controls retain explicit activation gates. Every availability claim follows runtime evidence. |
+
+## Capture and edit acceptance
+
+Capture accepted candidate commit, route, date, viewport and authentication mode in the footage manifest. Use only synthetic examples. Retain visible mode/fallback labels and relevant control results. Redact credentials, personal account details, private project identifiers if needed and tokens. Cursor actions and resulting state must remain understandable. Time compression may remove idle waits but must not hide required approvals or replace failed results. Caption the final edit from the actual narration and timing. Validate final duration, audio, legibility and prototype-link permissions. A script or screenshot montage alone is not the required working-product demonstration.
+
+If live Gemini or Reviewer is unavailable, say so on-screen and show its actual fallback or local candidate behavior. Never splice historical model evidence into a new interaction as if the candidate invoked it. Root integration owner owns final capture, edit and evidence verification.

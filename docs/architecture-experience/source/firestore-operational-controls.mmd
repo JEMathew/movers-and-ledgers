@@ -1,0 +1,17 @@
+flowchart LR
+  request["Authenticated owner requests advice"]
+  kill["Kill switch + synthetic authorization"]
+  reservation["Durable global budget + owner quota reservation"]
+  model["Bounded model execution"]
+  finalize["Finalize usage / terminal failure handling"]
+  activity["Sanitized activity stream"]
+  sql["Cloud SQL financial authority remains separate"]
+  deny["Deny / safe fallback"]
+  request -->|"check current policy"| kill
+  kill -->|"allowed"| reservation
+  kill -->|"disabled / unavailable"| deny
+  reservation -->|"atomic capacity granted"| model
+  reservation -->|"limit / persistence failure"| deny
+  model -->|"bounded result or failure"| finalize
+  finalize -->|"safe metadata only"| activity
+  request -->|"no Firestore financial write"| sql

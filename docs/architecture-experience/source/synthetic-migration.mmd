@@ -1,0 +1,20 @@
+flowchart LR
+  source["Harbor Light Books synthetic source"]
+  sa["Read-only source adapter"]
+  canonical["Canonical model / versioned mappings"]
+  approval["Human-approved manifest"]
+  ta["Separate synthetic target adapter"]
+  target["Synthetic target records"]
+  check["Deterministic reconciliation"]
+  fpu["Approved synthetic invoice + verified FPU"]
+  audit["Lineage / checkpoints / audit"]
+  source -->|"discovery"| sa
+  sa -->|"normalize / assess"| canonical
+  canonical -->|"plan / map / review"| approval
+  approval -->|"authorized idempotent load"| ta
+  ta -->|"synthetic records"| target
+  target -->|"counts / references / balances / checksums"| check
+  check -->|"all required controls pass"| fpu
+  ta -->|"checkpoint + attempt"| audit
+  check -->|"validation evidence"| audit
+  fpu -->|"productive receipt"| audit

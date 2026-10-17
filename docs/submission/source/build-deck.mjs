@@ -1,0 +1,73 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {pathToFileURL} from 'node:url';
+import {Presentation,PresentationFile} from '@oai/artifact-tool';
+const root=process.cwd();
+const skill='/Users/jincenmathew/.codex/plugins/cache/openai-primary-runtime/presentations/26.1011.51657/skills/presentations';
+const out=path.join(root,'docs/submission/assets');
+await fs.mkdir(out,{recursive:true});
+await fs.mkdir(path.join(root,'.packaging-build/slides'),{recursive:true});
+const deck=Presentation.create({slideSize:{width:1280,height:720}});
+const blue='#2563eb',ink='#12233f',muted='#50657f';
+function text(slide,value,x,y,w,h,size=27,color=ink,bold=false){const s=slide.shapes.add({geometry:'textbox',position:{left:x,top:y,width:w,height:h},fill:'none',line:{fill:'none',width:0}});s.text=value;s.text.style={typeface:'Arial',fontSize:size,color,bold};return s;}
+function base(title,notes=''){const s=deck.slides.add();s.background.fill='#ffffff';text(s,title,64,48,1152,90,42,ink,true);text(s,'MOVEBOOKS AI   /   BOUNDED SYNTHETIC BETA',64,665,950,28,15,muted);text(s,String(deck.slides.items.length).padStart(2,'0'),1155,665,50,28,15,muted);s.speakerNotes.text=notes;return s;}
+async function img(s,file,x,y,w,h){const b=await fs.readFile(path.join(root,file));s.images.add({blob:b.buffer.slice(b.byteOffset,b.byteOffset+b.byteLength),contentType:file.endsWith('.jpg')?'image/jpeg':'image/png',alt:file,fit:'contain',position:{left:x,top:y,width:w,height:h}});}
+function lines(s,items,x=64,y=175,w=1120,size=29,gap=102){items.forEach((t,i)=>text(s,t,x,y+i*gap,w,gap-12,size));}
+let s=base('MoveBooks AI','Source: docs/PRODUCT_CONSTITUTION.md; docs/working-backwards/product-press-release.md. Draft content deck. Exact prescribed template missing and compliance unresolved.');
+text(s,'Move your books.\nKeep your confidence.',64,190,560,180,58,ink,true);
+text(s,'Movers & Ledgers',64,410,560,50,30,blue,true);
+text(s,'Accounting migration, from understanding\nto verified first productive use',64,475,560,100,26,muted);
+await img(s,'docs/assets/movebooks-live-beta.jpg',650,170,550,400);
+s=base('Team and delivery scope','Team roster/contact not provided in source material. Do not infer named contributors from role titles.');
+lines(s,['Movers & Ledgers develops MoveBooks AI as an independent product concept.','The submission candidate combines product, engineering, financial systems, AI evaluation and release responsibilities.','Team names, roles and contact details await the submission owner.'],64,175,1100,30,140);
+s=base('The accounting handover problem','Source: product directive; docs/PRODUCT_CONSTITUTION.md. Problem needs are strategy hypotheses, not completed customer research. Exact official BFSI challenge wording pending.');
+lines(s,['A completed import does not show whether the books are ready for work.','Accountants need to understand unsupported records, ambiguous mappings and financial differences.','The proposed outcome is an informed, approved and verified first productive task.'],64,175,1110,34,126);
+text(s,'BFSI fit: trustworthy financial migration and onboarding. Exact selected challenge statement pending.',64,580,1100,50,21,muted);
+s=base('The product idea','Source: docs/product-management/blueprint.md; feature-contracts.md. Current scope bounded synthetic Beta.');
+text(s,'One governed journey',64,165,1100,60,37,blue,true);
+lines(s,['Understand and prepare with evidence before making consequential decisions.','Move supported synthetic information with checkpoints and safe recovery.','Verify financial correctness, configure the environment and complete an approved first invoice.'],64,255,1110,31,114);
+s=base('Differentiation','Source: docs/working-backwards/internal-faq.md. Differentiation is a positioning hypothesis. No measured competitor superiority claimed.');
+lines(s,['Continuity from learning and readiness to financial verification and productive adoption.','A human accountant controls consequential choices. Gemini explains. A separate Reviewer challenges.','Deterministic tools establish financial truth, while internal Judges evaluate quality outside the execution path.'],64,170,1110,31,140);
+s=base('Three entry experiences','Source: docs/product-management/feature-contracts.md. New Play and browser-local intake candidate acceptance pending.');
+text(s,'Play',64,175,270,60,37,blue,true);text(s,'A playable office mission for learning migration concepts.',64,250,330,190,28);
+text(s,'Explore Demo',465,175,345,60,37,blue,true);text(s,'A complete Harbor Light Books synthetic migration rehearsal.',465,250,330,190,28);
+text(s,'Try Your Data',866,175,350,60,37,blue,true);text(s,'Validation of permitted test packages. Hosted uploads remain separately gated.',866,250,330,210,28);
+text(s,'All paths preserve the same financial and approval boundaries.',64,560,1100,50,26,muted);
+s=base('Migration process','Source: docs/architecture-experience/source/customer-journey.mmd; docs/PRODUCT_CONSTITUTION.md.');
+const phases=[['Understand','Discover and assess'],['Prepare','Plan, map and approve'],['Move','Migrate and resolve'],['Verify','Reconcile and configure'],['Start','Onboard and verified FPU']];
+phases.forEach(([a,b],i)=>{text(s,String(i+1).padStart(2,'0'),64+i*238,180,190,70,47,blue,true);text(s,a,64+i*238,275,210,65,31,ink,true);text(s,b,64+i*238,365,205,100,26,muted);});
+text(s,'Progress follows evidence and valid state transitions. Financial discrepancies stop the journey.',64,555,1100,65,25,muted);
+s=base('Decision experience and wireframes','Source: docs/ux-v2/pr05/after-prepare-1440.jpg. Authentic historical candidate screenshot, not a wireframe or proof of this sprint deployment.');
+await img(s,'docs/ux-v2/pr05/after-prepare-1440.jpg',64,150,810,460);
+text(s,'Evidence first',915,175,290,70,32,blue,true);text(s,'What is happening?\nWhy is it happening?\nWhat happens next?',915,270,290,200,28);text(s,'Historical implemented UI evidence; final candidate capture pending.',915,515,290,100,20,muted);
+s=base('Technical architecture','Source: docs/architecture/beta-v1-agent-architecture.md; google-native-runtime.md. Diagram depicts implementation boundaries; cloud activation evidence is separate.');
+const boxes=[['Accountant and UI',64,180,310,90],['Authenticated API',455,180,340,90],['Deterministic workflow',875,180,340,90],['Human decisions',64,390,310,90],['Gemini / Reviewer',455,390,340,90],['Financial tools / SQL',875,390,340,90]];
+for(const [label,x,y,w,h] of boxes){s.shapes.add({geometry:'rect',position:{left:x,top:y,width:w,height:h},fill:'#edf4ff',line:{fill:blue,width:1}});text(s,label,x+15,y+22,w-30,55,27,ink,true);}
+text(s,'Advisory output returns to the accountant. Only authorized deterministic operations change financial state.',64,555,1130,65,26,muted);
+s=base('Google Cloud technologies','Source: docs/deployment/public-beta.md; docs/architecture/google-native-runtime.md; user last-known infrastructure facts. No new live verification claimed.');
+lines(s,['Firebase Hosting, Firebase Authentication and Cloud Run form the application and identity boundaries.','Cloud SQL / PostgreSQL retains financial and transactional authority. Cloud Storage and Secret Manager have scoped adapter boundaries.','Vertex AI / Gemini and Google ADK supply bounded advisory integration. Firestore operational controls remain separately activation-gated.'],64,165,1110,29,139);
+text(s,'Last known public mode: deterministic-only. Vertex API enablement alone does not prove inference access.',64,595,1110,38,20,muted);
+s=base('Implementation cost model','Source: docs/working-backwards/internal-faq.md. No measured spend, current price quote, workload volumes or commercial price available.');
+text(s,'A bounded cost model precedes activation',64,170,1110,70,36,blue,true);
+lines(s,['Compute and database: runtime seconds, memory, SQL capacity, storage and backups.','AI and operations: model tokens, Firestore operations, logs, storage and egress.','Service effort: support, financial review and recovery. Owner quotas, durable budgets and a kill switch bound exposure.'],64,270,1110,29,103);
+text(s,'Estimate status: unpriced. Publish currency, region, pricing date, workload assumptions and observed spend before asserting cost.',64,590,1110,50,21,muted);
+s=base('Financial verification and first productive use','Source: docs/ux-v2/pr04/after-verified-1440.jpg; agents/orchestrator/onboard_fpu.py; tests/test_onboard_fpu.py. Historical authentic screenshot.');
+await img(s,'docs/ux-v2/pr04/after-verified-1440.jpg',64,150,810,460);
+text(s,'Verified outcome',915,180,300,70,32,blue,true);text(s,'Required controls pass.\n\nThe owner approves a synthetic invoice.\n\nA deterministic receipt verifies its effect.',915,265,290,285,27);
+s=base('Benchmarking and validation','Source: root integration-owner report baseline local backend521 passed58 skipped,17 October2026; named tests. Candidate run and external benchmarking pending.');
+text(s,'Baseline backend tests',64,175,680,60,36,ink,true);text(s,'521 passed',64,260,680,100,66,blue,true);text(s,'58 skipped',64,370,680,60,34,muted);
+text(s,'What the evidence covers',780,175,420,70,31,ink,true);text(s,'Owner/approval boundaries\nState transitions and replay\nRecovery and reconciliation\nSynthetic FPU',780,270,420,220,28);
+text(s,'Historical local baseline, not candidate acceptance or user impact. No external provider benchmark or model accuracy claim.',64,570,1120,65,24,muted);
+s=base('Future roadmap','Source: docs/product-management/blueprint.md section10. Planned work is not credited as deployed.');
+lines(s,['Now: accept the synthetic journey, Play mission, local intake, mapping review, offline evaluation and submission evidence.','Next, gated: verify live Gemini and Firestore operations; complete independent hosted-upload safety and operating controls.','Later: reviewed provider adapters, real-data handling, delegated roles and observed customer outcomes.'],64,175,1110,31,138);
+s=base('Submission links and evidence','Source URLs: README.md and docs/deployment/public-beta.md. Current permissions/version to be verified by release owner. Exact official template and final working-video link still missing.');
+text(s,'Working Beta',64,175,250,45,28,blue,true);text(s,'https://movebooks-si.web.app',340,175,850,55,30);
+text(s,'Public source',64,280,250,45,28,blue,true);text(s,'github.com/JEMathew/movers-and-ledgers',340,280,850,55,30);
+text(s,'Evidence package',64,385,250,45,28,blue,true);text(s,'Working Backwards, PM blueprint, editable diagrams and candidate acceptance manifest',340,385,850,100,28);
+text(s,'Release completion requires the official template, portal checks, accepted candidate evidence and an authentic 3–4 minute video.',64,550,1120,80,26,muted);
+for(let i=0;i<deck.slides.items.length;i++){await fs.writeFile(path.join(root,'.packaging-build/slides',`slide-${String(i+1).padStart(2,'0')}.png`),new Uint8Array(await (await deck.export({slide:deck.slides.items[i],format:'png',scale:1})).arrayBuffer()));}
+const draft=path.join(root,'.packaging-build/draft.pptx');
+await (await PresentationFile.exportPptx(deck)).save(draft);
+const {finalizePresentation}=await import(pathToFileURL(path.join(skill,'container_tools/artifact_tool_utils.mjs')).href);
+const result=await finalizePresentation({workspaceDir:root,candidatePath:draft,finalPath:path.join(out,'movebooks-submission-draft.pptx'),pythonExecutable:'/Users/jincenmathew/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3',integrityValidatorPath:path.join(skill,'container_tools/inspect_presentation_package_integrity.py'),layoutValidatorPath:path.join(skill,'container_tools/inspect_presentation_layout_geometry.py'),layoutArgs:['--expected-slide-size-emu','12192000,6858000','--validate-bullet-geometry','--validate-heading-fit'],fontPolicy:{basis:'design',families:['Arial']},verifyArtifactToolImport:true,receiptPath:path.join(root,'.packaging-build/deck-validation.json'),explicitTotalSlideCount:15});
+console.log(result);
