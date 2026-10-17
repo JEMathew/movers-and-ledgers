@@ -13,9 +13,10 @@ Reviewable content package, 17 October 2026. **Not a completed official submissi
 - [Scoped cloud validation and release authorization plan](release-authorization-plan.md)
 - [Packaging status and open submission checks](packaging-status.md)
 - [Packaging validation record](packaging-validation.json)
+- [Independent model-control and Reviewer review](independent-model-control-review.md), 36 focused checks passed
 - [PM artifact index](../product-management/README.md), [Working Backwards](../working-backwards/README.md), [editable diagrams](../architecture-experience/README.md)
 
-The PPTX retains editable text and a native architecture diagram. It includes an authentic accepted local Play candidate capture and labeled historical journey screenshots. The PDF is a faithful raster export of the rendered content deck. No PowerPoint desktop compatibility check is claimed. No invented customer impact, adoption, accuracy, competitor result or financial cost appears in the deck. The deck records 14 passing Play browser checks and the integration owner’s local backend checkpoint of 553 passed / 58 skipped. Final accepted journey captures and subsequent test results must supplement this checkpoint.
+The PPTX retains editable text and a native architecture diagram. It includes an authentic accepted local Play candidate capture and labeled historical journey screenshots. The PDF is a faithful raster export of the rendered content deck. No PowerPoint desktop compatibility check is claimed. No invented customer impact, adoption, accuracy, competitor result or financial cost appears in the deck. The deck records 14 passing Play browser checks and the integration owner’s local backend checkpoint of 559 passed / 58 skipped, plus 658 frontend tests across 50 files. Final accepted journey captures and subsequent test results must supplement this checkpoint.
 
 ## Reproduction
 

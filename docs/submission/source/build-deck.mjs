@@ -55,10 +55,11 @@ text(s,'Estimate status: unpriced. Publish currency, region, pricing date, workl
 s=base('Financial verification and first productive use','Source: docs/ux-v2/pr04/after-verified-1440.jpg; agents/orchestrator/onboard_fpu.py; tests/test_onboard_fpu.py. Historical authentic screenshot.');
 await img(s,'docs/ux-v2/pr04/after-verified-1440.jpg',64,150,810,460);
 text(s,'Verified outcome',915,180,300,70,32,blue,true);text(s,'Required controls pass.\n\nThe owner approves a synthetic invoice.\n\nA deterministic receipt verifies its effect.',915,265,290,285,27);
-s=base('Benchmarking and validation','Source: root integration-owner report candidate local backend553 passed58 skipped,17 October2026; named tests. Candidate run and external benchmarking pending.');
-text(s,'Candidate backend tests',64,175,680,60,36,ink,true);text(s,'553 passed',64,260,680,100,66,blue,true);text(s,'58 skipped',64,370,680,60,34,muted);
-text(s,'What the evidence covers',780,175,420,70,31,ink,true);text(s,'Owner/approval boundaries\nState transitions and replay\nRecovery and reconciliation\nSynthetic FPU',780,270,420,220,28);
-text(s,'Local candidate test run, 58 skips explicit. No live-model accuracy, external provider benchmark or customer-impact claim.',64,570,1120,65,24,muted);
+s=base('Benchmarking and validation','Source: integration owner final combined candidate report, 17 October 2026: backend 559 passed / 58 skipped in 26.65 seconds; frontend 658 passed across 50 files; lint, typecheck and build passed. Focused independent model-control/Reviewer rerun: 36 passed in 1.49 seconds. These are local implementation tests, not live-cloud evidence or a model-quality benchmark.');
+text(s,'Backend tests',64,175,500,55,34,ink,true);text(s,'559 passed',64,250,500,100,66,blue,true);text(s,'58 skipped',64,365,500,55,32,muted);
+text(s,'Frontend tests',680,175,500,55,34,ink,true);text(s,'658 passed',680,250,500,100,66,blue,true);text(s,'50 test files',680,365,500,55,32,muted);
+text(s,'Checks cover owner and approval boundaries, state transitions, recovery, reconciliation, UI behavior and synthetic FPU.',64,470,1120,90,28,ink);
+text(s,'Local candidate evidence. Lint, typecheck and build passed. No live-model accuracy, external provider benchmark or customer-impact claim.',64,580,1120,65,23,muted);
 s=base('Future roadmap','Source: docs/product-management/blueprint.md section10. Planned work is not credited as deployed.');
 lines(s,['Now: accept the synthetic journey, Play mission, local intake, mapping review, offline evaluation and submission evidence.','Next, gated: verify live Gemini and Firestore operations; complete independent hosted-upload safety and operating controls.','Later: reviewed provider adapters, real-data handling, delegated roles and observed customer outcomes.'],64,175,1110,31,138);
 s=base('Submission links and evidence','Source URLs: README.md and docs/deployment/public-beta.md. Current permissions/version to be verified by release owner. Exact official template and final working-video link still missing.');

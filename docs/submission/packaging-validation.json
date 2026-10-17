@@ -11,7 +11,7 @@
   "pdf_pages": 15,
   "pdf_limit_bytes": 5000000,
   "pdf_size_check": "passed",
-  "visual_review": "All draft slides inspected individually; changed BFSI, Play and architecture slides re-rendered in refreshed PDF and inspected. Official-template comparison unavailable.",
+  "visual_review": "All draft slides inspected individually; changed BFSI, Play and architecture slides re-rendered and inspected. Refreshed validation-totals PDF slide inspected. Official-template comparison unavailable.",
   "description_characters": 953,
   "diagram_mermaid_svg_png_sets": 19,
   "relative_markdown_links": "passed",
@@ -19,13 +19,13 @@
   "assets": [
     {
       "path": "docs/submission/assets/movebooks-submission-draft.pdf",
-      "bytes": 1478217,
-      "sha256": "23198da0aa1cae613ed993a60fe3f585b3fb6fe7673b6d137a99f13c54b938fb"
+      "bytes": 1478467,
+      "sha256": "8922514ed1005b825a716bd83b51f8a98aed560edeec1a07a3e58ae364639cbb"
     },
     {
       "path": "docs/submission/assets/movebooks-submission-draft.pptx",
-      "bytes": 368122,
-      "sha256": "2bb68071c679b57850f1fee8c01d5550a74125a14461b69e0c35ee7b69507861"
+      "bytes": 368320,
+      "sha256": "f5bfd30cd19e3671da62bb032eb9b4ff8ff1f71dea34a51b2e963f3217a19b51"
     },
     {
       "path": "docs/submission/assets/play-local-candidate.png",
@@ -35,9 +35,25 @@
   ],
   "local_play_browser_checks": 14,
   "local_backend_checkpoint": {
-    "passed": 553,
+    "passed": 559,
     "skipped": 58,
-    "source": "integration-owner report; later control regressions may expand result"
+    "seconds": 26.65,
+    "source": "integration-owner final combined local report"
   },
-  "selected_challenge": "BFSI: Intelligent Risk, Fraud & Financial Experiences"
+  "selected_challenge": "BFSI: Intelligent Risk, Fraud & Financial Experiences",
+  "local_frontend_checkpoint": {
+    "passed": 658,
+    "files": 50,
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "source": "integration-owner final combined local report"
+  },
+  "independent_focused_review": {
+    "source_commit": "fffd14c",
+    "passed": 36,
+    "seconds": 1.49,
+    "scope": "offline model controls and independent Reviewer",
+    "findings_status": "original issues and constructor gap closed; live activation evidence still required"
+  }
 }
