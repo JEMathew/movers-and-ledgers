@@ -128,7 +128,7 @@ Future direction is not a delivery commitment or an implemented integration.
 | Configure | Human-approved synthetic target settings | Live provider configuration |
 | Onboarding | Role-aware synthetic setup and approvals | Broader guided adoption |
 | Verified FPU | Deterministically verified synthetic invoice | Production outcome instrumentation |
-| Gemini / ADK | Five bounded advisory capabilities live-validated in dev/test; public Beta remains deterministic-only | Broader evaluated advice and managed runtime |
+| Gemini / ADK | Five bounded advisory capabilities live-validated in dev/test on `gemini-2.5-flash` (29 Sep; model now retiring); independent Reviewer validated offline only; public Beta remains deterministic-only | Broader evaluated advice and managed runtime |
 | Try Your Data | Controlled local/de-identified test exports; synthetic targets | Secure hosted ingestion after hardening |
 | Play | Lightweight interactive migration learning | 2D interactive migration simulation |
 
@@ -247,6 +247,15 @@ python3 scripts/repository_checks.py
 [Deployment and operations](docs/deployment/public-beta.md) ·
 [Latest release remediation](docs/reviews/demo-loader-release-remediation.md)
 
+### AI Builder Cup submission evidence (18 Oct 2026)
+
+All local unless stated: real UI and real API from this repository, demo identity, deterministic-only. The integration candidate is **not deployed yet**.
+
+- [Working-product video (MP4, 3:43.7)](docs/submission/assets/movebooks-demo.mp4) · [final deck (PDF, 16 slides)](docs/submission/assets/movebooks-final-deck.pdf) · [judge FAQ](docs/submission/JUDGE-FAQ.md)
+- [End-to-end journey evidence](docs/submission/final-experience/evidence/journey-fa13e9e/README.md): 21/21 checks from readiness to a verified synthetic invoice (USD 107.25), including exception recovery, migration picker, switching and a fresh browser
+- [Offline Advisor/Reviewer evaluation](docs/submission/final-experience/evidence/agents/offline-agent-eval.json): 23/23 scenarios on grounding, authority, injected instructions, Reviewer independence and disagreement (boundaries, not model quality)
+- [Evidence manifest](docs/submission/final-experience/EVIDENCE-MANIFEST.md) · [release runbook](docs/release/RELEASE-RUNBOOK.md)
+
 ### Live / Current Status
 
 Evidence is scoped and dated; a source capability is not automatically enabled in the live Beta.
@@ -255,7 +264,7 @@ Evidence is scoped and dated; a source capability is not automatically enabled i
 | --- | --- |
 | V1.0 release and final acceptance | Released; **GREEN** for bounded synthetic acceptance ([record](docs/reviews/v1-final-acceptance.md)). |
 | Public-Beta V1 baseline | Live; original Safari identity/owner-isolation and financial controls passed. The post-merge test-fixture hold is resolved ([release checkpoint](docs/deployment/public-beta.md)). |
-| Bounded Gemini / ADK | **GREEN** for exercised advisory cases, including accepted Mapping escalation ([final evidence](docs/reviews/live-gemini-adk-mapping.md)); not enabled in the public deployment. |
+| Bounded Gemini / ADK | **GREEN** for exercised advisory cases on `gemini-2.5-flash` (29 Sep), including accepted Mapping escalation ([final evidence](docs/reviews/live-gemini-adk-mapping.md)); not enabled in the public deployment. The Reviewer has not run live; the replacement model run is prepared ([live-run guide](docs/release/LIVE-GEMINI-RUN.md)), not executed. |
 | Post-V1 account-shell and Hosting authentication | Bounded Safari sign-in, verified identity, navigation and sign-out passed ([closure checkpoint](docs/deployment/public-beta.md#hosting-authentication-closure--1-october-2026-ist)); not a new full migration acceptance claim. |
 | Main CI | [Seven jobs passed on ac95900](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36681965187); historical checkpoint, not a permanent-green badge. |
 
