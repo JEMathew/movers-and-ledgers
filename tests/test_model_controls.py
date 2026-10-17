@@ -331,7 +331,9 @@ def test_slow_adc_initialization_is_bounded_off_loop_and_not_duplicated(monkeypa
 
 def test_operational_completion_preserves_owner_and_never_refunds_or_rewrites():
     import hashlib
+    from datetime import UTC, datetime
 
+    from google.cloud import firestore
     from movebooks_api.runtime.model_controls import FirestoreModelControls
 
     from agents.reasoning.provider import ProviderResult
@@ -347,6 +349,8 @@ def test_operational_completion_preserves_owner_and_never_refunds_or_rewrites():
     class Ref:
         async def get(self, **kwargs):
             class Snapshot:
+                update_time = datetime(2026, 10, 17, tzinfo=UTC)
+
                 def to_dict(self):
                     return data.copy()
 
@@ -356,6 +360,8 @@ def test_operational_completion_preserves_owner_and_never_refunds_or_rewrites():
             data.update(values)
 
     class Client:
+        write_option = staticmethod(firestore.AsyncClient.write_option)
+
         def collection(self, name):
             return self
 
@@ -375,3 +381,116 @@ def test_operational_completion_preserves_owner_and_never_refunds_or_rewrites():
         asyncio.run(adapter.finish("firebase:other", "key", "COMPLETED", usage))
     with pytest.raises(ControlDenied, match="invalid_operational_outcome"):
         asyncio.run(adapter.finish(owner, "key", "FINANCIALLY_VERIFIED", usage))
+
+
+def test_competing_completion_cannot_overwrite_terminal_outcome(monkeypatch):
+    """Exercise the real SDK precondition against two deliberately stale reads, offline."""
+    import hashlib
+    from datetime import UTC, datetime, timedelta
+
+    import movebooks_api.runtime.model_controls as module
+    from google.api_core.exceptions import FailedPrecondition
+    from google.cloud import firestore
+    from google.cloud.firestore_v1.types import Write
+
+    from agents.reasoning.provider import ProviderResult
+
+    owner = "firebase:owner"
+    original_version = datetime(2026, 10, 17, tzinfo=UTC)
+    data = {
+        "owner_hash": hashlib.sha256(owner.encode()).hexdigest(),
+        "state": "RESERVED",
+        "reserved_calls": 2,
+        "reserved_microusd": 100000,
+    }
+
+    async def scenario():
+        both_read = asyncio.Barrier(2)
+        current_version = original_version
+        writes = []
+
+        class Ref:
+            async def get(self, **kwargs):
+                from types import SimpleNamespace
+
+                observed = data.copy()
+                version = current_version
+                await both_read.wait()
+                return SimpleNamespace(to_dict=lambda: observed, update_time=version)
+
+            async def update(self, values, *, option, timeout, retry):
+                nonlocal current_version
+                write = Write()
+                option.modify_write(write)
+                if write.current_document.update_time != current_version:
+                    raise FailedPrecondition("private-error-canary")
+                data.update(values)
+                current_version += timedelta(microseconds=1)
+                writes.append(values["state"])
+
+        class Client:
+            write_option = staticmethod(firestore.AsyncClient.write_option)
+
+            def collection(self, name):
+                return self
+
+            def document(self, name):
+                return Ref()
+
+        adapter = module.FirestoreModelControls(cloud_settings(), Client())
+
+        async def configured(_):
+            return adapter
+
+        monkeypatch.setattr(module, "configured_controls", configured)
+        usage = ProviderResult("not-stored", 1, 0, 10, 20, usage_status="complete")
+        results = await asyncio.gather(
+            module.finish_live(cloud_settings(), owner, "key", "COMPLETED", usage),
+            module.finish_live(cloud_settings(), owner, "key", "FALLBACK", usage),
+        )
+        assert sorted(results) == [False, True]
+        assert len(writes) == 1 and data["state"] == writes[0]
+        assert data["reserved_calls"] == 2 and data["reserved_microusd"] == 100000
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("name", ["", "abc", "UPPER", "a/bc", "other:db", "x" * 64])
+def test_invalid_database_names_rejected_before_client_initialization(name):
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError):
+        cloud_settings(firestore_database=name)
+
+
+def test_firestore_client_uses_the_selected_named_database(monkeypatch):
+    from google.cloud import firestore
+    from movebooks_api.runtime.model_controls import FirestoreModelControls
+
+    calls = []
+    monkeypatch.setattr(firestore, "AsyncClient", lambda **kwargs: calls.append(kwargs))
+    FirestoreModelControls(cloud_settings())
+    assert calls == [{"project": "test-project", "database": "movebooks-operations"}]
+
+
+def test_control_clients_never_cross_database_cache_boundaries(monkeypatch):
+    import movebooks_api.runtime.model_controls as module
+
+    calls = []
+
+    def factory(settings):
+        calls.append(settings.firestore_database)
+        return object()
+
+    monkeypatch.setattr(module, "FirestoreModelControls", factory)
+
+    async def scenario():
+        selected = await module.configured_controls(cloud_settings())
+        assert await module.configured_controls(cloud_settings()) is selected
+        other = await module.configured_controls(
+            cloud_settings(firestore_database="other-controls")
+        )
+        assert other is not selected
+
+    asyncio.run(scenario())
+    assert calls == ["movebooks-operations", "other-controls"]

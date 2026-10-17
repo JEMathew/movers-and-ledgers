@@ -63,7 +63,9 @@ class FirestoreModelControls:
         if client is None:
             from google.cloud import firestore
 
-            client = firestore.AsyncClient(project=settings.google_project)
+            client = firestore.AsyncClient(
+                project=settings.google_project, database=settings.firestore_database
+            )
         self.client = client
 
     async def reserve(self, owner, key, capability):
@@ -131,16 +133,18 @@ class FirestoreModelControls:
         owner_hash = hashlib.sha256(owner.encode()).hexdigest()
         key_hash = hashlib.sha256(key.encode()).hexdigest()
         ref = self.client.collection("movebooks_model_controls").document(f"reservation-{key_hash}")
-        observed = (
-            await ref.get(
-                timeout=self.settings.model_control_timeout_seconds,
-                retry=None,
-            )
-        ).to_dict() or {}
+        snapshot = await ref.get(
+            timeout=self.settings.model_control_timeout_seconds,
+            retry=None,
+        )
+        observed = snapshot.to_dict() or {}
         if observed.get("owner_hash") != owner_hash:
             raise ControlDenied("operational_event_owner_mismatch")
         if observed.get("state") != "RESERVED":
             return  # Final operational outcomes are immutable on replay.
+        version = snapshot.update_time
+        if version is None:
+            raise ControlDenied("operational_event_version_missing")
 
         def count(value, maximum):
             return value if type(value) is int and 0 <= value <= maximum else None
@@ -157,6 +161,8 @@ class FirestoreModelControls:
                 if usage.usage_status in {"unknown", "partial", "complete"}
                 else "unknown",
             },
+            # A competing completion must not overwrite the winning terminal outcome.
+            option=self.client.write_option(last_update_time=version),
             timeout=self.settings.model_control_timeout_seconds,
             retry=None,
         )
@@ -176,11 +182,10 @@ async def configured_controls(settings):
     """
     loop = asyncio.get_running_loop()
     clients = _control_clients.setdefault(loop, {})
-    if settings.google_project not in clients:
-        clients[settings.google_project] = asyncio.create_task(
-            asyncio.to_thread(FirestoreModelControls, settings)
-        )
-    return await asyncio.shield(clients[settings.google_project])
+    identity = (settings.google_project, settings.firestore_database)
+    if identity not in clients:
+        clients[identity] = asyncio.create_task(asyncio.to_thread(FirestoreModelControls, settings))
+    return await asyncio.shield(clients[identity])
 
 
 async def close_model_controls():

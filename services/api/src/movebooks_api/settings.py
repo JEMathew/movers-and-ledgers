@@ -36,6 +36,11 @@ class Settings(BaseSettings):
     model_control_timeout_seconds: float = Field(default=2, ge=0.05, le=5)
     synthetic_beta_authorized: bool = False
     model_controls_backend: Literal["disabled", "firestore"] = "disabled"
+    # Proposed isolated operational database; selecting it never provisions a database.
+    firestore_database: str = Field(
+        default="movebooks-operations",
+        pattern=r"^(?:\(default\)|[a-z][a-z0-9-]{2,61}[a-z0-9])$",
+    )
     reasoning_owner_daily_calls: int = Field(default=20, ge=2, le=100)
     reasoning_global_daily_calls: int = Field(default=100, ge=2, le=10000)
     # Operator-supplied conservative reservation, not a claim of verified prices.
