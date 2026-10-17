@@ -520,8 +520,8 @@ button, input, select, textarea { font: inherit; }
 
 /* Premium workspace: one dominant next step, a phase rail that says where you are. */
 .member-home { max-width: 72rem; }
-.member-layout { display: grid; gap: 1.25rem; margin-top: 1.25rem; align-items: start; }
-.member-main { display: grid; gap: 1.25rem; min-width: 0; }
+.member-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; margin-top: 1.25rem; align-items: start; }
+.member-main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; min-width: 0; }
 .member-layout > .member-progress { margin-top: 0; }
 .member-main .member-task { margin-top: 0; max-width: none; padding: 1.5rem 1.5rem 1.5rem 1.75rem; border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: var(--radius-xl); background: var(--surface-elevated); box-shadow: var(--shadow-md); }
 .member-kicker { font-size: .875rem; font-weight: 700; color: var(--primary); }
@@ -621,7 +621,7 @@ button, input, select, textarea { font: inherit; }
 .hero-assurances li { display: inline-flex; align-items: center; gap: .45rem; padding: .35rem .8rem; border: 1px solid var(--border); border-radius: 999px; font-size: .875rem; font-weight: 600; background: var(--surface); }
 .hero-assurances svg { color: var(--text-secondary); }
 .vision-label { margin-bottom: .5rem; font-size: .875rem; font-weight: 650; color: var(--text-secondary); }
-.member-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .5rem; }
+.member-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr)); gap: .5rem; }
 .member-actions a { display: flex; align-items: center; gap: .6rem; min-height: 2.75rem; padding: .5rem .875rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); font-size: .9375rem; font-weight: 600; transition: border-color var(--motion-micro) var(--ease-standard), background-color var(--motion-micro) var(--ease-standard); }
 .member-actions a:hover { border-color: var(--primary); background: var(--primary-subtle); }
 .member-actions svg { flex: none; color: var(--text-secondary); }
@@ -661,3 +661,8 @@ button, input, select, textarea { font: inherit; }
 .step-num { display: inline-grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: 999px; background: var(--primary); color: var(--on-primary); font-size: .8125rem; font-weight: 700; }
 @media (max-width: 520px) { .welcome-steps li + li::before { display: none; } }
 .member-blockers { margin: .5rem 0 1rem; padding-left: 1.25rem; font-weight: 600; }
+/* 200% zoom on a phone leaves ~195 CSS px: keep the brand mark and controls inside the viewport. */
+@media (max-width: 300px) { .site-brand > span:not(.brand-mark) { display: none; } .site-header { gap: .125rem; } .mobile-discovery-controls .nav-link { padding-inline: .4rem; } }
+.member-checks .data-table { table-layout: fixed; } .member-checks .data-table th, .member-checks .data-table td { overflow-wrap: anywhere; } .member-checks .data-table td { width: 42%; }
+.member-progress-mobile ol { grid-template-columns: minmax(0, 1fr); } .member-progress-mobile li, .member-progress-mobile a, .member-progress-mobile small { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 300px) { .tiles { grid-template-columns: minmax(0, 1fr); } .tile { padding: .75rem; column-gap: .5rem; } .tile-icon { display: none; } .tile { grid-template-columns: minmax(0, 1fr); grid-template-areas: "value" "label" "status"; } .tile-value, .tile-label, .tile-status { min-width: 0; overflow-wrap: anywhere; } }
