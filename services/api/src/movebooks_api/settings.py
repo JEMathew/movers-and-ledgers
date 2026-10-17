@@ -117,8 +117,11 @@ class Settings(BaseSettings):
                 for o in self.cors_origins
             ):
                 raise ValueError("Cloud CORS requires explicit HTTPS frontend origins")
-            if os.environ.get("FIREBASE_AUTH_EMULATOR_HOST"):
-                raise ValueError("Identity emulators are forbidden in cloud mode")
+            if any(
+                os.environ.get(key)
+                for key in ("FIREBASE_AUTH_EMULATOR_HOST", "FIRESTORE_EMULATOR_HOST")
+            ):
+                raise ValueError("Identity and Firestore emulators are forbidden in cloud mode")
         elif (self.persistence_backend, self.storage_backend, self.identity_mode) != (
             "memory",
             "memory",
