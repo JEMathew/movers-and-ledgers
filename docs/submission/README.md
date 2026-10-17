@@ -7,6 +7,10 @@ Reviewable content package, 17 October 2026. **Not a completed official submissi
 - [Product description](product-description.txt), 953 characters before trailing newline
 - [Authentic working-product video storyboard](video-storyboard.md), planned runtime 3:30
 - [Draft captions](video-captions-draft.srt), to retime against final narration
+- [Acceptance and release matrix](acceptance-report.md)
+- [Machine-readable evidence manifest](evidence-manifest.json)
+- [Independent Product Quality Judge](product-quality-judge.md)
+- [Scoped cloud validation and release authorization plan](release-authorization-plan.md)
 - [Packaging status and open submission checks](packaging-status.md)
 - [Packaging validation record](packaging-validation.json)
 - [PM artifact index](../product-management/README.md), [Working Backwards](../working-backwards/README.md), [editable diagrams](../architecture-experience/README.md)

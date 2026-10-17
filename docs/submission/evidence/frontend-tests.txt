@@ -1,0 +1,17 @@
+
+> @movebooks/web@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.2 /Users/jincenmathew/Downloads/Intuit/movebooks-submission-integration/apps/web
+
+
+ Test Files  50 passed (50)
+      Tests  658 passed (658)
+   Start at  14:57:28
+   Duration  5.31s (environment 40%, tests 34%, setup 12%, transform 8%, import 5%)
+
+Environment  jsdom was created 50 times · 33.17s total, 40% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments
+

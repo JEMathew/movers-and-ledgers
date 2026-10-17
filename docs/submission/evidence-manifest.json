@@ -1,0 +1,143 @@
+{
+  "version": "submission-evidence-v1",
+  "date": "2026-10-17",
+  "timezone": "Asia/Kolkata",
+  "code_commit": "fffd14c",
+  "branch": "delivery/submission-integration",
+  "overall_submission": "NO_GO",
+  "public_beta_modified": false,
+  "deployment_authorized": false,
+  "source_status": "Local committed implementation candidate; no public branch publication",
+  "verification": {
+    "backend": {
+      "command": "python -m pytest -q",
+      "passed": 559,
+      "skipped": 58,
+      "warnings": 1,
+      "evidence": "docs/submission/evidence/backend-tests.txt",
+      "limitations": "Skipped PostgreSQL/external gates not passed"
+    },
+    "frontend": {
+      "commands": [
+        "npm test",
+        "npm run lint",
+        "npm run typecheck",
+        "npm run build"
+      ],
+      "tests_passed": 658,
+      "test_files": 50,
+      "lint": "PASS",
+      "types": "PASS",
+      "production_build": "PASS",
+      "build_evidence": "docs/submission/evidence/web-build.txt"
+    },
+    "dependency_audits": {
+      "npm_production_known_vulnerabilities": 0,
+      "python_environment_known_vulnerabilities": 0,
+      "python_packages": 157,
+      "python_skipped": [
+        "editable movebooks-ai"
+      ],
+      "image_scan": "NOT_RUN_DOCKER_UNAVAILABLE"
+    },
+    "play_browser": {
+      "checks_passed": 14,
+      "evidence": "docs/submission/browser-play/browser-evidence.json"
+    },
+    "full_journey_browser": "IN_PROGRESS",
+    "working_product_video": "IN_PROGRESS",
+    "agent_quality_judge": {
+      "mode": "offline-contract",
+      "case_count": 18,
+      "expected_detection_passed": 18,
+      "live_model_calls": 0,
+      "evidence": "docs/submission/agent-quality-evidence.json",
+      "not_a_model_accuracy_benchmark": true
+    }
+  },
+  "public_links": [
+    {
+      "url": "https://movebooks-si.web.app",
+      "http": 200,
+      "scope": "Anonymous HTML reachability only; no candidate revision/authenticated acceptance"
+    },
+    {
+      "url": "https://github.com/JEMathew/movers-and-ledgers",
+      "http": 200,
+      "public": true,
+      "default_branch": "main",
+      "last_observed_push": "2026-10-12T16:47:16Z",
+      "candidate_published": false
+    }
+  ],
+  "cloud_truth": {
+    "current_credentials_available": false,
+    "gcloud_available": false,
+    "current_effective_vertex_permissions": "UNVERIFIED",
+    "current_supported_model_region": "UNVERIFIED",
+    "firestore_activation": "NOT_PERFORMED",
+    "operational_activity_stream": "UNFINISHED",
+    "sql_authority": "Existing implementation; current deployed persistence acceptance unverified",
+    "public_mode": "Last known deterministic-only, not reverified from authenticated runtime"
+  },
+  "release_gates": [
+    {
+      "id": "OFFICIAL_TEMPLATE",
+      "status": "BLOCKED_MISSING_INPUT",
+      "required": "Submission Template | AI Builder Cup.pptx"
+    },
+    {
+      "id": "TEAM_ROSTER_CONTACT",
+      "status": "BLOCKED_MISSING_INPUT"
+    },
+    {
+      "id": "FULL_BROWSER_AND_VIDEO",
+      "status": "IN_PROGRESS"
+    },
+    {
+      "id": "CANDIDATE_CLOUD_ACCEPTANCE",
+      "status": "NOT_AUTHORIZED_OR_RUN"
+    },
+    {
+      "id": "LIVE_GEMINI_FIRESTORE",
+      "status": "ACTIVATION_GATED"
+    },
+    {
+      "id": "FIRESTORE_ACTIVITY",
+      "status": "UNFINISHED"
+    },
+    {
+      "id": "HOSTED_UPLOAD",
+      "status": "NO_GO_INDEPENDENT_GATE"
+    },
+    {
+      "id": "PUBLIC_RELEASE",
+      "status": "REQUIRES_EXPLICIT_APPROVAL"
+    }
+  ],
+  "assets": [
+    {
+      "path": "docs/submission/assets/movebooks-submission-draft.pdf",
+      "bytes": 1478217,
+      "sha256": "23198da0aa1cae613ed993a60fe3f585b3fb6fe7673b6d137a99f13c54b938fb"
+    },
+    {
+      "path": "docs/submission/assets/movebooks-submission-draft.pptx",
+      "bytes": 368122,
+      "sha256": "2bb68071c679b57850f1fee8c01d5550a74125a14461b69e0c35ee7b69507861"
+    },
+    {
+      "path": "docs/submission/assets/play-local-candidate.png",
+      "bytes": 115439,
+      "sha256": "24a87b2c17e1f45a2fb7f56a861c8cd10341d1e05a979b231dcd7ca5f65bbc78"
+    }
+  ],
+  "description_characters": 953,
+  "pdf_max_bytes": 5000000,
+  "bfsi_problem_statement": "docs/submission/problem-statement.md",
+  "decision_reports": [
+    "docs/submission/acceptance-report.md",
+    "docs/submission/product-quality-judge.md",
+    "docs/submission/release-authorization-plan.md"
+  ]
+}

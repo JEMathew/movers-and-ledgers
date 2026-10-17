@@ -27,3 +27,26 @@ The Product Quality Judge must compare actual product evidence with this registe
 ## Candidate evidence updates
 
 The integration source now includes the independent Reviewer and `runtime/model_controls.py`. Their presence does not close deployment or live-model evidence. The internal evaluator has 18 contract golden cases in `evals/agent_quality_cases.json`, runner `scripts/agent_quality_judge.py` and a report in `docs/submission/agent-quality-evidence.json`. The reported 100% expected accept/reject detection score uses zero live calls and supplies regression evidence only. It cannot be substituted for user acceptance or model quality. The integration owner confirmed public prototype HTTP 200 and GitHub public visibility on 17 October; the candidate remains undeployed.
+
+## Integration checkpoint — 17 October 2026
+
+Implementation reference: `fffd14c` on `delivery/submission-integration` (local, unpublished).
+The [acceptance report](../submission/acceptance-report.md) and machine-readable
+[evidence manifest](../submission/evidence-manifest.json) supersede the baseline's unknown local
+implementation cells; deployed evidence remains separate. This is a tested candidate, not an
+approved or deployed release.
+
+| Promise / backlog | Concrete implementation and test execution | Current customer outcome / release decision |
+| --- | --- | --- |
+| Play / MB-02 | `components/play/OfficeMission.tsx`, `engine.ts`; gameplay/state tests; [14 browser checks](../submission/browser-play/browser-evidence.json) | Opening mission, failure/correction and demo unlock locally verified; no financial session changes. Candidate deployment pending. |
+| Explore / MB-01 | `GuidedDemo.tsx` now has a prominent real-journey link; core lifecycle and checksum-pinned v2/v3 fixtures; golden/compatibility tests passed | Preview completion is never migration completion. Executing the separate linked synthetic workspace is required; final browser evidence being captured. |
+| Try Your Data / MB-03, MB-10 | `BrowserLocalValidation.tsx`, `browser-parser.ts`, `browser-archive.ts`, `browser-validation.ts`; [actual local review and negative tests](../security/try-data-delivery.md) | Template→select→validate→repair/revalidate→review works locally. Hosted workspace creation remains explicitly unavailable; full local server journey retained. |
+| Gemini / MB-04 | `reasoning.py`, `agents/reasoning`, async `runtime/model_controls.py`; synthetic/owner/forgery/stale/timeout/cost/kill-switch tests passed | User receives a visibly labeled deterministic fallback by default. No live-model or cloud-control delivery credit without authorized current evidence. |
+| Reviewer / MB-05 | `agents/reviewer/agent.py`, `reviewer.py`, `IndependentReview.tsx`; separate contract, read-only challenge, offline ADK, stale/owner/authority/replay tests passed | Account 1200 locally produces a meaningful missing-purpose challenge; no correct classification or approval is inferred. Live Reviewer gated. |
+| Financial verification | `tools/validation/checks.py`, `validate_configure.py`; exact counts/relationships/balances/checksums, repair and revalidation tests passed | Failed checks remain blocking. No real provider or production-customer correctness claim. Final browser acceptance pending. |
+| Verified first use | `onboard_fpu.py`, `tools/activation/invoice.py`; owner/approval/idempotency/invoice/receipt tests passed | Only an approved synthetic invoice plus deterministic verification can establish the outcome. Full browser and deployed evidence pending. |
+
+All 559 backend and 658 frontend tests passed in the combined local run; 58 backend checks were
+skipped and are **not** passed gates. The Agent Judge's 18/18 result measures expected contract
+accept/reject detection with zero live model calls. See its report for the separate evaluation
+contract. Each remaining promise gap retains its original backlog ID; none is silently removed.

@@ -1,0 +1,90 @@
+{
+  "captured_at": "2026-10-17T09:00:40.198Z",
+  "base_url": "http://127.0.0.1:3000",
+  "scope": "Local combined submission candidate. No deployment or live provider operations. Next.js development indicator hidden from screenshots only.",
+  "checks": [
+    {
+      "name": "desktop_initial_no_horizontal_overflow",
+      "passed": true,
+      "viewport": 1440,
+      "content": 1440,
+      "overflow": false
+    },
+    {
+      "name": "desktop_keyboard_movement_proximity_interaction_and_document_focus",
+      "passed": true
+    },
+    {
+      "name": "pause_resume_retains_evidence",
+      "passed": true
+    },
+    {
+      "name": "all_three_evidence_items_reachable_through_keyboard_gameplay",
+      "passed": true
+    },
+    {
+      "name": "bank_mapping_failure_blocks_demo_unlock_and_explains_25_dollar_cash_difference",
+      "passed": true
+    },
+    {
+      "name": "failed_mapping_recovery_success_and_optional_explore_demo_handoff",
+      "passed": true
+    },
+    {
+      "name": "desktop_complete_no_horizontal_overflow",
+      "passed": true
+    },
+    {
+      "name": "mobile390_initial_no_horizontal_overflow",
+      "passed": true,
+      "viewport": 390,
+      "content": 390,
+      "overflow": false
+    },
+    {
+      "name": "mobile_touch_direction_pad_moves_character",
+      "passed": true
+    },
+    {
+      "name": "mobile_readiness_stays_locked_without_collected_evidence",
+      "passed": true
+    },
+    {
+      "name": "mobile390_completion_and_no_horizontal_overflow",
+      "passed": true,
+      "viewport": 390,
+      "content": 390,
+      "overflow": false
+    },
+    {
+      "name": "os_reduced_motion_disables_character_interpolation",
+      "passed": true,
+      "preference": true,
+      "transitionDuration": "1e-05s",
+      "transitionProperty": "none"
+    },
+    {
+      "name": "no_financial_api_calls_during_gameplay",
+      "passed": true,
+      "requests": []
+    },
+    {
+      "name": "no_browser_runtime_errors",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "play-desktop-opening.png",
+    "play-desktop-paused.png",
+    "play-desktop-ledger.png",
+    "play-desktop-failed-mapping.png",
+    "play-desktop-complete.png",
+    "play-mobile390-opening.png",
+    "play-mobile390-complete.png",
+    "play-reduced-motion.png"
+  ],
+  "api_requests": [],
+  "browser_errors": [],
+  "browser_version": "149.0.7827.55",
+  "status": "PASSED"
+}

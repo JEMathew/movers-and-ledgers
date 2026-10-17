@@ -9,3 +9,9 @@ For each major capability, [promise traceability](../product-management/promise-
 Current truth: bounded synthetic Beta; deterministic Python orchestration; user-triggered advisory Gemini with public activation gated; no real provider writes. Reviewer/Play/intake sprint enhancements require candidate evidence. Existing audit/session records do not imply Firestore integration. Last-known cloud mode is deterministic-only and Firestore API disabled; this package makes no new cloud verification claim.
 
 Approval status: product decision draft for review, not approved external publication. The Product Quality Judge must examine actual implemented/deployed behavior against these promises and must not credit future assumptions.
+
+Current integration checkpoint: local code `fffd14c` supplies the playable mission, browser-local
+validation fallback, independent mapping challenge and bounded asynchronous operational admission.
+The [promise checkpoint](../product-management/promise-traceability.md#integration-checkpoint--17-october-2026)
+and [acceptance matrix](../submission/acceptance-report.md) record what is tested and what is still
+release-gated. An unfinished hosted capability remains on the backlog, not an implied delivery.
