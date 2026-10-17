@@ -22,16 +22,14 @@ beforeEach(() => { vi.stubGlobal("fetch", fetchMock); fetchMock.mockReset(); ses
 afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
 
 describe("test export check", () => {
-  it("offers a truthful cloud boundary with no chooser, download, validation or intake request", () => {
+  it("offers browser-local compatibility checks while hosted handoff stays gated", () => {
     vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "firebase");
     render(<TryYourData/>);
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Cloud export uploads are unavailable.");
-    expect(screen.queryByLabelText("Test files")).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Validate Files" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Download Sample Package" })).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Try the Beta" })).toHaveAttribute("href", "/workspace");
-    fireEvent.click(screen.getByText("Local evaluation and file limits"));
-    expect(screen.getByText(/1,000 rows|1000 rows/)).toBeVisible();
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Check Your Export in This Browser");
+    expect(screen.getByLabelText("Test files")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Validate Files" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Download Template ZIP" })).toBeVisible();
+    expect(screen.getByText(/Hosted upload and workspace creation are unavailable/)).toBeVisible();
     expect(fetchMock).not.toHaveBeenCalled();
   });
   it("leads with four plain steps and keeps format detail behind a disclosure", () => {
