@@ -63,12 +63,13 @@ export function ApprovalReview({ plan, mappings, canApprove, approved, busy, rea
       <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-secondary">{(plan.summary?.validation_expectations ?? ["Review the deterministic reconciliation report after migration; no validation success is implied by plan approval."]).map(expectation => <li key={expectation}>{expectation}</li>)}</ul>
     </Panel>
     <Dialog open={confirm} onClose={() => { if (!busy) setConfirm(false); }} fallbackFocusRef={fallbackFocusRef} title="Approve This Migration Plan?" description="This is an explicit, auditable decision for the current migration.">
-      <p className="text-sm leading-6">You approve {reviewed} reviewed mappings{plan.summary ? ` and ${plan.summary.record_count} source records for ${plan.summary.company_name}` : " and this plan's recorded scope"}. Your authenticated identity and the server timestamp will be retained with the approval.</p>
+      <div className="dialog-scroll"><p className="text-sm leading-6">You approve {reviewed} reviewed mappings{plan.summary ? ` and ${plan.summary.record_count} source records for ${plan.summary.company_name}` : " and this plan's recorded scope"}. Your authenticated identity and the server timestamp will be retained with the approval.</p>
       <ul className="mt-4 space-y-2">{plan.summary?.batches.map(batch => <li key={batch.dataset}>{batch.label} · {batch.record_count} records</li>)}</ul>
       <h3 className="mt-4 font-semibold">Reviewed Mappings and Settings</h3>
       <ul className="mt-2 space-y-3">{mappings.map(mapping => <li key={mapping.id}><strong>{mapping.source_label} → {mapping.selected_target}</strong><p>{mapping.source_value != null ? `Source setting: ${mapping.source_value}. ` : ""}{mapping.rationale}</p><p>{mapping.risk} risk · {mapping.policy_reasons.join(" · ")}</p></li>)}</ul>
       <h3 className="mt-4 font-semibold">Validation Expectations</h3><ul>{plan.summary?.validation_expectations.map(value => <li key={value}>{value}</li>)}</ul>
       <p className="mt-3 text-sm leading-6">No target writes occur until you separately start migration. Hard blockers cannot be waived by this approval.</p>
+      </div>
       <div className="dialog-actions"><Button disabled={!canApprove || blocked || busy} onClick={() => { void approve().then(() => setConfirm(false)); }}>{busy ? "Recording approval…" : "Approve Migration Plan"}</Button><Button variant="secondary" disabled={busy} onClick={() => setConfirm(false)}>Keep Reviewing</Button></div>
     </Dialog>
   </section>;

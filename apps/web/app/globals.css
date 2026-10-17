@@ -676,3 +676,23 @@ button, input, select, textarea { font: inherit; }
 .member-notice svg { flex: none; margin-top: .125rem; }
 @media (max-width: 300px) { .migration-list a { grid-template-columns: minmax(0, 1fr); } }
 .migration-list ~ .member-actions { margin-top: 1rem; }
+/* Narrow screens (incl. 200% zoom): compact actions pinned at the bottom edge of the dialog's scrollport. */
+@media (max-width: 300px) {
+  .dialog { padding: 1rem; }
+  .dialog-actions { bottom: 0; margin: 1rem -1rem -1rem; padding: .75rem 1rem; gap: .5rem; }
+  .dialog-actions .button, .dialog-actions button { min-height: 2.75rem; padding-block: .5rem; flex: 1 1 100%; }
+}
+/* Approval dialog: only the review body scrolls, so the confirmation actions are always on screen. */
+.dialog[open]:has(.dialog-scroll) { display: flex; flex-direction: column; overflow: hidden; }
+.dialog[open]:has(.dialog-scroll) > div { flex: none; }
+.dialog[open]:has(.dialog-scroll) > .mt-6 { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }
+.dialog-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding-right: .25rem; }
+.dialog:has(.dialog-scroll) .dialog-actions { position: static; flex: none; margin: 1rem 0 0; padding: 1rem 0 0; }
+@media (max-width: 300px) {
+  .dialog { width: calc(100% - .75rem); max-height: calc(100dvh - .75rem); padding: .75rem; }
+  .dialog h2 { font-size: 1.0625rem; line-height: 1.25; overflow-wrap: break-word; word-break: normal; hyphens: auto; }
+  .dialog > div:first-child { gap: .5rem; }
+  .dialog > div:first-child p { font-size: .8125rem; line-height: 1.35; margin-top: .25rem; }
+  .dialog-scroll { font-size: .875rem; }
+}
+@media (max-width: 300px) { .dialog-actions .button, .dialog-actions button { font-size: .875rem; line-height: 1.2; padding: .375rem .5rem; min-height: 2.75rem; } .dialog-actions { padding-top: .5rem; margin-top: .5rem; gap: .375rem; } }
