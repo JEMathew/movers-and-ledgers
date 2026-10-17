@@ -88,7 +88,7 @@ describe.each([
     window.history.replaceState(null, "", `/stage?session=${id}`);
     vi.spyOn(globalThis, "fetch").mockImplementation(input => respond(migration, String(input)));
     render(<Page />);
-    if (Page === MyMigration) fireEvent.click(await screen.findByText("Operational steps"));
+    if (Page === MyMigration) fireEvent.click(await screen.findByText("Details"));
     await waitFor(() => expect(steps()).toEqual(journey));
   });
 });

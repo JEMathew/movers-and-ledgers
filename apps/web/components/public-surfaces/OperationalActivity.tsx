@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Alert, Button } from "@/components/ui";
 import { authHeaders } from "@/lib/identity";
 
@@ -26,7 +26,11 @@ function parseActivity(raw: unknown): Activity {
   if (data.status !== "AVAILABLE" && events.length) throw new Error("unavailable");
   return { status: data.status as Activity["status"], events };
 }
+const dollars = (microUsd: number) => (microUsd / 1_000_000).toLocaleString("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2, maximumFractionDigits: 4 });
 export function OperationalActivity() {
+  const heading = useRef<HTMLHeadingElement>(null);
+  // Arrive from the "AI activity" shortcut: the panel mounts after evidence loads, so scroll once it exists.
+  useEffect(() => { if (window.location.hash === "#ai-activity") { heading.current?.scrollIntoView({ block: "start" }); heading.current?.focus({ preventScroll: true }); } }, []);
   const [result, setResult] = useState<Activity>(), [busy, setBusy] = useState(false), [error, setError] = useState(false);
   async function refresh() {
     setBusy(true); setError(false); setResult(undefined);
@@ -37,23 +41,23 @@ export function OperationalActivity() {
     } catch { setError(true); }
     finally { setBusy(false); }
   }
-  return <section aria-labelledby="operational-activity-title" className="card p-6">
-    <h2 id="operational-activity-title" className="type-section">Advisory Operations</h2>
-    <p className="mt-2 text-secondary">Inspect operational capacity reservations and advisory outcomes for your account. This snapshot is separate from financial audit and approval records; it cannot establish financial correctness or migration completion.</p>
-    <Button className="mt-4" variant="secondary" disabled={busy} onClick={refresh}>{busy ? "Reading Operations…" : "Refresh Advisory Operations"}</Button>
+  return <section id="ai-activity" aria-labelledby="operational-activity-title" className="card p-6">
+    <h2 id="operational-activity-title" ref={heading} tabIndex={-1} className="type-section">AI activity</h2>
+    <p className="mt-2 text-secondary">What AI advice was reserved, used or replaced by rules for your account. Separate from the financial audit trail; it does not show whether your books are correct.</p>
+    <Button className="mt-4" variant="secondary" disabled={busy} onClick={refresh}>{busy ? "Checking AI activity…" : "Check AI activity"}</Button>
     <div className="mt-4" aria-live="polite" aria-busy={busy}>
-      {!result && !busy && !error && <p>No operational read requested. Refresh explicitly to read a snapshot.</p>}
-      {busy && <p role="status">Reading operational activity. No financial action is requested.</p>}
-      {error && <Alert tone="warning" title="Operational Activity Unavailable"><p>We could not read this snapshot. Verify your access or try again. No model execution, approval or financial result is inferred.</p></Alert>}
-      {result?.status === "DISABLED" && <Alert tone="info" title="Operational Activity Is Disabled"><p>The optional operational store is disabled in this environment. This is not evidence of successful model execution. Migration records remain independent.</p></Alert>}
-      {result?.status === "UNAVAILABLE" && <Alert tone="warning" title="Operational Activity Unavailable"><p>The operational store could not provide a snapshot. No model execution, approval or financial result is inferred.</p></Alert>}
+      {!result && !busy && !error && <p>Not checked yet. Choose Check AI activity to read your account snapshot.</p>}
+      {busy && <p role="status">Checking AI activity. No financial action is taken.</p>}
+      {error && <Alert tone="warning" title="AI activity unavailable"><p>We could not read this snapshot. Verify your access or try again. No AI use, approval or financial result is inferred.</p></Alert>}
+      {result?.status === "DISABLED" && <Alert tone="info" title="AI activity tracking is off"><p>AI activity tracking is off in this environment. This is not evidence of AI use. Migration records remain independent.</p></Alert>}
+      {result?.status === "UNAVAILABLE" && <Alert tone="warning" title="AI activity unavailable"><p>The activity store could not provide a snapshot. No AI use, approval or financial result is inferred.</p></Alert>}
       {result?.status === "AVAILABLE" && <>
-        <p className="text-sm text-secondary">At most 20 recent reservation records. Counts are reserved allowances unless explicitly reported as usage; a reservation does not prove a model call. Unknown usage is shown as unknown. This is not live monitoring.</p>
-        {!result.events.length ? <p className="mt-3">No reservation records were returned in this snapshot. This does not establish that no operations occurred.</p> : <ul className="mt-4 space-y-4">{result.events.map((event, index) => <li key={index} className="rounded-lg border border-token p-4 [overflow-wrap:anywhere]">
+        <p className="text-sm text-secondary">Latest 20 records only; not live monitoring. A reservation is not a charge and does not prove the AI ran. Unknown usage is shown as unknown.</p>
+        {!result.events.length ? <p className="mt-3">No AI activity recorded for your account in this snapshot. This does not establish that none occurred earlier. Until AI advice is switched on, guidance comes from rules.</p> : <ul className="mt-4 space-y-4">{result.events.map((event, index) => <li key={index} className="rounded-lg border border-token p-4 [overflow-wrap:anywhere]">
           <p className="font-semibold capitalize">{event.capability.replaceAll("-", " ")} · {event.state.toLowerCase()}</p>
           <p className="text-sm">Created: <time dateTime={event.created_at}>{event.created_at}</time></p>
           {event.completed_at && <p className="text-sm">Outcome recorded: <time dateTime={event.completed_at}>{event.completed_at}</time></p>}
-          <p className="mt-2 text-sm">Reserved model calls: {event.reserved_calls} · Reserved budget: {event.reserved_microusd} micro-USD. Reservation is not actual billing.</p>
+          <p className="mt-2 text-sm">Reserved: {event.reserved_calls} model {event.reserved_calls === 1 ? "call" : "calls"}, {dollars(event.reserved_microusd)}. A reservation is not a charge.</p>
           <p className="text-sm">Reported model calls: {event.model_calls ?? "unknown"} · Tool calls: {event.tool_calls ?? "unknown"} · Input tokens: {event.input_tokens ?? "unknown"} · Output tokens: {event.output_tokens ?? "unknown"} · Usage: {event.usage_status ?? "unknown"}</p>
           <p className="mt-2 text-sm text-secondary">{event.state === "RESERVED" ? "Capacity was reserved; execution and outcome are not established." : event.state === "COMPLETED" ? "An advisory outcome was recorded. This is not an accounting approval or financial verification." : event.state === "FALLBACK" ? "Fallback guidance was recorded; this does not establish a successful model response." : "An unavailable outcome was recorded; no successful inference is assumed."}</p>
         </li>)}</ul>}

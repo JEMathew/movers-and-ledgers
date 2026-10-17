@@ -10,7 +10,7 @@ function CloudWorkspace({ reference }: { reference?: string }) {
   const destination = reference !== undefined ? `/workspace?session=${encodeURIComponent(reference)}` : "/workspace";
   return identity ? <MyMigration key={`${identity.subject}:${reference ?? "selected"}`} reference={reference}/> : <main id="main-content" className="shell member-home">
     <h1 className="type-section">Sign in to continue your migration</h1>
-    <p className="mt-3">Use your Google account to securely access your MoveBooks migration.</p>
+    <p className="mt-3">Use your Google account to securely access your MoveBooks migration. New here? You start with a sample business. Returning? Your migration resumes where you left off.</p>
     <IdentityEntry destination={destination} />
   </main>;
 }

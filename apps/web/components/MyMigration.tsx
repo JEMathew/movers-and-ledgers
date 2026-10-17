@@ -40,9 +40,9 @@ export function MyMigration({ reference }: { reference?: string } = {}) {
         {view.status === "AWAITING_APPROVAL" && <p>{view.mappingIssues === null ? "Mapping review count unavailable; review mappings before plan consent." : `${view.mappingIssues} mappings awaiting review.`}</p>}
       </section>
       <MemberProgress view={view}/>
-      <details className="member-details"><summary>Operational steps</summary><MigrationJourney current={view.readinessKnown ? operational?.current ?? null : null} held={operational?.held} currentLabel={operational?.currentLabel}/></details>
-      <nav className="member-shortcuts" aria-label="Migration details">{memberHomeLinks(view).map(([label, href]) => <a key={label} href={href}>{label}</a>)}</nav>
-      <details className="member-details"><summary>Migration link and recent history</summary>
+      <details className="member-details"><summary>Details</summary>
+        <h2>Operational steps</h2>
+        <MigrationJourney current={view.readinessKnown ? operational?.current ?? null : null} held={operational?.held} currentLabel={operational?.currentLabel}/>
         <p>{view.sourceKind}. This snapshot omits business names and raw financial values.</p>
         <label className="field-label">Owned migration link<input className="field-control" readOnly value={typeof window !== "undefined" ? `${window.location.origin}/workspace?session=${view.id}` : `/workspace?session=${view.id}`} onFocus={event => event.currentTarget.select()}/></label>
         <Button variant="secondary" onClick={copyLink}>Copy migration link</Button><p role="status">{copyStatus}</p>
@@ -51,7 +51,7 @@ export function MyMigration({ reference }: { reference?: string } = {}) {
       </details>
     </>}
     {!view && !loading && <details className="member-details"><summary>Open an owned migration reference</summary><p>Use the reference from your saved migration link. Access is checked again; this does not list or create migrations.</p><form action="/workspace" method="get"><label className="field-label">Migration reference<input className="field-control" name="session" required pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" placeholder="UUID from your migration link"/></label><Button variant="secondary" type="submit">Open reference</Button></form></details>}
-    <nav className="member-shortcuts" aria-label="Task help"><a href={help}>Help with this task</a>{view && <a href={`/workspace?session=${view.id}#progress`}>Current migration progress</a>}<a href="/play">MoveBooks Play</a></nav>
+    <nav className="member-shortcuts" aria-label="Task help">{view && !loading && !error && memberHomeLinks(view).map(([label, href]) => <a key={label} href={href}>{label}</a>)}<a href={help}>Help with this task</a></nav>
     <p className="member-boundary">Bounded synthetic Beta · No production customer data</p>
   </main>;
 }

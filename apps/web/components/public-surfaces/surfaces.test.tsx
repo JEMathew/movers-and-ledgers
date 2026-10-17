@@ -44,14 +44,17 @@ describe("public surface contracts", () => {
       for (const heading of screen.getAllByRole("heading")) expect(heading.className).not.toMatch(/uppercase|type-label|eyebrow/);
     });
   });
-  it("presents one Beta launch, a read-only five-phase Demo and prominent public Play", () => {
+  it("presents one dominant sample-migration action, a secondary Demo link and Play inside the overview", () => {
     render(<Home/>);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Move your books.Keep your confidence.");
-    expect(screen.getByRole("link", { name: "Try the Beta" })).toHaveAttribute("href", "/workspace");
-    expect(screen.getByRole("link", { name: "Explore Demo" })).toHaveAttribute("href", "/simulator");
-    expect(screen.getByRole("link", { name: "Explore Demo" })).toHaveAccessibleDescription("Read-only five-phase Demo. No sign-in; the working synthetic Beta requires sign-in.");
-    expect(screen.getByRole("link", { name: "Open Play" })).toHaveAttribute("href", "/play");
-    expect(screen.getByText("V1.0 Bounded Synthetic Public Beta")).toBeVisible();
+    expect(screen.getByRole("link", { name: "Start a sample migration" })).toHaveAttribute("href", "/workspace");
+    const demo = screen.getByRole("link", { name: /Explore Demo/ });
+    expect(demo).toHaveAttribute("href", "/simulator");
+    expect(demo).toHaveTextContent("no sign-in required");
+    expect(demo).not.toHaveClass("button");
+    expect(screen.queryByRole("heading", { name: "Learn through MoveBooks Play" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Open Play" })).not.toBeInTheDocument();
+    expect(screen.queryByText("V1.0 Bounded Synthetic Public Beta")).not.toBeInTheDocument();
     expect(screen.getByText(/Do not use real customer or production provider data/)).toBeVisible();
     expect(screen.getByRole("link", { name: "Beta limitations" })).toHaveAttribute("href", "/trust#beta-limitations");
     const main = screen.getByRole("main");
@@ -62,6 +65,7 @@ describe("public surface contracts", () => {
     fireEvent.click(within(journey).getByText("How MoveBooks works"));
     expect(screen.getByText("Onboard + First Synthetic Task")).toBeVisible();
     expect(screen.getByRole("link", { name: "Getting Started Guide" })).toHaveAttribute("href", "/guide");
+    expect(screen.getByRole("link", { name: "Try MoveBooks Play" })).toHaveAttribute("href", "/play");
     fireEvent.click(screen.getByText("Beta boundaries and architecture"));
     expect(screen.getByText(/Live Gemini advice requires explicit deployment configuration/)).toBeVisible();
     expect(screen.getByText(/No affiliation with or representation/)).toBeVisible();
@@ -161,7 +165,7 @@ describe("public surface contracts", () => {
       expect(control.closest("details")).toHaveAttribute("open");
     }
     for (const name of ["The questions behind every move", "How MoveBooks works", "Trust by design"]) expect(screen.getByRole("heading", { name })).toBeVisible();
-    expect(screen.getByRole("link", { name: "Try the Beta" })).toHaveAttribute("href", "/workspace");
+    expect(screen.getByRole("link", { name: "Start a sample migration" })).toHaveAttribute("href", "/workspace");
     expect(screen.queryByRole("link", { name: "Try a migration" })).not.toBeInTheDocument();
     for (const heading of screen.getAllByRole("heading")) expect(heading.className).not.toMatch(/uppercase|type-label|eyebrow/);
   });

@@ -39,6 +39,7 @@ export function memberHomeLinks(view: SessionView) {
   if (phase === 1 || ["CONFIGURATION_REVIEW_REQUIRED", "ONBOARDING_BLOCKED", "FIRST_PRODUCTIVE_USE_BLOCKED"].includes(view.status)) links.push(["Review decisions", memberHomeAction(view).href]);
   if (view.blockers.length || /BLOCKED|PAUSED|RESOLVING|RETRY_PENDING/.test(view.status)) links.push([phase === 2 ? "Issues & Recovery" : "Review issues", memberHomeAction(view).href]);
   links.push(["Evidence & Results", `/trust?view=evidence&session=${view.id}`]);
+  links.push(["AI activity", `/trust?view=evidence&session=${view.id}#ai-activity`]);
   if (phase !== null && phase >= 3) links.push(["Financial verification", withSession("/validate-configure", view.id)]);
   if (phase === 4) links.push(["First-task evidence", withSession("/onboard-fpu", view.id)]);
   return links;

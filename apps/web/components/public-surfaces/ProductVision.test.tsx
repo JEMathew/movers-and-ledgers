@@ -1,12 +1,15 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import Home from "@/app/page";
 
 describe("Product Vision media", () => {
-  it("preserves conceptual vision after product entry and Play with native, bounded playback", () => {
+  it("keeps the conceptual vision discoverable in a collapsed disclosure with native, bounded playback", () => {
     render(<Home/>);
+    const disclosure = document.querySelector<HTMLDetailsElement>("#product-vision-disclosure")!;
+    expect(disclosure.open).toBe(false);
+    fireEvent.click(screen.getByText("Watch the product vision"));
     const video = screen.getByLabelText("MoveBooks AI Product Vision");
     expect(video.tagName).toBe("VIDEO");
     expect(video).toHaveAttribute("controls");
@@ -21,8 +24,8 @@ describe("Product Vision media", () => {
     expect(screen.getByText(/Product Vision shows the intended customer experience/)).toBeVisible();
     expect(screen.getByText("Conceptual product vision · 25 sec")).toBeVisible();
     const vision = document.querySelector("#product-vision")!;
-    const play = screen.getByRole("heading", { name: "Learn through MoveBooks Play" }).closest("section")!;
-    expect(play.compareDocumentPosition(vision) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(disclosure.contains(vision)).toBe(true);
+    expect(screen.queryByRole("heading", { name: "Learn through MoveBooks Play" })).not.toBeInTheDocument();
     expect(video).toHaveAttribute("aria-describedby", "vision-boundary");
   });
   it("ships one bounded H.264 fast-start asset and a small poster", () => {

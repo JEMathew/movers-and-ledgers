@@ -87,7 +87,7 @@ describe("shared Google authentication controls", () => {
     mount(true);
     const button = await enabled("Continue with Google", within(screen.getByRole("main")));
     expect(screen.getByRole("heading", { name: "Sign in to continue your migration" })).toBeVisible();
-    expect(screen.getByRole("main")).toHaveTextContent("Use your Google account to securely access your MoveBooks migration.");
+    expect(screen.getByRole("main")).toHaveTextContent("Use your Google account to securely access your MoveBooks migration. New here? You start with a sample business. Returning? Your migration resumes where you left off.");
     expect(screen.getByRole("main")).toHaveTextContent("Bounded synthetic Beta · No production customer data");
     expect(screen.getByRole("main")).not.toHaveTextContent(/workspace ownership|API verifies|durable storage/);
     expect(button).not.toHaveClass("secondary");

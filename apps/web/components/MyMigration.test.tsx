@@ -44,6 +44,12 @@ describe("state-aware migration home", () => {
       expect(phases().querySelectorAll('a')).toHaveLength(Number(phase) + 1);
     }
     expect(within(screen.getByRole("navigation", { name: "Task help" })).getByRole("link", { name: "Help with this task" })).toHaveAttribute("href", `/support?session=${id}&stage=${phase}`);
+    const shortcuts = within(screen.getByRole("navigation", { name: "Task help" }));
+    expect(shortcuts.getByRole("link", { name: "AI activity" })).toHaveAttribute("href", `/trust?view=evidence&session=${id}#ai-activity`);
+    expect(shortcuts.getByRole("link", { name: "Evidence & Results" })).toHaveAttribute("href", `/trust?view=evidence&session=${id}`);
+    expect(screen.getAllByRole("navigation", { name: /Task help|Migration details/ })).toHaveLength(1);
+    expect(screen.queryByRole("link", { name: "MoveBooks Play" })).not.toBeInTheDocument();
+    expect(screen.getAllByText("Details")).toHaveLength(1);
     expect(screen.queryByText(/\d+%/)).not.toBeInTheDocument();
   });
   it.each([undefined, null, { pending:0 }, { total:0,pending:0 }, { total:2,pending:3 }])("does not infer eligible plan consent from missing/inconsistent mapping count %s", async review => {
@@ -104,7 +110,7 @@ it.each([false,true])("copying the owned link is explicit and handles unavailabl
   vi.stubGlobal("navigator",{...navigator,clipboard:{writeText}});
   try {
     render(<MyMigration reference={id}/>);await screen.findByRole("link",{name:"Review recovery"});
-    expect(writeText).not.toHaveBeenCalled();fireEvent.click(screen.getByText("Migration link and recent history"));
+    expect(writeText).not.toHaveBeenCalled();fireEvent.click(screen.getByText("Details"));
     expect(screen.getByRole("textbox",{name:"Owned migration link"})).toHaveAttribute("readonly");
     fireEvent.click(screen.getByRole("button",{name:"Copy migration link"}));
     await screen.findByText(unavailable ? /Copy unavailable/ : /Migration link copied/);
