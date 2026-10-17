@@ -8,6 +8,7 @@ from sqlalchemy import Column, MetaData, String, Table, Text, insert, select, up
 from sqlalchemy.exc import DatabaseError, IntegrityError
 
 from domain.discovery_assessment.models import MigrationSession
+from movebooks_api.discover_assess import listing
 
 metadata = MetaData()
 sessions = Table(
@@ -130,6 +131,50 @@ class SqlSessionRepository:
         if row and digest(row[0]) != row[1]:
             raise ValueError("Stored session integrity check failed")
         return decode(row[0], owner_subject) if row else None
+
+    def list_for_owner(self, owner_subject, *, after=None, limit=listing.DEFAULT_LIMIT):
+        """Owner filter lives in SQL. Bounded by rows scanned and snapshot bytes decoded."""
+        with self.engine.connect() as connection:
+            ids = [
+                row[0]
+                for row in connection.execute(
+                    select(sessions.c.id)
+                    .where(sessions.c.owner == owner_subject)
+                    .order_by(sessions.c.id)
+                    .limit(listing.MAX_SCAN_ROWS + 1)
+                )
+            ]
+            incomplete, reason = len(ids) > listing.MAX_SCAN_ROWS, None
+            if incomplete:
+                reason, ids = "scan_limit", ids[: listing.MAX_SCAN_ROWS]
+            summaries, scanned, skipped, decoded = [], 0, 0, 0
+            for row_id in ids:
+                row = connection.execute(
+                    select(sessions.c.snapshot).where(
+                        sessions.c.id == row_id, sessions.c.owner == owner_subject
+                    )
+                ).first()
+                if row is None:
+                    continue
+                decoded += len(row[0])
+                if decoded > listing.MAX_DECODED_BYTES:
+                    incomplete, reason = True, "byte_limit"
+                    break
+                scanned += 1
+                try:
+                    summaries.append(listing.summarize_snapshot(row[0], row_id, owner_subject))
+                except (ValueError, KeyError, TypeError):
+                    skipped += 1
+        return listing.build_page(
+            owner_subject,
+            summaries,
+            after=after,
+            limit=limit,
+            incomplete=incomplete,
+            reason=reason,
+            scanned=scanned,
+            skipped=skipped,
+        )
 
     def put_if_unchanged(self, original, updated):
         if original.id != updated.id or original.owner_subject != updated.owner_subject:

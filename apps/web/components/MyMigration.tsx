@@ -41,7 +41,7 @@ export function MyMigration({ reference, storageScope }: { reference?: string; s
   }
   return <main id="main-content" className="shell member-home">
     <header><p className="eyebrow">My Migration</p><h1 className="type-page">{loading ? "Reading your migration" : error ? errorKind === "identity" ? "Sign in to resume" : "Migration unavailable" : action.heading}</h1>
-      {view && <p className="member-reference">Migration {view.id.slice(0, 8)}…{view.id.slice(-4)}</p>}
+      {view && <p className="member-reference">Migration {view.id.slice(0, 8)}…{view.id.slice(-4)}{storageScope && <> · <a href="/workspace?pick=1">Switch migration</a></>}</p>}
     </header>
     {loading ? <p role="status" className="member-status">Checking access and current state. No progress is assumed.</p> : error ? <section role="alert" className="member-task">
       <p>{error}</p><p>No progress is assumed. Refresh reads the same reference; it never starts a replacement.</p>

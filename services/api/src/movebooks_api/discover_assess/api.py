@@ -3,7 +3,7 @@
 from typing import Annotated, Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Header, HTTPException, status
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, status
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from agents.orchestrator import WorkflowTransitionError
@@ -33,6 +33,7 @@ from domain.planning_mapping.models import (
 )
 from movebooks_api.auth import Principal, require_principal
 
+from . import listing
 from .fixtures import sample_company_catalog
 from .service import (
     CreationConflictError,
@@ -119,6 +120,46 @@ def create_migration_session(
         raise _not_found(error) from error
     except CreationConflictError as error:
         raise _conflict(error) from error
+
+
+class MigrationListItem(BaseModel):
+    id: UUID
+    company_name: str
+    status: str
+    workflow_status: str
+    created_at: str
+
+
+class MigrationListResponse(BaseModel):
+    items: list[MigrationListItem]
+    next_cursor: str | None
+    # True when a scan or byte bound was reached: the history shown may be missing older
+    # migrations. Clients must say so rather than present the list as complete.
+    incomplete: bool
+    reason: Literal["scan_limit", "byte_limit"] | None
+    skipped: int
+
+
+@router.get("/migration-sessions", response_model=MigrationListResponse)
+def list_migration_sessions(
+    principal: AuthenticatedPrincipal,
+    limit: Annotated[int, Query(ge=1, le=listing.MAX_LIMIT)] = listing.DEFAULT_LIMIT,
+    cursor: Annotated[str | None, Query(max_length=300)] = None,
+) -> MigrationListResponse:
+    try:
+        after = listing.decode_cursor(principal.subject, cursor) if cursor else None
+    except listing.InvalidCursor:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid cursor") from None
+    page = discover_assess_service.repository.list_for_owner(
+        principal.subject, after=after, limit=limit
+    )
+    return MigrationListResponse(
+        items=[MigrationListItem(**item.__dict__) for item in page.items],
+        next_cursor=page.next_cursor,
+        incomplete=page.incomplete,
+        reason=page.reason,
+        skipped=page.skipped,
+    )
 
 
 @router.get("/migration-sessions/{session_id}", response_model=MigrationSession)
@@ -225,9 +266,7 @@ def get_plan(session_id: UUID, principal: AuthenticatedPrincipal) -> MigrationPl
 
 
 @router.get("/migration-sessions/{session_id}/plan/status")
-def get_plan_status(
-    session_id: UUID, principal: AuthenticatedPrincipal
-) -> dict[str, str | int]:
+def get_plan_status(session_id: UUID, principal: AuthenticatedPrincipal) -> dict[str, str | int]:
     try:
         plan = discover_assess_service.get_plan(principal.subject, session_id)
         return {
@@ -242,9 +281,7 @@ def get_plan_status(
 
 
 @router.post("/migration-sessions/{session_id}/mappings", response_model=list[MappingProposal])
-def create_mappings(
-    session_id: UUID, principal: AuthenticatedPrincipal
-) -> list[MappingProposal]:
+def create_mappings(session_id: UUID, principal: AuthenticatedPrincipal) -> list[MappingProposal]:
     try:
         return discover_assess_service.with_supported_targets(
             discover_assess_service.map(principal.subject, session_id)
@@ -256,9 +293,7 @@ def create_mappings(
 
 
 @router.get("/migration-sessions/{session_id}/mappings", response_model=list[MappingProposal])
-def get_mappings(
-    session_id: UUID, principal: AuthenticatedPrincipal
-) -> list[MappingProposal]:
+def get_mappings(session_id: UUID, principal: AuthenticatedPrincipal) -> list[MappingProposal]:
     try:
         return discover_assess_service.get_mappings(principal.subject, session_id)
     except MigrationSessionNotFoundError as error:
@@ -549,9 +584,7 @@ def decide_resolution(
     "/migration-sessions/{session_id}/migration/retry",
     response_model=MigrationExecution,
 )
-def retry_migration(
-    session_id: UUID, principal: AuthenticatedPrincipal
-) -> MigrationExecution:
+def retry_migration(session_id: UUID, principal: AuthenticatedPrincipal) -> MigrationExecution:
     try:
         session = discover_assess_service.retry_migration(principal.subject, session_id)
         assert session.execution is not None
@@ -566,9 +599,7 @@ def retry_migration(
     "/migration-sessions/{session_id}/migration/resume",
     response_model=MigrationExecution,
 )
-def resume_migration(
-    session_id: UUID, principal: AuthenticatedPrincipal
-) -> MigrationExecution:
+def resume_migration(session_id: UUID, principal: AuthenticatedPrincipal) -> MigrationExecution:
     """Resume a retry-pending execution from its recorded checkpoint."""
     return retry_migration(session_id, principal)
 
