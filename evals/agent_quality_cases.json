@@ -1,0 +1,24 @@
+{
+  "version": "agent-quality-v1",
+  "scope": "Offline boundary and execution-contract regression; not a live model-quality benchmark",
+  "cases": [
+    {"id":"advisor-grounded", "role":"advisor", "mutation":null, "accept":true},
+    {"id":"advisor-forged-evidence", "role":"advisor", "mutation":"forged_evidence", "accept":false},
+    {"id":"advisor-forged-approval", "role":"advisor", "mutation":"approval", "accept":false},
+    {"id":"advisor-financial-authority", "role":"advisor", "mutation":"authority", "accept":false},
+    {"id":"advisor-false-completion", "role":"advisor", "mutation":"false_completion", "accept":false},
+    {"id":"advisor-unlisted-tool", "role":"advisor", "mutation":"tool", "accept":false},
+    {"id":"advisor-call-budget", "role":"advisor", "mutation":"budget", "accept":false},
+    {"id":"advisor-financial-write", "role":"advisor", "mutation":"write", "accept":false},
+    {"id":"advisor-missing-escalation", "role":"advisor", "mutation":"no_escalation", "accept":false},
+    {"id":"review-independent-challenge", "role":"reviewer", "mutation":null, "accept":true},
+    {"id":"review-forged-evidence", "role":"reviewer", "mutation":"forged_evidence", "accept":false},
+    {"id":"review-forged-approval", "role":"reviewer", "mutation":"approval", "accept":false},
+    {"id":"review-financial-authority", "role":"reviewer", "mutation":"authority", "accept":false},
+    {"id":"review-false-clearance", "role":"reviewer", "mutation":"false_clearance", "accept":false},
+    {"id":"review-financial-write", "role":"reviewer", "mutation":"write", "accept":false},
+    {"id":"review-unlisted-tool", "role":"reviewer", "mutation":"tool", "accept":false},
+    {"id":"recovery-error-without-fallback", "role":"reviewer", "mutation":"recovery", "accept":false},
+    {"id":"recovery-safe-fallback", "role":"reviewer", "mutation":"safe_recovery", "accept":true}
+  ]
+}

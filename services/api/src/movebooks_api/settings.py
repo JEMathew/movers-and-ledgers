@@ -33,6 +33,14 @@ class Settings(BaseSettings):
     reasoning_timeout_seconds: float = Field(default=30, ge=1, le=60)
     reasoning_max_runs: int = Field(default=10, ge=1, le=10)
 
+    synthetic_beta_authorized: bool = False
+    model_controls_backend: Literal["disabled", "firestore"] = "disabled"
+    reasoning_owner_daily_calls: int = Field(default=20, ge=2, le=100)
+    reasoning_global_daily_calls: int = Field(default=100, ge=2, le=10000)
+    # Operator-supplied conservative reservation, not a claim of verified prices.
+    reasoning_reservation_microusd: int = Field(default=100000, ge=1)
+    reasoning_global_daily_microusd: int = Field(default=1000000, ge=1)
+
     @property
     def cloud(self) -> bool:
         return self.env in {"cloud-dev", "staging", "production"}

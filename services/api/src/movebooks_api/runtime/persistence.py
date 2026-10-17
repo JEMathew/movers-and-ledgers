@@ -41,6 +41,8 @@ def encode(session, *, explicit_nulls=False):
     for mapping in payload["session"]["mappings"]:
         if not mapping["reconsiderations"]:
             mapping.pop("reconsiderations")
+    if not payload["session"]["review_records"]:
+        payload["session"].pop("review_records")
     if not payload["session"]["reasoning_records"]:
         payload["session"].pop("reasoning_records")
     plan = payload["session"]["plan"]

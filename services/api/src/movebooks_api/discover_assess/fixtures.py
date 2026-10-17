@@ -35,7 +35,30 @@ def sample_company_catalog() -> list[dict[str, str | bool]]:
     ]
 
 
-def load_sample_company(sample_company_id: str) -> dict[str, Any] | None:
+def load_sample_company(
+    sample_company_id: str,
+    source_checksum: str | None = None,
+) -> dict[str, Any] | None:
+    if source_checksum is not None:
+        from tools.migration import stable_checksum
+
+        archived = Path(__file__).resolve().parents[5] / "synthetic-data" / "versions"
+        versions = [
+            *load_sample_companies(),
+            *(
+                json.loads(path.read_text(encoding="utf-8"))
+                for path in sorted(archived.glob("*.json"))
+            ),
+        ]
+        return next(
+            (
+                fixture
+                for fixture in versions
+                if fixture["sample_company_id"] == sample_company_id
+                and stable_checksum(fixture["datasets"]) == source_checksum
+            ),
+            None,
+        )
     return next(
         (
             fixture

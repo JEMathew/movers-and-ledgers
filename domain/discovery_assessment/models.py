@@ -11,6 +11,7 @@ from domain.migration_resolution.models import MigrationExecution
 from domain.onboarding_fpu.models import OnboardingState
 from domain.planning_mapping.models import MappingProposal, MigrationPlan, WorkflowStatus
 from domain.reasoning.models import ReasoningRecord
+from domain.reasoning.reviewer import ReviewRecord
 from domain.validation_configuration.models import (
     ConfigurationPlan,
     ValidationRepair,
@@ -275,3 +276,4 @@ class MigrationSession(BaseModel):
     configuration_history: list[ConfigurationPlan] = Field(default_factory=list)
     onboarding: OnboardingState | None = None
     reasoning_records: list[ReasoningRecord] = Field(default_factory=list)
+    review_records: list[ReviewRecord] = Field(default_factory=list)

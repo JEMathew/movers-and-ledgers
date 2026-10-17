@@ -103,7 +103,7 @@ def test_hostile_text_is_parsed_as_ordinary_data_and_changes_nothing():
     # The values are kept verbatim as data, and the unsupported memo column is dropped.
     customers = session.uploaded_source["datasets"]["customers"]
     assert customers[0]["display_name"] == HOSTILE["approve"] and "memo" not in customers[0]
-    assert len(session.uploaded_source["datasets"]["accounts"]) == 4
+    assert len(session.uploaded_source["datasets"]["accounts"]) == 5
 
     trust = client.get(f"/v1/migration-sessions/{session_id}/intake-trust", headers=AUTH)
     assert trust.status_code == 200

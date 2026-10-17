@@ -16,6 +16,7 @@ const routes = {
     "(migration-sessions|migration-demo-sessions|validation-demo-sessions|onboarding-demo-sessions)",
     `${session}/(discovery|assessment|plan|mappings|events)`,
     `${session}/mappings/${id}/(approve|reject|modify|reconsiderations)`,
+    `${session}/reviewer/mapping/${id}`,
     `${session}/mappings/${id}/reconsiderations/${id}/review`,
     `${session}/migration/(start|retry|resume)`,
     `${session}/migration/resolutions/${id}/decision`,

@@ -145,7 +145,7 @@ class DiscoverAssessService:
     def source_for(session: MigrationSession) -> dict | None:
         if session.source_kind == "user_upload":
             return session.uploaded_source
-        return load_sample_company(session.sample_company_id)
+        return load_sample_company(session.sample_company_id, session.source_checksum)
 
     def discover(self, owner_subject: str, session_id: UUID) -> MigrationSession:
         session = self.get_session(owner_subject, session_id)

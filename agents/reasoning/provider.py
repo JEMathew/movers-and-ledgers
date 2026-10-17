@@ -24,7 +24,7 @@ class ProviderResult:
     finish_reason: str | None = None
 
 
-def safe_shape(value):
+def safe_shape(value, contract=Advice):
     """Schema field names and JSON kinds only; never values or untrusted keys."""
     if not isinstance(value, dict):
         return {"$": "non_object"}
@@ -39,14 +39,14 @@ def safe_shape(value):
     }
     result = {
         name: kinds.get(type(value[name]), "other") if name in value else "missing"
-        for name in Advice.model_fields
+        for name in contract.model_fields
     }
-    if set(value) - set(Advice.model_fields):
+    if set(value) - set(contract.model_fields):
         result["$extra"] = "present"
     return result
 
 
-def safe_validation_issues(error):
+def safe_validation_issues(error, contract=Advice):
     """Only canonical paths and allowlisted rules; Pydantic messages can contain payloads."""
     allowed = {
         "missing",
@@ -71,7 +71,7 @@ def safe_validation_issues(error):
     issues = []
     for item in error.errors(include_input=False, include_context=False, include_url=False)[:16]:
         loc = item.get("loc", ())
-        root = loc[0] if loc and loc[0] in Advice.model_fields else "$"
+        root = loc[0] if loc and loc[0] in contract.model_fields else "$"
         path = root + ("[]" if len(loc) > 1 and isinstance(loc[1], int) else "")
         rule = item["type"] if item["type"] in allowed else "schema_violation"
         issues.append({"path": path, "rule": rule, "reason": "Response violates Advice contract"})

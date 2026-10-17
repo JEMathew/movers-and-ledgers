@@ -16,6 +16,7 @@ from .discover_assess.service import discover_assess_service
 from .discover_assess.validate_configure import router as validate_configure_router
 from .intake_api import router as intake_router
 from .reasoning import router as reasoning_router
+from .reviewer import router as reviewer_router
 from .runtime.observability import SafeRequestMiddleware, emit
 from .runtime.warmup import warm_cloud_dependencies
 from .settings import get_settings
@@ -55,6 +56,7 @@ app.include_router(validate_configure_router)
 app.include_router(onboard_fpu_router)
 app.include_router(intake_router)
 app.include_router(reasoning_router)
+app.include_router(reviewer_router)
 
 
 @app.exception_handler(Exception)
