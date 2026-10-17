@@ -46,7 +46,7 @@ describe("public surface contracts", () => {
   });
   it("presents one dominant sample-migration action, a secondary Demo link and Play inside the overview", () => {
     render(<Home/>);
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Move your books.Keep your confidence.");
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Move your books with confidence.");
     expect(screen.getByRole("link", { name: "Start a sample migration" })).toHaveAttribute("href", "/workspace");
     const demo = screen.getByRole("link", { name: /Explore Demo/ });
     expect(demo).toHaveAttribute("href", "/simulator");

@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/primitives";
 import { ActionLink } from "./journey/NextAction";
 import { MigrationJourney } from "./journey/MigrationJourney";
@@ -31,15 +32,15 @@ export function MyMigration({ reference }: { reference?: string } = {}) {
       {errorKind === "identity" && <p>If Account still shows a session, sign out there and reopen this saved migration link to sign in again.</p>}
       {errorKind === "identity" ? <ActionLink label="Sign in to resume" href={`/sign-in?next=${encodeURIComponent(destination)}`} /> : <Button onClick={refresh}>Try again</Button>}
       {errorKind === "unsupported" && selectedReference && <a className="public-text-link" href={`/assess?session=${selectedReference}`}>Read original workflow</a>}
-    </section> : <section className="member-task" aria-label="Next task"><p>{action.detail}</p><ActionLink label={action.label} href={action.href} />
+    </section> : <div className="member-layout"><div className="member-main"><section className="member-task" aria-label="Next task"><p className="member-kicker">Your next step</p><p>{action.detail}</p><ActionLink label={action.label} href={action.href} />
       {view && <p className="member-freshness">Snapshot read {readAt ? <time dateTime={readAt}>{new Date(readAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</time> : "just now"} · <button className="member-text-button" onClick={refresh}>Refresh current state</button></p>}
-    </section>}
-    {view && !loading && !error && <>
-      <section className="member-attention" aria-labelledby="attention-title"><h2 id="attention-title">Needs attention</h2>
+    </section>
+      {view && <section className="member-attention" data-tone={view.blockers.length ? "warning" : "clear"} aria-labelledby="attention-title"><h2 id="attention-title">{view.blockers.length ? <AlertTriangle size={18} aria-hidden="true"/> : <CheckCircle2 size={18} aria-hidden="true"/>}Needs attention</h2>
         {view.blockers.length ? <><ul>{view.blockers.slice(0, 3).map((item, index) => <li key={index}>{item}</li>)}</ul><p>{view.blockers.length} {view.blockers.length === 1 ? "item" : "items"} in the supplied snapshot{view.blockers.length > 3 ? "; first 3 shown. Open the current task for details." : "."}</p></> : <p>{view.attentionComplete ? "No attention items in this snapshot. The current task checks all remaining requirements." : "Attention details are incomplete. Open the current task to check requirements."}</p>}
         {view.status === "AWAITING_APPROVAL" && <p>{view.mappingIssues === null ? "Mapping review count unavailable; review mappings before plan consent." : `${view.mappingIssues} mappings awaiting review.`}</p>}
-      </section>
-      <MemberProgress view={view}/>
+      </section>}
+    </div>{view && <MemberProgress view={view}/>}</div>}
+    {view && !loading && !error && <>
       <details className="member-details"><summary>Details</summary>
         <h2>Operational steps</h2>
         <MigrationJourney current={view.readinessKnown ? operational?.current ?? null : null} held={operational?.held} currentLabel={operational?.currentLabel}/>

@@ -5,11 +5,16 @@ import { resolve } from "node:path";
 import Home from "@/app/page";
 
 describe("Product Vision media", () => {
-  it("keeps the conceptual vision discoverable in a collapsed disclosure with native, bounded playback", () => {
+  it("places the conceptual vision inline above the fold hero with user-initiated, native playback", () => {
     render(<Home/>);
-    const disclosure = document.querySelector<HTMLDetailsElement>("#product-vision-disclosure")!;
-    expect(disclosure.open).toBe(false);
-    fireEvent.click(screen.getByText("Watch the product vision"));
+    const hero = document.querySelector(".discovery-hero")!;
+    const vision = document.querySelector("#product-vision")!;
+    expect(hero.contains(vision)).toBe(true);
+    expect(document.querySelector("details#product-vision-disclosure")).toBeNull();
+    expect(screen.getByRole("heading", { name: "The MoveBooks AI vision" })).toBeVisible();
+    // DOM order: headline, then video, then CTA (mobile reads the video directly under the headline).
+    const order = [...hero.querySelectorAll("h1, video, a.button")].map(node => node.tagName);
+    expect(order).toEqual(["H1", "VIDEO", "A"]);
     const video = screen.getByLabelText("MoveBooks AI Product Vision");
     expect(video.tagName).toBe("VIDEO");
     expect(video).toHaveAttribute("controls");
@@ -17,16 +22,23 @@ describe("Product Vision media", () => {
     expect(video).toHaveAttribute("preload", "none");
     expect(video).not.toHaveAttribute("autoplay");
     expect(video).not.toHaveAttribute("loop");
+    expect(video).not.toHaveAttribute("muted");
     expect(video).toHaveAttribute("width", "1920");
     expect(video).toHaveAttribute("height", "1080");
     expect(video).toHaveAttribute("poster", "/media/movebooks-ai-product-vision-poster.webp");
     expect(video.querySelector("source")).toHaveAttribute("src", "/media/movebooks-ai-product-vision.mp4");
-    expect(screen.getByText(/Product Vision shows the intended customer experience/)).toBeVisible();
-    expect(screen.getByText("Conceptual product vision · 25 sec")).toBeVisible();
-    const vision = document.querySelector("#product-vision")!;
-    expect(disclosure.contains(vision)).toBe(true);
-    expect(screen.queryByRole("heading", { name: "Learn through MoveBooks Play" })).not.toBeInTheDocument();
+    expect(screen.getByText(/not a walkthrough of the current Beta/)).toBeVisible();
+    expect(screen.getByText("Concept · 25 sec")).toBeVisible();
     expect(video).toHaveAttribute("aria-describedby", "vision-boundary");
+    expect(screen.getByRole("button", { name: "Play the vision" })).toBeVisible();
+  });
+  it("hides the play prompt once playback starts and restores it when the video ends", () => {
+    render(<Home/>);
+    const video = screen.getByLabelText("MoveBooks AI Product Vision");
+    fireEvent.play(video);
+    expect(screen.queryByRole("button", { name: "Play the vision" })).not.toBeInTheDocument();
+    fireEvent.ended(video);
+    expect(screen.getByRole("button", { name: "Play the vision" })).toBeVisible();
   });
   it("ships one bounded H.264 fast-start asset and a small poster", () => {
     const root = resolve(process.cwd(), "public/media");

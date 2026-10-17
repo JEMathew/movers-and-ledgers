@@ -17,6 +17,7 @@ export function MemberProgress({ view }: { view?: SessionView }) {
     });
   return <section id="progress" className="member-progress" aria-labelledby="progress-title">
     <h2 id="progress-title">Migration progress</h2>
+    <div className="member-meter" aria-hidden="true">{items.map((item, i) => <span key={i} data-state={item.props["data-state"]}/>)}</div>
     <p>{verified ? "Five phases complete · verified synthetic result" : current !== null ? `${current + 1} of 5 · ${phases[current].name}${blocked ? " · Blocked" : ""}` : "No progress assumed"}</p>
     <ol aria-label="Five-phase migration journey">{items}</ol>
     <details className="member-progress-mobile"><summary>Five phases and history</summary><ol aria-label="Five-phase migration journey">{items}</ol></details>
