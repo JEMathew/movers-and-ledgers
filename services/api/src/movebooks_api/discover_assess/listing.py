@@ -16,6 +16,9 @@ from uuid import UUID
 DEFAULT_LIMIT = 20
 MAX_LIMIT = 50
 MAX_SCAN_ROWS = 200
+# Rows the database may order by creation time (it parses each owner snapshot server-side).
+# Above this, or when any row is unreadable, listing falls back to the bounded scan below.
+MAX_SORT_ROWS = 1000
 MAX_DECODED_BYTES = 32 * 1024 * 1024
 CURSOR_VERSION = 1
 
@@ -53,9 +56,13 @@ def sort_key(item: MigrationSummary) -> tuple[str, str]:
     return (item.created_at, item.id)
 
 
-def encode_cursor(owner: str, last: MigrationSummary) -> str:
-    raw = json.dumps([CURSOR_VERSION, owner_tag(owner), last.created_at, last.id])
+def encode_cursor_at(owner: str, created_at: str, session_id: str) -> str:
+    raw = json.dumps([CURSOR_VERSION, owner_tag(owner), created_at, session_id])
     return base64.urlsafe_b64encode(raw.encode()).decode().rstrip("=")
+
+
+def encode_cursor(owner: str, last: MigrationSummary) -> str:
+    return encode_cursor_at(owner, last.created_at, last.id)
 
 
 def decode_cursor(owner: str, cursor: str) -> tuple[str, str]:

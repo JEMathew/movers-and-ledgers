@@ -4,8 +4,21 @@ import hashlib
 import json
 import threading
 
-from sqlalchemy import Column, MetaData, String, Table, Text, insert, select, update
-from sqlalchemy.exc import DatabaseError, IntegrityError
+from sqlalchemy import (
+    Column,
+    MetaData,
+    String,
+    Table,
+    Text,
+    cast,
+    func,
+    insert,
+    select,
+    tuple_,
+    update,
+)
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.exc import DatabaseError, IntegrityError, OperationalError
 
 from domain.discovery_assessment.models import MigrationSession
 from movebooks_api.discover_assess import listing
@@ -132,8 +145,79 @@ class SqlSessionRepository:
             raise ValueError("Stored session integrity check failed")
         return decode(row[0], owner_subject) if row else None
 
+    def _created_at_expr(self):
+        """Creation time inside the stored snapshot (there is no created_at column)."""
+        name = self.engine.dialect.name
+        if name == "postgresql":
+            return cast(sessions.c.snapshot, JSONB)["session"]["created_at"].astext
+        if name == "sqlite":
+            return func.json_extract(sessions.c.snapshot, "$.session.created_at")
+        return None
+
+    def _list_ordered(self, owner_subject, *, after, limit):
+        """Exact newest-first order computed by the database; only the page is decoded here.
+
+        The owner filter stays in the WHERE clause. Returns None to request the bounded scan:
+        unsupported dialect, too many rows to order server-side, or any unreadable snapshot.
+        """
+        created = self._created_at_expr()
+        if created is None:
+            return None
+        with self.engine.connect() as connection:
+            total = connection.execute(
+                select(func.count()).select_from(sessions).where(sessions.c.owner == owner_subject)
+            ).scalar_one()
+            if total > listing.MAX_SORT_ROWS:
+                return None
+            query = select(sessions.c.id, created.label("created")).where(
+                sessions.c.owner == owner_subject
+            )
+            if after is not None:
+                query = query.where(tuple_(created, sessions.c.id) < tuple_(*after))
+            rows = connection.execute(
+                query.order_by(created.desc(), sessions.c.id.desc()).limit(limit + 1)
+            ).all()
+            window = rows[:limit]
+            items, skipped, decoded = [], 0, 0
+            for row_id, _created in window:
+                snapshot = connection.execute(
+                    select(sessions.c.snapshot).where(
+                        sessions.c.id == row_id, sessions.c.owner == owner_subject
+                    )
+                ).scalar_one_or_none()
+                if snapshot is None:
+                    continue
+                decoded += len(snapshot)
+                if decoded > listing.MAX_DECODED_BYTES:
+                    return None
+                try:
+                    items.append(listing.summarize_snapshot(snapshot, row_id, owner_subject))
+                except (ValueError, KeyError, TypeError):
+                    skipped += 1
+        more = len(rows) > limit and bool(window)
+        return listing.MigrationPage(
+            items=items,
+            next_cursor=listing.encode_cursor_at(owner_subject, window[-1][1], window[-1][0])
+            if more
+            else None,
+            incomplete=False,
+            reason=None,
+            scanned=len(window),
+            skipped=skipped,
+        )
+
     def list_for_owner(self, owner_subject, *, after=None, limit=listing.DEFAULT_LIMIT):
-        """Owner filter lives in SQL. Bounded by rows scanned and snapshot bytes decoded."""
+        """Owner-scoped listing, newest first. Never omits a recent session silently."""
+        try:
+            page = self._list_ordered(owner_subject, after=after, limit=limit)
+        except (DatabaseError, OperationalError):
+            page = None  # e.g. an unreadable snapshot: the bounded scan skips and counts it
+        if page is not None:
+            return page
+        return self._list_by_scan(owner_subject, after=after, limit=limit)
+
+    def _list_by_scan(self, owner_subject, *, after, limit):
+        """Fallback: bounded scan of owner rows (by id) with client-side ordering."""
         with self.engine.connect() as connection:
             ids = [
                 row[0]

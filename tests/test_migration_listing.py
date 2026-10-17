@@ -1,6 +1,7 @@
 """Owner-scoped migration listing: isolation, ordering, cursors, bounds, durability."""
 
 import json
+import os
 
 import pytest
 from fastapi.testclient import TestClient
@@ -18,12 +19,21 @@ SAMPLE = "harbor-light-migrate-demo"
 A, B = "firebase:account-a", "firebase:account-b"
 
 
-@pytest.fixture
-def sql(tmp_path):
-    url = f"sqlite:///{tmp_path / 'm.db'}"
-    engine = create_engine(url)
+@pytest.fixture(params=["sqlite", "postgres"])
+def sql(request, tmp_path):
+    """SQLite always; PostgreSQL too when MOVEBOOKS_TEST_POSTGRES_URL is set."""
+    if request.param == "postgres":
+        url = os.environ.get("MOVEBOOKS_TEST_POSTGRES_URL")
+        if not url:
+            pytest.skip("MOVEBOOKS_TEST_POSTGRES_URL not set")
+        engine = create_engine(url)
+        metadata.drop_all(engine)
+    else:
+        url = f"sqlite:///{tmp_path / 'm.db'}"
+        engine = create_engine(url)
     metadata.create_all(engine)
-    return url, SqlSessionRepository(engine)
+    yield url, SqlSessionRepository(engine)
+    engine.dispose()
 
 
 @pytest.fixture
@@ -160,6 +170,7 @@ def test_scan_limit_is_reported_never_silent(api, monkeypatch):
     client, svc, _, _ = api
     for i in range(4):
         svc.create_session(A, SAMPLE, f"a{i}")
+    monkeypatch.setattr(listing, "MAX_SORT_ROWS", 0)  # force the bounded-scan fallback
     monkeypatch.setattr(listing, "MAX_SCAN_ROWS", 3)
     body = client.get("/v1/migration-sessions").json()
     assert body["incomplete"] is True and body["reason"] == "scan_limit" and len(body["items"]) == 3
@@ -193,3 +204,90 @@ def test_in_memory_repository_matches_contract():
     svc.create_session(B, SAMPLE, "b0")
     page = repo.list_for_owner(A)
     assert [i.id for i in page.items] == [str(mine.id)] and not page.incomplete
+
+
+def _clone_rows(repo, template_id, owner, count, start=0):
+    """Add `count` sessions for `owner` by cloning one real snapshot (rising created_at)."""
+    with repo.engine.connect() as c:
+        raw = c.execute(sessions.select().where(sessions.c.id == str(template_id))).one()
+    base = json.loads(raw.snapshot)
+    ids = []
+    with repo.engine.begin() as c:
+        for n in range(start, start + count):
+            doc = json.loads(json.dumps(base))
+            sid = f"{n:08x}-0000-4000-8000-000000000000"
+            doc["owner"] = owner
+            doc["session"]["id"] = sid
+            doc["session"]["created_at"] = f"2026-10-01T00:{n // 60:02d}:{n % 60:02d}+00:00"
+            c.execute(
+                sql_insert(sessions).values(
+                    id=sid,
+                    owner=owner,
+                    digest="x",
+                    snapshot=json.dumps(doc, sort_keys=True, separators=(",", ":")),
+                )
+            )
+            ids.append(sid)
+    return ids
+
+
+def _drain(client, limit=50):
+    seen, cursor, pages = [], None, 0
+    while True:
+        qs = f"?limit={limit}" + (f"&cursor={cursor}" if cursor else "")
+        body = client.get("/v1/migration-sessions" + qs).json()
+        seen += [i["id"] for i in body["items"]]
+        pages += 1
+        assert body["incomplete"] is False
+        cursor = body["next_cursor"]
+        if not cursor:
+            return seen, pages
+
+
+def test_recent_sessions_not_omitted_beyond_scan_limit(api):
+    client, svc, who, repo = api
+    template = svc.create_session(A, SAMPLE, "t")
+    ids = _clone_rows(repo, template.id, A, listing.MAX_SCAN_ROWS + 60)
+    newest = svc.create_session(A, SAMPLE, "newest")  # random id; newest created_at
+    other = svc.create_session(B, SAMPLE, "b0")
+    first = client.get("/v1/migration-sessions?limit=5").json()
+    assert first["items"][0]["id"] == str(newest.id)
+    assert first["incomplete"] is False
+    seen, pages = _drain(client, 50)
+    # clones are dated 2026-10-01; the real sessions are newer, template older than "newest"
+    expected = [str(newest.id), str(template.id), *reversed(ids)]
+    assert seen == expected
+    assert len(seen) == len(set(seen))
+    assert str(other.id) not in seen and pages > 1
+
+
+def test_sql_ordering_cursor_remains_owner_bound(api):
+    client, svc, who, repo = api
+    template = svc.create_session(A, SAMPLE, "t")
+    _clone_rows(repo, template.id, A, 30)
+    cursor = client.get("/v1/migration-sessions?limit=10").json()["next_cursor"]
+    assert cursor
+    as_user(who, B)
+    assert client.get(f"/v1/migration-sessions?cursor={cursor}").status_code == 400
+
+
+def test_unreadable_snapshot_falls_back_and_is_counted(api):
+    client, svc, who, repo = api
+    good = svc.create_session(A, SAMPLE, "a0")
+    with repo.engine.begin() as c:
+        c.execute(
+            sql_insert(sessions).values(id="zzzz-bad", owner=A, digest="x", snapshot="{not json")
+        )
+    body = client.get("/v1/migration-sessions").json()
+    assert [i["id"] for i in body["items"]] == [str(good.id)]
+    assert body["skipped"] == 1 and body["incomplete"] is False
+
+
+def test_over_sort_limit_uses_bounded_scan_and_flags_incomplete(api, monkeypatch):
+    client, svc, who, repo = api
+    template = svc.create_session(A, SAMPLE, "t")
+    _clone_rows(repo, template.id, A, 12)
+    monkeypatch.setattr(listing, "MAX_SORT_ROWS", 5)
+    monkeypatch.setattr(listing, "MAX_SCAN_ROWS", 8)
+    body = client.get("/v1/migration-sessions").json()
+    assert body["incomplete"] is True and body["reason"] == "scan_limit"
