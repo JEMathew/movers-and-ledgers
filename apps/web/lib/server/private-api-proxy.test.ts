@@ -84,6 +84,25 @@ describe("private API proxy", () => {
     expect((await proxyRequest(request(`/api/v1/migration-sessions${search}`), config, dependencies)).status).toBe(404);
     expect(dependencies.fetch).not.toHaveBeenCalled();
   });
+  it("forwards only normalized allowlisted values and refuses smuggling and path variants", async () => {
+    const cursor = "a".repeat(300);
+    for (const [search, forwarded] of [
+      ["?lim%69t=20", "?limit=20"], ["?limit=%32%30", "?limit=20"], ["?limit=50", "?limit=50"],
+      [`?cursor=${cursor}`, `?cursor=${cursor}`], ["?&", ""],
+    ] as const) {
+      vi.mocked(dependencies.fetch).mockClear();
+      expect((await proxyRequest(request(`/api/v1/migration-sessions${search}`), config, dependencies)).status).toBe(200);
+      expect(vi.mocked(dependencies.fetch).mock.calls[0][0]).toBe(`${config.upstream}/v1/migration-sessions${forwarded}`);
+    }
+    vi.mocked(dependencies.fetch).mockClear();
+    for (const route of [
+      "/api/v1/migration-sessions?limit=20%26owner%3Dx", "/api/v1/migration-sessions?limit=20;owner=x",
+      "/api/v1/migration-sessions?limit=+20", "/api/v1/migration-sessions?limit=", "/api/v1/migration-sessions?limit",
+      "/api/v1/migration-sessions?LIMIT=20", "/api/v1/migration-sessions/?limit=20", `/api/v1/migration-sessions%2F${id}?limit=20`,
+    ]) expect((await proxyRequest(request(route), config, dependencies)).status).toBe(404);
+    expect((await proxyRequest(request("/api/v1/migration-sessions?limit=20", { headers: { "Sec-Fetch-Site": "cross-site" } }), config, dependencies)).status).toBe(403);
+    expect(dependencies.fetch).not.toHaveBeenCalled();
+  });
   it("keeps query strings refused on every other route and method", () => {
     expect(allowedQuery("GET", `/v1/migration-sessions/${id}`, "?limit=5")).toBeNull();
     expect(allowedQuery("POST", "/v1/migration-sessions", "?limit=5")).toBeNull();

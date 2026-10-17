@@ -25,7 +25,7 @@ Do not say: "13 autonomous agents", "AI migrates your books", or that the public
 | Offline Advisor + Reviewer demo | `evidence/agents/offline-advisor-reviewer-demo.json` | `09a8d01` | Local, no model | Reviewer CHALLENGED; baseline REVIEW_REQUIRED |
 | Backend tests | `tests/` | `09a8d01` | Local (venv with `.[cloud,agents]`) | 663 passed, 0 failed, 86 skipped. Without the optional Google libraries: 26 import failures only |
 | Listing tests incl. PostgreSQL 16 | `tests/test_migration_listing.py` | `35183a2` | Local | 33 passed (SQLite + Postgres) |
-| Web tests, lint, typecheck, build | `apps/web` | `09a8d01` | Local | 696/696 (52 files); lint, `tsc`, production build pass |
+| Web tests, lint, typecheck, build | `apps/web` | final HEAD | Local | 697/697 (52 files); lint, `tsc`, production build pass |
 | Proxy fix for the migration list in Firebase mode | `apps/web/lib/server/*` | `5b5d736` | Local production build | Smoke 7/7 after; 6/7 before (`404`) — `docs/release/evidence/smoke-*.txt` |
 | Dependency audits | `docs/release/evidence/` | `fa13e9e` | Local | npm prod 0 vulnerabilities (145 pkgs); pip-audit 0 known (141 pkgs) |
 | Release scripts | `scripts/release/`, `docs/release/RELEASE-RUNBOOK.md` | `fa13e9e` | Local (source checks only) | Integrity checks refuse wrong commit / tampered tree / tampered archive |
@@ -42,3 +42,6 @@ Do not say: "13 autonomous agents", "AI migrates your books", or that the public
 
 ## Still open (each needs the owner or an approval)
 Contact field on deck slide 1 · bounded live Gemini run (`docs/release/LIVE-GEMINI-RUN.md`) · image build + Grype scan in Cloud Shell · push · no-traffic deploy + smoke · real Google sign-in and two-account check · promotion · video upload (public link) · portal submission and receipt.
+
+## Independent security review
+A separate reviewer (no access to these conclusions) checked the proxy change against ~30 edge cases through the real `proxyRequest`: query smuggling, encodings, duplicate keys, path variants, other routes/methods, cross-owner cursors, origin/auth/header/body limits. Result: nothing exploitable; P2 suggestions applied (no bare `?` forwarded; edge-case tests added). Smoke after the change: `docs/release/evidence/smoke-after-final.txt` (7/7).

@@ -54,5 +54,6 @@ export function allowedQuery(method: string, path: string, search: string): stri
     else if (key === "cursor" && /^[A-Za-z0-9_-]{1,300}$/.test(value)) forwarded.set(key, value);
     else return null;
   }
-  return `?${forwarded.toString()}`;
+  const query = forwarded.toString();
+  return query ? `?${query}` : "";
 }

@@ -1,0 +1,8 @@
+PASS  web landing page (200)
+PASS  web workspace page serves (client-side sign-in) (200)
+PASS  proxy identity needs Google sign-in (401)
+PASS  proxy exposes migration list (auth required) (401)
+PASS  proxy refuses unknown list query (404)
+PASS  proxy refuses unexposed route (404)
+PASS  proxy refuses origin-less write (403)
+RESULT: 7 passed, 0 failed
