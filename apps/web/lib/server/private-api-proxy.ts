@@ -1,4 +1,4 @@
-import { allowedRoute, cloudIntake } from "./proxy-policy";
+import { allowedQuery, allowedRoute, cloudIntake } from "./proxy-policy";
 
 export type ProxyConfig = { upstream: string; publicOrigin: string; projectId: string; additionalOrigins?: string[] };
 export type ProxyDependencies = {
@@ -59,7 +59,8 @@ async function boundedBody(stream: ReadableStream<Uint8Array> | null, limit: num
 export async function proxyRequest(request: Request, config: ProxyConfig, dependencies: ProxyDependencies) {
   const url = new URL(request.url);
   const path = url.pathname.replace(/^\/api/, "");
-  if (!url.pathname.startsWith("/api/v1/") || url.search ||
+  const query = allowedQuery(request.method, path, url.search);
+  if (!url.pathname.startsWith("/api/v1/") || query === null ||
       (!allowedRoute(request.method, path) && !cloudIntake(path))) return failure(404, "API route unavailable.");
   const origin = request.headers.get("origin");
   const allowedOrigins = [config.publicOrigin, ...(config.additionalOrigins ?? [])];
@@ -92,7 +93,7 @@ export async function proxyRequest(request: Request, config: ProxyConfig, depend
   try {
     // Cloud Run IAM uses this header; Firebase continues to use Authorization in the API.
     headers.set("X-Serverless-Authorization", await dependencies.workloadAuthorization(config.upstream));
-    const upstream = await dependencies.fetch(`${config.upstream}${path}`, {
+    const upstream = await dependencies.fetch(`${config.upstream}${path}${query}`, {
       method: request.method, headers, body: body ? Buffer.from(body) : undefined,
       cache: "no-store", redirect: "error", signal: AbortSignal.timeout(60_000),
     });
