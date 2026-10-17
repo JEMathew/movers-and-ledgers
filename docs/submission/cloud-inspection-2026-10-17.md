@@ -65,7 +65,7 @@ configuration and onboarding requests, followed by a normal application shutdown
 It does not prove current signed-in execution, no errors outside that displayed window, candidate
 acceptance or model activity. Request/session identifiers and raw records are omitted here.
 
-## Unintended Firestore API activation — correction approval pending
+## Unintended Firestore API activation — owner elected to retain it
 
 1. The full enabled-service inventory initially omitted Firestore. The
    [Firestore API library detail](https://console.cloud.google.com/apis/library/firestore.googleapis.com?project=movebooks-ai)
@@ -78,8 +78,7 @@ acceptance or model activity. Request/session identifiers and raw records are om
    yet,” alongside its API error. This is not an authoritative successful database enumeration.
    The agent did not create or modify a database, index, rule or policy.
 5. The agent disclosed the incident and requested separate explicit approval to disable only
-   `firestore.googleapis.com`, restoring the prior state. **Approval is pending; no rollback was
-   performed.** Do not revisit a product landing page that can auto-enable a disabled service.
+   `firestore.googleapis.com`, restoring the prior state. The owner subsequently directed that the API remain enabled; **no rollback was performed**. Do not revisit a product landing page that can auto-enable a disabled service.
 
 Current API-enabled status is **not** evidence of an activated operational backend. The candidate's
 Firestore controls/readback remain undeployed and unprovisioned. Database existence/region, indexes,
@@ -90,5 +89,8 @@ rules, workload access, transaction behavior and owner isolation remain unverifi
 Read-only inventory supplies current serving revision/configuration and bounded IAM/API/health
 observations. It does not authorize live-model activation, Firestore provisioning, IAM changes,
 backup/HA changes, candidate deployment, public uploads or publication. Overall submission stays
-No-Go for its remaining mandatory inputs and release gates. Resolve the accidental API state with
-the user, evaluate the imminent model retirement, and prepare exact scoped changes for review.
+No-Go for its remaining mandatory inputs and release gates. The owner resolved the API state by retaining enablement. Evaluate the imminent model retirement, and prepare exact scoped changes for review.
+
+## Owner disposition after inspection
+
+The user explicitly directed: leave `firestore.googleapis.com` enabled and do not disable it. This accepts the enabled API as the new desired baseline; it does not retroactively authorize the inspection side effect. [Structured drift record](../../infra/firestore/api-drift-record.json). Database creation, IAM, service deployment and other configuration remain unapproved. The [concrete provisioning proposal](../security/firestore-provisioning-proposal.md) must be reviewed before any provisioning.

@@ -1,6 +1,6 @@
 # Bounded model controls — local implementation candidate
 
-17 October 2026. Implementation owner: integration. **No infrastructure or public activation has occurred.**
+17 October 2026. Implementation owner: integration. **No database, IAM, deployment or model activation has occurred.** The API was auto-enabled during inspection and the owner subsequently directed it remain enabled; [drift record](../../infra/firestore/api-drift-record.json).
 
 The existing five-context advisor remains synthetic-only and user-triggered. The separate account
 Reviewer challenges a proposal without consuming the advisor's output. Neither has business-write
@@ -14,7 +14,7 @@ Missing configuration, SDK/access failure, malformed counters, missing policy, d
 quota exhaustion and budget exhaustion produce a visible deterministic fallback with zero calls.
 Session CAS reservations also prevent a concurrent identical request from calling twice.
 
-Native asynchronous Firestore RPCs have explicit read deadlines. Admission has a two-second total deadline and at most two active reservations per event loop, including slow cancellation cleanup. ADC initialization runs off the event loop and is cached once per project/loop; caller timeout cannot start duplicate credential discovery. A timeout returns fallback without inference; a late reservation is conservatively retained. Channels are reused and closed at application shutdown.
+Native asynchronous Firestore RPCs have explicit read deadlines. Admission has a two-second total deadline and at most two active reservations per event loop, including slow cancellation cleanup. ADC initialization runs off the event loop and is cached once per project/database/loop; caller timeout cannot start duplicate credential discovery. A timeout returns fallback without inference; a late reservation is conservatively retained. Channels are reused and closed at application shutdown.
 
 A Firestore transaction reads policy, owner/day usage, global/day usage and a unique reservation;
 it atomically writes owner/global counters and a reservation. Two model calls and the full
@@ -32,7 +32,7 @@ limits and do not imply public quota enforcement.
 ## Deployment prerequisites (all pending)
 
 - Approve infrastructure and IAM changes explicitly; no setup script enables the service.
-- Enable/provision the intended Firestore database only under that approval; verify regional and
+- Provision the intended Firestore database only under that approval; verify regional and
   retention requirements. Do not grant client SDK or public access to control documents.
 - Grant the workload narrowly reviewed data access. Client Firestore rules must deny these
   collections; server Admin SDK IAM remains a separate authority.
@@ -63,3 +63,7 @@ Source integration `1a24a2c` adds owner-filtered readback, explicit refresh in o
 Evidence, controlled reservation/outcome states and a strict response projection. Source rules
 deny all direct client reads/writes; source indexes are unprovisioned. These are not financial
 audit records, model-call proof or real-cloud acceptance. See [activity evidence](operational-activity-delivery.md).
+
+`dac9815` explicitly selects `MOVEBOOKS_FIRESTORE_DATABASE` (proposed `movebooks-operations`) and caches clients by project/database. No database is created by the SDK initializer. Terminal updates carry the read snapshot update-time precondition; competing stale writes fail without refunds or financial effect. [Provisioning proposal](firestore-provisioning-proposal.md) separates dormant resources, IAM verification and runtime activation.
+
+`0c189f2` also rejects Firestore emulator routing in cloud modes, matching the existing identity-emulator prohibition. Local emulator testing, when a Java runtime is available, must use an explicitly isolated test configuration; no cloud-mode bypass is introduced.

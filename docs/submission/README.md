@@ -12,13 +12,14 @@ Reviewable content package, 17 October 2026. **Not a completed official submissi
 - [Machine-readable evidence manifest](evidence-manifest.json)
 - [Independent Product Quality Judge](product-quality-judge.md)
 - [Current cloud inspection and disclosed Firestore auto-enablement incident](cloud-inspection-2026-10-17.md)
+- [Firestore provisioning proposal](../security/firestore-provisioning-proposal.md), including retained API drift, costs and staged approval
 - [Scoped cloud validation and release authorization plan](release-authorization-plan.md)
 - [Packaging status and open submission checks](packaging-status.md)
 - [Packaging validation record](packaging-validation.json)
 - [Independent model-control and Reviewer review](independent-model-control-review.md), 36 focused checks passed
 - [PM artifact index](../product-management/README.md), [Working Backwards](../working-backwards/README.md), [editable diagrams](../architecture-experience/README.md)
 
-The PPTX retains editable text and a native architecture diagram. It includes authentic local Play, independent-review and verified-FPU screenshots. The PDF is a faithful raster export of the rendered deck, **1,412,574 bytes**, 15 pages. Native PowerPoint desktop behavior has not been tested. No invented customer impact, adoption, accuracy, competitor result or financial cost appears. Final local regression: **584 backend passed / 58 skipped**, **674 frontend passed / 51 files**, lint, types and production build passed; complete latest-source browser acceptance passed **17/17**, and Play passed **14/14**. [Finalization checks](evidence/presentation-finalization.json) passed package, geometry, font and first-party import validation.
+The PPTX retains editable text and a native architecture diagram. It includes authentic local Play, independent-review and verified-FPU screenshots. The PDF is a faithful raster export of the rendered deck, **1,412,574 bytes**, 15 pages. Native PowerPoint desktop behavior has not been tested. No invented customer impact, adoption, accuracy, competitor result or financial cost appears. Deck evidence checkpoint: **584 backend passed / 58 skipped**, **674 frontend passed / 51 files**, lint, types and production build passed; complete browser acceptance on `1a24a2c` passed **17/17**, and Play passed **14/14**. The subsequent control-only source `0c189f2` passed **594 backend / 58 skipped**; the deck, frontend and browser evidence retain their exact earlier checkpoints. [Finalization checks](evidence/presentation-finalization.json) passed package, geometry, font and first-party import validation.
 
 The video records API `fffd14c`; the newer source `1a24a2c` has a separate full acceptance run. Gemini/Reviewer explanations in the footage use explicitly labeled deterministic fallbacks. The final architecture segment is source evidence rather than a live cloud-console session. Public video publication and current cloud acceptance remain gated.
 

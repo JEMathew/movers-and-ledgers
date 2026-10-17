@@ -10,7 +10,9 @@ signed-in execution. Current environment has no usable ADC credentials or gcloud
 Scope the work to project `movebooks-ai` and workload
 `movebooks-beta-api@movebooks-ai.iam.gserviceaccount.com`. The user directly authorized read-only console inspection on 17 October 2026. The earlier automatic browser approval block is resolved. [Current inspection and its limits](cloud-inspection-2026-10-17.md) record serving revisions, deterministic-only configuration, project Allow-role labels, API state, historical logs and Cloud SQL health. Local CLI/ADC remains unavailable. No fresh workload inference or financial journey was performed.
 
-**Incident:** opening the Firestore database inventory automatically enabled `firestore.googleapis.com` despite no Enable action. This exceeded read-only scope; it was disclosed immediately. Separate permission to restore the API to disabled is pending. No database, IAM or deployment change was made. Avoid any product page that can auto-enable disabled services.
+**Incident:** opening the Firestore database inventory automatically enabled `firestore.googleapis.com` despite no Enable action. This exceeded read-only scope; it was disclosed immediately. The owner explicitly elected to retain it enabled and forbade disabling it. The [drift record](../../infra/firestore/api-drift-record.json) records that disposition. No database, IAM or deployment change was made. Avoid any product page that can auto-enable disabled services.
+
+[Firestore provisioning proposal](../security/firestore-provisioning-proposal.md) now supplies exact dormant resource/rule/index/policy, later conditional IAM, costs and rollback for review. No provisioning approval has been received.
 
 **Model gate:** Google's documentation lists `gemini-2.5-flash` retirement on 20 October2026. Evaluate a supported regional replacement with the existing safety/structured-output contract and current price bounds before proposing live configuration. The API remains deterministic-only.
 

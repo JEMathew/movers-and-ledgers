@@ -1,0 +1,7 @@
+{
+  "document": "movebooks_model_controls/policy",
+  "data": {
+    "enabled": false,
+    "synthetic_beta_authorized": false
+  }
+}

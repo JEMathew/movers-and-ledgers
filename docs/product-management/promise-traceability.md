@@ -59,3 +59,5 @@ cloud validation is not credited. Recorded full financial UI evidence retains it
 commit in the footage manifest rather than being relabeled as an unperformed cloud operation.
 
 Final local video acceptance: [231.88-second authentic captioned footage](../submission/assets/working-product-demo.webm) meets the 3–4 minute duration requirement. Its [manifest](../submission/browser-journey/recording/video-manifest.json) identifies API `fffd14c`; the separate latest-source `1a24a2c` browser run passed 17/17 checks. A public video URL remains release-gated. The final regression totals above supersede the earlier 559/658 checkpoint.
+
+Control-only source `0c189f2`:594backend passed/58skipped; explicit named-database selection/cache separation and terminal-write preconditions now tested. [Firestore proposal](../security/firestore-provisioning-proposal.md) records retained API drift and dormant setup pending approval. General migration-phase Firestore event replication remains a required gap under MB-11; current Firestore source covers advisory reservation/outcome activity, and SQL retains authoritative workflow activity.

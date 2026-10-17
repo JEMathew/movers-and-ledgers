@@ -1,0 +1,9 @@
+{
+  "firestore": [
+    {
+      "database": "movebooks-operations",
+      "rules": "firestore.rules",
+      "indexes": "firestore.indexes.json"
+    }
+  ]
+}

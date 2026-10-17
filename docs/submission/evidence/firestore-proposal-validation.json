@@ -1,0 +1,14 @@
+{
+  "status": "PASS_LOCAL_ONLY",
+  "source_commit": "0c189f2",
+  "full_backend_passed": 594,
+  "full_backend_skipped": 58,
+  "focused_passed": 105,
+  "proposal_config_hashes_verified": 7,
+  "cost_scenario_usd": 0.2426275,
+  "cloud_resources_applied": false,
+  "iam_applied": false,
+  "database_created": false,
+  "emulator_live_tests": "NOT_RUN_JAVA_RUNTIME_UNAVAILABLE",
+  "api_desired_state": "ENABLED_OWNER_RETAINED"
+}

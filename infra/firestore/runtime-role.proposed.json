@@ -1,0 +1,12 @@
+{
+  "title": "MoveBooks operational runtime",
+  "description": "Application operational records only; grant solely with the exact named-database condition. No delete, database admin, index admin or IAM permissions.",
+  "stage": "GA",
+  "includedPermissions": [
+    "datastore.databases.get",
+    "datastore.entities.get",
+    "datastore.entities.list",
+    "datastore.entities.create",
+    "datastore.entities.update"
+  ]
+}

@@ -9,7 +9,7 @@ returns UNAVAILABLE on initialization/query errors, deadline or exhausted read c
 credential, request, prompt or owner text is returned. Integration now wires the router, authenticated GET proxy allowlist and the owner-keyed Trust
 Evidence subtree. Reservation and completion instrumentation is connected; financial flows are unchanged.
 
-Enabled reads reuse `await configured_controls(settings)` and its per-loop/project cached
+Enabled reads reuse `await configured_controls(settings)` and its per-loop/project/database cached
 AsyncClient, including cached off-loop ADC initialization. A maximum two-second total read deadline
 covers initialization plus the query, and two shared read slots bound outstanding work including
 SDK cancellation cleanup. Query: collection `movebooks_model_controls`, equality FieldFilter on
@@ -60,3 +60,5 @@ terminal advisory metadata is recorded after session CAS and does not refund or 
 Independent mapping-review operations use their own allowlisted capability. A proxy regression
 verifies authenticated GET, no owner-header forwarding and denied POST. Live index/rule/IAM and
 transaction/readback validation remain unperformed; all infrastructure stays disabled/unchanged.
+
+Follow-up `0c189f2`: explicit named-database routing, database-specific client cache and update-time-conditional completion prevent default-database access and stale terminal overwrites. Cloud mode rejects Firestore emulator routing. Full backend594passed/58skipped; live/emulator verification remains pending. The API is retained enabled by owner direction, without database provisioning or runtime activation. See [proposal](firestore-provisioning-proposal.md).

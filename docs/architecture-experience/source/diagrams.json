@@ -758,7 +758,7 @@
       ],
       [
         "firestore",
-        "Firestore: API auto-enabled by console; restoration approval pending; no active backend"
+        "Firestore: API enabled, owner retained; named database and activation approval pending"
       ],
       [
         "gcs",

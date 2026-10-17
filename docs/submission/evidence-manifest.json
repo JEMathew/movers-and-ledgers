@@ -2,20 +2,22 @@
   "version": "submission-evidence-v1",
   "date": "2026-10-17",
   "timezone": "Asia/Kolkata",
-  "code_commit": "1a24a2c",
+  "code_commit": "0c189f2",
   "branch": "delivery/submission-integration",
   "overall_submission": "NO_GO",
   "public_beta_modified": false,
   "deployment_authorized": false,
-  "source_status": "Local committed implementation candidate; final documentation/media checkpoint follows core code 1a24a2c; no public branch publication",
+  "source_status": "Local unpublished core0c189f2; existing deck/media retain earlier recorded checkpoints; no public branch publication",
   "verification": {
     "backend": {
       "command": "python -m pytest -q",
-      "passed": 584,
+      "passed": 594,
       "skipped": 58,
       "warnings": 1,
       "evidence": "docs/submission/evidence/backend-tests.txt",
-      "limitations": "Skipped PostgreSQL/external gates not passed"
+      "limitations": "Skipped PostgreSQL/external gates not passed",
+      "seconds": 23.17,
+      "code_commit": "0c189f2"
     },
     "frontend": {
       "commands": [
@@ -84,8 +86,18 @@
     "presentation_finalization": "docs/submission/evidence/presentation-finalization.json",
     "repository_checks": {
       "status": "PASS",
-      "output": "Checked 132 Markdown files and 607 text files; 0 findings.",
-      "evidence": "docs/submission/evidence/final-asset-validation.json"
+      "output": "Checked 134 Markdown files and 618 text files; 0 findings.",
+      "evidence": "docs/submission/evidence/firestore-proposal-validation.json"
+    },
+    "control_followup": {
+      "status": "PASS",
+      "scope": "Named database/cache isolation, SDK stale-completion precondition and cloud emulator rejection; backend594/58skips",
+      "code_commit": "0c189f2",
+      "live_firestore_tests": false,
+      "emulator": "NOT_RUN_JAVA_RUNTIME_UNAVAILABLE",
+      "focused_tests_passed": 105,
+      "focused_seconds": 6.94,
+      "evidence": "docs/submission/evidence/firestore-proposal-validation.json"
     }
   },
   "public_links": [
@@ -108,7 +120,7 @@
     "gcloud_available": false,
     "current_effective_vertex_permissions": "Project Allow row includes Agent Platform user; effective inference not tested",
     "current_supported_model_region": "Google model documentation lists asia-southeast1 for gemini-2.5-flash; retirement2026-10-20; replacement evaluation needed",
-    "firestore_activation": "API_AUTO_ENABLED_UNINTENTIONALLY_BY_DATABASE_CONSOLE; rollback approval pending; no database/operational activation",
+    "firestore_activation": "API_ENABLED_OWNER_DIRECTED_RETAIN; database/operational backend not provisioned or activated",
     "operational_activity_stream": "IMPLEMENTED_GATED_SOURCE; owner-scoped SDK-port/UI/proxy tests passed, live validation not run",
     "sql_authority": "Existing implementation; current deployed persistence acceptance unverified",
     "public_mode": "CONFIRMED_SERVING_REVISION_CONFIG_DETERMINISTIC_ONLY",
@@ -119,7 +131,12 @@
     "api_serving_revision": "movebooks-beta-api-rel2997e20",
     "web_serving_revision": "movebooks-beta-web-ux2f781012182645",
     "incident_screenshot": "docs/submission/evidence/firestore-auto-enabled-console.png",
-    "incident_screenshot_sha256": "1950077122b8081d8b64675c3d358a95d0b5b1d96ea534cd440a1f89f6a25e19"
+    "incident_screenshot_sha256": "1950077122b8081d8b64675c3d358a95d0b5b1d96ea534cd440a1f89f6a25e19",
+    "drift_record": "infra/firestore/api-drift-record.json",
+    "proposed_database": "movebooks-operations; asia-southeast1; Standard Native; NOT_PROVISIONED",
+    "provisioning_proposal": "docs/security/firestore-provisioning-proposal.md",
+    "provisioning_approval_manifest": "infra/firestore/proposal-manifest.json",
+    "migration_phase_event_mirror": "REQUIRED_IMPLEMENTATION_GAP; advisory operations implemented; SQL workflow activity independent"
   },
   "release_gates": [
     {
@@ -162,11 +179,16 @@
     },
     {
       "id": "FIRESTORE_API_RESTORE",
-      "status": "PENDING_EXPLICIT_APPROVAL_TO_DISABLE_UNINTENDED_AUTO_ENABLE"
+      "status": "RESOLVED_OWNER_DIRECTED_RETAIN_ENABLED; DO_NOT_DISABLE"
     },
     {
       "id": "MODEL_LIFECYCLE",
       "status": "GEMINI_2_5_FLASH_RETIREMENT_2026_10_20; REPLACEMENT_EVALUATION_REQUIRED"
+    },
+    {
+      "id": "FIRESTORE_PROVISIONING",
+      "status": "CONCRETE_PHASE_A_PROPOSAL_AWAITS_EXPLICIT_APPROVAL",
+      "proposal": "docs/security/firestore-provisioning-proposal.md"
     }
   ],
   "assets": [

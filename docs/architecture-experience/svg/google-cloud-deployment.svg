@@ -78,10 +78,10 @@
 <!-- firestore -->
 <g id="node7" class="node">
 <title>firestore</title>
-<path fill="#edf4ff" stroke="#2563eb" d="M1705.56,-356.6C1705.56,-356.6 1470.18,-356.6 1470.18,-356.6 1464.18,-356.6 1458.18,-350.6 1458.18,-344.6 1458.18,-344.6 1458.18,-285.8 1458.18,-285.8 1458.18,-279.8 1464.18,-273.8 1470.18,-273.8 1470.18,-273.8 1705.56,-273.8 1705.56,-273.8 1711.56,-273.8 1717.56,-279.8 1717.56,-285.8 1717.56,-285.8 1717.56,-344.6 1717.56,-344.6 1717.56,-350.6 1711.56,-356.6 1705.56,-356.6"/>
-<text xml:space="preserve" text-anchor="middle" x="1587.87" y="-330.5" font-family="Arial" font-size="17.00">Firestore: API auto&#45;enabled by</text>
-<text xml:space="preserve" text-anchor="middle" x="1587.87" y="-310.1" font-family="Arial" font-size="17.00">console; restoration approval</text>
-<text xml:space="preserve" text-anchor="middle" x="1587.87" y="-289.7" font-family="Arial" font-size="17.00">pending; no active backend</text>
+<path fill="#edf4ff" stroke="#2563eb" d="M1705.58,-356.6C1705.58,-356.6 1470.16,-356.6 1470.16,-356.6 1464.16,-356.6 1458.16,-350.6 1458.16,-344.6 1458.16,-344.6 1458.16,-285.8 1458.16,-285.8 1458.16,-279.8 1464.16,-273.8 1470.16,-273.8 1470.16,-273.8 1705.58,-273.8 1705.58,-273.8 1711.58,-273.8 1717.58,-279.8 1717.58,-285.8 1717.58,-285.8 1717.58,-344.6 1717.58,-344.6 1717.58,-350.6 1711.58,-356.6 1705.58,-356.6"/>
+<text xml:space="preserve" text-anchor="middle" x="1587.87" y="-330.5" font-family="Arial" font-size="17.00">Firestore: API enabled, owner</text>
+<text xml:space="preserve" text-anchor="middle" x="1587.87" y="-310.1" font-family="Arial" font-size="17.00">retained; named database and</text>
+<text xml:space="preserve" text-anchor="middle" x="1587.87" y="-289.7" font-family="Arial" font-size="17.00">activation approval pending</text>
 </g>
 <!-- api&#45;&gt;firestore -->
 <g id="edge6" class="edge">
