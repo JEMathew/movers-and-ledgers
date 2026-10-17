@@ -165,23 +165,17 @@ describe("public surface contracts", () => {
     expect(screen.queryByRole("link", { name: "Try a migration" })).not.toBeInTheDocument();
     for (const heading of screen.getAllByRole("heading")) expect(heading.className).not.toMatch(/uppercase|type-label|eyebrow/);
   });
-  it("teaches consequences without allowing unsafe shortcuts or changing any workflow", () => {
+  it("opens the isolated pixel office mission without changing any workflow", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<Play/>);
-    fireEvent.click(screen.getByRole("button", { name: "Start learning scenario" }));
-    fireEvent.click(screen.getByRole("button", { name: "Approve from the name alone" }));
-    expect(screen.getByText("Unsafe shortcut — try again")).toBeVisible();
-    expect(screen.queryByRole("button", { name: "Continue lesson" })).not.toBeInTheDocument();
-    for (const name of ["Check account meaning, then approve", "Review evidence and approve a bounded remedy", "Stop, investigate and revalidate"]) {
-      fireEvent.click(screen.getByRole("button", { name }));
-      fireEvent.click(screen.getByRole("button", { name: "Continue lesson" }));
-    }
-    expect(screen.getByRole("heading", { name: "Learning exercise complete" })).toBeVisible();
-    expect(screen.getByText(/This is not migration completion/)).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Start mission" }));
+    expect(screen.getByRole("group", { name: /^Navigable office/ })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Investigate the office" })).toBeVisible();
+    expect(screen.queryByRole("link", { name: /Explore Demo/ })).not.toBeInTheDocument();
     expect(fetch).not.toHaveBeenCalled();
     expect(sessionStorage.length).toBe(0);
-    fireEvent.click(screen.getByRole("button", { name: "Restart exercise" }));
-    expect(screen.getByRole("button", { name: "Start learning scenario" })).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Restart mission" }));
+    expect(screen.getByRole("button", { name: "Start mission" })).toBeVisible();
   });
   it("shows actual Trust activity, decisions, tools and checks, but never hidden payload fields", async () => {
     window.history.replaceState(null, "", `/trust?session=${id}`);
