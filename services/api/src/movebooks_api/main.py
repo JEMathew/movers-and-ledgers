@@ -17,6 +17,7 @@ from .discover_assess.validate_configure import router as validate_configure_rou
 from .intake_api import router as intake_router
 from .reasoning import router as reasoning_router
 from .reviewer import router as reviewer_router
+from .runtime.model_controls import close_model_controls
 from .runtime.observability import SafeRequestMiddleware, emit
 from .runtime.warmup import warm_cloud_dependencies
 from .settings import get_settings
@@ -28,6 +29,7 @@ settings = get_settings()
 async def lifespan(app):
     warm_cloud_dependencies(settings)
     yield
+    await close_model_controls()
     repository = discover_assess_service.repository
     if hasattr(repository, "close"):
         repository.close()

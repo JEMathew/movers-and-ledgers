@@ -65,7 +65,7 @@ async def request_review(
     control_error = None
     if route.provider == "gemini-adk":
         try:
-            reserve_live(
+            await reserve_live(
                 settings, owner, f"review:{session_id}:{request.request_id}", "mapping-review"
             )
         except ControlDenied as denied:
@@ -92,6 +92,9 @@ async def request_review(
     saved = next(r for r in current.review_records if r.request_id == request.request_id)
     saved.completed_at = datetime.now(UTC)
     saved.model_calls, saved.tool_calls = usage.model_calls, usage.tool_calls
+    saved.input_tokens, saved.output_tokens = usage.input_tokens, usage.output_tokens
+    saved.usage_status = usage.usage_status
+    saved.validation_issues, saved.response_shape = usage.validation_issues, usage.response_shape
     saved.failure_category = error
     saved.state = "FALLBACK" if error else "COMPLETED"
     try:

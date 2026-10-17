@@ -18,6 +18,7 @@ describe("PR03 authored public Demo", () => {
     const events = vi.spyOn(window, "dispatchEvent");
     render(<GuidedDemo/>);
     expect(screen.getByText(/No sign-in · No workspace changes/)).toBeVisible();
+    expect(screen.getByRole("link", {name: "Run Harbor Light Migration"})).toHaveAttribute("href", sampleEntry);
     fireEvent.click(screen.getByRole("button", { name: "Start demo" }));
     for (const [index, phase] of demoPhases.entries()) {
       expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(phase.title);
@@ -76,7 +77,7 @@ describe("PR03 authored public Demo", () => {
     expect(screen.getByText(/No real customer or production provider data/)).toBeVisible();
     fireEvent.click(screen.getByText("Demo and Beta are different"));
     expect(screen.getByRole("link", { name: "Already signed in? Open the sample assessment" })).toHaveAttribute("href", sampleEntry);
-    for (const [name, href] of [["Back to Home", "/"], ["Practice three decisions in Play", "/play"], ["Learn", "/learn"], ["Conceptual Product Vision video", "/#product-vision"]])
+    for (const [name, href] of [["Back to Home", "/"], ["Play the office mission", "/play"], ["Learn", "/learn"], ["Conceptual Product Vision video", "/#product-vision"]])
       expect(screen.getByRole("link", { name })).toHaveAttribute("href", href);
   });
   it("labels authored amounts and separates controls from AI advice", () => {

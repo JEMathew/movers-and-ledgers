@@ -4,7 +4,9 @@ Firestore is optional and disabled by default. No database or policy is auto-cre
 All reservations consume the full allowance even on timeout; there are no unsafe refunds.
 """
 
+import asyncio
 import hashlib
+import weakref
 from datetime import UTC, datetime
 
 
@@ -61,10 +63,10 @@ class FirestoreModelControls:
         if client is None:
             from google.cloud import firestore
 
-            client = firestore.Client(project=settings.google_project)
+            client = firestore.AsyncClient(project=settings.google_project)
         self.client = client
 
-    def reserve(self, owner, key, capability):
+    async def reserve(self, owner, key, capability):
         from google.cloud import firestore
 
         settings = self.settings
@@ -77,10 +79,17 @@ class FirestoreModelControls:
         global_ref = collection.document(f"global-{day}")
         reservation_ref = collection.document(f"reservation-{key_hash}")
 
-        @firestore.transactional
-        def commit(transaction):
+        @firestore.async_transactional
+        async def commit(transaction):
             policy, owner_usage, global_usage, reservation = [
-                ref.get(transaction=transaction).to_dict() or {}
+                (
+                    await ref.get(
+                        transaction=transaction,
+                        timeout=settings.model_control_timeout_seconds,
+                        retry=None,
+                    )
+                ).to_dict()
+                or {}
                 for ref in (policy_ref, owner_ref, global_ref, reservation_ref)
             ]
             new_owner, new_global = decide(
@@ -110,13 +119,50 @@ class FirestoreModelControls:
                 },
             )
 
-        commit(self.client.transaction(max_attempts=3))
+        await commit(self.client.transaction(max_attempts=3))
 
 
-def reserve_live(settings, owner, key, capability, controls=None):
+# At most two reservation tasks per event loop, including cancelled tasks still
+# cleaning up an SDK transaction. A slow rollback cannot create unbounded work.
+_control_slots = weakref.WeakKeyDictionary()
+_control_clients = weakref.WeakKeyDictionary()
+
+
+async def configured_controls(settings):
+    """One lazily authenticated client per project/loop. ADC never blocks the event loop.
+
+    The initializer stays cached even if a caller times out; another request cannot
+    launch duplicate credential discovery. Failed initialization requires restart.
+    """
+    loop = asyncio.get_running_loop()
+    clients = _control_clients.setdefault(loop, {})
+    if settings.google_project not in clients:
+        clients[settings.google_project] = asyncio.create_task(
+            asyncio.to_thread(FirestoreModelControls, settings)
+        )
+    return await asyncio.shield(clients[settings.google_project])
+
+
+async def close_model_controls():
+    """Close reused gRPC channels during application shutdown only."""
+    clients = _control_clients.pop(asyncio.get_running_loop(), {})
+    for task in clients.values():
+        if not task.done() or task.cancelled():
+            task.cancel()
+            continue
+        try:
+            adapter = task.result()
+            # AsyncClient.close() only closes HTTP in this SDK version. The generated
+            # async GAPIC transport exposes the actual gRPC close coroutine.
+            api = adapter.client.__dict__.get("_firestore_api_internal")
+            if api is not None:
+                await api.transport.close()
+        except Exception:
+            pass  # Shutdown emits no SDK/credential details.
+
+
+async def reserve_live(settings, owner, key, capability, controls=None):
     if not settings.cloud:
-        # Local test invocations keep the existing durable-per-session cap. There
-        # is no public activation or Firestore integration implied here.
         return
     if (
         settings.identity_mode != "firebase"
@@ -125,9 +171,41 @@ def reserve_live(settings, owner, key, capability, controls=None):
         or settings.model_controls_backend != "firestore"
     ):
         raise ControlDenied("public_model_controls_required")
+    loop = asyncio.get_running_loop()
+    slots = _control_slots.setdefault(loop, asyncio.Semaphore(2))
+    if slots.locked():
+        raise ControlDenied("model_controls_busy")
+    await slots.acquire()
+    task = None
+
+    def cleanup(finished):
+        slots.release()
+        if not finished.cancelled():
+            finished.exception()  # Consume failures; no provider or RPC text is logged.
+
     try:
-        (controls or FirestoreModelControls(settings)).reserve(owner, key, capability)
+
+        async def initialize_and_reserve():
+            adapter = controls or await configured_controls(settings)
+            await adapter.reserve(owner, key, capability)
+
+        task = asyncio.create_task(initialize_and_reserve())
+        task.add_done_callback(cleanup)
+        completed, _ = await asyncio.wait({task}, timeout=settings.model_control_timeout_seconds)
+        if not completed:
+            task.cancel()
+            # Do not wait for SDK rollback: capacity remains occupied until cleanup.
+            # A late durable reservation is conservatively consumed, never reused.
+            raise ControlDenied("model_controls_timeout")
+        task.result()
     except ControlDenied:
+        raise
+    except asyncio.CancelledError:
+        if task is not None:
+            task.cancel()
         raise
     except Exception:
         raise ControlDenied("model_controls_unavailable") from None
+    finally:
+        if task is None:
+            slots.release()

@@ -39,4 +39,9 @@ class ReviewRecord(StrictModel):
     evidence: list[EvidenceFact] = Field(default_factory=list)
     model_calls: int | None = None
     tool_calls: int | None = None
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+    usage_status: Literal["unknown", "partial", "complete"] = "unknown"
+    validation_issues: list[dict[str, str]] = Field(default_factory=list)
+    response_shape: dict[str, str] = Field(default_factory=dict)
     failure_category: str | None = None

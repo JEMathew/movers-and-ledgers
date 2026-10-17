@@ -119,7 +119,7 @@ async def request_advice(
     control_error = None
     if route.provider == "gemini-adk":
         try:
-            reserve_live(
+            await reserve_live(
                 settings, owner, f"advice:{session_id}:{request.request_id}", capability.value
             )
         except ControlDenied as denied:

@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     reasoning_timeout_seconds: float = Field(default=30, ge=1, le=60)
     reasoning_max_runs: int = Field(default=10, ge=1, le=10)
 
+    model_control_timeout_seconds: float = Field(default=2, ge=0.05, le=5)
     synthetic_beta_authorized: bool = False
     model_controls_backend: Literal["disabled", "firestore"] = "disabled"
     reasoning_owner_daily_calls: int = Field(default=20, ge=2, le=100)

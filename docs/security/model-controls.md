@@ -14,6 +14,8 @@ Missing configuration, SDK/access failure, malformed counters, missing policy, d
 quota exhaustion and budget exhaustion produce a visible deterministic fallback with zero calls.
 Session CAS reservations also prevent a concurrent identical request from calling twice.
 
+Native asynchronous Firestore RPCs have explicit read deadlines. Admission has a two-second total deadline and at most two active reservations per event loop, including slow cancellation cleanup. ADC initialization runs off the event loop and is cached once per project/loop; caller timeout cannot start duplicate credential discovery. A timeout returns fallback without inference; a late reservation is conservatively retained. Channels are reused and closed at application shutdown.
+
 A Firestore transaction reads policy, owner/day usage, global/day usage and a unique reservation;
 it atomically writes owner/global counters and a reservation. Two model calls and the full
 operator-configured worst-case cost allowance are consumed even on failure. No automatic refund

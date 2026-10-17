@@ -1,6 +1,8 @@
 from pathlib import Path
-from reportlab.pdfgen import canvas
+
 from reportlab.lib.utils import ImageReader
+from reportlab.pdfgen import canvas
+
 root=Path.cwd()
 out=root/'docs/submission/assets/movebooks-submission-draft.pdf'
 c=canvas.Canvas(str(out),pagesize=(960,540),pageCompression=1)

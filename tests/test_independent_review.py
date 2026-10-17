@@ -230,3 +230,27 @@ def test_real_adk_reviewer_uses_separate_output_contract_offline():
     )
     assert validate_review(output.text, context) == expected
     assert output.model_calls == 2 and output.tool_calls == 1
+
+
+def test_rejected_review_preserves_known_usage_and_sanitized_provider_failure():
+    from agents.reasoning.provider import ProviderFailure
+    from agents.reviewer.agent import review
+
+    _, session, mapping = setup()
+    context = review_context(session, mapping.id)
+
+    class Invalid:
+        async def generate(self, context, model):
+            return ProviderResult('{"secret-canary":"not-a-review"}', 1, 1, 100, 50)
+
+    finding, usage, error = asyncio.run(review(context, "test", Invalid(), 1))
+    assert error and finding.outcome == "CHALLENGED"
+    assert (usage.model_calls, usage.tool_calls, usage.input_tokens) == (1, 1, 100)
+
+    class SchemaFailure:
+        async def generate(self, context, model):
+            raise ProviderFailure(ProviderResult("", 2, 1, 130, 60), "schema_validation")
+
+    _, usage, error = asyncio.run(review(context, "test", SchemaFailure(), 1))
+    assert error == "schema_validation" and usage.model_calls == 2
+    assert "secret-canary" not in str(usage.validation_issues)

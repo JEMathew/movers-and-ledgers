@@ -25,7 +25,7 @@ describe("browser-local fallback", () => {
     fireEvent.click(screen.getByRole("checkbox", { name: /I reviewed the local results/ }));
     fireEvent.click(screen.getByRole("button", { name: "Confirm Local Review" }));
     expect(screen.getByText("Hosted Workspace Creation Is Unavailable")).toBeVisible();
-    expect(screen.getByRole("link", { name: "Explore Demo" })).toHaveAttribute("href", "/workspace");
+    expect(screen.getByRole("link", { name: "Run Harbor Light Migration" })).toHaveAttribute("href", "/assess?sample=harbor-light-migrate-demo");
     expect(screen.queryByRole("button", { name: "Continue to Assessment" })).not.toBeInTheDocument();
     expect(sessionStorage.length).toBe(0); expect(localStorage.length).toBe(0); expect(fetchMock).not.toHaveBeenCalled();
   });

@@ -4,7 +4,7 @@ import asyncio
 import json
 
 from agents.reasoning.projection import project
-from agents.reasoning.provider import ProviderResult, validate_advice
+from agents.reasoning.provider import ProviderFailure, ProviderResult, validate_advice
 from domain.reasoning.models import Advice, Capability, EvidenceFact, ReasoningInput
 from domain.reasoning.reviewer import ReviewFinding
 
@@ -136,11 +136,15 @@ class GeminiReviewProvider:
 
 
 async def review(context, model, provider, timeout):
+    usage = ProviderResult("")
     try:
         usage = await asyncio.wait_for(provider.generate(context, model), timeout)
         return validate_review(usage.text, context), usage, None
     except TimeoutError:
         return independent_check(context), ProviderResult(""), "timeout"
+    except ProviderFailure as failure:
+        # Structured ADK failures retain allowlisted counts/shape, never raw text.
+        return independent_check(context), failure.result, failure.category
     except Exception:
-        # No raw provider output/errors survive this gate.
-        return independent_check(context), ProviderResult(""), "review_unavailable_or_invalid"
+        # Preserve observed execution counts without storing raw output or exception text.
+        return independent_check(context), usage, "review_unavailable_or_invalid"
