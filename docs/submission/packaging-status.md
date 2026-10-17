@@ -8,7 +8,7 @@
 | PDF <=5 MB | Export required with final template | Actual file size, page rendering and portal acceptance |
 | Working-product video 3–4 min | 3:30 storyboard and draft captions prepared | Authentic candidate footage, final MP4 duration/audio/visual QA and accessible link |
 | Product description <=1024 chars | Prepared in product-description.txt, mechanically bounded | Reconcile final implemented/live claims and selected BFSI challenge |
-| Selected BFSI problem statement | Exact official challenge wording not supplied here | User/portal source and explicit fit statement |
+| Selected BFSI problem statement | User-confirmed: BFSI: Intelligent Risk, Fraud & Financial Experiences | [Exact statement and accounting-migration fit](problem-statement.md) |
 | Prototype URL | Existing documented Beta: https://movebooks-si.web.app | 17 October read-only HTTP 200 confirmed by integration owner; candidate version not deployed/verified, no new deployment authorized |
 | Repository URL | Existing source: https://github.com/JEMathew/movers-and-ledgers | 17 October GitHub REST 200, private:false confirmed by integration owner; candidate branch/release still separate |
 | Google Cloud evidence | Existing architecture and historical validation reused | Genuine current service/mode/permission evidence, sanitized as appropriate |

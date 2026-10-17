@@ -11,21 +11,33 @@
   "pdf_pages": 15,
   "pdf_limit_bytes": 5000000,
   "pdf_size_check": "passed",
-  "visual_review": "All draft slides inspected individually; final PDF rendered. Historical screenshots labeled. Official-template comparison unavailable.",
-  "description_characters": 1022,
+  "visual_review": "All draft slides inspected individually; changed BFSI, Play and architecture slides re-rendered in refreshed PDF and inspected. Official-template comparison unavailable.",
+  "description_characters": 953,
   "diagram_mermaid_svg_png_sets": 19,
   "relative_markdown_links": "passed",
   "mandatory_video_status": "storyboard and captions only, final authentic footage missing",
   "assets": [
     {
       "path": "docs/submission/assets/movebooks-submission-draft.pdf",
-      "bytes": 1382173,
-      "sha256": "8b0997da99632b39286b5281079eb7d404b4730f9c3538668452653ad3d20e57"
+      "bytes": 1478217,
+      "sha256": "23198da0aa1cae613ed993a60fe3f585b3fb6fe7673b6d137a99f13c54b938fb"
     },
     {
       "path": "docs/submission/assets/movebooks-submission-draft.pptx",
-      "bytes": 255193,
-      "sha256": "9001aa821794f752a75cf4693fcc0f42d77b5a86b85635c7a5e1bf1442d5dde0"
+      "bytes": 368122,
+      "sha256": "2bb68071c679b57850f1fee8c01d5550a74125a14461b69e0c35ee7b69507861"
+    },
+    {
+      "path": "docs/submission/assets/play-local-candidate.png",
+      "bytes": 115439,
+      "sha256": "24a87b2c17e1f45a2fb7f56a861c8cd10341d1e05a979b231dcd7ca5f65bbc78"
     }
-  ]
+  ],
+  "local_play_browser_checks": 14,
+  "local_backend_checkpoint": {
+    "passed": 553,
+    "skipped": 58,
+    "source": "integration-owner report; later control regressions may expand result"
+  },
+  "selected_challenge": "BFSI: Intelligent Risk, Fraud & Financial Experiences"
 }

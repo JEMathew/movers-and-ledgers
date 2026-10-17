@@ -1,17 +1,17 @@
 # Submission packaging
 
-Reviewable content package, 17 October 2026. **Not a completed official submission.** The prescribed `Submission Template | AI Builder Cup.pptx` has not been located. The editable deck below follows the supplied section list, but exact-template compliance remains open. Team roster/contact and exact selected BFSI challenge wording require owner input.
+Reviewable content package, 17 October 2026. **Not a completed official submission.** The prescribed `Submission Template | AI Builder Cup.pptx` has not been located. The editable deck below follows the supplied section list, but exact-template compliance remains open. Team roster/contact still requires owner input. The [selected BFSI challenge](problem-statement.md) is user-confirmed.
 
 - [Editable PowerPoint content draft](assets/movebooks-submission-draft.pptx)
 - [PDF content draft](assets/movebooks-submission-draft.pdf), 15 pages, below the 5 MB portal limit
-- [Product description](product-description.txt), 1,022 characters before trailing newline
+- [Product description](product-description.txt), 953 characters before trailing newline
 - [Authentic working-product video storyboard](video-storyboard.md), planned runtime 3:30
 - [Draft captions](video-captions-draft.srt), to retime against final narration
 - [Packaging status and open submission checks](packaging-status.md)
 - [Packaging validation record](packaging-validation.json)
 - [PM artifact index](../product-management/README.md), [Working Backwards](../working-backwards/README.md), [editable diagrams](../architecture-experience/README.md)
 
-The PPTX retains editable text and a native architecture diagram. Its embedded screenshots are authentic historical repository evidence and are labeled accordingly. The PDF is a faithful raster export of the rendered content deck. No PowerPoint desktop compatibility check is claimed. No invented customer impact, adoption, accuracy, competitor result or financial cost appears in the deck. Candidate screenshots and actual test results must replace or supplement historical evidence once accepted.
+The PPTX retains editable text and a native architecture diagram. It includes an authentic accepted local Play candidate capture and labeled historical journey screenshots. The PDF is a faithful raster export of the rendered content deck. No PowerPoint desktop compatibility check is claimed. No invented customer impact, adoption, accuracy, competitor result or financial cost appears in the deck. The deck records 14 passing Play browser checks and the integration owner’s local backend checkpoint of 553 passed / 58 skipped. Final accepted journey captures and subsequent test results must supplement this checkpoint.
 
 ## Reproduction
 
@@ -21,4 +21,4 @@ Use the bundled Node runtime and `@oai/artifact-tool`. Copy `source/build-deck.m
 
 ## Release conditions
 
-Import the exact official template, reconcile team/challenge fields and all candidate claims, inspect the final deck/PDF, verify the prototype and public repository links, capture an authentic accepted-candidate video and validate its 3–4 minute duration. Script, captions, conceptual artwork and historical screenshots are preparation and evidence sources, not substitutes for the required final video. Public release, model/cloud activation and hosted upload authorization remain separate gates.
+Import the exact official template, reconcile team fields and all candidate claims, inspect the final deck/PDF, verify the prototype and public repository links, capture an authentic accepted-candidate video and validate its 3–4 minute duration. Script, captions, conceptual artwork and historical screenshots are preparation and evidence sources, not substitutes for the required final video. Public release, model/cloud activation and hosted upload authorization remain separate gates.
