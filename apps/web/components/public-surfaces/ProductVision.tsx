@@ -18,6 +18,9 @@ export function ProductVision() {
       </video>
       {!playing && <button type="button" className="vision-play" onClick={() => { void video.current?.play(); }}><Play size={22} aria-hidden="true" fill="currentColor"/><span>Play the vision</span></button>}
     </div>
+    <details className="vision-transcript"><summary>Read a text description of the video</summary>
+      <p>The video shows the MoveBooks AI title with the line &ldquo;From Migration Uncertainty to Business-Ready Accounting.&rdquo; Five stages light up in turn: Understand (Discover + Assess), Prepare (Plan, Map &amp; Approve), Move (Migrate + Resolve), Verify (Validate + Configure) and Start (Onboard + First Real Task). Beneath them are three statements: &ldquo;You approve key decisions,&rdquo; &ldquo;We resolve blockers before moving forward&rdquo; and &ldquo;We verify your numbers.&rdquo; It ends on &ldquo;Business Ready · Verified.&rdquo; This describes the on-screen visuals only. No spoken captions are provided yet.</p>
+    </details>
     <p id="vision-boundary" className="vision-note">A conceptual preview of where MoveBooks AI is heading, not a walkthrough of the current Beta. Start a sample migration to use what works today.</p>
   </section>;
 }

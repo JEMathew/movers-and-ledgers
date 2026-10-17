@@ -32,7 +32,7 @@ export function MyMigration({ reference }: { reference?: string } = {}) {
       {errorKind === "identity" && <p>If Account still shows a session, sign out there and reopen this saved migration link to sign in again.</p>}
       {errorKind === "identity" ? <ActionLink label="Sign in to resume" href={`/sign-in?next=${encodeURIComponent(destination)}`} /> : <Button onClick={refresh}>Try again</Button>}
       {errorKind === "unsupported" && selectedReference && <a className="public-text-link" href={`/assess?session=${selectedReference}`}>Read original workflow</a>}
-    </section> : <div className="member-layout"><div className="member-main"><section className="member-task" aria-label="Next task"><p className="member-kicker">Your next step</p><p>{action.detail}</p><ActionLink label={action.label} href={action.href} />
+    </section> : <div className="member-layout"><div className="member-main"><section className="member-task" data-tone={view && /BLOCKED/.test(view.status) ? "warning" : undefined} aria-label="Next task"><p className="member-kicker">Your next step</p><p>{action.detail}</p><ActionLink label={action.label} href={action.href} />
       {view && <p className="member-freshness">Snapshot read {readAt ? <time dateTime={readAt}>{new Date(readAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</time> : "just now"} · <button className="member-text-button" onClick={refresh}>Refresh current state</button></p>}
     </section>
       {view && <section className="member-attention" data-tone={view.blockers.length ? "warning" : "clear"} aria-labelledby="attention-title"><h2 id="attention-title">{view.blockers.length ? <AlertTriangle size={18} aria-hidden="true"/> : <CheckCircle2 size={18} aria-hidden="true"/>}Needs attention</h2>

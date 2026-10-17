@@ -601,3 +601,9 @@ button, input, select, textarea { font: inherit; }
 .decision-flow span { font-size: .9375rem; color: var(--text-secondary); }
 @media (min-width: 760px) { .decision-flow { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } }
 @keyframes decision-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.decision-flow li { align-content: start; }
+.vision-transcript { margin-top: .5rem; font-size: .875rem; }
+.vision-transcript summary { min-height: 2.75rem; display: flex; align-items: center; cursor: pointer; font-weight: 600; color: var(--primary); }
+.vision-transcript p { padding-bottom: .5rem; line-height: 1.55; color: var(--text-secondary); }
+.member-main .member-task[data-tone="warning"] { border-left-color: var(--warning); }
+.member-task[data-tone="warning"] .member-kicker { color: var(--warning); }
