@@ -41,3 +41,7 @@ Version 1, source baseline `8f750d9`, 17 October 2026. Mermaid files and SVGs ar
 ## Important reading rules
 
 Gemini starts with an explicit user request and returns advice to that user. Advice is never automatically consumed by orchestration. Source and target adapters are separate. Transient retries occur automatically only within deterministic policy. Sensitive configuration and consequential remediations need human approval. Raw uploaded source never enters model context. Cloud SQL is financial authority. Firestore activity/operational controls do not replace audit evidence. A successful synthetic FPU outcome does not claim production provider migration.
+
+## Candidate source reconciliation
+
+The integration workstream now supplies `agents/reviewer/agent.py`, `domain/reasoning/reviewer.py`, `services/api/src/movebooks_api/reviewer.py` and `tests/test_independent_review.py`. It uses a separate review instruction/output contract with deterministic challenge fallback. This is source evidence, not a claim of live-model execution or deployment. `runtime/model_controls.py` implements a Firestore transaction reservation boundary with explicit synthetic authorization, kill switch, owner/global allowances and conservative consumed reservations on failure. No refund/finalization or live activity-stream integration is claimed. `tests/test_model_controls.py` exercises a serialized port double and pure decisions; it is not live Firestore proof.

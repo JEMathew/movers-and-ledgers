@@ -1029,11 +1029,11 @@
       ],
       [
         "finalize",
-        "Finalize usage / terminal failure handling"
+        "Conservative reservation remains consumed on result or failure; no refunds"
       ],
       [
         "activity",
-        "Sanitized activity stream"
+        "Future sanitized activity stream: not integrated"
       ],
       [
         "sql",
@@ -1073,12 +1073,12 @@
       [
         "model",
         "finalize",
-        "bounded result or failure"
+        "bounded result or failure; retain allowance"
       ],
       [
         "finalize",
         "activity",
-        "safe metadata only"
+        "future integration; safe metadata only"
       ],
       [
         "request",

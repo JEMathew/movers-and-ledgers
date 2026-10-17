@@ -23,3 +23,7 @@ Baseline source inspected at `8f750d9`. Integration owner must reconcile candida
 | Mandatory deck template/video/portal limits unresolved | MB-08, MB-09 / submission not ready | Official template, verified portal constraints and authentic 3–4 minute final video |
 
 The Product Quality Judge must compare actual product evidence with this register and the PR/FAQ. It must not score hypothetical wording as implemented behavior. Customer outcome measurement remains proposed until instrumented and observed under the metric contract.
+
+## Candidate evidence updates
+
+The integration source now includes the independent Reviewer and `runtime/model_controls.py`. Their presence does not close deployment or live-model evidence. The internal evaluator has 18 contract golden cases in `evals/agent_quality_cases.json`, runner `scripts/agent_quality_judge.py` and a report in `docs/submission/agent-quality-evidence.json`. The reported 100% expected accept/reject detection score uses zero live calls and supplies regression evidence only. It cannot be substituted for user acceptance or model quality. The integration owner confirmed public prototype HTTP 200 and GitHub public visibility on 17 October; the candidate remains undeployed.
