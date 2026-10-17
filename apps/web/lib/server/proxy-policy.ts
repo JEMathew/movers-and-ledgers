@@ -3,7 +3,7 @@ const id = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA
 const session = `migration-sessions/${id}`;
 const routes = {
   GET: [
-    "identity", "sample-companies", "intake/template", session,
+    "identity", "sample-companies", "intake/template", "operations/activity", session,
     `${session}/(discovery|findings|assessment|activity|plan|plan/status|mappings|intake-trust)`,
     `${session}/mappings/${id}/evidence`,
     `${session}/migration(/(progress|batches|failures|resolutions|target))?`,

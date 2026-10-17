@@ -15,6 +15,7 @@ from .discover_assess.onboard_fpu import router as onboard_fpu_router
 from .discover_assess.service import discover_assess_service
 from .discover_assess.validate_configure import router as validate_configure_router
 from .intake_api import router as intake_router
+from .operational_activity import router as operational_activity_router
 from .reasoning import router as reasoning_router
 from .reviewer import router as reviewer_router
 from .runtime.model_controls import close_model_controls
@@ -59,6 +60,7 @@ app.include_router(onboard_fpu_router)
 app.include_router(intake_router)
 app.include_router(reasoning_router)
 app.include_router(reviewer_router)
+app.include_router(operational_activity_router)
 
 
 @app.exception_handler(Exception)

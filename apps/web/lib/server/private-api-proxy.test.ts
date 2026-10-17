@@ -142,3 +142,15 @@ describe("private API proxy", () => {
     expect(allowedRoute("DELETE", `/v1/migration-sessions/${id}`)).toBe(false);
   });
 });
+
+it("exposes operational snapshots only as authenticated reads and strips forged owner headers", async () => {
+  const response = await proxyRequest(request("/api/v1/operations/activity", { headers: {"X-Owner":"other"} }), config, dependencies);
+  expect(response.status).toBe(200);
+  expect(dependencies.verifyUser).toHaveBeenCalledWith(token, config.projectId);
+  const [url, init] = vi.mocked(dependencies.fetch).mock.calls[0];
+  expect(url).toBe(`${config.upstream}/v1/operations/activity`);
+  expect(new Headers(init?.headers).has("x-owner")).toBe(false);
+  expect(response.headers.get("cache-control")).toContain("no-store");
+  expect(allowedRoute("POST", "/v1/operations/activity")).toBe(false);
+  expect((await proxyRequest(request("/api/v1/operations/activity", {headers:{Authorization:""}}), config, dependencies)).status).toBe(401);
+});

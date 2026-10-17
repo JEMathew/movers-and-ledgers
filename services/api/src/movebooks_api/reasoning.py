@@ -16,7 +16,7 @@ from domain.reasoning.models import PROMPT_VERSION, Capability, ReasoningRecord,
 
 from .auth import Principal, require_principal
 from .discover_assess.service import discover_assess_service
-from .runtime.model_controls import ControlDenied, reserve_live
+from .runtime.model_controls import ControlDenied, finish_live, reserve_live
 from .settings import get_settings
 
 router = APIRouter(prefix="/v1/migration-sessions", tags=["advisory reasoning"])
@@ -171,6 +171,16 @@ async def request_advice(
     except ValueError:
         raise HTTPException(409, "Concurrent change; reserved request will not replay") from None
     safe_telemetry(saved)
+    if route.provider == "gemini-adk" and control_error is None:
+        await finish_live(
+            settings,
+            owner,
+            f"advice:{session_id}:{request.request_id}",
+            "FALLBACK"
+            if saved.state == "FALLBACK"
+            else ("UNAVAILABLE" if saved.state == "UNAVAILABLE" else "COMPLETED"),
+            usage,
+        )
     return saved
 
 

@@ -111,6 +111,7 @@ class FirestoreModelControls:
                 reservation_ref,
                 {
                     "day": day,
+                    "owner_hash": owner_hash,
                     "capability": capability,
                     "reserved_calls": 2,
                     "reserved_microusd": settings.reasoning_reservation_microusd,
@@ -120,6 +121,45 @@ class FirestoreModelControls:
             )
 
         await commit(self.client.transaction(max_attempts=3))
+
+    async def finish(self, owner, key, state, usage):
+        """Annotate a reserved operational event; never a financial/audit authority."""
+        from google.cloud import firestore
+
+        if state not in {"COMPLETED", "FALLBACK", "UNAVAILABLE"}:
+            raise ControlDenied("invalid_operational_outcome")
+        owner_hash = hashlib.sha256(owner.encode()).hexdigest()
+        key_hash = hashlib.sha256(key.encode()).hexdigest()
+        ref = self.client.collection("movebooks_model_controls").document(f"reservation-{key_hash}")
+        observed = (
+            await ref.get(
+                timeout=self.settings.model_control_timeout_seconds,
+                retry=None,
+            )
+        ).to_dict() or {}
+        if observed.get("owner_hash") != owner_hash:
+            raise ControlDenied("operational_event_owner_mismatch")
+        if observed.get("state") != "RESERVED":
+            return  # Final operational outcomes are immutable on replay.
+
+        def count(value, maximum):
+            return value if type(value) is int and 0 <= value <= maximum else None
+
+        await ref.update(
+            {
+                "state": state,
+                "completed_at": firestore.SERVER_TIMESTAMP,
+                "model_calls": count(usage.model_calls, 2),
+                "tool_calls": count(usage.tool_calls, 2),
+                "input_tokens": count(usage.input_tokens, 1000000),
+                "output_tokens": count(usage.output_tokens, 1000000),
+                "usage_status": usage.usage_status
+                if usage.usage_status in {"unknown", "partial", "complete"}
+                else "unknown",
+            },
+            timeout=self.settings.model_control_timeout_seconds,
+            retry=None,
+        )
 
 
 # At most two reservation tasks per event loop, including cancelled tasks still
@@ -171,6 +211,36 @@ async def reserve_live(settings, owner, key, capability, controls=None):
         or settings.model_controls_backend != "firestore"
     ):
         raise ControlDenied("public_model_controls_required")
+
+    async def operation():
+        adapter = controls or await configured_controls(settings)
+        await adapter.reserve(owner, key, capability)
+
+    await bounded_control(settings, operation)
+
+
+async def finish_live(settings, owner, key, state, usage):
+    """Best-effort visibility after the authoritative session result is committed."""
+    if (
+        not settings.cloud
+        or settings.model_controls_backend != "firestore"
+        or not settings.synthetic_beta_authorized
+        or not owner.startswith("firebase:")
+    ):
+        return False
+
+    async def operation():
+        adapter = await configured_controls(settings)
+        await adapter.finish(owner, key, state, usage)
+
+    try:
+        await bounded_control(settings, operation)
+        return True
+    except ControlDenied:
+        return False  # Missing telemetry is never a successful financial/model operation.
+
+
+async def bounded_control(settings, operation):
     loop = asyncio.get_running_loop()
     slots = _control_slots.setdefault(loop, asyncio.Semaphore(2))
     if slots.locked():
@@ -184,12 +254,7 @@ async def reserve_live(settings, owner, key, capability, controls=None):
             finished.exception()  # Consume failures; no provider or RPC text is logged.
 
     try:
-
-        async def initialize_and_reserve():
-            adapter = controls or await configured_controls(settings)
-            await adapter.reserve(owner, key, capability)
-
-        task = asyncio.create_task(initialize_and_reserve())
+        task = asyncio.create_task(operation())
         task.add_done_callback(cleanup)
         completed, _ = await asyncio.wait({task}, timeout=settings.model_control_timeout_seconds)
         if not completed:

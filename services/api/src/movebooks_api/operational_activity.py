@@ -5,7 +5,6 @@ from typing import Annotated, Literal
 from fastapi import APIRouter, Depends, Response
 from pydantic import BaseModel, ConfigDict, Field
 
-from domain.reasoning.models import Capability
 from movebooks_api.auth import Principal, require_principal
 from movebooks_api.runtime.operational_activity import read_activity
 from movebooks_api.settings import get_settings
@@ -15,7 +14,9 @@ router = APIRouter(prefix="/v1/operations", tags=["operational-activity"])
 
 class OperationalEvent(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    capability: Capability
+    capability: Literal[
+        "planning", "mapping", "mapping-review", "resolution", "configuration", "onboarding"
+    ]
     state: Literal["RESERVED", "COMPLETED", "FALLBACK", "UNAVAILABLE"]
     created_at: str = Field(max_length=40)
     reserved_calls: int = Field(ge=0, le=2)

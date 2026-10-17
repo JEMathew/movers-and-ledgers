@@ -327,3 +327,51 @@ def test_slow_adc_initialization_is_bounded_off_loop_and_not_duplicated(monkeypa
         assert calls == ["init"]  # Initialization did not authorize a late inference/reservation.
 
     asyncio.run(scenario())
+
+
+def test_operational_completion_preserves_owner_and_never_refunds_or_rewrites():
+    import hashlib
+
+    from movebooks_api.runtime.model_controls import FirestoreModelControls
+
+    from agents.reasoning.provider import ProviderResult
+
+    owner = "firebase:owner"
+    data = {
+        "owner_hash": hashlib.sha256(owner.encode()).hexdigest(),
+        "state": "RESERVED",
+        "reserved_calls": 2,
+        "reserved_microusd": 100000,
+    }
+
+    class Ref:
+        async def get(self, **kwargs):
+            class Snapshot:
+                def to_dict(self):
+                    return data.copy()
+
+            return Snapshot()
+
+        async def update(self, values, **kwargs):
+            data.update(values)
+
+    class Client:
+        def collection(self, name):
+            return self
+
+        def document(self, name):
+            return Ref()
+
+    adapter = FirestoreModelControls(cloud_settings(), Client())
+    usage = ProviderResult("secret-output-not-stored", 1, 1, 100, 50, usage_status="complete")
+    asyncio.run(adapter.finish(owner, "key", "FALLBACK", usage))
+    assert data["state"] == "FALLBACK" and data["model_calls"] == 1
+    assert data["reserved_calls"] == 2 and data["reserved_microusd"] == 100000
+    assert "secret-output" not in str(data)
+    before = str(data)
+    asyncio.run(adapter.finish(owner, "key", "COMPLETED", usage))
+    assert str(data) == before
+    with pytest.raises(ControlDenied, match="owner_mismatch"):
+        asyncio.run(adapter.finish("firebase:other", "key", "COMPLETED", usage))
+    with pytest.raises(ControlDenied, match="invalid_operational_outcome"):
+        asyncio.run(adapter.finish(owner, "key", "FINANCIALLY_VERIFIED", usage))

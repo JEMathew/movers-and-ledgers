@@ -14,7 +14,7 @@ from domain.reasoning.models import Capability
 from movebooks_api.runtime.model_controls import configured_controls
 
 STATES = frozenset({"RESERVED", "COMPLETED", "FALLBACK", "UNAVAILABLE"})
-CAPABILITIES = frozenset(str(value) for value in Capability)
+CAPABILITIES = frozenset(str(value) for value in Capability) | {"mapping-review"}
 MAX_EVENTS = 20
 MAX_BUDGET_MICROUSD = 1_000_000_000_000
 _read_slots = weakref.WeakKeyDictionary()
@@ -47,6 +47,7 @@ def project_event(value, owner_hash):
         or not 0 <= budget <= MAX_BUDGET_MICROUSD
     ):
         return None
+
     def bounded_count(key, maximum):
         number = value.get(key)
         return number if type(number) is int and 0 <= number <= maximum else None

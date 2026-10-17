@@ -14,7 +14,7 @@ from domain.reasoning.reviewer import ReviewRecord
 
 from .auth import Principal, require_principal
 from .discover_assess.service import discover_assess_service
-from .runtime.model_controls import ControlDenied, reserve_live
+from .runtime.model_controls import ControlDenied, finish_live, reserve_live
 from .settings import get_settings
 
 router = APIRouter(prefix="/v1/migration-sessions", tags=["independent review"])
@@ -109,6 +109,14 @@ async def request_review(
         repository.put_if_unchanged(original, current)
     except ValueError:
         raise HTTPException(409, "Concurrent change; reserved review will not replay") from None
+    if route.provider == "gemini-adk" and control_error is None:
+        await finish_live(
+            settings,
+            owner,
+            f"review:{session_id}:{request.request_id}",
+            saved.state,
+            usage,
+        )
     return saved
 
 

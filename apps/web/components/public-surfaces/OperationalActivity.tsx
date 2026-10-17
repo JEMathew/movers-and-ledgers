@@ -4,7 +4,7 @@ import { Alert, Button } from "@/components/ui";
 import { authHeaders } from "@/lib/identity";
 
 const API = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
-const capabilities = ["planning", "mapping", "resolution", "configuration", "onboarding"] as const;
+const capabilities = ["planning", "mapping", "mapping-review", "resolution", "configuration", "onboarding"] as const;
 const states = ["RESERVED", "COMPLETED", "FALLBACK", "UNAVAILABLE"] as const;
 type Event = { capability: string; state: string; created_at: string; reserved_calls: number; reserved_microusd: number; completed_at: string | null; model_calls: number | null; tool_calls: number | null; input_tokens: number | null; output_tokens: number | null; usage_status: string | null };
 type Activity = { status: "DISABLED" | "AVAILABLE" | "UNAVAILABLE"; events: Event[] };
@@ -50,7 +50,7 @@ export function OperationalActivity() {
       {result?.status === "AVAILABLE" && <>
         <p className="text-sm text-secondary">At most 20 recent reservation records. Counts are reserved allowances unless explicitly reported as usage; a reservation does not prove a model call. Unknown usage is shown as unknown. This is not live monitoring.</p>
         {!result.events.length ? <p className="mt-3">No reservation records were returned in this snapshot. This does not establish that no operations occurred.</p> : <ul className="mt-4 space-y-4">{result.events.map((event, index) => <li key={index} className="rounded-lg border border-token p-4 [overflow-wrap:anywhere]">
-          <p className="font-semibold capitalize">{event.capability} · {event.state.toLowerCase()}</p>
+          <p className="font-semibold capitalize">{event.capability.replaceAll("-", " ")} · {event.state.toLowerCase()}</p>
           <p className="text-sm">Created: <time dateTime={event.created_at}>{event.created_at}</time></p>
           {event.completed_at && <p className="text-sm">Outcome recorded: <time dateTime={event.completed_at}>{event.completed_at}</time></p>}
           <p className="mt-2 text-sm">Reserved model calls: {event.reserved_calls} · Reserved budget: {event.reserved_microusd} micro-USD. Reservation is not actual billing.</p>

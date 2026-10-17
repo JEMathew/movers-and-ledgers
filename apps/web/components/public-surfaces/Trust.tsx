@@ -6,6 +6,7 @@ import { useIdentity } from "@/components/IdentityProvider";
 import { cloudIdentity } from "@/lib/identity";
 import { Surface } from "./Surface";
 import { AnchoredDetails } from "./AnchoredDetails";
+import { OperationalActivity } from "./OperationalActivity";
 import { EvidenceRecords } from "./EvidenceRecords";
 import { phases } from "./content";
 import { isSessionId, useSessionView } from "./session";
@@ -46,6 +47,7 @@ function Evidence({ reference }: { reference?: string }) {
         <nav className="mt-3 flex flex-wrap gap-3" aria-label="Evidence task links"><Link className="public-text-link" href={`/support?session=${view.id}&stage=${view.phase}`}>Get contextual help</Link>{view.phase >= 3 && <Link className="public-text-link" href={`/validate-configure?session=${view.id}`}>Open exact financial checks</Link>}{view.phase === 4 && <Link className="public-text-link" href={`/onboard-fpu?session=${view.id}`}>Open invoice and first-task evidence</Link>}<Link className="public-text-link" href="/guide#reconsideration">How reconsideration preserves decisions</Link></nav>
       </section>
       <EvidenceRecords key={`${view.id}:${readAt}`} view={view}/>
+      <OperationalActivity/>
     </>}
     <Link className="public-text-link" href="/trust">Public trust principles and Beta boundaries</Link>
   </Surface>;
