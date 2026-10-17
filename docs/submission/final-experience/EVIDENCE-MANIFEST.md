@@ -17,10 +17,10 @@ Do not say: "13 autonomous agents", "AI migrates your books", or any present-ten
 ## Rubric evidence
 | Criterion (weight) | Claim | Evidence | Type | Gap |
 |---|---|---|---|---|
-| Technical merit & GenAI (40) | Deterministic 26-state workflow, exact reconciliation, human approval, checkpointed recovery | Real-backend journey to verified first synthetic invoice, 17/17 checks (17 Oct); backend suite 614 pass, 26 env-only failures identical to baseline | Local | Not re-run on the deployed candidate |
+| Technical merit & GenAI (40) | Deterministic 26-state workflow, exact reconciliation, human approval, checkpointed recovery | Real-backend journey to verified first synthetic invoice, 17/17 checks (17 Oct); backend suite 620 pass, 26 env-only failures identical to baseline; web 686 tests, lint, typecheck and production build pass at the integration candidate | Local | Not re-run on the deployed candidate |
 | | Bounded Advisor + independent Reviewer (ADK, read-only evidence tool, 2 calls max, structured validation, fallback) | Code + tests; offline demo script `scripts/live_advisor_reviewer_demo.py`; historical live run 29 Sep: `gemini-2.5-flash`, 4 of 6 cases accepted (AMBER), ~USD 0.0009 per call | Local; historical live (retired model, not the deployed candidate) | No live run on `gemini-3.5-flash-lite`; Reviewer never live-run |
 | | Owner-scoped persistence | Isolation and restart tests on SQLite | Local | Cloud SQL durability not verified |
-| | Cross-device resume | `GET /v1/migration-sessions` + picker (branch `feat/migration-listing`) | Local | Not deployed; real two-account check pending |
+| | Cross-device resume | `GET /v1/migration-sessions` (SQL-ordered newest-first, bounded, owner-bound cursors, incomplete-history signal; tested on SQLite and PostgreSQL 16, including >200 sessions) + picker (branch `feat/migration-listing`) | Local | Not deployed; real two-account check pending |
 | Problem alignment (25) | Desktop-to-cloud migration friction; accountant-first journey | Synthetic Harbor Light journey; plain-language screens | Local | No customer feedback exists; do not imply any |
 | Innovation (25) | Trust model: AI explains, rules verify, people approve; Reviewer challenge on `1200 · Misc Clearing` | Offline Reviewer finding (CHALLENGED) reproducible; live pending | Local | Judge/evaluator agent not built |
 | UX (10) | Visual-first workspace, picker, blocked/completed states, 200% zoom, keyboard | Screenshots in `evidence/premium/`; Approval, Assess, Move, Verify, Start: 15/15 width checks no overflow; dialog actions on screen at 195/390/1280 px | Local; blocked/completed shots Mocked | Real Google sign-in, real device, screen reader not verified; MP4 not verified in a real browser |
@@ -30,7 +30,7 @@ Do not say: "13 autonomous agents", "AI migrates your books", or any present-ten
 |---|---|---|
 | Final functional demo video (3–4 min) | Not produced | Record on the deployed candidate; state exactly what is live |
 | PDF deck, 16 slides, < 5 MB | Draft exists (16 pages, 2.3 MB) | Update claims to the wording above; re-export |
-| Description ≤ 1,024 chars | 954-char draft exists | Reword the present-tense Gemini sentences; recount |
+| Description ≤ 1,024 chars | Reworded to state Gemini is gated and the public candidate is deterministic-only (922 chars) | Recount if edited; keep wording unless live Gemini is later captured |
 | Public deployed URL | Candidate exists | Redeploy with final commit after approval; re-verify |
 | Public GitHub repo | Not pushed | Push after approval |
 | Portal submission receipt | None | Submit, then record the receipt |
