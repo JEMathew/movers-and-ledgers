@@ -6,10 +6,16 @@ import type { SessionView } from "../public-surfaces/session";
 export function MigrationSnapshot({ view }: { view: SessionView }) {
   const passed = view.checks.filter(check => check.status === "VERIFIED").length;
   const issues = view.blockers.length;
-  return <Tiles label="Migration snapshot">
-    <Tile icon={ListChecks} label="Mappings to review" value={view.mappingIssues ?? "—"} tone={view.mappingIssues === null ? "neutral" : view.mappingIssues ? "warning" : "success"} status={view.mappingIssues === null ? "Not read yet" : view.mappingIssues ? "Needs your review" : "All reviewed"}/>
-    <Tile icon={TriangleAlert} label="Open issues" value={view.attentionComplete || issues ? issues : "—"} tone={issues ? "warning" : view.attentionComplete ? "success" : "neutral"} status={issues ? "Needs attention" : view.attentionComplete ? "None open" : "Check the current task"}/>
-    <Tile icon={ShieldCheck} label="Checks passed" value={view.checks.length ? `${passed} of ${view.checks.length}` : "—"} tone={!view.checks.length ? "neutral" : passed === view.checks.length ? "success" : "warning"} status={!view.checks.length ? "None recorded yet" : passed === view.checks.length ? "All passed" : "Not all passed"}/>
-    <Tile icon={ClipboardCheck} label="Decisions recorded" value={view.decisions.length} tone="neutral" status={view.decisions.length ? "Kept in the audit trail" : "None yet"}/>
-  </Tiles>;
+  const mappings = view.mappingIssues !== null;
+  const hasChecks = view.checks.length > 0;
+  const issuesKnown = view.attentionComplete || issues > 0;
+  // Only tiles with recorded evidence are shown. An empty strip would be noise, so fewer than two means none.
+  const tiles = [
+    mappings && <Tile key="m" icon={ListChecks} label="Mappings to review" value={view.mappingIssues} tone={view.mappingIssues ? "warning" : "success"} status={view.mappingIssues ? "Needs your review" : "All reviewed"}/>,
+    issuesKnown && <Tile key="i" icon={TriangleAlert} label="Open issues" value={issues} tone={issues ? "warning" : "success"} status={issues ? "Needs attention" : "None open"}/>,
+    hasChecks && <Tile key="c" icon={ShieldCheck} label="Checks passed" value={`${passed} of ${view.checks.length}`} tone={passed === view.checks.length ? "success" : "warning"} status={passed === view.checks.length ? "All passed" : "Not all passed"}/>,
+    view.decisions.length > 0 && <Tile key="d" icon={ClipboardCheck} label="Decisions recorded" value={view.decisions.length} status="Kept in the audit trail"/>,
+  ].filter(Boolean);
+  if (tiles.length < 2) return null;
+  return <Tiles label="Migration snapshot">{tiles}</Tiles>;
 }

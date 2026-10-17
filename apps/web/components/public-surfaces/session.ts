@@ -5,6 +5,7 @@ import { pendingInReview } from "@/components/journey/journey";
 
 /** The migration the customer is working on, carried across navigation within the tab. */
 export const SELECTED_SESSION_KEY = "movebooks-migration-session";
+export const LAST_MIGRATION_PREFIX = "movebooks-last-migration:";
 export const isSessionId = (value: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
 export function phaseFor(status: string): number | null {
   if (["CREATED", "DISCOVERED", "ASSESSED"].includes(status)) return 0;
