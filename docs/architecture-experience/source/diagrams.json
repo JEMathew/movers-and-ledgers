@@ -742,7 +742,7 @@
       ],
       [
         "api",
-        "Cloud Run API: cloud-dev / deterministic-only last known"
+        "Cloud Run API: cloud-dev / deterministic-only confirmed 17 October"
       ],
       [
         "auth",
@@ -754,11 +754,11 @@
       ],
       [
         "vertex",
-        "Vertex AI API enabled last known; inference permission / region unverified"
+        "Agent Platform API enabled; workload inference untested; model lifecycle gate"
       ],
       [
         "firestore",
-        "Firestore: API disabled last known; gated operational controls"
+        "Firestore: API auto-enabled by console; restoration approval pending; no active backend"
       ],
       [
         "gcs",

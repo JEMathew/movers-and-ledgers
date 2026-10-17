@@ -1,6 +1,6 @@
 # Scoped cloud validation and release authorization plan
 
-Prepared against local integration code `1a24a2c`. **This plan has not been executed or approved.**
+Prepared against local integration code `1a24a2c`. **Only the user-authorized inventory has been performed; resource/release changes remain unapproved.**
 Existing public Beta and its traffic remain untouched. Read-only reachability checks returned
 HTTP 200 for the Beta and public repository; they do not identify the deployed source or prove
 signed-in execution. Current environment has no usable ADC credentials or gcloud executable.
@@ -8,11 +8,11 @@ signed-in execution. Current environment has no usable ADC credentials or gcloud
 ## Requested verification: current read-only inventory, then isolated validation
 
 Scope the work to project `movebooks-ai` and workload
-`movebooks-beta-api@movebooks-ai.iam.gserviceaccount.com`. The directive requests read-only verification. Local CLI/ADC access is unavailable. An existing signed-in Google Cloud console tab was found, but automatic approval review rejected observation because it could expose private project/account data and did not find explicit authorization in the trusted messages. A direct request for read-only console inspection is pending. This is an automatic review rejection, not a manual user refusal. No alternate surface or indirect access will be used to bypass it. Once explicit access is authorized, inspect current service revisions,
-identity, environment, IAM bindings/effective access, SQL/storage readiness and logging using the
-user's authorized Google Cloud session. Do not print tokens or full environment variables.
-No financial-session mutation belongs to this inventory. Confirm the actual project, database,
-regions and spend limits before proposing resource changes.
+`movebooks-beta-api@movebooks-ai.iam.gserviceaccount.com`. The user directly authorized read-only console inspection on 17 October 2026. The earlier automatic browser approval block is resolved. [Current inspection and its limits](cloud-inspection-2026-10-17.md) record serving revisions, deterministic-only configuration, project Allow-role labels, API state, historical logs and Cloud SQL health. Local CLI/ADC remains unavailable. No fresh workload inference or financial journey was performed.
+
+**Incident:** opening the Firestore database inventory automatically enabled `firestore.googleapis.com` despite no Enable action. This exceeded read-only scope; it was disclosed immediately. Separate permission to restore the API to disabled is pending. No database, IAM or deployment change was made. Avoid any product page that can auto-enable disabled services.
+
+**Model gate:** Google's documentation lists `gemini-2.5-flash` retirement on 20 October2026. Evaluate a supported regional replacement with the existing safety/structured-output contract and current price bounds before proposing live configuration. The API remains deterministic-only.
 
 The following mutations require a **separate explicit approval after that inventory**, not a
 blanket grant from this document:

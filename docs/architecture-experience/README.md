@@ -2,7 +2,7 @@
 
 Version 1, source baseline `8f750d9`, 17 October 2026. Mermaid files and SVGs are editable sources; PNG exports support presentations. `source/diagrams.json` is the shared semantic specification and `source/render-diagrams.mjs` reproduces SVG/PNG exports. Sequence message names are conceptual operations anchored in the source below, not claims of undocumented API routes.
 
-**Evidence boundary:** public Beta hosting is documented; candidate cloud services are not newly verified here. Last-known cloud mode is deterministic-only. Vertex API enablement does not prove inference permission or regional access. Firestore reservations, terminal advisory outcomes and owner-scoped operational readback are implemented gated source; live integration remains unverified. Existing audit records remain separate. Reviewer is a candidate until implementation/test/deployment evidence establishes its status. Internal Judges remain outside financial execution. Trust & Governance is a logical policy responsibility, not an active LLM runtime.
+**Evidence boundary:** public Beta hosting is documented; the local candidate is not deployed. Serving API configuration was confirmed deterministic-only on17October; [current console findings](../submission/cloud-inspection-2026-10-17.md) supersede earlier cloud-status assumptions. Vertex API enablement does not prove inference permission or regional access. Firestore reservations, terminal advisory outcomes and owner-scoped operational readback are implemented gated source; live integration remains unverified. Existing audit records remain separate. Reviewer is a candidate until implementation/test/deployment evidence establishes its status. Internal Judges remain outside financial execution. Trust & Governance is a logical policy responsibility, not an active LLM runtime.
 
 ## Catalogue
 
@@ -36,7 +36,7 @@ Version 1, source baseline `8f750d9`, 17 October 2026. Mermaid files and SVGs ar
 - Identity, persistence, adapters: `services/api/src/movebooks_api/auth.py`, `runtime/persistence.py`, `runtime/storage.py`, `docs/architecture/google-native-runtime.md`.
 - Intake: `services/api/src/movebooks_api/intake.py`, `intake_api.py`, `apps/web/components/try-your-data/package-contract.json`, `docs/architecture/try-your-data.md`.
 - Recovery/reconciliation/FPU: `tests/test_migrate_resolve.py`, `test_validate_configure.py`, `test_onboard_fpu.py`, `test_beta_v1_integration.py`.
-- Cloud truth: `docs/deployment/public-beta.md`, `docs/reviews/google-cloud-validation.md`, user-provided last-known cloud facts. Current deployment must be independently rechecked before presentation as live.
+- Cloud truth: `docs/deployment/public-beta.md`, `docs/reviews/google-cloud-validation.md`, user-provided last-known cloud facts. Current console inventory identifies older serving revisions; it is separate from local candidate deployment acceptance.
 
 ## Important reading rules
 

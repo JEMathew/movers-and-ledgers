@@ -106,14 +106,20 @@
   "cloud_truth": {
     "current_credentials_available": false,
     "gcloud_available": false,
-    "current_effective_vertex_permissions": "UNVERIFIED",
-    "current_supported_model_region": "UNVERIFIED",
-    "firestore_activation": "NOT_PERFORMED",
+    "current_effective_vertex_permissions": "Project Allow row includes Agent Platform user; effective inference not tested",
+    "current_supported_model_region": "Google model documentation lists asia-southeast1 for gemini-2.5-flash; retirement2026-10-20; replacement evaluation needed",
+    "firestore_activation": "API_AUTO_ENABLED_UNINTENTIONALLY_BY_DATABASE_CONSOLE; rollback approval pending; no database/operational activation",
     "operational_activity_stream": "IMPLEMENTED_GATED_SOURCE; owner-scoped SDK-port/UI/proxy tests passed, live validation not run",
     "sql_authority": "Existing implementation; current deployed persistence acceptance unverified",
-    "public_mode": "Last known deterministic-only, not reverified from authenticated runtime",
+    "public_mode": "CONFIRMED_SERVING_REVISION_CONFIG_DETERMINISTIC_ONLY",
     "source_index_rules": "infra/firestore (not deployed)",
-    "signed_in_browser_inventory": "Cloud console tab exists; content inspection blocked by automatic approval review pending explicit read-only authorization"
+    "signed_in_browser_inventory": "AUTHORIZED_AND_INSPECTED; user explicit read-only permission; see cloud-inspection-2026-10-17.md",
+    "cloud_inspection_evidence": "docs/submission/cloud-inspection-2026-10-17.md",
+    "sql_health": "Available/Runnable PostgreSQL17; no automated backup policy; HA disabled; no data/connection test",
+    "api_serving_revision": "movebooks-beta-api-rel2997e20",
+    "web_serving_revision": "movebooks-beta-web-ux2f781012182645",
+    "incident_screenshot": "docs/submission/evidence/firestore-auto-enabled-console.png",
+    "incident_screenshot_sha256": "1950077122b8081d8b64675c3d358a95d0b5b1d96ea534cd440a1f89f6a25e19"
   },
   "release_gates": [
     {
@@ -151,8 +157,16 @@
     },
     {
       "id": "READ_ONLY_CLOUD_CONSOLE",
-      "status": "AUTOMATIC_REVIEW_BLOCKED_PENDING_EXPLICIT_AUTHORIZATION",
+      "status": "AUTHORIZED_INVENTORY_PERFORMED_WITH_DISCLOSED_API_SIDE_EFFECT",
       "scope": "Inspect private movebooks-ai project/account data only; no mutations"
+    },
+    {
+      "id": "FIRESTORE_API_RESTORE",
+      "status": "PENDING_EXPLICIT_APPROVAL_TO_DISABLE_UNINTENDED_AUTO_ENABLE"
+    },
+    {
+      "id": "MODEL_LIFECYCLE",
+      "status": "GEMINI_2_5_FLASH_RETIREMENT_2026_10_20; REPLACEMENT_EVALUATION_REQUIRED"
     }
   ],
   "assets": [
@@ -198,6 +212,7 @@
   "decision_reports": [
     "docs/submission/acceptance-report.md",
     "docs/submission/product-quality-judge.md",
-    "docs/submission/release-authorization-plan.md"
+    "docs/submission/release-authorization-plan.md",
+    "docs/submission/cloud-inspection-2026-10-17.md"
   ]
 }

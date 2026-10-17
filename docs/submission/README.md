@@ -11,6 +11,7 @@ Reviewable content package, 17 October 2026. **Not a completed official submissi
 - [Acceptance and release matrix](acceptance-report.md)
 - [Machine-readable evidence manifest](evidence-manifest.json)
 - [Independent Product Quality Judge](product-quality-judge.md)
+- [Current cloud inspection and disclosed Firestore auto-enablement incident](cloud-inspection-2026-10-17.md)
 - [Scoped cloud validation and release authorization plan](release-authorization-plan.md)
 - [Packaging status and open submission checks](packaging-status.md)
 - [Packaging validation record](packaging-validation.json)
