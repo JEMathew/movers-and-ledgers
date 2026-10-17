@@ -1,0 +1,59 @@
+{
+  "file": "docs/submission/assets/movebooks-demo.mp4",
+  "sha256": "7684e266215f5a38e5505dd589e66b1c391d68bb66b5edcb8f2b28ad6189e349",
+  "duration_seconds": 223.72,
+  "size_bytes": 11561094,
+  "streams": [
+    {
+      "codec_name": "h264",
+      "codec_type": "video",
+      "width": 1440,
+      "height": 1000,
+      "pix_fmt": "yuv420p",
+      "r_frame_rate": "25/1"
+    },
+    {
+      "codec_name": "mov_text",
+      "codec_type": "subtitle",
+      "r_frame_rate": "0/0"
+    }
+  ],
+  "captions": "in-frame narration bar plus a mov_text subtitle track; sidecar movebooks-demo.srt",
+  "source": {
+    "product_commit": "fa13e9e9e20a9998b5a3f9c0fc392ae86efa5e71",
+    "web": "next dev (demo identity), http://localhost:3000",
+    "api": "FastAPI from the same tree, in-memory persistence, model_mode deterministic-only",
+    "browser": "141.0.7390.37",
+    "raw_capture": "Playwright recordVideo WebM 1440x1000, re-encoded once to H.264 (libx264 crf 24, yuv420p, faststart); no edits, cuts or substituted footage"
+  },
+  "acceptance": {
+    "status": "PASSED",
+    "checks": 21,
+    "check_names": [
+      "landing_page_renders",
+      "explicit_demo_sign_in_then_harbor_selection",
+      "discovery_and_assessment_complete",
+      "independent_second_opinion_1200_runtime_mode_visible",
+      "user_requested_mapping_advice_fallback_labeled",
+      "all_mappings_explicitly_reviewed",
+      "separate_plan_approval_recorded",
+      "duplicate_resolution_authorized_checkpoint_retry_and_completion",
+      "deterministic_financial_validation_verified",
+      "all_configuration_areas_reviewed_and_sensitive_approvals_recorded",
+      "owner_approved_invoice_posted_and_verified_first_productive_use",
+      "my_migration_shows_completed_state",
+      "ai_activity_explicit_read_only_check",
+      "second_migration_started",
+      "picker_lists_both_owner_migrations",
+      "switch_to_completed_migration",
+      "selection_restored_after_reload",
+      "cleared_local_memory_shows_owner_picker_not_a_guess",
+      "fresh_device_lists_owner_migrations_without_local_memory",
+      "architecture_segment_explicitly_labels_source_and_runtime_boundaries",
+      "no_browser_runtime_errors"
+    ],
+    "finished_seconds": 215.3
+  },
+  "environment": "Local synthetic Beta in a sandbox. Not the deployed candidate, not live Gemini, not real Google sign-in.",
+  "qa": "Full decode with ffmpeg (no errors); frames sampled across the timeline in recording/qa-contact-sheet.png were inspected for readability."
+}
