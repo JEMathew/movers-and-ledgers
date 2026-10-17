@@ -75,8 +75,16 @@ def decode(encoded, owner):
 
 
 class SqlSessionRepository:
-    def __init__(self, engine):
+    def __init__(self, engine, *, migration_activity=None):
         self.engine = engine
+        if migration_activity is not None and migration_activity.engine is not engine:
+            raise ValueError("Migration activity must use the same local transaction engine")
+        self.migration_activity = migration_activity
+
+    def _enqueue_activity(self, connection, original, updated, encoded_digest):
+        activity = getattr(self, "migration_activity", None)
+        if activity is not None:
+            activity.enqueue(connection, original, updated, encoded_digest)
 
     def ready(self):
         with self.engine.connect() as connection:
@@ -95,6 +103,7 @@ class SqlSessionRepository:
                         snapshot=encoded,
                     )
                 )
+                self._enqueue_activity(connection, None, session, digest(encoded))
         except DatabaseError as error:
             # The Cloud SQL connector uses pg8000.dbapi rather than pg8000's
             # legacy connection. Its unique violation is a plain DatabaseError.
@@ -140,6 +149,7 @@ class SqlSessionRepository:
                 raise ValueError(
                     "Session changed concurrently; refresh and review before retrying."
                 )
+            self._enqueue_activity(connection, original, updated, digest(encoded))
         return updated.model_copy(deep=True)
 
     def put_uploaded(self, session, limit):
