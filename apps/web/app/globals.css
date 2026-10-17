@@ -656,3 +656,8 @@ button, input, select, textarea { font: inherit; }
 .welcome-steps { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin: 1rem 0 0; padding: 0; }
 .welcome-steps li { display: flex; align-items: center; gap: .5rem; padding: .625rem .75rem; border: 1px solid var(--border); border-radius: var(--radius-md, .5rem); font-weight: 600; font-size: .9375rem; }
 @media (max-width: 520px) { .welcome-steps { grid-template-columns: 1fr; } }
+.welcome-steps li { position: relative; background: transparent; }
+.welcome-steps li + li::before { content: ""; position: absolute; left: -.5rem; top: 50%; width: .5rem; border-top: 2px solid var(--border-strong); }
+.step-num { display: inline-grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: 999px; background: var(--primary); color: var(--on-primary); font-size: .8125rem; font-weight: 700; }
+@media (max-width: 520px) { .welcome-steps li + li::before { display: none; } }
+.member-blockers { margin: .5rem 0 1rem; padding-left: 1.25rem; font-weight: 600; }
