@@ -723,7 +723,7 @@
       [
         "api",
         "ops",
-        "controls / activity only after integration"
+        "gated source: reservations, outcomes, owner readback"
       ]
     ],
     "kind": "flowchart"
@@ -1009,7 +1009,7 @@
   },
   {
     "name": "firestore-operational-controls",
-    "title": "Firestore operational control design: not live evidence",
+    "title": "Firestore operational controls: implemented source; live unverified",
     "nodes": [
       [
         "request",
@@ -1033,7 +1033,7 @@
       ],
       [
         "activity",
-        "Future sanitized activity stream: not integrated"
+        "Owner-filtered sanitized activity readback: implemented gated source"
       ],
       [
         "sql",
@@ -1042,6 +1042,18 @@
       [
         "deny",
         "Deny / safe fallback"
+      ],
+      [
+        "refresh",
+        "Owner explicitly refreshes activity"
+      ],
+      [
+        "read",
+        "Authenticated GET: owner filter + per-record check"
+      ],
+      [
+        "client",
+        "Direct Firestore client writes denied in source rules"
       ]
     ],
     "edges": [
@@ -1078,12 +1090,27 @@
       [
         "finalize",
         "activity",
-        "future integration; safe metadata only"
+        "terminal advisory state; bounded safe metadata"
       ],
       [
         "request",
         "sql",
         "no Firestore financial write"
+      ],
+      [
+        "refresh",
+        "read",
+        "no automatic UI reads"
+      ],
+      [
+        "read",
+        "activity",
+        "20 newest safe records; deadline + owner isolation"
+      ],
+      [
+        "client",
+        "deny",
+        "rules / index not yet provisioned"
       ]
     ],
     "kind": "flowchart"

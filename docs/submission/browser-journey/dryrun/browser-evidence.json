@@ -1,0 +1,932 @@
+{
+  "started_at": "2026-10-17T09:37:53.333Z",
+  "mode": "ui-dryrun",
+  "candidate": "1a24a2ce45ab2814d2f2f26628c64fc05cb19abc",
+  "scope": "Real UI only; local synthetic demo identity; no direct financial API manipulation.",
+  "events": [
+    {
+      "at_seconds": 0.6,
+      "event": "Open /"
+    },
+    {
+      "at_seconds": 0.6,
+      "event": "Narration",
+      "caption": "MoveBooks AI by Movers & Ledgers: move your books, keep your confidence. This local demonstration uses bounded synthetic data, with every financial approval left to the user.",
+      "planned_until": 10
+    },
+    {
+      "at_seconds": 1.4,
+      "event": "Open /play"
+    },
+    {
+      "at_seconds": 1.4,
+      "event": "Narration",
+      "caption": "Play makes migration approachable. Walk through Eli’s office, inspect the evidence and reconcile a clearing account before choosing its destination. Game progress never approves or moves financial records.",
+      "planned_until": 35
+    },
+    {
+      "at_seconds": 1.5,
+      "event": "Click Start mission"
+    },
+    {
+      "at_seconds": 2.1,
+      "event": "Click Run readiness check"
+    },
+    {
+      "at_seconds": 2.1,
+      "event": "Click Run readiness check"
+    },
+    {
+      "at_seconds": 2.2,
+      "event": "PASS play_real_keyboard_gameplay_bad_choice_recovery_and_unlock"
+    },
+    {
+      "at_seconds": 2.8,
+      "event": "Open /try-your-data"
+    },
+    {
+      "at_seconds": 2.9,
+      "event": "Explicit demo sign-in for local compatibility preview"
+    },
+    {
+      "at_seconds": 3.5,
+      "event": "Narration",
+      "caption": "Try Your Data downloads a documented template and validates permitted synthetic files in this browser. A journal imbalance blocks the package; replacing the files allows a fresh review. Public upload and workspace creation remain unavailable.",
+      "planned_until": 62
+    },
+    {
+      "at_seconds": 3.6,
+      "event": "Click Download Template ZIP"
+    },
+    {
+      "at_seconds": 3.6,
+      "event": "Template downloaded from actual UI",
+      "filename": "movebooks-controlled-package-v1.zip"
+    },
+    {
+      "at_seconds": 3.6,
+      "event": "Click Validate Files"
+    },
+    {
+      "at_seconds": 3.7,
+      "event": "PASS browser_local_validation_rejects_real_unbalanced_synthetic_input"
+    },
+    {
+      "at_seconds": 3.8,
+      "event": "Click Clear Files"
+    },
+    {
+      "at_seconds": 3.8,
+      "event": "Click Validate Files"
+    },
+    {
+      "at_seconds": 3.9,
+      "event": "Click Confirm Local Review"
+    },
+    {
+      "at_seconds": 3.9,
+      "event": "PASS downloaded_zip_validated_corrected_reviewed_with_hosted_gate_truth"
+    },
+    {
+      "at_seconds": 4.6,
+      "event": "Open /sign-in"
+    },
+    {
+      "at_seconds": 4.6,
+      "event": "Open Enter Demo Workspace →"
+    },
+    {
+      "at_seconds": 5.2,
+      "event": "PASS explicit_demo_sign_in_then_harbor_selection"
+    },
+    {
+      "at_seconds": 5.4,
+      "event": "Click Check If My Books Are Ready to Migrate"
+    },
+    {
+      "at_seconds": 5.5,
+      "event": "PASS discovery_and_assessment_complete",
+      "session_id": "f197428b-6c2b-5649-b023-645862a8e563"
+    },
+    {
+      "at_seconds": 5.5,
+      "event": "Narration",
+      "caption": "Explore Demo follows one synthetic business through Understand, Prepare, Move, Verify and Start. Discovery and readiness precede a versioned plan.",
+      "planned_until": 87
+    },
+    {
+      "at_seconds": 5.5,
+      "event": "Open Create My Migration Plan"
+    },
+    {
+      "at_seconds": 6.2,
+      "event": "Click Create My Migration Plan"
+    },
+    {
+      "at_seconds": 6.4,
+      "event": "Click Review Mappings"
+    },
+    {
+      "at_seconds": 6.4,
+      "event": "Narration",
+      "caption": "Account 1200, Misc Clearing, needs judgment. Request an independent second opinion and bounded advice; the displayed public Beta mode is deterministic fallback, not live Gemini.",
+      "planned_until": 110
+    },
+    {
+      "at_seconds": 6.4,
+      "event": "Click Request independent review"
+    },
+    {
+      "at_seconds": 6.5,
+      "event": "PASS independent_second_opinion_1200_runtime_mode_visible"
+    },
+    {
+      "at_seconds": 6.5,
+      "event": "Click Explain mapping"
+    },
+    {
+      "at_seconds": 6.6,
+      "event": "PASS user_requested_mapping_advice_fallback_labeled"
+    },
+    {
+      "at_seconds": 6.6,
+      "event": "Narration",
+      "caption": "The accountant reviews all mappings and separately approves the migration plan. Advice and second opinions cannot authorize financial writes.",
+      "planned_until": 130
+    },
+    {
+      "at_seconds": 6.7,
+      "event": "Click Confirm Mapping"
+    },
+    {
+      "at_seconds": 6.8,
+      "event": "Click Confirm Mapping"
+    },
+    {
+      "at_seconds": 6.8,
+      "event": "Click Confirm Mapping"
+    },
+    {
+      "at_seconds": 6.9,
+      "event": "Click Confirm Mapping"
+    },
+    {
+      "at_seconds": 7,
+      "event": "Click Confirm Mapping"
+    },
+    {
+      "at_seconds": 7,
+      "event": "Click Confirm Mapping"
+    },
+    {
+      "at_seconds": 7.1,
+      "event": "Click Confirm Mapping"
+    },
+    {
+      "at_seconds": 7.2,
+      "event": "Click Confirm Mapping"
+    },
+    {
+      "at_seconds": 7.2,
+      "event": "Click Confirm Mapping"
+    },
+    {
+      "at_seconds": 7.3,
+      "event": "Click Confirm Mapping"
+    },
+    {
+      "at_seconds": 7.3,
+      "event": "Click Confirm Mapping"
+    },
+    {
+      "at_seconds": 7.4,
+      "event": "Click Confirm Mapping"
+    },
+    {
+      "at_seconds": 7.4,
+      "event": "PASS all_mappings_explicitly_reviewed",
+      "count": 12
+    },
+    {
+      "at_seconds": 7.5,
+      "event": "Click Review Migration Plan"
+    },
+    {
+      "at_seconds": 7.5,
+      "event": "Click Approve Migration Plan"
+    },
+    {
+      "at_seconds": 7.6,
+      "event": "Click Approve Migration Plan"
+    },
+    {
+      "at_seconds": 7.7,
+      "event": "PASS separate_plan_approval_recorded"
+    },
+    {
+      "at_seconds": 8,
+      "event": "Open Continue to Move"
+    },
+    {
+      "at_seconds": 8.7,
+      "event": "Narration",
+      "caption": "Deterministic tools move the approved synthetic manifest. A controlled duplicate stops the batch; completed checkpoints stay intact until a person reviews the remedy.",
+      "planned_until": 151
+    },
+    {
+      "at_seconds": 8.8,
+      "event": "Click Start Migration"
+    },
+    {
+      "at_seconds": 8.9,
+      "event": "Click Close dialog"
+    },
+    {
+      "at_seconds": 8.9,
+      "event": "Click Review 1 Migration Issue"
+    },
+    {
+      "at_seconds": 9,
+      "event": "Click Approve resolution"
+    },
+    {
+      "at_seconds": 9.1,
+      "event": "Click Retry failed batch"
+    },
+    {
+      "at_seconds": 9.2,
+      "event": "PASS duplicate_resolution_authorized_checkpoint_retry_and_completion"
+    },
+    {
+      "at_seconds": 9.2,
+      "event": "Open Verify My Books"
+    },
+    {
+      "at_seconds": 9.9,
+      "event": "Narration",
+      "caption": "Moving records is not proof. Deterministic reconciliation checks counts, relationships, balances and documents before reviewed configuration can be applied.",
+      "planned_until": 174
+    },
+    {
+      "at_seconds": 10,
+      "event": "Click Verify My Books"
+    },
+    {
+      "at_seconds": 10.1,
+      "event": "PASS deterministic_financial_validation_verified"
+    },
+    {
+      "at_seconds": 10.1,
+      "event": "Click Continue to configuration"
+    },
+    {
+      "at_seconds": 10.7,
+      "event": "Click Confirm approve"
+    },
+    {
+      "at_seconds": 11.2,
+      "event": "Click Confirm approve"
+    },
+    {
+      "at_seconds": 11.6,
+      "event": "Click Confirm approve"
+    },
+    {
+      "at_seconds": 12.2,
+      "event": "Click Confirm approve"
+    },
+    {
+      "at_seconds": 12.6,
+      "event": "Click Confirm approve"
+    },
+    {
+      "at_seconds": 12.7,
+      "event": "Click Apply reviewed configuration"
+    },
+    {
+      "at_seconds": 12.8,
+      "event": "PASS all_configuration_areas_reviewed_and_sensitive_approvals_recorded",
+      "count": 8
+    },
+    {
+      "at_seconds": 12.8,
+      "event": "Open Complete Setup"
+    },
+    {
+      "at_seconds": 13.5,
+      "event": "Narration",
+      "caption": "Onboarding checks the governed prerequisites. The owner reviews invoice terms, approves posting, then runs the first synthetic task and verifies its accounting effect.",
+      "planned_until": 203
+    },
+    {
+      "at_seconds": 13.6,
+      "event": "Click Start onboarding from configured evidence"
+    },
+    {
+      "at_seconds": 14.1,
+      "event": "Click Confirm approve"
+    },
+    {
+      "at_seconds": 14.5,
+      "event": "Click Confirm approve"
+    },
+    {
+      "at_seconds": 15,
+      "event": "Click Confirm approve"
+    },
+    {
+      "at_seconds": 15.4,
+      "event": "Click Confirm approve"
+    },
+    {
+      "at_seconds": 15.9,
+      "event": "Click Confirm approve"
+    },
+    {
+      "at_seconds": 16,
+      "event": "Click Prepare invoice contract"
+    },
+    {
+      "at_seconds": 16.1,
+      "event": "Click Review invoice approval"
+    },
+    {
+      "at_seconds": 16.2,
+      "event": "Click Confirm approve"
+    },
+    {
+      "at_seconds": 16.2,
+      "event": "Click Post and verify invoice"
+    },
+    {
+      "at_seconds": 16.3,
+      "event": "PASS owner_approved_invoice_posted_and_verified_first_productive_use"
+    },
+    {
+      "at_seconds": 16.3,
+      "event": "Narration",
+      "caption": "The first productive invoice is verified against its approved contract and exact accounting effect: USD 100.00 plus 7.25 tax, total 107.25. This is synthetic verified use, not production readiness.",
+      "planned_until": 203
+    },
+    {
+      "at_seconds": 17,
+      "event": "Open Review Verified Evidence"
+    },
+    {
+      "at_seconds": 17.7,
+      "event": "PASS trust_advisory_operations_does_not_read_automatically"
+    },
+    {
+      "at_seconds": 17.8,
+      "event": "Click Refresh Advisory Operations"
+    },
+    {
+      "at_seconds": 17.8,
+      "event": "PASS explicit_operations_read_returns_disabled_without_financial_claim",
+      "request": {
+        "at_seconds": 17.8,
+        "method": "GET",
+        "path": "/v1/operations/activity",
+        "status": 200
+      }
+    },
+    {
+      "at_seconds": 17.9,
+      "event": "Narration",
+      "caption": "Source-grounded architecture assigns financial authority to Cloud SQL and bounded operational controls to Firestore. This recording exercised local deterministic fallbacks. The diagram is architecture evidence, not a live cloud console or a production claim.",
+      "planned_until": 222
+    },
+    {
+      "at_seconds": 17.9,
+      "event": "PASS architecture_segment_explicitly_labels_source_and_runtime_boundaries"
+    },
+    {
+      "at_seconds": 17.9,
+      "event": "PASS no_browser_runtime_errors"
+    }
+  ],
+  "checks": [
+    {
+      "name": "play_real_keyboard_gameplay_bad_choice_recovery_and_unlock",
+      "passed": true
+    },
+    {
+      "name": "browser_local_validation_rejects_real_unbalanced_synthetic_input",
+      "passed": true
+    },
+    {
+      "name": "downloaded_zip_validated_corrected_reviewed_with_hosted_gate_truth",
+      "passed": true
+    },
+    {
+      "name": "explicit_demo_sign_in_then_harbor_selection",
+      "passed": true
+    },
+    {
+      "name": "discovery_and_assessment_complete",
+      "passed": true,
+      "session_id": "f197428b-6c2b-5649-b023-645862a8e563"
+    },
+    {
+      "name": "independent_second_opinion_1200_runtime_mode_visible",
+      "passed": true
+    },
+    {
+      "name": "user_requested_mapping_advice_fallback_labeled",
+      "passed": true
+    },
+    {
+      "name": "all_mappings_explicitly_reviewed",
+      "passed": true,
+      "count": 12
+    },
+    {
+      "name": "separate_plan_approval_recorded",
+      "passed": true
+    },
+    {
+      "name": "duplicate_resolution_authorized_checkpoint_retry_and_completion",
+      "passed": true
+    },
+    {
+      "name": "deterministic_financial_validation_verified",
+      "passed": true
+    },
+    {
+      "name": "all_configuration_areas_reviewed_and_sensitive_approvals_recorded",
+      "passed": true,
+      "count": 8
+    },
+    {
+      "name": "owner_approved_invoice_posted_and_verified_first_productive_use",
+      "passed": true
+    },
+    {
+      "name": "trust_advisory_operations_does_not_read_automatically",
+      "passed": true
+    },
+    {
+      "name": "explicit_operations_read_returns_disabled_without_financial_claim",
+      "passed": true,
+      "request": {
+        "at_seconds": 17.8,
+        "method": "GET",
+        "path": "/v1/operations/activity",
+        "status": 200
+      }
+    },
+    {
+      "name": "architecture_segment_explicitly_labels_source_and_runtime_boundaries",
+      "passed": true
+    },
+    {
+      "name": "no_browser_runtime_errors",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "landing-three-entry-experiences.png",
+    "play-evidence.png",
+    "play-bad-mapping.png",
+    "play-completed.png",
+    "try-data-unbalanced-journal.png",
+    "try-data-passed-reviewed-hosted-gate.png",
+    "understand-readiness.png",
+    "prepare-plan.png",
+    "prepare-independent-review.png",
+    "prepare-advice-fallback.png",
+    "prepare-plan-consent.png",
+    "move-paused-duplicate.png",
+    "move-resolution-review.png",
+    "move-complete.png",
+    "verify-reconciliation.png",
+    "configure-base-currency-review.png",
+    "configure-tax-setup-review.png",
+    "configure-user-roles-access-review.png",
+    "configure-complete.png",
+    "start-invoice-contract.png",
+    "start-invoice-consent.png",
+    "start-verified-fpu.png",
+    "start-posted-invoice-journal.png",
+    "trust-explicit-disabled-advisory-operations.png",
+    "architecture-source-status.png"
+  ],
+  "api_results": [
+    {
+      "at_seconds": 2.9,
+      "method": "GET",
+      "path": "/api/auth/demo",
+      "status": 307
+    },
+    {
+      "at_seconds": 4.6,
+      "method": "GET",
+      "path": "/api/auth/demo",
+      "status": 307
+    },
+    {
+      "at_seconds": 5.3,
+      "method": "POST",
+      "path": "/v1/migration-sessions",
+      "status": 201
+    },
+    {
+      "at_seconds": 5.4,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/discovery",
+      "status": 200
+    },
+    {
+      "at_seconds": 5.4,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/assessment",
+      "status": 200
+    },
+    {
+      "at_seconds": 5.4,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id/activity",
+      "status": 200
+    },
+    {
+      "at_seconds": 5.5,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/events",
+      "status": 201
+    },
+    {
+      "at_seconds": 5.7,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 6.3,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/plan",
+      "status": 200
+    },
+    {
+      "at_seconds": 6.3,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 6.4,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/mappings",
+      "status": 200
+    },
+    {
+      "at_seconds": 6.4,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 6.4,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/reviewer/mapping/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 6.6,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/reasoning/mapping",
+      "status": 200
+    },
+    {
+      "at_seconds": 6.7,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/mappings/:id/approve",
+      "status": 200
+    },
+    {
+      "at_seconds": 6.7,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 6.8,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/mappings/:id/approve",
+      "status": 200
+    },
+    {
+      "at_seconds": 6.8,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 6.8,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/mappings/:id/approve",
+      "status": 200
+    },
+    {
+      "at_seconds": 6.8,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 6.9,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/mappings/:id/approve",
+      "status": 200
+    },
+    {
+      "at_seconds": 6.9,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 7,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/mappings/:id/approve",
+      "status": 200
+    },
+    {
+      "at_seconds": 7,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 7,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/mappings/:id/approve",
+      "status": 200
+    },
+    {
+      "at_seconds": 7,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 7.1,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/mappings/:id/approve",
+      "status": 200
+    },
+    {
+      "at_seconds": 7.1,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 7.2,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/mappings/:id/approve",
+      "status": 200
+    },
+    {
+      "at_seconds": 7.2,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 7.2,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/mappings/:id/approve",
+      "status": 200
+    },
+    {
+      "at_seconds": 7.2,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 7.3,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/mappings/:id/approve",
+      "status": 200
+    },
+    {
+      "at_seconds": 7.3,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 7.4,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/mappings/:id/approve",
+      "status": 200
+    },
+    {
+      "at_seconds": 7.4,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 7.4,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/mappings/:id/approve",
+      "status": 200
+    },
+    {
+      "at_seconds": 7.4,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 7.6,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/plan",
+      "status": 200
+    },
+    {
+      "at_seconds": 7.7,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 8.2,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id",
+      "status": 200
+    },
+    {
+      "at_seconds": 8.8,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/migration/start",
+      "status": 200
+    },
+    {
+      "at_seconds": 8.8,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id/activity",
+      "status": 200
+    },
+    {
+      "at_seconds": 9,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/migration/resolutions/:id/decision",
+      "status": 200
+    },
+    {
+      "at_seconds": 9.1,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id/activity",
+      "status": 200
+    },
+    {
+      "at_seconds": 9.1,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/migration/resume",
+      "status": 200
+    },
+    {
+      "at_seconds": 9.1,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id/activity",
+      "status": 200
+    },
+    {
+      "at_seconds": 9.4,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id/validation-configuration",
+      "status": 200
+    },
+    {
+      "at_seconds": 10,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/validation",
+      "status": 200
+    },
+    {
+      "at_seconds": 10.1,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/configuration",
+      "status": 200
+    },
+    {
+      "at_seconds": 10.7,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/configuration/:id/decision",
+      "status": 200
+    },
+    {
+      "at_seconds": 11.2,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/configuration/:id/decision",
+      "status": 200
+    },
+    {
+      "at_seconds": 11.7,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/configuration/:id/decision",
+      "status": 200
+    },
+    {
+      "at_seconds": 12.2,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/configuration/:id/decision",
+      "status": 200
+    },
+    {
+      "at_seconds": 12.6,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/configuration/:id/decision",
+      "status": 200
+    },
+    {
+      "at_seconds": 12.7,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/configuration/apply",
+      "status": 200
+    },
+    {
+      "at_seconds": 13,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id/onboarding",
+      "status": 200
+    },
+    {
+      "at_seconds": 13.6,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/onboarding",
+      "status": 200
+    },
+    {
+      "at_seconds": 14.1,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/onboarding/tasks/opening_balances/decision",
+      "status": 200
+    },
+    {
+      "at_seconds": 14.5,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/onboarding/tasks/role_access/decision",
+      "status": 200
+    },
+    {
+      "at_seconds": 15,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/onboarding/tasks/invoice_preferences/decision",
+      "status": 200
+    },
+    {
+      "at_seconds": 15.4,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/onboarding/tasks/tax_readiness/decision",
+      "status": 200
+    },
+    {
+      "at_seconds": 15.9,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/onboarding/tasks/bank_setup/decision",
+      "status": 200
+    },
+    {
+      "at_seconds": 16,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/fpu/task",
+      "status": 200
+    },
+    {
+      "at_seconds": 16.2,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/fpu/decision",
+      "status": 200
+    },
+    {
+      "at_seconds": 16.2,
+      "method": "POST",
+      "path": "/v1/migration-sessions/:id/fpu/execute",
+      "status": 200
+    },
+    {
+      "at_seconds": 17.2,
+      "method": "GET",
+      "path": "/v1/migration-sessions/:id/intake-trust",
+      "status": 200
+    },
+    {
+      "at_seconds": 17.8,
+      "method": "GET",
+      "path": "/v1/operations/activity",
+      "status": 200
+    }
+  ],
+  "errors": [],
+  "browser_version": "149.0.7827.55",
+  "session_id": "f197428b-6c2b-5649-b023-645862a8e563",
+  "mapping_count": 12,
+  "configuration_count": 8,
+  "onboarding_count": 10,
+  "status": "PASSED",
+  "finished_seconds": 17.9
+}

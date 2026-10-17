@@ -20,7 +20,7 @@ Baseline source inspected at `8f750d9`. Integration owner must reconcile candida
 | Hosted uploads exceed public activation gates | MB-10 / No-Go hosted activation | All independent controls and security tests plus release authorization |
 | Live Gemini and Firestore exceed last-known cloud state | MB-04, MB-11 / activation gated | Effective permission/region, runtime/model_controls.py and tests/test_model_controls.py candidate controls, kill switch and sanitized runtime evidence |
 | New Play/Reviewer/intake changes not yet deployed | MB-02, MB-03, MB-05 / candidate pending | Candidate tests and authentic browser/deployment acceptance |
-| Mandatory deck template/video/portal limits unresolved | MB-08, MB-09 / submission not ready | Official template, verified portal constraints and authentic 3–4 minute final video |
+| Mandatory prescribed template/team/public video link unresolved | MB-08, MB-09 / submission not ready | Official template and team input, accepted PDF≤5MB and description≤1024 characters, authorized accessible video URL |
 
 The Product Quality Judge must compare actual product evidence with this register and the PR/FAQ. It must not score hypothetical wording as implemented behavior. Customer outcome measurement remains proposed until instrumented and observed under the metric contract.
 
@@ -39,14 +39,23 @@ approved or deployed release.
 | Promise / backlog | Concrete implementation and test execution | Current customer outcome / release decision |
 | --- | --- | --- |
 | Play / MB-02 | `components/play/OfficeMission.tsx`, `engine.ts`; gameplay/state tests; [14 browser checks](../submission/browser-play/browser-evidence.json) | Opening mission, failure/correction and demo unlock locally verified; no financial session changes. Candidate deployment pending. |
-| Explore / MB-01 | `GuidedDemo.tsx` now has a prominent real-journey link; core lifecycle and checksum-pinned v2/v3 fixtures; golden/compatibility tests passed | Preview completion is never migration completion. Executing the separate linked synthetic workspace is required; final browser evidence being captured. |
+| Explore / MB-01 | `GuidedDemo.tsx` now has a prominent real-journey link; core lifecycle and checksum-pinned v2/v3 fixtures; golden/compatibility tests passed | Preview completion is never migration completion. Executing the separate linked synthetic workspace is required; [complete real-UI dry-run evidence](../submission/browser-journey/dryrun/browser-evidence.json) passed 17/17 combined checks. |
 | Try Your Data / MB-03, MB-10 | `BrowserLocalValidation.tsx`, `browser-parser.ts`, `browser-archive.ts`, `browser-validation.ts`; [actual local review and negative tests](../security/try-data-delivery.md) | Template→select→validate→repair/revalidate→review works locally. Hosted workspace creation remains explicitly unavailable; full local server journey retained. |
 | Gemini / MB-04 | `reasoning.py`, `agents/reasoning`, async `runtime/model_controls.py`; synthetic/owner/forgery/stale/timeout/cost/kill-switch tests passed | User receives a visibly labeled deterministic fallback by default. No live-model or cloud-control delivery credit without authorized current evidence. |
 | Reviewer / MB-05 | `agents/reviewer/agent.py`, `reviewer.py`, `IndependentReview.tsx`; separate contract, read-only challenge, offline ADK, stale/owner/authority/replay tests passed | Account 1200 locally produces a meaningful missing-purpose challenge; no correct classification or approval is inferred. Live Reviewer gated. |
-| Financial verification | `tools/validation/checks.py`, `validate_configure.py`; exact counts/relationships/balances/checksums, repair and revalidation tests passed | Failed checks remain blocking. No real provider or production-customer correctness claim. Final browser acceptance pending. |
-| Verified first use | `onboard_fpu.py`, `tools/activation/invoice.py`; owner/approval/idempotency/invoice/receipt tests passed | Only an approved synthetic invoice plus deterministic verification can establish the outcome. Full browser and deployed evidence pending. |
+| Financial verification | `tools/validation/checks.py`, `validate_configure.py`; exact counts/relationships/balances/checksums, repair and revalidation tests passed | Failed checks remain blocking. No real provider or production-customer correctness claim. Exact checks passed in the complete UI dry run; deployment remains pending. |
+| Verified first use | `onboard_fpu.py`, `tools/activation/invoice.py`; owner/approval/idempotency/invoice/receipt tests passed | Only an approved synthetic invoice plus deterministic verification can establish the outcome. The complete UI dry run passed through an approved USD 107.25 invoice and deterministic receipt; current deployed evidence remains pending. |
 
 All 559 backend and 658 frontend tests passed in the combined local run; 58 backend checks were
 skipped and are **not** passed gates. The Agent Judge's 18/18 result measures expected contract
 accept/reject detection with zero live model calls. See its report for the separate evaluation
 contract. Each remaining promise gap retains its original backlog ID; none is silently removed.
+
+Additional source checkpoint `1a24a2c` completes gated advisory operational activity readback: owner
+filter plus per-record owner validation, controlled event projection, explicit refresh, client-write
+denial sources and bounded outage handling. Full combined local regression is 584 backend passed /
+58 skipped and 674 frontend passed / 51 files; source rules/indexes remain unprovisioned, and live
+cloud validation is not credited. Recorded full financial UI evidence retains its exact runtime
+commit in the footage manifest rather than being relabeled as an unperformed cloud operation.
+
+Final local video acceptance: [231.88-second authentic captioned footage](../submission/assets/working-product-demo.webm) meets the 3–4 minute duration requirement. Its [manifest](../submission/browser-journey/recording/video-manifest.json) identifies API `fffd14c`; the separate latest-source `1a24a2c` browser run passed 17/17 checks. A public video URL remains release-gated. The final regression totals above supersede the earlier 559/658 checkpoint.

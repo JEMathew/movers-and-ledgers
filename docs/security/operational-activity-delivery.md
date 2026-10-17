@@ -6,8 +6,8 @@ No Firestore database, index, rules, IAM or deployed configuration was changed o
 `GET /v1/operations/activity` is an authenticated read-only router. It returns DISABLED before
 ADC/store access for local mode, disabled backend or missing synthetic-Beta authorization. It
 returns UNAVAILABLE on initialization/query errors, deadline or exhausted read capacity; no SDK,
-credential, request, prompt or owner text is returned. Root integration owns router/proxy/Trust
-mounting and reservation completion instrumentation; this slice does not change financial flows.
+credential, request, prompt or owner text is returned. Integration now wires the router, authenticated GET proxy allowlist and the owner-keyed Trust
+Evidence subtree. Reservation and completion instrumentation is connected; financial flows are unchanged.
 
 Enabled reads reuse `await configured_controls(settings)` and its per-loop/project cached
 AsyncClient, including cached off-loop ADC initialization. A maximum two-second total read deadline
@@ -54,3 +54,9 @@ Offline verification:
 These are fake SDK-port/offline contracts, not Firestore transaction, emulator, IAM, index,
 public deployment, live Gemini usage or financial audit evidence. Full integrated/proxy tests and
 release authorization remain with the integration owner.
+
+Integration checkpoint `1a24a2c`: reservation records now include only a pseudonymous owner hash;
+terminal advisory metadata is recorded after session CAS and does not refund or rewrite allowances.
+Independent mapping-review operations use their own allowlisted capability. A proxy regression
+verifies authenticated GET, no owner-header forwarding and denied POST. Live index/rule/IAM and
+transaction/readback validation remain unperformed; all infrastructure stays disabled/unchanged.

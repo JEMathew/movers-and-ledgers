@@ -1,0 +1,46 @@
+const fs=require('node:fs');const path=require('node:path');const {expect}=require('/Users/jincenmathew/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/test');
+module.exports=async function({page,goto,click,section,hold,snap,check,root,output,log,pause}){
+ await goto('/');
+ await section(10,'MoveBooks AI by Movers & Ledgers: move your books, keep your confidence. This local demonstration uses bounded synthetic data, with every financial approval left to the user.');
+ await snap('landing-three-entry-experiences');await hold(10);
+ await goto('/play');
+ await section(35,'Play makes migration approachable. Walk through Eli’s office, inspect the evidence and reconcile a clearing account before choosing its destination. Game progress never approves or moves financial records.');
+ await click('Start mission');
+ const office=page.getByRole('group',{name:/^Navigable office/});
+ for(let i=0;i<4;i++){await office.press('ArrowUp');await page.waitForTimeout(70);}
+ await office.press('e');await expect(page.getByRole('heading',{name:'A letter on Eli’s desk',exact:true})).toBeVisible();await pause(3500);
+ await page.getByRole('heading',{name:'A letter on Eli’s desk',exact:true}).press('Escape');
+ await office.press('ArrowDown');for(let i=0;i<4;i++)await office.press('ArrowRight');await office.press('e');
+ await expect(page.getByRole('heading',{name:'The clearing ledger',exact:true})).toBeVisible();await pause(3500);await snap('play-evidence');
+ await page.getByRole('heading',{name:'The clearing ledger',exact:true}).press('Escape');
+ for(let i=0;i<6;i++)await office.press('ArrowRight');await office.press('ArrowUp');await office.press('e');
+ await expect(page.getByRole('heading',{name:'The settlement file',exact:true})).toBeVisible();await pause(3500);
+ await page.getByRole('heading',{name:'The settlement file',exact:true}).press('Escape');
+ await office.press('ArrowLeft');await office.press('ArrowDown');await office.press('ArrowDown');await office.press('e');
+ await page.getByLabel('Amount still held by the processor (USD)').fill('25.00');
+ await page.getByLabel('Destination for 1200 · Misc Clearing').selectOption('bank');await click('Run readiness check');
+ await expect(page.getByRole('status').filter({hasText:'Bank reconciliation failed'})).toBeVisible();
+ await snap('play-bad-mapping');await pause(3500);
+ await page.getByLabel('Destination for 1200 · Misc Clearing').selectOption('clearing');await click('Run readiness check');
+ await expect(page.getByText('Mission complete · Demo unlocked',{exact:true})).toBeVisible();
+ await snap('play-completed');check('play_real_keyboard_gameplay_bad_choice_recovery_and_unlock');await hold(35);
+ await goto('/try-your-data');
+ if(await page.getByRole('link',{name:'Enter Demo Workspace →',exact:true}).isVisible().catch(()=>false)){await page.getByRole('link',{name:'Enter Demo Workspace →',exact:true}).click();log('Explicit demo sign-in for local compatibility preview');await page.waitForLoadState('networkidle');}
+ await section(62,'Try Your Data downloads a documented template and validates permitted synthetic files in this browser. A journal imbalance blocks the package; replacing the files allows a fresh review. Public upload and workspace creation remain unavailable.');
+ await expect(page.getByRole('heading',{name:'Check Your Export in This Browser',exact:true})).toBeVisible();
+ const downloadPromise=page.waitForEvent('download');await click('Download Template ZIP');const downloaded=await downloadPromise;
+ const zip=path.join(output,'downloaded-controlled-package-v1.zip');await downloaded.saveAs(zip);log('Template downloaded from actual UI',{filename:downloaded.suggestedFilename()});
+ const template=JSON.parse(fs.readFileSync(path.join(root,'apps/web/components/try-your-data/browser-template.json'),'utf8'));
+ const broken=Object.entries(template).map(([name,content])=>({name,mimeType:name.endsWith('.csv')?'text/csv':'application/json',buffer:Buffer.from(name==='transactions.csv'?content.replace('""credit"": ""420.00""','""credit"": ""419.00""'):content)}));
+ await page.getByLabel('Test files',{exact:true}).setInputFiles(broken);
+ await page.getByRole('checkbox',{name:'I have permission to use these synthetic or de-identified test files. They contain no confidential customer data.',exact:true}).check();
+ await click('Validate Files');
+ await expect(page.getByText('Correct These Files and Revalidate',{exact:true})).toBeVisible();await snap('try-data-unbalanced-journal');await pause(4500);check('browser_local_validation_rejects_real_unbalanced_synthetic_input');
+ await click('Clear Files');await page.getByLabel('Test files',{exact:true}).setInputFiles(zip);await click('Validate Files');
+ await expect(page.getByText('Local Compatibility Checks Passed',{exact:true})).toBeVisible();
+ await pause(3000);
+ await page.getByRole('checkbox',{name:'I reviewed the local results and any columns that will not migrate.',exact:true}).check();
+ await click('Confirm Local Review');await expect(page.getByText('Hosted Workspace Creation Is Unavailable',{exact:true})).toBeVisible();
+ await page.getByRole('heading',{name:'4. Review and Confirm',exact:true}).scrollIntoViewIfNeeded();await snap('try-data-passed-reviewed-hosted-gate');
+ check('downloaded_zip_validated_corrected_reviewed_with_hosted_gate_truth');await hold(62);
+};

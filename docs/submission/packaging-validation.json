@@ -11,43 +11,63 @@
   "pdf_pages": 15,
   "pdf_limit_bytes": 5000000,
   "pdf_size_check": "passed",
-  "visual_review": "All draft slides inspected individually; changed BFSI, Play and architecture slides re-rendered and inspected. Refreshed validation-totals PDF slide inspected. Official-template comparison unavailable.",
+  "visual_review": "Existing all-slide review retained; final changes on slides8,10,12,13,15 re-rendered and inspected; final PDF pages8and12 rendered by Poppler and visually verified. Exact template comparison unavailable.",
   "description_characters": 953,
   "diagram_mermaid_svg_png_sets": 19,
   "relative_markdown_links": "passed",
-  "mandatory_video_status": "storyboard and captions only, final authentic footage missing",
+  "mandatory_video_status": "PASS_LOCAL_231_88_SECONDS_SILENT_VISIBLE_CAPTIONS; PUBLIC_LINK_PENDING",
   "assets": [
     {
       "path": "docs/submission/assets/movebooks-submission-draft.pdf",
-      "bytes": 1478467,
-      "sha256": "8922514ed1005b825a716bd83b51f8a98aed560edeec1a07a3e58ae364639cbb"
+      "bytes": 1412574,
+      "sha256": "6e47c64c670d876076f10c6a8779e36b34bb755e585c8ef39c40f97c26540b0f"
     },
     {
       "path": "docs/submission/assets/movebooks-submission-draft.pptx",
-      "bytes": 368320,
-      "sha256": "f5bfd30cd19e3671da62bb032eb9b4ff8ff1f71dea34a51b2e963f3217a19b51"
+      "bytes": 520897,
+      "sha256": "639350a5fc2c29597630c759f4a661ce9921942f391657f62d79765d80885c4a"
     },
     {
       "path": "docs/submission/assets/play-local-candidate.png",
       "bytes": 115439,
       "sha256": "24a87b2c17e1f45a2fb7f56a861c8cd10341d1e05a979b231dcd7ca5f65bbc78"
+    },
+    {
+      "path": "docs/submission/assets/plan-local-candidate.png",
+      "bytes": 144192,
+      "sha256": "39097798ab837ddc80de8391fdd6f10780baefd05a0d234ff5eabcc92c8015b5"
+    },
+    {
+      "path": "docs/submission/assets/fpu-local-candidate.png",
+      "bytes": 158995,
+      "sha256": "45f02172e0a1a386fc3c2f8db719bdf12a1fd35f1a9991d0a2dd721eccc361ca"
+    },
+    {
+      "path": "docs/submission/assets/working-product-demo.webm",
+      "bytes": 20890407,
+      "sha256": "820e07dbef45b8878abe2c52d93c5d9d3adfc3313155f354cba5a3cfe7ca2838"
+    },
+    {
+      "path": "docs/submission/assets/working-product-demo.srt",
+      "bytes": 2406,
+      "sha256": "966c5e57b1b4af0e314ae31cef3e6b8fc4b8e8a57ddf813452219c11563f19f6"
     }
   ],
   "local_play_browser_checks": 14,
   "local_backend_checkpoint": {
-    "passed": 559,
+    "passed": 584,
     "skipped": 58,
-    "seconds": 26.65,
-    "source": "integration-owner final combined local report"
+    "seconds": 23.73,
+    "source": "evidence/backend-tests.txt; core1a24a2c"
   },
   "selected_challenge": "BFSI: Intelligent Risk, Fraud & Financial Experiences",
   "local_frontend_checkpoint": {
-    "passed": 658,
-    "files": 50,
+    "passed": 674,
+    "files": 51,
     "lint": "passed",
     "typecheck": "passed",
     "build": "passed",
-    "source": "integration-owner final combined local report"
+    "source": "evidence/frontend-tests.txt; core1a24a2c"
   },
   "independent_focused_review": {
     "source_commit": "fffd14c",
@@ -55,5 +75,7 @@
     "seconds": 1.49,
     "scope": "offline model controls and independent Reviewer",
     "findings_status": "original issues and constructor gap closed; live activation evidence still required"
-  }
+  },
+  "full_journey_browser_checks": 17,
+  "pptx_finalizer_evidence": "docs/submission/evidence/presentation-finalization.json"
 }

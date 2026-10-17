@@ -13,4 +13,4 @@ flowchart LR
   workflow -->|"atomic owner-scoped snapshot / audit"| sql
   api -->|"user-triggered allowlisted projection"| model
   api -->|"interface-ready artifacts; not raw upload activation"| storage
-  api -->|"controls / activity only after integration"| ops
+  api -->|"gated source: reservations, outcomes, owner readback"| ops

@@ -1,0 +1,43 @@
+1
+00:00:00,600 --> 00:00:01,400
+MoveBooks AI by Movers & Ledgers: move your books, keep your confidence. This local demonstration uses bounded synthetic data, with every financial approval left to the user.
+
+2
+00:00:01,400 --> 00:00:03,500
+Play makes migration approachable. Walk through Eli’s office, inspect the evidence and reconcile a clearing account before choosing its destination. Game progress never approves or moves financial records.
+
+3
+00:00:03,500 --> 00:00:05,500
+Try Your Data downloads a documented template and validates permitted synthetic files in this browser. A journal imbalance blocks the package; replacing the files allows a fresh review. Public upload and workspace creation remain unavailable.
+
+4
+00:00:05,500 --> 00:00:06,400
+Explore Demo follows one synthetic business through Understand, Prepare, Move, Verify and Start. Discovery and readiness precede a versioned plan.
+
+5
+00:00:06,400 --> 00:00:06,600
+Account 1200, Misc Clearing, needs judgment. Request an independent second opinion and bounded advice; the displayed public Beta mode is deterministic fallback, not live Gemini.
+
+6
+00:00:06,600 --> 00:00:08,700
+The accountant reviews all mappings and separately approves the migration plan. Advice and second opinions cannot authorize financial writes.
+
+7
+00:00:08,700 --> 00:00:09,900
+Deterministic tools move the approved synthetic manifest. A controlled duplicate stops the batch; completed checkpoints stay intact until a person reviews the remedy.
+
+8
+00:00:09,900 --> 00:00:13,500
+Moving records is not proof. Deterministic reconciliation checks counts, relationships, balances and documents before reviewed configuration can be applied.
+
+9
+00:00:13,500 --> 00:00:16,300
+Onboarding checks the governed prerequisites. The owner reviews invoice terms, approves posting, then runs the first synthetic task and verifies its accounting effect.
+
+10
+00:00:16,300 --> 00:00:17,900
+The first productive invoice is verified against its approved contract and exact accounting effect: USD 100.00 plus 7.25 tax, total 107.25. This is synthetic verified use, not production readiness.
+
+11
+00:00:17,900 --> 00:00:17,900
+Source-grounded architecture assigns financial authority to Cloud SQL and bounded operational controls to Firestore. This recording exercised local deterministic fallbacks. The diagram is architecture evidence, not a live cloud console or a production claim.

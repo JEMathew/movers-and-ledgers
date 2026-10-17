@@ -2,16 +2,16 @@
   "version": "submission-evidence-v1",
   "date": "2026-10-17",
   "timezone": "Asia/Kolkata",
-  "code_commit": "fffd14c",
+  "code_commit": "1a24a2c",
   "branch": "delivery/submission-integration",
   "overall_submission": "NO_GO",
   "public_beta_modified": false,
   "deployment_authorized": false,
-  "source_status": "Local committed implementation candidate; no public branch publication",
+  "source_status": "Local committed implementation candidate; final documentation/media checkpoint follows core code 1a24a2c; no public branch publication",
   "verification": {
     "backend": {
       "command": "python -m pytest -q",
-      "passed": 559,
+      "passed": 584,
       "skipped": 58,
       "warnings": 1,
       "evidence": "docs/submission/evidence/backend-tests.txt",
@@ -24,28 +24,55 @@
         "npm run typecheck",
         "npm run build"
       ],
-      "tests_passed": 658,
-      "test_files": 50,
+      "tests_passed": 674,
+      "test_files": 51,
       "lint": "PASS",
       "types": "PASS",
       "production_build": "PASS",
-      "build_evidence": "docs/submission/evidence/web-build.txt"
+      "build_evidence": "docs/submission/evidence/web-build.txt",
+      "test_evidence": "docs/submission/evidence/frontend-tests.txt",
+      "static_evidence": "docs/submission/evidence/frontend-static-checks.txt"
     },
     "dependency_audits": {
       "npm_production_known_vulnerabilities": 0,
       "python_environment_known_vulnerabilities": 0,
-      "python_packages": 157,
       "python_skipped": [
         "editable movebooks-ai"
       ],
-      "image_scan": "NOT_RUN_DOCKER_UNAVAILABLE"
+      "image_scan": "NOT_RUN_DOCKER_UNAVAILABLE",
+      "python_packages_checked": 156,
+      "python_entries_total": 157
     },
     "play_browser": {
       "checks_passed": 14,
       "evidence": "docs/submission/browser-play/browser-evidence.json"
     },
-    "full_journey_browser": "IN_PROGRESS",
-    "working_product_video": "IN_PROGRESS",
+    "full_journey_browser": {
+      "status": "PASS",
+      "checks_passed": 17,
+      "mode": "real-ui-dryrun",
+      "evidence": "docs/submission/browser-journey/dryrun/browser-evidence.json",
+      "direct_financial_api_manipulation": false,
+      "terminal_outcome": "VERIFIED_FIRST_PRODUCTIVE_USE",
+      "synthetic_invoice_total": "107.25",
+      "code_commit": "1a24a2ce45ab2814d2f2f26628c64fc05cb19abc",
+      "operations": "Zero automatic reads; one explicit GET returned 200 DISABLED; no live Firestore claim"
+    },
+    "working_product_video": {
+      "status": "PASSED",
+      "recording_git_head": "74066efbf4818fb4d5b769abd72c496069f2f817",
+      "api_runtime_commit": "fffd14c246dcec58347ac2b3155e2cf51b2b9662",
+      "acceptance_checks_passed": 15,
+      "encoded_video_duration_seconds": 231.88,
+      "video_file": "docs/submission/assets/working-product-demo.webm",
+      "video_bytes": 20890407,
+      "video_sha256": "820e07dbef45b8878abe2c52d93c5d9d3adfc3313155f354cba5a3cfe7ca2838",
+      "srt_file": "docs/submission/assets/working-product-demo.srt",
+      "runtime": "Explicit local demo identity; deterministic advice and independent review; no live Gemini or production provider writes.",
+      "audio": "Silent with visible narration captions and SRT sidecar",
+      "evidence": "docs/submission/browser-journey/recording/video-manifest.json",
+      "public_link": "NOT_PUBLISHED_REQUIRES_APPROVAL"
+    },
     "agent_quality_judge": {
       "mode": "offline-contract",
       "case_count": 18,
@@ -53,6 +80,12 @@
       "live_model_calls": 0,
       "evidence": "docs/submission/agent-quality-evidence.json",
       "not_a_model_accuracy_benchmark": true
+    },
+    "presentation_finalization": "docs/submission/evidence/presentation-finalization.json",
+    "repository_checks": {
+      "status": "PASS",
+      "output": "Checked 132 Markdown files and 607 text files; 0 findings.",
+      "evidence": "docs/submission/evidence/final-asset-validation.json"
     }
   },
   "public_links": [
@@ -76,9 +109,11 @@
     "current_effective_vertex_permissions": "UNVERIFIED",
     "current_supported_model_region": "UNVERIFIED",
     "firestore_activation": "NOT_PERFORMED",
-    "operational_activity_stream": "UNFINISHED",
+    "operational_activity_stream": "IMPLEMENTED_GATED_SOURCE; owner-scoped SDK-port/UI/proxy tests passed, live validation not run",
     "sql_authority": "Existing implementation; current deployed persistence acceptance unverified",
-    "public_mode": "Last known deterministic-only, not reverified from authenticated runtime"
+    "public_mode": "Last known deterministic-only, not reverified from authenticated runtime",
+    "source_index_rules": "infra/firestore (not deployed)",
+    "signed_in_browser_inventory": "Cloud console tab exists; content inspection blocked by automatic approval review pending explicit read-only authorization"
   },
   "release_gates": [
     {
@@ -92,7 +127,7 @@
     },
     {
       "id": "FULL_BROWSER_AND_VIDEO",
-      "status": "IN_PROGRESS"
+      "status": "PASS_LOCAL_17_CHECKS_AND_231_88_SECOND_VIDEO"
     },
     {
       "id": "CANDIDATE_CLOUD_ACCEPTANCE",
@@ -104,7 +139,7 @@
     },
     {
       "id": "FIRESTORE_ACTIVITY",
-      "status": "UNFINISHED"
+      "status": "SOURCE_IMPLEMENTED_LIVE_VALIDATION_GATED"
     },
     {
       "id": "HOSTED_UPLOAD",
@@ -113,23 +148,48 @@
     {
       "id": "PUBLIC_RELEASE",
       "status": "REQUIRES_EXPLICIT_APPROVAL"
+    },
+    {
+      "id": "READ_ONLY_CLOUD_CONSOLE",
+      "status": "AUTOMATIC_REVIEW_BLOCKED_PENDING_EXPLICIT_AUTHORIZATION",
+      "scope": "Inspect private movebooks-ai project/account data only; no mutations"
     }
   ],
   "assets": [
     {
       "path": "docs/submission/assets/movebooks-submission-draft.pdf",
-      "bytes": 1478217,
-      "sha256": "23198da0aa1cae613ed993a60fe3f585b3fb6fe7673b6d137a99f13c54b938fb"
+      "bytes": 1412574,
+      "sha256": "6e47c64c670d876076f10c6a8779e36b34bb755e585c8ef39c40f97c26540b0f"
     },
     {
       "path": "docs/submission/assets/movebooks-submission-draft.pptx",
-      "bytes": 368122,
-      "sha256": "2bb68071c679b57850f1fee8c01d5550a74125a14461b69e0c35ee7b69507861"
+      "bytes": 520897,
+      "sha256": "639350a5fc2c29597630c759f4a661ce9921942f391657f62d79765d80885c4a"
     },
     {
       "path": "docs/submission/assets/play-local-candidate.png",
       "bytes": 115439,
       "sha256": "24a87b2c17e1f45a2fb7f56a861c8cd10341d1e05a979b231dcd7ca5f65bbc78"
+    },
+    {
+      "path": "docs/submission/assets/plan-local-candidate.png",
+      "bytes": 144192,
+      "sha256": "39097798ab837ddc80de8391fdd6f10780baefd05a0d234ff5eabcc92c8015b5"
+    },
+    {
+      "path": "docs/submission/assets/fpu-local-candidate.png",
+      "bytes": 158995,
+      "sha256": "45f02172e0a1a386fc3c2f8db719bdf12a1fd35f1a9991d0a2dd721eccc361ca"
+    },
+    {
+      "path": "docs/submission/assets/working-product-demo.webm",
+      "bytes": 20890407,
+      "sha256": "820e07dbef45b8878abe2c52d93c5d9d3adfc3313155f354cba5a3cfe7ca2838"
+    },
+    {
+      "path": "docs/submission/assets/working-product-demo.srt",
+      "bytes": 2406,
+      "sha256": "966c5e57b1b4af0e314ae31cef3e6b8fc4b8e8a57ddf813452219c11563f19f6"
     }
   ],
   "description_characters": 953,

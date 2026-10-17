@@ -44,8 +44,9 @@ limits and do not imply public quota enforcement.
 - Prove effective Vertex inference permission and regional model access for the API workload.
 - Review budget prices, alarms, pseudonymous-data retention/deletion and reservation TTL. Preserve
   reservations for the session replay window; unsafe early deletion would weaken replay defense.
-- Complete sanitized operational activity readback and owner-isolation tests before claiming the
-  requested Firestore activity stream is integrated. Existing SQL activity/audit is independent.
+- Validate the implemented sanitized operational readback against the real authorized backend,
+  including owner isolation, index/rules/IAM and outage behavior, before claiming live Firestore
+  activity. Existing SQL activity/audit remains independent.
 
 ## Evidence
 
@@ -57,3 +58,8 @@ and the actual Google ADK runner with a scripted offline model. Model execution 
 these tests is **offline**; it is not a claim of a paid Gemini invocation.
 
 Hosted uploads retain a separate release gate and never enter model context.
+
+Source integration `1a24a2c` adds owner-filtered readback, explicit refresh in owner-keyed Trust
+Evidence, controlled reservation/outcome states and a strict response projection. Source rules
+deny all direct client reads/writes; source indexes are unprovisioned. These are not financial
+audit records, model-call proof or real-cloud acceptance. See [activity evidence](operational-activity-delivery.md).

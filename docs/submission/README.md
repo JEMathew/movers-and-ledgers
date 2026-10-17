@@ -5,8 +5,9 @@ Reviewable content package, 17 October 2026. **Not a completed official submissi
 - [Editable PowerPoint content draft](assets/movebooks-submission-draft.pptx)
 - [PDF content draft](assets/movebooks-submission-draft.pdf), 15 pages, below the 5 MB portal limit
 - [Product description](product-description.txt), 953 characters before trailing newline
-- [Authentic working-product video storyboard](video-storyboard.md), planned runtime 3:30
-- [Draft captions](video-captions-draft.srt), to retime against final narration
+- [Authentic working-product video](assets/working-product-demo.webm), **3:51.88**, silent with visible captions
+- [Matching captions](assets/working-product-demo.srt) and [capture/provenance/QA](browser-journey/README.md)
+- [Planning storyboard](video-storyboard.md) and [superseded draft captions](video-captions-draft.srt), retained as preparation
 - [Acceptance and release matrix](acceptance-report.md)
 - [Machine-readable evidence manifest](evidence-manifest.json)
 - [Independent Product Quality Judge](product-quality-judge.md)
@@ -16,7 +17,9 @@ Reviewable content package, 17 October 2026. **Not a completed official submissi
 - [Independent model-control and Reviewer review](independent-model-control-review.md), 36 focused checks passed
 - [PM artifact index](../product-management/README.md), [Working Backwards](../working-backwards/README.md), [editable diagrams](../architecture-experience/README.md)
 
-The PPTX retains editable text and a native architecture diagram. It includes an authentic accepted local Play candidate capture and labeled historical journey screenshots. The PDF is a faithful raster export of the rendered content deck. No PowerPoint desktop compatibility check is claimed. No invented customer impact, adoption, accuracy, competitor result or financial cost appears in the deck. The deck records 14 passing Play browser checks and the integration owner’s local backend checkpoint of 559 passed / 58 skipped, plus 658 frontend tests across 50 files. Final accepted journey captures and subsequent test results must supplement this checkpoint.
+The PPTX retains editable text and a native architecture diagram. It includes authentic local Play, independent-review and verified-FPU screenshots. The PDF is a faithful raster export of the rendered deck, **1,412,574 bytes**, 15 pages. Native PowerPoint desktop behavior has not been tested. No invented customer impact, adoption, accuracy, competitor result or financial cost appears. Final local regression: **584 backend passed / 58 skipped**, **674 frontend passed / 51 files**, lint, types and production build passed; complete latest-source browser acceptance passed **17/17**, and Play passed **14/14**. [Finalization checks](evidence/presentation-finalization.json) passed package, geometry, font and first-party import validation.
+
+The video records API `fffd14c`; the newer source `1a24a2c` has a separate full acceptance run. Gemini/Reviewer explanations in the footage use explicitly labeled deterministic fallbacks. The final architecture segment is source evidence rather than a live cloud-console session. Public video publication and current cloud acceptance remain gated.
 
 ## Reproduction
 
@@ -26,4 +29,4 @@ Use the bundled Node runtime and `@oai/artifact-tool`. Copy `source/build-deck.m
 
 ## Release conditions
 
-Import the exact official template, reconcile team fields and all candidate claims, inspect the final deck/PDF, verify the prototype and public repository links, capture an authentic accepted-candidate video and validate its 3–4 minute duration. Script, captions, conceptual artwork and historical screenshots are preparation and evidence sources, not substitutes for the required final video. Public release, model/cloud activation and hosted upload authorization remain separate gates.
+Import the exact official template, reconcile team fields and all candidate claims, inspect the final deck/PDF, verify the prototype and public repository links, publish the accepted 3:51.88 video only under release approval, and verify the resulting accessible link and portal compatibility. Script, captions, conceptual artwork and historical screenshots are preparation and evidence sources, not substitutes for the required final video. Public release, model/cloud activation and hosted upload authorization remain separate gates.

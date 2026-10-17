@@ -1,14 +1,14 @@
 # Scoped cloud validation and release authorization plan
 
-Prepared against local integration code `fffd14c`. **This plan has not been executed or approved.**
+Prepared against local integration code `1a24a2c`. **This plan has not been executed or approved.**
 Existing public Beta and its traffic remain untouched. Read-only reachability checks returned
 HTTP 200 for the Beta and public repository; they do not identify the deployed source or prove
 signed-in execution. Current environment has no usable ADC credentials or gcloud executable.
 
-## Proposed first authorization: isolated synthetic cloud validation
+## Requested verification: current read-only inventory, then isolated validation
 
 Scope the work to project `movebooks-ai` and workload
-`movebooks-beta-api@movebooks-ai.iam.gserviceaccount.com`. First inspect current service revisions,
+`movebooks-beta-api@movebooks-ai.iam.gserviceaccount.com`. The directive requests read-only verification. Local CLI/ADC access is unavailable. An existing signed-in Google Cloud console tab was found, but automatic approval review rejected observation because it could expose private project/account data and did not find explicit authorization in the trusted messages. A direct request for read-only console inspection is pending. This is an automatic review rejection, not a manual user refusal. No alternate surface or indirect access will be used to bypass it. Once explicit access is authorized, inspect current service revisions,
 identity, environment, IAM bindings/effective access, SQL/storage readiness and logging using the
 user's authorized Google Cloud session. Do not print tokens or full environment variables.
 No financial-session mutation belongs to this inventory. Confirm the actual project, database,
@@ -36,8 +36,9 @@ No uploaded context, raw financial payload or credentials may enter model traces
 Required proof before any live-model release: current workload/region access; Firestore transaction
 atomicity and authenticated event/readback isolation; budget/kill-switch behavior; safe fallback;
 SQL/persistence compatibility; current image/dependency security; and full signed-in browser path.
-The local reservation adapter does not deliver the requested operational activity stream. Complete
-its authenticated integration and tests before claiming that capability as active.
+The source candidate now implements operational reservation/outcome readback and owner checks.
+Its fake-SDK tests do not establish live Firestore behavior; validate the provisioned backend,
+index, direct-client rules, IAM and owner/outage boundaries before claiming it as active.
 
 ## Proposed second authorization: bounded public candidate release
 
@@ -54,7 +55,7 @@ preserved migration approvals or financial records to make a demonstration succe
 
 ## Independent hosted-upload gate
 
-Public upload remains disabled through both authorizations above. It requires its own release
+Public upload remains disabled throughout the verification and release steps above. It requires its own release
 approval plus parser isolation, malware protection, authentication/tenant isolation,
 retention/deletion, abuse prevention, bounded concurrency and negative security tests. The
 browser-local fallback remains available while that capability is unfinished.
