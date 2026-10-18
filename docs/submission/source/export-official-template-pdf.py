@@ -1,5 +1,6 @@
 """Export the rendered official-template review deck without modifying source/video."""
 from pathlib import Path
+
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 root = Path.cwd()
