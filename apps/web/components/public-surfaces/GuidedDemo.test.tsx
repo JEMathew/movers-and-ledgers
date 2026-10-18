@@ -18,12 +18,12 @@ describe("PR03 authored public Demo", () => {
     const events = vi.spyOn(window, "dispatchEvent");
     render(<GuidedDemo/>);
     expect(screen.getByText(/No sign-in · No workspace changes/)).toBeVisible();
-    expect(screen.getByRole("link", {name: "Run Harbor Light Migration"})).toHaveAttribute("href", sampleEntry);
+    expect(screen.getByRole("link", {name: "Run Harbor Light migration"})).toHaveAttribute("href", sampleEntry);
     fireEvent.click(screen.getByRole("button", { name: "Start demo" }));
     for (const [index, phase] of demoPhases.entries()) {
       expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(phase.title);
       expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
-      expect(screen.getByRole("button", { name: `Preview ${phase.name}, phase ${index + 1} of 5` })).toHaveAttribute("aria-current", "step");
+      expect(screen.getByRole("button", { name: `Preview ${phase.name}, stage ${index + 1} of 5` })).toHaveAttribute("aria-current", "step");
       expect(screen.getByText(phase.insight)).toBeVisible();
       const evidence = screen.getByRole("region", { name: `${phase.name} sample evidence` });
       for (const [label, value] of phase.evidence) {
@@ -35,9 +35,9 @@ describe("PR03 authored public Demo", () => {
       expect(screen.getByRole("link", { name: `Learn about ${phase.name.toLowerCase()}` })).toHaveAttribute("href", `/learn#${phase.topic}`);
       next();
     }
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("You’ve explored the five phases.");
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("You’ve explored the five stages.");
     expect(screen.getByText(/No approvals, posting or verification occurred/)).toBeVisible();
-    expect(screen.getByRole("link", { name: "Try the Guided Migration" })).toHaveAttribute("href", `/sign-in?next=${encodeURIComponent(sampleEntry)}`);
+    expect(screen.getByRole("link", { name: "Try the guided migration" })).toHaveAttribute("href", `/sign-in?next=${encodeURIComponent(sampleEntry)}`);
     expect(fetch).not.toHaveBeenCalled();
     expect(xhr).not.toHaveBeenCalled();
     expect(stored).not.toHaveBeenCalled();
@@ -51,14 +51,14 @@ describe("PR03 authored public Demo", () => {
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(demoPhases[0].title);
     fireEvent.click(screen.getByRole("button", { name: "Back to introduction" }));
     fireEvent.click(screen.getByRole("button", { name: "Start demo" }));
-    fireEvent.click(screen.getByRole("button", { name: "Preview Start, phase 5 of 5" }));
+    fireEvent.click(screen.getByRole("button", { name: "Preview Start, stage 5 of 5" }));
     fireEvent.click(screen.getByRole("button", { name: "Finish demo" }));
     fireEvent.click(screen.getByRole("button", { name: "Previous phase" }));
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(demoPhases[4].title);
     next();
     fireEvent.click(screen.getByRole("button", { name: "Restart demo" }));
     expect(screen.getByRole("button", { name: "Start demo" })).toBeEnabled();
-    expect(screen.queryByRole("link", { name: "Try the Guided Migration" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Try the guided migration" })).not.toBeInTheDocument();
   });
   it("forgets the preview on remount and preserves an existing selected migration pointer", () => {
     sessionStorage.setItem("movebooks-migration-session", "11111111-1111-4111-8111-111111111111");
@@ -77,20 +77,20 @@ describe("PR03 authored public Demo", () => {
     expect(screen.getByText(/No real customer or production provider data/)).toBeVisible();
     fireEvent.click(screen.getByText("Demo and Beta are different"));
     expect(screen.getByRole("link", { name: "Already signed in? Open the sample assessment" })).toHaveAttribute("href", sampleEntry);
-    for (const [name, href] of [["Back to Home", "/"], ["Learn", "/learn"], ["Conceptual Product Vision video", "/#product-vision"]])
+    for (const [name, href] of [["Back to home", "/"], ["Learn", "/learn"], ["Conceptual Product Vision video", "/#product-vision"]])
       expect(screen.getByRole("link", { name })).toHaveAttribute("href", href);
     expect(screen.queryByRole("link", { name: "Play the office mission" })).toBeNull();
   });
   it("labels authored amounts and separates controls from AI advice", () => {
     render(<GuidedDemo/>);
     fireEvent.click(screen.getByRole("button", { name: "Start demo" }));
-    fireEvent.click(screen.getByRole("button", { name: "Preview Verify, phase 4 of 5" }));
+    fireEvent.click(screen.getByRole("button", { name: "Preview Verify, stage 4 of 5" }));
     expect(screen.getByText(/Sample evidence/)).toBeVisible();
     expect(screen.getByText("USD 7.25 · blocked")).toBeVisible();
     fireEvent.click(screen.getByText("How assistance and controls work"));
     expect(screen.getByText(/not measured or calculated by this Demo/)).toBeVisible();
     expect(screen.queryByRole("button", { name: /Approve|Repair|Post|Retry|Validate/ })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Preview Prepare, phase 2 of 5" }));
+    fireEvent.click(screen.getByRole("button", { name: "Preview Prepare, stage 2 of 5" }));
     expect(document.querySelector("details[open]")).toBeNull();
     fireEvent.click(screen.getByText("How assistance and controls work"));
     expect(screen.getByText(/not calibrated live-model predictions/)).toBeVisible();

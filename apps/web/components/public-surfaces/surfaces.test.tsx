@@ -122,7 +122,7 @@ describe("public surface contracts", () => {
     window.history.replaceState(null, "", `/product?session=${id}`);
     const fetch = vi.spyOn(globalThis, "fetch").mockImplementation(() => json(evidence));
     render(<ProductEntry/>);
-    expect(await screen.findByRole("link", { name: "Continue My Migration" })).toHaveAttribute("href", `/migrate-resolve?session=${id}`);
+    expect(await screen.findByRole("link", { name: "Continue my migration" })).toHaveAttribute("href", `/migrate-resolve?session=${id}`);
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch.mock.calls[0][1]?.method).toBeUndefined();
   });
@@ -133,7 +133,7 @@ describe("public surface contracts", () => {
       expect(document.getElementById(topic.id)?.tagName).toBe("DETAILS");
     }
     // With no migration selected, each topic leads to My Migration, never the marketing Product page.
-    const links = screen.getAllByRole("link", { name: "Open My Migration", hidden: true });
+    const links = screen.getAllByRole("link", { name: "Open my migration", hidden: true });
     expect(links).toHaveLength(10);
     for (const link of links) expect(link).toHaveAttribute("href", "/workspace");
     expect(document.querySelector('a[href^="/product"]')).toBeNull();
@@ -143,10 +143,10 @@ describe("public surface contracts", () => {
     if (source === "query") window.history.replaceState(null, "", `/learn?session=${id}`);
     else { window.history.replaceState(null, "", "/learn"); sessionStorage.setItem("movebooks-migration-session", id); }
     render(<Learn/>);
-    const links = await screen.findAllByRole("link", { name: /in Your Migration$/, hidden: true });
+    const links = await screen.findAllByRole("link", { name: /in your migration$/, hidden: true });
     expect(links).toHaveLength(10);
     const reconciliation = within(document.getElementById("reconciliation") as HTMLElement).getByRole("link", { hidden: true });
-    expect(reconciliation).toHaveTextContent("Open Validate in Your Migration");
+    expect(reconciliation).toHaveTextContent("Open Validate in your migration");
     expect(reconciliation).toHaveAttribute("href", `/validate-configure?session=${id}`);
     const mappings = within(document.getElementById("mappings") as HTMLElement).getByRole("link", { hidden: true });
     expect(mappings).toHaveAttribute("href", `/plan-map-approve?session=${id}`);
@@ -156,7 +156,7 @@ describe("public surface contracts", () => {
   it("ignores an invalid stored session on Learn topic links", async () => {
     sessionStorage.setItem("movebooks-migration-session", "../../private");
     render(<Learn/>);
-    await waitFor(() => expect(screen.getAllByRole("link", { name: "Open My Migration", hidden: true })).toHaveLength(10));
+    await waitFor(() => expect(screen.getAllByRole("link", { name: "Open my migration", hidden: true })).toHaveLength(10));
     sessionStorage.clear();
   });
   it("returns from Learn to the referenced step without fetching or changing progress", () => {
@@ -169,7 +169,7 @@ describe("public surface contracts", () => {
   it("does not invent a current migration from invalid Learn context", () => {
     window.history.replaceState(null, "", "/learn?stage=99&session=invalid");
     render(<Learn/>);
-    expect(screen.getByRole("link", { name: "Go to My Migration" })).toHaveAttribute("href", "/workspace");
+    expect(screen.getByRole("link", { name: "Go to my migration" })).toHaveAttribute("href", "/workspace");
   });
   it("keeps one launch action, repeated only in the closing band with the same label and destination", () => {
     render(<Home/>);
@@ -199,11 +199,11 @@ describe("public surface contracts", () => {
     window.history.replaceState(null, "", `/trust?session=${id}`);
     const fetch = vi.spyOn(globalThis, "fetch").mockImplementation(() => json(evidence));
     render(<Trust evidenceMode/>);
-    await screen.findByRole("heading", { name: "Current journey stage: Move" });
+    await screen.findByRole("heading", { name: "Current stage: Move" });
     fireEvent.change(screen.getByLabelText("Evidence category"), { target: { value: "activity" } });
     expect(screen.getByText("Assessment Agent reviewed source evidence")).toBeVisible();
     fireEvent.click(screen.getByText("Assessment Agent reviewed source evidence"));
-    expect(screen.getByRole("heading", { name: "Current journey stage: Move" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Current stage: Move" })).toBeVisible();
     expect(screen.getByText("Tool: check_balance")).toBeVisible();
     expect(document.body.textContent).not.toContain("PRIVATE_");
     expect(fetch.mock.calls.every(call => !call[1]?.method || call[1].method === "GET")).toBe(true);
@@ -213,7 +213,7 @@ describe("public surface contracts", () => {
     vi.spyOn(globalThis, "fetch").mockImplementation(() => json({}, status));
     render(<Trust evidenceMode/>);
     expect(await screen.findByText("Evidence unavailable")).toBeVisible();
-    expect(screen.queryByRole("heading", { name: /Current journey stage/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: /Current stage/ })).not.toBeInTheDocument();
   });
   it("does not infer a stage from an unknown or non-synthetic session", () => {
     expect(() => projectSession({ ...evidence, workflow_status: "MAYBE_COMPLETE" }, id)).toThrow();

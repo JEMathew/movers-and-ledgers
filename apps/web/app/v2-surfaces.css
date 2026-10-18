@@ -1,1 +1,26 @@
-/* v2-surfaces: see docs/v2/full-experience/README.md for ownership. */
+/* V2 supporting surfaces: Trust, evidence, Help, Learn, Guide, Demo, Feedback, Try your data. Owner: workstream D. */
+
+.v2-surface-eyebrow { margin: 0; font-size: 0.9375rem; font-weight: 600; color: var(--v2-quiet); }
+.v2-surface-header .type-page { letter-spacing: -0.02em; }
+
+/* Trust principles as four quiet cards; the planned AI card is dashed like the landing page. */
+.v2-principles { list-style: none; padding: 0; margin: 24px 0 8px; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); max-width: none; }
+.v2-principles li { position: relative; margin: 0; padding: 20px; background: var(--v2-surface); border: 1px solid var(--v2-rule); border-radius: var(--v2-radius-container); color: var(--v2-ink-2); line-height: 1.55; }
+.v2-principles li strong { display: block; margin-bottom: 6px; color: var(--v2-ink); font-size: 1.0625rem; }
+.v2-principles li:nth-child(1) { border: 2px solid var(--v2-ink); }
+.v2-principles .v2-principle-planned { border-style: dashed; border-color: var(--v2-rule-strong); }
+.v2-principle-badge { position: absolute; top: 18px; right: 16px; }
+
+/* Evidence page. */
+.v2-evidence-context { display: grid; gap: 14px; }
+.v2-evidence-context .type-section { margin: 0; }
+.evidence-record > summary { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 8px 16px; }
+.evidence-record-main { display: grid; gap: 2px; min-width: 0; }
+.evidence-record-main strong { font-weight: 600; color: var(--v2-ink); }
+.evidence-record-meta { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.evidence-result { display: inline-flex; align-items: center; gap: 6px; font-size: 0.875rem; font-weight: 600; color: var(--v2-quiet); }
+.evidence-result::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--v2-rule-strong); }
+.evidence-result[data-result="ok"] { color: var(--v2-accent); }
+.evidence-result[data-result="ok"]::before { background: var(--v2-accent); }
+.evidence-result[data-result="stop"] { color: var(--v2-blocked-fg); }
+.evidence-result[data-result="stop"]::before { background: var(--v2-critical); border-radius: 1px; }

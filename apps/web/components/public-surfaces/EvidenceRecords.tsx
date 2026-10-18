@@ -2,8 +2,12 @@
 import { useId, useRef, useState } from "react";
 import { Badge, Button, Select } from "@/components/ui";
 import type { SessionView, TraceRow } from "./session";
+import { rowLabel, statusLabel } from "./evidence-labels";
 
 const PAGE_SIZE = 8;
+const resultTone = (status: string) => /^(VERIFIED|COMPLETED|APPROVE|APPROVED|PLAN_APPROVED|MODIFIED|MODIFY)$/i.test(status) ? "ok" : /^(BLOCKED|REJECTED|REJECT|FAILED)$/i.test(status) ? "stop" : "neutral";
+/** Short, locale-stable display of an ISO time; the exact value stays in the datetime attribute. */
+const formatTime = (iso: string) => { const at = new Date(iso); return Number.isNaN(at.getTime()) ? iso : at.toISOString().slice(0, 16).replace("T", " ") + " UTC"; };
 /** Only pages records already supplied by the authorized, redacted snapshot. */
 export function EvidenceRecords({ view }: { view: SessionView }) {
   const id = useId();
@@ -12,9 +16,9 @@ export function EvidenceRecords({ view }: { view: SessionView }) {
   const [page, setPage] = useState(0);
   const groups: { id: string; title: string; rows: TraceRow[]; note: string }[] = [
     { id: "decisions", title: "Human approvals and decisions", rows: view.decisions, note: "Recorded decisions only. A past approval does not approve a later task or erase a rejection." },
-    { id: "checks", title: "Deterministic checks", rows: view.checks, note: "Rule results from the supplied validation report and first task. Exact financial terms stay in Verify and Start." },
-    { id: "activity", title: "Agent activity and tools", rows: view.activity, note: "Actions and recommendations carry their recorded provenance. Agent advice is not financial verification or consent." },
-    { id: "events", title: "Lifecycle audit", rows: view.events, note: "Recorded workflow events. A lifecycle event alone is not proof of financial correctness." },
+    { id: "checks", title: "Rule checks", rows: view.checks, note: "Rule results from the supplied validation report and first task. Exact financial terms stay in Verify and Start." },
+    { id: "activity", title: "Rule and tool activity", rows: view.activity, note: "Automated steps with their recorded provenance. Activity is not financial verification or consent." },
+    { id: "events", title: "Workflow events", rows: view.events, note: "Recorded workflow events. A lifecycle event alone is not proof of financial correctness." },
   ];
   const selected = groups.find(group => group.id === filter)!;
   const pages = Math.max(1, Math.ceil(selected.rows.length / PAGE_SIZE));
@@ -29,8 +33,9 @@ export function EvidenceRecords({ view }: { view: SessionView }) {
     <p className="mt-2 text-sm" role="status">{records.length ? `Showing ${current * PAGE_SIZE + 1}–${current * PAGE_SIZE + records.length} of ${selected.rows.length} supplied records · page ${current + 1} of ${pages}.` : "No records supplied for this category. Absence is not a passed check or an approval."}</p>
     <ol className="mt-3 space-y-3">{records.map((row, index) => <li key={`${filter}:${current}:${row.id}:${index}`}>
       <details className="public-disclosure evidence-record">
-        <summary><Badge>{row.kind}</Badge><strong className="block mt-2">{row.title || "Untitled recorded event"}</strong><span className="block mt-1 text-sm">{row.status || "Status not supplied"} · {row.actor || "Actor not supplied"}</span></summary>
+        <summary><span className="evidence-record-main"><strong>{rowLabel(filter, row)}</strong><span className="text-sm text-secondary">{row.actor || "Actor not supplied"}{row.time ? <> · <time dateTime={row.time}>{formatTime(row.time)}</time></> : null}</span></span><span className="evidence-record-meta"><span className="evidence-result" data-result={resultTone(row.status)}>{row.status ? statusLabel(row.status) : "Status not supplied"}</span><Badge>{row.kind}</Badge></span></summary>
         <div className="public-detail">
+          <p>Recorded as: {row.title || "Untitled recorded event"}</p>
           <p>{row.time ? <time dateTime={row.time}>{row.time}</time> : "Time not supplied"}</p>
           {row.tool && <p>Tool: {row.tool}</p>}
           <p>Audit: {row.id || "Not recorded"}</p>

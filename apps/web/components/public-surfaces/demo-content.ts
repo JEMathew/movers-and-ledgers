@@ -12,7 +12,7 @@ export const demoPhases = [
   {
     name: "Prepare", title: "Keep account meaning.",
     scenario: "Harbor Light Books needs an asset account for money owed by customers.",
-    evidence: [["Source", "Receivables · Asset"], ["Suggested destination", "Receivables · Asset"]],
+    evidence: [["Source", "Receivables · asset"], ["Suggested destination", "Receivables · asset"]],
     insight: "Match meaning, then review the plan.",
     guidance: "The Beta uses policy-based mapping suggestions, not calibrated live-model predictions. An authorized person reviews consequential mappings and the plan. Plan approval and starting the move remain separate actions.",
     topic: "mappings",

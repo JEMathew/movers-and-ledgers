@@ -106,66 +106,66 @@ export function TryYourData() {
 
   return <main className="shell space-y-8 py-12 sm:py-16">
     <header className="max-w-3xl">
-      <p className="eyebrow text-primary">Use My Test Export</p>
-      <h1 className="type-page mt-4">Check Your Export Before Migration</h1>
+      <p className="eyebrow text-primary">Use my test export</p>
+      <h1 className="type-page mt-4">Check your export before migration</h1>
       <p className="mt-5 text-lg leading-8 text-secondary">We&apos;ll check the files, identify missing or inconsistent data, and show what needs attention before anything moves.</p>
       <Badge className="mt-4">De-Identified Test Data Only</Badge>
     </header>
 
     <Card>
-      <h2 className="type-section">1. Download Sample Package</h2>
+      <h2 className="type-section">1. Download sample package</h2>
       <p className="mt-2 text-secondary">See a small example of the files and formats MoveBooks accepts.</p>
-      <Button className="mt-4" variant="secondary" onClick={downloadSample}>Download Sample Package</Button>
+      <Button className="mt-4" variant="secondary" onClick={downloadSample}>Download sample package</Button>
     </Card>
 
     <Card>
       <div ref={chooser} className="scroll-mt-8">
-        <h2 className="type-section">2. Choose Test Files</h2>
+        <h2 className="type-section">2. Choose test files</h2>
         <div className="mt-4"><Input type="file" multiple label="Test files" hint="Choose CSV and JSON files from your export, or one ZIP. You can add files in more than one pick." disabled={busy} onChange={event => { changeFiles([...files, ...Array.from(event.target.files ?? [])]); event.target.value = ""; }}/></div>
       </div>
       <ul className="my-4 space-y-2">{files.map((file, i) => <li key={`${i}-${file.name}`} className="flex flex-wrap items-center gap-3 [overflow-wrap:anywhere]"><span className="min-w-0">{file.name} · {file.size} bytes</span><Button variant="ghost" size="small" disabled={busy} onClick={() => changeFiles(files.filter((_, index) => index !== i))}>Remove {file.name}</Button></li>)}</ul>
       <Checkbox label="I'm using de-identified test data and understand this Beta's limits." checked={permission} disabled={busy} onChange={event => setPermission(event.target.checked)}/>
-      {files.length > 0 && <Button className="mt-4" variant="ghost" size="small" disabled={busy} onClick={() => changeFiles([])}>Clear Files</Button>}
+      {files.length > 0 && <Button className="mt-4" variant="ghost" size="small" disabled={busy} onClick={() => changeFiles([])}>Clear files</Button>}
     </Card>
 
     <section aria-live="polite" aria-busy={busy} className="card p-6">
-      <h2 ref={results} tabIndex={-1} className="type-section">3. Validate Files</h2>
-      {!report && !session && <Button className="mt-4" disabled={busy || !files.length || !permission} onClick={validate}>{busy ? "Checking Files…" : "Validate Files"}</Button>}
+      <h2 ref={results} tabIndex={-1} className="type-section">3. Validate files</h2>
+      {!report && !session && <Button className="mt-4" disabled={busy || !files.length || !permission} onClick={validate}>{busy ? "Checking Files…" : "Validate files"}</Button>}
       {busy && <p role="status" className="mt-3">Checking your files. Nothing is imported while we check.</p>}
-      {error && <div className="mt-4" role="alert"><Alert tone="error" title="Files Not Checked"><p>{error}</p></Alert></div>}
+      {error && <div className="mt-4" role="alert"><Alert tone="error" title="Files not checked"><p>{error}</p></Alert></div>}
       {report && blocked && <div className="mt-4">
         <ValidationIssues issues={report.issues.filter(issue => issue.severity === "BLOCKER")} />
         <p className="mt-4 font-semibold">We couldn&apos;t use this package yet. Nothing was imported or changed.</p>
-        <div className="mt-4 flex flex-wrap gap-3"><Button onClick={fixFiles}>Fix Files and Validate Again</Button><Button variant="secondary" onClick={viewFormat}>View Expected Format</Button></div>
+        <div className="mt-4 flex flex-wrap gap-3"><Button onClick={fixFiles}>Fix files and validate again</Button><Button variant="secondary" onClick={viewFormat}>View expected format</Button></div>
       </div>}
       {report && !blocked && <div className="mt-4">
-        <Alert tone={report.status === "READY" ? "success" : "warning"} title={report.status === "READY" ? "Your Files Are Ready" : "Your Files Can Be Used After Review"}>
+        <Alert tone={report.status === "READY" ? "success" : "warning"} title={report.status === "READY" ? "Your files are ready" : "Your files can be used after review"}>
           <p>{report.files.length} files checked{report.files.length ? ` · ${report.files.reduce((n, f) => n + f.rows, 0)} records` : ""}.{report.status === "READY" ? " Nothing needs attention." : " Review the notes below before you continue."}</p>
         </Alert>
         {report.issues.length > 0 && <div className="mt-4"><ValidationIssues issues={report.issues} /></div>}
-        <Button className="mt-4" variant="ghost" size="small" disabled={busy} onClick={validate}>Validate Again</Button>
+        <Button className="mt-4" variant="ghost" size="small" disabled={busy} onClick={validate}>Validate again</Button>
       </div>}
-      {report && <details className="mt-4 text-sm"><summary className="cursor-pointer py-2 font-semibold">Files Checked</summary><ul className="mt-2 space-y-1 text-secondary">{report.files.map(file => <li key={file.name}>{file.name} · {file.rows} records · {file.schema_status === "READY" ? "Ready" : "Needs attention"}{file.ignored_fields.length > 0 ? ` · Not migrated: ${file.ignored_fields.join(", ")}` : ""}</li>)}</ul></details>}
+      {report && <details className="mt-4 text-sm"><summary className="cursor-pointer py-2 font-semibold">Files checked</summary><ul className="mt-2 space-y-1 text-secondary">{report.files.map(file => <li key={file.name}>{file.name} · {file.rows} records · {file.schema_status === "READY" ? "Ready" : "Needs attention"}{file.ignored_fields.length > 0 ? ` · Not migrated: ${file.ignored_fields.join(", ")}` : ""}</li>)}</ul></details>}
     </section>
 
     {report && !blocked && <section className="card p-6" aria-labelledby="continue-title">
-      <h2 id="continue-title" className="type-section">4. Continue to Assessment</h2>
+      <h2 id="continue-title" className="type-section">4. Continue to assessment</h2>
       {!session ? <>
         <p className="mt-2 text-secondary">We&apos;ll create a workspace from these files and check whether the books are ready to migrate. Every later step still needs your approval.</p>
         <div className="mt-4"><Checkbox label="I reviewed the results, including any columns that won't migrate." checked={reviewed} disabled={busy} onChange={event => setReviewed(event.target.checked)}/></div>
-        {continueError && <div className="mt-4" role="alert"><Alert tone="warning" title={continueError === UNCONFIRMED ? "We Couldn't Confirm This Step" : "Assessment Not Started"}><p>{continueError}</p>{continueError === UNCONFIRMED && <p className="mt-2">Trying again is safe: it returns the same workspace if it was already created.</p>}</Alert></div>}
-        <Button className="mt-4" disabled={busy || !reviewed} onClick={continueToAssessment}>{continueError === UNCONFIRMED ? "Try Again" : "Continue to Assessment"}</Button>
+        {continueError && <div className="mt-4" role="alert"><Alert tone="warning" title={continueError === UNCONFIRMED ? "We Couldn't Confirm This Step" : "Assessment not started"}><p>{continueError}</p>{continueError === UNCONFIRMED && <p className="mt-2">Trying again is safe: it returns the same workspace if it was already created.</p>}</Alert></div>}
+        <Button className="mt-4" disabled={busy || !reviewed} onClick={continueToAssessment}>{continueError === UNCONFIRMED ? "Try again" : "Continue to assessment"}</Button>
       </> : <>
         <p className="mt-2 text-secondary">Your workspace is ready and its migration readiness has been checked. Accepted files don&apos;t mean the books are ready to migrate; review the assessment next.</p>
-        <div className="mt-4 flex flex-wrap gap-3"><Link className="button" href={`/assess?session=${session}`}>View Assessment Results</Link><Link className="button secondary" href={`/trust?session=${session}`}>View Intake Evidence</Link></div>
+        <div className="mt-4 flex flex-wrap gap-3"><Link className="button" href={`/assess?session=${session}`}>View assessment results</Link><Link className="button secondary" href={`/trust?session=${session}`}>View intake evidence</Link></div>
       </>}
     </section>}
 
     <details ref={format} className="card scroll-mt-8 p-6">
-      <summary className="cursor-pointer font-semibold">View Supported File Format and Limits</summary>
+      <summary className="cursor-pointer font-semibold">View supported file format and limits</summary>
       <div className="mt-4 space-y-4 text-sm leading-6 [overflow-wrap:anywhere]">
         <p>Use the sample package as a reference. File names and column headers must match exactly. A CSV with only its header row means that dataset is empty.</p>
-        <h3 className="font-semibold">Required Files</h3>
+        <h3 className="font-semibold">Required files</h3>
         <ul className="divide-y divide-[var(--border)] border-y border-token" aria-label="Required files">
           {contract.files.map(file => <li key={file.name} className="py-3"><code className="font-semibold">{file.name}</code>
             <p className="mt-1"><span className="text-secondary">Required columns:</span> {file.required.join(", ")}</p>
@@ -186,8 +186,8 @@ export function TryYourData() {
       </div>
     </details>
 
-    <Alert tone="info" title="About This Beta">
-      <p>Use de-identified test exports only. Files stay in this tab until you choose Validate Files, then go to your local MoveBooks service. Checked records stay in memory until the service restarts, and unused packages expire after 30 minutes. This Beta offers no production retention, encryption at rest or compliance guarantee. No data goes to an LLM, and results stay in a synthetic workspace, never an accounting provider.</p>
+    <Alert tone="info" title="About this Beta">
+      <p>Use de-identified test exports only. Files stay in this tab until you choose Validate files, then go to your local MoveBooks service. Checked records stay in memory until the service restarts, and unused packages expire after 30 minutes. This Beta offers no production retention, encryption at rest or compliance guarantee. No data goes to an LLM, and results stay in a synthetic workspace, never an accounting provider.</p>
     </Alert>
   </main>;
 }

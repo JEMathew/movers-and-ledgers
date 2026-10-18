@@ -10,20 +10,20 @@ export type Issue = {
 };
 
 const TITLES: Record<string, string> = {
-  MISSING_FILE: "Missing Required File", UNSUPPORTED_FILE: "Unsupported File", DUPLICATE_FILENAME: "Duplicate File",
-  PACKAGE_LIMIT: "Package Too Large", UNSAFE_ARCHIVE: "Unsafe ZIP", FILE_TOO_LARGE: "File Too Large",
-  EMPTY_FILE: "Empty File", INVALID_ENCODING: "Not UTF-8 Text", BINARY_CONTENT: "Not a Text File", HIDDEN_CHARACTERS: "Hidden Characters",
-  MALFORMED_CSV: "Malformed CSV", MALFORMED_JSON: "Malformed JSON", MISSING_COLUMN: "Missing Required Column",
-  DUPLICATE_HEADER: "Duplicate Column", INVALID_HEADER: "Invalid Column Name", TOO_MANY_COLUMNS: "Too Many Columns",
-  ROW_LIMIT: "Too Many Rows", MALFORMED_ROW: "Malformed Row", MISSING_VALUE: "Missing Required Value",
-  INVALID_IDENTIFIER: "Invalid Identifier", INVALID_TYPE: "Invalid Value Type", INVALID_VALUE: "Invalid Value", INVALID_NUMBER: "Invalid Amount",
+  MISSING_FILE: "Missing required file", UNSUPPORTED_FILE: "Unsupported file", DUPLICATE_FILENAME: "Duplicate file",
+  PACKAGE_LIMIT: "Package too large", UNSAFE_ARCHIVE: "Unsafe ZIP", FILE_TOO_LARGE: "File too large",
+  EMPTY_FILE: "Empty file", INVALID_ENCODING: "Not UTF-8 Text", BINARY_CONTENT: "Not a text file", HIDDEN_CHARACTERS: "Hidden characters",
+  MALFORMED_CSV: "Malformed CSV", MALFORMED_JSON: "Malformed JSON", MISSING_COLUMN: "Missing required column",
+  DUPLICATE_HEADER: "Duplicate column", INVALID_HEADER: "Invalid column name", TOO_MANY_COLUMNS: "Too many columns",
+  ROW_LIMIT: "Too many rows", MALFORMED_ROW: "Malformed row", MISSING_VALUE: "Missing required value",
+  INVALID_IDENTIFIER: "Invalid identifier", INVALID_TYPE: "Invalid value type", INVALID_VALUE: "Invalid value", INVALID_NUMBER: "Invalid amount",
   UNBALANCED_JOURNAL: "Journal Doesn't Balance",
-  INVALID_DATE: "Invalid Date", TEXT_TOO_LONG: "Text Too Long", DUPLICATE_ID: "Duplicate Identifier",
-  MISSING_KEY: "Missing Required Key", UNSUPPORTED_KEY: "Unsupported Key", INVALID_RECORD: "Invalid Record",
-  INVALID_SCHEMA: "File Can't Be Read", BROKEN_REFERENCE: "Broken Reference", ACCOUNT_ROLE: "Wrong Account Type",
-  ACCOUNTING_EVIDENCE: "Books Don't Balance", IGNORED_FIELDS: "Columns That Won't Migrate", METADATA_ONLY: "Metadata Not Migrated",
+  INVALID_DATE: "Invalid date", TEXT_TOO_LONG: "Text too long", DUPLICATE_ID: "Duplicate identifier",
+  MISSING_KEY: "Missing required key", UNSUPPORTED_KEY: "Unsupported key", INVALID_RECORD: "Invalid record",
+  INVALID_SCHEMA: "File Can't Be Read", BROKEN_REFERENCE: "Broken reference", ACCOUNT_ROLE: "Wrong account type",
+  ACCOUNTING_EVIDENCE: "Books Don't Balance", IGNORED_FIELDS: "Columns That Won't Migrate", METADATA_ONLY: "Metadata not migrated",
 };
-export const issueTitle = (code: string) => TITLES[code] ?? "Needs Attention";
+export const issueTitle = (code: string) => TITLES[code] ?? "Needs attention";
 
 const where = (issue: Issue) => [issue.row ? `Row ${issue.row}` : "", issue.column ? `Column ${issue.column}` : "", issue.key ? `Key ${issue.key}` : ""].filter(Boolean).join(" · ");
 
@@ -32,8 +32,8 @@ export function ValidationIssues({ issues }: { issues: Issue[] }) {
   const files = [...new Set(issues.map(issue => issue.file))];
   return <div className="[overflow-wrap:anywhere]">
     <h3 className="type-card">{blocking
-      ? `${blocking} ${blocking === 1 ? "Thing Needs" : "Things Need"} Attention Before We Can Use These Files.`
-      : `${issues.length} ${issues.length === 1 ? "Note" : "Notes"} to Review`}</h3>
+      ? `${blocking} ${blocking === 1 ? "thing needs" : "things need"} attention before we can use these files.`
+      : `${issues.length} ${issues.length === 1 ? "note" : "notes"} to review`}</h3>
     {files.map(file => <section key={file} className="mt-4" aria-label={`Issues in ${file}`}>
       <h4 className="font-bold"><code>{file}</code></h4>
       <ul className="mt-2 space-y-3">{issues.filter(issue => issue.file === file).map((issue, index) => <li key={index} className="rounded-lg border border-token p-4">
