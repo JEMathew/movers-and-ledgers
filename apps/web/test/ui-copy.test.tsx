@@ -106,10 +106,12 @@ describe("internal terms stay out of customer copy", () => {
 describe("demo workspace entry", () => {
   it("explains the local demo workspace without identity jargon", async () => {
     render(await SignIn({ searchParams: Promise.resolve({ next: "/assess" }) }));
-    expect(screen.getByRole("heading", { level: 1, name: "Continue Your Migration" })).toBeVisible();
+    expect(screen.getByRole("heading", { level: 1, name: "Continue your migration" })).toBeVisible();
     expect(screen.getByText("Review and continue your migration using the demo workspace.")).toBeVisible();
-    expect(screen.getByRole("link", { name: /Enter Demo Workspace/ })).toHaveAttribute("href", "/api/auth/demo?next=%2Fassess");
-    expect(screen.getByText("Synthetic Data Only")).toBeVisible();
+    expect(screen.getByRole("link", { name: /^Enter demo workspace/ })).toHaveAttribute("href", "/api/auth/demo?next=%2Fassess");
+    expect(screen.getByText("Synthetic data only")).toBeVisible();
+    // One primary action on the page.
+    expect(document.querySelectorAll("main a.button:not(.secondary), main button.button:not(.secondary)")).toHaveLength(1);
     expect(document.body).not.toHaveTextContent(/Local demo identity|controlled de-identified test exports only/i);
   });
   // Google sign-in copy stays as it was; test/google-sign-in.test.tsx asserts it in cloud mode.

@@ -194,5 +194,5 @@ export function PlanMapApproveExperience() {
 }
 
 function ApprovedHandoff({ snapshot }: { snapshot: Snapshot }) {
-  return ["APPROVED", "MIGRATION_READY"].includes(snapshot.workflow_status) ? <ActionLink label="Continue to Move" href={`/migrate-resolve?session=${snapshot.id}`} /> : <ActionLink label="Return to My Migration" href={`/workspace?session=${snapshot.id}`} />;
+  return ["APPROVED", "MIGRATION_READY"].includes(snapshot.workflow_status) ? <ActionLink label="Continue to Move" href={`/migrate-resolve?session=${snapshot.id}`} /> : <ActionLink label="Return to My migration" href={`/workspace?session=${snapshot.id}`} />;
 }
