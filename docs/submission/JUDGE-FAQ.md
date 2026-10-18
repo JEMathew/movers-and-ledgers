@@ -6,7 +6,7 @@ Short, evidence-linked answers. "Local" means run from this repository with the 
 Moving a business from desktop accounting to a cloud product stalls on judgment calls: which account maps where, what to do when a batch fails, whether the books still balance, and whether the business can actually work afterwards. MoveBooks AI guides one synthetic business from a readiness check to a verified first invoice, with a person approving every consequential step.
 
 **Is Gemini running in the product?**
-Not in the public Beta. It runs deterministic agents only, and the AI panels say so ("deterministic fallback — not live AI"). The code includes a Gemini Advisor and an independent Reviewer built on Google ADK. The Advisor was validated live on `gemini-2.5-flash` on 29 Sep: all five capabilities accepted after prompt fixes ([record](../reviews/live-gemini-adk.md)). That model is now retiring. The Reviewer has not run live. A bounded run on `gemini-3.5-flash-lite` is prepared and awaits approval ([guide](../release/LIVE-GEMINI-RUN.md)).
+Not in the public Beta. It runs deterministic agents only, and the AI panels say so ("deterministic fallback — not live AI"). The code includes a Gemini Advisor and an independent Reviewer built on Google ADK, and both have run live in a bounded test harness on `gemini-3.5-flash-lite` (18 Oct): one synthetic case, 4 model calls, 2 read-only evidence reads, all 14 acceptance checks passed. The Advisor escalated to a human, the Reviewer challenged the ambiguous account, and the deterministic mapping stayed REVIEW_REQUIRED ([record](../reviews/live-gemini-l1-16e31e9.md)). Earlier, the Advisor was validated live on `gemini-2.5-flash` on 29 Sep ([record](../reviews/live-gemini-adk.md)). A passing harness run is not product activation: turning Gemini on in the Beta is a separate, gated decision.
 
 **How many agents are there?**
 13 registered roles, 7 ADK agent definitions, 2 model-capable pathways invoked by the API (Advisor, Reviewer, both gated off in the Beta) and **0 verified autonomous agents**. The workflow is run by deterministic stage agents; AI only explains and challenges.
@@ -32,7 +32,7 @@ Seventeen deterministic reconciliation checks (counts, relationships, balances, 
 Yes, locally. An owner-scoped list (`GET /v1/migration-sessions`) feeds a picker. The journey checks switching, restoration after reload, and a fresh browser with no local memory. On the deployed site this still needs the candidate deployment and a real two-account sign-in check.
 
 **What is deployed today?**
-The public Beta at https://movebooks-si.web.app (earlier release). The integration candidate, with the picker, listing and proxy fix, is built and tested locally and has a release runbook ([runbook](../release/RELEASE-RUNBOOK.md)), but it is not deployed.
+The public Beta at https://movebooks-si.web.app (earlier release). The release candidate `16e31e9`, with the picker, listing and proxy fix, is built, image-scanned and deployed to Cloud Run with no traffic; its 13 live smoke checks pass ([runbook](../release/RELEASE-RUNBOOK.md)). It serves users only after a database backup and an approved promotion.
 
 **Is any real customer data used?**
 No. Only synthetic businesses. Hosted uploads are disabled; "Try Your Data" validates test packages in the browser only.
@@ -42,10 +42,11 @@ No. Only synthetic businesses. Hosted uploads are disabled; "Try Your Data" vali
 - Web: 696 tests, plus typecheck, lint and a production build.
 - End-to-end journey: 21/21 checks.
 - Offline agent evaluation: 23/23.
-- Proxy smoke test: 7/7.
+- Proxy smoke test: 7/7 (local); deployed no-traffic candidates: 13/13 live smoke checks.
+- Live Gemini Advisor + Reviewer (bounded harness): 14/14 acceptance checks.
 - npm and pip dependency audits: 0 known vulnerabilities.
 
-Container image scans run in Cloud Shell and are pending. See the [evidence manifest](final-experience/EVIDENCE-MANIFEST.md).
+See the [evidence manifest](final-experience/EVIDENCE-MANIFEST.md).
 
 **How do I reproduce the journey?**
 Start the API (`services/api/start.py`) and the web dev server in demo mode, then run `docs/submission/browser-journey/final-journey.cjs`, setting `PLAYWRIGHT_TEST` and `CHROMIUM` to your local installs. Each run creates fresh synthetic migrations through the UI.

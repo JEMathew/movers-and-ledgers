@@ -1,4 +1,6 @@
-# Bounded live Gemini run — prepared, NOT executed
+# Bounded live Gemini run
+
+**Status:** executed once on 18 Oct 2026, PASS 14/14 ([record](../reviews/live-gemini-l1-16e31e9.md)). Each further paid run needs fresh approval.
 
 Approval needed: one explicit "yes" for exactly this run. Synthetic data only; no deployment, IAM, Firestore or database change.
 
