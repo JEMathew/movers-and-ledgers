@@ -122,6 +122,15 @@
 .v2s-queue .field-control { width: 100%; font-weight: 400; }
 
 @media (max-width: 640px) {
+  .v2s-meta { flex-direction: column; gap: 2px; }
+  .v2s-facts > div { flex-wrap: wrap; gap: 2px 16px; }
+  .v2s-facts dd { max-width: 100%; margin-left: auto; }
+  .v2s-buttons > .button:not(.secondary):not(.ghost):not(.danger), .v2s-recovery-wrap .v2-recovery-action > .button { width: 100%; justify-content: center; }
+  .v2s-meta > span + span::before { content: none; }
+  .v2s-table { font-size: 0.875rem; }
+  .v2s-table .v2s-amount { padding-left: 8px; }
+  .v2s-table tfoot th.v2s-amount, .v2s-table tbody th { white-space: normal; }
+  .v2s-table tfoot .v2s-total th, .v2s-table tfoot .v2s-total td { font-size: 1rem; }
   .v2s-rows > li { grid-template-columns: minmax(0, 1fr) auto; }
   .v2s-rows > li .v2s-row-figure { grid-column: 1; grid-row: 2; }
   .v2s-money .v2-money { padding: 20px; }
