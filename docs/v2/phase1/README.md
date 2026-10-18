@@ -33,7 +33,7 @@ Deferred from the Phase 1 backlog, with reasons:
 ## Design source
 
 Approved editable source: design canvas "MoveBooks AI V2.0 Visual Directions", row "Selected (provisional): A Clear
-Ledger with B Companion guidance", version `1792356300-ace3` (19 Oct 2026). Frames: Landing, My Migration,
+Ledger with B Companion guidance", version `1792360852-a7bc` (19 Oct 2026; States sheet corrected to the API's blocked and rejected recovery rules). Frames: Landing, My Migration,
 Prepare: map and approve, Start: verified first invoice, States and recovery, four phone screens, plus the clickable
 prototype. Phase 1 implements the foundation those frames share; screens move to V2 in Phase 2 behind a flag.
 
