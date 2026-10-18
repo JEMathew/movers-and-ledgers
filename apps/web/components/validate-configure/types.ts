@@ -9,7 +9,7 @@ export type Proposal = {
   id: string; area: string; label: string; source_value: string; selected_value: string;
   alternatives: string[]; risk: "LOW" | "HIGH"; approval_required: boolean;
   state: string; evidence: string[]; policy_reason: string; explanation: string;
-  decided_by?: string; decision?: string;
+  decided_by?: string | null; decided_at?: string | null; decision?: string | null;
 };
 export type Snapshot = {
   session_id: string; company_name: string; workflow_status: string;

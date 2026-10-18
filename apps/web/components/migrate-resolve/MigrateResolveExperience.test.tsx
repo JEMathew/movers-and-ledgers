@@ -65,7 +65,8 @@ describe("MigrateResolveExperience", () => {
     expect(screen.getByRole("button", { name: /approve resolution/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/25% migration progress/i)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", {name:"Close dialog"}));
-    await waitFor(() => expect(screen.getByRole("heading", {name:/Move Your Approved Books/i})).toHaveFocus());
+    // Focus returns to the page title, now naming the paused state.
+    await waitFor(() => expect(screen.getByText("A batch paused for your review")).toHaveFocus());
   });
 
   it.each([true, false])("keeps evidence governed while activity is pending and records approval=%s before any retry", async (approve) => {
@@ -99,7 +100,7 @@ describe("MigrateResolveExperience", () => {
     // Closing or Escape is not a decision, and a late read must not reopen it.
     fireEvent(dialog, new Event("cancel", { cancelable: true, bubbles: true }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /Move Your Approved Books/i })).toHaveFocus();
+    expect(screen.getByText("A batch paused for your review")).toHaveFocus();
     await act(async () => { finishActivity(await jsonResponse([])); });
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(3);
@@ -126,7 +127,7 @@ describe("MigrateResolveExperience", () => {
       const retry = screen.getByRole("button", { name: /retry failed batch/i });
       await waitFor(() => expect(retry).toBeEnabled());
       fireEvent.click(retry);
-      expect(await screen.findByText("Synthetic migration complete")).toBeVisible();
+      expect(await screen.findByRole("heading", { level: 1, name: "Your records moved" })).toBeVisible();
       expect(screen.getByRole("link", { name: "Verify my books" })).toHaveAttribute("href", expect.stringMatching(/^\/validate-configure\?session=/));
       expect(screen.queryByRole("link", { name: /Continue to Validate/ })).not.toBeInTheDocument();
       expect(fetchMock.mock.calls[5][0]).toContain("/migration/resume");
@@ -135,7 +136,9 @@ describe("MigrateResolveExperience", () => {
     } else {
       expect(screen.queryByRole("button", { name: /retry failed batch/i })).not.toBeInTheDocument();
       expect(screen.queryByRole("button", { name: "Review 1 migration issue" })).not.toBeInTheDocument();
-      expect(screen.queryByText("Synthetic migration complete")).not.toBeInTheDocument();
+      expect(screen.queryByRole("heading", { level: 1, name: "Your records moved" })).not.toBeInTheDocument();
+      // A rejected fix is a blocked state with a recovery path; completed batches are kept.
+      expect(screen.getByRole("region", { name: "How to recover" })).toHaveTextContent("1 of 2 batches moved and stay in the new books.");
     }
   });
 });

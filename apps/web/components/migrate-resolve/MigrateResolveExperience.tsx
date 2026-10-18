@@ -1,25 +1,18 @@
 "use client";
 
-import {
-  AlertTriangle,
-  Bot,
-  CheckCircle2,
-  Database,
-  Play,
-  RefreshCw,
-  ShieldCheck,
-} from "lucide-react";
+import { AlertTriangle, CheckCircle2, Play, RefreshCw, ShieldCheck } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import type { AgentActivity } from "@/components/discover-assess/types";
 import { Dialog } from "@/components/ui/dialog";
-import { Alert } from "@/components/ui/feedback";
 import { PhaseProgress, TaskContext } from "@/components/journey/PhaseProgress";
 import { journeyStepFor, pendingMappingsIn, PROCESSING, projectJourney } from "@/components/journey/journey";
-import { NextAction } from "@/components/journey/NextAction";
-import { Badge, Button, Card, Panel } from "@/components/ui/primitives";
-import { StatusBadge } from "@/components/ui/status";
+import { Button } from "@/components/ui/primitives";
+import { RecoveryNotice, StageHeader, WorkflowSummary } from "@/components/v2/Workflow";
+import type { Outstanding } from "@/components/v2/Workflow";
 
+import { ActionFailure, evidenceHref, ReadFailure, sentence, sessionHref, StateChip } from "./stage-kit";
+import type { ChipTone } from "./stage-kit";
 import type { DemoSession, MigrationBatch, MigrationExecution } from "./types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
@@ -37,20 +30,18 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-function humanize(value: string) {
-  return value.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
-}
-
-function batchStatus(batch: MigrationBatch) {
-  if (batch.status === "COMPLETED") return "COMPLETED" as const;
-  if (batch.status === "FAILED" || batch.status === "BLOCKED") return "BLOCKED" as const;
-  if (batch.status === "RUNNING") return "IN PROGRESS" as const;
-  if (batch.status === "RETRY_PENDING") return "REQUIRES APPROVAL" as const;
-  return "NOT STARTED" as const;
+/** How a batch reads in the batch list. Wording only; the batch status is the API's. */
+function batchState(batch: MigrationBatch, paused: boolean): { tone: ChipTone; label: string } {
+  if (batch.status === "COMPLETED") return { tone: "approved", label: "Moved" };
+  if (batch.status === "RUNNING") return { tone: "low_risk", label: "Moving" };
+  if (batch.status === "RETRY_PENDING") return { tone: "needs_review", label: "Ready to retry" };
+  if (batch.status === "BLOCKED") return { tone: "blocked", label: "Blocked" };
+  if (batch.status === "FAILED") return paused ? { tone: "needs_review", label: "Paused" } : { tone: "blocked", label: "Failed" };
+  return { tone: "low_risk", label: "Waiting" };
 }
 
 export function MigrateResolveExperience() {
-  const headingRef = useRef<HTMLHeadingElement>(null);
+  const headingRef = useRef<HTMLSpanElement>(null);
   const [session, setSession] = useState<DemoSession>();
   const [execution, setExecution] = useState<MigrationExecution>();
   const [busy, setBusy] = useState(false);
@@ -60,12 +51,14 @@ export function MigrateResolveExperience() {
   const [error, setError] = useState<string>();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [activity, setActivity] = useState<AgentActivity[]>([]);
+  const [requested, setRequested] = useState<string>();
 
   // A user action supersedes a still-pending initial read; the late read is ignored.
   const acted = useRef(0);
   useEffect(() => {
     const saved = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem("movebooks-migration-session");
     if (!saved) { setReadState("ready"); return; }
+    setRequested(saved);
     let active = true;
     const before = acted.current;
     const fresh = () => active && acted.current === before;
@@ -89,7 +82,10 @@ export function MigrateResolveExperience() {
   const complete = execution?.status === "MIGRATION_COMPLETE" && execution.safe_to_validate;
   const resolving = execution?.status === "RESOLVING";
   const retryPending = execution?.status === "RETRY_PENDING";
+  // The decision endpoint reports a rejected fix as BLOCKED; the session reads MIGRATION_BLOCKED.
+  const blocked = execution?.status === "MIGRATION_BLOCKED" || (execution?.status as string | undefined) === "BLOCKED";
   const openIssues = execution?.failures.filter((item) => !item.resolved).length ?? 0;
+  const approvalRecorded = Boolean(session && (["APPROVED", "MIGRATION_READY"].includes(session.workflow_status) || execution));
 
   const loadDemo = async () => {
     acted.current += 1;
@@ -177,159 +173,170 @@ export function MigrateResolveExperience() {
     }
   };
 
-  return (
-    <main className="shell migration-task min-h-[75vh]">
-      <header>
-        <div className="max-w-3xl">
-          <p className="eyebrow text-primary">Move</p>
-          <h1 ref={headingRef} tabIndex={-1} className="type-page mt-4">Move Your Approved Books</h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-secondary">
-            Move the approved scope, review any paused batch, then verify your books. Synthetic Beta · no provider writes.
-          </p>
-        </div>
-      </header>
+  const batches = execution?.batches ?? [];
+  const moved = batches.filter(batch => batch.status === "COMPLETED").length;
+  const pausedBatch = failure ? batches.find(batch => batch.id === failure.batch_id) : undefined;
+  const pausedName = pausedBatch ? `Batch ${pausedBatch.sequence} (${sentence(pausedBatch.entity).toLowerCase()})` : "The paused batch";
+  const decidedBy = proposal?.decided_by;
+  const retryHref = sessionHref("/migrate-resolve", session?.id ?? requested);
+  const keptLine = execution ? `${moved} of ${batches.length} batches moved and stay in the new books.` : "Nothing has moved yet.";
 
+  const title = !session ? "Move your approved books"
+    : complete ? "Your records moved"
+    : blocked ? "The paused batch is blocked"
+    : retryPending ? "Fix approved: retry the paused batch"
+    : resolving ? "A batch paused for your review"
+    : execution ? "Your records are moving"
+    : "Move your approved books";
+  const guide = !session ? "Open a migration from My migration to move its approved records. A standalone scenario is at the end of this page."
+    : complete ? "Every batch moved and no blocking issue remains. Next, check the new books against the old ones."
+    : blocked ? `${pausedName} stays blocked because the proposed fix was not approved. Batches that already moved are kept.`
+    : retryPending ? "You approved the proposed fix. Retrying runs the paused batch again; batches that already moved are not repeated."
+    : resolving ? `A problem pauses one batch, not the move. ${pausedName} needs your decision; batches that already moved are kept.`
+    : execution ? "MoveBooks is moving your records in checkpointed batches."
+    : "Your plan is approved. MoveBooks moves your records in checkpointed batches; a problem pauses one batch, not the move.";
+
+  const next = complete
+    ? { title: "Verify your books", detail: "Compare the new books with the source. Every check must match before setup.", action: <a className="button" href={sessionHref("/validate-configure", session?.id)}><ShieldCheck aria-hidden="true" size={17} />Verify my books</a> }
+    : retryPending
+      ? { title: "Retry the paused batch", detail: "Only the paused batch runs again.", action: <Button onClick={retry} disabled={busy} leadingIcon={RefreshCw}>Retry failed batch</Button> }
+      : resolving && proposal
+        ? { title: "Review the proposed fix", detail: "Approve it to retry the paused batch, or reject it to keep the batch blocked. Nothing changes until you decide.", action: <Button onClick={() => setDialogOpen(true)} disabled={busy} leadingIcon={CheckCircle2}>{openIssues > 1 ? `Review ${openIssues} migration issues` : "Review 1 migration issue"}</Button> }
+        : session && !execution
+          ? { title: "Start moving your records", detail: approvalRecorded ? "Your approved plan is recorded. Records move in checkpointed batches." : "Move starts only after the plan approval is recorded in Prepare.", action: <Button onClick={start} disabled={busy || readState !== "ready" || !["APPROVED", "MIGRATION_READY"].includes(session.workflow_status)} leadingIcon={Play}>Start migration</Button> }
+          : blocked && session
+            ? { title: "Investigate the blocked batch", detail: "Open the evidence for the paused batch. Help explains the ways forward; no restart is offered here.", action: <a className="button secondary" href={`/support?session=${encodeURIComponent(session.id)}&stage=2`}>Get help with this batch</a> }
+            : execution
+              ? { title: "Follow the move", detail: "Batches move one after another. You will be asked if anything needs a decision." }
+              : undefined;
+
+  const done = [
+    ...(approvalRecorded ? ["Plan approval recorded"] : []),
+    ...(execution ? [`${moved} of ${batches.length} batches moved`] : []),
+    ...(failure?.resolved ? [`Fix approved${decidedBy ? ` by ${decidedBy}` : ""}`] : []),
+  ];
+  const outstanding: Outstanding[] = [
+    ...(resolving && openIssues ? [{ label: openIssues === 1 ? "1 migration issue to review" : `${openIssues} migration issues to review`, tone: "review" as const }] : []),
+    ...(retryPending ? [{ label: "Retry the paused batch", tone: "review" as const }] : []),
+    ...(blocked ? [{ label: `${pausedName} is blocked`, tone: "blocked" as const }] : []),
+  ];
+
+  const recovery = error && readState !== "error"
+    ? <ActionFailure message={error} retryHref={retryHref} kept={keptLine} />
+    : resolving && failure && !failure.resolved
+      ? <RecoveryNotice title="Migration paused safely">
+          <p><strong>What happened:</strong> {failure.summary}</p>
+          <p><strong>What is kept:</strong> {keptLine}</p>
+          <p><strong>Way forward:</strong> review the proposed fix, approve or reject it, then retry the paused batch.</p>
+        </RecoveryNotice>
+      : blocked
+        ? <RecoveryNotice title="The paused batch is blocked">
+            <p><strong>What happened:</strong> {failure?.summary ?? "A batch could not move."}{proposal?.state === "REJECTED" ? ` The proposed fix was rejected${decidedBy ? ` by ${decidedBy}` : ""}.` : ""}</p>
+            <p><strong>What is kept:</strong> {keptLine}</p>
+            <p><strong>Way forward:</strong> {failure?.retryable === false ? "this failure is not retryable; investigate the evidence." : "investigate the evidence. A retry needs an approved fix."}</p>
+          </RecoveryNotice>
+        : undefined;
+
+  return (
+    <main className="shell migration-task v2s-page">
       <TaskContext phase={2} session={session?.id} />
       <PhaseProgress session={session?.id} status={status} current={projection?.current ?? null} held={projection?.held} currentLabel={projection?.currentLabel} processing={working ? PROCESSING[working] : undefined} />
 
-      {readState === "loading" && <p role="status">Loading your migration…</p>}
-      {error && (
-        <div className="mt-6">
-          <Alert tone="error" title="Governed workflow stopped">
-            <p className="mt-1">{error}</p><p>No new progress is assumed. Return to My Migration to read the same migration again.</p><a className="underline" href={`/workspace?session=${session?.id ?? ""}`}>My Migration</a>
-          </Alert>
-        </div>
-      )}
+      <StageHeader stage={2} step="move your records" title={<span ref={headingRef} tabIndex={-1} className="v2s-focus">{title}</span>} guide={guide}>
+        <p className="v2s-meta">{session && <span>{session.company_name}</span>}<span>Synthetic Beta · no provider writes</span>{execution && <span>Manifest {execution.manifest_version}</span>}</p>
+      </StageHeader>
 
-      {session && <Panel className="task-outcome border-[var(--primary)]">
-        <div className="flex flex-wrap items-center justify-between gap-5">
-          <div className="flex items-start gap-4">
-            <div className="activity-icon"><Database aria-hidden="true" size={19} /></div>
-            <div>
-              <h2 className="type-section">Approved Synthetic Manifest</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-secondary">
-                Review the approved scope. Completed checkpoints stay intact when a batch pauses.
-              </p>
-            </div>
-          </div>
-          {session && !execution ? (
-            <Button onClick={start} disabled={busy || readState !== "ready" || !["APPROVED", "MIGRATION_READY"].includes(session.workflow_status)} leadingIcon={Play}>Start migration</Button>
-          ) : retryPending ? (
-            <Button onClick={retry} disabled={busy} leadingIcon={RefreshCw}>Retry failed batch</Button>
-          ) : resolving && proposal ? (
-            <Button onClick={() => setDialogOpen(true)} disabled={busy} leadingIcon={Bot}>{openIssues > 1 ? `Review ${openIssues} migration issues` : "Review 1 migration issue"}</Button>
-          ) : null}
-        </div>
-        {session && (
-          <div className="mt-5 flex flex-wrap gap-2">
-            <Badge>{session.company_name}</Badge>
-            <Badge>synthetic target</Badge>
-            <Badge>{["APPROVED", "MIGRATION_READY"].includes(session.workflow_status) || execution ? "approval recorded" : "approval not confirmed"}</Badge>
-            {execution && <Badge>Manifest {execution.manifest_version}</Badge>}
-          </div>
-        )}
-      </Panel>}
+      {readState === "loading" && <p role="status" className="v2s-loading">Loading your migration…</p>}
+      {readState === "error" && <ReadFailure retryHref={retryHref} detail={error} />}
+      {!session && error && readState !== "error" && <ActionFailure message={error} retryHref={retryHref} kept="Nothing in your migration has changed." />}
 
-      {complete && (
-        <section className="mt-12">
-          <Alert tone="success" title="Synthetic migration complete">
-            <p className="mt-1">All batches completed, no blocking exceptions remain, and the target state is inspectable.</p>
-          </Alert>
-          <NextAction className="mt-4" label="Verify my books" href={`/validate-configure?session=${session?.id}`}>
-            <span className="flex items-start gap-3"><ShieldCheck aria-hidden="true" className="mt-1 shrink-0 text-primary" size={19} />Compare your migrated books with the source evidence before setting up the environment.</span>
-          </NextAction>
+      {session && <WorkflowSummary
+        label="Where the move stands"
+        recovery={recovery}
+        next={next}
+        done={done}
+        outstanding={outstanding}
+        evidence={{ href: evidenceHref(session.id), detail: "Batch checkpoints, decisions and the audit trail.", label: "Open evidence" }}
+      />}
+
+      {execution && (
+        <section className="v2-card v2s-section" aria-labelledby="progress-heading">
+          <div className="v2s-section-head">
+            <h2 id="progress-heading">Batches</h2>
+            <span className="v2s-quiet">{moved} of {batches.length} moved</span>
+          </div>
+          <div className="v2s-progress" role="group" aria-label={`${execution.progress_percent}% migration progress`}>
+            <div className="v2s-progress-track" aria-hidden="true"><div className="v2s-progress-value" style={{ width: `${execution.progress_percent}%` }} /></div>
+            <span className="v2s-quiet">{execution.progress_percent}% of approved records processed</span>
+          </div>
+          <ol className="v2s-rows" aria-label="Batches in order">
+            {batches.map(batch => {
+              const state = batchState(batch, Boolean(resolving && failure && failure.batch_id === batch.id));
+              return <li key={batch.id}>
+                <span className="v2s-row-main"><span className="v2s-quiet">Batch {batch.sequence}</span> {sentence(batch.entity)}</span>
+                <span className="v2s-row-figure v2-num">{batch.succeeded_count} of {batch.record_count} {batch.record_count === 1 ? "record" : "records"}</span>
+                <StateChip tone={state.tone}>{state.label}</StateChip>
+                {batch.last_error && <span className="v2s-row-note">{batch.last_error}</span>}
+              </li>;
+            })}
+          </ol>
+          <details className="v2s-details"><summary>Attempts and retry limits</summary>
+            <div className="v2s-table-wrap"><table className="v2s-table">
+              <caption className="sr-only">Attempts per batch</caption>
+              <thead><tr><th scope="col">Batch</th><th scope="col">Records</th><th scope="col">Succeeded</th><th scope="col">Failed</th><th scope="col">Attempts</th><th scope="col">Retry limit</th></tr></thead>
+              <tbody>{batches.map(batch => <tr key={batch.id}><th scope="row">{batch.sequence} · {sentence(batch.entity)}</th><td>{batch.record_count}</td><td>{batch.succeeded_count}</td><td>{batch.failed_count}</td><td>{batch.attempt_count}</td><td>{batch.retry_limit}</td></tr>)}</tbody>
+            </table></div>
+          </details>
         </section>
       )}
 
       {failure && (
-        <section className="mt-12" aria-labelledby="exception-heading">
-          <Alert tone={failure.resolved ? "success" : "warning"} title={failure.resolved ? "Exception resolved" : "Migration paused safely"}>
-            <p className="mt-1">{failure.summary} Prior completed checkpoints remain intact.</p>
-          </Alert>
-          <Card className="mt-4">
-            <div className="flex items-start justify-between gap-4">
-              <div><p className="eyebrow text-primary">Controlled exception</p><h2 id="exception-heading" className="type-card mt-2">{humanize(failure.kind)}</h2></div>
-              <Badge>{failure.code}</Badge>
-            </div>
-            <p className="mt-4 text-sm leading-6 text-secondary">{failure.root_cause}</p>
-            <p className="mt-3 text-sm"><strong>Retry count:</strong> {failure.retry_count}</p>
-            <p className="mt-3 text-sm">{failure.retryable ? "Retry may be available only after a permitted remedy is approved." : "This failure is not retryable. Investigate the evidence; no restart is offered."}</p>
-          </Card>
-        </section>
-      )}
-
-      {execution && (
-        <section className="mt-12 motion-enter" aria-labelledby="progress-heading">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="eyebrow text-primary">Migration Agent</p>
-              <h2 id="progress-heading" className="type-section mt-2">Execution Progress</h2>
-              <p className="mt-2 text-secondary">Current agent: {humanize(execution.current_agent)}</p>
-            </div>
-            <StatusBadge
-              status={complete ? "COMPLETED" : resolving ? "REQUIRES APPROVAL" : execution.status === "MIGRATION_BLOCKED" ? "BLOCKED" : "IN PROGRESS"}
-            />
+        <section className={`v2-card v2s-section${failure.resolved ? "" : " v2-card-blocked"}`} aria-labelledby="exception-heading">
+          <div className="v2s-section-head">
+            <div><p className="v2s-kicker">{pausedName}</p><h2 id="exception-heading">{sentence(failure.kind)}</h2></div>
+            <StateChip tone={failure.resolved ? "approved" : blocked ? "blocked" : "needs_review"}>{failure.resolved ? "Fix approved" : blocked ? "Blocked" : "Needs your decision"}</StateChip>
           </div>
-          <div className="mt-5" aria-label={`${execution.progress_percent}% migration progress`}>
-            <div className="mb-2 flex justify-between text-sm"><span>Approved records processed</span><strong>{execution.progress_percent}%</strong></div>
-            <div className="progress-track"><div className="progress-value" style={{ width: `${execution.progress_percent}%` }} /></div>
-          </div>
-          <details className="mt-4"><summary>Batch checkpoints and attempts · {execution.batches.length} batches</summary><div className="mt-3 grid gap-3 md:grid-cols-2">
-            {execution.batches.map((batch) => (
-              <Card key={batch.id}>
-                <div className="flex items-start justify-between gap-3">
-                  <div><p className="type-meta">Batch {batch.sequence}</p><h3 className="type-card mt-1">{humanize(batch.entity)}</h3></div>
-                  <StatusBadge status={batchStatus(batch)} />
-                </div>
-                <dl className="mt-4 grid grid-cols-3 gap-3 text-sm">
-                  <div><dt className="text-muted">Records</dt><dd className="mt-1 font-bold">{batch.record_count}</dd></div>
-                  <div><dt className="text-muted">Attempts</dt><dd className="mt-1 font-bold">{batch.attempt_count}</dd></div>
-                  <div><dt className="text-muted">Retry limit</dt><dd className="mt-1 font-bold">{batch.retry_limit}</dd></div>
-                  <div><dt className="text-muted">Succeeded</dt><dd>{batch.succeeded_count}</dd></div><div><dt className="text-muted">Failed</dt><dd>{batch.failed_count}</dd></div>
-                </dl>
-                {batch.last_error && <p>{batch.last_error}</p>}
-              </Card>
-            ))}
-          </div></details>
+          <p>{failure.summary}</p>
+          <dl className="v2s-facts">
+            <div><dt>Cause</dt><dd>{failure.root_cause}</dd></div>
+            <div><dt>Code</dt><dd>{failure.code}</dd></div>
+            <div><dt>Retries so far</dt><dd className="v2-num">{failure.retry_count}</dd></div>
+            <div><dt>Retry</dt><dd>{failure.retryable ? "Available only after a permitted fix is approved" : "Not retryable; investigate the evidence"}</dd></div>
+            {proposal && <div><dt>Proposed fix</dt><dd>{sentence(proposal.action)} · {sentence(proposal.state)}{decidedBy ? ` · decided by ${decidedBy}` : ""}{proposal.decided_at ? ` at ${proposal.decided_at}` : ""}</dd></div>}
+          </dl>
         </section>
       )}
 
       {activity.length > 0 && (
-        <details className="mt-6"><summary>Agent and human activity</summary><section className="mt-4" aria-labelledby="activity-heading">
-          <p className="eyebrow text-primary">Audit activity</p>
-          <h2 id="activity-heading" className="type-section mt-2">Evidence-Backed Actions</h2>
-          <Panel className="mt-5">
-            <ol>
-              {activity.slice(-6).reverse().map((item) => (
-                <li className="activity-item" key={item.id}>
-                  <div className="activity-icon"><Bot aria-hidden="true" size={17} /></div>
-                  <div><p className="font-semibold">{item.action}</p><p className="mt-1 text-sm text-secondary">{humanize(item.agent)} · {humanize(item.status)} · {humanize(item.risk)} risk</p></div>
-                </li>
-              ))}
-            </ol>
-          </Panel>
-        </section></details>
+        <details className="v2s-details v2s-section"><summary>Decisions and activity</summary>
+          <ol className="v2s-activity" aria-label="Latest decisions and activity">
+            {activity.slice(-6).reverse().map((item) => (
+              <li key={item.id}><strong>{item.action}</strong><span className="v2s-quiet">{sentence(item.agent)} · {sentence(item.status)} · {sentence(item.risk)} risk</span></li>
+            ))}
+          </ol>
+        </details>
       )}
-      <details className="mt-6"><summary>Standalone synthetic scenario · separate migration</summary><p>Loading this scenario replays earlier approvals. It does not continue the selected migration.</p><Button variant="secondary" className="mt-3" onClick={loadDemo} disabled={busy || readState === "loading"}>Load reviewed manifest</Button></details>
+      <details className="v2s-details v2s-section"><summary>Standalone synthetic scenario · separate migration</summary><p>Loading this scenario replays earlier approvals. It does not continue the selected migration.</p><Button variant="secondary" className="mt-3" onClick={loadDemo} disabled={busy || readState === "loading"}>Load reviewed manifest</Button></details>
 
       <Dialog
         fallbackFocusRef={headingRef}
         open={dialogOpen && Boolean(proposal)}
         onClose={() => setDialogOpen(false)}
         title="Review proposed resolution"
-        description="The Resolution Agent can propose a reversible action. You govern this consequential decision."
+        description="The rules propose a reversible fix for the paused batch. Nothing changes until you decide."
       >
         {proposal && failure && (
-          <div>
-            <div className="flex flex-wrap gap-2"><Badge>{humanize(proposal.specialist)}</Badge><Badge>{proposal.risk} risk</Badge><Badge>{Math.round(proposal.confidence * 100)}% policy confidence</Badge></div>
-            <h3 className="type-card mt-5">{humanize(proposal.action)}</h3>
-            <p className="mt-2 text-sm leading-6 text-secondary">{proposal.rationale}</p>
-            <div className="mt-5 rounded-lg bg-[var(--surface-subtle)] p-4 text-sm">
+          <div className="v2s-dialog">
+            <p className="v2s-meta"><span>{sentence(proposal.specialist)}</span><span>{sentence(proposal.risk)} risk</span><span>{Math.round(proposal.confidence * 100)}% policy confidence</span></p>
+            <h3>{sentence(proposal.action)}</h3>
+            <p>{proposal.rationale}</p>
+            <div className="v2s-evidence">
               <strong>Evidence</strong>
-              <ul className="mt-2 grid gap-1 text-secondary">{proposal.evidence.map((item) => <li className="break-all" key={item}>• {item}</li>)}</ul>
+              <ul>{proposal.evidence.map((item) => <li className="break-all" key={item}>{item}</li>)}</ul>
             </div>
-            <p className="mt-4 flex items-start gap-2 text-sm text-secondary"><AlertTriangle aria-hidden="true" size={18} />{proposal.escalation_rule}</p>
-            <div className="mt-6 flex flex-wrap justify-end gap-2">
+            <p className="v2s-note"><AlertTriangle aria-hidden="true" size={18} />{proposal.escalation_rule}</p>
+            <p className="v2s-quiet">Your decision is recorded with your name. Approving lets you retry the paused batch; rejecting keeps it blocked.</p>
+            <div className="v2s-dialog-actions">
               <Button variant="secondary" onClick={() => decide(false)} disabled={busy}>Reject and block</Button>
               <Button onClick={() => decide(true)} disabled={busy || !resolving || !failure.retryable || !proposal.deterministic_fix_available || !["PROPOSED", "AWAITING_APPROVAL"].includes(proposal.state)} leadingIcon={CheckCircle2}>Approve resolution</Button>
             </div>

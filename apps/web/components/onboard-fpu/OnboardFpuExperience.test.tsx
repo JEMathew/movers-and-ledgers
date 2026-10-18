@@ -10,19 +10,20 @@ const response = (body: object, status=200) => Promise.resolve(new Response(JSON
 beforeAll(() => {HTMLDialogElement.prototype.showModal = function(){this.open=true;}; HTMLDialogElement.prototype.close = function(){this.open=false;};});
 beforeEach(() => {sessionStorage.clear(); window.history.replaceState(null,"","/onboard-fpu");});
 afterEach(() => vi.restoreAllMocks());
-async function load(value=initial) {vi.spyOn(globalThis,"fetch").mockImplementation(() => response(value)); render(<OnboardFpuExperience/>); fireEvent.click(screen.getByRole("button",{name:"Load synthetic scenario"})); await screen.findByText("Finish the Essentials");}
+async function load(value=initial) {vi.spyOn(globalThis,"fetch").mockImplementation(() => response(value)); render(<OnboardFpuExperience/>); fireEvent.click(screen.getByRole("button",{name:"Load synthetic scenario"})); await screen.findByRole("heading",{name:/^Essentials for daily use/});}
 
 describe("governed onboarding and productive use", () => {
   it("shows scope and prevents preparation before prerequisites", async () => {
     await load();
     expect(screen.getByText(/No real provider writes/)).toBeInTheDocument();
     expect(screen.getByRole("button",{name:"Prepare invoice contract"})).toBeDisabled();
-    expect(screen.queryByRole("heading",{name:"Business ready · verified"})).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading",{level:1,name:/is ready to use/})).not.toBeInTheDocument();
   });
   it("presents the Start Using stage in business language", async () => {
     await load();
-    expect(screen.getByRole("heading", { level: 1, name: "Start Using Your Books" })).toBeVisible();
-    expect(screen.getByText("Finish the essentials, then post and verify your first synthetic invoice.")).toBeVisible();
+    expect(screen.getByRole("heading", { level: 1, name: "Finish the essentials" })).toBeVisible();
+    expect(screen.getByText("Start", { selector: ".v2-stage-eyebrow strong" })).toBeVisible();
+    expect(screen.getByText(/0 of 1 essentials are ready/)).toBeVisible();
     expect(screen.getAllByText("Start")[0]).toBeVisible();
     expect(document.body).not.toHaveTextContent(/First Productive Use|\bFPU\b|first live cycle/i);
   });
@@ -43,18 +44,21 @@ describe("governed onboarding and productive use", () => {
     fireEvent.click(screen.getByRole("button",{name:"Confirm approve"}));
     expect(await screen.findByRole("alert")).toHaveTextContent("Evidence changed");
     expect(screen.getByRole("dialog")).toBeInTheDocument();
-    expect(screen.queryByRole("heading",{name:"Business ready · verified"})).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading",{level:1,name:/is ready to use/})).not.toBeInTheDocument();
   });
   it("resumes a posted checkpoint with the original key and renders verified evidence only", async () => {
     const posted = {...task,checkpoint:"POSTED" as const,attempts:1,idempotency_key:"original",decisions:[{action:"approve",actor:"demo-user"}]};
     await load({...prepared,onboarding:{faults:[],fpu:posted}});
     vi.mocked(fetch).mockImplementationOnce(() => response({...prepared,verified_fpu:true,workflow_status:"VERIFIED_FIRST_PRODUCTIVE_USE",effective_status:"VERIFIED_FIRST_PRODUCTIVE_USE",onboarding:{faults:[],fpu:{...posted,checkpoint:"VERIFIED",posted_by:"demo-user",invoice:{total:"107.25"},checks:[{id:"posting",passed:true,explanation:"Matched",evidence:["invoice:hash"]}]}}}));
     fireEvent.click(screen.getByRole("button",{name:"Resume verification"}));
-    await screen.findByRole("heading",{name:"Business ready · verified"});
+    await screen.findByRole("heading",{level:1,name:"Harbor is ready to use"});
     expect(screen.getByRole("link",{name:"Review verified evidence"}).getAttribute("href")).toMatch(/^\/trust\?view=evidence&session=/);
     expect(screen.getByRole("list",{name:"Migration Journey"})).toHaveTextContent("Start usingDone");
-    expect((vi.mocked(fetch).mock.calls.at(-1)![1]!.headers as Record<string,string>)["Idempotency-Key"]).toBe("original");
-    expect(screen.getByText("Posted invoice, journal and accounting impact")).toBeInTheDocument();
+    const execute = vi.mocked(fetch).mock.calls.find(call => String(call[0]).endsWith("/fpu/execute"))!;
+    expect((execute[1]!.headers as Record<string,string>)["Idempotency-Key"]).toBe("original");
+    // The verified figure is the API's posted total, named for the migrated customer.
+    expect(screen.getByText("First invoice, Cedar")).toBeInTheDocument();
+    expect(screen.getByText("USD 107.25", { selector: ".v2-money-value" })).toBeInTheDocument();
   });
   it("requires human approval for synthetic repair and never calls execute implicitly", async () => {
     await load({...initial,onboarding:{faults:["missing_customer"]}});
