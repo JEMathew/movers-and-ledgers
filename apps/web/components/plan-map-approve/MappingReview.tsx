@@ -148,7 +148,7 @@ function MappingDetail({ mapping, history, editable, busy, decide, reconsider, h
     <div className="pm-detail-top"><StatusChip status={chipStatus(mapping)} /><span>{riskText(mapping.risk)} · {matchText(mapping.confidence)}</span><span>{areaLabel(mapping.area)}</span></div>
     <div className="mapping-review-row pm-compare">
       {/* Valid source names and targets can be long and unbroken; no column may outgrow the card. */}
-      <div className="min-w-0 pm-side"><p className="pm-meta">In your old books</p><h3 ref={headingRef} tabIndex={-1} className="pm-side-name">{mapping.source_label}</h3><p className="pm-meta">{mapping.source_id}</p>{mapping.source_value != null && <p className="pm-side-value">Source setting: {mapping.source_value}</p>}</div>
+      <div className="min-w-0 pm-side"><p className="pm-meta">In your old books</p><h3 ref={headingRef} tabIndex={-1} className="pm-side-name">{mapping.source_label}</h3>{mapping.source_id !== mapping.source_label && <p className="pm-meta">{mapping.source_id}</p>}{mapping.source_value != null && <p className="pm-side-value">Source setting: {mapping.source_value}</p>}</div>
       <span className="min-w-0 pm-arrow" aria-hidden="true">→</span>
       <div className="min-w-0 pm-side pm-side-new"><p className="pm-meta">Proposed in your new books</p><p className="pm-side-name">{mapping.selected_target}</p>
         {mapping.state === "MODIFIED" && <p className="pm-meta">Originally suggested: {mapping.recommended_target}</p>}
@@ -193,7 +193,7 @@ function SecondOpinion({ mapping }: { mapping: MappingProposal }) {
     <div className="pm-second-head"><h4 id={titleId}>Want a second opinion?</h4><AiStatusBadge withDetail /></div>
     <p className="pm-meta">The Advisor will explain a mapping and the Reviewer will challenge it. Neither decides: you approve every change, and advice never changes your books.</p>
     <div className="pm-second-actions"><button type="button" className="button secondary small" disabled>Ask the Advisor</button><button type="button" className="button secondary small" disabled>Ask the Reviewer</button></div>
-    <PlannedExample><p>Advisor: “The name suggests a clearing account. Check what it settles before you approve it.”</p><p>Reviewer: “The source purpose isn’t established. Ask for the account’s settlement history.”</p></PlannedExample>
+    <PlannedExample><p>Advisor: “Here is why the rules suggest this target, and what to check in your old books before you approve it.”</p><p>Reviewer: “Here is what could be wrong with this mapping, and the evidence that would settle it.”</p></PlannedExample>
     {mapping.area === "chart_of_accounts" && <IndependentReview key={`${mapping.id}:${mapping.state}:${mapping.selected_target}`} mappingId={mapping.id} />}
   </section>;
 }
