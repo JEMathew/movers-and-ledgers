@@ -61,7 +61,7 @@ describe("Assess processing", () => {
       .mockResolvedValueOnce(json({ readiness: "READY", blocker_count: 0, warning_count: 0, decision_basis: [], recommended_next_actions: [], ready_areas: [], policy_version: "p1" }))
       .mockResolvedValueOnce(json([]));
     await act(async () => finish(json({ company_name: "Harbor Light Books", findings: [], profiles: [], fixture_version: "v1", synthetic: true })));
-    await screen.findByRole("heading", { name: "Migration Readiness" });
+    await screen.findByRole("heading", { name: "Migration readiness" });
     expect(steps()[0]).toHaveTextContent("UnderstandDone");
     expect(steps()[0]).toHaveAttribute("data-state", "Completed");
     expect(document.querySelector(".is-processing")).toBeNull();
@@ -80,7 +80,7 @@ describe("secondary reads after assessing", () => {
     }));
     render(<DiscoverAssessExperience />);
     fireEvent.click(screen.getByRole("button", { name: /Check if my books are ready to migrate/ }));
-    await screen.findByRole("heading", { name: "Migration Readiness" });
+    await screen.findByRole("heading", { name: "Migration readiness" });
     // The activity read is still pending: Assess is done and Plan is simply current.
     expect(steps()[0]).toHaveTextContent("UnderstandDone");
     expect(steps()[1]).toHaveTextContent("PrepareNow");
@@ -104,9 +104,9 @@ describe("starting a new assessment", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<DiscoverAssessExperience />);
     await screen.findByText("Northstar Supplies has 1 blocker to fix before migration.");
-    fireEvent.click(screen.getByRole("button", { name: /Start a New Assessment/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Start a new assessment/ }));
     await waitFor(() => expect(steps()[0]).toHaveTextContent("UnderstandAssessing…"));
-    expect(screen.queryByRole("heading", { name: "Migration Readiness" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Migration readiness" })).not.toBeInTheDocument();
     expect(steps()[0]).not.toHaveClass("is-blocked");
   });
 });

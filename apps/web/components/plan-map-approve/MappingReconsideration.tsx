@@ -50,8 +50,8 @@ export function MappingReconsideration({ mapping, history, submit }: {
       {r.reviewed_at && <p>New decision {r.decision_id}: {r.reviewed_by} · {r.reviewed_at}</p>}
     </div>)}
     {pending ? <div className="mt-3 flex flex-wrap gap-2">
-      <Button variant="secondary" disabled={busy} onClick={() => perform(`/reconsiderations/${pending.id}/review`, {action: "approve", comment: "Explicit human review of the displayed reconsideration"})}>Approve Reconsideration</Button>
-      <Button disabled={busy} variant="secondary" onClick={() => perform(`/reconsiderations/${pending.id}/review`, {action: "reject", comment: "Reconsideration rejected after human review"})}>Reject Reconsideration</Button>
+      <Button variant="secondary" disabled={busy} onClick={() => perform(`/reconsiderations/${pending.id}/review`, {action: "approve", comment: "Explicit human review of the displayed reconsideration"})}>Approve reconsideration</Button>
+      <Button disabled={busy} variant="secondary" onClick={() => perform(`/reconsiderations/${pending.id}/review`, {action: "reject", comment: "Reconsideration rejected after human review"})}>Reject reconsideration</Button>
     </div> : mapping.state === "REJECTED" && <form className="mt-3" onSubmit={event => {
       event.preventDefault();
       if (!prior || !reason.trim() || busy) return;

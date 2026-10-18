@@ -1,23 +1,24 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { useRef, useState } from "react";
-import { Badge, Button, Card } from "@/components/ui/primitives";
+import type { ReactNode, RefObject } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { Button } from "@/components/ui/primitives";
 import { Select } from "@/components/ui/forms";
+import { AiStatusBadge, PlannedExample, StatusChip } from "@/components/v2/primitives";
+import { V2_STATUS_LABEL, V2_STATUS_RECOVERY } from "@/components/v2/mapping-status";
+import { BulkApproval } from "./BulkApproval";
 import { IndependentReview } from "./IndependentReview";
+import { MappingEvidence } from "./MappingEvidence";
 import { MappingReconsideration } from "./MappingReconsideration";
 import { areaLabel } from "./PlanSummary";
+import { bulkEligible, bulkIneligibility, INELIGIBLE_TEXT, type BulkItem, type BulkOutcome } from "./bulk-approval";
+import { chipStatus, GROUP_TITLE, groupMappings, groupOf, matchText, riskText, type MappingGroupId } from "./mapping-groups";
 import type { MappingHistoryDecision, MappingProposal } from "./types";
 
 export const mappingReviewed = (mapping: MappingProposal) => ["APPROVED", "MODIFIED"].includes(mapping.state);
-export function mappingLabel(mapping: MappingProposal, planApproved: boolean) {
-  if (mapping.state === "MODIFIED") return "Changed";
-  if (mapping.state === "APPROVED") return planApproved ? "Approved" : "Reviewed";
-  // Three different situations with three different ways forward; never one shared label (V1 audit, finding 4).
-  if (mapping.state === "BLOCKED") return "Blocked";
-  if (mapping.state === "REJECTED") return "Rejected";
-  if (mapping.state === "REVIEW_REQUIRED") return "Needs review";
-  return "Suggested";
+/** The state label a mapping shows, in the V2 vocabulary: Needs review, Blocked, Rejected, Low risk, ready, Approved, Changed. */
+export function mappingLabel(mapping: MappingProposal) {
+  return V2_STATUS_LABEL[chipStatus(mapping)];
 }
 
 /** What the person can do next for a mapping that is not settled. Mirrors apply_mapping_decision and
@@ -25,16 +26,32 @@ export function mappingLabel(mapping: MappingProposal, planApproved: boolean) {
 export function mappingRecovery(mapping: MappingProposal): string | undefined {
   if (mapping.state === "BLOCKED") {
     const why = mapping.policy_reasons.length ? ` ${mapping.policy_reasons.join(" ")}` : "";
-    return `Blocked: the rules can't accept this record as it stands.${why} It can't be confirmed or rejected. Save a compatible destination if one is offered, or correct the source record and check readiness again.`;
+    return `Blocked: the rules can't accept this record as it stands.${why} It can't be approved or rejected. Save a compatible destination if one is offered, or correct the source record and check readiness again.`;
   }
   if (mapping.state === "REJECTED") {
     return "Rejected: this record stays out of the move, and the plan can't be approved while a mapping is rejected. Request reconsideration to change the decision.";
   }
-  if (mapping.state === "REVIEW_REQUIRED") return "Needs review: confirm it, save a different destination, or reject it.";
   return undefined;
 }
 
-export function MappingReview({ mappings, history, editable, busy, planApproved, decide, reconsider, onReviewPlan, handoff }: {
+function ruleCheck(mapping: MappingProposal) {
+  switch (mapping.state) {
+    case "BLOCKED": return "failed. This mapping can't move as it stands.";
+    case "REJECTED": return "you rejected this mapping, so it stays out of the move.";
+    case "APPROVED": case "MODIFIED": return "decision recorded.";
+    case "AUTO_ACCEPTABLE": return "passed. It still needs your approval.";
+    default: return "needs your approval.";
+  }
+}
+
+const GROUP_NOTE: Partial<Record<MappingGroupId, string>> = {
+  needs_review: "Medium and high risk. Each needs your judgement.",
+  blocked: `A blocked mapping failed a rule check. ${V2_STATUS_RECOVERY.blocked}`,
+  rejected: "A mapping you reject stays out of the move and keeps Move locked until you change it. Ask to reconsider it to change the decision.",
+  one_by_one: "Low risk, but each needs its own approval: the rules mark it as sensitive, or it is tax or already changed.",
+};
+
+export function MappingReview({ mappings, history, editable, busy, planApproved, decide, reconsider, runBulk, onReviewPlan, handoff }: {
   mappings: MappingProposal[];
   history: MappingHistoryDecision[];
   editable: boolean;
@@ -42,85 +59,141 @@ export function MappingReview({ mappings, history, editable, busy, planApproved,
   planApproved: boolean;
   decide: (mapping: MappingProposal, action: "approve" | "reject" | "modify", target?: string) => Promise<void>;
   reconsider: (mapping: MappingProposal, path: string, body: unknown) => Promise<void>;
+  runBulk: (set: BulkItem[]) => Promise<BulkOutcome>;
   onReviewPlan: () => void;
   handoff?: ReactNode;
 }) {
-  const [reviewing, setReviewing] = useState<string>();
   const [selectedId, setSelectedId] = useState<string>();
-  const [targets, setTargets] = useState<Record<string, string>>({});
-  const cards = useRef(new Map<string, HTMLElement>());
-  const pending = mappings.filter(mapping => !mappingReviewed(mapping));
-  const reviewNext = () => {
-    const next = pending.find(mapping => !["BLOCKED", "REJECTED"].includes(mapping.state)) ?? pending[0];
-    if (!next) return;
-    setSelectedId(next.id); setReviewing(next.id);
-    cards.current.get(next.id)?.focus();
-    cards.current.get(next.id)?.scrollIntoView?.({ block: "start" });
-  };
-  const selectedMapping = mappings.find(mapping => mapping.id === selectedId) ?? pending[0] ?? mappings[0];
-  const areas = selectedMapping ? [selectedMapping.area] : [];
-  const datasetByArea: Record<string, string> = { chart_of_accounts: "accounts", customers: "customers", vendors: "vendors", products_services: "products", tax_configuration: "taxes", general_configuration: "configuration" };
-  return <section className="mt-8" aria-labelledby="mapping-heading">
-    <div className="panel flex flex-wrap items-center justify-between gap-5 p-6">
-      <div><h2 id="mapping-heading" className="type-section">Review your mappings</h2><p className="mt-2 text-secondary">{mappings.length - pending.length} of {mappings.length} reviewed. Confirming a mapping does not approve the migration plan.</p></div>
-      {handoff ?? (pending.length ? <Button variant="secondary" disabled={!editable || busy} onClick={reviewNext}>Review {pending.length} {pending.length === 1 ? "mapping" : "mappings"}</Button> : <Button disabled={busy || !mappings.length} onClick={onReviewPlan}>Review migration plan</Button>)}
-    </div>
-    {mappings.length > 0 && <div className="review-queue">
-      <label>Mapping queue · {pending.length} pending<select className="field-control mt-2" value={selectedMapping?.id ?? ""} onChange={event => { setSelectedId(event.target.value); setReviewing(event.target.value); }}>
-        {mappings.map((mapping, index) => <option key={mapping.id} value={mapping.id}>{index + 1}. {mapping.source_label} · {mappingLabel(mapping, planApproved)}</option>)}
-      </select></label>
-      <p>Every mapping is available here, including rejected and previously reviewed decisions. Selection gives no approval.</p>
-    </div>}
-    {areas.map(area => <section key={area} className="mt-8" aria-label={areaLabel(area)}>
-      <h3 className="type-card">{areaLabel(area)}</h3>
-      <div className="mt-4 grid gap-4">
-        {mappings.filter(mapping => mapping.id === selectedMapping?.id).map(mapping => {
-          const terminal = ["APPROVED", "MODIFIED", "REJECTED"].includes(mapping.state);
-          const identityOnly = ["general_configuration", "products_services"].includes(mapping.area);
-          // Only destinations the server's compatibility rules accept; never a target a save would refuse.
-          // A blocked mapping can only be cleared by saving a destination, so a compatible current one stays listed.
-          const blocked = mapping.state === "BLOCKED";
-          const destinations = (mapping.supported_targets ?? []).filter(target => (blocked || target !== mapping.selected_target) && (!identityOnly || target === mapping.recommended_target));
-          const canDecide = editable && !busy && !terminal;
-          const open = reviewing === mapping.id || reviewing === undefined;
-          const relevant = mapping.evidence.filter(evidence => evidence.startsWith("mapping-rule:") || evidence.includes(`:${datasetByArea[mapping.area]}:`));
-          const shownEvidence = relevant.length ? relevant : mapping.evidence;
-          const context = mapping.evidence.filter(evidence => !shownEvidence.includes(evidence));
-          return <Card key={mapping.id} className={`min-w-0 [overflow-wrap:anywhere] ${open ? "border-[var(--primary)]" : ""}`} tabIndex={-1} aria-label={`${mapping.source_label} mapping`}>
-            <div ref={node => { if (node) cards.current.set(mapping.id, node); else cards.current.delete(mapping.id); }} tabIndex={-1} className="mapping-review-row grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
-              {/* Valid source names and targets can be long and unbroken; no column may outgrow the card. */}
-              <div className="min-w-0"><p className="type-meta">Source</p><h4 className="mt-1 font-bold">{mapping.source_label}</h4><p className="mt-1 text-xs text-secondary">{mapping.source_id}</p>{mapping.source_value != null && <p className="mt-2 text-sm">Source setting: {mapping.source_value}</p>}</div>
-              <div className="min-w-0"><p className="type-meta">Proposed destination</p><p className="mt-1 font-bold">{mapping.selected_target}</p>{mapping.state === "MODIFIED" && <p className="mt-1 text-xs text-secondary">Originally suggested: {mapping.recommended_target}</p>}</div>
-              <div className="min-w-0"><Badge>{mappingLabel(mapping, planApproved)}</Badge></div>
-            </div>
-            {mappingRecovery(mapping) && <p className="mapping-recovery mt-3 text-sm font-semibold" data-state={mapping.state}>{mappingRecovery(mapping)}</p>}
-            <p className="mt-4 text-sm leading-6 text-secondary">{mapping.rationale}</p>
-            {mapping.risk !== "LOW" && <p className="mt-2 text-sm font-semibold">{mapping.risk === "HIGH" ? "High" : "Medium"} risk · {Math.round(mapping.confidence * 100)}% recommendation confidence. Confidence cannot clear a policy blocker.</p>}
-            <details open={open} className="mt-4 rounded-lg bg-[var(--surface-subtle)] p-4 text-sm"><summary className="cursor-pointer font-semibold">Evidence and Policy · {shownEvidence.length} direct {shownEvidence.length === 1 ? "reference" : "references"}</summary><ul className="mt-2 space-y-1 text-secondary">{shownEvidence.map(evidence => <li key={evidence}>{evidence}</li>)}{mapping.policy_reasons.map(reason => <li key={reason}>{reason}</li>)}</ul>{context.length > 0 && <details className="mt-3"><summary className="cursor-pointer font-semibold">Additional Planning Context · {context.length} references</summary><ul className="mt-2 space-y-1 text-secondary">{context.map(evidence => <li key={evidence}>{evidence}</li>)}</ul></details>}</details>
-            {mapping.area === "chart_of_accounts" && <IndependentReview key={`${mapping.id}:${mapping.state}:${mapping.selected_target}`} mappingId={mapping.id} />}
-            {mapping.decided_at && <p className="mt-3 break-all text-xs text-secondary">Decision by {mapping.decided_by} · <time>{mapping.decided_at}</time></p>}
-            {editable && !terminal && <div className="mt-4">
-              <Button className="h-auto max-w-full text-left" variant="secondary" size="small" aria-expanded={open} onClick={() => setReviewing(mapping.id)}>Review {mapping.source_label}</Button>
-              {open && <div className="mt-4 border-t border-token pt-4">
-                {destinations.length > 0 ? <Select label={`Change destination for ${mapping.source_label}`} value={targets[mapping.id] ?? ""} onChange={event => setTargets(current => ({ ...current, [mapping.id]: event.target.value }))} disabled={!canDecide}>
-                  <option value="">Choose a supported destination</option>
-                  {destinations.map(target => <option key={target} value={target}>{target === mapping.selected_target ? `${target} (keep current)` : target}</option>)}
-                </Select> : <p className="text-sm text-secondary">{blocked ? "No compatible destination is available. This mapping stays blocked until the source data is corrected; it cannot be confirmed or rejected here." : "No other supported destination. Confirm this mapping, or reject it; a rejected mapping keeps the plan from being approved until it is reconsidered."}</p>}
-                {identityOnly && <p className="mt-2 text-sm text-secondary">This synthetic adapter retains the source product or configuration treatment. Conversions and changed treatments are unavailable.</p>}
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <Button variant={targets[mapping.id] ? "secondary" : "primary"} disabled={!canDecide || mapping.state === "BLOCKED"} onClick={() => void decide(mapping, "approve")}>Confirm Mapping</Button>
-                  {destinations.length > 0 && <Button variant={targets[mapping.id] ? "primary" : "secondary"} disabled={!canDecide || !targets[mapping.id] || !destinations.includes(targets[mapping.id])} onClick={() => void decide(mapping, "modify", targets[mapping.id])}>Save Changed Mapping</Button>}
-                  {!blocked && <Button variant="ghost" disabled={!canDecide} onClick={() => void decide(mapping, "reject")}>Reject Mapping</Button>}
-                </div>
-                {blocked && destinations.length > 0 && <p className="mt-3 text-sm text-secondary">This recommendation is blocked. Save a compatible destination to clear it; a blocked mapping cannot be confirmed or rejected as it stands.</p>}
-              </div>}
-            </div>}
-            {editable && <MappingReconsideration mapping={mapping} history={history} submit={(path, body) => reconsider(mapping, path, body)} />}
-          </Card>;
-        })}
+  const [bulkOpen, setBulkOpen] = useState(false);
+  const [bulkOutcome, setBulkOutcome] = useState<BulkOutcome>();
+  const [focusDetail, setFocusDetail] = useState(0);
+  const detailHeading = useRef<HTMLHeadingElement>(null);
+  const groups = groupMappings(mappings);
+  const ordered = groups.flatMap(group => group.items);
+  const pending = ordered.filter(mapping => !mappingReviewed(mapping));
+  const decidedCount = mappings.length - pending.length;
+  const ready = mappings.filter(bulkEligible);
+  const firstOpen = pending.find(mapping => !["BLOCKED", "REJECTED"].includes(mapping.state)) ?? pending[0];
+  const selected = mappings.find(mapping => mapping.id === selectedId) ?? firstOpen ?? ordered[0];
+  useEffect(() => { if (focusDetail) detailHeading.current?.focus(); }, [focusDetail]);
+
+  function select(id: string) { setBulkOpen(false); setSelectedId(id); setFocusDetail(n => n + 1); }
+  function reviewNext() {
+    const rest = pending.filter(mapping => mapping.id !== selected?.id);
+    const next = rest.find(mapping => !["BLOCKED", "REJECTED"].includes(mapping.state)) ?? rest[0];
+    if (next) select(next.id);
+  }
+
+  return <section className="pm-map" aria-labelledby="mapping-heading">
+    <div className="pm-map-head">
+      <div className="min-w-0">
+        <h2 id="mapping-heading">Review your mappings</h2>
+        <p className="pm-map-count"><strong>{decidedCount} of {mappings.length} decided.</strong> Approving a mapping does not approve the migration plan.</p>
       </div>
-    </section>)}
-    {selectedMapping && mappingReviewed(selectedMapping) && pending.length > 0 && <Button className="mt-4" disabled={busy} onClick={reviewNext}>Review next mapping</Button>}
-    {!mappings.length && <p className="mt-6 text-secondary">No mappings have been prepared. Return to your plan to prepare them; no review is assumed.</p>}
+      {handoff ?? (!pending.length && mappings.length > 0 ? <Button disabled={busy} onClick={onReviewPlan}>Review migration plan</Button> : null)}
+    </div>
+    {mappings.length > 0 ? <div className="pm-map-grid">
+      <nav className="pm-queue" aria-label="Mapping queue">
+        {groups.map(group => <QueueGroup key={group.id} id={group.id} items={group.items} selectedId={bulkOpen ? undefined : selected?.id} onSelect={select}
+          action={group.id === "ready" && editable ? <div className="pm-queue-bulk">
+            <Button variant="secondary" disabled={busy || !ready.length} aria-expanded={bulkOpen} onClick={() => { setBulkOutcome(undefined); setBulkOpen(true); }}>Approve {ready.length} low-risk {ready.length === 1 ? "mapping" : "mappings"}</Button>
+            <p className="pm-meta">Each approval is recorded separately. High and medium risk are never included.</p>
+          </div> : undefined} />)}
+      </nav>
+      <div className="pm-detail-pane">
+        {/* Stays mounted while the post-approval read runs (editable is briefly false), so the result stays visible. */}
+        {bulkOpen ? <BulkApproval mappings={mappings} editable={editable} busy={busy} run={runBulk} outcome={bulkOutcome} onOutcome={setBulkOutcome} onClose={() => { setBulkOpen(false); setFocusDetail(n => n + 1); }} />
+          : selected ? <MappingDetail key={selected.id} mapping={selected} history={history} editable={editable} busy={busy} decide={decide} reconsider={reconsider} headingRef={detailHeading}
+            next={mappingReviewed(selected) && pending.length > 0 ? <Button disabled={busy} onClick={reviewNext}>Review next mapping</Button> : undefined} /> : null}
+      </div>
+    </div> : <p className="pm-empty">No mappings have been prepared. Return to your plan to prepare them; no review is assumed.</p>}
+    {planApproved && <p className="pm-meta">The plan is approved. These decisions are kept with it.</p>}
+  </section>;
+}
+
+function QueueGroup({ id, items, selectedId, onSelect, action }: { id: MappingGroupId; items: MappingProposal[]; selectedId?: string; onSelect: (id: string) => void; action?: ReactNode }) {
+  const titleId = useId();
+  return <section className="pm-group" data-group={id} aria-labelledby={titleId}>
+    <h3 id={titleId} className="pm-group-title">{GROUP_TITLE[id]} <span className="pm-count">({items.length})</span></h3>
+    {GROUP_NOTE[id] && <p className="pm-group-note">{GROUP_NOTE[id]}</p>}
+    <ul className="pm-queue-list">{items.map(mapping => <li key={mapping.id}>
+      <button type="button" className="pm-queue-item" aria-current={selectedId === mapping.id ? "true" : undefined} onClick={() => onSelect(mapping.id)}>
+        <span className="pm-queue-name">{mapping.source_label}</span>
+        <span className="pm-queue-meta"><StatusChip status={chipStatus(mapping)} />{mapping.risk !== "LOW" && <span>{riskText(mapping.risk)}</span>}<span>{matchText(mapping.confidence)}</span></span>
+      </button>
+    </li>)}</ul>
+    {action}
+  </section>;
+}
+
+function MappingDetail({ mapping, history, editable, busy, decide, reconsider, headingRef, next }: {
+  mapping: MappingProposal; history: MappingHistoryDecision[]; editable: boolean; busy: boolean;
+  decide: (mapping: MappingProposal, action: "approve" | "reject" | "modify", target?: string) => Promise<void>;
+  reconsider: (mapping: MappingProposal, path: string, body: unknown) => Promise<void>;
+  headingRef: RefObject<HTMLHeadingElement | null>; next?: ReactNode;
+}) {
+  const [target, setTarget] = useState("");
+  const blocked = mapping.state === "BLOCKED";
+  const [changing, setChanging] = useState(blocked);
+  const terminal = ["APPROVED", "MODIFIED", "REJECTED"].includes(mapping.state);
+  const identityOnly = ["general_configuration", "products_services"].includes(mapping.area);
+  // Only destinations the server's compatibility rules accept; never a target a save would refuse.
+  // A blocked mapping can only be cleared by saving a destination, so a compatible current one stays listed.
+  const destinations = (mapping.supported_targets ?? []).filter(option => (blocked || option !== mapping.selected_target) && (!identityOnly || option === mapping.recommended_target));
+  const alternatives = destinations.filter(option => option !== mapping.selected_target);
+  const canDecide = editable && !busy && !terminal;
+  const recovery = mappingRecovery(mapping);
+  const why = groupOf(mapping) === "one_by_one" ? bulkIneligibility(mapping).filter(reason => reason !== "risk") : [];
+  return <article className="pm-detail min-w-0 [overflow-wrap:anywhere]" aria-label={`${mapping.source_label} mapping`}>
+    <div className="pm-detail-top"><StatusChip status={chipStatus(mapping)} /><span>{riskText(mapping.risk)} · {matchText(mapping.confidence)}</span><span>{areaLabel(mapping.area)}</span></div>
+    <div className="mapping-review-row pm-compare">
+      {/* Valid source names and targets can be long and unbroken; no column may outgrow the card. */}
+      <div className="min-w-0 pm-side"><p className="pm-meta">In your old books</p><h3 ref={headingRef} tabIndex={-1} className="pm-side-name">{mapping.source_label}</h3>{mapping.source_id !== mapping.source_label && <p className="pm-meta">{mapping.source_id}</p>}{mapping.source_value != null && <p className="pm-side-value">Source setting: {mapping.source_value}</p>}</div>
+      <span className="min-w-0 pm-arrow" aria-hidden="true">→</span>
+      <div className="min-w-0 pm-side pm-side-new"><p className="pm-meta">Proposed in your new books</p><p className="pm-side-name">{mapping.selected_target}</p>
+        {mapping.state === "MODIFIED" && <p className="pm-meta">Originally suggested: {mapping.recommended_target}</p>}
+        {!terminal && alternatives.length > 0 && <p className="pm-meta">Other compatible {alternatives.length === 1 ? "target" : "targets"}: {alternatives.join(", ")}</p>}
+      </div>
+    </div>
+    {recovery && <p className="mapping-recovery pm-recovery" data-state={mapping.state}>{recovery}</p>}
+    <div className="pm-rule"><p><strong>Rule check:</strong> {ruleCheck(mapping)}</p><p className="pm-rationale">{mapping.rationale}</p>
+      {mapping.risk !== "LOW" && <p className="pm-meta">Confidence is not a guarantee and cannot clear a policy blocker.</p>}
+      {why.length > 0 && <p className="pm-meta">Why this needs its own approval: {why.map(reason => INELIGIBLE_TEXT[reason]).join(" ")}</p>}
+    </div>
+    <MappingEvidence mapping={mapping} open={!terminal} />
+    {editable && !terminal && <div className="pm-decide">
+      {destinations.length === 0 && <p className="pm-meta">{blocked ? "No compatible destination is available. This mapping stays blocked until the source data is corrected; it cannot be approved or rejected here." : "No other supported destination. Approve this mapping, or reject it; a rejected mapping keeps the plan from being approved until it is reconsidered."}</p>}
+      {identityOnly && <p className="pm-meta">This synthetic adapter retains the source product or configuration treatment. Conversions and changed treatments are unavailable.</p>}
+      {changing && destinations.length > 0 && <div className="pm-change">
+        <Select label={`Change destination for ${mapping.source_label}`} value={target} onChange={event => setTarget(event.target.value)} disabled={!canDecide}>
+          <option value="">Choose a supported destination</option>
+          {destinations.map(option => <option key={option} value={option}>{option === mapping.selected_target ? `${option} (keep current)` : option}</option>)}
+        </Select>
+        {blocked && <p className="pm-meta">This recommendation is blocked. Save a compatible destination to clear it; a blocked mapping cannot be approved or rejected as it stands.</p>}
+      </div>}
+      <div className="pm-decide-actions">
+        <Button variant={target || blocked ? "secondary" : "primary"} disabled={!canDecide || blocked} onClick={() => void decide(mapping, "approve")}>Approve as {mapping.selected_target}</Button>
+        {destinations.length > 0 && (changing
+          ? <Button variant={target ? "primary" : "secondary"} disabled={!canDecide || !target || !destinations.includes(target)} onClick={() => void decide(mapping, "modify", target)}>Save changed mapping</Button>
+          : <Button variant="secondary" disabled={!canDecide} onClick={() => setChanging(true)}>Change mapping</Button>)}
+        {!blocked && <Button variant="ghost" className="pm-quiet" disabled={!canDecide} onClick={() => void decide(mapping, "reject")}>Reject</Button>}
+      </div>
+    </div>}
+    {mapping.decided_at && <p className="pm-meta pm-decided">Decision by {mapping.decided_by} · <time>{mapping.decided_at}</time></p>}
+    {next && <div className="pm-next">{next}</div>}
+    {editable && <MappingReconsideration mapping={mapping} history={history} submit={(path, body) => reconsider(mapping, path, body)} />}
+    <p className="pm-footnote">You approve every change. Advice never changes your books. Your decision is recorded with your name.</p>
+    <SecondOpinion mapping={mapping} />
+  </article>;
+}
+
+function SecondOpinion({ mapping }: { mapping: MappingProposal }) {
+  const titleId = useId();
+  return <section className="pm-second" aria-labelledby={titleId}>
+    <div className="pm-second-head"><h4 id={titleId}>Want a second opinion?</h4><AiStatusBadge withDetail /></div>
+    <p className="pm-meta">The Advisor will explain a mapping and the Reviewer will challenge it. Neither decides: you approve every change, and advice never changes your books.</p>
+    <div className="pm-second-actions"><button type="button" className="button secondary small" disabled>Ask the Advisor</button><button type="button" className="button secondary small" disabled>Ask the Reviewer</button></div>
+    <PlannedExample><p>Advisor: “Here is why the rules suggest this target, and what to check in your old books before you approve it.”</p><p>Reviewer: “Here is what could be wrong with this mapping, and the evidence that would settle it.”</p></PlannedExample>
+    {mapping.area === "chart_of_accounts" && <IndependentReview key={`${mapping.id}:${mapping.state}:${mapping.selected_target}`} mappingId={mapping.id} />}
   </section>;
 }

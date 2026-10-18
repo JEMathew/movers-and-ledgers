@@ -46,7 +46,7 @@ describe("state-aware migration home", () => {
     expect(within(screen.getByRole("navigation", { name: "Task help" })).getByRole("link", { name: "Help with this task" })).toHaveAttribute("href", `/support?session=${id}&stage=${phase}`);
     const shortcuts = within(screen.getByRole("navigation", { name: "Task help" }));
     expect(shortcuts.getByRole("link", { name: "AI activity" })).toHaveAttribute("href", `/trust?view=evidence&session=${id}#ai-activity`);
-    expect(shortcuts.getByRole("link", { name: "Evidence & Results" })).toHaveAttribute("href", `/trust?view=evidence&session=${id}`);
+    expect(shortcuts.getByRole("link", { name: "Open evidence" })).toHaveAttribute("href", `/trust?view=evidence&session=${id}`);
     expect(screen.getAllByRole("navigation", { name: /Task help|Migration details/ })).toHaveLength(1);
     expect(screen.queryByRole("link", { name: "MoveBooks Play" })).not.toBeInTheDocument();
     expect(screen.getAllByText("Details")).toHaveLength(1);
@@ -89,7 +89,7 @@ describe("state-aware migration home", () => {
     vi.spyOn(globalThis,"fetch").mockImplementation(()=>json({id,synthetic:true,workflow_status:"ASSESSED"}));render(<MyMigration reference={id}/>);expect(await screen.findByRole("link",{name:"Review readiness and plan"})).toBeVisible();expect(screen.getByText(/Attention details are incomplete/)).toBeVisible();expect(phases().firstElementChild).toHaveAttribute("data-state","Earlier phase");fireEvent.click(screen.getByText("Operational steps"));expect(screen.getByRole("list",{name:"Migration Journey"}).querySelector(".is-complete")).toBeNull();
   });
   it("shows only three attention previews with the actual supplied total",async()=>{
-    vi.spyOn(globalThis,"fetch").mockImplementation(()=>json({...evidence,execution:{failures:Array.from({length:5},()=>({code:"MB-DUPLICATE_CUSTOMER",resolved:false}))}}));render(<MyMigration reference={id}/>);await screen.findByRole("link",{name:"Review recovery"});expect(within(screen.getByRole("region",{name:"Next task"})).getAllByRole("listitem")).toHaveLength(4);expect(screen.getByText("and 2 more in the task")).toBeVisible();expect(screen.queryByRole("region",{name:"Needs attention"})).toBeNull();
+    vi.spyOn(globalThis,"fetch").mockImplementation(()=>json({...evidence,execution:{failures:Array.from({length:5},()=>({code:"MB-DUPLICATE_CUSTOMER",resolved:false}))}}));render(<MyMigration reference={id}/>);await screen.findByRole("link",{name:"Review recovery"});expect(within(screen.getByRole("region",{name:"How to recover"})).getAllByRole("listitem")).toHaveLength(4);expect(screen.getByText("and 2 more in the task")).toBeVisible();expect(screen.queryByRole("region",{name:"Waiting on you"})).toBeNull();
   });
   it("adopts only authorized deep links, restores them on return, and clears old view while refreshing",async()=>{
     const fetch=vi.spyOn(globalThis,"fetch").mockImplementation(()=>json(evidence));const first=render(<MyMigration reference={id}/>);await screen.findByRole("link",{name:"Review recovery"});expect(sessionStorage.getItem("movebooks-migration-session")).toBe(id);first.unmount();render(<MyMigration/>);await screen.findByRole("link",{name:"Review recovery"});expect(fetch).toHaveBeenCalledTimes(2);

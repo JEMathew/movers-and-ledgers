@@ -28,9 +28,9 @@ function Remembered({ reference, scope }: { reference?: string; scope: string })
   const selectedInTab = (() => { try { return typeof window !== "undefined" && !!sessionStorage.getItem(SELECTED_SESSION_KEY); } catch { return false; } })();
   const needList = pickRequired && (start?.pick === true || !selectedInTab);
   const listing = useMigrationList(needList);
-  if (start === undefined) return <main id="main-content" className="shell member-home" aria-busy="true"><p role="status">Opening your migration…</p></main>;
+  if (start === undefined) return <main id="main-content" className="shell mm" aria-busy="true"><p className="mm-eyebrow"><strong>My migration</strong></p><p role="status" className="mm-status">Opening your migration…</p></main>;
   if (needList) {
-    if (listing.loading) return <main id="main-content" className="shell member-home" aria-busy="true"><p role="status">Checking your migrations…</p></main>;
+    if (listing.loading) return <main id="main-content" className="shell mm" aria-busy="true"><p className="mm-eyebrow"><strong>My migration</strong></p><p role="status" className="mm-status">Checking your migrations…</p></main>;
     if (listing.failure && !listing.list) return <ListProblem failure={listing.failure} retry={listing.retry}/>;
     const list = listing.list;
     if (list && (start?.pick || list.items.length > 1 || list.incomplete || list.skipped > 0) && list.items.length > 0) return <MigrationPicker list={list} loadMore={listing.loadMore} more={listing.more} failure={listing.failure}/>;
@@ -44,10 +44,13 @@ function CloudWorkspace({ reference }: { reference?: string }) {
   const { identity } = useIdentity();
   // Key the read consumer by verified account and reference; stale reads unmount.
   const destination = reference !== undefined ? `/workspace?session=${encodeURIComponent(reference)}` : "/workspace";
-  return identity ? <Remembered key={identity.subject} reference={reference} scope={identity.subject}/> : <main id="main-content" className="shell member-home">
-    <h1 className="type-section">Sign in to continue your migration</h1>
-    <p className="mt-3">Use your Google account to securely access your MoveBooks migration. New here? You start with a sample business. Returning? Your migration resumes where you left off.</p>
-    <IdentityEntry destination={destination} />
+  return identity ? <Remembered key={identity.subject} reference={reference} scope={identity.subject}/> : <main id="main-content" className="shell entry">
+    <section className="entry-card" aria-labelledby="workspace-sign-in-title">
+      <p className="entry-eyebrow">My migration</p>
+      <h1 id="workspace-sign-in-title" className="entry-title">Sign in to continue your migration</h1>
+      <p className="entry-lead">Use your Google account to securely access your MoveBooks migration. New here? You start with a sample business. Returning? Your migration resumes where you left off.</p>
+      <IdentityEntry destination={destination} />
+    </section>
   </main>;
 }
 // /workspace is My Migration. The local demo is already behind the demo sign-in middleware.
