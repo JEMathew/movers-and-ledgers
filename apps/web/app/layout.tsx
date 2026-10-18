@@ -13,7 +13,7 @@ import { RuntimeNotice } from "@/components/RuntimeNotice";
 import { IdentityProvider } from "@/components/IdentityProvider";
 
 export const metadata: Metadata = {
-  title: "MoveBooks AI — Migrate with evidence",
+  title: { default: "MoveBooks AI — Migrate with evidence", template: "%s · MoveBooks AI" },
   description: "A governed, provider-neutral accounting migration experience from Movers & Ledgers.",
 };
 

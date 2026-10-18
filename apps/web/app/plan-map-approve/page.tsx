@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { PlanMapApproveExperience } from "@/components/plan-map-approve/PlanMapApproveExperience";
 
 export const metadata: Metadata = {
-  title: "Plan, Map & Approve · MoveBooks AI",
+  title: "Prepare: map and approve",
   description: "Build a structured migration plan and govern evidence-backed mapping decisions.",
 };
 

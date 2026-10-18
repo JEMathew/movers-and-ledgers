@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { DiscoverAssessExperience } from "@/components/discover-assess/DiscoverAssessExperience";
 
 export const metadata: Metadata = {
-  title: "Assess My Migration · MoveBooks AI",
+  title: "Understand: check readiness",
   description: "Run deterministic discovery and readiness checks against synthetic accounting data.",
 };
 
