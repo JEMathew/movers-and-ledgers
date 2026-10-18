@@ -84,6 +84,30 @@ describe("Plan-stage label casing", () => {
   });
 });
 
+describe("Workstream B screens label casing", () => {
+  it("keeps entry, My migration, Understand and Prepare headings, buttons and labels in sentence case", async () => {
+    const { readFileSync, readdirSync } = await import("node:fs");
+    const { join, resolve } = await import("node:path");
+    const root = resolve(__dirname, "..");
+    const inDir = (dir: string) => readdirSync(join(root, dir)).filter(name => /\.tsx$/.test(name) && !name.includes(".test.")).map(name => join(dir, name));
+    const files = [...inDir("components/plan-map-approve"), ...inDir("components/discover-assess"), "components/MyMigration.tsx", "components/WorkspaceEntry.tsx", "components/IdentityEntry.tsx", "app/sign-in/page.tsx",
+      "components/journey/MemberProgress.tsx", "components/journey/MigrationSnapshot.tsx", "components/journey/ChecksTable.tsx", "components/journey/MigrationPicker.tsx"];
+    const labels = files.flatMap(file => {
+      const source = readFileSync(join(root, file), "utf8");
+      return [
+        ...[...source.matchAll(/<h[1-5][^>]*>([^<{]+)<\/h[1-5]>/g)].map(match => match[1].trim()),
+        // Text directly before a closing button tag, whatever the attributes contain.
+        ...[...source.matchAll(/>([A-Z][^<{>]+)<\/(?:Button|button)>/g)].map(match => match[1].trim()),
+        ...[...source.matchAll(/<summary[^>]*>([A-Z][^<{]+)<\/summary>/g)].map(match => match[1].trim()),
+        ...[...source.matchAll(/(?:title|label)="([A-Z][^"]+)"/g)].map(match => match[1]),
+      ];
+    });
+    expect(labels.length).toBeGreaterThan(40);
+    // "My migration" is the name of a place in the product, like a stage name.
+    expect(labels.filter(label => !sentenceCase(label.replace(/[?.:]$/, "").replace(/ ·.*$/, "").replace(/ My migration\b/, " my migration")))).toEqual([]);
+  });
+});
+
 describe("internal terms stay out of customer copy", () => {
   it("never shows First Productive Use, FPU or first live cycle in UI source text", async () => {
     const { readFileSync, readdirSync, statSync } = await import("node:fs");
