@@ -1,6 +1,8 @@
 import { journeyStepFor } from "../journey/journey";
 import { AiStatusBadge, GuideNote, MoneyFigure, NextStepPanel, PlannedExample, StatusChip } from "./primitives";
 import { StageBar } from "./StageBar";
+import { RecoveryNotice, StageHeader, WorkflowSummary } from "./Workflow";
+import { Attribution } from "./Attribution";
 import { v2Stages } from "./stages";
 import { V2_STATUS_LABEL, V2_STATUS_RECOVERY, type V2MappingStatus } from "./mapping-status";
 
@@ -26,7 +28,7 @@ export function V2ComponentSheet() {
     <div className="mb-v2" data-testid="v2-component-sheet">
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 32px 72px", display: "grid", gap: 32 }}>
         <header style={{ display: "grid", gap: 10, maxWidth: 760 }}>
-          <p className="v2-quiet" style={{ margin: 0, fontSize: "0.9rem" }}>Internal · V2 Phase 1 · not used by any product screen yet</p>
+          <p className="v2-quiet" style={{ margin: 0, fontSize: "0.9rem" }}>Internal · V2 component sheet · used by the product screens</p>
           <h1 style={{ margin: 0, fontSize: "2.25rem", lineHeight: 1.15, letterSpacing: "-0.015em" }}>Clear Ledger components with Companion guidance</h1>
           <p className="v2-ink-2" style={{ margin: 0 }}>Every amount and count below is a labelled sample for visual review. In the product each one is read from the API.</p>
         </header>
@@ -52,6 +54,21 @@ export function V2ComponentSheet() {
           <NextStepPanel title="Review the 2 mappings that need you" action={<button type="button" className="v2-button v2-button-primary">Review mappings</button>}>
             <p className="v2-ink-2" style={{ margin: 0 }}>Sample counts. Then approve the low-risk mappings in one step; each is still recorded on its own.</p>
           </NextStepPanel>
+        </Group>
+
+        <Group title="Workflow screen: stage, done, waiting on you, next step, evidence, recovery">
+          <StageHeader stage={2} step="migrate and resolve" title="Fix one paused batch" guide="One batch paused. Completed batches are kept; review the proposed fix before the batch runs again." />
+          <WorkflowSummary
+            recovery={<RecoveryNotice title="A batch paused" action={<button type="button" className="v2-button v2-button-secondary">Help with this step</button>}><p>Possible duplicate customer (sample). Nothing already moved is undone.</p></RecoveryNotice>}
+            next={{ title: "Review the proposed fix", detail: "Approve or reject it. Retry the batch only after a decision.", action: <button type="button" className="v2-button v2-button-primary">Review the fix</button> }}
+            done={["Understand and Prepare done", "7 of 8 batches moved (sample)"]}
+            outstanding={[{ label: "1 proposed fix needs your decision", tone: "blocked" }]}
+            evidence={{ href: "#", detail: "Every rule check and decision, with who made it and when." }} />
+        </Group>
+
+        <Group title="Attribution (one quiet line)">
+          <Attribution />
+          <p className="v2-ink-2" style={{ margin: 0 }}>Shows the owner-approved line only when AI assistance is verified live.</p>
         </Group>
 
         <Group title="Money figures">
