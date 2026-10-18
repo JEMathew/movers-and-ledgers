@@ -26,7 +26,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12", cache: pip}
-      - run: pip install -e '.[dev]'
+      # The suite includes fake-backed tests of the Firestore and Gemini adapters, which import the real SDKs;
+      # without them those adapters correctly fail closed and the tests cannot exercise them.
+      - run: pip install -e '.[dev,cloud,agents]'
       - run: ruff check .
       - name: Fail-closed configuration and reference validation
         run: pytest tests/test_validation_failures.py tests/test_runtime_faults.py -q
