@@ -38,7 +38,7 @@ describe("MigrateResolveExperience", () => {
     expect(step).not.toHaveClass("is-complete");
     // Same reading as My Migration for a paused migration: Resolve needs attention.
     const resolve = screen.getByText("Resolve", {selector:"strong"}).closest("li");
-    expect(resolve).toHaveTextContent("ResolveNeeds Attention");
+    expect(resolve).toHaveTextContent("ResolveNeeds attention");
     expect(resolve).toHaveClass("is-attention");
     expect(document.querySelector(".migration-orb")).toBeNull();
     expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -105,13 +105,13 @@ describe("MigrateResolveExperience", () => {
     expect(fetchMock).toHaveBeenCalledTimes(3);
     expect(screen.getByText("Migration paused safely")).toBeVisible();
     // One dominant action while paused: resolve the open issue through the governed review.
-    const resolveCta = screen.getByRole("button", { name: "Review 1 Migration Issue" });
+    const resolveCta = screen.getByRole("button", { name: "Review 1 migration issue" });
     expect(resolveCta).not.toHaveClass("secondary", "ghost");
     fireEvent.click(resolveCta);
     expect(screen.getByRole("dialog", { name: /review proposed resolution/i })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Close dialog" }));
 
-    fireEvent.click(screen.getByRole("button", { name: "Review 1 Migration Issue" }));
+    fireEvent.click(screen.getByRole("button", { name: "Review 1 migration issue" }));
     const reopened = screen.getByRole("dialog", { name: /review proposed resolution/i });
     const decision = within(reopened).getByRole("button", { name: approve ? "Approve resolution" : "Reject and block" });
     expect(decision).toBeEnabled();
@@ -127,14 +127,14 @@ describe("MigrateResolveExperience", () => {
       await waitFor(() => expect(retry).toBeEnabled());
       fireEvent.click(retry);
       expect(await screen.findByText("Synthetic migration complete")).toBeVisible();
-      expect(screen.getByRole("link", { name: "Verify My Books" })).toHaveAttribute("href", expect.stringMatching(/^\/validate-configure\?session=/));
+      expect(screen.getByRole("link", { name: "Verify my books" })).toHaveAttribute("href", expect.stringMatching(/^\/validate-configure\?session=/));
       expect(screen.queryByRole("link", { name: /Continue to Validate/ })).not.toBeInTheDocument();
       expect(fetchMock.mock.calls[5][0]).toContain("/migration/resume");
       expect(fetchMock.mock.calls[5][1]?.method).toBe("POST");
       expect(fetchMock).toHaveBeenCalledTimes(7);
     } else {
       expect(screen.queryByRole("button", { name: /retry failed batch/i })).not.toBeInTheDocument();
-      expect(screen.queryByRole("button", { name: "Review 1 Migration Issue" })).not.toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: "Review 1 migration issue" })).not.toBeInTheDocument();
       expect(screen.queryByText("Synthetic migration complete")).not.toBeInTheDocument();
     }
   });

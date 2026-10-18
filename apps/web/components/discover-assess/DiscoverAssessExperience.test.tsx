@@ -85,7 +85,7 @@ describe("DiscoverAssessExperience", () => {
     vi.stubGlobal("fetch",fetchMock);
     render(<DiscoverAssessExperience />);
     fireEvent.change(screen.getByRole("combobox",{name:"Sample business"}),{target:{value:"harbor-light-migrate-demo"}});
-    fireEvent.click(screen.getByRole("button",{name:"Check If My Books Are Ready to Migrate"}));
+    fireEvent.click(screen.getByRole("button",{name:"Check if my books are ready to migrate"}));
     await screen.findByRole("heading",{name:"Migration Readiness"});
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({sample_company_id:"harbor-light-migrate-demo"});
     expect(fetchMock.mock.calls[0][0]).toMatch(/\/v1\/migration-sessions$/);
@@ -99,10 +99,10 @@ describe("DiscoverAssessExperience", () => {
     expect(screen.getByRole("link", { name: "Choose Test Files" })).toHaveAttribute("href", "/try-your-data");
     const journey = screen.getByRole("list", { name: "Migration Journey" });
     expect(journey).not.toBeVisible();
-    expect(screen.getAllByRole("list", { name: "Five-phase migration journey" })[0]).toBeVisible();
+    expect(screen.getAllByRole("list", { name: "Five-stage migration journey" })[0]).toBeVisible();
     // A fresh user is at the start of a real journey, exactly as My Migration shows it.
-    expect(journey.querySelector('[aria-current="step"]')).toHaveTextContent("AssessCurrent");
-    expect(screen.getByText("1 of 5 · Understand · Current")).toBeVisible();
+    expect(journey.querySelector('[aria-current="step"]')).toHaveTextContent("AssessNow");
+    expect(screen.getByText("Understand, stage 1 of 5")).toBeVisible();
     expect(screen.queryByText(/Progress not confirmed|Progress unavailable/)).not.toBeInTheDocument();
   });
 
@@ -153,7 +153,7 @@ describe("DiscoverAssessExperience", () => {
     expect(resume).not.toHaveClass("secondary");
     // Starting over stays available, but only as a separate, secondary action.
     expect(screen.getByRole("button", { name: /Start a New Assessment/ })).toHaveClass("secondary");
-    expect(screen.queryByRole("button", { name: /Check If My Books Are Ready to Migrate/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Check if my books are ready to migrate/ })).not.toBeInTheDocument();
     fireEvent.click(resume);
 
     expect(await screen.findByRole("heading", { name: "Migration Readiness" })).toBeVisible();
@@ -166,7 +166,7 @@ describe("DiscoverAssessExperience", () => {
     expect(urls.some(url => url.endsWith("/v1/migration-sessions"))).toBe(false);
     expect(window.location.search).toBe("?session=session-777");
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe("session-777");
-    expect(screen.getByRole("link", { name: "Create My Migration Plan" })).toHaveAttribute("href", "/plan-map-approve?session=session-777");
+    expect(screen.getByRole("link", { name: "Create my migration plan" })).toHaveAttribute("href", "/plan-map-approve?session=session-777");
   });
 
   it("runs the API-backed journey and hands off to the governed planning workspace", async () => {
@@ -179,18 +179,18 @@ describe("DiscoverAssessExperience", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<DiscoverAssessExperience />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Check if my books are ready to migrate/ }));
 
     expect(await screen.findByRole("heading", { name: "Migration Readiness" })).toBeVisible();
     expect(screen.getByText("Northstar Supplies can move forward. 1 item needs your review first.")).toBeVisible();
-    expect(screen.getAllByText("NEEDS ATTENTION").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Needs attention").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Potential duplicate customers need review").length).toBeGreaterThan(0);
     // Technical evidence is available but secondary.
     expect(screen.getByRole("heading", { name: "Activity and evidence" })).not.toBeVisible();
     fireEvent.click(screen.getByText("Show technical evidence"));
     expect(screen.getByRole("heading", { name: "Activity and evidence" })).toBeVisible();
 
-    const cta = screen.getByRole("link", { name: "Create My Migration Plan" });
+    const cta = screen.getByRole("link", { name: "Create my migration plan" });
     expect(cta).toHaveAttribute("href", "/plan-map-approve?session=session-001");
     cta.addEventListener("click", event => event.preventDefault());
     fireEvent.click(cta);
@@ -211,7 +211,7 @@ describe("DiscoverAssessExperience", () => {
     const readiness = await screen.findByRole("heading", { name: "Migration Readiness" });
     expect(screen.getByText("Northstar Supplies has 1 blocker to fix before migration.")).toBeVisible();
     const issues = screen.getByRole("heading", { name: "What Needs Attention" });
-    const cta = screen.getByRole("link", { name: "Review 1 Readiness Issue" });
+    const cta = screen.getByRole("link", { name: "Review 1 readiness issue" });
     const evidence = screen.getByText("Show technical evidence");
     const source = screen.getByRole("heading", { name: "Check Another Business" });
     const follows = (a: Element, b: Element) => Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
@@ -224,7 +224,7 @@ describe("DiscoverAssessExperience", () => {
     expect(screen.getByText(/Deterministic assessment/)).toBeVisible();
     expect(screen.getAllByRole("link").filter(link => link.classList.contains("button") && !link.classList.contains("secondary"))).toEqual([cta]);
     expect(screen.getByRole("button", { name: /Start a New Assessment/ })).toHaveClass("secondary");
-    expect(screen.getByRole("list", { name: "Migration Journey" }).querySelector('[aria-current="step"]')).toHaveTextContent("PlanCurrent");
+    expect(screen.getByRole("list", { name: "Migration Journey" }).querySelector('[aria-current="step"]')).toHaveTextContent("PlanNow");
     // Readiness blockers keep Assess from reading as completed while planning goes on.
     const assess = within(screen.getByRole("list", { name: "Migration Journey" })).getAllByRole("listitem")[0];
     expect(assess).toHaveTextContent("AssessBlocked");
@@ -239,7 +239,7 @@ describe("DiscoverAssessExperience", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<DiscoverAssessExperience />);
     fireEvent.change(screen.getByRole("combobox", { name: "Sample business" }), { target: { value: sample } });
-    fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Check if my books are ready to migrate/ }));
     const alert = await screen.findByRole("alert");
     // Creating a migration may have succeeded with only the response lost: no rollback promise.
     expect(alert).toHaveTextContent("We couldn't confirm whether this step completed. Your request may have been received. Try again or check your migration status.");
@@ -266,7 +266,7 @@ describe("DiscoverAssessExperience", () => {
     render(<DiscoverAssessExperience />);
     expect(screen.getByText("See what can move, what needs attention, and what to address before migration.")).toBeVisible();
     expect(screen.getByRole("heading", { name: "Try a Sample Business" })).toBeVisible();
-    expect(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ })).toBeEnabled();
+    expect(screen.getByRole("button", { name: /Check if my books are ready to migrate/ })).toBeEnabled();
     const exportPath = screen.getByLabelText("Use My Test Export");
     expect(exportPath).toHaveTextContent("Use supported de-identified accounting files to test the migration flow.");
     expect(exportPath).toHaveTextContent("De-Identified Test Data Only");
@@ -296,7 +296,7 @@ describe("DiscoverAssessExperience", () => {
   it("shows a recoverable error without inventing results", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ detail: "API unavailable" }, 503)));
     render(<DiscoverAssessExperience />);
-    fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Check if my books are ready to migrate/ }));
     // A server failure while starting may follow a committed create: never claim it did not happen.
     const alert = await screen.findByRole("alert");
     expect(alert).toHaveTextContent("We Couldn't Confirm This Step");

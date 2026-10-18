@@ -17,7 +17,7 @@ describe("governed onboarding and productive use", () => {
     await load();
     expect(screen.getByText(/No real provider writes/)).toBeInTheDocument();
     expect(screen.getByRole("button",{name:"Prepare invoice contract"})).toBeDisabled();
-    expect(screen.queryByRole("heading",{name:"Business Ready · Verified"})).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading",{name:"Business ready · verified"})).not.toBeInTheDocument();
   });
   it("presents the Start Using stage in business language", async () => {
     await load();
@@ -43,16 +43,16 @@ describe("governed onboarding and productive use", () => {
     fireEvent.click(screen.getByRole("button",{name:"Confirm approve"}));
     expect(await screen.findByRole("alert")).toHaveTextContent("Evidence changed");
     expect(screen.getByRole("dialog")).toBeInTheDocument();
-    expect(screen.queryByRole("heading",{name:"Business Ready · Verified"})).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading",{name:"Business ready · verified"})).not.toBeInTheDocument();
   });
   it("resumes a posted checkpoint with the original key and renders verified evidence only", async () => {
     const posted = {...task,checkpoint:"POSTED" as const,attempts:1,idempotency_key:"original",decisions:[{action:"approve",actor:"demo-user"}]};
     await load({...prepared,onboarding:{faults:[],fpu:posted}});
     vi.mocked(fetch).mockImplementationOnce(() => response({...prepared,verified_fpu:true,workflow_status:"VERIFIED_FIRST_PRODUCTIVE_USE",effective_status:"VERIFIED_FIRST_PRODUCTIVE_USE",onboarding:{faults:[],fpu:{...posted,checkpoint:"VERIFIED",posted_by:"demo-user",invoice:{total:"107.25"},checks:[{id:"posting",passed:true,explanation:"Matched",evidence:["invoice:hash"]}]}}}));
     fireEvent.click(screen.getByRole("button",{name:"Resume verification"}));
-    await screen.findByRole("heading",{name:"Business Ready · Verified"});
-    expect(screen.getByRole("link",{name:"Review Verified Evidence"}).getAttribute("href")).toMatch(/^\/trust\?view=evidence&session=/);
-    expect(screen.getByRole("list",{name:"Migration Journey"})).toHaveTextContent("Start UsingCompleted");
+    await screen.findByRole("heading",{name:"Business ready · verified"});
+    expect(screen.getByRole("link",{name:"Review verified evidence"}).getAttribute("href")).toMatch(/^\/trust\?view=evidence&session=/);
+    expect(screen.getByRole("list",{name:"Migration Journey"})).toHaveTextContent("Start usingDone");
     expect((vi.mocked(fetch).mock.calls.at(-1)![1]!.headers as Record<string,string>)["Idempotency-Key"]).toBe("original");
     expect(screen.getByText("Posted invoice, journal and accounting impact")).toBeInTheDocument();
   });

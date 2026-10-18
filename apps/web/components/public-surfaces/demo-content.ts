@@ -38,7 +38,7 @@ export const demoPhases = [
     scenario: "Harbor Light Books prepares a first synthetic invoice.",
     evidence: [["Subtotal", "USD 100.00"], ["Tax", "USD 7.25"], ["Total", "USD 107.25"]],
     insight: "Posting alone is not verified completion.",
-    guidance: "Onboarding prerequisites and authorized roles gate the task. A person reviews the exact invoice terms and explicitly consents before posting. The engine verifies accounting evidence separately, preserving posted checkpoints to prevent duplicates. Only a server-verified first task earns Business Ready · Verified in the synthetic Beta. This preview posts or verifies nothing.",
+    guidance: "Onboarding prerequisites and authorized roles gate the task. A person reviews the exact invoice terms and explicitly consents before posting. The engine verifies accounting evidence separately, preserving posted checkpoints to prevent duplicates. Only a server-verified first task earns Business ready · verified in the synthetic Beta. This preview posts or verifies nothing.",
     topic: "business-ready",
   },
 ] as const;

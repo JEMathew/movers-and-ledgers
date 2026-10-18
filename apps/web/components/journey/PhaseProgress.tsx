@@ -7,7 +7,14 @@ import { phases } from "../public-surfaces/content";
 import { phaseIndexFor, withSession } from "./journey";
 import type { CurrentStepLabel, HeldStep, Processing, UnknownProgress } from "./journey";
 
-/** Presentation of the existing operational projection; never advances the workflow. */
+/** Display text for each stage state. data-state keeps the stable value used by styles and tests. */
+const STATE_TEXT: Record<string, string> = {
+  Completed: "Done", Current: "Now", "Not Started": "Not started", "Needs Attention": "Needs attention",
+  Blocked: "Blocked", Paused: "Paused", Unconfirmed: "Not confirmed",
+};
+
+/** The V2 stage bar for task pages: one five-stage model, projected from the existing operational
+ *  status. Presentation only; it never advances the workflow. */
 export function PhaseProgress({ current, held, currentLabel = "Current", unknown = "unavailable", processing, session, status }: {
   current: number | null; held?: HeldStep; currentLabel?: CurrentStepLabel; unknown?: UnknownProgress;
   processing?: Processing; session?: string; status?: string;
@@ -19,15 +26,17 @@ export function PhaseProgress({ current, held, currentLabel = "Current", unknown
   const items = phases.map((item, index) => {
     const blocked = held?.index === 0 && index === 0 && phase === 1;
     const state = phase === null ? "Unconfirmed" : blocked ? "Blocked" : done ? "Completed" : phase === index ? currentLabel : phase !== null && index < phase ? "Completed" : "Not Started";
+    const shown = STATE_TEXT[state] ?? state;
     return <li key={item.name} data-state={state} className={working && phase === index ? "is-processing" : undefined} aria-current={!done && phase === index ? "step" : undefined}>
-      {session && phase !== null && index <= phase ? <a href={withSession(item.route, session)}><strong>{item.name}</strong><small>{working && phase === index ? working.action : state}</small></a> : <span><strong>{item.name}</strong><small>{working && phase === index ? working.action : state}</small></span>}
+      {session && phase !== null && index <= phase ? <a href={withSession(item.route, session)}><strong>{item.name}</strong><small>{working && phase === index ? working.action : shown}</small></a> : <span><strong>{item.name}</strong><small>{working && phase === index ? working.action : shown}</small></span>}
     </li>;
   });
   return <section className="member-progress phase-progress" aria-labelledby={`${id}-title`} aria-busy={Boolean(working)}>
-    <p id={`${id}-title`}>{phase === null ? unknown === "loading" ? "Checking your progress…" : "Progress unavailable · nothing is assumed" : done ? "Five phases complete · verified synthetic result" : `${phase + 1} of 5 · ${phases[phase].name} · ${currentLabel}`}</p>
-    <ol aria-label="Five-phase migration journey">{items}</ol>
+    <p id={`${id}-title`}>{phase === null ? unknown === "loading" ? "Checking your progress…" : "Progress unavailable. Nothing is assumed." : done ? "All 5 stages done. Verified synthetic result." : `${phases[phase].name}, stage ${phase + 1} of 5${currentLabel === "Current" ? "" : `. ${STATE_TEXT[currentLabel]}`}`}</p>
+    <ol aria-label="Five-stage migration journey">{items}</ol>
     {working && <div role="status" aria-live="polite" className="mt-3"><strong>{working.title}</strong><p>{working.detail}</p>{working.stages && <p>{working.stages[working.stage ?? 0]}</p>}</div>}
-    <details className="operational-history"><summary>Five phases and operational steps</summary><ol className="phase-mobile-history" aria-label="Five-phase migration journey">{items}</ol><MigrationJourney current={current} held={held} currentLabel={currentLabel} unknown={unknown} /></details>
+    {/* The same five stages, broken into the steps the rules record. Secondary detail, closed by default. */}
+    <details className="operational-history"><summary>Steps in each stage</summary><MigrationJourney current={current} held={held} currentLabel={currentLabel} unknown={unknown} /></details>
   </section>;
 }
 

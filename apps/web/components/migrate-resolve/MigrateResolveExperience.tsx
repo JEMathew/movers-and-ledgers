@@ -213,11 +213,11 @@ export function MigrateResolveExperience() {
             </div>
           </div>
           {session && !execution ? (
-            <Button onClick={start} disabled={busy || readState !== "ready" || !["APPROVED", "MIGRATION_READY"].includes(session.workflow_status)} leadingIcon={Play}>Start Migration</Button>
+            <Button onClick={start} disabled={busy || readState !== "ready" || !["APPROVED", "MIGRATION_READY"].includes(session.workflow_status)} leadingIcon={Play}>Start migration</Button>
           ) : retryPending ? (
             <Button onClick={retry} disabled={busy} leadingIcon={RefreshCw}>Retry failed batch</Button>
           ) : resolving && proposal ? (
-            <Button onClick={() => setDialogOpen(true)} disabled={busy} leadingIcon={Bot}>{openIssues > 1 ? `Review ${openIssues} Migration Issues` : "Review 1 Migration Issue"}</Button>
+            <Button onClick={() => setDialogOpen(true)} disabled={busy} leadingIcon={Bot}>{openIssues > 1 ? `Review ${openIssues} migration issues` : "Review 1 migration issue"}</Button>
           ) : null}
         </div>
         {session && (
@@ -235,7 +235,7 @@ export function MigrateResolveExperience() {
           <Alert tone="success" title="Synthetic migration complete">
             <p className="mt-1">All batches completed, no blocking exceptions remain, and the target state is inspectable.</p>
           </Alert>
-          <NextAction className="mt-4" label="Verify My Books" href={`/validate-configure?session=${session?.id}`}>
+          <NextAction className="mt-4" label="Verify my books" href={`/validate-configure?session=${session?.id}`}>
             <span className="flex items-start gap-3"><ShieldCheck aria-hidden="true" className="mt-1 shrink-0 text-primary" size={19} />Compare your migrated books with the source evidence before setting up the environment.</span>
           </NextAction>
         </section>

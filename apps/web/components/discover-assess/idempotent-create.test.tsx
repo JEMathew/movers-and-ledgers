@@ -93,7 +93,7 @@ describe("starting an assessment is idempotent", () => {
     render(<DiscoverAssessExperience />);
     // Harbor Light is now the default; these idempotency checks use the Northstar sample explicitly.
     fireEvent.change(screen.getByRole("combobox", { name: "Sample business" }), { target: { value: "northstar-supplies" } });
-    fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Check if my books are ready to migrate/ }));
     await screen.findByRole("alert");
     fireEvent.click(screen.getByRole("button", { name: "Try Again" }));
     expect(await screen.findByText(NORTHSTAR_OUTCOME)).toBeVisible();
@@ -108,7 +108,7 @@ describe("starting an assessment is idempotent", () => {
     render(<DiscoverAssessExperience />);
     // Harbor Light is now the default; these idempotency checks use the Northstar sample explicitly.
     fireEvent.change(screen.getByRole("combobox", { name: "Sample business" }), { target: { value: "northstar-supplies" } });
-    fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Check if my books are ready to migrate/ }));
     expect(await screen.findByText(NORTHSTAR_OUTCOME)).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: /Start a New Assessment/ }));
     await screen.findByText(NORTHSTAR_OUTCOME);

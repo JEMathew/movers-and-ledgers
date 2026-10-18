@@ -62,8 +62,8 @@ export function MappingReview({ mappings, history, editable, busy, planApproved,
   const datasetByArea: Record<string, string> = { chart_of_accounts: "accounts", customers: "customers", vendors: "vendors", products_services: "products", tax_configuration: "taxes", general_configuration: "configuration" };
   return <section className="mt-8" aria-labelledby="mapping-heading">
     <div className="panel flex flex-wrap items-center justify-between gap-5 p-6">
-      <div><h2 id="mapping-heading" className="type-section">Review Your Mappings</h2><p className="mt-2 text-secondary">{mappings.length - pending.length} of {mappings.length} reviewed. Confirming a mapping does not approve the migration plan.</p></div>
-      {handoff ?? (pending.length ? <Button variant="secondary" disabled={!editable || busy} onClick={reviewNext}>Review {pending.length} {pending.length === 1 ? "Mapping" : "Mappings"}</Button> : <Button disabled={busy || !mappings.length} onClick={onReviewPlan}>Review Migration Plan</Button>)}
+      <div><h2 id="mapping-heading" className="type-section">Review your mappings</h2><p className="mt-2 text-secondary">{mappings.length - pending.length} of {mappings.length} reviewed. Confirming a mapping does not approve the migration plan.</p></div>
+      {handoff ?? (pending.length ? <Button variant="secondary" disabled={!editable || busy} onClick={reviewNext}>Review {pending.length} {pending.length === 1 ? "mapping" : "mappings"}</Button> : <Button disabled={busy || !mappings.length} onClick={onReviewPlan}>Review migration plan</Button>)}
     </div>
     {mappings.length > 0 && <div className="review-queue">
       <label>Mapping queue · {pending.length} pending<select className="field-control mt-2" value={selectedMapping?.id ?? ""} onChange={event => { setSelectedId(event.target.value); setReviewing(event.target.value); }}>
@@ -120,7 +120,7 @@ export function MappingReview({ mappings, history, editable, busy, planApproved,
         })}
       </div>
     </section>)}
-    {selectedMapping && mappingReviewed(selectedMapping) && pending.length > 0 && <Button className="mt-4" disabled={busy} onClick={reviewNext}>Review Next Mapping</Button>}
+    {selectedMapping && mappingReviewed(selectedMapping) && pending.length > 0 && <Button className="mt-4" disabled={busy} onClick={reviewNext}>Review next mapping</Button>}
     {!mappings.length && <p className="mt-6 text-secondary">No mappings have been prepared. Return to your plan to prepare them; no review is assumed.</p>}
   </section>;
 }

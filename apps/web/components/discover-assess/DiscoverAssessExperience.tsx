@@ -257,7 +257,7 @@ export function DiscoverAssessExperience() {
               </select>
             </label>
             <Button className="mt-6" variant={assessment || sessionId || reading !== "none" ? "secondary" : "primary"} onClick={startAssessment} disabled={running}>
-              {assessment || sessionId ? "Start a New Assessment" : "Check If My Books Are Ready to Migrate"}
+              {assessment || sessionId ? "Start a New Assessment" : "Check if my books are ready to migrate"}
               <ArrowRight aria-hidden="true" size={17} />
             </Button>
             <p className="mt-2 text-sm leading-6 text-secondary">
@@ -318,7 +318,7 @@ export function DiscoverAssessExperience() {
                 <div><p className="type-financial">{assessment.blocker_count}</p><p className="type-meta">blockers</p></div>
                 <div><p className="type-financial">{assessment.warning_count}</p><p className="type-meta">warnings</p></div>
               </div>
-              <ActionLink className="mt-4" label={pastAssessment ? "Return to My Migration" : assessment.blocker_count ? `Review ${count(assessment.blocker_count, "Readiness Issue")}` : "Create My Migration Plan"} href={`${pastAssessment ? "/workspace" : "/plan-map-approve"}?session=${sessionId}`} onClick={recordPlanSelection} />
+              <ActionLink className="mt-4" label={pastAssessment ? "Return to My Migration" : assessment.blocker_count ? `Review ${count(assessment.blocker_count, "readiness issue")}` : "Create my migration plan"} href={`${pastAssessment ? "/workspace" : "/plan-map-approve"}?session=${sessionId}`} onClick={recordPlanSelection} />
               <p className="mt-3 text-secondary">Source: {discovery.synthetic ? "synthetic sample" : "de-identified test export"} · {discovery.fixture_version}. {discovery.profiles.length} datasets · {discovery.profiles.reduce((total, profile) => total + profile.record_count, 0)} records profiled. Full dataset counts in technical evidence.</p>
               <p className="mt-2 text-secondary">Deterministic assessment · Policy {assessment.policy_version}</p>
               <p className="mt-3 text-secondary">{assessment.blocker_count ? "Planning preserves these blockers; migration cannot start until source data is corrected." : "This assessment does not move data or approve a plan."}</p>
@@ -449,7 +449,7 @@ export function DiscoverAssessExperience() {
       {resumable && (
         <section className="panel mt-10 p-6" aria-labelledby="resume-heading">
           <p className="eyebrow text-primary">Next step</p>
-          <h2 id="resume-heading" className="type-section mt-2">Finish Checking If Your Books Are Ready</h2>
+          <h2 id="resume-heading" className="type-section mt-2">Finish checking if your books are ready</h2>
           <p className="mt-2 max-w-2xl leading-7 text-secondary">This migration has started, but its readiness check is not finished. Continue with the same migration; nothing new is created.</p>
           <Button className="mt-4" onClick={resumeAssessment}>
             Continue This Assessment

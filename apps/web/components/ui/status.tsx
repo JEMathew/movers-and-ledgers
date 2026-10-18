@@ -24,12 +24,17 @@ const statusConfig: Record<ProductStatus, { icon: LucideIcon; tone: Tone }> = {
   "VERIFIED": { icon: ShieldCheck, tone: "success" },
 };
 
+/** Sentence-case display text; the stored value stays the upper-case product status. */
+export function statusLabel(status: ProductStatus) {
+  return status.charAt(0) + status.slice(1).toLowerCase();
+}
+
 export function StatusBadge({ status, className }: { status: ProductStatus; className?: string }) {
   const { icon: Icon, tone } = statusConfig[status];
   return (
     <span className={cn("status-badge", `status-${tone}`, className)} data-status={status}>
       <Icon aria-hidden="true" size={14} strokeWidth={2.2} />
-      <span>{status}</span>
+      <span>{statusLabel(status)}</span>
     </span>
   );
 }
