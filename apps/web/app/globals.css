@@ -824,3 +824,8 @@ body { font-family: "Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system
 .type-section { font-size: clamp(1.375rem, 2.1vw, 1.75rem); line-height: 1.2; font-weight: 700; letter-spacing: -0.015em; }
 /* Visible keyboard focus on native media and file controls, which some resets leave without a ring. */
 video:focus, .field-control:focus-within:has(input[type="file"]:focus-visible), input[type="file"]:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+/* Clear Ledger dialogs: a 2px ink frame instead of a shadow, and a plain dim backdrop. */
+.dialog { box-shadow: none; border: 2px solid var(--foreground); }
+.dialog::backdrop { backdrop-filter: none; }
+/* Schibsted Grotesk widens the decimal point and comma under tnum ("107 . 25"), so V2 keeps proportional figures. */
+.type-financial, .tabular, table td, .data-table .num, .tile-value { font-variant-numeric: normal; }

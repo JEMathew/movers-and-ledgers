@@ -32,7 +32,7 @@ export function PhaseProgress({ current, held, currentLabel = "Current", unknown
     </li>;
   });
   return <section className="member-progress phase-progress" aria-labelledby={`${id}-title`} aria-busy={Boolean(working)}>
-    <p id={`${id}-title`}>{phase === null ? unknown === "loading" ? "Checking your progress…" : "Progress unavailable. Nothing is assumed." : done ? "All 5 stages done. Verified synthetic result." : `${phases[phase].name}, stage ${phase + 1} of 5${currentLabel === "Current" ? "" : `. ${STATE_TEXT[currentLabel]}`}`}</p>
+    <p id={`${id}-title`}>{phase === null ? unknown === "loading" ? "Checking your progress…" : "Progress unavailable. Nothing is assumed." : done ? "All 5 stages done · ready to use" : `${phases[phase].name}, stage ${phase + 1} of 5${currentLabel === "Current" ? "" : `. ${STATE_TEXT[currentLabel]}`}`}</p>
     <ol aria-label="Five-stage migration journey">{items}</ol>
     {working && <div role="status" aria-live="polite" className="mt-3"><strong>{working.title}</strong><p>{working.detail}</p>{working.stages && <p>{working.stages[working.stage ?? 0]}</p>}</div>}
     {/* The same five stages, broken into the steps the rules record. Secondary detail, closed by default. */}

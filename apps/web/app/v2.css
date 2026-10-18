@@ -41,7 +41,8 @@
 .mb-v2 h1, .mb-v2 h2 { font-weight: 700; letter-spacing: -0.015em; }
 .mb-v2 h3, .mb-v2 h4, .mb-v2 h5 { font-weight: 600; }
 /* Tabular figures only where numbers align in columns: this face also widens punctuation under tnum. */
-.mb-v2 .v2-num, .mb-v2 td { font-variant-numeric: tabular-nums; }
+/* Tabular figures only on .v2-num: in this face tnum also widens the decimal point, so money table cells stay proportional and right-aligned. */
+.mb-v2 .v2-num { font-variant-numeric: tabular-nums; }
 
 .dark .mb-v2 {
   --v2-ground: #0f151c;
