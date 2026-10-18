@@ -88,3 +88,17 @@ describe("V2 money figure", () => {
     expect(screen.getByText("Not available")).toBeVisible();
   });
 });
+
+describe("V2 component sheet", () => {
+  it("renders every primitive inside the scoped V2 theme with samples labelled", async () => {
+    const { V2ComponentSheet } = await import("./V2ComponentSheet");
+    render(<V2ComponentSheet />);
+    const sheet = screen.getByTestId("v2-component-sheet");
+    expect(sheet).toHaveClass("mb-v2");
+    expect(screen.getAllByRole("navigation", { name: "Migration stages" })).toHaveLength(2);
+    expect(screen.getByText("First invoice (sample)")).toBeVisible();
+    expect(screen.getByText("Not available")).toBeVisible();
+    expect(screen.getByText("Example of planned behaviour. Not live model output.")).toBeVisible();
+    expect(sheet.textContent).not.toMatch(/\bLive\b/);
+  });
+});
