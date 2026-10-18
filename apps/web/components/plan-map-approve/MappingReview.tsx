@@ -65,6 +65,7 @@ export function MappingReview({ mappings, history, editable, busy, planApproved,
 }) {
   const [selectedId, setSelectedId] = useState<string>();
   const [bulkOpen, setBulkOpen] = useState(false);
+  const [bulkOutcome, setBulkOutcome] = useState<BulkOutcome>();
   const [focusDetail, setFocusDetail] = useState(0);
   const detailHeading = useRef<HTMLHeadingElement>(null);
   const groups = groupMappings(mappings);
@@ -95,12 +96,13 @@ export function MappingReview({ mappings, history, editable, busy, planApproved,
       <nav className="pm-queue" aria-label="Mapping queue">
         {groups.map(group => <QueueGroup key={group.id} id={group.id} items={group.items} selectedId={bulkOpen ? undefined : selected?.id} onSelect={select}
           action={group.id === "ready" && editable ? <div className="pm-queue-bulk">
-            <Button variant="secondary" disabled={busy || !ready.length} aria-expanded={bulkOpen} onClick={() => setBulkOpen(true)}>Approve {ready.length} low-risk {ready.length === 1 ? "mapping" : "mappings"}</Button>
+            <Button variant="secondary" disabled={busy || !ready.length} aria-expanded={bulkOpen} onClick={() => { setBulkOutcome(undefined); setBulkOpen(true); }}>Approve {ready.length} low-risk {ready.length === 1 ? "mapping" : "mappings"}</Button>
             <p className="pm-meta">Each approval is recorded separately. High and medium risk are never included.</p>
           </div> : undefined} />)}
       </nav>
       <div className="pm-detail-pane">
-        {bulkOpen && editable ? <BulkApproval mappings={mappings} editable={editable} busy={busy} run={runBulk} onClose={() => { setBulkOpen(false); setFocusDetail(n => n + 1); }} />
+        {/* Stays mounted while the post-approval read runs (editable is briefly false), so the result stays visible. */}
+        {bulkOpen ? <BulkApproval mappings={mappings} editable={editable} busy={busy} run={runBulk} outcome={bulkOutcome} onOutcome={setBulkOutcome} onClose={() => { setBulkOpen(false); setFocusDetail(n => n + 1); }} />
           : selected ? <MappingDetail key={selected.id} mapping={selected} history={history} editable={editable} busy={busy} decide={decide} reconsider={reconsider} headingRef={detailHeading}
             next={mappingReviewed(selected) && pending.length > 0 ? <Button disabled={busy} onClick={reviewNext}>Review next mapping</Button> : undefined} /> : null}
       </div>

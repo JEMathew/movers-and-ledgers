@@ -19,12 +19,15 @@ export function consentReady({ consent, listed, inSentence, inButton }: { consen
 const plural = (n: number) => `${n} ${n === 1 ? "mapping" : "mappings"}`;
 
 /** Inspection and consent for approving low-risk mappings together, one recorded approval per item. */
-export function BulkApproval({ mappings, editable, busy, run, onClose }: {
+export function BulkApproval({ mappings, editable, busy, run, onClose, outcome: shownOutcome, onOutcome }: {
   mappings: MappingProposal[];
   editable: boolean;
   busy: boolean;
   run: (set: BulkItem[]) => Promise<BulkOutcome>;
   onClose: () => void;
+  /** Optional: the parent keeps the last result so it survives a remount. */
+  outcome?: BulkOutcome;
+  onOutcome?: (outcome: BulkOutcome | undefined) => void;
 }) {
   const titleId = useId();
   const checkId = useId();
@@ -34,7 +37,9 @@ export function BulkApproval({ mappings, editable, busy, run, onClose }: {
   const [consent, setConsent] = useState(false);
   const [listed, setListed] = useState(0);
   const [running, setRunning] = useState(false);
-  const [outcome, setOutcome] = useState<BulkOutcome>();
+  const [ownOutcome, setOwnOutcome] = useState<BulkOutcome>();
+  const outcome = onOutcome ? shownOutcome : ownOutcome;
+  const setOutcome = (value: BulkOutcome | undefined) => { setOwnOutcome(value); onOutcome?.(value); };
   // Eligibility is read from the latest API response on every render, never from a stored list.
   const eligible = mappings.filter(bulkEligible);
   const set = eligible.filter(mapping => !removed.includes(mapping.id));

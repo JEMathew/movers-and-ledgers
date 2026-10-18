@@ -195,13 +195,18 @@ describe("through the Prepare screen", () => {
   const posts = (fetch: ReturnType<typeof vi.fn>) => fetch.mock.calls.filter(([, init]) => init?.method === "POST");
 
   it("approves each item with its own call, in order, then reads the session and reports per item", async () => {
+    let finalRead!: (response: Response) => void;
     const fetch = vi.fn()
       .mockResolvedValueOnce(json(snapshot()))          // initial read
       .mockResolvedValueOnce(json(snapshot()))          // fresh read at consent time
       .mockResolvedValueOnce(json({})).mockResolvedValueOnce(json({})).mockResolvedValueOnce(json({}))
-      .mockResolvedValueOnce(json(snapshot(approvedAll(3), { human_decisions: approvedAll(3).slice(0, 3).map((item, index) => ({ id: `d${index}`, affected_entity: item.id, decision: "APPROVED", actor: "demo-user", occurred_at: "t", selected_value: "Customer" })) })));
-    const { panel, submit } = await openPanel(fetch);
+      .mockReturnValueOnce(new Promise(resolve => { finalRead = resolve; }));
+    const { submit } = await openPanel(fetch);
     fireEvent.click(submit);
+    // The authoritative read after the approvals is still running: the panel and its result stay on screen.
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(6));
+    await act(async () => finalRead(await json(snapshot(approvedAll(3), { human_decisions: approvedAll(3).slice(0, 3).map((item, index) => ({ id: `d${index}`, affected_entity: item.id, decision: "APPROVED", actor: "demo-user", occurred_at: "t", selected_value: "Customer" })) }))));
+    const panel = screen.getByRole("region", { name: "Approve low-risk mappings together" });
     expect(await within(panel).findByText("3 approved, each recorded separately.")).toBeVisible();
     expect(within(panel).getAllByRole("status")[0]).toHaveTextContent("Cedar School → Customer: approved and recorded");
     expect(within(panel).getAllByRole("status")[1]).toHaveTextContent("No other mapping qualifies");
