@@ -119,7 +119,7 @@ export function OnboardFpuExperience() {
   const reviewInvoice = fpu && !frozen ? <Button key="review" variant={approved || editing || !snapshot!.ready ? "secondary" : "primary"} disabled={!safe || editing || !snapshot!.ready} onClick={() => open({kind:"invoice", action:"approve"})}>Review invoice approval</Button> : null;
   const postInvoice = fpu && !verified ? <Button key="post" variant={approved && !editing && !invoiceFaults.length ? "primary" : "secondary"} disabled={!safe || !approved || editing || !snapshot!.ready || (fpu.checkpoint === "DRAFT" && fpu.attempts >= fpu.retry_limit)} onClick={() => perform(`${root}/fpu/execute`, undefined, fpu.idempotency_key ?? `fpu-${fpu.id}`)}>{fpu.checkpoint === "POSTED" ? "Resume verification" : fpu.attempts ? "Retry approved invoice" : "Post and verify invoice"}</Button> : null;
   const invoiceLeads = !!fpu && !verified && !frozen && !approved;
-  const remediation = <Button disabled={!safe} onClick={() => open({kind: "repair"})}>Review synthetic remediation</Button>;
+  const remediation = <Button variant="secondary" disabled={!safe} onClick={() => open({kind: "repair"})}>Review synthetic remediation</Button>;
 
   const step = !snapshot?.onboarding ? "begin setup" : verified ? "ready to use" : !snapshot.ready && !fpu ? "finish the essentials" : !fpu ? "prepare your first invoice" : fpu.checkpoint === "POSTED" ? "verify your first invoice" : approved ? "post your first invoice" : "approve your first invoice";
   const title = !snapshot?.onboarding ? "Start using your books"
