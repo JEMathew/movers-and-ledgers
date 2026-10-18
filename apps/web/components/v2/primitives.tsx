@@ -16,8 +16,15 @@ export function GuideNote({ children }: { children: ReactNode }) {
   return <p className="v2-guide"><Mark /><span>{children}</span></p>;
 }
 
+function ChipIcon({ status }: { status: V2MappingStatus }) {
+  if (status === "blocked") return <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5" width="8" height="6" rx="1" fill="currentColor" /><path d="M4 5V3.5a2 2 0 014 0V5" fill="none" stroke="currentColor" strokeWidth="1.4" /></svg>;
+  if (status === "rejected") return <svg width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 2.5l7 7M9.5 2.5l-7 7" stroke="currentColor" strokeWidth="1.6" /></svg>;
+  return null;
+}
+
+/** State chip. Blocked and Rejected also differ by icon, so the states never rely on colour alone. */
 export function StatusChip({ status }: { status: V2MappingStatus }) {
-  return <span className="v2-chip" data-state={status}>{V2_STATUS_LABEL[status]}</span>;
+  return <span className="v2-chip" data-state={status}><ChipIcon status={status} />{V2_STATUS_LABEL[status]}</span>;
 }
 
 export function AiStatusBadge({ withDetail = false }: { withDetail?: boolean }) {
