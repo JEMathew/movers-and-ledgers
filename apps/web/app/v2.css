@@ -98,7 +98,8 @@
 .v2-chip[data-state="rejected"] { background: var(--v2-rejected-bg); color: var(--v2-rejected-fg); }
 .v2-chip[data-state="approved"], .v2-chip[data-state="changed"] { background: var(--v2-accent-tint); color: var(--v2-accent); }
 .v2-chip[data-state="low_risk"] { background: var(--v2-surface-muted); color: var(--v2-ink-2); }
-.v2-chip-ai { background: var(--v2-ai-bg); color: var(--v2-ai-fg); }
+/* The AI badge also appears on V1 surfaces, outside .mb-v2: fall back to the V1 agent tokens there. */
+.v2-chip-ai { background: var(--v2-ai-bg, var(--agent-subtle)); color: var(--v2-ai-fg, var(--agent)); }
 
 /* Containers. */
 .v2-card { background: var(--v2-surface); border: 1px solid var(--v2-rule); border-radius: var(--v2-radius-container); padding: 24px; }

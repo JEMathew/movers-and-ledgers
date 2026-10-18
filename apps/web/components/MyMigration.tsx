@@ -67,7 +67,7 @@ export function MyMigration({ reference, storageScope }: { reference?: string; s
         <label className="field-label">Owned migration link<input className="field-control" readOnly value={typeof window !== "undefined" ? `${window.location.origin}/workspace?session=${view.id}` : `/workspace?session=${view.id}`} onFocus={event => event.currentTarget.select()}/></label>
         <Button variant="secondary" onClick={copyLink}>Copy migration link</Button><p role="status">{copyStatus}</p>
         <h2>Recent recorded events</h2>{view.events.length ? <ol>{view.events.slice(-3).reverse().map((event, index) => <li key={index}>{event.title}{event.time && <> · <time dateTime={event.time}>{event.time}</time></>}</li>)}</ol> : <p>No events supplied in this snapshot. Absence is not completion evidence.</p>}
-        <p>Agents coordinate. Rules verify. You decide. All approvals and financial results remain in their original tasks.</p>
+        <p>MoveBooks coordinates. Rules verify. You decide. All approvals and financial results remain in their original tasks.</p>
       </details>
     </>}
     {!view && !loading && <details className="member-details"><summary>Resume a saved migration</summary><p>Use the reference from your saved migration link. Access is checked again; this does not list or create migrations.</p><form action="/workspace" method="get"><label className="field-label">Migration reference<input className="field-control" name="session" required pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" placeholder="UUID from your migration link"/></label><Button variant="secondary" type="submit">Open reference</Button></form></details>}

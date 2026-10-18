@@ -4,6 +4,7 @@ import { useState } from "react";
 import { authHeaders } from "@/lib/identity";
 import { isSessionId } from "@/components/public-surfaces/session";
 import { Button } from "@/components/ui/primitives";
+import { AiStatusBadge } from "@/components/v2/primitives";
 
 type Review = {
   state: string; provider: string; context_hash: string; requested_at: string;
@@ -40,7 +41,7 @@ export function IndependentReview({ mappingId }: { mappingId: string }) {
     finally { setBusy(false); }
   }
   return <section className="mt-5 rounded-lg border border-token p-4" aria-label="Independent mapping review">
-    <h5 className="font-semibold">Get a second opinion</h5>
+    <div className="flex flex-wrap items-center gap-2"><h5 className="font-semibold">Get a second opinion</h5><AiStatusBadge /></div>
     <p className="mt-2 text-sm text-secondary">The Reviewer challenges this candidate from source evidence. It does not read the advisor’s response or change your mapping. Public Beta uses an independent deterministic check; Gemini review requires operator activation.</p>
     <Button className="mt-3" size="small" variant="secondary" disabled={busy} onClick={() => void request()}>{busy ? "Reviewing evidence…" : "Request independent review"}</Button>
     <p role="status" className="mt-2 text-sm">{busy ? "Checking the proposal…" : result ? `Review: ${result.state}` : "No review requested."}</p>

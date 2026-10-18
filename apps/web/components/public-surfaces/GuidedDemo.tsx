@@ -44,7 +44,7 @@ export function GuidedDemo() {
       </> : <>
         <p id="demo-handoff" className="demo-caption">Sign in for Harbor Light, then explicitly start assessment. Demo progress grants no approval.</p>
         <div className="demo-actions"><Link className="button" href={`/sign-in?next=${encodeURIComponent(sampleEntry)}`} aria-describedby="demo-handoff">Try the Guided Migration</Link><button className="button ghost" onClick={() => setScreen(4)}>Previous phase</button><button className="button ghost" onClick={() => setScreen(-1)}>Restart demo</button></div>
-        <section className="demo-card" aria-label="Demo debrief"><h2>Agents coordinate. Rules verify. You decide.</h2><p>The working Beta adds sign-in, owner-protected workspaces, explicit human decisions and server-authoritative progress.</p></section>
+        <section className="demo-card" aria-label="Demo debrief"><h2>MoveBooks coordinates. Rules verify. You decide.</h2><p>The working Beta adds sign-in, owner-protected workspaces, explicit human decisions and server-authoritative progress.</p></section>
       </>}
     </>}
     <div className="demo-more">
