@@ -90,7 +90,8 @@ export function DiscoverAssessExperience() {
   const [evidence, setEvidence] = useState<JourneyEvidence>();
   const [activity, setActivity] = useState<AgentActivity[]>([]);
   const [error, setError] = useState<string>();
-  const [sample, setSample] = useState("northstar-supplies");
+  // Harbor Light runs the whole journey; Northstar is the deliberately broken practice sample (FR4).
+  const [sample, setSample] = useState("harbor-light-migrate-demo");
 
   // Every read or assessment run starts a new operation (see begin). Unmounting supersedes them all.
   const latest = useRef(0);
@@ -122,7 +123,8 @@ export function DiscoverAssessExperience() {
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     const saved = query.get("session");
-    if (!saved && query.get("sample") === "harbor-light-migrate-demo") setSample("harbor-light-migrate-demo");
+    const requested = query.get("sample");
+    if (!saved && requested && ["northstar-supplies", "harbor-light-migrate-demo"].includes(requested)) setSample(requested);
     if (!saved) return;
     loadExisting(saved);
   }, []);
@@ -250,8 +252,8 @@ export function DiscoverAssessExperience() {
             <h3 className="mt-3 text-xl font-bold">Try a Sample Business</h3>
             <label className="mt-4 block font-bold">Sample business
               <select className="field-control mt-2 block w-full" value={sample} disabled={running} onChange={event => setSample(event.target.value)}>
-                <option value="northstar-supplies">Northstar Supplies — Needs Attention</option>
                 <option value="harbor-light-migrate-demo">Harbor Light Books — Ready to Migrate</option>
+                <option value="northstar-supplies">Northstar Supplies — Practice Fixing Data</option>
               </select>
             </label>
             <Button className="mt-6" variant={assessment || sessionId || reading !== "none" ? "secondary" : "primary"} onClick={startAssessment} disabled={running}>
@@ -259,7 +261,7 @@ export function DiscoverAssessExperience() {
               <ArrowRight aria-hidden="true" size={17} />
             </Button>
             <p className="mt-2 text-sm leading-6 text-secondary">
-              {sample === "northstar-supplies" ? "A deliberately imperfect office-supply distributor with duplicates, a missing value, an invalid relationship, and an unsupported setting." : "One synthetic business from discovery to verified first use. You approve key decisions; a controlled migration exception demonstrates safe recovery."}
+              {sample === "northstar-supplies" ? "Practice sample: a deliberately imperfect office-supply distributor with duplicates, a missing value, an invalid relationship, and an unsupported setting. Some of its mappings are blocked on purpose and cannot be completed." : "One synthetic business from discovery to verified first use. You approve key decisions; a controlled migration exception demonstrates safe recovery."}
             </p>
 
           </Card>

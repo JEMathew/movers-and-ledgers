@@ -93,7 +93,9 @@ describe("DiscoverAssessExperience", () => {
   it("starts with a synthetic company and routes uploads through controlled intake", () => {
     render(<DiscoverAssessExperience />);
     expect(screen.getByRole("heading", { name: "Understand Your Books" })).toBeVisible();
-    expect(screen.getByRole("combobox", { name: "Sample business" })).toHaveValue("northstar-supplies");
+    // Harbor Light runs the full journey, so a fresh visitor starts there; Northstar is opt-in practice (FR4).
+    expect(screen.getByRole("combobox", { name: "Sample business" })).toHaveValue("harbor-light-migrate-demo");
+    expect(screen.getByRole("option", { name: "Northstar Supplies — Practice Fixing Data" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Choose Test Files" })).toHaveAttribute("href", "/try-your-data");
     const journey = screen.getByRole("list", { name: "Migration Journey" });
     expect(journey).not.toBeVisible();
@@ -115,7 +117,22 @@ describe("DiscoverAssessExperience", () => {
     await screen.findByText("Current Workspace: Your Test Export");
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(fetchMock.mock.calls.every(call => call[0].endsWith("/migration-sessions/upload-session") && !call[1]?.method)).toBe(true);
-    expect(screen.getByRole("combobox", {name: "Sample business"})).toHaveValue("northstar-supplies");
+    expect(screen.getByRole("combobox", {name: "Sample business"})).toHaveValue("harbor-light-migrate-demo");
+  });
+
+  it("still opens the Northstar practice sample when the link asks for it", () => {
+    window.history.replaceState(null, "", "/assess?sample=northstar-supplies");
+    render(<DiscoverAssessExperience />);
+    expect(screen.getByRole("combobox", { name: "Sample business" })).toHaveValue("northstar-supplies");
+    expect(screen.getByText(/Practice sample: a deliberately imperfect/)).toBeVisible();
+    window.history.replaceState(null, "", "/assess");
+  });
+
+  it("ignores an unknown sample in the link and keeps Harbor Light", () => {
+    window.history.replaceState(null, "", "/assess?sample=someone-elses-company");
+    render(<DiscoverAssessExperience />);
+    expect(screen.getByRole("combobox", { name: "Sample business" })).toHaveValue("harbor-light-migrate-demo");
+    window.history.replaceState(null, "", "/assess");
   });
 
   it.each([
