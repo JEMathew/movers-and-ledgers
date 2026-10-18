@@ -291,3 +291,52 @@
   .entry { padding-block: 24px; place-items: start stretch; }
   .entry-card { padding: 24px 20px; }
 }
+
+/* ---------- Understand (/assess) ---------- */
+.ua-page { display: grid; gap: 20px; align-content: start; }
+.ua-page > .v2-stage-header { margin-bottom: 0; }
+.ua-h2 { margin: 0; font-size: 1.375rem; line-height: 1.25; }
+.ua-h3 { margin: 0; font-size: 1.0625rem; font-weight: 600; }
+.ua-meta { margin: 0; font-size: 0.9375rem; color: var(--v2-quiet); }
+.ua-eyebrow { margin: 0; font-size: 0.875rem; color: var(--v2-quiet); }
+.ua-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.ua-outcome { display: grid; gap: 12px; padding: 28px; background: var(--v2-surface); border: 2px solid var(--v2-ink); border-radius: var(--v2-radius-container); min-width: 0; overflow-wrap: anywhere; }
+.ua-outcome[data-state="blocked"] { border-color: var(--v2-critical); }
+.ua-outcome-text { margin: 0; font-size: 1.1875rem; color: var(--v2-ink); max-width: 60ch; }
+.ua-counts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
+.ua-counts p { margin: 0; color: var(--v2-ink-2); }
+.ua-counts strong { font-size: 1.375rem; color: var(--v2-ink); margin-right: 2px; }
+.ua-issues { display: grid; gap: 12px; }
+.ua-findings { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.ua-findings > li { display: grid; gap: 6px; padding: 16px 20px; background: var(--v2-surface); border: 1px solid var(--v2-rule); border-radius: var(--v2-radius-container); overflow-wrap: anywhere; }
+.ua-findings > li[data-category="BLOCKER"] { border-left: 4px solid var(--v2-critical); }
+.ua-findings > li[data-category="WARNING"] { border-left: 4px solid var(--v2-review-fg); }
+.ua-findings strong { color: var(--v2-ink); }
+.ua-finding-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.ua-support { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: 16px; }
+.ua-card { display: grid; gap: 8px; align-content: start; padding: 20px; background: var(--v2-surface); border: 1px solid var(--v2-rule); border-radius: var(--v2-radius-container); }
+.ua-card-title { margin: 0; font-size: 1.0625rem; font-weight: 600; letter-spacing: 0; }
+.ua-card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.ua-planned { border-style: dashed; border-color: var(--v2-rule-strong); }
+.ua-technical { margin-top: 8px; }
+.ua-another > summary { cursor: pointer; font-weight: 600; min-height: 44px; padding-block: 10px; }
+.ua-source { display: grid; gap: 16px; margin-top: 8px; }
+.ua-source-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+.ua-source-card { display: grid; gap: 12px; align-content: start; }
+.ua-source-main { border: 2px solid var(--v2-ink); }
+.ua-source-card > .button { justify-self: start; }
+.ua-source-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ua-icon { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; background: var(--v2-accent-tint); color: var(--v2-accent); }
+.ua-field { display: grid; gap: 6px; font-weight: 600; }
+.ua-field .field-control { width: 100%; font-weight: 400; }
+.ua-foot { display: flex; gap: 12px; align-items: flex-start; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--v2-rule); font-size: 0.875rem; color: var(--v2-quiet); }
+.ua-foot p { margin: 0; }
+.ua-foot-icon { flex: none; color: var(--v2-accent); margin-top: 2px; }
+@media (max-width: 640px) {
+  .ua-outcome { padding: 20px; }
+  .ua-actions > .button, .ua-source-card > .button { width: 100%; justify-content: center; justify-self: stretch; }
+}
+
+/* Disclosure markers for this workstream's details (some global resets hide them). */
+.ua-another > summary, .pm-history > summary, .pm-more > summary, .pm-more-inner > summary, .pm-evidence > summary, .pm-evidence-more > summary, .mm-details > summary, .mm-checks details > summary { display: list-item; list-style: disclosure-closed inside; }
+.ua-another[open] > summary, .pm-history[open] > summary, .pm-more[open] > summary, .pm-more-inner[open] > summary, .pm-evidence[open] > summary, .pm-evidence-more[open] > summary, .mm-details[open] > summary, .mm-checks details[open] > summary { list-style-type: disclosure-open; }
