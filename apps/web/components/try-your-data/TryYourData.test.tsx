@@ -38,7 +38,7 @@ describe("test export check", () => {
     expect(screen.getByText("We'll check the files, identify missing or inconsistent data, and show what needs attention before anything moves.")).toBeVisible();
     for (const name of ["1. Download sample package", "2. Choose test files", "3. Validate files"]) expect(screen.getByRole("heading", { name })).toBeVisible();
     expect(screen.getByText("See a small example of the files and formats MoveBooks accepts.")).toBeVisible();
-    expect(screen.getByText("De-Identified Test Data Only")).toBeVisible();
+    expect(screen.getByText("De-identified test data only")).toBeVisible();
     const format = screen.getByText("View supported file format and limits").closest("details")!;
     expect(format).not.toHaveAttribute("open");
     expect(within(format).getByText("customers.csv")).toBeInTheDocument();

@@ -109,7 +109,7 @@ export function TryYourData() {
       <p className="eyebrow text-primary">Use my test export</p>
       <h1 className="type-page mt-4">Check your export before migration</h1>
       <p className="mt-5 text-lg leading-8 text-secondary">We&apos;ll check the files, identify missing or inconsistent data, and show what needs attention before anything moves.</p>
-      <Badge className="mt-4">De-Identified Test Data Only</Badge>
+      <Badge className="mt-4">De-identified test data only</Badge>
     </header>
 
     <Card>
