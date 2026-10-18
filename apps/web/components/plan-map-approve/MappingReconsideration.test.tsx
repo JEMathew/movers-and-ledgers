@@ -20,7 +20,7 @@ describe("Mapping reconsideration", () => {
     fireEvent.click(screen.getByRole("button", {name: "Request reconsideration"}));
     await waitFor(() => expect(submit).toHaveBeenCalledOnce());
     expect(submit).toHaveBeenCalledWith("/reconsiderations", {request_id: expect.any(String), prior_decision_id: original.id, reason: "Explicit human request", proposed_target: "Service"});
-    expect(screen.queryByRole("button", {name: "Approve Reconsideration"})).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", {name: "Approve reconsideration"})).not.toBeInTheDocument();
   });
 
   it.each(["approve", "reject"])("requires a separate %s action and keeps original history visible", async action => {
@@ -29,7 +29,7 @@ describe("Mapping reconsideration", () => {
     expect(submit).not.toHaveBeenCalled();
     expect(screen.getByText(/Original rejection decision-original/)).toBeVisible();
     expect(screen.getByText(/Original evidence: source:service-001/)).toBeVisible();
-    fireEvent.click(screen.getByRole("button", {name: action === "approve" ? "Approve Reconsideration" : "Reject Reconsideration"}));
+    fireEvent.click(screen.getByRole("button", {name: action === "approve" ? "Approve reconsideration" : "Reject reconsideration"}));
     await waitFor(() => expect(submit).toHaveBeenCalledWith("/reconsiderations/request-001/review", {action, comment: expect.any(String)}));
     const state = action === "approve" ? "APPROVED" : "REJECTED";
     const newDecision = {...original, id: "decision-new", decision: state};
