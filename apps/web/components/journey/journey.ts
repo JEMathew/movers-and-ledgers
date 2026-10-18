@@ -186,3 +186,14 @@ export function nextActionFor(state?: JourneyState): NextAction {
       return { heading: "See If Your Books Are Ready to Migrate", detail: "This migration's status is not recognised, so no progress is assumed.", label: "Check If My Books Are Ready to Migrate", href: sampleEntry };
   }
 }
+
+/** The customer-facing phase (0 Understand … 4 Start) for an operational step. Single rule shared by the
+ *  V1 phase rail and the V2 stage bar so the two can never disagree. Null when the step is unknown. */
+export function phaseIndexFor(current: number | null, status?: string | null): number | null {
+  if (current === null) return null;
+  if (current >= 8 || ["CONFIGURED", "ONBOARDING", "ONBOARDING_BLOCKED"].includes(status ?? "")) return 4;
+  if (current >= 6) return 3;
+  if (current >= 4) return 2;
+  if (current >= 1) return 1;
+  return 0;
+}

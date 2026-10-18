@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
+import "@fontsource/schibsted-grotesk/400.css";
+import "@fontsource/schibsted-grotesk/500.css";
+import "@fontsource/schibsted-grotesk/600.css";
+import "@fontsource/schibsted-grotesk/700.css";
 import "./globals.css";
+import "./v2.css";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";

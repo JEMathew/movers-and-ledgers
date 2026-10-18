@@ -4,7 +4,7 @@ import { useId } from "react";
 import { FileSearch, LifeBuoy, Sparkles } from "lucide-react";
 import { MigrationJourney } from "./MigrationJourney";
 import { phases } from "../public-surfaces/content";
-import { withSession } from "./journey";
+import { phaseIndexFor, withSession } from "./journey";
 import type { CurrentStepLabel, HeldStep, Processing, UnknownProgress } from "./journey";
 
 /** Presentation of the existing operational projection; never advances the workflow. */
@@ -13,7 +13,7 @@ export function PhaseProgress({ current, held, currentLabel = "Current", unknown
   processing?: Processing; session?: string; status?: string;
 }) {
   const id = useId();
-  const phase = current === null ? null : current >= 8 || ["CONFIGURED", "ONBOARDING", "ONBOARDING_BLOCKED"].includes(status ?? "") ? 4 : current >= 6 ? 3 : current >= 4 ? 2 : current >= 1 ? 1 : 0;
+  const phase = phaseIndexFor(current, status);
   const done = current !== null && current >= 9;
   const working = processing?.step === current ? processing : undefined;
   const items = phases.map((item, index) => {
