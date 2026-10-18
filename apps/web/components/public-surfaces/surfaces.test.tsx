@@ -71,7 +71,7 @@ describe("public surface contracts", () => {
     render(<Home/>);
     const proof = screen.getByRole("figure");
     expect(within(proof).getByText("Sample result")).toBeVisible();
-    expect(proof).toHaveTextContent("USD 0.00");
+    expect(proof).toHaveTextContent("No difference");
     expect(proof).toHaveTextContent("USD 107.25");
     expect(proof).toHaveTextContent("17 of 17 checks matched in the sample walkthrough");
   });

@@ -64,7 +64,9 @@ export function differenceText(check: CheckLike | undefined, currency: string): 
   const raw = typeof check?.difference === "string" ? check.difference.trim() : "";
   if (!raw) return { text: "Not available", amount: false };
   const formatted = formatApiAmount(raw, currency);
-  return formatted === "Not available" ? { text: raw, amount: false } : { text: formatted, amount: true };
+  if (formatted !== "Not available") return { text: formatted, amount: true };
+  // tools/validation/checks.py reports a non-numeric comparison as "None" (no difference found) or "Mismatch".
+  return { text: raw === "None" ? "No difference" : raw === "Mismatch" ? "Mismatch found" : raw, amount: false };
 }
 
 /** Record counts (count:* rules) and every other check, counted from the report's own list. */

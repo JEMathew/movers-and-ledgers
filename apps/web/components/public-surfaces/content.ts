@@ -40,7 +40,8 @@ export function visibleLinks<T extends readonly (readonly [string, string])[]>(l
 export const sampleOutcome = {
   company: "Harbor Light Books",
   currency: "USD",
-  trialBalanceDifference: "0.00",
+  /** Worded as the product shows the trial-balance rule result ("None" from the API). */
+  trialBalanceResult: "No difference",
   firstInvoiceTotal: "107.25",
   checksMatched: 17,
   checksTotal: 17,

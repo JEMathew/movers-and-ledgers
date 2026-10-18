@@ -44,7 +44,7 @@ export default function Home() {
         <div className="v2-proof-head"><span className="font-semibold">{sampleOutcome.company}</span><span className="v2-proof-sample">Sample result</span></div>
         <div>
           <span className="v2-proof-label">Trial balance difference, old vs new books</span>
-          <span className="v2-proof-figure">{formatApiAmount(sampleOutcome.trialBalanceDifference, sampleOutcome.currency)}</span>
+          <span className="v2-proof-figure">{sampleOutcome.trialBalanceResult}</span>
         </div>
         <ul className="v2-proof-checks">
           {sampleOutcome.highlights.map(check => <li key={check}><span>{check}</span><span className="v2-proof-ok"><Tick />Matches</span></li>)}

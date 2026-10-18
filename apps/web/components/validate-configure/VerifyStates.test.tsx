@@ -33,7 +33,7 @@ describe("Verify stage states", () => {
   });
 
   it.each([
-    ["a non-numeric difference in the API's words", [check("trial-balance", "Trial balance — per account", "None")], "None"],
+    ["a non-numeric difference in the API's words", [check("trial-balance", "Trial balance — per account", "None")], "No difference"],
     ["no trial balance check", [check("ar", "A/R", "0.00")], "Not available"],
   ])("shows %s, never a default zero", async (_name, checks, shown) => {
     read({ ...base, report: report(checks) });
