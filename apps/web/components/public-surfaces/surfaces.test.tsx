@@ -12,7 +12,8 @@ import { ProductEntry } from "./ProductEntry";
 import { Support } from "./Support";
 import { Trust } from "./Trust";
 import { Guide } from "./Guide";
-import { publicLinks, sampleEntry, topics } from "./content";
+import { memberLinks, publicLinks, sampleEntry, topics, visibleLinks } from "./content";
+import { features } from "@/lib/features";
 import { contextQuery, safeContext } from "./context";
 import { phaseFor, projectSession } from "./session";
 import { surfaceEvents } from "./analytics";
@@ -44,46 +45,60 @@ describe("public surface contracts", () => {
       for (const heading of screen.getAllByRole("heading")) expect(heading.className).not.toMatch(/uppercase|type-label|eyebrow/);
     });
   });
-  it("presents one dominant sample-migration action, a secondary Demo link and Play inside the overview", () => {
+  it("presents one dominant sample-migration action, a secondary Demo link and no Play promotion", () => {
     render(<Home/>);
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Move your books with confidence.");
-    expect(screen.getByRole("link", { name: "Start a sample migration" })).toHaveAttribute("href", "/workspace");
-    const demo = screen.getByRole("link", { name: /Explore Demo/ });
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Move your books.Prove every total.");
+    expect(screen.getAllByRole("link", { name: "Start a sample migration" })[0]).toHaveAttribute("href", "/workspace");
+    const demo = screen.getByRole("link", { name: /Explore the demo/ });
     expect(demo).toHaveAttribute("href", "/simulator");
-    expect(demo).toHaveTextContent("no sign-in required");
+    expect(demo).toHaveTextContent("no sign-in needed");
     expect(demo).not.toHaveClass("button");
-    expect(screen.queryByRole("heading", { name: "Learn through MoveBooks Play" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: "Open Play" })).not.toBeInTheDocument();
+    expect(document.querySelector('main a[href="/play"]')).toBeNull();
     expect(screen.queryByText("V1.0 Bounded Synthetic Public Beta")).not.toBeInTheDocument();
     expect(screen.getByText(/Do not use real customer or production provider data/)).toBeVisible();
     expect(screen.getByRole("link", { name: "Beta limitations" })).toHaveAttribute("href", "/trust#beta-limitations");
     const main = screen.getByRole("main");
+    // One filled primary in the page body; the closing band repeats the same action in the secondary style.
     expect(main.querySelectorAll("a.button:not(.secondary):not(.ghost)")).toHaveLength(1);
     expect(screen.queryByText(/62%/)).not.toBeInTheDocument();
-    const journey = document.querySelector<HTMLDetailsElement>("#how-it-works")!;
-    expect(journey.open).toBe(false);
-    fireEvent.click(within(journey).getByText("How MoveBooks works"));
     expect(screen.getByText("Onboard + First Synthetic Task")).toBeVisible();
-    expect(screen.getByRole("link", { name: "Getting Started Guide" })).toHaveAttribute("href", "/guide");
-    expect(screen.getByRole("link", { name: "Try MoveBooks Play" })).toHaveAttribute("href", "/play");
+    expect(screen.getByRole("link", { name: "Read how it works" })).toHaveAttribute("href", "/guide");
     fireEvent.click(screen.getByText("Beta boundaries and architecture"));
     expect(screen.getByText(/Live Gemini advice requires explicit deployment configuration/)).toBeVisible();
     expect(screen.getByText(/No affiliation with or representation/)).toBeVisible();
   });
-  it("simplifies public navigation with Play outside the mobile menu", () => {
+  it("labels the sample proof as a sample and formats its figures without computing them", () => {
+    render(<Home/>);
+    const proof = screen.getByRole("figure");
+    expect(within(proof).getByText("Sample result")).toBeVisible();
+    expect(proof).toHaveTextContent("USD 0.00");
+    expect(proof).toHaveTextContent("USD 107.25");
+    expect(proof).toHaveTextContent("17 of 17 checks matched in the sample walkthrough");
+  });
+  it("shows the attribution as one quiet line that does not claim live Gemini", () => {
+    render(<Home/>);
+    expect(screen.getByText("Built on Google Cloud · Gemini AI planned")).toBeVisible();
+    expect(document.body).not.toHaveTextContent(/powered by Gemini/i);
+  });
+  it("simplifies public navigation and keeps Play out of it while the flag is off", () => {
     render(<IdentityProvider><Nav/></IdentityProvider>);
     const nav = screen.getByRole("navigation", { name: "Primary navigation", hidden: true });
-    for (const [name, href] of publicLinks) expect(within(nav).getByRole("link", { name, hidden: true })).toHaveAttribute("href", href);
-    expect(publicLinks.map(([label]) => label)).toEqual(["Explore Demo", "Play", "Learn", "Trust"]);
+    expect(visibleLinks(publicLinks, false).map(([label]) => label)).toEqual(["How it works", "Explore demo", "Learn", "Trust and security"]);
+    for (const [name, href] of visibleLinks(publicLinks, false)) expect(within(nav).getByRole("link", { name, hidden: true })).toHaveAttribute("href", href);
     expect(screen.getByRole("link", { name: "MoveBooks AI home" })).toHaveAttribute("href", "/");
-    expect(screen.getAllByRole("link", { name: "Play", hidden: true })).toHaveLength(2);
+    expect(screen.queryAllByRole("link", { name: "Play", hidden: true })).toHaveLength(0);
     expect(screen.getByRole("link", { name: "Help" })).toHaveAttribute("href", "/support");
     const menu = screen.getByRole("button", { name: "Open navigation" });
     fireEvent.click(menu);
-    const demo = within(nav).getByRole("link", { name: "Explore Demo" });
+    const demo = within(nav).getByRole("link", { name: "Explore demo" });
     demo.addEventListener("click", event => event.preventDefault());
     fireEvent.click(demo);
     expect(menu).toHaveAttribute("aria-expanded", "false");
+  });
+  it("restores Play in navigation only when the reversible flag is on", () => {
+    expect(features.playInNavigation).toBe(false);
+    expect(visibleLinks(publicLinks, true).map(([, href]) => href)).toContain("/play");
+    expect(visibleLinks(memberLinks, false).map(([, href]) => href)).toEqual(["/workspace"]);
   });
   it("opens the public read-only Demo without requests or automatic approvals", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
@@ -156,17 +171,16 @@ describe("public surface contracts", () => {
     render(<Learn/>);
     expect(screen.getByRole("link", { name: "Go to My Migration" })).toHaveAttribute("href", "/workspace");
   });
-  it("keeps detailed copy available through native disclosures without a second launch CTA", () => {
+  it("keeps one launch action, repeated only in the closing band with the same label and destination", () => {
     render(<Home/>);
-    for (const summary of ["How MoveBooks works", "Why businesses migrate", "Trust by design", "Beta boundaries and architecture"]) {
-      const control = screen.getByText(summary).closest("summary")!;
-      expect(control.closest("details")).not.toHaveAttribute("open");
-      fireEvent.click(control);
-      expect(control.closest("details")).toHaveAttribute("open");
-    }
-    for (const name of ["The questions behind every move", "How MoveBooks works", "Trust by design"]) expect(screen.getByRole("heading", { name })).toBeVisible();
-    expect(screen.getByRole("link", { name: "Start a sample migration" })).toHaveAttribute("href", "/workspace");
+    const starts = screen.getAllByRole("link", { name: "Start a sample migration" });
+    expect(starts).toHaveLength(2);
+    for (const link of starts) expect(link).toHaveAttribute("href", "/workspace");
+    expect(starts[1]).toHaveClass("secondary");
     expect(screen.queryByRole("link", { name: "Try a migration" })).not.toBeInTheDocument();
+    for (const name of ["Five stages, each with a clear owner", "Who decides what", "Why businesses migrate"]) expect(screen.getByRole("heading", { name })).toBeVisible();
+    const boundaries = screen.getByText("Beta boundaries and architecture").closest("summary")!;
+    expect(boundaries.closest("details")).not.toHaveAttribute("open");
     for (const heading of screen.getAllByRole("heading")) expect(heading.className).not.toMatch(/uppercase|type-label|eyebrow/);
   });
   it("opens the isolated pixel office mission without changing any workflow", () => {

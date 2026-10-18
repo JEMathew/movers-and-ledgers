@@ -1,4 +1,5 @@
 "use client";
+import { features } from "@/lib/features";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { demoPhases } from "./demo-content";
@@ -50,8 +51,8 @@ export function GuidedDemo() {
     <div className="demo-more">
       <AnchoredDetails id="sample-journey" title="Demo and Beta are different"><p>This Demo is an authored, read-only preview held only in page memory. It calls no migration APIs, records no decisions and does not measure migration results. Reloading resets it. Nothing is pre-approved when you enter the Beta.</p><p>The actual synthetic Beta retains all nine operational steps: Assess → Plan → Map → Approve → Migrate → Resolve → Validate → Set Up → Start Using.</p><Link className="public-text-link" href="/guide#journey">Follow the five-phase guide</Link><Link className="public-text-link" href={sampleEntry}>Already signed in? Open the sample assessment</Link></AnchoredDetails>
       <AnchoredDetails id="sample-boundaries" title="Synthetic Beta boundaries"><p>V1.0 Bounded Synthetic Public Beta. No real customer or production provider data, live provider migration or production readiness. Cloud Beta uses real Google sign-in and owner-protected synthetic workspaces; no accounting provider is contacted. Local demo workspace access is for development.</p></AnchoredDetails>
-      <AnchoredDetails id="sample-success" title="What verified completion means"><p>Business Ready · Verified requires a server-verified first task after required checks, configuration, onboarding and an explicitly approved synthetic invoice. Moving records or posting alone is insufficient. Finishing this Demo is only completing a preview.</p><Link className="public-text-link" href="/learn#business-ready">Understand verified completion</Link></AnchoredDetails>
-      <nav aria-label="Keep exploring" className="demo-related"><Link className="public-text-link" href="/">Back to Home</Link><Link className="public-text-link" href="/play">Play the office mission</Link><Link className="public-text-link" href="/learn">Learn</Link><Link className="public-text-link" href="/#product-vision">Conceptual Product Vision video</Link></nav>
+      <AnchoredDetails id="sample-success" title="What verified completion means"><p>Business ready · verified requires a server-verified first task after required checks, configuration, onboarding and an explicitly approved synthetic invoice. Moving records or posting alone is insufficient. Finishing this Demo is only completing a preview.</p><Link className="public-text-link" href="/learn#business-ready">Understand verified completion</Link></AnchoredDetails>
+      <nav aria-label="Keep exploring" className="demo-related"><Link className="public-text-link" href="/">Back to Home</Link>{features.playInNavigation && <Link className="public-text-link" href="/play">Play the office mission</Link>}<Link className="public-text-link" href="/learn">Learn</Link><Link className="public-text-link" href="/#product-vision">Conceptual Product Vision video</Link></nav>
     </div>
   </main>;
 }

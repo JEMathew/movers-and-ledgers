@@ -11,6 +11,7 @@ import { projectJourney } from "./journey/journey";
 import { MemberProgress } from "./journey/MemberProgress";
 import { memberHomeAction, memberHomeLinks, memberHomePhase } from "./journey/member-home";
 import { useSessionView } from "./public-surfaces/session";
+import { Attribution } from "./v2/Attribution";
 
 const shortcutIcon = (label: string) => /another sample/i.test(label) ? Rocket : /AI activity/i.test(label) ? Sparkles : /help/i.test(label) ? LifeBuoy : /verification/i.test(label) ? ShieldCheck : /issue|recovery|difference/i.test(label) ? AlertTriangle : /evidence|results/i.test(label) ? FileSearch : /decision|settings|prerequisite/i.test(label) ? ClipboardCheck : ArrowUpRight;
 
@@ -73,5 +74,6 @@ export function MyMigration({ reference, storageScope }: { reference?: string; s
     {!view && !loading && <details className="member-details"><summary>Resume a saved migration</summary><p>Use the reference from your saved migration link. Access is checked again; this does not list or create migrations.</p><form action="/workspace" method="get"><label className="field-label">Migration reference<input className="field-control" name="session" required pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" placeholder="UUID from your migration link"/></label><Button variant="secondary" type="submit">Open reference</Button></form></details>}
     {!view && !loading && <nav className="member-actions" aria-label="Task help"><a href={help}><LifeBuoy size={18} aria-hidden="true"/>Help with this task</a></nav>}
     <p className="member-boundary">Bounded synthetic Beta · No production customer data</p>
+    <Attribution />
   </main>;
 }

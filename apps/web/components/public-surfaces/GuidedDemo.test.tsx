@@ -77,8 +77,9 @@ describe("PR03 authored public Demo", () => {
     expect(screen.getByText(/No real customer or production provider data/)).toBeVisible();
     fireEvent.click(screen.getByText("Demo and Beta are different"));
     expect(screen.getByRole("link", { name: "Already signed in? Open the sample assessment" })).toHaveAttribute("href", sampleEntry);
-    for (const [name, href] of [["Back to Home", "/"], ["Play the office mission", "/play"], ["Learn", "/learn"], ["Conceptual Product Vision video", "/#product-vision"]])
+    for (const [name, href] of [["Back to Home", "/"], ["Learn", "/learn"], ["Conceptual Product Vision video", "/#product-vision"]])
       expect(screen.getByRole("link", { name })).toHaveAttribute("href", href);
+    expect(screen.queryByRole("link", { name: "Play the office mission" })).toBeNull();
   });
   it("labels authored amounts and separates controls from AI advice", () => {
     render(<GuidedDemo/>);

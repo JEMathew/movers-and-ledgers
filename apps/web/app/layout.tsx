@@ -5,6 +5,10 @@ import "@fontsource/schibsted-grotesk/600.css";
 import "@fontsource/schibsted-grotesk/700.css";
 import "./globals.css";
 import "./v2.css";
+import "./v2-workflow.css";
+import "./v2-journey.css";
+import "./v2-stages.css";
+import "./v2-surfaces.css";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
@@ -20,7 +24,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className="mb-v2">
         <ThemeProvider>
           <IdentityProvider>
           <Nav />

@@ -5,7 +5,8 @@ import { Menu } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { AccountControls } from "@/components/AccountControls";
 import { useIdentity } from "@/components/IdentityProvider";
-import { memberLinks, publicLinks } from "@/components/public-surfaces/content";
+import { memberLinks, publicLinks, visibleLinks } from "@/components/public-surfaces/content";
+import { features } from "@/lib/features";
 
 export function Nav() {
   const { identity } = useIdentity();
@@ -16,7 +17,7 @@ export function Nav() {
   const trigger = useRef<HTMLButtonElement>(null);
   const panelId = useId();
   // Navigation reflects API-verified identity, including on public Play and Help.
-  const links = identity ? memberLinks : publicLinks;
+  const links = visibleLinks(identity ? memberLinks : publicLinks, features.playInNavigation);
   useEffect(() => { setOpen(false); }, [pathname, identity?.subject]);
   useEffect(() => {
     if (!open) return;
@@ -32,12 +33,12 @@ export function Nav() {
   return <header ref={root} className="shell site-header" onKeyDown={event => {
     if (event.key === "Escape" && open) { event.preventDefault(); setOpen(false); trigger.current?.focus(); }
   }}>
-    <Link href={identity ? "/workspace" : "/"} aria-label={identity ? "MoveBooks AI My Migration" : "MoveBooks AI home"} className="site-brand">
-      <span className="brand-mark" aria-hidden="true">M</span>
-      <span>MoveBooks <span className="font-semibold text-primary">AI</span></span>
+    <Link href={identity ? "/workspace" : "/"} aria-label={identity ? "MoveBooks AI, my migration" : "MoveBooks AI home"} className="site-brand">
+      <svg className="brand-mark" viewBox="0 0 26 26" aria-hidden="true"><rect x="3" y="4" width="8" height="18" rx="2" fill="none" stroke="currentColor" strokeWidth="2" /><rect x="15" y="4" width="8" height="18" rx="2" fill="var(--primary)" /></svg>
+      <span>MoveBooks AI</span>
     </Link>
     <div className="mobile-discovery-controls">
-      <Link className="nav-link" href="/play" aria-current={pathname === "/play" ? "page" : undefined}>Play</Link>
+      {features.playInNavigation && <Link className="nav-link" href="/play" aria-current={pathname === "/play" ? "page" : undefined}>Play</Link>}
       <button ref={trigger} type="button" className="button ghost icon-button" aria-label="Open navigation" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen(value => !value)}><Menu aria-hidden="true" size={20}/></button>
     </div>
     <div ref={panel} id={panelId} className={`navigation-panel${open ? " is-open" : ""}`} onClick={event => {
