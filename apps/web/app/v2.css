@@ -35,8 +35,13 @@
   font-family: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
   font-size: 1rem;
   line-height: 1.55;
-  font-variant-numeric: tabular-nums;
 }
+
+/* Tailwind preflight resets heading weights; the design sets them explicitly. */
+.mb-v2 h1, .mb-v2 h2 { font-weight: 700; letter-spacing: -0.015em; }
+.mb-v2 h3, .mb-v2 h4, .mb-v2 h5 { font-weight: 600; }
+/* Tabular figures only where numbers align in columns: this face also widens punctuation under tnum. */
+.mb-v2 .v2-num, .mb-v2 td { font-variant-numeric: tabular-nums; }
 
 .dark .mb-v2 {
   --v2-ground: #0f151c;
@@ -87,7 +92,9 @@
 .v2-stage[data-status="current"] .v2-stage-detail { color: var(--v2-ink); }
 .v2-stages-compact { display: none; margin: 10px 0 0; font-size: 0.95rem; }
 @media (max-width: 640px) {
-  .v2-stage-name, .v2-stage-detail { display: none; }
+  /* Visually hidden, still read by screen readers: the compact line below is aria-hidden. */
+  .v2-stage-name, .v2-stage-detail { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .v2-stage { position: relative; }
   .v2-stages-compact { display: block; }
 }
 
@@ -110,7 +117,8 @@
 .v2-guide svg { flex: none; margin-top: 2px; }
 .v2-money { display: flex; flex-direction: column; gap: 6px; }
 .v2-money-label { font-size: 0.95rem; color: var(--v2-ink-2); }
-.v2-money-value { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1; font-weight: 600; letter-spacing: -0.03em; }
+.v2-money-value { font-size: clamp(2rem, 3.4vw, 3.5rem); line-height: 1.05; font-weight: 600; letter-spacing: -0.02em; white-space: nowrap; }
+.v2-money-missing { font-size: 1.125rem; font-weight: 600; color: var(--v2-quiet); }
 .v2-money-caption { color: var(--v2-accent); font-weight: 600; }
 .v2-example { border-radius: 8px; padding: 14px 16px; border: 1px solid var(--v2-ai-rule); background: repeating-linear-gradient(135deg, var(--v2-ai-bg) 0 10px, var(--v2-surface) 10px 20px); }
 .v2-example-label { font-size: 0.8125rem; font-weight: 600; color: var(--v2-ai-fg); }

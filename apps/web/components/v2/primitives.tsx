@@ -54,7 +54,7 @@ export function MoneyFigure({ label, amount, currency, caption, strong = false }
   return (
     <div className={`v2-card v2-money${strong ? " v2-card-strong" : ""}`}>
       <span className="v2-money-label">{label}</span>
-      <span className="v2-money-value">{formatted}</span>
+      <span className={formatted === "Not available" ? "v2-money-missing" : "v2-money-value"}>{formatted}</span>
       {caption ? <span className="v2-money-caption">{caption}</span> : null}
     </div>
   );

@@ -39,7 +39,7 @@ export function V2ComponentSheet() {
         <Group title="Mapping states and recovery">
           <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))" }}>
             {STATES.map((state) => (
-              <div key={state} className={`v2-card${state === "blocked" ? " v2-card-blocked" : ""}`} style={{ display: "grid", gap: 8, padding: 18 }}>
+              <div key={state} className={`v2-card${state === "blocked" ? " v2-card-blocked" : ""}`} style={{ display: "grid", gap: 8, padding: 18, alignContent: "start" }}>
                 <span><StatusChip status={state} /></span>
                 <span className="v2-ink-2" style={{ fontSize: "0.95rem" }}><span className="sr-only">{V2_STATUS_LABEL[state]}: </span>{V2_STATUS_RECOVERY[state]}</span>
               </div>
