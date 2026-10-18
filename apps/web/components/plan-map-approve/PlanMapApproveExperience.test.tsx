@@ -330,7 +330,7 @@ describe("mapping changes and adapter limits", () => {
     render(<PlanMapApproveExperience />); await openMappings();
     const select = screen.getByLabelText("Change destination for Service Revenue");
     expect(within(select).getAllByRole("option").map(option => option.textContent)).toEqual(["Choose a supported destination", "Sales Income (keep current)", "Other Income"]);
-    expect(screen.getByRole("button", { name: "Approve as Sales Income" })).toBeDisabled();
+    expect(screen.queryByRole("button", { name: "Approve as Sales Income" })).toBeNull();
     // The API refuses to reject a blocked mapping, so the action is not offered.
     expect(screen.queryByRole("button", { name: "Reject" })).not.toBeInTheDocument();
     fireEvent.change(select, { target: { value: "Other Income" } });
@@ -348,7 +348,7 @@ describe("mapping changes and adapter limits", () => {
     expect(screen.getByText(/No compatible destination is available/)).toBeVisible();
     expect(screen.queryByRole("button", { name: "Reject" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Save changed mapping" })).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Approve as Vendor" })).toBeDisabled();
+    expect(screen.queryByRole("button", { name: "Approve as Vendor" })).toBeNull();
   });
   it("offers no changed destination for a mapping without server-supported targets", async () => {
     read({ mappings: [{ ...proposal, area: "chart_of_accounts", source_label: "Sales", recommended_target: "Sales Income", selected_target: "Sales Income", alternatives: ["Other Income"] }] });

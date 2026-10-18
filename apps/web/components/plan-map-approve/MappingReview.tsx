@@ -175,7 +175,8 @@ function MappingDetail({ mapping, history, editable, busy, decide, reconsider, h
         {blocked && <p className="pm-meta">This recommendation is blocked. Save a compatible destination to clear it; a blocked mapping cannot be approved or rejected as it stands.</p>}
       </div>}
       <div className="pm-decide-actions">
-        <Button variant={target || blocked ? "secondary" : "primary"} disabled={!canDecide || blocked} onClick={() => void decide(mapping, "approve")}>Approve as {mapping.selected_target}</Button>
+        {/* A blocked mapping can only be changed to a compatible target (apply_mapping_decision), so no approve control is shown. */}
+        {!blocked && <Button variant={target ? "secondary" : "primary"} disabled={!canDecide} onClick={() => void decide(mapping, "approve")}>Approve as {mapping.selected_target}</Button>}
         {destinations.length > 0 && (changing
           ? <Button variant={target ? "primary" : "secondary"} disabled={!canDecide || !target || !destinations.includes(target)} onClick={() => void decide(mapping, "modify", target)}>Save changed mapping</Button>
           : <Button variant="secondary" disabled={!canDecide} onClick={() => setChanging(true)}>Change mapping</Button>)}

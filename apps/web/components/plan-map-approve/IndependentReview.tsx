@@ -41,8 +41,9 @@ export function IndependentReview({ mappingId }: { mappingId: string }) {
     finally { setBusy(false); }
   }
   return <section className="pm-independent" aria-label="Independent mapping review">
-    <div className="flex flex-wrap items-center gap-2"><h5 className="font-semibold">Independent rule check</h5><span className="pm-meta">Gemini Reviewer</span><AiStatusBadge /></div>
-    <p className="mt-2 text-sm text-secondary">Available now: a separate deterministic check challenges this candidate from source evidence. It does not read the advisor’s response or change your mapping. Gemini review requires operator activation.</p>
+    <div className="flex flex-wrap items-center gap-2"><h5 className="font-semibold">Independent rule check</h5><span className="pm-meta">Available now · rules only</span></div>
+    <p className="mt-2 text-sm text-secondary">Available now: a separate deterministic check challenges this candidate from source evidence. It does not read the advisor’s response or change your mapping.</p>
+    <p className="mt-1 flex flex-wrap items-center gap-2 text-sm text-secondary">A Gemini Reviewer for this check <AiStatusBadge /></p>
     <Button className="mt-3" size="small" variant="secondary" disabled={busy} onClick={() => void request()}>{busy ? "Reviewing evidence…" : "Request independent review"}</Button>
     <p role="status" className="mt-2 text-sm">{busy ? "Checking the proposal…" : result ? `Review: ${result.state}` : "No review requested."}</p>
     {error && <p role="alert" className="mt-3 text-sm">{error}</p>}
