@@ -51,7 +51,10 @@ const GROUP_NOTE: Partial<Record<MappingGroupId, string>> = {
   one_by_one: "Low risk, but each needs its own approval: the rules mark it as sensitive, or it is tax or already changed.",
 };
 
-export function MappingReview({ mappings, history, editable, busy, planApproved, decide, reconsider, runBulk, onReviewPlan, handoff }: {
+export function MappingReview({ mappings, history, editable, busy, planApproved, decide, reconsider, runBulk, onReviewPlan, handoff, readinessBlocked = false }: {
+  /** Open readiness findings (for example possible duplicate customers) are not linked to mappings,
+   *  so approving together is switched off until the source data is corrected. Fails closed. */
+  readinessBlocked?: boolean;
   mappings: MappingProposal[];
   history: MappingHistoryDecision[];
   editable: boolean;
@@ -96,8 +99,8 @@ export function MappingReview({ mappings, history, editable, busy, planApproved,
       <nav className="pm-queue" aria-label="Mapping queue">
         {groups.map(group => <QueueGroup key={group.id} id={group.id} items={group.items} selectedId={bulkOpen ? undefined : selected?.id} onSelect={select}
           action={group.id === "ready" && editable ? <div className="pm-queue-bulk">
-            <Button variant="secondary" disabled={busy || !ready.length} aria-expanded={bulkOpen} onClick={() => { setBulkOutcome(undefined); setBulkOpen(true); }}>Approve {ready.length} low-risk {ready.length === 1 ? "mapping" : "mappings"}</Button>
-            <p className="pm-meta">Each approval is recorded separately. High and medium risk are never included.</p>
+            <Button variant="secondary" disabled={busy || !ready.length || readinessBlocked} aria-expanded={bulkOpen} onClick={() => { setBulkOutcome(undefined); setBulkOpen(true); }}>Approve {ready.length} low-risk {ready.length === 1 ? "mapping" : "mappings"}</Button>
+            <p className="pm-meta">{readinessBlocked ? "Approving together is off while readiness findings are open. Decide each mapping on its own." : "Each approval is recorded separately. High and medium risk are never included."}</p>
           </div> : undefined} />)}
       </nav>
       <div className="pm-detail-pane">

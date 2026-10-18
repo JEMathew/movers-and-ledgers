@@ -271,3 +271,15 @@ describe("6 · accessibility", () => {
     box.focus(); expect(box).toHaveFocus();
   });
 });
+
+describe("readiness findings switch batch approval off", () => {
+  it("disables approving together while readiness findings are open, and says why", async () => {
+    const { MappingReview } = await import("./MappingReview");
+    const props = { mappings: fixture, history: [], editable: true, busy: false, planApproved: false, decide: vi.fn(), reconsider: vi.fn(), runBulk: vi.fn(), onReviewPlan: vi.fn() };
+    const view = render(<MappingReview {...props} readinessBlocked />);
+    expect(screen.getByRole("button", { name: /^Approve \d+ low-risk/ })).toBeDisabled();
+    expect(screen.getByText(/Approving together is off while readiness findings are open/)).toBeVisible();
+    view.rerender(<MappingReview {...props} />);
+    expect(screen.getByRole("button", { name: /^Approve \d+ low-risk/ })).toBeEnabled();
+  });
+});
