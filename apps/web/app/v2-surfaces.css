@@ -24,3 +24,8 @@
 .evidence-result[data-result="ok"]::before { background: var(--v2-accent); }
 .evidence-result[data-result="stop"] { color: var(--v2-blocked-fg); }
 .evidence-result[data-result="stop"]::before { background: var(--v2-critical); border-radius: 1px; }
+
+/* Help: the selected issue reads as one recovery card with its single action. */
+.v2-help-answer { display: grid; gap: 12px; padding: 24px; background: var(--v2-surface); border: 2px solid var(--v2-ink); border-radius: var(--v2-radius-container); }
+.v2-help-answer .type-section { margin: 0; }
+@media (max-width: 640px) { .v2-help-answer { padding: 20px; } .v2-help-answer .button { width: 100%; justify-content: center; } }
