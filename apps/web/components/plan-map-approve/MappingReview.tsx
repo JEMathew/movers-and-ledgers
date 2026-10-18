@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { useRef, useState } from "react";
 import { Badge, Button, Card } from "@/components/ui/primitives";
 import { Select } from "@/components/ui/forms";
+import { IndependentReview } from "./IndependentReview";
 import { MappingReconsideration } from "./MappingReconsideration";
 import { areaLabel } from "./PlanSummary";
 import type { MappingHistoryDecision, MappingProposal } from "./types";
@@ -78,6 +79,7 @@ export function MappingReview({ mappings, history, editable, busy, planApproved,
             <p className="mt-4 text-sm leading-6 text-secondary">{mapping.rationale}</p>
             {mapping.risk !== "LOW" && <p className="mt-2 text-sm font-semibold">{mapping.risk === "HIGH" ? "High" : "Medium"} risk · {Math.round(mapping.confidence * 100)}% recommendation confidence. Confidence cannot clear a policy blocker.</p>}
             <details open={open} className="mt-4 rounded-lg bg-[var(--surface-subtle)] p-4 text-sm"><summary className="cursor-pointer font-semibold">Evidence and Policy · {shownEvidence.length} direct {shownEvidence.length === 1 ? "reference" : "references"}</summary><ul className="mt-2 space-y-1 text-secondary">{shownEvidence.map(evidence => <li key={evidence}>{evidence}</li>)}{mapping.policy_reasons.map(reason => <li key={reason}>{reason}</li>)}</ul>{context.length > 0 && <details className="mt-3"><summary className="cursor-pointer font-semibold">Additional Planning Context · {context.length} references</summary><ul className="mt-2 space-y-1 text-secondary">{context.map(evidence => <li key={evidence}>{evidence}</li>)}</ul></details>}</details>
+            {mapping.area === "chart_of_accounts" && <IndependentReview key={`${mapping.id}:${mapping.state}:${mapping.selected_target}`} mappingId={mapping.id} />}
             {mapping.decided_at && <p className="mt-3 break-all text-xs text-secondary">Decision by {mapping.decided_by} · <time>{mapping.decided_at}</time></p>}
             {editable && !terminal && <div className="mt-4">
               <Button className="h-auto max-w-full text-left" variant="secondary" size="small" aria-expanded={open} onClick={() => setReviewing(mapping.id)}>Review {mapping.source_label}</Button>

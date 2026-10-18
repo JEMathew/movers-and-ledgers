@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { proxyConfig, proxyRequest, type ProxyDependencies } from "./private-api-proxy";
-import { allowedRoute } from "./proxy-policy";
+import { allowedQuery, allowedRoute } from "./proxy-policy";
 
 const config = { upstream: "https://private-api.example.run.app", publicOrigin: "https://web.example.run.app", projectId: "synthetic-project" };
 const id = "00000000-0000-4000-8000-000000000001";
@@ -62,6 +62,54 @@ describe("private API proxy", () => {
     for (const name of ["cookie", "x-owner", "x-forwarded-host"]) expect(headers.has(name)).toBe(false);
     expect(init).toMatchObject({ cache: "no-store", redirect: "error" });
     expect(response.headers.get("cache-control")).toContain("no-store");
+  });
+
+  it("forwards the owner-scoped migration list with only a bounded limit and opaque cursor", async () => {
+    const cursor = "WzEsImFiYyIsIjIwMjYtMTAtMDEiLCJ4Il0";
+    const response = await proxyRequest(request(`/api/v1/migration-sessions?limit=20&cursor=${cursor}`), config, dependencies);
+    expect(response.status).toBe(200);
+    expect(dependencies.verifyUser).toHaveBeenCalledWith(token, config.projectId);
+    const [url, init] = vi.mocked(dependencies.fetch).mock.calls[0];
+    expect(url).toBe(`${config.upstream}/v1/migration-sessions?limit=20&cursor=${cursor}`);
+    expect(init?.method).toBe("GET");
+    expect(new Headers(init?.headers).has("x-owner")).toBe(false);
+    expect((await proxyRequest(request("/api/v1/migration-sessions"), config, dependencies)).status).toBe(200);
+    expect(vi.mocked(dependencies.fetch).mock.calls[1][0]).toBe(`${config.upstream}/v1/migration-sessions`);
+    expect((await proxyRequest(request("/api/v1/migration-sessions?limit=20", { headers: { Authorization: "" } }), config, dependencies)).status).toBe(401);
+  });
+  it.each([
+    "?owner=firebase:account-b", "?limit=20&owner=x", "?limit=0", "?limit=51", "?limit=20&limit=5",
+    "?cursor=a%2Fb", "?cursor=" + "a".repeat(301), "?limit=1e1",
+  ])("refuses unsafe migration list queries: %s", async search => {
+    expect((await proxyRequest(request(`/api/v1/migration-sessions${search}`), config, dependencies)).status).toBe(404);
+    expect(dependencies.fetch).not.toHaveBeenCalled();
+  });
+  it("forwards only normalized allowlisted values and refuses smuggling and path variants", async () => {
+    const cursor = "a".repeat(300);
+    for (const [search, forwarded] of [
+      ["?lim%69t=20", "?limit=20"], ["?limit=%32%30", "?limit=20"], ["?limit=50", "?limit=50"],
+      [`?cursor=${cursor}`, `?cursor=${cursor}`], ["?&", ""],
+    ] as const) {
+      vi.mocked(dependencies.fetch).mockClear();
+      expect((await proxyRequest(request(`/api/v1/migration-sessions${search}`), config, dependencies)).status).toBe(200);
+      expect(vi.mocked(dependencies.fetch).mock.calls[0][0]).toBe(`${config.upstream}/v1/migration-sessions${forwarded}`);
+    }
+    vi.mocked(dependencies.fetch).mockClear();
+    for (const route of [
+      "/api/v1/migration-sessions?limit=20%26owner%3Dx", "/api/v1/migration-sessions?limit=20;owner=x",
+      "/api/v1/migration-sessions?limit=+20", "/api/v1/migration-sessions?limit=", "/api/v1/migration-sessions?limit",
+      "/api/v1/migration-sessions?LIMIT=20", "/api/v1/migration-sessions/?limit=20", `/api/v1/migration-sessions%2F${id}?limit=20`,
+    ]) expect((await proxyRequest(request(route), config, dependencies)).status).toBe(404);
+    expect((await proxyRequest(request("/api/v1/migration-sessions?limit=20", { headers: { "Sec-Fetch-Site": "cross-site" } }), config, dependencies)).status).toBe(403);
+    expect(dependencies.fetch).not.toHaveBeenCalled();
+  });
+  it("keeps query strings refused on every other route and method", () => {
+    expect(allowedQuery("GET", `/v1/migration-sessions/${id}`, "?limit=5")).toBeNull();
+    expect(allowedQuery("POST", "/v1/migration-sessions", "?limit=5")).toBeNull();
+    expect(allowedQuery("GET", "/v1/identity", "?x=1")).toBeNull();
+    expect(allowedQuery("GET", "/v1/identity", "")).toBe("");
+    expect(allowedRoute("GET", "/v1/migration-sessions")).toBe(true);
+    expect(allowedRoute("DELETE", "/v1/migration-sessions")).toBe(false);
   });
 
   it.each(["", "Bearer demo-user", "Bearer invalid", "Basic synthetic"])("rejects missing/malformed identity: %s", async Authorization => {
@@ -141,4 +189,16 @@ describe("private API proxy", () => {
     expect(allowedRoute("POST", `/v1/migration-sessions/${id}/onboarding/tasks/opening_balances/decision`)).toBe(true);
     expect(allowedRoute("DELETE", `/v1/migration-sessions/${id}`)).toBe(false);
   });
+});
+
+it("exposes operational snapshots only as authenticated reads and strips forged owner headers", async () => {
+  const response = await proxyRequest(request("/api/v1/operations/activity", { headers: {"X-Owner":"other"} }), config, dependencies);
+  expect(response.status).toBe(200);
+  expect(dependencies.verifyUser).toHaveBeenCalledWith(token, config.projectId);
+  const [url, init] = vi.mocked(dependencies.fetch).mock.calls[0];
+  expect(url).toBe(`${config.upstream}/v1/operations/activity`);
+  expect(new Headers(init?.headers).has("x-owner")).toBe(false);
+  expect(response.headers.get("cache-control")).toContain("no-store");
+  expect(allowedRoute("POST", "/v1/operations/activity")).toBe(false);
+  expect((await proxyRequest(request("/api/v1/operations/activity", {headers:{Authorization:""}}), config, dependencies)).status).toBe(401);
 });

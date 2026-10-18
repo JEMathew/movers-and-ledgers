@@ -1,0 +1,49 @@
+1
+00:00:00,000 --> 00:00:15,000
+MoveBooks AI helps accountants move their books and keep their confidence.
+A bounded synthetic Beta by Movers & Ledgers.
+
+2
+00:00:15,000 --> 00:00:40,000
+Play starts in a bookkeeping office. Explore records, collect evidence
+and solve a migration puzzle without changing financial state.
+
+3
+00:00:40,000 --> 00:01:05,000
+Try Your Data checks supported permitted test records in the browser.
+Hosted uploads remain separately security-gated.
+
+4
+00:01:05,000 --> 00:01:25,000
+Explore Demo follows Understand, Prepare, Move, Verify and Start.
+Readiness findings and a versioned plan make decisions visible.
+
+5
+00:01:25,000 --> 00:01:55,000
+Account 1200 needs an informed choice. Request explanation and review.
+Evidence and uncertainty guide the accountant. Advice cannot approve.
+
+6
+00:01:55,000 --> 00:02:15,000
+An authorized person approves the current plan and mappings.
+Deterministic tools execute only the approved synthetic intent.
+
+7
+00:02:15,000 --> 00:02:35,000
+Checkpoints and idempotency protect recovery.
+Policy controls transient retries and human escalation.
+
+8
+00:02:35,000 --> 00:02:55,000
+Deterministic reconciliation verifies records and balances.
+Discrepancies block progression. Sensitive settings need approval.
+
+9
+00:02:55,000 --> 00:03:15,000
+The owner approves a synthetic invoice after required controls pass.
+A verified receipt establishes First Productive Use.
+
+10
+00:03:15,000 --> 00:03:30,000
+Cloud SQL retains financial authority. Google Cloud hosts the boundaries.
+Availability claims follow verified runtime evidence.

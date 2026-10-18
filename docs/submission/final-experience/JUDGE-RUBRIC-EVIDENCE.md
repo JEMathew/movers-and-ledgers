@@ -1,0 +1,13 @@
+# Judge rubric evidence map (honest; evidence = what exists today)
+
+| Criterion | Weight | Evidence we can show | Gap / cannot claim |
+|---|---|---|---|
+| Technical merit & GenAI | 40% | Deterministic agent workflow with 26-state machine; bounded Gemini advisor via Google ADK (`gemini-3.5-flash-lite`, global endpoint, low thinking) validated offline and in one bounded live run (Advisor + Reviewer, 14/14); separate Reviewer slice; hard guards (advisor cannot approve/execute); Firestore model-control policy, quotas, kill switch, owner-scoped activity readback; least-privilege IAM (custom role, database-conditioned); Grype-gated images; Cloud Run private API behind Firebase-verified proxy; Cloud SQL | Live Gemini evidence is one bounded synthetic harness run on `gemini-3.5-flash-lite` (18 Oct: Advisor + Reviewer, 14/14), not the deployed product and not a measure of model accuracy. The deployed candidate runs deterministic agents only (Gemini gated off). Do not say "13 autonomous agents"; say "deterministic agents with a bounded Gemini advisor". Firestore read gate (A10) unexecuted. 29 Sep dev live runs on gemini-2.5-flash: first ledger AMBER, then all five capabilities accepted after targeted prompt fixes (GREEN for the exercised synthetic gate) — not the new model, not the Reviewer |
+| Problem alignment & impact | 25% | Desktop→cloud migration friction; synthetic Harbor Light journey to verified first synthetic invoice; support-deflection and completion framing; accountant-first language | No real customer data, no live provider integration, no production readiness; no participant feedback exists — do not fabricate |
+| Innovation & creativity | 25% | Trust model: AI explains / rules verify / people approve; recovery with checkpoints; Reviewer second opinion on `1200 · Misc Clearing`; Play as learning surface; evidence-first UX | Judge/evaluator agent and hosted Try Your Data are not built; Play is supporting, not core |
+| User experience | 10% | Single guided journey, plain language, accessibility work, status-driven next action | Landing promo clutter; buried AI activity; dense hub (this package); rendered UX not yet reviewed in browser |
+
+## Claims allowed once evidence exists
+- Public candidate sign-in + full journey: after A1–A9 pass. - Firestore activity AVAILABLE: after A10. - Gemini live: only with a captured non-FALLBACK record and model id.
+## Video narrative order (3–4 min)
+Problem (20 s) → sign in + sample (20 s) → plan/map/approve incl. `1200 Misc Clearing` (50 s) → move/recover (40 s) → verify + first invoice (40 s) → evidence + AI activity (25 s) → architecture on Google Cloud: Firebase Auth/Hosting, Cloud Run, Firestore controls, Gemini advisor (25 s, state exactly what is live).

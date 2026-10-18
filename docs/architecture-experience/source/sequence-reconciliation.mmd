@@ -1,0 +1,15 @@
+sequenceDiagram
+  autonumber
+  participant Workflow
+  participant Validator
+  participant Source
+  participant Target
+  participant Accountant
+  Workflow->>Validator: Request post-migration verification
+  Validator->>Source: Read expected canonical controls
+  Validator->>Target: Read actual synthetic records
+  Validator->>Validator: Exact counts, relationships, balances and checksums
+  Validator->>Workflow: Pass with evidence or mismatch blocker
+  Workflow->>Accountant: Mismatch: inspect permitted remediation
+  Accountant->>Workflow: Approve repair where required
+  Workflow->>Validator: Revalidate after repair

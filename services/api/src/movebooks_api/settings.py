@@ -28,10 +28,25 @@ class Settings(BaseSettings):
     sql_iam_user: str = ""
     storage_bucket: str = ""
     reasoning_project: str = ""
-    reasoning_location: Literal["asia-southeast1"] = "asia-southeast1"
+    # Global is an explicit processing-location choice; Singapore remains the default.
+    reasoning_location: Literal["asia-southeast1", "global"] = "asia-southeast1"
     reasoning_models: dict[str, str] = Field(default_factory=dict)
     reasoning_timeout_seconds: float = Field(default=30, ge=1, le=60)
     reasoning_max_runs: int = Field(default=10, ge=1, le=10)
+
+    model_control_timeout_seconds: float = Field(default=2, ge=0.05, le=5)
+    synthetic_beta_authorized: bool = False
+    model_controls_backend: Literal["disabled", "firestore"] = "disabled"
+    # Proposed isolated operational database; selecting it never provisions a database.
+    firestore_database: str = Field(
+        default="movebooks-operations",
+        pattern=r"^(?:\(default\)|[a-z][a-z0-9-]{2,61}[a-z0-9])$",
+    )
+    reasoning_owner_daily_calls: int = Field(default=20, ge=2, le=100)
+    reasoning_global_daily_calls: int = Field(default=100, ge=2, le=10000)
+    # Operator-supplied conservative reservation, not a claim of verified prices.
+    reasoning_reservation_microusd: int = Field(default=100000, ge=1)
+    reasoning_global_daily_microusd: int = Field(default=1000000, ge=1)
 
     @property
     def cloud(self) -> bool:
@@ -55,6 +70,13 @@ class Settings(BaseSettings):
                 for m in self.reasoning_models.values()
             ):
                 raise ValueError("Only explicit Gemini model IDs are supported")
+            if (
+                "gemini-3.5-flash-lite" in self.reasoning_models.values()
+                and self.reasoning_location != "global"
+            ):
+                raise ValueError(
+                    "gemini-3.5-flash-lite requires explicit global reasoning location"
+                )
             if any(
                 os.environ.get(k)
                 for k in (
@@ -103,8 +125,11 @@ class Settings(BaseSettings):
                 for o in self.cors_origins
             ):
                 raise ValueError("Cloud CORS requires explicit HTTPS frontend origins")
-            if os.environ.get("FIREBASE_AUTH_EMULATOR_HOST"):
-                raise ValueError("Identity emulators are forbidden in cloud mode")
+            if any(
+                os.environ.get(key)
+                for key in ("FIREBASE_AUTH_EMULATOR_HOST", "FIRESTORE_EMULATOR_HOST")
+            ):
+                raise ValueError("Identity and Firestore emulators are forbidden in cloud mode")
         elif (self.persistence_backend, self.storage_backend, self.identity_mode) != (
             "memory",
             "memory",

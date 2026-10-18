@@ -12,7 +12,7 @@ COPY tools ./tools
 COPY synthetic-data ./synthetic-data
 COPY services/api ./services/api
 RUN python -m pip install --no-cache-dir --upgrade pip==26.2.1 \
-    && python -m pip install --no-cache-dir '.[cloud]'
+    && python -m pip install --no-cache-dir '.[cloud,agents]'
 RUN python -m pip check
 
 FROM build AS test

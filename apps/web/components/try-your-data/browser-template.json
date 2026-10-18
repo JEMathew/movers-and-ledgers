@@ -1,0 +1,10 @@
+{
+  "customers.csv": "id,display_name\r\ncustomer-001,Cedar School\r\ncustomer-002,Maple Library\r\n",
+  "vendors.csv": "id,display_name\r\nvendor-001,Independent Press Distribution\r\n",
+  "accounts.csv": "id,code,name,account_type,opening_balance\r\naccount-bank,1000,Operating Bank,bank,1000.00\r\naccount-ar,1100,Accounts Receivable,accounts_receivable,0.00\r\naccount-sales,4000,Book Sales,income,-1000.00\r\naccount-ap,2100,Accounts Payable,accounts_payable,0.00\r\n",
+  "products.csv": "id,name,item_type\r\nproduct-001,Catalog preparation,service\r\n",
+  "invoices.csv": "id,customer_id,receivable_account_id,document_number,total\r\ninvoice-001,customer-001,account-ar,HL-1001,420.00\r\n",
+  "bills.csv": "id,vendor_id,payable_account_id,document_number,total\r\nbill-001,vendor-001,account-ap,B-1,125.00\r\n",
+  "transactions.csv": "id,transaction_date,entries\r\ntransaction-001,2026-02-01,\"[{\"\"account_id\"\": \"\"account-ar\"\", \"\"debit\"\": \"\"420.00\"\", \"\"credit\"\": \"\"0.00\"\"}, {\"\"account_id\"\": \"\"account-sales\"\", \"\"debit\"\": \"\"0.00\"\", \"\"credit\"\": \"\"420.00\"\"}]\"\r\ntransaction-002,2026-02-02,\"[{\"\"account_id\"\": \"\"account-bank\"\", \"\"debit\"\": \"\"125.00\"\", \"\"credit\"\": \"\"0.00\"\"}, {\"\"account_id\"\": \"\"account-ap\"\", \"\"debit\"\": \"\"0.00\"\", \"\"credit\"\": \"\"125.00\"\"}]\"\r\n",
+  "configuration.json": "{\n  \"company\": {\n    \"id\": \"company-demo-001\",\n    \"legal_name\": \"Harbor Light Books LLC\",\n    \"display_name\": \"Harbor Light Books\",\n    \"base_currency\": \"USD\",\n    \"fiscal_year_start_month\": 1\n  },\n  \"settings\": {\n    \"fiscal_year\": \"1\",\n    \"base_currency\": \"USD\",\n    \"tax_setup\": \"CA-SALES\",\n    \"payment_terms\": \"NET_30\",\n    \"inventory\": \"WEIGHTED_AVERAGE\",\n    \"invoice_preferences\": \"HL-\",\n    \"user_roles\": \"FINANCE_REVIEWER\",\n    \"integrations\": \"DISABLED\"\n  },\n  \"taxes\": [\n    {\n      \"id\": \"tax-001\",\n      \"code\": \"CA-SALES\",\n      \"rate\": \"0.0725\",\n      \"jurisdiction\": \"California\"\n    }\n  ]\n}"
+}

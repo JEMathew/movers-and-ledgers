@@ -70,3 +70,10 @@ Use this index to find the durable decision records without turning the reposito
 - The product constitution is authoritative for the full canonical journey. Shorter stage lists in current UI examples are illustrative subsets, not a conflicting lifecycle.
 - The architecture reference now makes the governed transformation stage explicit between the canonical model and target adapter; this clarifies the existing ports-and-adapters decision rather than introducing a new runtime layer.
 - The current scaffold has no production metrics instrumentation, support workflow, or reviewer runtime. These documents define governance and future contracts without claiming those capabilities are implemented.
+
+## Current delivery decision packages
+
+- [Product Management Blueprint and feature acceptance](product-management/README.md)
+- [Hypothetical Working Backwards PR/FAQ](working-backwards/README.md)
+- [Editable experience and architecture diagrams](architecture-experience/README.md)
+- [Submission assets and evidence](submission/README.md) — candidate status and release gates apply.

@@ -1,0 +1,15 @@
+sequenceDiagram
+  autonumber
+  participant Accountant
+  participant UI
+  participant Workflow
+  participant Target
+  participant Validator
+  Accountant->>UI: Prepare agreed productive invoice
+  UI->>Workflow: Check versioned FPU and prerequisites
+  Workflow->>UI: Preview invoice and required approval
+  Accountant->>Workflow: Explicitly approve current invoice
+  Workflow->>Target: Post once using scoped idempotency
+  Target->>Validator: Receipt and resulting synthetic accounting state
+  Validator->>Workflow: Verify deterministic effect and all controls
+  Workflow->>Accountant: Verified FPU evidence or safe blocker

@@ -1,0 +1,11 @@
+{
+  "role": "projects/movebooks-ai/roles/movebooksOperationalRuntime",
+  "members": [
+    "serviceAccount:movebooks-beta-api@movebooks-ai.iam.gserviceaccount.com"
+  ],
+  "condition": {
+    "title": "movebooks-operations-only",
+    "description": "Restrict this custom role to the isolated operational database. Validate with the real SDK identity before activation.",
+    "expression": "resource.name == \"projects/movebooks-ai/databases/movebooks-operations\""
+  }
+}

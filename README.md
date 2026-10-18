@@ -128,7 +128,7 @@ Future direction is not a delivery commitment or an implemented integration.
 | Configure | Human-approved synthetic target settings | Live provider configuration |
 | Onboarding | Role-aware synthetic setup and approvals | Broader guided adoption |
 | Verified FPU | Deterministically verified synthetic invoice | Production outcome instrumentation |
-| Gemini / ADK | Five bounded advisory capabilities live-validated in dev/test; public Beta remains deterministic-only | Broader evaluated advice and managed runtime |
+| Gemini / ADK | Advisor and independent Reviewer passed a bounded live run on `gemini-3.5-flash-lite` (18 Oct, 14/14 checks); five advisory capabilities live-validated earlier on `gemini-2.5-flash`; public Beta remains deterministic-only | Broader evaluated advice and managed runtime |
 | Try Your Data | Controlled local/de-identified test exports; synthetic targets | Secure hosted ingestion after hardening |
 | Play | Lightweight interactive migration learning | 2D interactive migration simulation |
 
@@ -173,7 +173,17 @@ reached through an authenticated server-side proxy. GCS supports permitted non-s
 artifacts, and Secret Manager supports runtime configuration.
 
 Optional Google ADK bounded runners use Gemini via Vertex AI for synthetic advisory reasoning.
-**Managed ADK hosting is not activated.** GitHub Actions covers regressions, dependency checks
+**Managed ADK hosting is not activated.**
+
+**GenAI today and the vision.** Today, deterministic stage agents run the whole journey: discovery,
+assessment, planning, mapping, migration, exception resolution, reconciliation, configuration,
+onboarding and verified First Productive Use. Gemini adds two bounded roles. An Advisor explains
+evidence and uncertainty, and an independent Reviewer challenges the proposed mapping. Both read
+evidence through a single read-only tool, have no write path, and every consequential step still
+needs a person's approval. These roles have passed a bounded live run in a test harness; the public
+Beta keeps them switched off. The vision is a migration agent that guides each customer through every
+stage. It would use more model-assisted reasoning, always behind the same controls: rules verify,
+people approve, and every action is evidenced. GitHub Actions covers regressions, dependency checks
 and container/image security gates.
 
 [Runtime architecture](docs/architecture/google-native-runtime.md) ·
@@ -247,6 +257,15 @@ python3 scripts/repository_checks.py
 [Deployment and operations](docs/deployment/public-beta.md) ·
 [Latest release remediation](docs/reviews/demo-loader-release-remediation.md)
 
+### AI Builder Cup submission evidence (18 Oct 2026)
+
+All local unless stated: real UI and real API from this repository, demo identity, deterministic-only. The integration candidate is **not deployed yet**.
+
+- [Working-product video (MP4, 3:43.7)](docs/submission/assets/movebooks-demo.mp4) · [final deck (PDF, 16 slides)](docs/submission/assets/movebooks-final-deck.pdf) · [judge FAQ](docs/submission/JUDGE-FAQ.md)
+- [End-to-end journey evidence](docs/submission/final-experience/evidence/journey-fa13e9e/README.md): 21/21 checks from readiness to a verified synthetic invoice (USD 107.25), including exception recovery, migration picker, switching and a fresh browser
+- [Offline Advisor/Reviewer evaluation](docs/submission/final-experience/evidence/agents/offline-agent-eval.json): 23/23 scenarios on grounding, authority, injected instructions, Reviewer independence and disagreement (boundaries, not model quality)
+- [Evidence manifest](docs/submission/final-experience/EVIDENCE-MANIFEST.md) · [release runbook](docs/release/RELEASE-RUNBOOK.md)
+
 ### Live / Current Status
 
 Evidence is scoped and dated; a source capability is not automatically enabled in the live Beta.
@@ -255,7 +274,7 @@ Evidence is scoped and dated; a source capability is not automatically enabled i
 | --- | --- |
 | V1.0 release and final acceptance | Released; **GREEN** for bounded synthetic acceptance ([record](docs/reviews/v1-final-acceptance.md)). |
 | Public-Beta V1 baseline | Live; original Safari identity/owner-isolation and financial controls passed. The post-merge test-fixture hold is resolved ([release checkpoint](docs/deployment/public-beta.md)). |
-| Bounded Gemini / ADK | **GREEN** for exercised advisory cases, including accepted Mapping escalation ([final evidence](docs/reviews/live-gemini-adk-mapping.md)); not enabled in the public deployment. |
+| Bounded Gemini / ADK | **GREEN** for exercised advisory cases on `gemini-2.5-flash` (29 Sep), including accepted Mapping escalation ([final evidence](docs/reviews/live-gemini-adk-mapping.md)); not enabled in the public deployment. On 18 Oct the Advisor and the independent Reviewer passed a bounded live run on `gemini-3.5-flash-lite` (14/14 checks, 4 model calls; [record](docs/reviews/live-gemini-l1-16e31e9.md)); this is a test-harness result, not product activation. |
 | Post-V1 account-shell and Hosting authentication | Bounded Safari sign-in, verified identity, navigation and sign-out passed ([closure checkpoint](docs/deployment/public-beta.md#hosting-authentication-closure--1-october-2026-ist)); not a new full migration acceptance claim. |
 | Main CI | [Seven jobs passed on ac95900](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36681965187); historical checkpoint, not a permanent-green badge. |
 

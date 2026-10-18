@@ -1,0 +1,43 @@
+{
+  "status": "PASSED",
+  "recording_git_head": "74066efbf4818fb4d5b769abd72c496069f2f817",
+  "api_runtime_commit": "fffd14c246dcec58347ac2b3155e2cf51b2b9662",
+  "later_source_note": "Read-only advisory operations changes were accepted separately against API 1a24a2c; they were not loaded into the API during this video.",
+  "local_origin": "http://localhost:3000",
+  "api_origin": "http://127.0.0.1:8000",
+  "runtime": "Explicit local demo identity; deterministic advice and independent review; no live Gemini or production provider writes.",
+  "synthetic_session_id": "2bc598c1-a582-5a13-910f-59dd6dd2a984",
+  "acceptance_checks_passed": 15,
+  "timed_ui_run_seconds": 222,
+  "encoded_video_duration_seconds": 231.88,
+  "official_duration_requirement_seconds": [
+    180,
+    240
+  ],
+  "duration_note": "The encoded screencast retains the final architecture frame beyond the 222-second UI clock. The final sidecar caption covers this observed tail.",
+  "video_file": "docs/submission/assets/working-product-demo.webm",
+  "video_bytes": 20890407,
+  "video_sha256": "820e07dbef45b8878abe2c52d93c5d9d3adfc3313155f354cba5a3cfe7ca2838",
+  "srt_file": "docs/submission/assets/working-product-demo.srt",
+  "caption_method": "Narration layer visible during authentic UI capture. Sidecar timing follows observed narration events and covers the encoded final hold. No financial results were inserted.",
+  "capture_method": "Fixed 1440x1000 viewport; 25 fps VP8; viewport-only screenshots during recording. The Next.js development indicator was hidden.",
+  "qa": "Representative frames were inspected for readable actual UI, approvals, fallback labels, final accounting evidence and architecture boundaries.",
+  "qa_frames": [
+    "docs/submission/browser-journey/recording/qa-frames/frame-005.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-015.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-024.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-040.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-055.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-073.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-094.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-104.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-122.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-133.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-155.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-164.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-183.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-198.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-213.png",
+    "docs/submission/browser-journey/recording/qa-frames/frame-229.png"
+  ]
+}

@@ -127,7 +127,7 @@ export function PlanMapApproveExperience() {
     changeView("map");
   }
 
-  return <main id="main-content" className="shell migration-task min-h-[75vh]">
+  return <main id="main-content" className={`shell migration-task min-h-[75vh]${view === "approve" ? " approval-surface" : ""}`}>
     <header className="max-w-3xl"><p className="eyebrow text-primary">Prepare</p>
       <h1 ref={heading} tabIndex={-1} className="type-page mt-4">{approved ? "Your Migration Plan Is Approved" : plan ? view === "map" ? "Choose Where Your Records Go" : view === "approve" ? "Review Your Migration Plan" : "Your Migration Plan Is Ready" : "Prepare Your Migration Plan"}</h1>
       <p className="mt-5 text-lg leading-8 text-secondary">{approved ? (status === "APPROVED" || status === "MIGRATION_READY" ? "Your approval is recorded. Start Migration separately when you are ready." : "Your approved plan is retained with this migration. Return to My Migration for your current next step.") : "Review the scope and evidence, confirm each mapping, then explicitly approve your plan. Nothing moves during this review."}</p>

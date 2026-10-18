@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-17",
+  "project": "movebooks-ai",
+  "resource": "firestore.googleapis.com",
+  "baseline_before_inspection": "DISABLED",
+  "observed_after_database_inventory_navigation": "ENABLED",
+  "cause": "Google Cloud database inventory automatically enabled the API during intended read-only inspection; no Enable button clicked",
+  "original_scope_exceeded": true,
+  "owner_disposition": "RETAIN_ENABLED; do not disable",
+  "current_desired_state": "ENABLED",
+  "owner_authorization_scope": "Retain API only; databases, IAM, deployment and other configuration changes still require explicit approval",
+  "database_created_by_agent": false,
+  "iam_changed_by_agent": false,
+  "services_deployed_by_agent": false,
+  "correction_request": "CLOSED_OWNER_DECLINED_DISABLE",
+  "evidence": "docs/submission/cloud-inspection-2026-10-17.md",
+  "record_scope": "Historical inspection incident only; fields describe actions before later dormant Phase A approval",
+  "later_authorized_provisioning": "infra/firestore/phase-a-execution.json"
+}

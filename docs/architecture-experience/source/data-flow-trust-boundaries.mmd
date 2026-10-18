@@ -1,0 +1,20 @@
+flowchart LR
+  untrusted["Untrusted browser / package / user text"]
+  local["Browser-local validator fallback"]
+  gate["Hosted upload gate: currently closed"]
+  api["Authenticated API: owner / schema / bounds"]
+  state["Cloud SQL financial/session authority"]
+  projection["Allowlisted synthetic-only projection"]
+  model["Gemini: no uploaded source context"]
+  output["Structured output + evidence validation"]
+  human["Accountant decision"]
+  ops["Operational activity: no raw financial payload"]
+  untrusted -->|"validate on device"| local
+  untrusted -->|"no hosted activation without security gates"| gate
+  untrusted -->|"supported bounded API requests"| api
+  api -->|"owner-scoped deterministic changes"| state
+  api -->|"synthetic context only"| projection
+  projection -->|"user-triggered call"| model
+  model -->|"untrusted model output"| output
+  output -->|"advice / safe fallback"| human
+  api -->|"sanitized control metadata only"| ops

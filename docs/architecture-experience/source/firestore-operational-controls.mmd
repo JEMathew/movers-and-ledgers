@@ -1,0 +1,23 @@
+flowchart LR
+  request["Authenticated owner requests advice"]
+  kill["Kill switch + synthetic authorization"]
+  reservation["Durable global budget + owner quota reservation"]
+  model["Bounded model execution"]
+  finalize["Conservative reservation remains consumed on result or failure; no refunds"]
+  activity["Owner-filtered sanitized activity readback: implemented gated source"]
+  sql["Cloud SQL financial authority remains separate"]
+  deny["Deny / safe fallback"]
+  refresh["Owner explicitly refreshes activity"]
+  read["Authenticated GET: owner filter + per-record check"]
+  client["Direct Firestore client writes denied in source rules"]
+  request -->|"check current policy"| kill
+  kill -->|"allowed"| reservation
+  kill -->|"disabled / unavailable"| deny
+  reservation -->|"atomic capacity granted"| model
+  reservation -->|"limit / persistence failure"| deny
+  model -->|"bounded result or failure; retain allowance"| finalize
+  finalize -->|"terminal advisory state; bounded safe metadata"| activity
+  request -->|"no Firestore financial write"| sql
+  refresh -->|"no automatic UI reads"| read
+  read -->|"20 newest safe records; deadline + owner isolation"| activity
+  client -->|"rules / index not yet provisioned"| deny

@@ -299,7 +299,8 @@ def test_legacy_snapshot_cas_representation_remains_unchanged():
     assert encode(decode(encoded, "owner")) == encoded
 
 
-def test_real_adk_runner_tool_and_output_contract_offline():
+@pytest.mark.parametrize("model", ["offline-test", "gemini-3.5-flash-lite"])
+def test_real_adk_runner_tool_and_output_contract_offline(model, monkeypatch):
     pytest.importorskip("google.adk")
     from google.adk.models.base_llm import BaseLlm
     from google.adk.models.llm_response import LlmResponse
@@ -307,6 +308,12 @@ def test_real_adk_runner_tool_and_output_contract_offline():
 
     from agents.reasoning.adk import run_advisor
 
+    def no_client(*args, **kwargs):
+        pytest.fail("Offline ADK tests must never construct a provider client")
+
+    from google import genai
+
+    monkeypatch.setattr(genai, "Client", no_client)
     _, session = prepared()
     context = project(session, Capability.PLANNING)
     expected = fallback(context)
@@ -318,6 +325,13 @@ def test_real_adk_runner_tool_and_output_contract_offline():
 
         async def generate_content_async(self, llm_request, stream=False):
             self.calls += 1
+            if model == "gemini-3.5-flash-lite":
+                assert llm_request.config.temperature is None
+                assert llm_request.config.thinking_config.thinking_level == types.ThinkingLevel.LOW
+                assert llm_request.config.thinking_config.thinking_budget is None
+                assert llm_request.config.max_output_tokens == 2048
+                # The replacement rejects a final model turn, including tool follow-ups.
+                assert llm_request.contents[-1].role == "user"
             if self.calls == 1:
                 part = types.Part(function_call=types.FunctionCall(name="read_evidence", args={}))
             else:
@@ -329,7 +343,17 @@ def test_real_adk_runner_tool_and_output_contract_offline():
                 ),
             )
 
-    result = asyncio.run(run_advisor(context, "offline-test", configured(), llm=ScriptedModel()))
+    settings = Settings(
+        _env_file=None,
+        model_provider_mode="gemini-adk",
+        reasoning_project="synthetic-test",
+        reasoning_location="global" if model == "gemini-3.5-flash-lite" else "asia-southeast1",
+        reasoning_models={
+            c.value: model if model == "gemini-3.5-flash-lite" else "gemini-test-model"
+            for c in Capability
+        },
+    )
+    result = asyncio.run(run_advisor(context, model, settings, llm=ScriptedModel()))
     assert validate_advice(result.text, context) == expected
     assert result.model_calls == 2 and result.tool_calls == 1
     assert result.input_tokens == 20 and result.output_tokens == 40

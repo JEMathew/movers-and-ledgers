@@ -1,0 +1,16 @@
+flowchart LR
+  browser["Next.js browser UI"]
+  api["FastAPI authenticated API"]
+  workflow["Deterministic Python orchestration / tools"]
+  sql["Cloud SQL PostgreSQL: transactional authority"]
+  model["Bounded Gemini / ADK advisor"]
+  storage["Private Cloud Storage adapter"]
+  ops["Firestore operational adapter: release-gated"]
+  auth["Firebase ID-token verification"]
+  browser -->|"HTTPS + ID token"| api
+  auth -->|"derived owner identity"| api
+  api -->|"valid state + approved intent"| workflow
+  workflow -->|"atomic owner-scoped snapshot / audit"| sql
+  api -->|"user-triggered allowlisted projection"| model
+  api -->|"interface-ready artifacts; not raw upload activation"| storage
+  api -->|"gated source: reservations, outcomes, owner readback"| ops

@@ -3,7 +3,7 @@ const id = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA
 const session = `migration-sessions/${id}`;
 const routes = {
   GET: [
-    "identity", "sample-companies", "intake/template", session,
+    "migration-sessions", "identity", "sample-companies", "intake/template", "operations/activity", session,
     `${session}/(discovery|findings|assessment|activity|plan|plan/status|mappings|intake-trust)`,
     `${session}/mappings/${id}/evidence`,
     `${session}/migration(/(progress|batches|failures|resolutions|target))?`,
@@ -16,6 +16,7 @@ const routes = {
     "(migration-sessions|migration-demo-sessions|validation-demo-sessions|onboarding-demo-sessions)",
     `${session}/(discovery|assessment|plan|mappings|events)`,
     `${session}/mappings/${id}/(approve|reject|modify|reconsiderations)`,
+    `${session}/reviewer/mapping/${id}`,
     `${session}/mappings/${id}/reconsiderations/${id}/review`,
     `${session}/migration/(start|retry|resume)`,
     `${session}/migration/resolutions/${id}/decision`,
@@ -35,4 +36,24 @@ export function allowedRoute(method: string, path: string) {
 
 export function cloudIntake(path: string) {
   return path !== "/v1/intake/template" && /^\/v1\/intake(?:\/|$)/.test(path);
+}
+
+/**
+ * Query strings are refused everywhere except the owner-scoped migration list, which accepts
+ * only `limit` (1-50) and an opaque `cursor`, each at most once. Returns the normalized query
+ * to forward ("" when there is none) or null to refuse the request.
+ */
+export function allowedQuery(method: string, path: string, search: string): string | null {
+  if (!search) return "";
+  if (method !== "GET" || path !== "/v1/migration-sessions" || search.length > 400) return null;
+  const params = new URLSearchParams(search);
+  const forwarded = new URLSearchParams();
+  for (const [key, value] of params) {
+    if (forwarded.has(key)) return null;
+    if (key === "limit" && /^[1-9][0-9]?$/.test(value) && Number(value) <= 50) forwarded.set(key, value);
+    else if (key === "cursor" && /^[A-Za-z0-9_-]{1,300}$/.test(value)) forwarded.set(key, value);
+    else return null;
+  }
+  const query = forwarded.toString();
+  return query ? `?${query}` : "";
 }

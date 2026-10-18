@@ -1,0 +1,10 @@
+{
+  "name": "projects/movebooks-ai/databases/movebooks-operations",
+  "locationId": "asia-southeast1",
+  "type": "FIRESTORE_NATIVE",
+  "databaseEdition": "STANDARD",
+  "concurrencyMode": "PESSIMISTIC",
+  "pointInTimeRecoveryEnablement": "POINT_IN_TIME_RECOVERY_DISABLED",
+  "appEngineIntegrationMode": "DISABLED",
+  "deleteProtectionState": "DELETE_PROTECTION_ENABLED"
+}

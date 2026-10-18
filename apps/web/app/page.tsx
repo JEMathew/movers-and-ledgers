@@ -1,26 +1,24 @@
 import Link from "next/link";
-import { ArrowRight, Cloud, Eye, Gamepad2, Network, TrendingUp } from "lucide-react";
-import { Badge, Card } from "@/components/ui";
+import { ArrowRight, Cloud, Eye, Network, ShieldCheck, Sparkles, TrendingUp, UserCheck } from "lucide-react";
+import { Card } from "@/components/ui";
 import { phases, startMigrationHref } from "@/components/public-surfaces/content";
 import { ProductVision } from "@/components/public-surfaces/ProductVision";
 const reasons = [{ Icon: TrendingUp, title: "Scale", copy: "Support growth without adding manual work." }, { Icon: Cloud, title: "Access", copy: "Work securely from anywhere." }, { Icon: Network, title: "Connect", copy: "Reduce disconnected tools and duplicate processes." }, { Icon: Eye, title: "See clearly", copy: "Improve reporting and operational visibility." }];
 export default function Home() {
   return <main id="main-content" className="discovery-home">
     <section className="shell discovery-hero" aria-labelledby="product-heading">
-      <Badge>V1.0 Bounded Synthetic Public Beta</Badge>
-      <h1 id="product-heading" className="serif">Move your books.<br/><span className="text-primary">Keep your confidence.</span></h1>
-      <p className="hero-value">Provider-neutral, AI-assisted accounting migration and onboarding. Review decisions, verify your numbers, and complete a first task with synthetic data.</p>
-      <p className="hero-boundary">Synthetic Beta only. Do not use real customer or production provider data. <Link href="/trust#beta-limitations">Beta limitations</Link></p>
-      <div className="hero-actions"><Link href={startMigrationHref} className="button">Try the Beta <ArrowRight size={18} aria-hidden="true"/></Link><Link href="/simulator" className="button secondary" aria-describedby="demo-intro">Explore Demo</Link></div>
-      <p id="demo-intro" className="demo-intro">Read-only five-phase Demo. No sign-in; the working synthetic Beta requires sign-in.</p>
-    </section>
-    <section className="shell play-preview" aria-labelledby="play-heading">
-      <div className="panel"><Gamepad2 className="text-primary" size={28} aria-hidden="true"/><div><h2 id="play-heading" className="type-section">Learn through MoveBooks Play</h2><p>Practice three decisions about mappings, safe recovery and financial checks. No sign-in; nothing changes your migration.</p></div><Link className="button secondary" href="/play">Open Play <ArrowRight size={17} aria-hidden="true"/></Link></div>
+      <div className="hero-head"><h1 id="product-heading">Move your books with confidence.</h1></div>
+      <div className="hero-video"><ProductVision/></div>
+      <div className="hero-body">
+        <p className="hero-value">Understand what needs to move, stay in control, and verify your numbers before starting fresh.</p>
+        <div className="hero-actions"><Link href={startMigrationHref} className="button">Start a sample migration <ArrowRight size={18} aria-hidden="true"/></Link><Link href="/simulator" className="public-text-link">Explore Demo, no sign-in required</Link></div>
+        <ul className="hero-assurances" aria-label="How MoveBooks keeps you in control">{[[UserCheck, "You approve"], [ShieldCheck, "Rules verify"], [Sparkles, "AI advises"]].map(([Icon, text]) => { const I = Icon as typeof UserCheck; return <li key={text as string}><I size={16} aria-hidden="true"/>{text as string}</li>; })}</ul>
+        <p className="hero-boundary">Synthetic Beta only. Do not use real customer or production provider data. <Link href="/trust#beta-limitations">Beta limitations</Link></p>
+      </div>
     </section>
     <section className="shell discovery-details" aria-label="Product overview details">
-      <details id="how-it-works" className="home-disclosure"><summary><h2 id="how-heading">How MoveBooks works</h2></summary><div className="disclosure-content"><ol className="phase-overview" aria-label="Journey overview, not live progress">{phases.map(phase => <li key={phase.name}><h3 className="font-bold text-primary">{phase.name}</h3><p className="mt-2 text-sm font-semibold">{phase.detail}</p><p className="mt-2 text-secondary">{phase.copy}</p></li>)}</ol><h3 className="type-card mt-5">A complete synthetic journey.</h3><p className="mt-3 text-secondary">Discover Harbor Light Books, approve mappings, recover from a controlled failure, verify the result, configure the business, and complete onboarding and a verified synthetic invoice.</p><p className="mt-3 text-secondary">Outcome: Business Ready · Verified, demonstrated with a synthetic business.</p><Link href="/guide" className="discovery-link">Getting Started Guide</Link></div></details>
+      <details id="how-it-works" className="home-disclosure"><summary><h2 id="how-heading">How MoveBooks works</h2></summary><div className="disclosure-content"><ol className="phase-overview" aria-label="Journey overview, not live progress">{phases.map(phase => <li key={phase.name}><h3 className="font-bold text-primary">{phase.name}</h3><p className="mt-2 text-sm font-semibold">{phase.detail}</p><p className="mt-2 text-secondary">{phase.copy}</p></li>)}</ol><h3 className="type-card mt-5">A complete synthetic journey.</h3><p className="mt-3 text-secondary">Discover Harbor Light Books, approve mappings, recover from a controlled failure, verify the result, configure the business, and complete onboarding and a verified synthetic invoice.</p><p className="mt-3 text-secondary">Outcome: Business Ready · Verified, demonstrated with a synthetic business.</p><Link href="/guide" className="discovery-link">Getting Started Guide</Link> <Link href="/play" className="discovery-link">Try MoveBooks Play</Link></div></details>
     </section>
-    <ProductVision/>
     <section className="shell discovery-details" aria-label="More about MoveBooks">
       <details className="home-disclosure"><summary><h2 id="why-migrate">Why businesses migrate</h2></summary><div className="disclosure-content"><p className="text-secondary">Outgrown systems, fragmented data, manual processes and limited visibility can make everyday accounting harder to operate and scale.</p><div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{reasons.map(({ Icon, title, copy }) => <Card key={title}><Icon className="text-primary" aria-hidden="true" size={24}/><h3 className="mt-3 font-bold">{title}</h3><p className="mt-2 leading-7 text-secondary">{copy}</p></Card>)}</div><h3 className="type-card mt-5">The questions behind every move</h3><div className="mt-4 grid gap-5 md:grid-cols-3">{[
         ["Will all my data move correctly?", "Customers, vendors, accounts, transactions and configuration need to arrive complete and usable."],

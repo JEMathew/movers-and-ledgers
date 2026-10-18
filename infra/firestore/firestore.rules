@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Server ADC uses separately reviewed IAM. Browser clients receive no direct access,
+    // including signed-in users. All owner-scoped reads go through the authenticated API.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "version": "firestore-local-phase-b-v1",
+  "date": "2026-10-17",
+  "code_commit": "65750048ce76bb7aeaf5046314aada129cfc4037",
+  "status": "PASS_LOCAL_SCOPE_ONLY",
+  "project": "demo-movebooks-local",
+  "cloud_calls": 0,
+  "model_calls": 0,
+  "new_iam_grants": 0,
+  "deployments": 0,
+  "backend": {
+    "passed": 628,
+    "skipped": 71,
+    "warnings": 1,
+    "seconds": 28.95,
+    "separately_passed_emulator_skips": 13,
+    "remaining_original_optional_skips": 58
+  },
+  "emulator": {
+    "sdk_cases_passed": 13,
+    "seconds": 3.04,
+    "direct_client_denial_checks_passed": 8,
+    "version": "1.19.8",
+    "python_sdk": "2.32.0",
+    "firebase_web_sdk": "12.19.0",
+    "explicit_anonymous_server_credentials": true,
+    "adc_forbidden": true,
+    "loopback_only": true
+  },
+  "outbox": {
+    "offline_cases_passed": 34,
+    "emulator_cases_included": 3,
+    "enabled_by_default": false,
+    "cloud_or_ui_wired": false,
+    "production_sql_schema_applied": false,
+    "future_index_applied": false,
+    "financial_authority": "SQL session CAS unchanged; telemetry is non-authoritative"
+  },
+  "live_cloud_iam_validation": "NOT_AUTHORIZED_OR_RUN",
+  "report": "docs/submission/firestore-phase-b-local.md",
+  "sha256": {
+    "services/api/src/movebooks_api/runtime/persistence.py": "878555888a108e4bbe9c0edd33af026fc8176fca14573cfc91586a30b62093d5",
+    "services/api/src/movebooks_api/runtime/migration_activity.py": "4c6893d84ba19a5b7b7d832930d12407d4a553bfc9f930ee0b9c2dd2b9ffee7e",
+    "scripts/run_firestore_emulator_tests.py": "734986f8d817eb7e1b2f8bf885fc82dc108fc0732ad5d48aecec81e5194c97ab",
+    "scripts/test_firestore_emulator_rules.cjs": "9a7d2fb8aadd05b14456d3b8b9664821cb6f4b4bac168ea7bb11ad86290e0314",
+    "tests/test_firestore_emulator_integration.py": "d7288c6ff2c340f92a96449e4bff98a29003993c58dba6dbee0f7937cae611df",
+    "tests/test_migration_activity_emulator.py": "7cc019f2bb0c8b04b3b16336e2f99f999b5038a79295bb4c7938b423fa08885d",
+    "tests/test_migration_activity_outbox.py": "0b7720fe686c03fe6402e54c0f0c6ff0fed716fce6ba4426994cdbb97c450865",
+    "infra/firestore/firestore.rules": "e2e4d57004343221057b6e946bd66cacfe9c471fd26291be3f3b4f28763d7ffc",
+    "docs/submission/evidence/backend-phase-b-tests.txt": "7d00ff90241f6953e36bf91c62c59d9495d319243f4a9efaf69aaea50010993e",
+    "docs/submission/evidence/firestore-phase-b-local-combined.txt": "66bcc4394e5d0fef0802e92bc2c0d219479228ab0b192a79f85ce0ed4b9fed70"
+  }
+}

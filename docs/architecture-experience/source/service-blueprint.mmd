@@ -1,0 +1,55 @@
+flowchart LR
+  subgraph lane0["Customer action"]
+    direction LR
+    n0_0["Entry / Understand: Choose entry; inspect source"]
+    n0_1["Prepare: Review and decide"]
+    n0_2["Move: Authorize; resolve blocker"]
+    n0_3["Verify: Review controls and settings"]
+    n0_4["Start: Perform agreed first task"]
+    n0_0 --> n0_1 --> n0_2 --> n0_3 --> n0_4
+  end
+  subgraph lane1["Frontstage UI"]
+    direction LR
+    n1_0["Entry / Understand: Play / local intake / discovery"]
+    n1_1["Prepare: Plan and mapping evidence"]
+    n1_2["Move: Checkpoint / exception views"]
+    n1_3["Verify: Reconciliation and configuration"]
+    n1_4["Start: Onboarding / invoice receipt"]
+    n1_0 --> n1_1 --> n1_2 --> n1_3 --> n1_4
+  end
+  subgraph lane2["Backstage workflow"]
+    direction LR
+    n2_0["Entry / Understand: Validate owner and input"]
+    n2_1["Prepare: Versioned proposals and guards"]
+    n2_2["Move: Approved idempotent batches"]
+    n2_3["Verify: Deterministic verification"]
+    n2_4["Start: FPU contract verification"]
+    n2_0 --> n2_1 --> n2_2 --> n2_3 --> n2_4
+  end
+  subgraph lane3["Supporting cloud boundary"]
+    direction LR
+    n3_0["Entry / Understand: Firebase identity / API"]
+    n3_1["Prepare: SQL session authority"]
+    n3_2["Move: SQL target / checkpoint state"]
+    n3_3["Verify: Scoped adapters / logs"]
+    n3_4["Start: SQL authoritative receipt"]
+    n3_0 --> n3_1 --> n3_2 --> n3_3 --> n3_4
+  end
+  subgraph lane4["Evidence and recovery"]
+    direction LR
+    n4_0["Entry / Understand: Findings and provenance"]
+    n4_1["Prepare: Decisions / evidence links"]
+    n4_2["Move: Bounded retry or escalation"]
+    n4_3["Verify: Repair approval / revalidation"]
+    n4_4["Start: No FPU without all controls"]
+    n4_0 --> n4_1 --> n4_2 --> n4_3 --> n4_4
+  end
+  subgraph lane5["Operational control status"]
+    direction LR
+    n5_0["Entry / Understand: Firestore not live evidence"]
+    n5_1["Prepare: Synthetic-only Gemini gate"]
+    n5_2["Move: Budget / kill-switch gate"]
+    n5_3["Verify: No raw financial payload"]
+    n5_4["Start: Separate from financial audit"]
+    n5_0 --> n5_1 --> n5_2 --> n5_3 --> n5_4
+  end

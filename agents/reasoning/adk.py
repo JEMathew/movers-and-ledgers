@@ -32,14 +32,40 @@ def vertex_client(settings):
         project=settings.reasoning_project,
         location=settings.reasoning_location,
         http_options=types.HttpOptions(
-            base_url=f"https://{settings.reasoning_location}-aiplatform.googleapis.com",
+            base_url=(
+                "https://aiplatform.googleapis.com"
+                if settings.reasoning_location == "global"
+                else f"https://{settings.reasoning_location}-aiplatform.googleapis.com"
+            ),
             timeout=int(settings.reasoning_timeout_seconds * 1000),
             retry_options=types.HttpRetryOptions(attempts=1),
         ),
     )
 
 
-async def run_advisor(context, model, settings, *, llm=None):
+def generation_config(model):
+    from google.genai import types
+
+    if model == "gemini-3.5-flash-lite":
+        # Exact verified replacement only: Gemini 3 uses levels, not token budgets.
+        # Omit temperature/top-p/top-k: this model ignores custom sampling values.
+        return types.GenerateContentConfig(
+            max_output_tokens=2048,
+            thinking_config=types.ThinkingConfig(
+                include_thoughts=False, thinking_level=types.ThinkingLevel.LOW
+            ),
+        )
+    return types.GenerateContentConfig(
+        temperature=0,
+        max_output_tokens=2048,
+        thinking_config=types.ThinkingConfig(include_thoughts=False, thinking_budget=128),
+    )
+
+
+async def run_advisor(
+    context, model, settings, *, llm=None, output_contract=None,
+    role_instruction=None, role_name=None,
+):
     from google.adk.agents import LlmAgent
     from google.adk.agents.run_config import RunConfig
     from google.adk.models.google_llm import Gemini
@@ -51,7 +77,7 @@ async def run_advisor(context, model, settings, *, llm=None):
 
     protect_sdk_telemetry()
 
-    class WireAdvice(Advice):
+    class WireAdvice(output_contract or Advice):
         # ADK's function-schema converter cannot encode Literal[bool]. The strict
         # authority literals are still required by the host's validate_advice gate.
         human_approval_required: bool
@@ -109,18 +135,18 @@ async def run_advisor(context, model, settings, *, llm=None):
         parts = llm_response.content.parts if llm_response.content else []
         for part in parts or []:
             if part.function_call and part.function_call.name == "set_model_response":
-                response_shape = safe_shape(part.function_call.args)
+                response_shape = safe_shape(part.function_call.args, output_contract or Advice)
         text = "".join(p.text for p in parts or [] if p.text and not p.thought)
         if text and len(text.encode()) <= 16000:
             try:
-                response_shape = safe_shape(json.loads(text))
+                response_shape = safe_shape(json.loads(text), output_contract or Advice)
             except ValueError:
                 response_shape = {"$": "invalid_json"}
 
     agent = LlmAgent(
-        name=f"movebooks_{context.capability.value}_advisor",
+        name=role_name or f"movebooks_{context.capability.value}_advisor",
         model=llm,
-        instruction=instruction(context.capability.value),
+        instruction=role_instruction or instruction(context.capability.value),
         tools=[read_evidence],
         output_schema=WireAdvice,
         output_key="advice",
@@ -128,11 +154,7 @@ async def run_advisor(context, model, settings, *, llm=None):
         disallow_transfer_to_peers=True,
         before_model_callback=before_model,
         after_model_callback=after_model,
-        generate_content_config=types.GenerateContentConfig(
-            temperature=0,
-            max_output_tokens=2048,
-            thinking_config=types.ThinkingConfig(include_thoughts=False, thinking_budget=128),
-        ),
+        generate_content_config=generation_config(model),
     )
     sessions = InMemorySessionService()
     user_id, session_id = "synthetic-advisor", str(uuid4())
@@ -190,7 +212,7 @@ async def run_advisor(context, model, settings, *, llm=None):
                 reads,
                 input_tokens if usage_reports else None,
                 output_tokens if usage_reports else None,
-                validation_issues=safe_validation_issues(error),
+                validation_issues=safe_validation_issues(error, output_contract or Advice),
                 response_shape=response_shape,
                 finish_reason=finish_reason,
                 usage_status="partial" if usage_reports else "unknown",

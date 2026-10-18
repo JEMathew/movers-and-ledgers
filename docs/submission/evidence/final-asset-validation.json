@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "core_code": "1a24a2c",
+  "asset_hash_size_checks": 7,
+  "pdf_pages": 15,
+  "pdf_bytes": 1412574,
+  "description_characters": 953,
+  "diagram_sets": 19,
+  "latest_ui_checks_passed": 17,
+  "video_seconds": 231.88,
+  "external_claims": "No deployment/live-model/Firestore/public-video-link acceptance inferred"
+}

@@ -1,0 +1,41 @@
+flowchart LR
+  subgraph lane0["User goal"]
+    direction LR
+    n0_0["Entry: Learn / rehearse / preview"]
+    n0_1["Understand: Know readiness"]
+    n0_2["Prepare: Choose treatment"]
+    n0_3["Move: Move safely"]
+    n0_4["Verify: Prove correctness"]
+    n0_5["Start: Begin useful work"]
+    n0_0 --> n0_1 --> n0_2 --> n0_3 --> n0_4 --> n0_5
+  end
+  subgraph lane1["User action"]
+    direction LR
+    n1_0["Entry: Play / Demo / test package"]
+    n1_1["Understand: Discover and assess"]
+    n1_2["Prepare: Plan, map and approve"]
+    n1_3["Move: Authorize and resolve"]
+    n1_4["Verify: Inspect and configure"]
+    n1_5["Start: Onboard and approve invoice"]
+    n1_0 --> n1_1 --> n1_2 --> n1_3 --> n1_4 --> n1_5
+  end
+  subgraph lane2["Pain hypothesis"]
+    direction LR
+    n2_0["Entry: Technical intimidation"]
+    n2_1["Understand: Hidden incompatibility"]
+    n2_2["Prepare: Ambiguous account 1200"]
+    n2_3["Move: Opaque or repeated writes"]
+    n2_4["Verify: False success status"]
+    n2_5["Start: Transfer without adoption"]
+    n2_0 --> n2_1 --> n2_2 --> n2_3 --> n2_4 --> n2_5
+  end
+  subgraph lane3["Evidence / outcome"]
+    direction LR
+    n3_0["Entry: Scope understood"]
+    n3_1["Understand: Findings / blockers"]
+    n3_2["Prepare: Versioned human decisions"]
+    n3_3["Move: Checkpoint and recovery"]
+    n3_4["Verify: Deterministic reconciliation"]
+    n3_5["Start: Verified synthetic FPU"]
+    n3_0 --> n3_1 --> n3_2 --> n3_3 --> n3_4 --> n3_5
+  end

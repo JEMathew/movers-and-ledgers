@@ -1,0 +1,8 @@
+
+> @movebooks/web@0.1.0 lint
+> eslint .
+
+
+> @movebooks/web@0.1.0 typecheck
+> tsc --noEmit
+

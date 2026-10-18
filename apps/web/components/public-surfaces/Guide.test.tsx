@@ -9,7 +9,7 @@ describe("compact task guide", () => {
     render(<Guide/>);
     expect(guideSections).toHaveLength(12);
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
-    expect(screen.getByRole("link", { name: "Try the Beta" })).toHaveAttribute("href", "/workspace");
+    expect(screen.getByRole("link", { name: "Start a sample migration" })).toHaveAttribute("href", "/workspace");
     for (const section of guideSections) {
       const details = document.getElementById(section.id)!;
       expect(details.tagName).toBe("DETAILS");

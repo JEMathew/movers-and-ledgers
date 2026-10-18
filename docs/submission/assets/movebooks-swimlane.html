@@ -1,0 +1,60 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>MoveBooks swimlane</title>
+<style>
+  :root { --ink:#16202b; --muted:#5b6876; --line:#c9d3de; --human:#e9f2ff; --humanEdge:#2f6fd6;
+          --flow:#eef6f1; --flowEdge:#1d7a4f; --ai:#fff6e5; --aiEdge:#b36b00; --rec:#f3f4f7; --recEdge:#55606d; }
+  html,body { margin:0; background:#fff; }
+  body { width:1500px; height:700px; font-family: Arial, Helvetica, sans-serif; color:var(--ink); }
+  .grid { display:grid; grid-template-columns: 200px repeat(5, 1fr); grid-template-rows: 44px repeat(4, 1fr) 46px;
+          gap:8px; padding:8px 10px; box-sizing:border-box; height:700px; }
+  .phase { font-weight:700; font-size:25px; display:flex; align-items:flex-end; padding-bottom:6px; border-bottom:2px solid var(--line); }
+  .phase small { font-weight:400; font-size:16px; color:var(--muted); margin-left:8px; }
+  .lane { font-weight:700; font-size:21px; padding:8px 10px; border-radius:10px; display:flex; flex-direction:column; justify-content:center; }
+  .lane span { font-weight:400; font-size:17px; color:var(--muted); margin-top:6px; line-height:1.3; }
+  .cell { border-radius:10px; padding:8px 10px; font-size:20px; line-height:1.28; border:1.5px solid; display:flex; align-items:center; }
+  .h { background:var(--human); border-color:var(--humanEdge); } .lane.h { border:0; }
+  .f { background:var(--flow); border-color:var(--flowEdge); } .lane.f { border:0; }
+  .a { background:var(--ai); border-color:var(--aiEdge); border-style:dashed; } .lane.a { border:0; }
+  .r { background:var(--rec); border-color:var(--recEdge); } .lane.r { border:0; }
+  .empty { border:1.5px dashed var(--line); background:#fafbfc; color:var(--muted); }
+  .foot { grid-column: 1 / -1; font-size:19px; color:var(--ink); display:flex; gap:24px; align-items:center; padding:0 6px; }
+  .key { display:flex; align-items:center; gap:8px; } .sw { width:22px; height:16px; border-radius:4px; border:1.5px solid; }
+</style></head>
+<body><div class="grid">
+  <div></div>
+  <div class="phase">Understand</div><div class="phase">Prepare</div><div class="phase">Move</div><div class="phase">Verify</div><div class="phase">Start</div>
+
+  <div class="lane h">Accountant<span>approves each consequential step</span></div>
+  <div class="cell h">Choose a business; start the readiness check</div>
+  <div class="cell h">Review 12 mappings; approve the plan separately</div>
+  <div class="cell h">Approve the remedy for a paused batch</div>
+  <div class="cell h">Approve currency, tax and role settings</div>
+  <div class="cell h">Approve the first invoice</div>
+
+  <div class="lane f">Deterministic agents<span>run the workflow; rules verify</span></div>
+  <div class="cell f">Discover data; assess readiness</div>
+  <div class="cell f">Version the plan; propose mappings</div>
+  <div class="cell f">Move in checkpoints; stop on a duplicate</div>
+  <div class="cell f">Reconcile 17 checks; apply settings</div>
+  <div class="cell f">Post and verify the invoice</div>
+
+  <div class="lane a">Advisory AI<span>Advisor + Reviewer; gated off in the public Beta</span></div>
+  <div class="cell empty">No advice needed</div>
+  <div class="cell a">Explain a mapping; Reviewer challenges 1200</div>
+  <div class="cell a">Explain the exception and options</div>
+  <div class="cell a">Explain a setting</div>
+  <div class="cell a">Explain prerequisites</div>
+
+  <div class="lane r">System of record<span>Cloud SQL, owner-scoped</span></div>
+  <div class="cell r">Owner-scoped migration session</div>
+  <div class="cell r">Plan versions and decisions</div>
+  <div class="cell r">Checkpoints; work never replayed</div>
+  <div class="cell r">Validation results and settings</div>
+  <div class="cell r">Verified invoice: USD&nbsp;107.25</div>
+
+  <div class="foot">
+    <div class="key"><div class="sw" style="background:var(--human);border-color:var(--humanEdge)"></div>Approves</div>
+    <div class="key"><div class="sw" style="background:var(--flow);border-color:var(--flowEdge)"></div>Executes and verifies</div>
+    <div class="key"><div class="sw" style="background:var(--ai);border-color:var(--aiEdge);border-style:dashed"></div>Advises only: read-only evidence, no write path, validated or replaced by a labelled fallback</div>
+  </div>
+</div></body></html>

@@ -1,0 +1,16 @@
+sequenceDiagram
+  autonumber
+  participant Workflow
+  participant Config
+  participant UI
+  participant Accountant
+  participant API
+  participant Policy
+  participant Audit
+  Workflow->>Config: Propose supported target settings
+  Config->>UI: Impact, evidence and required approval
+  Accountant->>API: Approve or reject current proposal
+  API->>Policy: Owner, scope, version and prerequisite guards
+  Policy->>Config: Apply approved deterministic setting only
+  Config->>Audit: Record setting version and actor
+  Config->>UI: Configured or blocked; no premature FPU

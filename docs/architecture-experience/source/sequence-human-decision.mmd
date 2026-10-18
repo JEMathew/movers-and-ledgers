@@ -1,0 +1,15 @@
+sequenceDiagram
+  autonumber
+  participant Accountant
+  participant UI
+  participant API
+  participant Policy
+  participant Workflow
+  participant Audit
+  Accountant->>UI: Inspect evidence and consequences
+  UI->>API: Approve, reject or modify proposal
+  API->>Policy: Verify owner, current version and valid state
+  Policy->>Workflow: Accept permitted decision
+  Workflow->>Audit: Record actor, version and evidence
+  Workflow->>UI: Approved handoff or rejected/revised state
+  UI->>Accountant: Show status and next action

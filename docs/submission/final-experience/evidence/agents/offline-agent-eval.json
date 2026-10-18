@@ -1,0 +1,171 @@
+{
+  "evaluation": "offline Advisor + independent Reviewer (scripted model doubles)",
+  "network": "none",
+  "model_calls_to_real_models": 0,
+  "passed": 23,
+  "total": 23,
+  "results": [
+    {
+      "group": "advisor",
+      "scenario": "planning:grounded_output_accepted",
+      "passed": true,
+      "state": "COMPLETED",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "planning:ungrounded_reference_rejected",
+      "passed": true,
+      "state": "FALLBACK",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "planning:financial_authority_claim_rejected",
+      "passed": true,
+      "state": "FALLBACK",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "planning:human_approval_removal_rejected",
+      "passed": true,
+      "state": "FALLBACK",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "planning:injected_instruction_rejected",
+      "passed": true,
+      "state": "FALLBACK",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "planning:unknown_field_rejected",
+      "passed": true,
+      "state": "FALLBACK",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "planning:low_confidence_escalates",
+      "passed": true,
+      "state": "ESCALATED",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "planning:provider_failure_falls_back",
+      "passed": true,
+      "state": "FALLBACK",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "mapping:grounded_output_accepted",
+      "passed": true,
+      "state": "ESCALATED",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "mapping:ungrounded_reference_rejected",
+      "passed": true,
+      "state": "FALLBACK",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "mapping:financial_authority_claim_rejected",
+      "passed": true,
+      "state": "FALLBACK",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "mapping:human_approval_removal_rejected",
+      "passed": true,
+      "state": "FALLBACK",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "mapping:injected_instruction_rejected",
+      "passed": true,
+      "state": "FALLBACK",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "mapping:unknown_field_rejected",
+      "passed": true,
+      "state": "FALLBACK",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "mapping:low_confidence_escalates",
+      "passed": true,
+      "state": "ESCALATED",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "advisor",
+      "scenario": "mapping:provider_failure_falls_back",
+      "passed": true,
+      "state": "FALLBACK",
+      "business_state_unchanged": true
+    },
+    {
+      "group": "reviewer",
+      "scenario": "independence:no_advisor_text_in_reviewer_context",
+      "passed": true,
+      "canary_stored_in_advisor_record": true
+    },
+    {
+      "group": "reviewer",
+      "scenario": "clearing_account_challenged",
+      "passed": true,
+      "state": "COMPLETED",
+      "outcome": "CHALLENGED"
+    },
+    {
+      "group": "reviewer",
+      "scenario": "disagreement_recorded_side_by_side_human_decides",
+      "passed": true,
+      "advisor_state": "COMPLETED",
+      "reviewer_outcome": "CHALLENGED",
+      "mapping_state": "REVIEW_REQUIRED"
+    },
+    {
+      "group": "reviewer",
+      "scenario": "false_clearance_rejected",
+      "passed": true,
+      "state": "FALLBACK",
+      "outcome": "CHALLENGED"
+    },
+    {
+      "group": "reviewer",
+      "scenario": "forged_evidence_rejected",
+      "passed": true,
+      "state": "FALLBACK",
+      "outcome": "CHALLENGED"
+    },
+    {
+      "group": "reviewer",
+      "scenario": "authority_claim_rejected",
+      "passed": true,
+      "state": "FALLBACK",
+      "outcome": "CHALLENGED"
+    },
+    {
+      "group": "reviewer",
+      "scenario": "posting_instruction_rejected",
+      "passed": true,
+      "state": "FALLBACK",
+      "outcome": "CHALLENGED"
+    }
+  ],
+  "limits": "Measures validation, fallback, independence and authority boundaries; does not measure live model quality."
+}

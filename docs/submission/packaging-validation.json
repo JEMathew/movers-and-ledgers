@@ -1,0 +1,143 @@
+{
+  "date": "2026-10-17",
+  "scope": "official template populated with confirmed roster; contact/publication/deployed acceptance pending",
+  "deck_slides": 16,
+  "deck_fonts": [
+    "Google Sans Flex",
+    "Google Sans Flex Medium",
+    "Google Sans Flex SemiBold"
+  ],
+  "powerpoint_desktop_tested": false,
+  "artifact_tool_import_validated": true,
+  "package_geometry_font_validation": "passed",
+  "pdf_pages": 16,
+  "pdf_limit_bytes": 5000000,
+  "pdf_size_check": "passed",
+  "visual_review": "All 16 source and filled slides inspected; all 16 final Poppler PDF pages inspected. Source branding, layout, dimensions and closing artwork retained. Native PowerPoint and portal acceptance remain unverified. Confirmed roster revision: changed cover and roadmap re-rendered and visually checked; unchanged page review retained. Phase B benchmarking slide12 updated to source6575004 local results and visually checked after Poppler render; prior source/unchanged-slide review retained.",
+  "description_characters": 953,
+  "diagram_mermaid_svg_png_sets": 19,
+  "relative_markdown_links": "passed",
+  "mandatory_video_status": "PASS_LOCAL_231_88_SECONDS_SILENT_VISIBLE_CAPTIONS; PUBLIC_LINK_PENDING",
+  "assets": [
+    {
+      "path": "docs/submission/assets/fpu-local-candidate.png",
+      "bytes": 158995,
+      "sha256": "45f02172e0a1a386fc3c2f8db719bdf12a1fd35f1a9991d0a2dd721eccc361ca"
+    },
+    {
+      "path": "docs/submission/assets/movebooks-official-template-review.pdf",
+      "bytes": 2347471,
+      "sha256": "716375c484c68de22241cd78b2cfe1f9e13920c939f82ee0cb299219e547d528"
+    },
+    {
+      "path": "docs/submission/assets/movebooks-official-template-review.pptx",
+      "bytes": 1597049,
+      "sha256": "492ee03eab3648daece2e5f6fb059d225e33cbb67a41a5494ebe3e19858ea5b3"
+    },
+    {
+      "path": "docs/submission/assets/movebooks-submission-draft.pdf",
+      "bytes": 1412574,
+      "sha256": "6e47c64c670d876076f10c6a8779e36b34bb755e585c8ef39c40f97c26540b0f"
+    },
+    {
+      "path": "docs/submission/assets/movebooks-submission-draft.pptx",
+      "bytes": 520897,
+      "sha256": "639350a5fc2c29597630c759f4a661ce9921942f391657f62d79765d80885c4a"
+    },
+    {
+      "path": "docs/submission/assets/plan-local-candidate.png",
+      "bytes": 144192,
+      "sha256": "39097798ab837ddc80de8391fdd6f10780baefd05a0d234ff5eabcc92c8015b5"
+    },
+    {
+      "path": "docs/submission/assets/play-local-candidate.png",
+      "bytes": 115439,
+      "sha256": "24a87b2c17e1f45a2fb7f56a861c8cd10341d1e05a979b231dcd7ca5f65bbc78"
+    },
+    {
+      "path": "docs/submission/assets/working-product-demo.srt",
+      "bytes": 2406,
+      "sha256": "966c5e57b1b4af0e314ae31cef3e6b8fc4b8e8a57ddf813452219c11563f19f6"
+    },
+    {
+      "path": "docs/submission/assets/working-product-demo.webm",
+      "bytes": 20890407,
+      "sha256": "820e07dbef45b8878abe2c52d93c5d9d3adfc3313155f354cba5a3cfe7ca2838"
+    }
+  ],
+  "local_play_browser_checks": 14,
+  "local_backend_checkpoint": {
+    "source_commit": "65750048ce76bb7aeaf5046314aada129cfc4037",
+    "passed": 628,
+    "skipped": 71,
+    "seconds": 28.95,
+    "source": "docs/submission/evidence/backend-phase-b-tests.txt",
+    "separately_passed_emulator_skips": 13,
+    "remaining_original_optional_external_skips": 58
+  },
+  "selected_challenge": "BFSI: Intelligent Risk, Fraud & Financial Experiences",
+  "local_frontend_checkpoint": {
+    "passed": 674,
+    "files": 51,
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "source": "evidence/frontend-tests.txt; core1a24a2c"
+  },
+  "independent_focused_review": {
+    "source_commit": "fffd14c",
+    "passed": 36,
+    "seconds": 1.49,
+    "scope": "offline model controls and independent Reviewer",
+    "findings_status": "original issues and constructor gap closed; live activation evidence still required"
+  },
+  "full_journey_browser_checks": 17,
+  "pptx_finalizer_evidence": "docs/submission/evidence/official-template-finalization.json",
+  "previous_content_deck": {
+    "slides": 15,
+    "pptx": "docs/submission/assets/movebooks-submission-draft.pptx",
+    "pdf": "docs/submission/assets/movebooks-submission-draft.pdf",
+    "status": "historical preparation; superseded as primary deck"
+  },
+  "template": {
+    "source_path": "docs/submission/source/Submission Template | AI Builder Cup.pptx",
+    "bytes": 960223,
+    "sha256": "9d4f6fc09dd68da4b38bffe3599cb6eb22951fe5a0f66c661005c3176b9c6bb4",
+    "source_slides": 16,
+    "dimensions_emu": [
+      9144000,
+      5143500
+    ],
+    "status": "preserved and populated with confirmed roster; contact pending",
+    "comparison": "manual per-slide source/final comparison; no invented automated template-coverage ratio"
+  },
+  "primary_deck": {
+    "pptx": "docs/submission/assets/movebooks-official-template-review.pptx",
+    "pdf": "docs/submission/assets/movebooks-official-template-review.pdf"
+  },
+  "control_followup_checkpoint": {
+    "source_commit": "0c189f2",
+    "passed": 594,
+    "skipped": 58,
+    "scope": "control-only local follow-up; separate from recorded video"
+  },
+  "team": {
+    "team_name": "MoveBooks AI",
+    "team_lead": "Jincen E Mathew",
+    "team_member": "Kunal Nangia",
+    "contact": null,
+    "contact_status": "pending owner input",
+    "source": "explicit user-confirmed roster relayed by integration owner"
+  },
+  "local_emulator_checkpoint": {
+    "source_commit": "65750048ce76bb7aeaf5046314aada129cfc4037",
+    "sdk_cases_passed": 13,
+    "seconds": 3.04,
+    "actual_firebase_web_sdk_denial_checks_passed": 8,
+    "source": "docs/submission/evidence/firestore-phase-b-local-combined.txt",
+    "record": "docs/submission/evidence/firestore-phase-b-local.json",
+    "scope": "local emulator only; no live cloud, IAM or inference claim"
+  },
+  "full_journey_browser_source_commit": "1a24a2c",
+  "video_api_runtime_commit": "fffd14c"
+}

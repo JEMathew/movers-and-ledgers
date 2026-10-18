@@ -1,0 +1,1622 @@
+[
+  {
+    "name": "customer-journey",
+    "title": "Three entries, one governed customer journey",
+    "nodes": [
+      [
+        "play",
+        "Play: learn in office"
+      ],
+      [
+        "demo",
+        "Explore Demo: Harbor Light Books"
+      ],
+      [
+        "intake",
+        "Try Your Data: permitted test package"
+      ],
+      [
+        "understand",
+        "Understand: discover / assess"
+      ],
+      [
+        "prepare",
+        "Prepare: plan / map and approve"
+      ],
+      [
+        "move",
+        "Move: migrate / resolve"
+      ],
+      [
+        "verify",
+        "Verify: reconcile / configure"
+      ],
+      [
+        "start",
+        "Start: onboard / verified FPU"
+      ]
+    ],
+    "edges": [
+      [
+        "play",
+        "demo",
+        "optional transition"
+      ],
+      [
+        "demo",
+        "understand",
+        "synthetic workspace"
+      ],
+      [
+        "intake",
+        "understand",
+        "reviewed handoff only if supported"
+      ],
+      [
+        "understand",
+        "prepare",
+        "readiness evidence"
+      ],
+      [
+        "prepare",
+        "move",
+        "human authorization"
+      ],
+      [
+        "move",
+        "verify",
+        "checkpoints / exceptions"
+      ],
+      [
+        "verify",
+        "start",
+        "required controls pass"
+      ]
+    ],
+    "kind": "swimlane",
+    "columns": [
+      "Entry",
+      "Understand",
+      "Prepare",
+      "Move",
+      "Verify",
+      "Start"
+    ],
+    "lanes": [
+      [
+        "User goal",
+        [
+          "Learn / rehearse / preview",
+          "Know readiness",
+          "Choose treatment",
+          "Move safely",
+          "Prove correctness",
+          "Begin useful work"
+        ]
+      ],
+      [
+        "User action",
+        [
+          "Play / Demo / test package",
+          "Discover and assess",
+          "Plan, map and approve",
+          "Authorize and resolve",
+          "Inspect and configure",
+          "Onboard and approve invoice"
+        ]
+      ],
+      [
+        "Pain hypothesis",
+        [
+          "Technical intimidation",
+          "Hidden incompatibility",
+          "Ambiguous account 1200",
+          "Opaque or repeated writes",
+          "False success status",
+          "Transfer without adoption"
+        ]
+      ],
+      [
+        "Evidence / outcome",
+        [
+          "Scope understood",
+          "Findings / blockers",
+          "Versioned human decisions",
+          "Checkpoint and recovery",
+          "Deterministic reconciliation",
+          "Verified synthetic FPU"
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "user-system-swimlane",
+    "title": "User and system responsibilities",
+    "nodes": [
+      [
+        "human",
+        "Accountant: review and decide"
+      ],
+      [
+        "ui",
+        "Product UI: evidence / next action"
+      ],
+      [
+        "api",
+        "API / orchestration: owner + state guards"
+      ],
+      [
+        "spec",
+        "Specialists: bounded proposals"
+      ],
+      [
+        "tools",
+        "Deterministic financial tools"
+      ],
+      [
+        "adapters",
+        "Separate source / target adapters"
+      ],
+      [
+        "audit",
+        "Authoritative session + audit records"
+      ]
+    ],
+    "edges": [
+      [
+        "human",
+        "ui",
+        "request / approval"
+      ],
+      [
+        "ui",
+        "api",
+        "authenticated request"
+      ],
+      [
+        "api",
+        "spec",
+        "permitted task"
+      ],
+      [
+        "spec",
+        "tools",
+        "scoped deterministic call"
+      ],
+      [
+        "tools",
+        "adapters",
+        "synthetic read / authorized write"
+      ],
+      [
+        "api",
+        "audit",
+        "decision / lineage / checkpoint"
+      ],
+      [
+        "audit",
+        "ui",
+        "evidence and recovery state"
+      ]
+    ],
+    "kind": "swimlane",
+    "columns": [
+      "Understand",
+      "Prepare",
+      "Move",
+      "Verify",
+      "Start"
+    ],
+    "lanes": [
+      [
+        "Accountant",
+        [
+          "Inspect readiness",
+          "Approve / reject / modify",
+          "Authorize; resolve escalation",
+          "Approve sensitive settings",
+          "Approve productive invoice"
+        ]
+      ],
+      [
+        "Product UI",
+        [
+          "Inventory and findings",
+          "Evidence and alternatives",
+          "Progress and exceptions",
+          "Controls and next steps",
+          "Preview and receipt"
+        ]
+      ],
+      [
+        "API / orchestration",
+        [
+          "Owner and state guards",
+          "Versioned decision guards",
+          "Approved manifest / idempotency",
+          "Verification prerequisite guards",
+          "FPU contract and approvals"
+        ]
+      ],
+      [
+        "Specialist components",
+        [
+          "Discovery / Assessment",
+          "Planning / Mapping specialists",
+          "Migration / Resolution specialists",
+          "Validation / Configuration",
+          "Onboarding / Activation"
+        ]
+      ],
+      [
+        "Financial tools",
+        [
+          "Schema and compatibility",
+          "Deterministic mapping rules",
+          "Scoped load / safe retries",
+          "Exact reconciliation",
+          "Once-only invoice effect"
+        ]
+      ],
+      [
+        "Adapters and audit",
+        [
+          "Read-only source adapter",
+          "Decision / lineage records",
+          "Separate target / checkpoints",
+          "Validation / configuration audit",
+          "Verified FPU receipt"
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "agent-subagent-swimlane",
+    "title": "Logical roles and actual execution boundaries",
+    "nodes": [
+      [
+        "orchestrator",
+        "Deterministic Python orchestrator"
+      ],
+      [
+        "parents",
+        "Discovery / Assessment / Planning / Mapping / Migration / Resolution / Validation / Configuration / Onboarding / Activation"
+      ],
+      [
+        "mapping",
+        "Mapping: Account / Tax / Entity / Configuration"
+      ],
+      [
+        "resolution",
+        "Resolution: Duplicate / Referential Integrity / Tax-Configuration / Retry Recovery / Recovery Coordinator"
+      ],
+      [
+        "human",
+        "Accountant: human authority"
+      ],
+      [
+        "advisor",
+        "User-triggered Gemini via authenticated API"
+      ],
+      [
+        "review",
+        "Independent Reviewer candidate: separate evidence contract"
+      ],
+      [
+        "policy",
+        "Deterministic policy / evidence validation / fallback"
+      ],
+      [
+        "knowledge",
+        "Versioned Knowledge; Trust and Governance logical responsibility"
+      ]
+    ],
+    "edges": [
+      [
+        "orchestrator",
+        "parents",
+        "ordered workflow"
+      ],
+      [
+        "parents",
+        "mapping",
+        "bounded specialist components"
+      ],
+      [
+        "parents",
+        "resolution",
+        "bounded specialist components"
+      ],
+      [
+        "knowledge",
+        "parents",
+        "reference / policy context"
+      ],
+      [
+        "human",
+        "advisor",
+        "explicit request"
+      ],
+      [
+        "advisor",
+        "human",
+        "advice only"
+      ],
+      [
+        "human",
+        "review",
+        "request second opinion"
+      ],
+      [
+        "review",
+        "human",
+        "findings only; activation needs evidence"
+      ],
+      [
+        "human",
+        "orchestrator",
+        "approve / reject / modify"
+      ],
+      [
+        "policy",
+        "orchestrator",
+        "guard, retry or escalate"
+      ],
+      [
+        "policy",
+        "advisor",
+        "validate evidence / fail safely"
+      ]
+    ],
+    "kind": "swimlane",
+    "columns": [
+      "Request / context",
+      "Bounded proposal",
+      "Human decision",
+      "Execution / recovery",
+      "Evidence / outcome"
+    ],
+    "lanes": [
+      [
+        "Accountant",
+        [
+          "Initiates journey and advice",
+          "Inspects alternatives",
+          "Approve / reject / modify",
+          "Required escalation decision",
+          "Reads verified outcome"
+        ]
+      ],
+      [
+        "Python parent roles",
+        [
+          "Discover / Assess / Plan",
+          "Map / Configure proposals",
+          "Guard current authority",
+          "Migrate / Resolve",
+          "Validate / Onboard / FPU"
+        ]
+      ],
+      [
+        "Mapping specialists",
+        [
+          "Account / Tax context",
+          "Entity / Configuration rules",
+          "No approval authority",
+          "No direct financial write",
+          "Evidence and uncertainty"
+        ]
+      ],
+      [
+        "Resolution specialists",
+        [
+          "Duplicate / Referential Integrity",
+          "Tax-Configuration proposal",
+          "Human if consequential",
+          "Retry Recovery / Coordinator",
+          "Resolution lineage"
+        ]
+      ],
+      [
+        "Gemini and Reviewer",
+        [
+          "Explicit user request only",
+          "Advice / separate review contract",
+          "Returns to accountant",
+          "No execution authority",
+          "Validated references / fallback"
+        ]
+      ],
+      [
+        "Knowledge / governance",
+        [
+          "Versioned knowledge",
+          "Policy and evidence guards",
+          "Attributable approvals",
+          "Bounded retry / safe stop",
+          "Audit; not an LLM runtime"
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "service-blueprint",
+    "title": "Service blueprint and recovery evidence",
+    "nodes": [
+      [
+        "customer",
+        "Customer: learn / inspect / decide / first task"
+      ],
+      [
+        "front",
+        "Frontstage: Play / intake / five journey phases"
+      ],
+      [
+        "back",
+        "Backstage: owner checks / deterministic workflow"
+      ],
+      [
+        "support",
+        "Supporting: identity / Cloud SQL / model boundary"
+      ],
+      [
+        "evidence",
+        "Evidence: lineage / approval / reconciliation / receipt"
+      ],
+      [
+        "recovery",
+        "Recovery: known-good checkpoint / bounded retry / escalation"
+      ],
+      [
+        "ops",
+        "Operational Firestore controls: gated, separate from financial audit"
+      ]
+    ],
+    "edges": [
+      [
+        "customer",
+        "front",
+        "visible action"
+      ],
+      [
+        "front",
+        "back",
+        "request with identity"
+      ],
+      [
+        "back",
+        "support",
+        "scoped service boundary"
+      ],
+      [
+        "back",
+        "evidence",
+        "record outcome"
+      ],
+      [
+        "evidence",
+        "front",
+        "explain status / next step"
+      ],
+      [
+        "back",
+        "recovery",
+        "classified failure"
+      ],
+      [
+        "recovery",
+        "front",
+        "resume or ask human"
+      ],
+      [
+        "ops",
+        "support",
+        "kill switch / budget only when integrated"
+      ]
+    ],
+    "kind": "swimlane",
+    "columns": [
+      "Entry / Understand",
+      "Prepare",
+      "Move",
+      "Verify",
+      "Start"
+    ],
+    "lanes": [
+      [
+        "Customer action",
+        [
+          "Choose entry; inspect source",
+          "Review and decide",
+          "Authorize; resolve blocker",
+          "Review controls and settings",
+          "Perform agreed first task"
+        ]
+      ],
+      [
+        "Frontstage UI",
+        [
+          "Play / local intake / discovery",
+          "Plan and mapping evidence",
+          "Checkpoint / exception views",
+          "Reconciliation and configuration",
+          "Onboarding / invoice receipt"
+        ]
+      ],
+      [
+        "Backstage workflow",
+        [
+          "Validate owner and input",
+          "Versioned proposals and guards",
+          "Approved idempotent batches",
+          "Deterministic verification",
+          "FPU contract verification"
+        ]
+      ],
+      [
+        "Supporting cloud boundary",
+        [
+          "Firebase identity / API",
+          "SQL session authority",
+          "SQL target / checkpoint state",
+          "Scoped adapters / logs",
+          "SQL authoritative receipt"
+        ]
+      ],
+      [
+        "Evidence and recovery",
+        [
+          "Findings and provenance",
+          "Decisions / evidence links",
+          "Bounded retry or escalation",
+          "Repair approval / revalidation",
+          "No FPU without all controls"
+        ]
+      ],
+      [
+        "Operational control status",
+        [
+          "Firestore not live evidence",
+          "Synthetic-only Gemini gate",
+          "Budget / kill-switch gate",
+          "No raw financial payload",
+          "Separate from financial audit"
+        ]
+      ]
+    ]
+  },
+  {
+    "name": "c4-system-context",
+    "title": "C4 system context: bounded synthetic Beta",
+    "nodes": [
+      [
+        "users",
+        "Accountant / bookkeeper / owner"
+      ],
+      [
+        "system",
+        "MoveBooks AI: learning to verified FPU"
+      ],
+      [
+        "identity",
+        "Firebase Authentication boundary"
+      ],
+      [
+        "gemini",
+        "Vertex Gemini advisory boundary"
+      ],
+      [
+        "source",
+        "Synthetic source environment"
+      ],
+      [
+        "target",
+        "Synthetic target environment"
+      ],
+      [
+        "future",
+        "Future real providers: unsupported today"
+      ]
+    ],
+    "edges": [
+      [
+        "users",
+        "system",
+        "learn / review / authorize"
+      ],
+      [
+        "system",
+        "identity",
+        "verify authenticated owner"
+      ],
+      [
+        "system",
+        "gemini",
+        "user-requested permitted synthetic context"
+      ],
+      [
+        "system",
+        "source",
+        "read-only adapter"
+      ],
+      [
+        "system",
+        "target",
+        "approved deterministic adapter"
+      ],
+      [
+        "future",
+        "system",
+        "future adapter contracts; no active connection"
+      ]
+    ],
+    "kind": "flowchart"
+  },
+  {
+    "name": "c4-container",
+    "title": "C4 container architecture",
+    "nodes": [
+      [
+        "browser",
+        "Next.js browser UI"
+      ],
+      [
+        "api",
+        "FastAPI authenticated API"
+      ],
+      [
+        "workflow",
+        "Deterministic Python orchestration / tools"
+      ],
+      [
+        "sql",
+        "Cloud SQL PostgreSQL: transactional authority"
+      ],
+      [
+        "model",
+        "Bounded Gemini / ADK advisor"
+      ],
+      [
+        "storage",
+        "Private Cloud Storage adapter"
+      ],
+      [
+        "ops",
+        "Firestore operational adapter: release-gated"
+      ],
+      [
+        "auth",
+        "Firebase ID-token verification"
+      ]
+    ],
+    "edges": [
+      [
+        "browser",
+        "api",
+        "HTTPS + ID token"
+      ],
+      [
+        "auth",
+        "api",
+        "derived owner identity"
+      ],
+      [
+        "api",
+        "workflow",
+        "valid state + approved intent"
+      ],
+      [
+        "workflow",
+        "sql",
+        "atomic owner-scoped snapshot / audit"
+      ],
+      [
+        "api",
+        "model",
+        "user-triggered allowlisted projection"
+      ],
+      [
+        "api",
+        "storage",
+        "interface-ready artifacts; not raw upload activation"
+      ],
+      [
+        "api",
+        "ops",
+        "gated source: reservations, outcomes, owner readback"
+      ]
+    ],
+    "kind": "flowchart"
+  },
+  {
+    "name": "google-cloud-deployment",
+    "title": "Google Cloud deployment intent and evidence boundary",
+    "nodes": [
+      [
+        "hosting",
+        "Firebase Hosting: public Beta URL documented"
+      ],
+      [
+        "web",
+        "Cloud Run web service: candidate evidence required"
+      ],
+      [
+        "api",
+        "Cloud Run API: cloud-dev / deterministic-only confirmed 17 October"
+      ],
+      [
+        "auth",
+        "Firebase Auth: owner identity"
+      ],
+      [
+        "sql",
+        "Cloud SQL: financial and session authority"
+      ],
+      [
+        "vertex",
+        "Agent Platform API enabled; workload inference untested; model lifecycle gate"
+      ],
+      [
+        "firestore",
+        "Firestore: dormant movebooks-operations in Singapore; deny-client rules and index verified; runtime activation gated"
+      ],
+      [
+        "gcs",
+        "Cloud Storage: adapter boundary"
+      ],
+      [
+        "secret",
+        "Secret Manager: allowlisted adapter"
+      ],
+      [
+        "logs",
+        "Logging stdout; Monitoring activation evidence separate"
+      ]
+    ],
+    "edges": [
+      [
+        "hosting",
+        "web",
+        "frontend hosting integration"
+      ],
+      [
+        "web",
+        "api",
+        "authenticated API proxy"
+      ],
+      [
+        "auth",
+        "api",
+        "verified token"
+      ],
+      [
+        "api",
+        "sql",
+        "transactional repository"
+      ],
+      [
+        "api",
+        "vertex",
+        "activation gated"
+      ],
+      [
+        "api",
+        "firestore",
+        "activation gated"
+      ],
+      [
+        "api",
+        "gcs",
+        "reviewed artifacts only"
+      ],
+      [
+        "api",
+        "secret",
+        "named secret access if configured"
+      ],
+      [
+        "api",
+        "logs",
+        "sanitized execution events"
+      ]
+    ],
+    "kind": "flowchart"
+  },
+  {
+    "name": "agent-tool-architecture",
+    "title": "Reasoning, tools and internal evaluation",
+    "nodes": [
+      [
+        "ui",
+        "Accountant / UI"
+      ],
+      [
+        "advisor",
+        "Gemini + Google ADK advisory boundary"
+      ],
+      [
+        "reviewer",
+        "Independent mapping Reviewer candidate"
+      ],
+      [
+        "orchestrator",
+        "Deterministic orchestrator"
+      ],
+      [
+        "tools",
+        "Allowlisted deterministic financial tools"
+      ],
+      [
+        "human",
+        "Attributable human decisions"
+      ],
+      [
+        "eval",
+        "Offline Agent Quality Judge"
+      ],
+      [
+        "taste",
+        "Internal Product Quality Judge"
+      ]
+    ],
+    "edges": [
+      [
+        "ui",
+        "advisor",
+        "explicit request"
+      ],
+      [
+        "advisor",
+        "ui",
+        "structured validated explanation"
+      ],
+      [
+        "ui",
+        "reviewer",
+        "request allowed-evidence review"
+      ],
+      [
+        "reviewer",
+        "ui",
+        "concerns / uncertainty / next action"
+      ],
+      [
+        "ui",
+        "human",
+        "approve / reject / modify"
+      ],
+      [
+        "human",
+        "orchestrator",
+        "authorized current intent"
+      ],
+      [
+        "orchestrator",
+        "tools",
+        "policy-controlled execution"
+      ],
+      [
+        "advisor",
+        "eval",
+        "sanitized output / traces"
+      ],
+      [
+        "reviewer",
+        "eval",
+        "separate review cases"
+      ],
+      [
+        "ui",
+        "taste",
+        "actual product evidence; no execution authority"
+      ]
+    ],
+    "kind": "flowchart"
+  },
+  {
+    "name": "data-flow-trust-boundaries",
+    "title": "Data flow and trust boundaries",
+    "nodes": [
+      [
+        "untrusted",
+        "Untrusted browser / package / user text"
+      ],
+      [
+        "local",
+        "Browser-local validator fallback"
+      ],
+      [
+        "gate",
+        "Hosted upload gate: currently closed"
+      ],
+      [
+        "api",
+        "Authenticated API: owner / schema / bounds"
+      ],
+      [
+        "state",
+        "Cloud SQL financial/session authority"
+      ],
+      [
+        "projection",
+        "Allowlisted synthetic-only projection"
+      ],
+      [
+        "model",
+        "Gemini: no uploaded source context"
+      ],
+      [
+        "output",
+        "Structured output + evidence validation"
+      ],
+      [
+        "human",
+        "Accountant decision"
+      ],
+      [
+        "ops",
+        "Operational activity: no raw financial payload"
+      ]
+    ],
+    "edges": [
+      [
+        "untrusted",
+        "local",
+        "validate on device"
+      ],
+      [
+        "untrusted",
+        "gate",
+        "no hosted activation without security gates"
+      ],
+      [
+        "untrusted",
+        "api",
+        "supported bounded API requests"
+      ],
+      [
+        "api",
+        "state",
+        "owner-scoped deterministic changes"
+      ],
+      [
+        "api",
+        "projection",
+        "synthetic context only"
+      ],
+      [
+        "projection",
+        "model",
+        "user-triggered call"
+      ],
+      [
+        "model",
+        "output",
+        "untrusted model output"
+      ],
+      [
+        "output",
+        "human",
+        "advice / safe fallback"
+      ],
+      [
+        "api",
+        "ops",
+        "sanitized control metadata only"
+      ]
+    ],
+    "kind": "flowchart"
+  },
+  {
+    "name": "firestore-operational-controls",
+    "title": "Firestore operational controls: implemented source; live unverified",
+    "nodes": [
+      [
+        "request",
+        "Authenticated owner requests advice"
+      ],
+      [
+        "kill",
+        "Kill switch + synthetic authorization"
+      ],
+      [
+        "reservation",
+        "Durable global budget + owner quota reservation"
+      ],
+      [
+        "model",
+        "Bounded model execution"
+      ],
+      [
+        "finalize",
+        "Conservative reservation remains consumed on result or failure; no refunds"
+      ],
+      [
+        "activity",
+        "Owner-filtered sanitized activity readback: implemented gated source"
+      ],
+      [
+        "sql",
+        "Cloud SQL financial authority remains separate"
+      ],
+      [
+        "deny",
+        "Deny / safe fallback"
+      ],
+      [
+        "refresh",
+        "Owner explicitly refreshes activity"
+      ],
+      [
+        "read",
+        "Authenticated GET: owner filter + per-record check"
+      ],
+      [
+        "client",
+        "Direct Firestore client writes denied in source rules"
+      ]
+    ],
+    "edges": [
+      [
+        "request",
+        "kill",
+        "check current policy"
+      ],
+      [
+        "kill",
+        "reservation",
+        "allowed"
+      ],
+      [
+        "kill",
+        "deny",
+        "disabled / unavailable"
+      ],
+      [
+        "reservation",
+        "model",
+        "atomic capacity granted"
+      ],
+      [
+        "reservation",
+        "deny",
+        "limit / persistence failure"
+      ],
+      [
+        "model",
+        "finalize",
+        "bounded result or failure; retain allowance"
+      ],
+      [
+        "finalize",
+        "activity",
+        "terminal advisory state; bounded safe metadata"
+      ],
+      [
+        "request",
+        "sql",
+        "no Firestore financial write"
+      ],
+      [
+        "refresh",
+        "read",
+        "no automatic UI reads"
+      ],
+      [
+        "read",
+        "activity",
+        "20 newest safe records; deadline + owner isolation"
+      ],
+      [
+        "client",
+        "deny",
+        "rules / index not yet provisioned"
+      ]
+    ],
+    "kind": "flowchart"
+  },
+  {
+    "name": "synthetic-migration",
+    "title": "Synthetic migration and verification architecture",
+    "nodes": [
+      [
+        "source",
+        "Harbor Light Books synthetic source"
+      ],
+      [
+        "sa",
+        "Read-only source adapter"
+      ],
+      [
+        "canonical",
+        "Canonical model / versioned mappings"
+      ],
+      [
+        "approval",
+        "Human-approved manifest"
+      ],
+      [
+        "ta",
+        "Separate synthetic target adapter"
+      ],
+      [
+        "target",
+        "Synthetic target records"
+      ],
+      [
+        "check",
+        "Deterministic reconciliation"
+      ],
+      [
+        "fpu",
+        "Approved synthetic invoice + verified FPU"
+      ],
+      [
+        "audit",
+        "Lineage / checkpoints / audit"
+      ]
+    ],
+    "edges": [
+      [
+        "source",
+        "sa",
+        "discovery"
+      ],
+      [
+        "sa",
+        "canonical",
+        "normalize / assess"
+      ],
+      [
+        "canonical",
+        "approval",
+        "plan / map / review"
+      ],
+      [
+        "approval",
+        "ta",
+        "authorized idempotent load"
+      ],
+      [
+        "ta",
+        "target",
+        "synthetic records"
+      ],
+      [
+        "target",
+        "check",
+        "counts / references / balances / checksums"
+      ],
+      [
+        "check",
+        "fpu",
+        "all required controls pass"
+      ],
+      [
+        "ta",
+        "audit",
+        "checkpoint + attempt"
+      ],
+      [
+        "check",
+        "audit",
+        "validation evidence"
+      ],
+      [
+        "fpu",
+        "audit",
+        "productive receipt"
+      ]
+    ],
+    "kind": "flowchart"
+  },
+  {
+    "name": "sequence-ambiguous-mapping",
+    "title": "Ambiguous account mapping",
+    "kind": "sequenceDiagram",
+    "steps": [
+      [
+        "Accountant",
+        "UI",
+        "Inspect 1200 Misc Clearing proposal"
+      ],
+      [
+        "UI",
+        "API",
+        "Read owner-scoped proposal and evidence"
+      ],
+      [
+        "API",
+        "Mapping",
+        "Build deterministic specialist proposal"
+      ],
+      [
+        "Mapping",
+        "UI",
+        "Evidence, uncertainty and alternatives"
+      ],
+      [
+        "Accountant",
+        "UI",
+        "Request advice or independent review"
+      ],
+      [
+        "UI",
+        "Accountant",
+        "Show explanation and findings"
+      ],
+      [
+        "Accountant",
+        "API",
+        "Approve, reject or modify current version"
+      ]
+    ],
+    "parties": [
+      "Accountant",
+      "UI",
+      "API",
+      "Mapping"
+    ]
+  },
+  {
+    "name": "sequence-gemini-advisory",
+    "title": "User-triggered Gemini advisory",
+    "kind": "sequenceDiagram",
+    "steps": [
+      [
+        "Accountant",
+        "UI",
+        "Request explanation in supported context"
+      ],
+      [
+        "UI",
+        "API",
+        "Authenticated advisory request"
+      ],
+      [
+        "API",
+        "Policy",
+        "Synthetic authorization, quota, budget, kill switch"
+      ],
+      [
+        "Policy",
+        "Advisor",
+        "Allowlisted synthetic projection if permitted"
+      ],
+      [
+        "Advisor",
+        "Gemini",
+        "Bounded ADK invocation"
+      ],
+      [
+        "Gemini",
+        "Advisor",
+        "Structured untrusted output"
+      ],
+      [
+        "Advisor",
+        "API",
+        "Validate evidence references or safe fallback"
+      ],
+      [
+        "API",
+        "Accountant",
+        "Advice only; no automatic workflow consumption"
+      ]
+    ],
+    "parties": [
+      "Accountant",
+      "UI",
+      "API",
+      "Policy",
+      "Advisor",
+      "Gemini"
+    ]
+  },
+  {
+    "name": "sequence-independent-review",
+    "title": "Independent review candidate",
+    "kind": "sequenceDiagram",
+    "steps": [
+      [
+        "Accountant",
+        "UI",
+        "Request second opinion"
+      ],
+      [
+        "UI",
+        "API",
+        "Authenticated owner request"
+      ],
+      [
+        "API",
+        "Reviewer",
+        "Separate review contract and allowed evidence"
+      ],
+      [
+        "Reviewer",
+        "Reviewer",
+        "Challenge assumptions and contradictions"
+      ],
+      [
+        "Reviewer",
+        "API",
+        "Outcome, references, concerns, uncertainty, next action"
+      ],
+      [
+        "API",
+        "Accountant",
+        "Review finding; no state mutation"
+      ],
+      [
+        "Accountant",
+        "API",
+        "Separate explicit financial decision if desired"
+      ]
+    ],
+    "parties": [
+      "Accountant",
+      "UI",
+      "API",
+      "Reviewer"
+    ]
+  },
+  {
+    "name": "sequence-human-decision",
+    "title": "Human approval and rejection",
+    "kind": "sequenceDiagram",
+    "steps": [
+      [
+        "Accountant",
+        "UI",
+        "Inspect evidence and consequences"
+      ],
+      [
+        "UI",
+        "API",
+        "Approve, reject or modify proposal"
+      ],
+      [
+        "API",
+        "Policy",
+        "Verify owner, current version and valid state"
+      ],
+      [
+        "Policy",
+        "Workflow",
+        "Accept permitted decision"
+      ],
+      [
+        "Workflow",
+        "Audit",
+        "Record actor, version and evidence"
+      ],
+      [
+        "Workflow",
+        "UI",
+        "Approved handoff or rejected/revised state"
+      ],
+      [
+        "UI",
+        "Accountant",
+        "Show status and next action"
+      ]
+    ],
+    "parties": [
+      "Accountant",
+      "UI",
+      "API",
+      "Policy",
+      "Workflow",
+      "Audit"
+    ]
+  },
+  {
+    "name": "sequence-retry-escalation",
+    "title": "Automatic retry versus human escalation",
+    "kind": "sequenceDiagram",
+    "steps": [
+      [
+        "Workflow",
+        "Tool",
+        "Execute approved idempotent batch"
+      ],
+      [
+        "Tool",
+        "Policy",
+        "Classified failure and checkpoint"
+      ],
+      [
+        "Policy",
+        "Workflow",
+        "Transient and permitted: bounded automatic retry"
+      ],
+      [
+        "Workflow",
+        "Tool",
+        "Reuse intent and idempotency key"
+      ],
+      [
+        "Policy",
+        "Accountant",
+        "Consequential, unknown or exhausted: escalate"
+      ],
+      [
+        "Accountant",
+        "Workflow",
+        "Review/approve remediation if permitted"
+      ],
+      [
+        "Workflow",
+        "Audit",
+        "Record attempts, decisions and recovery evidence"
+      ]
+    ],
+    "parties": [
+      "Workflow",
+      "Tool",
+      "Policy",
+      "Accountant",
+      "Audit"
+    ]
+  },
+  {
+    "name": "sequence-sensitive-configuration",
+    "title": "Sensitive configuration approval",
+    "kind": "sequenceDiagram",
+    "steps": [
+      [
+        "Workflow",
+        "Config",
+        "Propose supported target settings"
+      ],
+      [
+        "Config",
+        "UI",
+        "Impact, evidence and required approval"
+      ],
+      [
+        "Accountant",
+        "API",
+        "Approve or reject current proposal"
+      ],
+      [
+        "API",
+        "Policy",
+        "Owner, scope, version and prerequisite guards"
+      ],
+      [
+        "Policy",
+        "Config",
+        "Apply approved deterministic setting only"
+      ],
+      [
+        "Config",
+        "Audit",
+        "Record setting version and actor"
+      ],
+      [
+        "Config",
+        "UI",
+        "Configured or blocked; no premature FPU"
+      ]
+    ],
+    "parties": [
+      "Workflow",
+      "Config",
+      "UI",
+      "Accountant",
+      "API",
+      "Policy",
+      "Audit"
+    ]
+  },
+  {
+    "name": "sequence-reconciliation",
+    "title": "Deterministic reconciliation",
+    "kind": "sequenceDiagram",
+    "steps": [
+      [
+        "Workflow",
+        "Validator",
+        "Request post-migration verification"
+      ],
+      [
+        "Validator",
+        "Source",
+        "Read expected canonical controls"
+      ],
+      [
+        "Validator",
+        "Target",
+        "Read actual synthetic records"
+      ],
+      [
+        "Validator",
+        "Validator",
+        "Exact counts, relationships, balances and checksums"
+      ],
+      [
+        "Validator",
+        "Workflow",
+        "Pass with evidence or mismatch blocker"
+      ],
+      [
+        "Workflow",
+        "Accountant",
+        "Mismatch: inspect permitted remediation"
+      ],
+      [
+        "Accountant",
+        "Workflow",
+        "Approve repair where required"
+      ],
+      [
+        "Workflow",
+        "Validator",
+        "Revalidate after repair"
+      ]
+    ],
+    "parties": [
+      "Workflow",
+      "Validator",
+      "Source",
+      "Target",
+      "Accountant"
+    ]
+  },
+  {
+    "name": "sequence-fpu-invoice",
+    "title": "Approved synthetic FPU invoice",
+    "kind": "sequenceDiagram",
+    "steps": [
+      [
+        "Accountant",
+        "UI",
+        "Prepare agreed productive invoice"
+      ],
+      [
+        "UI",
+        "Workflow",
+        "Check versioned FPU and prerequisites"
+      ],
+      [
+        "Workflow",
+        "UI",
+        "Preview invoice and required approval"
+      ],
+      [
+        "Accountant",
+        "Workflow",
+        "Explicitly approve current invoice"
+      ],
+      [
+        "Workflow",
+        "Target",
+        "Post once using scoped idempotency"
+      ],
+      [
+        "Target",
+        "Validator",
+        "Receipt and resulting synthetic accounting state"
+      ],
+      [
+        "Validator",
+        "Workflow",
+        "Verify deterministic effect and all controls"
+      ],
+      [
+        "Workflow",
+        "Accountant",
+        "Verified FPU evidence or safe blocker"
+      ]
+    ],
+    "parties": [
+      "Accountant",
+      "UI",
+      "Workflow",
+      "Target",
+      "Validator"
+    ]
+  }
+]

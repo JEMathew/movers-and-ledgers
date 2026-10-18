@@ -1,6 +1,7 @@
 "use client";
 
 import { useId } from "react";
+import { FileSearch, LifeBuoy, Sparkles } from "lucide-react";
 import { MigrationJourney } from "./MigrationJourney";
 import { phases } from "../public-surfaces/content";
 import { withSession } from "./journey";
@@ -31,9 +32,10 @@ export function PhaseProgress({ current, held, currentLabel = "Current", unknown
 }
 
 export function TaskContext({ phase, session }: { phase: number; session?: string }) {
+  const q = session ? encodeURIComponent(session) : "";
   return <nav className="task-context" aria-label="Migration utilities">
-    <a href={withSession("/workspace", session)}>My Migration</a>
-    <a href={session ? `/support?session=${encodeURIComponent(session)}&stage=${phase}` : "/support"} aria-label="Help with this task">Help</a>
-    {session && <a href={`/trust?view=evidence&session=${encodeURIComponent(session)}`} aria-label="Evidence & results">Evidence</a>}
+    {session && <a href={`/trust?view=evidence&session=${q}`} aria-label="Evidence & results"><FileSearch size={15} aria-hidden="true"/>Evidence</a>}
+    {session && <a href={`/trust?view=evidence&session=${q}#ai-activity`} aria-label="AI activity"><Sparkles size={15} aria-hidden="true"/>AI activity</a>}
+    <a href={session ? `/support?session=${q}&stage=${phase}` : "/support"} aria-label="Help with this task"><LifeBuoy size={15} aria-hidden="true"/>Help</a>
   </nav>;
 }

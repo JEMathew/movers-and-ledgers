@@ -15,7 +15,7 @@ jobs:
       - run: python -m pip install --upgrade 'pip>=26.2' 'setuptools>=83'
       - run: pip install -e '.[dev,agents]' pip-audit
       - name: Real ADK runner with offline models; no credentials
-        run: pytest tests/test_live_reasoning.py -q
+        run: pytest tests/test_live_reasoning.py tests/test_independent_review.py -q
       - name: Synthetic reasoning contract catalog (not live quality evidence)
         run: python scripts/live_reasoning_eval.py
       - name: Optional AI dependency audit
@@ -26,11 +26,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12", cache: pip}
-      - run: pip install -e '.[dev]'
+      # The suite includes fake-backed tests of the Firestore and Gemini adapters, which import the real SDKs;
+      # without them those adapters correctly fail closed and the tests cannot exercise them.
+      - run: pip install -e '.[dev,cloud,agents]'
       - run: ruff check .
       - name: Fail-closed configuration and reference validation
         run: pytest tests/test_validation_failures.py tests/test_runtime_faults.py -q
       - run: pytest --cov --cov-report=term-missing
+      - name: Offline Agent Quality Judge regression
+        run: python scripts/agent_quality_judge.py
       - run: python scripts/repository_checks.py
       - run: git diff --check
   web:

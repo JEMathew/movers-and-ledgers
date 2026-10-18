@@ -6,6 +6,8 @@ from uuid import UUID
 
 from domain.discovery_assessment.models import MigrationSession
 
+from . import listing
+
 
 class MigrationSessionRepository(Protocol):
     """Persistence port for owner-scoped migration-session state."""
@@ -23,6 +25,10 @@ class MigrationSessionRepository(Protocol):
     ) -> MigrationSession: ...
 
     def put_uploaded(self, session: MigrationSession, limit: int) -> MigrationSession: ...
+
+    def list_for_owner(
+        self, owner_subject: str, *, after: tuple[str, str] | None = None, limit: int = 20
+    ) -> listing.MigrationPage: ...
 
 
 class InMemoryMigrationSessionRepository:
@@ -49,6 +55,32 @@ class InMemoryMigrationSessionRepository:
             if session is None or session.owner_subject != owner_subject:
                 return None
             return session.model_copy(deep=True)
+
+    def list_for_owner(self, owner_subject, *, after=None, limit=listing.DEFAULT_LIMIT):
+        with self._lock:
+            owned = [s for s in self._sessions.values() if s.owner_subject == owner_subject]
+        incomplete = len(owned) > listing.MAX_SCAN_ROWS
+        owned = sorted(owned, key=lambda s: str(s.id))[: listing.MAX_SCAN_ROWS]
+        summaries = [
+            listing.MigrationSummary(
+                id=str(s.id),
+                company_name=s.company_name[:120],
+                status=s.status.value,
+                workflow_status=s.workflow_status.value,
+                created_at=s.created_at.isoformat(),
+            )
+            for s in owned
+        ]
+        return listing.build_page(
+            owner_subject,
+            summaries,
+            after=after,
+            limit=limit,
+            incomplete=incomplete,
+            reason="scan_limit" if incomplete else None,
+            scanned=len(summaries),
+            skipped=0,
+        )
 
     def clear(self) -> None:
         with self._lock:

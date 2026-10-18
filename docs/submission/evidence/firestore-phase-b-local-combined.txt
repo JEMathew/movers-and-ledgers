@@ -1,0 +1,16 @@
+Local emulator only: 127.0.0.1:57970; demo project; no ADC
+.............                                                            [100%]
+13 passed in 3.04s
+[2026-10-17T10:56:40.740Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x79740a22 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+PASS direct client denied: (default), anonymous, read/write
+[2026-10-17T10:56:40.773Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x79740a24 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+PASS direct client denied: (default), signed-in, read/write
+[2026-10-17T10:56:40.801Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x79740a26 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+PASS direct client denied: movebooks-operations, anonymous, read/write
+[2026-10-17T10:56:40.821Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x79740a28 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+PASS direct client denied: movebooks-operations, signed-in, read/write
+Firebase web SDK: 8 deny-all checks passed; no IAM claim

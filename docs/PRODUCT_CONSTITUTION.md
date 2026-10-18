@@ -6,14 +6,14 @@ This document is the durable product decision framework for MoveBooks AI. When a
 
 MoveBooks AI helps businesses understand, prepare for, execute, and adopt an accounting migration with evidence, deterministic financial controls, and accountable human decisions.
 
-Primary users are business owners and finance operators responsible for a migration. Accountants, bookkeepers, advisors, migration specialists, administrators, approvers, and support teams are supporting users with distinct permissions and evidence needs.
+Primary users are accountants, bookkeepers, small-business owners and finance operators responsible for a migration. Migration specialists, administrators and financial approvers are supporting users with distinct evidence needs. The current Beta uses an authenticated workspace owner; distinct delegated roles remain future work.
 
 ## Customer problems and value proposition
 
 | Customer problem | User statement | Product response |
 | --- | --- | --- |
 | Conceptual uncertainty | “I do not understand migration.” | **Learn** explains the domain; **Play** makes the lifecycle tangible. |
-| Personal uncertainty | “I do not know what migration will look like for my business.” | **Simulator** rehearses the journey with synthetic businesses; **Try Your Data** privately profiles a bounded customer export without target writes. |
+| Personal uncertainty | “I do not know what migration will look like for my business.” | **Simulator** rehearses the journey with synthetic businesses; **Try Your Data** validates a bounded, permitted synthetic or de-identified test export without target writes. |
 | Execution burden | “I do not want to manually manage a complex migration.” | **MoveBooks AI Product** combines deterministic tools, bounded agents, approvals, validation, configuration, and onboarding in one governed workflow. |
 
 The value proposition is a provider-neutral path from uncertainty to First Productive Use: users can see what will happen, understand why, control consequential decisions, and verify the accounting outcome.
@@ -22,7 +22,7 @@ The value proposition is a provider-neutral path from uncertainty to First Produ
 
 - **MoveBooks AI Product** — the governed migration workspace from discovery through First Productive Use.
 - **MoveBooks AI Simulator** — high-fidelity practice with synthetic accounting environments and controlled failure cases.
-- **Try Your Data** — a protected, read-only preview that profiles a bounded customer export before a migration workspace is started.
+- **Try Your Data** — a read-only compatibility preview of permitted synthetic or de-identified test files. The browser-local fallback cannot create a hosted workspace; the retained local server flow requires explicit review. Confidential customer data and provider writes remain out of bounds.
 - **MoveBooks AI Play** — an approachable visual introduction to migration concepts and trade-offs.
 - **MoveBooks AI Learn** — contextual education about migration, accounting, readiness, and AI trust.
 - **Trust / Agent Operations** — evidence, approvals, auditability, evaluation, policy enforcement, and operational visibility.

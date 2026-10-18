@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-17",
+  "status": "PASS",
+  "code_commit": "65750048ce76bb7aeaf5046314aada129cfc4037",
+  "repository_checks": "Checked 138 Markdown files and 637 text files; 0 findings.",
+  "official_template_slides": 16,
+  "pdf_pages": 16,
+  "pdf_bytes": 2347471,
+  "description_characters": 953,
+  "asset_hashes": "PASS_ALL_PACKAGING_ASSETS_AND_SOURCE_TEMPLATE",
+  "phase_a_screenshot_hashes": "PASS",
+  "phase_a_state": "ACCEPTED_CLOSED_DORMANT",
+  "immutable_proposal_hashes": "PASS_UNCHANGED",
+  "local_phase_b_source_and_log_hashes": "PASS",
+  "official_pptx_receipt_identity": "PASS",
+  "no_new_cloud_or_model_execution": true,
+  "limitations": [
+    "PDF is raster export; editable source PPTX retained",
+    "Native PowerPoint and portal acceptance unverified",
+    "Contact and public video link pending",
+    "Cloud workload integration, IAM, live model and deployment gates remain"
+  ]
+}

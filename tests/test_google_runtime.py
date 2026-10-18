@@ -106,8 +106,9 @@ def test_unsafe_cloud_configuration_rejected(field, value):
         Settings(**{**CLOUD, field: value}, _env_file=None)
 
 
-def test_no_cloud_emulator_bypass(monkeypatch):
-    monkeypatch.setenv("FIREBASE_AUTH_EMULATOR_HOST", "localhost:9099")
+@pytest.mark.parametrize("variable", ["FIREBASE_AUTH_EMULATOR_HOST", "FIRESTORE_EMULATOR_HOST"])
+def test_no_cloud_emulator_bypass(monkeypatch, variable):
+    monkeypatch.setenv(variable, "localhost:9099")
     with pytest.raises(ValidationError):
         Settings(**CLOUD, _env_file=None)
 

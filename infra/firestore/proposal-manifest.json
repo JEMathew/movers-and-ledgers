@@ -1,0 +1,27 @@
+{
+  "version": "firestore-dormant-v1",
+  "status": "PROPOSED_NOT_APPLIED",
+  "project": "movebooks-ai",
+  "api": "RETAIN_ENABLED_BY_OWNER",
+  "phase_a": "Only named database/settings, deny-client rules/index and disabled policy seed; no IAM/deploy/inference",
+  "phase_a_files": [
+    "database.proposed.json",
+    "firebase.proposed.json",
+    "firestore.rules",
+    "firestore.indexes.json",
+    "policy.proposed.json"
+  ],
+  "phase_b_separate_approval_files": [
+    "runtime-role.proposed.json",
+    "runtime-binding.proposed.json"
+  ],
+  "sha256": {
+    "database.proposed.json": "d045bfa7267ba1f91bad1158e0b76a41caeef02be5fa1621cd0f6cbb7d753689",
+    "firebase.proposed.json": "b166c05faf110833e54308fd4cb70bf06d4d13ae59dabec582fb391ef2fbbb6e",
+    "firestore.rules": "e2e4d57004343221057b6e946bd66cacfe9c471fd26291be3f3b4f28763d7ffc",
+    "firestore.indexes.json": "ff8042e53f4a4b9de39f309e687d7380aac4b618f83d7f45d5ad0f3cab77e244",
+    "policy.proposed.json": "5dd8579033c98e7fbf67b0bcecfa2ca0f421e6887060a859c7be32c4b9edd9e0",
+    "runtime-role.proposed.json": "15d55ce6707dc3f1551f730eaea24e4f8219c7a4e9ae99cf017579b23374d0be",
+    "runtime-binding.proposed.json": "86a072b41d387857e327503865c21db035fa798607c28dc0dd9f8f4367a736bd"
+  }
+}

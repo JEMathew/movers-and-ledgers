@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-17",
+  "source": "https://cloud.google.com/firestore/pricing",
+  "region_selector": "Singapore (asia-southeast1)",
+  "currency": "USD",
+  "consumption": "Default pay-as-you-go; no CUD",
+  "storage_selector": "Monthly",
+  "reads_per_100000": 0.0369,
+  "writes_per_100000": 0.1107,
+  "deletes_per_100000": 0.0123,
+  "storage_gib_month": 0.1846,
+  "screenshot": "docs/submission/evidence/firestore-singapore-pricing.png",
+  "free_quota_assumed": false,
+  "assumptions": {
+    "days": 30,
+    "new_admissions_per_day": 10,
+    "reads_per_admission_with_three_reservation_attempts_and_completion": 13,
+    "writes_per_admission": 4,
+    "explicit_refreshes_per_day": 1000,
+    "documents_per_refresh": 20,
+    "average_storage_gib_including_indexes": 0.1,
+    "scheduled_deletes": 0,
+    "pitr": false,
+    "scheduled_backups": false
+  },
+  "limitations": "Scenario, not observed usage or hard cap. Denied requests/retries beyond assumptions, abuse, logs, taxes, currency conversions, other services and Gemini excluded.",
+  "calculation": {
+    "document_reads": 603900,
+    "document_writes": 1200,
+    "read_usd": 0.2228391,
+    "write_usd": 0.0013284,
+    "storage_usd": 0.01846,
+    "total_usd": 0.2426275
+  },
+  "actual_database_free_tier_reported": true,
+  "free_tier_interpretation": "Owner update metadata reports freeTier:true. Original no-free-quota arithmetic is deliberately conservative, not an actual bill or a claim this database lacks free quota."
+}

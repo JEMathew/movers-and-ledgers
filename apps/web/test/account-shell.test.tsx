@@ -38,7 +38,7 @@ describe("global account and settings shell", () => {
     expect(signIn).toBeEnabled();
     expect(signIn).toHaveClass("ghost");
     expect(within(banner).queryByRole("link", { name: "Start My Migration" })).not.toBeInTheDocument();
-    expect(within(banner).queryByRole("link", { name: "Try the Beta" })).not.toBeInTheDocument();
+    expect(within(banner).queryByRole("link", { name: "Start a sample migration" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Change appearance" })).toHaveAttribute("aria-haspopup", "dialog");
     expect(screen.queryByRole("button", { name: "Settings" })).not.toBeInTheDocument();
     fireEvent.click(signIn);

@@ -1,0 +1,99 @@
+{
+  "mode": "offline-fallback (no model was called)",
+  "synthetic_case": {
+    "source": "1200 \u00b7 Misc Clearing",
+    "candidate": "Other Current Asset"
+  },
+  "deterministic_baseline": {
+    "state": "REVIEW_REQUIRED",
+    "approval_required": true,
+    "policy_flags": [
+      "Sensitive accounting or tax mappings require human approval.",
+      "Confidence is below the 90% auto-acceptable threshold."
+    ]
+  },
+  "advisor": {
+    "model": "offline",
+    "used_fallback": true,
+    "output": {
+      "observation": "12 evidence references at AWAITING_APPROVAL.",
+      "inference": "No model inference is asserted by this versioned fallback.",
+      "recommendation": "Inspect the existing deterministic proposal and evidence in this workflow.",
+      "rationale": "A model explanation cannot change a control, approval, or financial result.",
+      "evidence_references": [
+        "mapping:1105c1b6-7679-44e7-afea-3dcb3077c188",
+        "mapping:94a8002b-7bf0-4e65-b117-b25c2a2924d9",
+        "mapping:45d49d9e-394c-4f17-91d9-41ffb069b4ca",
+        "mapping:b08c1eed-7a0a-428c-9dd5-1f2c3702c6b4",
+        "mapping:d5d79b43-1b2e-4791-aa6f-2c6ea0c1f245",
+        "mapping:e68a8a72-8d92-42ae-ab22-d05e97741c14",
+        "mapping:2d165bf9-c6e3-4797-a7d5-70c2e59927b2",
+        "mapping:16dd0eed-fde9-47c7-9759-c1306d4b19fb",
+        "mapping:26fde069-62ef-4cfa-8328-865e66430193",
+        "mapping:68b3b900-3471-469f-b18d-5a84a97de840",
+        "mapping:ea2ff372-7608-497a-b05c-abe78e5bc130",
+        "mapping:7e8b39e1-231a-46c0-8121-48b5cf562b30"
+      ],
+      "confidence": 0.0,
+      "uncertainty": [
+        "No calibrated model recommendation is available."
+      ],
+      "alternatives": [
+        "Stop and request qualified human review."
+      ],
+      "next_action": "ESCALATE",
+      "human_approval_required": true,
+      "financial_authority": false
+    },
+    "usage": {
+      "failure_category": null,
+      "model_calls": 0,
+      "tool_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_status": "unknown",
+      "finish_reason": null,
+      "validation_issues": [],
+      "latency_ms": 1,
+      "estimated_cost_usd": null
+    }
+  },
+  "reviewer": {
+    "independent_evidence": "mapping only; the Advisor output was not supplied",
+    "used_fallback": true,
+    "output": {
+      "outcome": "CHALLENGED",
+      "summary": "The candidate is not established by the available source evidence. A permitted target class is not proof of the account's business purpose.",
+      "evidence_references": [
+        "mapping:45d49d9e-394c-4f17-91d9-41ffb069b4ca"
+      ],
+      "concerns": [
+        "Source account purpose and settlement history are absent from this projection.",
+        "Misc Clearing does not establish whether the balance is a temporary asset.",
+        "The mapping has policy flags requiring inspection in the current task."
+      ],
+      "uncertainty": [
+        "No statement of business purpose or settlement history is supplied; the Reviewer cannot select the correct accounting treatment."
+      ],
+      "suggested_next_action": "INSPECT_SOURCE_PURPOSE",
+      "human_approval_required": true,
+      "financial_authority": false
+    },
+    "usage": {
+      "failure_category": null,
+      "model_calls": 0,
+      "tool_calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_status": "unknown",
+      "finish_reason": null,
+      "validation_issues": [],
+      "latency_ms": 0,
+      "estimated_cost_usd": null
+    }
+  },
+  "authority": "Advisory only. A human approves; deterministic rules verify; no state was changed.",
+  "human_scoring": {
+    "semantic_correctness": "not_human_scored"
+  }
+}
