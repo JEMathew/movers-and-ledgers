@@ -13,8 +13,25 @@ export const mappingReviewed = (mapping: MappingProposal) => ["APPROVED", "MODIF
 export function mappingLabel(mapping: MappingProposal, planApproved: boolean) {
   if (mapping.state === "MODIFIED") return "Changed";
   if (mapping.state === "APPROVED") return planApproved ? "Approved" : "Reviewed";
-  if (["BLOCKED", "REJECTED", "REVIEW_REQUIRED"].includes(mapping.state)) return "Needs attention";
+  // Three different situations with three different ways forward; never one shared label (V1 audit, finding 4).
+  if (mapping.state === "BLOCKED") return "Blocked";
+  if (mapping.state === "REJECTED") return "Rejected";
+  if (mapping.state === "REVIEW_REQUIRED") return "Needs review";
   return "Suggested";
+}
+
+/** What the person can do next for a mapping that is not settled. Mirrors apply_mapping_decision and
+ *  mapping_ready_for_handoff; it changes no rule and enables no action. */
+export function mappingRecovery(mapping: MappingProposal): string | undefined {
+  if (mapping.state === "BLOCKED") {
+    const why = mapping.policy_reasons.length ? ` ${mapping.policy_reasons.join(" ")}` : "";
+    return `Blocked: the rules can't accept this record as it stands.${why} It can't be confirmed or rejected. Save a compatible destination if one is offered, or correct the source record and check readiness again.`;
+  }
+  if (mapping.state === "REJECTED") {
+    return "Rejected: this record stays out of the move, and the plan can't be approved while a mapping is rejected. Request reconsideration to change the decision.";
+  }
+  if (mapping.state === "REVIEW_REQUIRED") return "Needs review: confirm it, save a different destination, or reject it.";
+  return undefined;
 }
 
 export function MappingReview({ mappings, history, editable, busy, planApproved, decide, reconsider, onReviewPlan, handoff }: {
@@ -76,6 +93,7 @@ export function MappingReview({ mappings, history, editable, busy, planApproved,
               <div className="min-w-0"><p className="type-meta">Proposed destination</p><p className="mt-1 font-bold">{mapping.selected_target}</p>{mapping.state === "MODIFIED" && <p className="mt-1 text-xs text-secondary">Originally suggested: {mapping.recommended_target}</p>}</div>
               <div className="min-w-0"><Badge>{mappingLabel(mapping, planApproved)}</Badge></div>
             </div>
+            {mappingRecovery(mapping) && <p className="mapping-recovery mt-3 text-sm font-semibold" data-state={mapping.state}>{mappingRecovery(mapping)}</p>}
             <p className="mt-4 text-sm leading-6 text-secondary">{mapping.rationale}</p>
             {mapping.risk !== "LOW" && <p className="mt-2 text-sm font-semibold">{mapping.risk === "HIGH" ? "High" : "Medium"} risk · {Math.round(mapping.confidence * 100)}% recommendation confidence. Confidence cannot clear a policy blocker.</p>}
             <details open={open} className="mt-4 rounded-lg bg-[var(--surface-subtle)] p-4 text-sm"><summary className="cursor-pointer font-semibold">Evidence and Policy · {shownEvidence.length} direct {shownEvidence.length === 1 ? "reference" : "references"}</summary><ul className="mt-2 space-y-1 text-secondary">{shownEvidence.map(evidence => <li key={evidence}>{evidence}</li>)}{mapping.policy_reasons.map(reason => <li key={reason}>{reason}</li>)}</ul>{context.length > 0 && <details className="mt-3"><summary className="cursor-pointer font-semibold">Additional Planning Context · {context.length} references</summary><ul className="mt-2 space-y-1 text-secondary">{context.map(evidence => <li key={evidence}>{evidence}</li>)}</ul></details>}</details>
@@ -87,7 +105,7 @@ export function MappingReview({ mappings, history, editable, busy, planApproved,
                 {destinations.length > 0 ? <Select label={`Change destination for ${mapping.source_label}`} value={targets[mapping.id] ?? ""} onChange={event => setTargets(current => ({ ...current, [mapping.id]: event.target.value }))} disabled={!canDecide}>
                   <option value="">Choose a supported destination</option>
                   {destinations.map(target => <option key={target} value={target}>{target === mapping.selected_target ? `${target} (keep current)` : target}</option>)}
-                </Select> : <p className="text-sm text-secondary">{blocked ? "No compatible destination is available. This mapping stays blocked until the source data is corrected; it cannot be confirmed or rejected here." : "No other supported destination. Confirm this mapping, or reject it to keep it out of the plan."}</p>}
+                </Select> : <p className="text-sm text-secondary">{blocked ? "No compatible destination is available. This mapping stays blocked until the source data is corrected; it cannot be confirmed or rejected here." : "No other supported destination. Confirm this mapping, or reject it; a rejected mapping keeps the plan from being approved until it is reconsidered."}</p>}
                 {identityOnly && <p className="mt-2 text-sm text-secondary">This synthetic adapter retains the source product or configuration treatment. Conversions and changed treatments are unavailable.</p>}
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Button variant={targets[mapping.id] ? "secondary" : "primary"} disabled={!canDecide || mapping.state === "BLOCKED"} onClick={() => void decide(mapping, "approve")}>Confirm Mapping</Button>
