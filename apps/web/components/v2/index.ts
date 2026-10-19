@@ -6,5 +6,5 @@ export { v2MappingStatus, V2_STATUS_LABEL, V2_STATUS_RECOVERY } from "./mapping-
 export type { ApiMappingRisk, ApiMappingState, V2MappingStatus } from "./mapping-status";
 export { RecoveryNotice, StageHeader, WorkflowSummary } from "./Workflow";
 export type { Outstanding } from "./Workflow";
-export { Attribution, attributionText } from "./Attribution";
+export { APPROVED_ATTRIBUTION, Attribution } from "./Attribution";
 export { AI_ASSISTANCE_STATUS, AI_STATUS_LABEL } from "./ai-status";

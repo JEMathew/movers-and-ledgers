@@ -51,7 +51,8 @@ describe("My migration screen", () => {
     expect(within(screen.getByRole("region", { name: "At a glance" })).getByText("Mappings waiting for you").nextSibling).toHaveTextContent("2");
     expect(screen.getByRole("link", { name: "Open evidence" })).toHaveAttribute("href", `/trust?view=evidence&session=${id}`);
     expect(within(screen.getByRole("region", { name: "Second opinions" })).getByText("Planned")).toBeVisible();
-    expect(screen.getByText("Built on Google Cloud · Gemini AI planned")).toBeVisible();
+    expect(screen.getByText("Built on Google Cloud and powered by Gemini AI")).toBeVisible();
+    expect(screen.queryByText(/Gemini AI planned/)).toBeNull();
   });
   it("never shows an unknown mapping count as zero", async () => {
     vi.spyOn(globalThis, "fetch").mockImplementation(() => json({ ...evidence, mapping_review: null }));

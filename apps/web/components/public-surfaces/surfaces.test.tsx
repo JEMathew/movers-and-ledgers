@@ -75,10 +75,13 @@ describe("public surface contracts", () => {
     expect(proof).toHaveTextContent("USD 107.25");
     expect(proof).toHaveTextContent("17 of 17 checks matched in the sample walkthrough");
   });
-  it("shows the attribution as one quiet line that does not claim live Gemini", () => {
+  it("shows the approved attribution once, as one quiet line, with AI assistance still Planned", () => {
     render(<Home/>);
-    expect(screen.getByText("Built on Google Cloud · Gemini AI planned")).toBeVisible();
-    expect(document.body).not.toHaveTextContent(/powered by Gemini/i);
+    const lines = screen.getAllByText("Built on Google Cloud and powered by Gemini AI");
+    expect(lines).toHaveLength(1);
+    expect(lines[0]).toBeVisible();
+    expect(lines[0]).toHaveClass("v2-attribution");
+    expect(document.body).not.toHaveTextContent(/Gemini AI planned/);
   });
   it("simplifies public navigation and keeps Play out of it while the flag is off", () => {
     render(<IdentityProvider><Nav/></IdentityProvider>);

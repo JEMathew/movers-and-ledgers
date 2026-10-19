@@ -25,10 +25,9 @@ design names only. The product is MoveBooks AI.
 
 ## Attribution
 
-The owner-approved line is "Built on Google Cloud and powered by Gemini AI". The hosted Beta is deterministic-only,
-so publishing that line now would claim active hosted inference. `components/v2/Attribution.tsx` therefore shows
-"Built on Google Cloud · Gemini AI planned" while `AI_ASSISTANCE_STATUS` is `planned`, and switches to the exact
-approved line when the status is `live` (a separate, verified release decision). One quiet line, on the landing page
+`components/v2/Attribution.tsx` shows the owner-approved line "Built on Google Cloud and powered by Gemini AI".
+It is fixed Phase 1 copy and does not depend on `AI_ASSISTANCE_STATUS`, which stays `planned`: the Advisor and
+Reviewer keep their Planned badges, and hosted live Gemini inference is not active in Phase 1. One quiet line, on the landing page
 and in My migration; no logos, badges or supporting paragraph.
 
 ## Play

@@ -1,19 +1,20 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { AI_ASSISTANCE_STATUS } from "./ai-status";
-import { APPROVED_ATTRIBUTION, Attribution, attributionText, PLANNED_ATTRIBUTION } from "./Attribution";
+import { APPROVED_ATTRIBUTION, Attribution } from "./Attribution";
 
 describe("product attribution", () => {
-  it("keeps the owner-approved line exact", () => {
-    expect(APPROVED_ATTRIBUTION).toBe("Built on Google Cloud and powered by Gemini AI");
-    expect(attributionText("live")).toBe(APPROVED_ATTRIBUTION);
-  });
-  it("does not claim active Gemini inference while assistance is planned", () => {
-    expect(AI_ASSISTANCE_STATUS).toBe("planned");
+  it("renders the owner-approved line exactly, as one quiet line", () => {
     render(<Attribution />);
-    const line = screen.getByText(PLANNED_ATTRIBUTION);
-    expect(line).toHaveAttribute("data-ai-status", "planned");
-    expect(document.body).not.toHaveTextContent(/powered by Gemini/i);
-    expect(line.querySelector("img, svg")).toBeNull();
+    const line = screen.getByText("Built on Google Cloud and powered by Gemini AI");
+    expect(APPROVED_ATTRIBUTION).toBe("Built on Google Cloud and powered by Gemini AI");
+    expect(line.tagName).toBe("P");
+    expect(line).toHaveClass("v2-attribution");
+    expect(line.textContent).toBe("Built on Google Cloud and powered by Gemini AI");
+    expect(line.querySelector("img, svg, a")).toBeNull();
+    expect(document.body).not.toHaveTextContent(/Gemini AI planned/);
+  });
+  it("leaves the AI assistance status Planned in Phase 1", () => {
+    expect(AI_ASSISTANCE_STATUS).toBe("planned");
   });
 });

@@ -14,8 +14,8 @@ hdr()  { tr -d '\r' < "$body.h" | awk -v k="$1" 'tolower($1)==tolower(k)":" {sub
 
 [[ $(get "$WEB/") == 200 ]] && ok "landing 200" || bad "landing 200"
 grep -q "Prove every total" "$body" && ok "V2 landing served (not a cached V1 page)" || bad "V2 landing served"
-grep -q "Gemini AI planned" "$body" && ok "attribution shows Planned while AI status is planned" || bad "attribution Planned"
-grep -qi "powered by Gemini" "$body" && bad "no live-Gemini claim" || ok "no live-Gemini claim"
+grep -q "Built on Google Cloud and powered by Gemini AI" "$body" && ok "approved attribution line" || bad "approved attribution line"
+grep -q "Gemini AI planned" "$body" && bad "old attribution copy removed" || ok "old attribution copy removed"
 grep -q 'href="/play"' "$body" && bad "Play hidden from navigation (flag off)" || ok "Play hidden from navigation (flag off)"
 [[ $(hdr cache-control) == "public, max-age=0, s-maxage=60, must-revalidate" ]] && ok "static HTML cached at most 60s" || bad "static HTML cache header: $(hdr cache-control)"
 css=$(grep -oE '/_next/static/[^"]+\.css' "$body" | head -1)
