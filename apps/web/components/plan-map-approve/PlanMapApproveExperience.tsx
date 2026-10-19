@@ -10,7 +10,7 @@ import { ActionLink } from "@/components/journey/NextAction";
 import { isSessionId, projectSession, SELECTED_SESSION_KEY } from "@/components/public-surfaces/session";
 import { StageHeader } from "@/components/v2/Workflow";
 import { MappingReview, mappingReviewed } from "./MappingReview";
-import { bulkEligible, runBulkApproval, type BulkItem, type BulkOutcome } from "./bulk-approval";
+import { bulkEligible, RefusedError, runBulkApproval, type BulkItem, type BulkOutcome } from "./bulk-approval";
 import { groupMappings } from "./mapping-groups";
 import { ApprovalReview } from "./ApprovalReview";
 import { PlanSummary } from "./PlanSummary";
@@ -25,11 +25,14 @@ type Snapshot = {
 type View = "plan" | "map" | "approve";
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
+/** The API answered with an error status (as opposed to no answer at all). */
+class HttpError extends Error {}
+
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE}${path}`, { ...init, headers: { ...await authHeaders(), "Content-Type": "application/json", ...init?.headers } });
   if (!response.ok) {
     const body = await response.json().catch(() => null);
-    throw new Error(typeof body?.detail === "string" ? body.detail : `Request failed with status ${response.status}`);
+    throw new HttpError(typeof body?.detail === "string" ? body.detail : `Request failed with status ${response.status}`);
   }
   return response.json() as Promise<T>;
 }
@@ -140,7 +143,8 @@ export function PlanMapApproveExperience() {
       const outcome = await runBulkApproval({
         set, setId: crypto.randomUUID().slice(0, 8),
         readFresh: async () => validate(await api<Snapshot>(`/v1/migration-sessions/${id}`), id).mappings,
-        approve: (item, body) => api(`/v1/migration-sessions/${id}/mappings/${item.id}/approve`, { method: "POST", body: JSON.stringify(body) }),
+        // An HTTP error is a refusal; a lost connection is not: that approval may have been recorded.
+        approve: (item, body) => api(`/v1/migration-sessions/${id}/mappings/${item.id}/approve`, { method: "POST", body: JSON.stringify(body) }).catch(caught => { throw caught instanceof HttpError ? new RefusedError(caught.message) : caught; }),
       });
       // POST responses never substitute for an authoritative session read.
       if (outcome.kind !== "unread") await refresh().catch(caught => { if (mounted.current) setError(caught instanceof Error ? caught.message : "Session unavailable."); });
@@ -179,7 +183,7 @@ export function PlanMapApproveExperience() {
         {reviewed && <Button variant="ghost" aria-current={view === "approve" ? "page" : undefined} onClick={() => changeView("approve")}>Approval review</Button>}
       </nav>
       {view === "plan" && <><section className="pm-card pm-next" aria-label="Your next step"><div className="min-w-0"><p className="pm-eyebrow">Your next step</p><p className="pm-next-title">{approved ? "This scope is retained with the migration." : mappings.length ? `Decide ${pending} of ${mappings.length} mappings` : "Review where your records go"}</p><p className="pm-meta">{approved ? "Your decisions and the plan approval are recorded with your name." : "Check the scope and blockers below, then review the destination for every mapping."}</p></div>{!approved && <Button disabled={!ready || busy || !["PLANNED", "MAPPING", "AWAITING_APPROVAL"].includes(status ?? "")} onClick={() => void reviewMappings()}>Review mappings</Button>}{approved && <ApprovedHandoff snapshot={snapshot!} />}</section><PlanSummary plan={plan} mappings={mappings} /></>}
-      {view === "map" && <MappingReview readinessBlocked={Boolean(snapshot?.assessment?.blocker_count) || snapshot?.assessment?.readiness === "BLOCKED"} handoff={approved ? <ApprovedHandoff snapshot={snapshot!} /> : undefined} mappings={mappings} history={snapshot?.human_decisions ?? []} editable={editable} busy={busy} planApproved={approved} decide={async (mapping, action, target) => {
+      {view === "map" && <MappingReview readinessBlocked={!snapshot?.assessment || Boolean(snapshot.assessment.blocker_count) || snapshot.assessment.readiness === "BLOCKED"} handoff={approved ? <ApprovedHandoff snapshot={snapshot!} /> : undefined} mappings={mappings} history={snapshot?.human_decisions ?? []} editable={editable} busy={busy} planApproved={approved} decide={async (mapping, action, target) => {
         if (!editable) return;
         await mutate(`/mappings/${mapping.id}/${action}`, action === "modify" ? { selected_target: target, comment: "Changed after reviewing the displayed evidence" } : { comment: action === "approve" ? "Reviewed the displayed mapping and evidence" : "Rejected after reviewing the displayed evidence" });
       }} reconsider={async (mapping, path, body) => { if (!editable || !await mutate(`/mappings/${mapping.id}${path}`, body)) throw new Error("Reconsideration could not be confirmed. Read the migration again."); }} runBulk={runBulk} onReviewPlan={() => changeView("approve")} />}

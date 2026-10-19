@@ -51,6 +51,13 @@ export function MigrateResolveExperience() {
   const [error, setError] = useState<string>();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [activity, setActivity] = useState<AgentActivity[]>([]);
+  // The activity list is a secondary read. If it fails after an action succeeded, the action is still
+  // recorded, so this is reported on its own and never as "that step was not completed".
+  const [activityStale, setActivityStale] = useState(false);
+  async function refreshActivity(id: string) {
+    try { setActivity(await api<AgentActivity[]>(`/v1/migration-sessions/${id}/activity`)); setActivityStale(false); }
+    catch { setActivityStale(true); }
+  }
   const [requested, setRequested] = useState<string>();
 
   // A user action supersedes a still-pending initial read; the late read is ignored.
@@ -120,7 +127,7 @@ export function MigrateResolveExperience() {
       );
       setExecution(started);
       setDialogOpen(started.status === "RESOLVING");
-      setActivity(await api<AgentActivity[]>(`/v1/migration-sessions/${session.id}/activity`));
+      await refreshActivity(session.id);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Migration could not start safely.");
     } finally {
@@ -146,7 +153,7 @@ export function MigrateResolveExperience() {
       );
       setExecution(updated);
       setDialogOpen(false);
-      setActivity(await api<AgentActivity[]>(`/v1/migration-sessions/${session.id}/activity`));
+      await refreshActivity(session.id);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "The decision was not recorded.");
     } finally {
@@ -165,7 +172,7 @@ export function MigrateResolveExperience() {
           method: "POST",
         }),
       );
-      setActivity(await api<AgentActivity[]>(`/v1/migration-sessions/${session.id}/activity`));
+      await refreshActivity(session.id);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "The governed retry could not run.");
     } finally {
@@ -188,7 +195,8 @@ export function MigrateResolveExperience() {
     : resolving ? "A batch paused for your review"
     : execution ? "Your records are moving"
     : "Move your approved books";
-  const guide = !session ? "Open a migration from My migration to move its approved records. A standalone scenario is at the end of this page."
+  const guide = !session && readState === "loading" ? "Reading your migration. Nothing is assumed until it loads."
+    : !session ? "Open a migration from My migration to move its approved records. A standalone scenario is at the end of this page."
     : complete ? "Every batch moved and no blocking issue remains. Next, check the new books against the old ones."
     : blocked ? `${pausedName} stays blocked because the proposed fix was not approved. Batches that already moved are kept.`
     : retryPending ? "You approved the proposed fix. Retrying runs the paused batch again; batches that already moved are not repeated."
@@ -252,7 +260,7 @@ export function MigrateResolveExperience() {
 
       {session && <WorkflowSummary
         label="Where the move stands"
-        recovery={recovery}
+        recovery={<>{recovery}{activityStale && <p className="v2s-meta" role="status">Your last action is recorded. The activity list could not be refreshed; reload the page to read it again.</p>}</>}
         next={next}
         done={done}
         outstanding={outstanding}

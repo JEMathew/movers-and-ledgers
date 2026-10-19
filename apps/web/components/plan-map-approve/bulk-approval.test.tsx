@@ -178,7 +178,7 @@ describe("through the Prepare screen", () => {
   const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
   const mappings = [m("11111111-0000-4000-8000-000000000001", { source_label: "Cedar School" }), m("11111111-0000-4000-8000-000000000002", { source_label: "Maple Library" }), m("11111111-0000-4000-8000-000000000003", { source_label: "Independent Press" }),
     m("11111111-0000-4000-8000-000000000004", { source_label: "1200 · Misc Clearing", area: "chart_of_accounts", risk: "MEDIUM", state: "REVIEW_REQUIRED", confidence: 0.76, policy_reasons: [sensitive] })];
-  const snapshot = (items = mappings, extra = {}) => ({ id, synthetic: true, workflow_status: "AWAITING_APPROVAL", plan, mappings: items, activity: [], human_decisions: [], ...extra });
+  const snapshot = (items = mappings, extra = {}) => ({ id, synthetic: true, workflow_status: "AWAITING_APPROVAL", plan, assessment: { blocker_count: 0, readiness: "READY" }, mappings: items, activity: [], human_decisions: [], ...extra });
   const approvedAll = (n: number): MappingProposal[] => mappings.map((item, index) => index < n ? { ...item, state: "APPROVED" as const, decided_by: "demo-user" } : item);
   async function openPanel(fetch: ReturnType<typeof vi.fn>) {
     sessionStorage.setItem("movebooks-migration-session", id);
@@ -251,6 +251,45 @@ describe("through the Prepare screen", () => {
     expect(posts(fetch)).toHaveLength(2);
     await act(async () => { await new Promise(resolve => setTimeout(resolve, 20)); });
     expect(posts(fetch)).toHaveLength(2);
+  });
+
+  it("reports a lost connection as not confirmed, never as refused, and still sends nothing after it", async () => {
+    const fetch = vi.fn()
+      .mockResolvedValueOnce(json(snapshot())).mockResolvedValueOnce(json(snapshot()))
+      .mockResolvedValueOnce(json({}))
+      .mockRejectedValueOnce(new TypeError("Failed to fetch"))
+      .mockResolvedValue(json(snapshot(approvedAll(1))));
+    const { panel, submit } = await openPanel(fetch);
+    fireEvent.click(submit);
+    const alert = await within(panel).findByRole("alert");
+    expect(alert).toHaveTextContent("Maple Library was not confirmed");
+    expect(alert).toHaveTextContent("Maple Library → Customer: not confirmed, check its state in the list");
+    expect(alert).not.toHaveTextContent("refused");
+    expect(alert).toHaveTextContent("Independent Press → Customer: not sent");
+    expect(posts(fetch)).toHaveLength(2);
+  });
+
+  it("keeps the queue locked while a batch runs, so its result cannot be hidden", async () => {
+    let release!: (value: Response) => void;
+    const fetch = vi.fn()
+      .mockResolvedValueOnce(json(snapshot())).mockResolvedValueOnce(json(snapshot()))
+      .mockImplementationOnce(() => new Promise<Response>(resolve => { release = resolve; }))
+      .mockResolvedValue(json(snapshot(approvedAll(3))));
+    const { submit } = await openPanel(fetch);
+    fireEvent.click(submit);
+    const queue = await screen.findByRole("navigation", { name: "Mapping queue" });
+    await waitFor(() => expect(within(queue).getAllByRole("button").filter(button => button.classList.contains("pm-queue-item")).every(button => (button as HTMLButtonElement).disabled)).toBe(true));
+    await act(async () => { release(new Response(JSON.stringify({}), { status: 200 })); });
+    expect(await screen.findByRole("region", { name: "Approve low-risk mappings together" })).toBeVisible();
+  });
+
+  it("keeps batch approval off when the session read has no assessment (fails closed)", async () => {
+    sessionStorage.setItem("movebooks-migration-session", id);
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(json({ ...snapshot(), assessment: undefined })));
+    render(<PlanMapApproveExperience />);
+    fireEvent.click(await screen.findByRole("button", { name: "Review mappings" }));
+    expect(await screen.findByRole("button", { name: "Approve 3 low-risk mappings" })).toBeDisabled();
+    expect(screen.getByText(/Approving together is off while readiness findings are open/)).toBeVisible();
   });
 });
 

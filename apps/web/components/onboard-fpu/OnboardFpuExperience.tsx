@@ -133,7 +133,8 @@ export function OnboardFpuExperience() {
     : fpu.checkpoint === "POSTED" ? "Finish verifying your first invoice"
     : approved ? "Post and verify your first invoice"
     : "Approve your first invoice";
-  const guide = !snapshot ? "Open a migration from My migration to start using its books. Standalone scenarios are at the end of this page."
+  const guide = !snapshot && readState === "loading" ? "Reading your migration. Nothing is assumed until it loads."
+    : !snapshot ? "Open a migration from My migration to start using its books. Standalone scenarios are at the end of this page."
     : !snapshot.onboarding ? "Your books match and the settings are applied. Start onboarding to check the essentials your team needs before the first invoice."
     : !snapshot.ready && !fpu ? `${complete} of ${snapshot.tasks.length} essentials are ready. Confirm the ones that need you; the rules check the rest.`
     : !fpu ? "Every essential is ready. Prepare one invoice for a migrated customer; nothing posts until you approve it."

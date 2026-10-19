@@ -111,9 +111,9 @@ function BulkResult({ outcome }: { outcome: BulkOutcome }) {
   const notApproved = failed ? [failed.item, ...notAttempted] : notAttempted;
   return <div className="pm-bulk-result" data-tone={failed ? "blocked" : "done"} role={failed ? "alert" : "status"}>
     {failed
-      ? <p><strong>Stopped at {failed.item.label}.</strong> {approved.length} approved, each recorded separately. {notApproved.length} not approved. {failed.message} Nothing was retried or undone; decide the rest one by one.</p>
+      ? <p><strong>Stopped at {failed.item.label}.</strong> {approved.length} approved, each recorded separately. {failed.refused ? `${notApproved.length} not approved. ${failed.message}` : `${failed.item.label} was not confirmed: the connection failed, so it may or may not be recorded. The list below shows its current state after a fresh read.`} Nothing was retried or undone; decide the rest one by one.</p>
       : <p><strong>{approved.length} approved, each recorded separately.</strong></p>}
     {approved.length > 0 && <><p className="pm-meta">Approved</p><ul>{approved.map(item => <li key={item.id}>{item.label} → {item.target}: approved and recorded</li>)}</ul></>}
-    {notApproved.length > 0 && <><p className="pm-meta">Not approved</p><ul>{notApproved.map(item => <li key={item.id}>{item.label} → {item.target}: {failed && item.id === failed.item.id ? "refused" : "not sent"}</li>)}</ul></>}
+    {notApproved.length > 0 && <><p className="pm-meta">Not approved</p><ul>{notApproved.map(item => <li key={item.id}>{item.label} → {item.target}: {failed && item.id === failed.item.id ? failed.refused ? "refused" : "not confirmed, check its state in the list" : "not sent"}</li>)}</ul></>}
   </div>;
 }

@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/vitest";
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { MigrateResolveExperience } from "./MigrateResolveExperience";
 
@@ -49,6 +49,24 @@ describe("Move stage states", () => {
     // TaskContext and the five-stage bar stay on the page.
     expect(screen.getByRole("navigation", { name: "Migration utilities" })).toBeInTheDocument();
     expect(screen.getByRole("list", { name: "Five-stage migration journey" })).toBeInTheDocument();
+  });
+
+  it("does not call a recorded decision a failure when only the activity refresh fails", async () => {
+    const approved = { ...paused, status: "RETRY_PENDING", failures: paused.failures.map(f => ({ ...f, resolved: true })), resolutions: paused.resolutions.map(r => ({ ...r, state: "APPROVED", decided_by: "owner-7", decided_at: "2026-01-02T03:04:05Z" })) };
+    let decided = false;
+    vi.spyOn(globalThis, "fetch").mockImplementation((input, init) => {
+      const url = String(input);
+      if (init?.method === "POST" && url.endsWith("/decision")) { decided = true; return json(approved); }
+      if (url.endsWith("/activity")) return decided ? json({ detail: "Down" }, 503) : json([]);
+      return json(session(decided ? approved : paused, decided ? "RETRY_PENDING" : "RESOLVING"));
+    });
+    render(<MigrateResolveExperience />);
+    fireEvent.click(await screen.findByRole("button", { name: "Review 1 migration issue" }));
+    const approve = await screen.findByRole("button", { name: "Approve resolution" });
+    expect(approve).toBeEnabled();
+    fireEvent.click(approve);
+    expect(await screen.findByText(/Your last action is recorded\. The activity list could not be refreshed/)).toBeVisible();
+    expect(screen.queryByText(/That step was not completed/)).toBeNull();
   });
 
   it("names who approved the fix once the API records it", async () => {

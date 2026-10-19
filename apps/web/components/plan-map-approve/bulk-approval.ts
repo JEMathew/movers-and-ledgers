@@ -79,10 +79,14 @@ export function staleItems(set: BulkItem[], fresh: MappingProposal[]): StaleItem
   });
 }
 
+/** The API answered and declined the approval (an HTTP error status). Anything else, such as a lost
+ *  connection, leaves the outcome unknown: the approval may or may not have been recorded. */
+export class RefusedError extends Error {}
+
 export type BulkOutcome =
   | { kind: "aborted"; stale: StaleItem[]; set: BulkItem[] }
   | { kind: "unread"; message: string; set: BulkItem[] }
-  | { kind: "done"; approved: BulkItem[]; failed?: { item: BulkItem; message: string }; notAttempted: BulkItem[]; set: BulkItem[] };
+  | { kind: "done"; approved: BulkItem[]; failed?: { item: BulkItem; message: string; refused: boolean }; notAttempted: BulkItem[]; set: BulkItem[] };
 
 /**
  * Re-reads the mappings, aborts if anything in the set changed, then approves one item at a time in the
@@ -104,7 +108,8 @@ export async function runBulkApproval({ set, setId, readFresh, approve }: {
   for (const [index, item] of set.entries()) {
     try { await approve(item, { comment }); }
     catch (caught) {
-      return { kind: "done", approved, failed: { item, message: caught instanceof Error ? caught.message : "The approval was refused." }, notAttempted: set.slice(index + 1), set };
+      const refused = caught instanceof RefusedError;
+      return { kind: "done", approved, failed: { item, refused, message: caught instanceof Error ? caught.message : "The approval was not confirmed." }, notAttempted: set.slice(index + 1), set };
     }
     approved.push(item);
   }

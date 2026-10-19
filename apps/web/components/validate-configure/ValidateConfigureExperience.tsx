@@ -150,7 +150,8 @@ export function ValidateConfigureExperience() {
     : snapshot?.ready_for_onboarding ? "Your books match and settings are applied"
     : plan ? "Review the settings for your new books"
     : "Your books match";
-  const guide = !snapshot ? "Open a migration from My migration to check its books. Standalone scenarios are at the end of this page."
+  const guide = !snapshot && readState === "loading" ? "Reading your migration. Nothing is assumed until it loads."
+    : !snapshot ? "Open a migration from My migration to check its books. Standalone scenarios are at the end of this page."
     : !report ? "Compare the new books with the source. Every count and balance must match exactly before setup; nothing is rounded or written off."
     : !verified ? `${groups!.matched} of ${groups!.total} checks matched. Nothing is written off; review the permitted repair, then verify again.`
     : snapshot.ready_for_onboarding ? `${groups!.matched} of ${groups!.total} checks matched and every required setting is applied. Next, finish the essentials and post your first invoice.`

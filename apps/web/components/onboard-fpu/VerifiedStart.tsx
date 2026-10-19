@@ -57,14 +57,14 @@ export function VerifiedStart({ snapshot, fpu, evidence, recovery }: {
     <section className="v2s-money" aria-label="Verified results">
       <MoneyFigure strong label={`First invoice, ${customer}`} amount={figures.total} currency={figures.currency} caption={sum ? <span className="v2s-caption"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" strokeWidth="2" /></svg>Posted and verified: {sum}</span> : "Posted and verified"} />
       <div className="v2-card v2-money v2s-desk-only">
-        <span className="v2-money-label">Difference between old and new books</span>
+        <span className="v2-money-label">Trial balance difference, old vs new books</span>
         <span className={difference?.amount ? "v2-money-value" : "v2s-money-text"}>{difference?.text ?? unknown}</span>
         <span className="v2s-caption" data-tone={groups && booksAgree ? undefined : "quiet"}>{groups && booksAgree ? <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" strokeWidth="2" /></svg> : null}{trial ? `${trial.label}: ${trial.status === "VERIFIED" ? "matched" : "does not match"} · ` : ""}{checksLine}</span>
       </div>
       {/* Phone frame: one compact card instead of the second figure. */}
       <div className="v2-card v2s-phone-block">
         <Facts label="Verified results summary" rows={[
-          { label: "Difference, old vs new", value: difference?.text ?? unknown },
+          { label: "Trial balance difference", value: difference?.text ?? unknown },
           { label: "Verify checks", value: groups ? `${groups.matched} of ${groups.total}` : unknown, tone: booksAgree ? "ok" : undefined },
           { label: "Readiness checks", value: `${ready} of ${snapshot.tasks.length}`, tone: ready === snapshot.tasks.length ? "ok" : "review" },
         ]} />

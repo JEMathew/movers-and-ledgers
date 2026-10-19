@@ -80,7 +80,8 @@ export function MappingReview({ mappings, history, editable, busy, planApproved,
   const selected = mappings.find(mapping => mapping.id === selectedId) ?? firstOpen ?? ordered[0];
   useEffect(() => { if (focusDetail) detailHeading.current?.focus(); }, [focusDetail]);
 
-  function select(id: string) { setBulkOpen(false); setSelectedId(id); setFocusDetail(n => n + 1); }
+  // While a request runs (including a batch), the queue cannot switch panes, so a batch result is never hidden.
+  function select(id: string) { if (busy) return; setBulkOpen(false); setSelectedId(id); setFocusDetail(n => n + 1); }
   function reviewNext() {
     const rest = pending.filter(mapping => mapping.id !== selected?.id);
     const next = rest.find(mapping => !["BLOCKED", "REJECTED"].includes(mapping.state)) ?? rest[0];
@@ -97,9 +98,9 @@ export function MappingReview({ mappings, history, editable, busy, planApproved,
     </div>
     {mappings.length > 0 ? <div className="pm-map-grid">
       <nav className="pm-queue" aria-label="Mapping queue">
-        {groups.map(group => <QueueGroup key={group.id} id={group.id} items={group.items} selectedId={bulkOpen ? undefined : selected?.id} onSelect={select}
+        {groups.map(group => <QueueGroup key={group.id} id={group.id} items={group.items} selectedId={bulkOpen ? undefined : selected?.id} onSelect={select} disabled={busy}
           action={group.id === "ready" && editable ? <div className="pm-queue-bulk">
-            <Button variant="secondary" disabled={busy || !ready.length || readinessBlocked} aria-expanded={bulkOpen} onClick={() => { setBulkOutcome(undefined); setBulkOpen(true); }}>Approve {ready.length} low-risk {ready.length === 1 ? "mapping" : "mappings"}</Button>
+            <Button variant="secondary" disabled={busy || !ready.length || readinessBlocked} aria-expanded={bulkOpen} onClick={() => setBulkOpen(true)}>Approve {ready.length} low-risk {ready.length === 1 ? "mapping" : "mappings"}</Button>
             <p className="pm-meta">{readinessBlocked ? "Approving together is off while readiness findings are open. Decide each mapping on its own." : "Each approval is recorded separately. High and medium risk are never included."}</p>
           </div> : undefined} />)}
       </nav>
@@ -114,13 +115,13 @@ export function MappingReview({ mappings, history, editable, busy, planApproved,
   </section>;
 }
 
-function QueueGroup({ id, items, selectedId, onSelect, action }: { id: MappingGroupId; items: MappingProposal[]; selectedId?: string; onSelect: (id: string) => void; action?: ReactNode }) {
+function QueueGroup({ id, items, selectedId, onSelect, action, disabled = false }: { id: MappingGroupId; items: MappingProposal[]; selectedId?: string; onSelect: (id: string) => void; action?: ReactNode; disabled?: boolean }) {
   const titleId = useId();
   return <section className="pm-group" data-group={id} aria-labelledby={titleId}>
     <h3 id={titleId} className="pm-group-title">{GROUP_TITLE[id]} <span className="pm-count">({items.length})</span></h3>
     {GROUP_NOTE[id] && <p className="pm-group-note">{GROUP_NOTE[id]}</p>}
     <ul className="pm-queue-list">{items.map(mapping => <li key={mapping.id}>
-      <button type="button" className="pm-queue-item" aria-current={selectedId === mapping.id ? "true" : undefined} onClick={() => onSelect(mapping.id)}>
+      <button type="button" className="pm-queue-item" disabled={disabled} aria-current={selectedId === mapping.id ? "true" : undefined} onClick={() => onSelect(mapping.id)}>
         <span className="pm-queue-name">{mapping.source_label}</span>
         <span className="pm-queue-meta"><StatusChip status={chipStatus(mapping)} />{mapping.risk !== "LOW" && <span>{riskText(mapping.risk)}</span>}<span>{matchText(mapping.confidence)}</span></span>
       </button>

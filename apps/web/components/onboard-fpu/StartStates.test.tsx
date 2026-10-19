@@ -53,7 +53,7 @@ describe("Start: verified first invoice", () => {
     expect(screen.getByText("EUR 53.60", { selector: ".v2-money-value" })).toBeInTheDocument();
     expect(screen.getByText(/Posted and verified: 53\.60 = 50\.00 \+ 3\.60 tax/)).toBeInTheDocument();
     // Difference: the trial-balance check's own field, formatted with the report currency.
-    await waitFor(() => expect(screen.getByText("Difference between old and new books").nextElementSibling).toHaveTextContent(/^EUR 0\.00$/));
+    await waitFor(() => expect(screen.getByText("Trial balance difference, old vs new books").nextElementSibling).toHaveTextContent(/^EUR 0\.00$/));
     expect(screen.getByRole("heading", { name: "Verify: 3 of 3 checks matched" })).toBeInTheDocument();
     expect(screen.getByText(/The old and new books agree to the cent\./)).toBeInTheDocument();
   });
@@ -91,7 +91,7 @@ describe("Start: verified first invoice", () => {
 
   it("every amount it renders is an API string (contract test)", async () => {
     serve(verified); render(<OnboardFpuExperience />);
-    await waitFor(() => expect(screen.getByText("Difference between old and new books").nextElementSibling).toHaveTextContent("EUR 0.00"));
+    await waitFor(() => expect(screen.getByText("Trial balance difference, old vs new books").nextElementSibling).toHaveTextContent("EUR 0.00"));
     const api = JSON.stringify({ verified, evidence });
     // Every text node on the page, so adjacent table cells are never joined into one number.
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
@@ -104,7 +104,7 @@ describe("Start: verified first invoice", () => {
   it("says Not available, never zero, when the migration evidence cannot be read", async () => {
     serve(verified, null); render(<OnboardFpuExperience />);
     await screen.findByRole("heading", { level: 1, name: "Juniper Ledger Co is ready to use" });
-    await waitFor(() => expect(screen.getByText("Difference between old and new books").nextElementSibling).toHaveTextContent(/^Not available$/));
+    await waitFor(() => expect(screen.getByText("Trial balance difference, old vs new books").nextElementSibling).toHaveTextContent(/^Not available$/));
     expect(screen.queryByText(/agree to the cent/)).not.toBeInTheDocument();
     expect(document.body).not.toHaveTextContent("EUR 0.00");
     expect(screen.getByRole("region", { name: "Decisions by owner-9" })).toHaveTextContent("Mappings approved or changedNot available");
