@@ -269,6 +269,22 @@ describe("through the Prepare screen", () => {
     expect(posts(fetch)).toHaveLength(2);
   });
 
+  it("reports a server error as not confirmed, never as refused, because the approval may have been recorded", async () => {
+    const fetch = vi.fn()
+      .mockResolvedValueOnce(json(snapshot())).mockResolvedValueOnce(json(snapshot()))
+      .mockResolvedValueOnce(json({}))
+      .mockResolvedValueOnce(json({ detail: "The private API did not respond in time. Retry safely; no approval is implied." }, 503))
+      .mockResolvedValue(json(snapshot(approvedAll(2))));
+    const { panel, submit } = await openPanel(fetch);
+    fireEvent.click(submit);
+    const alert = await within(panel).findByRole("alert");
+    expect(alert).toHaveTextContent("Maple Library was not confirmed, so it may or may not be recorded.");
+    expect(alert).toHaveTextContent("Maple Library → Customer: not confirmed, check its state in the list");
+    expect(alert).not.toHaveTextContent("refused");
+    expect(alert).toHaveTextContent("Independent Press → Customer: not sent");
+    expect(posts(fetch)).toHaveLength(2);
+  });
+
   it("keeps the queue locked while a batch runs, so its result cannot be hidden", async () => {
     let release!: (value: Response) => void;
     const fetch = vi.fn()

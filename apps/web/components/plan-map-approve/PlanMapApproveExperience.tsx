@@ -26,13 +26,15 @@ type View = "plan" | "map" | "approve";
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
 /** The API answered with an error status (as opposed to no answer at all). */
-class HttpError extends Error {}
+class HttpError extends Error {
+  constructor(message: string, readonly status: number) { super(message); }
+}
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE}${path}`, { ...init, headers: { ...await authHeaders(), "Content-Type": "application/json", ...init?.headers } });
   if (!response.ok) {
     const body = await response.json().catch(() => null);
-    throw new HttpError(typeof body?.detail === "string" ? body.detail : `Request failed with status ${response.status}`);
+    throw new HttpError(typeof body?.detail === "string" ? body.detail : `Request failed with status ${response.status}`, response.status);
   }
   return response.json() as Promise<T>;
 }
@@ -143,8 +145,9 @@ export function PlanMapApproveExperience() {
       const outcome = await runBulkApproval({
         set, setId: crypto.randomUUID().slice(0, 8),
         readFresh: async () => validate(await api<Snapshot>(`/v1/migration-sessions/${id}`), id).mappings,
-        // An HTTP error is a refusal; a lost connection is not: that approval may have been recorded.
-        approve: (item, body) => api(`/v1/migration-sessions/${id}/mappings/${item.id}/approve`, { method: "POST", body: JSON.stringify(body) }).catch(caught => { throw caught instanceof HttpError ? new RefusedError(caught.message) : caught; }),
+        // A 4xx answer is a refusal. A lost connection or a 5xx (including the proxy's 503 after an upstream
+        // timeout) is not: that approval may have been recorded.
+        approve: (item, body) => api(`/v1/migration-sessions/${id}/mappings/${item.id}/approve`, { method: "POST", body: JSON.stringify(body) }).catch(caught => { throw caught instanceof HttpError && caught.status < 500 ? new RefusedError(caught.message) : caught; }),
       });
       // POST responses never substitute for an authoritative session read.
       if (outcome.kind !== "unread") await refresh().catch(caught => { if (mounted.current) setError(caught instanceof Error ? caught.message : "Session unavailable."); });

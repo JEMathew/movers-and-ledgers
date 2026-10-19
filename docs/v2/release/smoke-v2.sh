@@ -9,7 +9,7 @@ k=(); [[ $WEB == https://localhost:* ]] && k=(-k)
 pass=0; failed=0; body=$(mktemp); trap 'rm -f "$body"' EXIT
 ok()   { echo "PASS  $1"; pass=$((pass + 1)); }
 bad()  { echo "FAIL  $1"; failed=$((failed + 1)); }
-get()  { curl "${k[@]}" -sS -D "$body.h" -o "$body" -w '%{http_code}' --max-time 30 "$1" 2>/dev/null || echo 000; }
+get()  { curl ${k[@]+"${k[@]}"} -sS -D "$body.h" -o "$body" -w '%{http_code}' --max-time 30 "$1" 2>/dev/null || echo 000; }
 hdr()  { tr -d '\r' < "$body.h" | awk -v k="$1" 'tolower($1)==tolower(k)":" {sub(/^[^:]*: /,""); print}'; }
 
 [[ $(get "$WEB/") == 200 ]] && ok "landing 200" || bad "landing 200"

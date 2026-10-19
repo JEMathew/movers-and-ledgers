@@ -79,8 +79,8 @@ export function staleItems(set: BulkItem[], fresh: MappingProposal[]): StaleItem
   });
 }
 
-/** The API answered and declined the approval (an HTTP error status). Anything else, such as a lost
- *  connection, leaves the outcome unknown: the approval may or may not have been recorded. */
+/** The API answered and declined the approval (a 4xx status). Anything else, such as a lost connection or
+ *  a 5xx, leaves the outcome unknown: the approval may or may not have been recorded. */
 export class RefusedError extends Error {}
 
 export type BulkOutcome =
