@@ -105,7 +105,9 @@ export function OnboardFpuExperience() {
   const currentTask = snapshot?.tasks.find(task => task.id === taskId) ?? snapshot?.tasks.find(task => task.status !== "COMPLETED") ?? snapshot?.tasks[0];
   const complete = snapshot?.tasks.filter(t => t.status === "COMPLETED").length ?? 0;
   const frozen = !!fpu && (fpu.checkpoint !== "DRAFT" || fpu.attempts > 0);
-  const approved = fpu?.decisions.at(-1)?.action === "approve";
+  const lastDecision = fpu?.decisions.at(-1);
+  // The current terms are approved only by an approval of this exact contract (the API checks the same hash before posting).
+  const approved = lastDecision?.action === "approve" && (!lastDecision.evidence_hash || lastDecision.evidence_hash === fpu?.contract_hash);
   const rejected = fpu?.decisions.at(-1)?.action === "reject";
   const safe = readState === "ready" && !busy && !snapshot?.gate_error;
   const faults = snapshot?.onboarding?.faults ?? [];
@@ -116,7 +118,10 @@ export function OnboardFpuExperience() {
   const nextTaskForApproval = snapshot?.tasks.find(t => t.status !== "COMPLETED" && t.approval_required)?.id;
 
   // Every invoice control is rendered once, with the same enabled rules as before; only its place differs.
-  const reviewInvoice = fpu && !frozen ? <Button key="review" variant={approved || editing || !snapshot!.ready ? "secondary" : "primary"} disabled={!safe || editing || !snapshot!.ready} onClick={() => open({kind:"invoice", action:"approve"})}>Review invoice approval</Button> : null;
+  // Once these exact terms are approved, the approval is shown as recorded instead of offered again: a repeat
+  // approval would add a duplicate consent decision to the audit trail. Reject invoice still withdraws it.
+  const recordedApproval = fpu && !frozen && approved && lastDecision ? <p key="approved" className="v2s-meta v2s-recorded" role="status">Invoice terms approved by {lastDecision.actor}{lastDecision.at ? <> · <time dateTime={lastDecision.at}>{lastDecision.at}</time></> : null}. To change your mind, reject the invoice before posting.</p> : null;
+  const reviewInvoice = fpu && !frozen && !approved ? <Button key="review" variant={approved || editing || !snapshot!.ready ? "secondary" : "primary"} disabled={!safe || editing || !snapshot!.ready} onClick={() => open({kind:"invoice", action:"approve"})}>Review invoice approval</Button> : null;
   const postInvoice = fpu && !verified ? <Button key="post" variant={approved && !editing && !invoiceFaults.length ? "primary" : "secondary"} disabled={!safe || !approved || editing || !snapshot!.ready || (fpu.checkpoint === "DRAFT" && fpu.attempts >= fpu.retry_limit)} onClick={() => perform(`${root}/fpu/execute`, undefined, fpu.idempotency_key ?? `fpu-${fpu.id}`)}>{fpu.checkpoint === "POSTED" ? "Resume verification" : fpu.attempts ? "Retry approved invoice" : "Post and verify invoice"}</Button> : null;
   const invoiceLeads = !!fpu && !verified && !frozen && !approved;
   const remediation = <Button variant="secondary" disabled={!safe} onClick={() => open({kind: "repair"})}>Review synthetic remediation</Button>;
@@ -199,7 +204,7 @@ export function OnboardFpuExperience() {
           <p className="v2s-quiet">Next: {task.next_action}</p>
           {task.decision && <p className="v2s-small">{task.decision.actor} · {task.decision.role} · {task.decision.action}: {task.decision.selection} · {task.decision.at}</p>}
           <details className="v2s-details"><summary>Setup evidence</summary><Evidence values={task.evidence} /></details>
-          <div className="v2s-buttons">{task.approval_required && !frozen && ["approve", "modify", "reject"].map(action => <Button key={action} size="small" variant={action === "reject" ? "danger" : action === "approve" && task.status !== "COMPLETED" && task.id === nextTaskForApproval ? "primary" : "secondary"} disabled={!safe} onClick={() => open({kind: "task", task, action: action as "approve" | "modify" | "reject"})}>{action[0].toUpperCase() + action.slice(1)} {task.label.toLowerCase().replace(/^(approve|confirm|choose) /, "")}</Button>)}<Button size="small" variant="ghost" disabled={busy} onClick={() => open({kind: "explain", task})}>Explain {task.label.toLowerCase()}</Button></div>
+          <div className="v2s-buttons">{task.approval_required && !frozen && (["approve", "modify", "reject"] as const).filter(action => !(action === "approve" && task.status === "COMPLETED" && task.decision?.action === "approve")).map(action => <Button key={action} size="small" variant={action === "reject" ? "danger" : action === "approve" && task.status !== "COMPLETED" && task.id === nextTaskForApproval ? "primary" : "secondary"} disabled={!safe} onClick={() => open({kind: "task", task, action: action as "approve" | "modify" | "reject"})}>{action[0].toUpperCase() + action.slice(1)} {task.label.toLowerCase().replace(/^(approve|confirm|choose) /, "")}</Button>)}<Button size="small" variant="ghost" disabled={busy} onClick={() => open({kind: "explain", task})}>Explain {task.label.toLowerCase()}</Button></div>
         </article>; })}
         {!snapshot.ready && currentTask?.status === "COMPLETED" && <div><Button variant="secondary" disabled={!safe} onClick={() => setTaskId(snapshot.tasks.find(task => task.status !== "COMPLETED")?.id)}>Review next prerequisite</Button></div>}
       </div>
@@ -223,7 +228,7 @@ export function OnboardFpuExperience() {
       <div className="v2s-buttons"><Button type="submit" variant={snapshot.ready && !frozen ? "primary" : "secondary"} disabled={!safe || !snapshot.ready || frozen}>Prepare invoice contract</Button><span className="v2s-small">{snapshot.ready ? "Preparing or changing a draft requires fresh approval. No transaction is posted yet." : "Unlocks when every essential is ready. No transaction is posted yet."}</span></div>
     </form>}
     {fpu && <InvoiceDocument fpu={fpu} snapshot={snapshot} verified={false} nested>
-      <div className="v2s-buttons">{invoiceLeads ? null : reviewInvoice}{!frozen && <><Button variant="secondary" disabled={!safe} onClick={() => {setEditing(true); setQuantity(fpu.inputs.quantity); setPrice(fpu.inputs.unit_price); formRef.current?.focus();}}>Modify invoice</Button><Button variant="danger" disabled={!safe} onClick={() => open({kind:"invoice", action:"reject"})}>Reject invoice</Button></>}{invoiceLeads ? postInvoice : null}</div>
+      <div className="v2s-buttons">{invoiceLeads ? null : reviewInvoice ?? recordedApproval}{!frozen && <><Button variant="secondary" disabled={!safe} onClick={() => {setEditing(true); setQuantity(fpu.inputs.quantity); setPrice(fpu.inputs.unit_price); formRef.current?.focus();}}>Modify invoice</Button><Button variant="danger" disabled={!safe} onClick={() => open({kind:"invoice", action:"reject"})}>Reject invoice</Button></>}{invoiceLeads ? postInvoice : null}</div>
       {fpu.decisions.length > 0 && <p className="v2s-small">Last decision: {fpu.decisions.at(-1)!.action} by {fpu.decisions.at(-1)!.actor}{fpu.decisions.at(-1)!.at ? ` · ${fpu.decisions.at(-1)!.at}` : ""}</p>}
       <JournalTable fpu={fpu} />
       {fpu.checks.length > 0 && <ol className="v2s-rows" aria-label="Invoice checks">{fpu.checks.map(check => <li key={check.id}><span className="v2s-row-main">{sentence(check.id)}<span className="v2s-row-sub">{check.explanation}</span></span><StateChip tone={check.passed ? "approved" : "blocked"}>{check.passed ? "Passed" : "Failed"}</StateChip></li>)}</ol>}

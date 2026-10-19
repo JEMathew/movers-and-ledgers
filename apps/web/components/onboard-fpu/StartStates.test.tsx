@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { OnboardFpuExperience } from "./OnboardFpuExperience";
 import type { Fpu, SessionEvidence, Snapshot, Task } from "./types";
@@ -148,6 +148,35 @@ describe("Start: blocked states keep a way forward", () => {
     expect(recovery).toHaveTextContent("Onboarding is blocked");
     expect(recovery).toHaveTextContent("Invoice access: Invoice access explained");
     expect(screen.getByRole("heading", { level: 1, name: "Finish the essentials" })).toBeVisible();
+  });
+
+  it("shows an approval of these exact terms as recorded, never offers a second approval, and keeps withdrawal", async () => {
+    serve({ ...base, onboarding: { faults: [], fpu: { ...draft, status: "APPROVED", decisions: [{ action: "approve", actor: "owner-9", at: "2026-03-04T05:00:00Z", evidence_hash: "hash-1" }] } } });
+    render(<OnboardFpuExperience />);
+    const recorded = await screen.findByText(/Invoice terms approved by owner-9/);
+    expect(recorded).toHaveTextContent("2026-03-04T05:00:00Z");
+    expect(screen.queryByRole("button", { name: "Review invoice approval" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Reject invoice" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Post and verify invoice" })).toBeEnabled();
+  });
+
+  it("does not offer a second approval for an essential already approved, but keeps change and reject", async () => {
+    const approvedEssential: Task = { ...task("a", "Opening balances", "COMPLETED", true), decision: { actor: "owner-9", role: "OWNER", at: "t1", action: "approve", selection: "Use migrated balances" } };
+    serve({ ...base, ready: false, onboarding: { faults: [] }, tasks: [approvedEssential, task("role", "Invoice access", "REVIEW_REQUIRED", true)] });
+    render(<OnboardFpuExperience />);
+    await screen.findByRole("heading", { level: 1 });
+    fireEvent.change(screen.getByLabelText(/Onboarding checklist/), { target: { value: "a" } });
+    expect(screen.queryByRole("button", { name: "Approve opening balances" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Modify opening balances" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Reject opening balances" })).toBeEnabled();
+  });
+
+  it("treats an approval of different terms as stale and asks for a fresh approval", async () => {
+    serve({ ...base, onboarding: { faults: [], fpu: { ...draft, decisions: [{ action: "approve", actor: "owner-9", at: "t0", evidence_hash: "older-hash" }] } } });
+    render(<OnboardFpuExperience />);
+    expect(await screen.findByRole("button", { name: "Review invoice approval" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Post and verify invoice" })).toBeDisabled();
+    expect(screen.queryByText(/Invoice terms approved by/)).toBeNull();
   });
 
   it("shows a prepared draft as a document with the customer's migrated name and one primary action", async () => {

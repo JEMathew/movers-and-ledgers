@@ -1,4 +1,4 @@
-export type Decision = { actor: string; role?: string; at?: string; action: string; selection?: string };
+export type Decision = { actor: string; role?: string; at?: string; action: string; selection?: string; evidence_hash?: string };
 export type Task = {
   id: string; label: string; status: "COMPLETED" | "REVIEW_REQUIRED" | "BLOCKED";
   explanation: string; next_action: string; evidence: string[]; approval_required: boolean;
