@@ -1,5 +1,7 @@
 # MoveBooks AI V2: full experience, implementation report
 
+> Superseded for status and test counts by `docs/v2/release/RELEASE-READINESS.md` (release-readiness sprint, `3d4cb07`).
+
 Branch `v2/full-experience` at `64f7953` (27 commits on top of `v2/phase1-foundations` `0c6c757`, which was created
 from GitHub `main` `4e31e29`). Prepared 19 Oct 2026, local only. Not pushed, not merged, not deployed; GitHub push is not
 authorised from this environment, so no draft PR was opened. Gemini is not activated (`AI_ASSISTANCE_STATUS = "planned"`).

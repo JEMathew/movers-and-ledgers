@@ -1,22 +1,23 @@
 # Checkpoint: V2 full experience
 
-Updated 19 Oct 2026. Branch `v2/full-experience`. Nothing pushed, merged or deployed. Gemini not activated.
+Updated 19 Oct 2026 after the release-readiness sprint. Branch `v2/full-experience`; the last code commit is `3d4cb07`.
+Nothing has been pushed, merged or deployed, and Gemini is not activated. Current status, the release matrix and open
+issues are in `docs/v2/release/RELEASE-READINESS.md`, which supersedes the test counts in `REPORT.md`. Those counts were
+correct at `64f7953`.
 
-Status: all five workstreams are integrated and verified. See `REPORT.md` for results, decisions and remaining work.
-
-Test status at `64f7953`:
-- vitest: 798 passed.
-- tsc: clean.
-- eslint: clean.
-- next build: pass.
-- pytest: 663 passed, 86 skipped.
-- UI journey: 49/49 at 1440 and 390, ending in API `VERIFIED_FIRST_PRODUCTIVE_USE` with total 107.25 and 17/17 checks.
-- Live rejected and blocked recovery: pass.
-- axe: clean apart from the pre-existing `/play` issue.
+Test status at `3d4cb07`:
+- vitest 814 passed
+- tsc and eslint clean
+- `next build` (Firebase mode) passes
+- pytest 663 passed and 86 skipped; with Postgres, 678 passed and 71 skipped
+- journey 49/49 at 1440 and 390
+- live rejected and blocked recovery passes
+- axe 0 on 46 route checks
+- `smoke-v2.sh` 24/24
 
 ## Next tasks (each needs an owner decision)
 
-1. Approve a tagged, no-traffic Cloud Run preview for hosted verification of Firebase sign-in and Cloud SQL.
-2. Authorise a push of `v2/full-experience` and a draft PR to `main`. Merging and production promotion stay separate gates.
-3. Decide the API contract follow-ups in `REPORT.md`: difference as an amount, account names, and an evidence-pack export.
-4. Decide on the Gemini activation gate. The attribution switches to the approved line only after that gate.
+1. Push the branch and open a draft PR (`docs/v2/release/PR.md`); CI then runs on GitHub.
+2. Approve the private preview (`docs/v2/release/PREVIEW-PLAN.md`) and run `ACCEPTANCE-CHECKLIST.md` with the two test accounts.
+3. Decide on the backend `fpu/decision` replay guard (P2) and the API contract follow-ups.
+4. Production promotion, then the Gemini activation gate, each as a separate decision.

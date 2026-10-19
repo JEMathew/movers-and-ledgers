@@ -1,0 +1,370 @@
+[
+ {
+  "route": "/",
+  "width": 1440,
+  "title": "MoveBooks AI \u2014 Migrate with evidence",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/sign-in",
+  "width": 1440,
+  "title": "Sign in \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/workspace",
+  "width": 1440,
+  "title": "My migration \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/workspace?pick=1",
+  "width": 1440,
+  "title": "My migration \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/workspace?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 1440,
+  "title": "My migration \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/assess",
+  "width": 1440,
+  "title": "Understand: check readiness \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/assess?sample=northstar-supplies",
+  "width": 1440,
+  "title": "Understand: check readiness \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/plan-map-approve?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 1440,
+  "title": "Prepare: map and approve \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/migrate-resolve?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 1440,
+  "title": "Move: move your records \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/validate-configure?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 1440,
+  "title": "Verify: checks and settings \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/onboard-fpu?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 1440,
+  "title": "Start: your first invoice \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/trust",
+  "width": 1440,
+  "title": "Trust and security \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/trust?view=evidence&session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 1440,
+  "title": "Trust and security \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/product?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 1440,
+  "title": "MoveBooks AI \u2014 Migrate with evidence",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/learn",
+  "width": 1440,
+  "title": "Learn \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/guide",
+  "width": 1440,
+  "title": "How it works \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/simulator",
+  "width": 1440,
+  "title": "Simulator \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/support",
+  "width": 1440,
+  "title": "Help \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/support?session=071ba32e-17b1-59a2-bfae-0a33972d30f6&stage=2",
+  "width": 1440,
+  "title": "Help \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/feedback",
+  "width": 1440,
+  "title": "Send feedback \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/try-your-data",
+  "width": 1440,
+  "title": "Check your export in this browser \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/design-system",
+  "width": 1440,
+  "title": "Design system (internal) \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/play",
+  "width": 1440,
+  "title": "Play \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/",
+  "width": 390,
+  "title": "MoveBooks AI \u2014 Migrate with evidence",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/sign-in",
+  "width": 390,
+  "title": "Sign in \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/workspace",
+  "width": 390,
+  "title": "My migration \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/workspace?pick=1",
+  "width": 390,
+  "title": "My migration \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/workspace?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 390,
+  "title": "My migration \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/assess",
+  "width": 390,
+  "title": "Understand: check readiness \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/assess?sample=northstar-supplies",
+  "width": 390,
+  "title": "Understand: check readiness \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/plan-map-approve?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 390,
+  "title": "Prepare: map and approve \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/migrate-resolve?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 390,
+  "title": "Move: move your records \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/validate-configure?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 390,
+  "title": "Verify: checks and settings \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/onboard-fpu?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 390,
+  "title": "Start: your first invoice \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/trust",
+  "width": 390,
+  "title": "Trust and security \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/trust?view=evidence&session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 390,
+  "title": "Trust and security \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/product?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 390,
+  "title": "MoveBooks AI \u2014 Migrate with evidence",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/learn",
+  "width": 390,
+  "title": "Learn \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/guide",
+  "width": 390,
+  "title": "How it works \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/simulator",
+  "width": 390,
+  "title": "Simulator \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/support",
+  "width": 390,
+  "title": "Help \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/support?session=071ba32e-17b1-59a2-bfae-0a33972d30f6&stage=2",
+  "width": 390,
+  "title": "Help \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/feedback",
+  "width": 390,
+  "title": "Send feedback \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/try-your-data",
+  "width": 390,
+  "title": "Check your export in this browser \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/design-system",
+  "width": 390,
+  "title": "Design system (internal) \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ },
+ {
+  "route": "/play",
+  "width": 390,
+  "title": "Play \u00b7 MoveBooks AI",
+  "axe": [],
+  "horizontal_scroll": false,
+  "errors": []
+ }
+]
