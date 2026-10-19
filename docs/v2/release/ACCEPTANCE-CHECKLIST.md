@@ -8,6 +8,7 @@ equivalents are listed so you can see what the hosted run adds.
 
 | # | Check | Expected | Local evidence (19 Oct, demo identity) |
 |---|---|---|---|
+| A0 | Auth-layering gate (`PREVIEW-PLAN.md` step 5a) | Through the tunnel: 401 before sign-in; after Google sign-in, My migration loads (no 401) | Not testable locally (needs Cloud Run IAM) |
 | A1 | Sign in with Google (account A) from `/sign-in` | One popup; returns to the requested page; Account menu shows A's verified email | Not testable locally (Firebase) |
 | A2 | Refresh the same tab | Still signed in (browser-session persistence) | n/a |
 | A3 | Open a new tab | Signed out (session persistence is per tab by design) | n/a |
@@ -44,6 +45,16 @@ Backend evidence already run:
 6. Start: essentials → prepare invoice → approve once. "Invoice terms approved by …" replaces the approve control.
 7. Post and verify: USD 107.25 and "Trial balance difference: No difference".
 8. Evidence: exactly one "First invoice approved" row; mapping decisions show the actor.
+   Before posting, open the invoice in a second tab and approve again if the control is offered (it should not
+   be). The evidence page must still show one invoice approval.
 9. Northstar: a blocked `vendor-002` shows no approve control, and batch approval is off.
 
-Local evidence for every step: `REPORT.md` (journey 49/49 at 1440 and 390, recovery and consent checks).
+Local evidence for every step:
+- `REPORT.md` (journey 49/49 at 1440 and 390, recovery and consent checks).
+- For Phase 1 closure, `evidence/phase1-closure/`:
+  - journey at 1440 and 390 with the API final state;
+  - recovery flows;
+  - live invoice idempotency;
+  - 64 route accessibility checks.
+
+These are local runs with the demo identity, not hosted, real-device or accountant validation.

@@ -129,7 +129,7 @@ For Harbor Light, 6 mappings qualify. The design showed 10, but the 4 low-risk a
 
 ## Decisions and deviations
 
-1. **Attribution.** The approved line "Built on Google Cloud and powered by Gemini AI" would claim live hosted inference while the Beta is deterministic-only. `components/v2/Attribution.tsx` therefore shows "Built on Google Cloud · Gemini AI planned" and switches to the exact approved line only when the AI status is `live`. That switch is a separate, verified release decision. It is one quiet line on the landing page and in My migration.
+1. **Attribution.** The approved line "Built on Google Cloud and powered by Gemini AI" would claim live hosted inference while the Beta is deterministic-only. `components/v2/Attribution.tsx` therefore shows "Built on Google Cloud · Gemini AI planned" and switches to the exact approved line only when the AI status is `live`. That switch is a separate, verified release decision. It is one quiet line on the landing page and in My migration. *Superseded in Phase 1 closure (`2e41d20`): by owner decision the exact approved line is shown as fixed copy; AI status stays Planned. See `docs/v2/phase1/ai-status-rule.md`.*
 2. **"USD 0.00" difference.** The rules report the trial-balance comparison as "None" (no difference) or "Mismatch", not as an amount. The product and the landing sample say "No difference". Showing "USD 0.00" needs an API contract change.
 3. **Batch size.** As explained above, 6 mappings qualify for Harbor Light rather than the design's 10, because the server marks account mappings as sensitive.
 4. **Evidence pack.** No export exists in the app or API. The Start screen's primary action is "Review verified evidence".

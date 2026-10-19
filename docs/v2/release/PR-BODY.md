@@ -1,55 +1,52 @@
-## MoveBooks AI V2: full experience (draft, do not merge)
+## MoveBooks AI V2: Phase 1 release candidate (draft, do not merge)
 
-This PR moves every primary screen onto the approved A+B design:
+This PR moves every primary screen onto the approved V2 design, in one five-stage journey:
+- landing and sign-in;
+- My migration;
+- Understand, Prepare, Move, Verify and Start;
+- Evidence and Trust;
+- Demo, Learn, Help and Try your data.
 
-- landing page
-- sign-in
-- My migration
-- Understand, Prepare, Move, Verify and Start
-- evidence and Trust
-- demo, Learn, Help, Try your data
-
-It uses one five-stage journey, and every workflow screen shows the stage, what is done, what is waiting on you, one next step, the evidence and a recovery path.
+Every workflow screen shows:
+- the stage;
+- what is done and what is waiting on you;
+- one next step;
+- the evidence;
+- a recovery path.
 
 **Scope**
-- Only `apps/web` and `docs/v2` change. The API, domain rules, database schema, identity, the proxy and infrastructure are unchanged.
-- Route files are identical to `main`.
-- Gemini is not activated. AI is labelled Planned. The attribution line shows "Built on Google Cloud · Gemini AI planned" until the AI status is `live`.
+- Frontend changes are in `apps/web`, and documentation is in `docs/v2`.
+- One narrow backend fix: `decide_fpu` in `agents/orchestrator/onboard_fpu.py`, with tests.
+- Route files, schema, identity, the proxy and infrastructure are unchanged.
+- Play stays hidden from navigation behind its default-off flag.
+- The attribution is the approved line "Built on Google Cloud and powered by Gemini AI".
+- Hosted live Gemini inference is **not** active: the Advisor and the Reviewer remain Planned, and `AI_ASSISTANCE_STATUS` is `planned`.
 
 **Financial and safety changes**
-- Low-risk batch approval is built only on the existing per-item approve endpoint:
-  - explicit consent and full inspection;
+- **Invoice approval is idempotent on the server.** An identical repeat of the latest decision on the same contract records nothing new. The same action with a different note is refused (409). Reconsideration, revocation, changed-contract approval and posting idempotency are unchanged. This is covered by unit, API, PostgreSQL race and live tests.
+- **Low-risk batch approval** is built on the per-item approve endpoint:
+  - consent and full inspection;
   - revalidation before submitting;
   - stop on first failure;
-  - one audited decision per item.
-- The invoice cannot be approved twice for the same terms.
+  - one audited decision per item;
+  - a server error reads as "not confirmed", never as "refused".
 - Blocked mappings offer no approve control.
 
 **Release changes**
-- Prerendered HTML is cached for at most 60 s; it was one year.
+- Prerendered HTML is cached for at most 60 s; hashed assets are immutable.
 - The Play contrast and video focus-ring defects are fixed.
 
-**Local verification**
+**Local verification** (full matrix in `docs/v2/release/RELEASE-READINESS.md`)
 
 | Check | Result |
 |---|---|
-| vitest | 814 passed |
-| tsc and eslint | clean |
-| `next build` | passes |
-| pytest | 663 passed, 86 skipped; 678 passed with Postgres |
-| Journey at 1440 and 390 | 49/49 each |
-| axe | 0 violations on 23 routes × 2 widths |
+| vitest; tsc; eslint; ruff | 815 passed; clean |
+| pytest | 668 passed, 88 skipped; 728 passed with PostgreSQL 18 |
+| `next build`; `smoke-v2.sh` | passes; 24/24 |
+| Journey at 1440 and 390 | `VERIFIED_FIRST_PRODUCTIVE_USE`, one invoice decision, 0 axe violations |
+| axe WCAG 2.2 AA | 0 violations on 64 route checks (16 routes, 2 widths, light and dark) |
 
-Full results are in `docs/v2/release/RELEASE-READINESS.md`.
+**Not yet verified:** CI, container scan, hosted Google sign-in, two-account isolation and the preview auth-layering gate.
+See `docs/v2/release/PREVIEW-PLAN.md` and `ACCEPTANCE-CHECKLIST.md`.
 
-**Not yet verified**
-- Hosted Google sign-in
-- Two-account isolation
-- Container scan
-- CI
-
-These are covered in `docs/v2/release/PREVIEW-PLAN.md` and `ACCEPTANCE-CHECKLIST.md`.
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_011Rdxj7etdqG14zUJcubgxj
+🧙 Built with [WOZCODE](https://wozcode.com)

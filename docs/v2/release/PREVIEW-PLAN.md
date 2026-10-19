@@ -84,14 +84,40 @@ C=<full sha of v2/full-experience after the push>          # exact commit under 
    # open https://localhost:8443 (accept the local self-signed certificate)
    ```
 
+5a. **Auth-layering gate (before any acceptance step).** The preview has two separate authentication layers.
+   - **Cloud Run IAM** decides who may reach the private service. `gcloud run services proxy` attaches your identity token.
+   - **Firebase Google sign-in** decides whose migrations the app shows. The browser sends the Firebase ID token as
+     `Authorization: Bearer …` to `/api/v1/*`, and the web proxy verifies it, then forwards it to the API. Cloud Run
+     IAM for that hop travels in `X-Serverless-Authorization` (`lib/server/private-api-proxy.ts`).
+
+   Google's documentation for `gcloud run services proxy` does not state which header carries its token. If it sends
+   `Authorization`, it replaces the Firebase token on the browser-to-web hop: Google sign-in succeeds, but every data
+   call returns 401 "Sign in with Google to access this workspace". This has not been verified from this environment.
+   Check it first:
+   ```bash
+   # Through the tunnel, unauthenticated at the app layer: expect 401 from the app (Cloud Run IAM passed).
+   curl -sk -o /dev/null -w '%{http_code}\n' https://localhost:8443/api/v1/identity
+   ```
+   Then sign in with test account A at `https://localhost:8443/sign-in`, and open My migration.
+
+   **Pass:** the Account menu shows A's verified email, and My migration loads (start a sample migration if it is empty).
+
+   **Fail (401 after a successful Google sign-in):** stop `gcloud run services proxy`. Use the standalone proxy instead.
+   It sends the IAM token in `X-Serverless-Authorization` by default and leaves `Authorization` untouched
+   ([GoogleCloudPlatform/cloud-run-proxy](https://github.com/GoogleCloudPlatform/cloud-run-proxy)):
+   ```bash
+   go install github.com/GoogleCloudPlatform/cloud-run-proxy@latest      # pin the version you review
+   cloud-run-proxy -host https://<preview-service-url> -bind 127.0.0.1:8080
+   ```
+   Keep `local-ssl-proxy` unchanged and repeat this step. Do not make the service public to work around it.
+
 6. **Smoke tests.**
    ```bash
    bash docs/v2/release/smoke-v2.sh https://localhost:8443          # 24 read-only checks
    ```
    Locally, the same tunnel (`local-ssl-proxy` → Firebase-mode standalone build) passed 24/24. Google sign-in itself
-   could not be exercised here.
-   ```bash
-   ```
+   could not be exercised here. On 19 Oct, the script also passed 24/24 against a local production build of the
+   Phase 1 closure commit.
    Then do the manual acceptance in `docs/v2/release/ACCEPTANCE-CHECKLIST.md`, including the two-account isolation
    harness (`auth-isolation/isolation_check.py https://localhost:8443`) with the two existing test Google accounts.
 
@@ -100,6 +126,17 @@ C=<full sha of v2/full-experience after the push>          # exact commit under 
    gcloud run services delete movebooks-v2-preview-web --region $R --project $P
    ```
    Synthetic migrations created during the preview stay with their owners, as with any Beta use.
+
+### Go/no-go for the preview
+
+- **YES, deploy the private preview** once steps 1 and 3 are approved and the scan passes (0 Critical, 0 High).
+  Nothing in it changes production traffic, IAM, secrets or data.
+- **Roll back** (delete the service) on any of the following:
+  - the IAM policy shows `allUsers`;
+  - `smoke-v2.sh` fails;
+  - step 5a fails with both proxies;
+  - any isolation check shows another account's data;
+  - a financial value differs from the API.
 
 ## Production release (separate decision, not requested here)
 
