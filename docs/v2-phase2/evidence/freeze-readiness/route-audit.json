@@ -1,0 +1,23 @@
+{
+  "checks": [
+    {
+      "source": "/guide",
+      "links": 1,
+      "url": "http://localhost:3000/#product-vision",
+      "targetCount": 0,
+      "playCount": 1
+    },
+    {
+      "source": "/simulator",
+      "links": 1,
+      "url": "http://localhost:3000/#product-vision",
+      "targetCount": 0,
+      "playCount": 1
+    }
+  ],
+  "tryData": {
+    "status": 307,
+    "location": "/sign-in?next=%2Ftry-your-data"
+  },
+  "responses": []
+}

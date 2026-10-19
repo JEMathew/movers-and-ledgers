@@ -1,0 +1,529 @@
+{
+  "date_utc": "2026-10-19T19:36:35.168361+00:00",
+  "status": "GO for owner checkpoint approval; no commit authorized",
+  "source_files_changed": [
+    "apps/web/components/public-surfaces/HeroVideo.tsx",
+    "apps/web/components/public-surfaces/HeroVideo.test.tsx"
+  ],
+  "implementation": "Restore product-vision ID on existing hero-media wrapper; use existing 6rem scroll-padding-top without CSS changes",
+  "new_tests": 1,
+  "focused": {
+    "files": 6,
+    "passed": 80,
+    "exit_code": 0
+  },
+  "frontend": {
+    "files": 64,
+    "passed": 823,
+    "exit_code": 0,
+    "reason_for_increase": "One regression test checks the real Guide/Demo fragment destinations against the unique existing video wrapper and ensures no playback"
+  },
+  "typescript_exit_code": 0,
+  "eslint_exit_code": 0,
+  "diff_check_exit_code": 0,
+  "fragment_browser": {
+    "cases": [
+      {
+        "width": 1440,
+        "height": 900,
+        "theme": "dark",
+        "states": [
+          {
+            "source": "/guide",
+            "url": "http://localhost:3000/#product-vision",
+            "scrollY": 0,
+            "scrollPadding": "96px",
+            "targetCount": 1,
+            "target": {
+              "top": 77.9375,
+              "bottom": 549.9375
+            },
+            "play": {
+              "top": 462.75,
+              "bottom": 533.9375
+            },
+            "headerBottom": 77.9375,
+            "playCount": 1,
+            "dialogOpen": false,
+            "paused": true,
+            "overflow": false,
+            "targetOwnsPlay": true
+          },
+          {
+            "source": "/simulator",
+            "url": "http://localhost:3000/#product-vision",
+            "scrollY": 0,
+            "scrollPadding": "96px",
+            "targetCount": 1,
+            "target": {
+              "top": 77.9375,
+              "bottom": 549.9375
+            },
+            "play": {
+              "top": 462.75,
+              "bottom": 533.9375
+            },
+            "headerBottom": 77.9375,
+            "playCount": 1,
+            "dialogOpen": false,
+            "paused": true,
+            "overflow": false,
+            "targetOwnsPlay": true
+          },
+          {
+            "source": "direct",
+            "url": "http://localhost:3000/#product-vision",
+            "scrollY": 0,
+            "scrollPadding": "96px",
+            "targetCount": 1,
+            "target": {
+              "top": 77.9375,
+              "bottom": 549.9375
+            },
+            "play": {
+              "top": 462.75,
+              "bottom": 533.9375
+            },
+            "headerBottom": 77.9375,
+            "playCount": 1,
+            "dialogOpen": false,
+            "paused": true,
+            "overflow": false,
+            "targetOwnsPlay": true
+          }
+        ],
+        "closed": {
+          "paused": true,
+          "dialogClosed": true,
+          "focusReturned": true
+        }
+      },
+      {
+        "width": 1440,
+        "height": 900,
+        "theme": "light",
+        "states": [
+          {
+            "source": "/guide",
+            "url": "http://localhost:3000/#product-vision",
+            "scrollY": 0,
+            "scrollPadding": "96px",
+            "targetCount": 1,
+            "target": {
+              "top": 77.9375,
+              "bottom": 549.9375
+            },
+            "play": {
+              "top": 462.75,
+              "bottom": 533.9375
+            },
+            "headerBottom": 77.9375,
+            "playCount": 1,
+            "dialogOpen": false,
+            "paused": true,
+            "overflow": false,
+            "targetOwnsPlay": true
+          },
+          {
+            "source": "/simulator",
+            "url": "http://localhost:3000/#product-vision",
+            "scrollY": 0,
+            "scrollPadding": "96px",
+            "targetCount": 1,
+            "target": {
+              "top": 77.9375,
+              "bottom": 549.9375
+            },
+            "play": {
+              "top": 462.75,
+              "bottom": 533.9375
+            },
+            "headerBottom": 77.9375,
+            "playCount": 1,
+            "dialogOpen": false,
+            "paused": true,
+            "overflow": false,
+            "targetOwnsPlay": true
+          },
+          {
+            "source": "direct",
+            "url": "http://localhost:3000/#product-vision",
+            "scrollY": 0,
+            "scrollPadding": "96px",
+            "targetCount": 1,
+            "target": {
+              "top": 77.9375,
+              "bottom": 549.9375
+            },
+            "play": {
+              "top": 462.75,
+              "bottom": 533.9375
+            },
+            "headerBottom": 77.9375,
+            "playCount": 1,
+            "dialogOpen": false,
+            "paused": true,
+            "overflow": false,
+            "targetOwnsPlay": true
+          }
+        ],
+        "closed": {
+          "paused": true,
+          "dialogClosed": true,
+          "focusReturned": true
+        }
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "theme": "dark",
+        "states": [
+          {
+            "source": "/guide",
+            "url": "http://localhost:3000/#product-vision",
+            "scrollY": 513,
+            "scrollPadding": "96px",
+            "targetCount": 1,
+            "target": {
+              "top": 95.625,
+              "bottom": 431.375
+            },
+            "play": {
+              "top": 347.375,
+              "bottom": 415.375
+            },
+            "headerBottom": 83.09375,
+            "playCount": 1,
+            "dialogOpen": false,
+            "paused": true,
+            "overflow": false,
+            "targetOwnsPlay": true
+          },
+          {
+            "source": "/simulator",
+            "url": "http://localhost:3000/#product-vision",
+            "scrollY": 513,
+            "scrollPadding": "96px",
+            "targetCount": 1,
+            "target": {
+              "top": 95.625,
+              "bottom": 431.375
+            },
+            "play": {
+              "top": 347.375,
+              "bottom": 415.375
+            },
+            "headerBottom": 83.09375,
+            "playCount": 1,
+            "dialogOpen": false,
+            "paused": true,
+            "overflow": false,
+            "targetOwnsPlay": true
+          },
+          {
+            "source": "direct",
+            "url": "http://localhost:3000/#product-vision",
+            "scrollY": 513,
+            "scrollPadding": "96px",
+            "targetCount": 1,
+            "target": {
+              "top": 95.625,
+              "bottom": 431.375
+            },
+            "play": {
+              "top": 347.375,
+              "bottom": 415.375
+            },
+            "headerBottom": 83.09375,
+            "playCount": 1,
+            "dialogOpen": false,
+            "paused": true,
+            "overflow": false,
+            "targetOwnsPlay": true
+          }
+        ],
+        "closed": {
+          "paused": true,
+          "dialogClosed": true,
+          "focusReturned": true
+        }
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "theme": "light",
+        "states": [
+          {
+            "source": "/guide",
+            "url": "http://localhost:3000/#product-vision",
+            "scrollY": 513,
+            "scrollPadding": "96px",
+            "targetCount": 1,
+            "target": {
+              "top": 95.625,
+              "bottom": 431.375
+            },
+            "play": {
+              "top": 347.375,
+              "bottom": 415.375
+            },
+            "headerBottom": 83.09375,
+            "playCount": 1,
+            "dialogOpen": false,
+            "paused": true,
+            "overflow": false,
+            "targetOwnsPlay": true
+          },
+          {
+            "source": "/simulator",
+            "url": "http://localhost:3000/#product-vision",
+            "scrollY": 513,
+            "scrollPadding": "96px",
+            "targetCount": 1,
+            "target": {
+              "top": 95.625,
+              "bottom": 431.375
+            },
+            "play": {
+              "top": 347.375,
+              "bottom": 415.375
+            },
+            "headerBottom": 83.09375,
+            "playCount": 1,
+            "dialogOpen": false,
+            "paused": true,
+            "overflow": false,
+            "targetOwnsPlay": true
+          },
+          {
+            "source": "direct",
+            "url": "http://localhost:3000/#product-vision",
+            "scrollY": 513,
+            "scrollPadding": "96px",
+            "targetCount": 1,
+            "target": {
+              "top": 95.625,
+              "bottom": 431.375
+            },
+            "play": {
+              "top": 347.375,
+              "bottom": 415.375
+            },
+            "headerBottom": 83.09375,
+            "playCount": 1,
+            "dialogOpen": false,
+            "paused": true,
+            "overflow": false,
+            "targetOwnsPlay": true
+          }
+        ],
+        "closed": {
+          "paused": true,
+          "dialogClosed": true,
+          "focusReturned": true
+        }
+      }
+    ],
+    "resources": [],
+    "pageErrors": [],
+    "failures": []
+  },
+  "existing_harness": {
+    "axe_cases": 9,
+    "violations": 0,
+    "overflow_cases": 0,
+    "appearance": {
+      "firstVisitClass": "dark",
+      "checked": "dark",
+      "focused": "dark",
+      "afterArrow": {
+        "cls": "light",
+        "stored": "light"
+      },
+      "focusAfterEscape": "Change appearance",
+      "afterReload": "light",
+      "systemDark": "dark",
+      "systemLightLive": "light"
+    },
+    "sticky": {
+      "atTop": 0,
+      "scrolled": 1,
+      "headerTop": 0,
+      "backToTop": 0,
+      "mobileScrolled": 1,
+      "mobileHscroll": false
+    },
+    "video": {
+      "open": {
+        "open": true,
+        "modal": true,
+        "paused": false,
+        "muted": false,
+        "duration": 25.042,
+        "focus": "Close video"
+      },
+      "afterEscape": {
+        "open": false,
+        "paused": true,
+        "focus": "lp-play"
+      }
+    },
+    "journey": {
+      "frames": [
+        {
+          "t": 100,
+          "state": "static",
+          "colors": [
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)"
+          ],
+          "fills": [
+            "none",
+            "none",
+            "none",
+            "none"
+          ]
+        },
+        {
+          "t": 900,
+          "state": "playing",
+          "colors": [
+            "rgb(29, 95, 216)",
+            "rgb(67, 99, 149)",
+            "rgb(82, 100, 123)",
+            "rgb(82, 100, 123)",
+            "rgb(82, 100, 123)"
+          ],
+          "fills": [
+            "matrix(1, 0, 0, 1, 0, 0)",
+            "matrix(0.0855961, 0, 0, 1, 0, 0)",
+            "matrix(0, 0, 0, 1, 0, 0)",
+            "matrix(0, 0, 0, 1, 0, 0)"
+          ]
+        },
+        {
+          "t": 1700,
+          "state": "playing",
+          "colors": [
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)",
+            "rgb(54, 97, 172)",
+            "rgb(82, 100, 123)",
+            "rgb(82, 100, 123)"
+          ],
+          "fills": [
+            "matrix(1, 0, 0, 1, 0, 0)",
+            "matrix(1, 0, 0, 1, 0, 0)",
+            "matrix(0.170991, 0, 0, 1, 0, 0)",
+            "matrix(0, 0, 0, 1, 0, 0)"
+          ]
+        },
+        {
+          "t": 2500,
+          "state": "playing",
+          "colors": [
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)",
+            "rgb(42, 96, 193)",
+            "rgb(82, 100, 123)"
+          ],
+          "fills": [
+            "matrix(1, 0, 0, 1, 0, 0)",
+            "matrix(1, 0, 0, 1, 0, 0)",
+            "matrix(1, 0, 0, 1, 0, 0)",
+            "matrix(0.26757, 0, 0, 1, 0, 0)"
+          ]
+        },
+        {
+          "t": 3600,
+          "state": "playing",
+          "colors": [
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)"
+          ],
+          "fills": [
+            "matrix(1, 0, 0, 1, 0, 0)",
+            "matrix(1, 0, 0, 1, 0, 0)",
+            "matrix(1, 0, 0, 1, 0, 0)",
+            "matrix(1, 0, 0, 1, 0, 0)"
+          ]
+        },
+        {
+          "t": 5000,
+          "state": "playing",
+          "colors": [
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)",
+            "rgb(29, 95, 216)"
+          ],
+          "fills": [
+            "matrix(1, 0, 0, 1, 0, 0)",
+            "matrix(1, 0, 0, 1, 0, 0)",
+            "matrix(1, 0, 0, 1, 0, 0)",
+            "matrix(1, 0, 0, 1, 0, 0)"
+          ]
+        }
+      ],
+      "reduced": {
+        "state": "playing",
+        "colors": [
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)"
+        ],
+        "fills": [
+          "none",
+          "none",
+          "none",
+          "none"
+        ],
+        "animations": 0
+      }
+    },
+    "console_errors_with_locations": [
+      {
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "location": {
+          "url": "http://localhost:3000/favicon.ico",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "location": {
+          "url": "http://localhost:3000/favicon.ico",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      }
+    ]
+  },
+  "resource_404_conclusion": "Both console errors identify http://localhost:3000/favicon.ico. Baseline HEAD has no favicon asset; documented before this fix. No remediation.",
+  "preserved": {
+    "index_identical": true,
+    "staged_deletions": [
+      "apps/web/components/public-surfaces/ProductVision.test.tsx",
+      "apps/web/components/public-surfaces/ProductVision.tsx"
+    ]
+  },
+  "commands": {
+    "focused": "cd apps/web && ./node_modules/.bin/vitest run components/public-surfaces/HeroVideo.test.tsx components/public-surfaces/surfaces.test.tsx components/public-surfaces/landing-motion.test.tsx components/public-surfaces/GuidedDemo.test.tsx test/legacy-routes.test.tsx test/account-shell.test.tsx",
+    "full": "cd apps/web && ./node_modules/.bin/vitest run",
+    "typescript": "cd apps/web && ./node_modules/.bin/tsc --noEmit --incremental false",
+    "eslint": "cd apps/web && ./node_modules/.bin/eslint .",
+    "diff": "git diff --check"
+  },
+  "temporary_runner_and_logs": "/private/tmp/movebooks-anchor-1ji5upb8"
+}

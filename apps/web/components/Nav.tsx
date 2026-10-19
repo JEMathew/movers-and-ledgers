@@ -1,12 +1,50 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { ArrowRight, Menu } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { AccountControls } from "@/components/AccountControls";
 import { useIdentity } from "@/components/IdentityProvider";
 import { memberLinks, publicLinks, visibleLinks } from "@/components/public-surfaces/content";
+import { AppearanceMenu } from "@/components/theme/AppearanceMenu";
+import { Attribution } from "@/components/v2/Attribution";
 import { features } from "@/lib/features";
+
+/** Open-book mark from the approved design. Decorative: the link carries the name. */
+export function BrandMark() {
+  return <svg className="brand-mark" viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" strokeLinecap="round">
+    <path d="M4 7.5c3.6-1.4 7.6-1.2 12 1.2v18c-4.4-2.4-8.4-2.6-12-1.2z" />
+    <path d="M28 7.5c-3.6-1.4-7.6-1.2-12 1.2v18c4.4-2.4 8.4-2.6 12-1.2z" />
+    <path d="M7.5 12.5h5M7.5 16.5h5M7.5 20.5h5M19.5 12.5h5M19.5 16.5h5M19.5 20.5h5" />
+  </svg>;
+}
+
+/**
+ * Shows the compact header Explore Demo only while the page's hero CTA (marked data-hero-cta) is scrolled
+ * out of view, so the two primary buttons are never emphasised together.
+ */
+function useHeroCtaHidden(pathname: string | null) {
+  const [hidden, setHidden] = useState(false);
+  useEffect(() => {
+    setHidden(false);
+    const cta = document.querySelector("[data-hero-cta]");
+    if (!cta || typeof IntersectionObserver === "undefined") return;
+    let observer: IntersectionObserver;
+    function observe() {
+      // The sticky header occludes part of the viewport. Treat a CTA behind it as hidden,
+      // including on shorter pages, and recalculate when the responsive header changes size.
+      const headerHeight = document.querySelector(".site-header-bar")?.getBoundingClientRect().height ?? 0;
+      observer?.disconnect();
+      observer = new IntersectionObserver(([entry]) => setHidden(!entry.isIntersecting && entry.boundingClientRect.top < headerHeight),
+        { rootMargin: `-${headerHeight}px 0px 0px 0px` });
+      observer.observe(cta!);
+    }
+    observe();
+    window.addEventListener("resize", observe);
+    return () => { observer.disconnect(); window.removeEventListener("resize", observe); };
+  }, [pathname]);
+  return hidden;
+}
 
 export function Nav() {
   const { identity } = useIdentity();
@@ -16,6 +54,7 @@ export function Nav() {
   const panel = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const panelId = useId();
+  const showHeaderCta = useHeroCtaHidden(pathname);
   // Navigation reflects API-verified identity, including on public Play and Help.
   const links = visibleLinks(identity ? memberLinks : publicLinks, features.playInNavigation);
   useEffect(() => { setOpen(false); }, [pathname, identity?.subject]);
@@ -30,29 +69,38 @@ export function Nav() {
     document.addEventListener("pointerdown", outside);
     return () => { window.removeEventListener("resize", resize); document.removeEventListener("pointerdown", outside); };
   }, [open]);
-  return <header ref={root} className="shell site-header" onKeyDown={event => {
-    if (event.key === "Escape" && open) { event.preventDefault(); setOpen(false); trigger.current?.focus(); }
-  }}>
-    <Link href={identity ? "/workspace" : "/"} aria-label={identity ? "MoveBooks AI, my migration" : "MoveBooks AI home"} className="site-brand">
-      <svg className="brand-mark" viewBox="0 0 26 26" aria-hidden="true"><rect x="3" y="4" width="8" height="18" rx="2" fill="none" stroke="currentColor" strokeWidth="2" /><rect x="15" y="4" width="8" height="18" rx="2" fill="var(--primary)" /></svg>
-      <span>MoveBooks AI</span>
-    </Link>
-    <div className="mobile-discovery-controls">
-      {features.playInNavigation && <Link className="nav-link" href="/play" aria-current={pathname === "/play" ? "page" : undefined}>Play</Link>}
-      <button ref={trigger} type="button" className="button ghost icon-button" aria-label="Open navigation" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen(value => !value)}><Menu aria-hidden="true" size={20}/></button>
-    </div>
-    <div ref={panel} id={panelId} className={`navigation-panel${open ? " is-open" : ""}`} onClick={event => {
-      if ((event.target as HTMLElement).closest("a")) setOpen(false);
-    }} onBlur={event => {
-      if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget) && event.relatedTarget !== trigger.current) setOpen(false);
+  const headerCta = showHeaderCta && <Link href="/simulator" className="header-cta">Explore Demo<ArrowRight size={16} aria-hidden="true" /></Link>;
+  return <div className="site-header-bar" data-tone={pathname === "/" ? "navy" : undefined}>
+    <header ref={root} className="shell site-header" onKeyDown={event => {
+      if (event.key === "Escape" && open) { event.preventDefault(); setOpen(false); trigger.current?.focus(); }
     }}>
-      <nav aria-label="Primary navigation" className="site-nav">
-        {links.map(([label, href]) => <Link key={href} className={href === "/play" ? "desktop-play" : undefined} href={href} aria-current={pathname === href ? "page" : undefined}>{label}</Link>)}
-      </nav>
-      <div className="nav-utilities">
-        <Link className="nav-link" href="/support" aria-current={pathname === "/support" ? "page" : undefined}>Help</Link>
-        <AccountControls />
+      <div className="site-brand-block">
+        {/* The logo is Home: Public Home before sign-in, Member Home after. */}
+        <Link href={identity ? "/workspace" : "/"} aria-label={identity ? "MoveBooks AI, member home" : "MoveBooks AI home"} className="site-brand">
+          <BrandMark />
+          <span>MoveBooks AI</span>
+        </Link>
+        <Attribution className="site-attribution" />
       </div>
-    </div>
-  </header>;
+      <div className="mobile-discovery-controls">
+        {headerCta}
+        {features.playInNavigation && <Link className="nav-link" href="/play" aria-current={pathname === "/play" ? "page" : undefined}>Play</Link>}
+        <button ref={trigger} type="button" className="button ghost icon-button" aria-label="Open navigation" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen(value => !value)}><Menu aria-hidden="true" size={20}/></button>
+      </div>
+      <div ref={panel} id={panelId} className={`navigation-panel${open ? " is-open" : ""}`} onClick={event => {
+        if ((event.target as HTMLElement).closest("a")) setOpen(false);
+      }} onBlur={event => {
+        if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget) && event.relatedTarget !== trigger.current) setOpen(false);
+      }}>
+        <nav aria-label="Primary navigation" className="site-nav">
+          {links.map(([label, href]) => <Link key={href} className={href === "/play" ? "desktop-play" : undefined} href={href} aria-current={pathname === href ? "page" : undefined}>{label}</Link>)}
+        </nav>
+        <div className="nav-utilities">
+          <span className="desktop-header-cta">{headerCta}</span>
+          <AppearanceMenu />
+          <AccountControls />
+        </div>
+      </div>
+    </header>
+  </div>;
 }

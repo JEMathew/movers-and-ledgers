@@ -16,9 +16,14 @@ const statuses = ["CREATED", "DISCOVERED", "ASSESSED", "PLANNED", "MAPPING", "AW
 const id = "11111111-1111-4111-8111-111111111111";
 
 describe("customer-facing label casing", () => {
-  it("uses sentence case for menus, journey steps and every next action", () => {
+  it("uses the approved design's exact navigation labels", () => {
+    // The approved V2 landing design sets header labels in title case; they are fixed, not free-form copy.
+    expect(publicLinks.map(([label]) => label)).toEqual(["Learn", "Trust and Security", "Play"]);
+    expect(memberLinks.map(([label]) => label)).toEqual(["My Migration", "Explore Demo", "Learn", "Trust and Security", "Play"]);
+    expect(footerLinks.map(([label]) => label)).toEqual(["Contact"]);
+  });
+  it("uses sentence case for journey steps and every next action", () => {
     const labels = [
-      ...[...publicLinks, ...memberLinks, ...footerLinks].map(([label]) => label),
       ...journeySteps.map(step => step.label),
       ...statuses.flatMap(status => [0, 2].flatMap(n => {
         const action = nextActionFor({ id, status, readinessIssues: n, migrationIssues: n, verificationIssues: n, mappingIssues: n });

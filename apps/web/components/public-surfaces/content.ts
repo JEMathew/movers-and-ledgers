@@ -17,12 +17,13 @@ export const topics = [
   { id: "recovery", title: "What happens when migration fails", body: "Work pauses at a safe boundary, preserving completed checkpoints and failure evidence. Review the proposed remedy. Consequential recovery needs your approval; retry only when the workflow permits it.", question: "What completed, what failed, and what will retry do?", phase: 2 },
   { id: "business-ready", title: "What Business ready · verified means", body: "Required data, setup, access and onboarding checks pass, then an authorized user completes an agreed task with verified evidence. In this Beta that is a synthetic invoice—not proof of production readiness.", question: "Has the productive task been verified, not merely posted?", phase: 4 },
 ] as const;
-// Signed-out navigation. Route paths are unchanged for compatibility; labels are customer-facing.
-export const publicLinks = [["How it works", "/guide"], ["Explore demo", "/simulator"], ["Learn", "/learn"], ["Trust and security", "/trust"], ["Play", "/play"]] as const;
-// Signed-in navigation replaces the public marketing links. Account is the identity menu itself.
-export const memberLinks = [["My migration", "/workspace"], ["Play", "/play"]] as const;
-export const exploreLinks = [["Product overview", "/"], ["Explore demo", "/simulator"], ["Learn", "/learn"], ["Trust and security", "/trust"], ["How it works", "/guide"]] as const;
-export const footerLinks = [["How it works", "/guide"], ["Help", "/support"], ["Send feedback", "/feedback"], ["Beta limitations", "/trust#beta-limitations"]] as const;
+// Signed-out navigation (approved V2 landing design). The logo is Home; Explore Demo lives in the hero and the
+// scroll-aware header button, so it is not repeated here. Labels follow the approved design's title case.
+export const publicLinks = [["Learn", "/learn"], ["Trust and Security", "/trust"], ["Play", "/play"]] as const;
+// Signed-in navigation. The logo is Member Home (/workspace); Account is the identity menu itself.
+export const memberLinks = [["My Migration", "/workspace"], ["Explore Demo", "/simulator"], ["Learn", "/learn"], ["Trust and Security", "/trust"], ["Play", "/play"]] as const;
+// Minimal legal footer. Privacy and Terms are withheld until owner-reviewed documents exist (release blocker).
+export const footerLinks = [["Contact", "/support"]] as const;
 export const startMigrationHref = "/workspace";
 export const sampleEntry = "/assess?sample=harbor-light-migrate-demo";
 export const scope = "Synthetic Data · Public Reference · Beta. No live provider migration or production readiness claim.";

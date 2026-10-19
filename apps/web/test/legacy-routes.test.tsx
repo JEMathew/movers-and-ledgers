@@ -48,13 +48,13 @@ describe("legacy /approvals and /reports routes", () => {
 });
 
 describe("footer", () => {
-  it("carries Feedback with Help and the Beta limits, outside the primary navigation", () => {
+  it("is the minimal legal footer: copyright and Contact only, with no brand or attribution repeat", () => {
     render(<Footer />);
     const footer = screen.getByRole("navigation", { name: "Footer" });
-    for (const [name, href] of [["How it works", "/guide"], ["Help", "/support"], ["Send feedback", "/feedback"], ["Beta limitations", "/trust#beta-limitations"]]) {
-      expect(within(footer).getByRole("link", { name })).toHaveAttribute("href", href);
-    }
-    expect(publicLinks.map(([label]) => label as string)).not.toContain("Feedback");
-    expect(screen.getByText(/independent synthetic product concept/)).toBeInTheDocument();
+    expect(within(footer).getAllByRole("link").map(link => [link.textContent, link.getAttribute("href")])).toEqual([["Contact", "/support"]]);
+    expect(screen.getByText("© 2026 Movers & Ledgers")).toBeInTheDocument();
+    expect(screen.getByRole("contentinfo")).not.toHaveTextContent(/MoveBooks AI|Google Cloud|Gemini/);
+    // Privacy and Terms stay out until owner-reviewed documents exist; no invented legal pages.
+    expect(screen.queryByRole("link", { name: /Privacy|Terms/ })).not.toBeInTheDocument();
   });
 });

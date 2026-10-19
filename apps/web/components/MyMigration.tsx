@@ -10,7 +10,6 @@ import { MemberProgress } from "./journey/MemberProgress";
 import { memberHomeAction, memberHomeGuide, memberHomeLinks, memberHomePhase, memberHomeStageLines, memberHomeStep } from "./journey/member-home";
 import { LAST_MIGRATION_PREFIX, useSessionView } from "./public-surfaces/session";
 import { phases } from "./public-surfaces/content";
-import { Attribution } from "./v2/Attribution";
 import { AiStatusBadge, GuideNote } from "./v2/primitives";
 import { RecoveryNotice } from "./v2/Workflow";
 
@@ -127,6 +126,6 @@ export function MyMigration({ reference, storageScope }: { reference?: string; s
       <details className="mm-details"><summary>Resume a saved migration</summary><p>Use the reference from your saved migration link. Access is checked again; this does not list or create migrations.</p><form action="/workspace" method="get"><label className="field-label">Migration reference<input className="field-control" name="session" required pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" placeholder="UUID from your migration link"/></label><Button variant="secondary" type="submit">Open reference</Button></form></details>
       <nav className="mm-links mm-links-inline" aria-label="Task help"><a href={help}>Help with this task</a></nav>
     </>}
-    <footer className="mm-foot"><p className="mm-boundary">Bounded synthetic Beta · No production customer data</p><Attribution /></footer>
+    <footer className="mm-foot"><p className="mm-boundary">Bounded synthetic Beta · No production customer data</p></footer>
   </main>;
 }

@@ -29,14 +29,15 @@ describe("global account and settings shell", () => {
     const banner = screen.getByRole("banner");
     expect(within(banner).queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
     expect(within(banner).queryByRole("link", { name: "Start My Migration" })).not.toBeInTheDocument();
-    expect(within(banner).getByRole("link", { name: "My migration" })).toHaveAttribute("href", "/workspace");
+    expect(within(banner).getByRole("link", { name: "My Migration" })).toHaveAttribute("href", "/workspace");
   });
   it("keeps sign-in and appearance utilities without a competing header launch", () => {
     render(shell());
     const banner = screen.getByRole("banner");
     const signIn = within(banner).getByRole("button", { name: "Sign in with Google" });
     expect(signIn).toBeEnabled();
-    expect(signIn).toHaveClass("ghost");
+    expect(signIn).toHaveClass("header-sign-in");
+    expect(signIn).toHaveTextContent("Sign In");
     expect(within(banner).queryByRole("link", { name: "Start My Migration" })).not.toBeInTheDocument();
     expect(within(banner).queryByRole("link", { name: "Start a sample migration" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Change appearance" })).toHaveAttribute("aria-haspopup", "dialog");
@@ -78,7 +79,8 @@ describe("global account and settings shell", () => {
     expect(screen.queryByText("Session needs attention")).not.toBeInTheDocument();
     expect(account()).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByRole("button", { name: "Settings" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Change appearance" })).not.toBeInTheDocument();
+    // The appearance shortcut stays in the header after sign-in.
+    expect(screen.getByRole("button", { name: "Change appearance" })).toBeEnabled();
     expect(screen.queryByRole("button", { name: "Sign Out" })).not.toBeInTheDocument();
     fireEvent.click(account());
     expect(account()).toHaveAttribute("aria-expanded", "true");
@@ -141,17 +143,19 @@ describe("global account and settings shell", () => {
     expect(screen.getByRole("button", { name: "Sign Out" })).toBeEnabled();
     expect(screen.queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
   });
-  it("offers System, Light and Dark from the signed-out appearance icon and nothing about motion", () => {
+  it("offers Dark, Light and System from the appearance icon, Dark by default, and nothing about motion", () => {
     render(shell()); screen.getByRole("button", { name: "Change appearance" }).focus(); fireEvent.click(screen.getByRole("button", { name: "Change appearance" }));
     const dialog = screen.getByRole("dialog", { name: "Appearance" });
     expect(screen.getByRole("button", { name: "Change appearance" })).toHaveAttribute("aria-expanded", "true");
     const options = within(dialog).getAllByRole("radio");
-    expect(options.map(option => (option as HTMLInputElement).value)).toEqual(["system", "light", "dark"]);
-    // V2 opens in the light theme the design was approved in; System and Dark stay one click away.
-    expect(within(dialog).getByRole("radio", { name: "Light" })).toBeChecked();
-    expect(within(dialog).getByRole("radio", { name: "Light" })).toHaveFocus();
+    expect(options.map(option => (option as HTMLInputElement).value)).toEqual(["dark", "light", "system"]);
+    // First-time visitors get Dark (approved V2 design); the checked option takes focus.
+    expect(within(dialog).getByRole("radio", { name: "Dark" })).toBeChecked();
+    expect(within(dialog).getByRole("radio", { name: "Dark" })).toHaveFocus();
     expect(dialog).toHaveAttribute("aria-modal", "false");
-    expect(dialog).toHaveClass("settings-panel");
+    expect(dialog).toHaveTextContent("System follows your device appearance");
+    fireEvent.click(within(dialog).getByRole("radio", { name: "Light" }));
+    expect(document.documentElement).toHaveClass("light");
     fireEvent.click(within(dialog).getByRole("radio", { name: "Dark" }));
     expect(within(dialog).getByRole("radio", { name: "Dark" })).toBeChecked();
     expect(document.documentElement).toHaveClass("dark");
@@ -163,7 +167,7 @@ describe("global account and settings shell", () => {
     expect(document.body).not.toHaveTextContent(/Reduced motion|reduced-motion|motion preference/i);
     expect(dialog).not.toHaveTextContent(/Billing|Notifications|Provider integration|Session|Signed out|Signed in/);
     expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
-    fireEvent.click(within(dialog).getByRole("button", { name: "Close appearance" }));
+    fireEvent.keyDown(within(dialog).getByRole("radio", { name: "System" }), { key: "Escape" });
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Change appearance" })).toHaveFocus();
   });
@@ -171,13 +175,13 @@ describe("global account and settings shell", () => {
     localStorage.clear(); document.documentElement.className = "";
     const first = render(shell());
     fireEvent.click(screen.getByRole("button", { name: "Change appearance" }));
-    fireEvent.click(screen.getByRole("radio", { name: "Dark" }));
-    expect(localStorage.getItem("theme")).toBe("dark");
+    fireEvent.click(screen.getByRole("radio", { name: "Light" }));
+    expect(localStorage.getItem("theme")).toBe("light");
     first.unmount(); document.documentElement.className = "";
     render(shell());
-    expect(document.documentElement).toHaveClass("dark");
+    expect(document.documentElement).toHaveClass("light");
     fireEvent.click(screen.getByRole("button", { name: "Change appearance" }));
-    expect(screen.getByRole("radio", { name: "Dark" })).toBeChecked();
+    expect(screen.getByRole("radio", { name: "Light" })).toBeChecked();
     localStorage.clear(); document.documentElement.className = "";
   });
   it("supports keyboard use: Escape closes the appearance panel and returns focus to the icon", () => {
@@ -189,19 +193,18 @@ describe("global account and settings shell", () => {
     fireEvent.click(screen.getByRole("button", { name: "Change appearance" }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
-  it("keeps Settings with a Theme select inside the signed-in account menu, with no motion copy", () => {
+  it("keeps Settings to Trust and Security and Appearance inside the signed-in account menu, with no motion copy", () => {
     signedIn(); render(shell()); fireEvent.click(account());
     fireEvent.click(screen.getByRole("button", { name: "Settings" }));
     const dialog = screen.getByRole("dialog", { name: "Settings" });
-    const theme = within(dialog).getByRole("combobox", { name: "Theme" });
-    expect(theme).toHaveFocus();
-    expect(within(theme).getAllByRole("option").map(option => option.textContent)).toEqual(["System", "Light", "Dark"]);
-    fireEvent.change(theme, { target: { value: "dark" } });
-    expect(theme).toHaveValue("dark");
-    fireEvent.change(theme, { target: { value: "system" } });
-    expect(theme).toHaveValue("system");
-    expect(within(dialog).queryByRole("radio")).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Change appearance" })).not.toBeInTheDocument();
+    expect(within(dialog).getByRole("radio", { name: "Dark" })).toHaveFocus();
+    expect(within(dialog).getAllByRole("radio").map(option => (option as HTMLInputElement).value)).toEqual(["dark", "light", "system"]);
+    fireEvent.click(within(dialog).getByRole("radio", { name: "System" }));
+    expect(within(dialog).getByRole("radio", { name: "System" })).toBeChecked();
+    expect(within(dialog).getByRole("link", { name: "Trust and Security" })).toHaveAttribute("href", "/trust");
+    expect(within(dialog).getAllByRole("link")).toHaveLength(1);
+    expect(within(dialog).queryByRole("combobox")).not.toBeInTheDocument();
+    expect(dialog).not.toHaveTextContent(/Profile|Workspace|Sign Out/);
     expect(document.body).not.toHaveTextContent(/Reduced motion|reduced-motion|motion preference/i);
     expect(dialog).not.toHaveTextContent(/Billing|Notifications|Provider integration|Signed out|Signed in/);
     fireEvent.click(within(dialog).getByRole("button", { name: "Close settings" }));
@@ -210,7 +213,7 @@ describe("global account and settings shell", () => {
   it("restores the account trigger when Settings closes after its menu unmounts", () => {
     signedIn(); render(shell()); fireEvent.click(account());
     fireEvent.click(screen.getByRole("button", { name: "Settings" }));
-    fireEvent.keyDown(screen.getByRole("combobox"), { key: "Escape" });
+    fireEvent.keyDown(screen.getByRole("radio", { name: "Dark" }), { key: "Escape" });
     expect(account()).toHaveFocus();
     expect(account()).toHaveAttribute("aria-expanded", "false");
   });
@@ -224,25 +227,22 @@ describe("global account and settings shell", () => {
   });
   it("preserves the appearance controls through a non-focusing Safari click", () => {
     render(shell()); fireEvent.click(screen.getByRole("button", { name: "Change appearance" }));
-    const close = screen.getByRole("button", { name: "Close appearance" });
-    fireEvent.pointerDown(close); fireEvent.blur(screen.getByRole("radio", { name: "System" }), { relatedTarget: null });
-    fireEvent.click(close);
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Change appearance" })).toHaveFocus();
+    const light = screen.getByRole("radio", { name: "Light" });
+    fireEvent.pointerDown(light); fireEvent.blur(screen.getByRole("radio", { name: "Dark" }), { relatedTarget: null });
+    fireEvent.click(light);
+    expect(screen.getByRole("dialog", { name: "Appearance" })).toBeInTheDocument();
+    expect(light).toBeChecked();
   });
-  it("explains migration reasons and the three concrete customer questions", () => {
+  it("keeps the three concrete customer questions, with no migration-reasons section", () => {
     render(<Home />);
-    expect(screen.getByRole("heading", { name: "Why businesses migrate" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Three Questions. One Confident Move." })).toBeVisible();
     for (const copy of [
-      "Outgrown systems, fragmented data, manual processes and limited visibility make everyday accounting harder to run and to scale. A move is a financial-trust problem, not a file copy.",
-      "Support growth without adding manual work.", "Work securely from anywhere.",
-      "Reduce disconnected tools and duplicate processes.", "Improve reporting and operational visibility.",
       "Customers, vendors, accounts, transactions and settings need to arrive complete and usable.",
       "Balances, totals and reconciliation must match before the move counts as a success.",
       "Settings, access and onboarding must work before the move is truly complete.",
     ]) expect(screen.getByText(copy)).toBeVisible();
-    for (const question of ["Will all my data move correctly?", "Will my numbers still be right?", "Will my business be ready to operate?"]) expect(screen.getByRole("heading", { name: question })).toBeVisible();
-    expect(screen.queryByText("Will everything move?")).not.toBeInTheDocument();
+    for (const question of ["Will All My Data Move Correctly?", "Will My Numbers Still Be Right?", "Will My Business Be Ready to Operate?"]) expect(screen.getByRole("heading", { name: question })).toBeVisible();
+    expect(screen.queryByRole("heading", { name: "Why businesses migrate" })).not.toBeInTheDocument();
   });
   it("keeps mobile navigation and account controls separate and reachable", () => {
     render(shell());
@@ -255,20 +255,19 @@ describe("global account and settings shell", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     const view = render(shell());
     const primary = () => screen.getByRole("navigation", { name: "Primary navigation" });
-    expect(within(primary()).queryByRole("link", { name: "My migration" })).not.toBeInTheDocument();
-    expect(within(primary()).getByRole("link", { name: "Explore demo" })).toHaveAttribute("href", "/simulator");
+    expect(within(primary()).queryByRole("link", { name: "My Migration" })).not.toBeInTheDocument();
+    expect(within(primary()).getAllByRole("link").map(a => a.textContent)).toEqual(["Learn", "Trust and Security"]);
+    expect(screen.getByRole("link", { name: "MoveBooks AI home" })).toHaveAttribute("href", "/");
     session.hasSession = true; session.ready = false; view.rerender(shell());
-    expect(within(primary()).queryByRole("link", { name: "My migration" })).not.toBeInTheDocument();
+    expect(within(primary()).queryByRole("link", { name: "My Migration" })).not.toBeInTheDocument();
     signedIn(); session.ready = true; view.rerender(shell());
     // Play stays reachable at /play but is out of navigation while its flag is off.
-    expect(within(primary()).getAllByRole("link").map(a => a.textContent)).toEqual(["My migration"]);
-    expect(within(primary()).getByRole("link", { name: "My migration" })).toHaveAttribute("href", "/workspace");
-    expect(screen.getByRole("link", { name: "MoveBooks AI, my migration" })).toHaveAttribute("href", "/workspace");
+    expect(within(primary()).getAllByRole("link").map(a => [a.textContent, a.getAttribute("href")])).toEqual([
+      ["My Migration", "/workspace"], ["Explore Demo", "/simulator"], ["Learn", "/learn"], ["Trust and Security", "/trust"]]);
+    // After sign-in the logo is Member Home.
+    expect(screen.getByRole("link", { name: "MoveBooks AI, member home" })).toHaveAttribute("href", "/workspace");
     fireEvent.click(account());
-    const explore = screen.getByRole("navigation", { name: "Explore MoveBooks" });
-    for (const [name, href] of [["Product overview", "/"], ["Explore demo", "/simulator"], ["Learn", "/learn"], ["Trust and security", "/trust"], ["How it works", "/guide"]]) {
-      expect(within(explore).getByRole("link", { name })).toHaveAttribute("href", href);
-    }
+    expect(screen.queryByRole("navigation", { name: "Explore MoveBooks" })).not.toBeInTheDocument();
     expect(session.signIn).not.toHaveBeenCalled();
     expect(session.signOut).not.toHaveBeenCalled();
     expect(fetch).not.toHaveBeenCalled();
@@ -279,7 +278,7 @@ describe("global account and settings shell", () => {
     const menu = screen.getByRole("button", { name: "Open navigation" });
     fireEvent.click(menu);
     expect(menu).toHaveAttribute("aria-expanded", "true");
-    const demo = within(screen.getByRole("navigation", { name: "Primary navigation" })).getByRole("link", { name: "How it works" });
+    const demo = within(screen.getByRole("navigation", { name: "Primary navigation" })).getByRole("link", { name: "Learn" });
     expect(demo).toHaveFocus();
     fireEvent.keyDown(demo, { key: "Escape" });
     expect(menu).toHaveAttribute("aria-expanded", "false");
@@ -296,7 +295,7 @@ describe("global account and settings shell", () => {
   it("closes navigation on selection, outside pointer and focus exit", () => {
     render(shell());
     const menu = screen.getByRole("button", { name: "Open navigation" });
-    const demo = within(screen.getByRole("navigation", { name: "Primary navigation" })).getByRole("link", { name: "Explore demo" });
+    const demo = within(screen.getByRole("navigation", { name: "Primary navigation" })).getByRole("link", { name: "Learn" });
     demo.addEventListener("click", event => event.preventDefault());
     fireEvent.click(menu); fireEvent.click(demo);
     expect(menu).toHaveAttribute("aria-expanded", "false");

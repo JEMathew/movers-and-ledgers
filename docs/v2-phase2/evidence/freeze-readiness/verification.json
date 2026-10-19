@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-20",
+  "executed_at_utc": "2026-10-19T19:26:09.299794+00:00",
+  "branch": "feature/v2-landing-final",
+  "head": "ab4654671b94f049bcf1a5959627e5d48862b97c",
+  "readiness": "NO-GO for clean checkpoint until missing product-vision fragment is fixed or explicitly accepted",
+  "source_edits_this_review": false,
+  "staging_changed": false,
+  "preexisting_file_count": 1160,
+  "preexisting_changed_files": [],
+  "tests": {
+    "frontend": {
+      "command": "cd apps/web && ./node_modules/.bin/vitest run",
+      "files": 64,
+      "passed": 822,
+      "exit_code": 0,
+      "count_change": 0
+    },
+    "typescript": {
+      "command": "cd apps/web && ./node_modules/.bin/tsc --noEmit --incremental false",
+      "exit_code": 0
+    },
+    "eslint": {
+      "command": "cd apps/web && ./node_modules/.bin/eslint .",
+      "exit_code": 0
+    },
+    "backend": {
+      "command": ".venv/bin/python -m pytest -q tests/test_identity_display.py tests/test_independent_review.py tests/test_explicit_plan_approval.py tests/test_validation_failures.py tests/test_google_runtime.py",
+      "passed": 102,
+      "exit_code": 0,
+      "warnings": [
+        "StarletteDeprecationWarning: httpx with starlette.testclient is deprecated"
+      ],
+      "scope": "Local fixture/adapter contracts; no live Firebase verification"
+    },
+    "diff_check": {
+      "command": "git diff --check",
+      "exit_code": 0
+    }
+  },
+  "browser": {
+    "base": "http://localhost:3000",
+    "identity_mode_observed": "local demo; protected-route 307 to sign-in",
+    "existing_harness": "docs/v2-phase2/evidence/landing-final/harness/qa.mjs",
+    "existing_harness_exit_code": 0,
+    "additional_harness": "docs/v2-phase2/evidence/codex-hero-refinement/harness/codex-checks.cjs",
+    "additional_harness_exit_code": 0,
+    "existing_cases": 9,
+    "additional_cases": 10,
+    "violations": 0,
+    "overflow_cases": 0,
+    "image_loaded_all": true,
+    "single_play_all": true,
+    "reduced_motion_zero_all": true,
+    "actual_video_seconds": 25.042,
+    "resource_console_errors": [
+      "console Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "console Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "additional_page_errors": [],
+    "launch_note": "Initial sandbox Chromium launch failed; authorized external-sandbox localhost reruns succeeded. Evidence retains successful runs.",
+    "route_audit": "route-audit.json"
+  },
+  "secret_scan": {
+    "scope": "Pre-existing modified/staged/untracked candidate files; pattern scan only",
+    "text_files": 36,
+    "binary_files_not_text_scanned": 74,
+    "findings": []
+  },
+  "hero": {
+    "path": "apps/web/public/media/movebooks-ai-hero-desk-v2.webp",
+    "bytes": 92548,
+    "width": 1536,
+    "height": 1024,
+    "sha256": "b136ab9638f5c2b274657f91b2dd4d16c64092d3cdd81939451acc87cb984ce9",
+    "owner_final_confirmation_recorded_in_source": false
+  },
+  "not_run": [
+    "Production build",
+    "Hosted browser acceptance",
+    "Real Google sign-in",
+    "Real two-account isolation",
+    "Cloud configuration inspection",
+    "Live model inference",
+    "Deployments"
+  ],
+  "raw_logs_temporary_directory": "/private/tmp/movebooks-freeze-20261020-ox0w4eya"
+}

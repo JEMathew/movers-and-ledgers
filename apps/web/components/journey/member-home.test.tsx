@@ -51,7 +51,8 @@ describe("My migration screen", () => {
     expect(within(screen.getByRole("region", { name: "At a glance" })).getByText("Mappings waiting for you").nextSibling).toHaveTextContent("2");
     expect(screen.getByRole("link", { name: "Open evidence" })).toHaveAttribute("href", `/trust?view=evidence&session=${id}`);
     expect(within(screen.getByRole("region", { name: "Second opinions" })).getByText("Planned")).toBeVisible();
-    expect(screen.getByText("Built on Google Cloud and powered by Gemini AI")).toBeVisible();
+    // The attribution now appears once per page, in the shared header, not in this screen.
+    expect(screen.queryByText(/Built on Google Cloud/)).not.toBeInTheDocument();
     expect(screen.queryByText(/Gemini AI planned/)).toBeNull();
   });
   it("never shows an unknown mapping count as zero", async () => {

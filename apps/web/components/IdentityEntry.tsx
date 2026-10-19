@@ -12,12 +12,12 @@ export function GoogleSignIn({ destination, compact = false }: { destination?: s
   if (identity) return compact ? null : <a className="button mt-7" href={safeDestination(destination ?? "/workspace")}>Go to My migration</a>;
   if (hasSession) return compact ? null : <p role="status" className="mt-7">{!ready || busy ? "Verifying your account…" : "Your session needs attention. Use the account control above to sign out and try again."}</p>;
   // The page owns the primary authentication task; the header stays a utility.
-  return <Button className={compact ? undefined : "mt-7"} size={compact ? "small" : "default"} variant={compact ? "ghost" : "primary"}
+  return <Button className={compact ? "header-sign-in" : "mt-7"} size={compact ? "small" : "default"} variant="primary"
     aria-label={compact && !busy ? "Sign in with Google" : undefined}
     disabled={!ready || busy} aria-busy={preparing || undefined} title={preparing ? "Getting Google sign-in ready" : undefined} onClick={() => signIn(destination ?? (window.location.pathname === "/sign-in"
       ? new URLSearchParams(window.location.search).get("next") ?? "/workspace"
       : `${window.location.pathname}${window.location.search}`))}>
-    {busy ? "Signing in…" : compact ? "Sign in" : "Continue with Google"}
+    {busy ? "Signing in…" : compact ? "Sign In" : "Continue with Google"}
   </Button>;
 }
 

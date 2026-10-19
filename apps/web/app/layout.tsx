@@ -9,6 +9,7 @@ import "./v2-workflow.css";
 import "./v2-journey.css";
 import "./v2-stages.css";
 import "./v2-surfaces.css";
+import "./v2-landing.css";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";

@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-20",
+  "branch": "feature/v2-landing-final",
+  "baseline": "ab46546",
+  "status": "Ready for owner visual acceptance; not release-ready",
+  "changed_existing_files": [
+    "apps/web/app/v2-landing.css",
+    "apps/web/components/public-surfaces/HeroVideo.tsx",
+    "apps/web/components/public-surfaces/landing-motion.test.tsx",
+    "apps/web/components/Nav.tsx"
+  ],
+  "new_product_asset": "apps/web/public/media/movebooks-ai-hero-desk-v2.webp",
+  "preservation": "All other 1115 baseline files are byte-for-byte unchanged. The two staged deletions remain.",
+  "checks": [
+    "64 test files / 822 tests pass (npx vitest run).",
+    "TypeScript passes: npx tsc --noEmit --incremental false.",
+    "ESLint passes: npx eslint .; git diff --check passes.",
+    "Nine existing axe viewport/theme cases plus ten additional layout/theme cases: zero reported accessibility violations and no horizontal overflow.",
+    "Open Appearance/navigation panels checked; all three choices fit on mobile. The 720\u00d7450 zoom-equivalent menu remains scrollable.",
+    "Image loads in all ten cases; mobile video control does not overlap the photograph.",
+    "Video playback, Escape, pause after the native close event, and focus return verified on desktop/mobile in Dark and Light.",
+    "Dark/Light preference persistence and live System OS switching verified.",
+    "Sticky CTA verified at 1440\u00d7900, 1440\u00d7720, and mobile; hides on return.",
+    "Five phases complete by the 3600ms frame and remain complete at 5000ms. Reduced motion has zero journey animations.",
+    "Explore Demo opens /simulator; Try Your Data retains its middleware sign-in redirect. Product routes retain their original dark surface and green primary."
+  ],
+  "asset": {
+    "tool": "built-in image_gen",
+    "requested_dimensions": [
+      2400,
+      1600
+    ],
+    "returned_dimensions": [
+      1536,
+      1024
+    ],
+    "bytes": 92548,
+    "prompt": "hero-generation-prompt.txt",
+    "final_owner_acceptance": false
+  },
+  "remaining_differences": [
+    "The dedicated photograph matches the requested desk, laptop, subtly branded mug, steam and natural lighting, with different framing and a simplified laptop interface. It is not a pixel-exact reproduction.",
+    "The tool returned 1536\u00d71024 rather than approximately 2400\u00d71600. The optimized WebP is 92,548 bytes; no artificial upscale was applied.",
+    "The existing Schibsted Grotesk typography, outline icons, accurate assurance copy, text-only attribution, local My Migration control and real 0:25 overview label remain.",
+    "Your Data. Your Control. is retained as requested, although absent from the reference, increasing total page height.",
+    "Mobile places the single play control below the photograph to keep the laptop and mug unobscured. No mobile reference was supplied.",
+    "Privacy and Terms links remain omitted pending owner-reviewed documents."
+  ],
+  "blockers": [
+    "Owner final visual sign-off on the generated hero and crops.",
+    "Firebase-configured authenticated browser acceptance for account identity and Settings.",
+    "Existing video captions missing.",
+    "Existing owner-reviewed Privacy and Terms missing.",
+    "Existing owner-only AI-wording rule conflict remains unchanged."
+  ],
+  "notes": [
+    "The source scope expanded narrowly to Nav.tsx and its motion test: the shorter page exposed a CTA hidden behind the sticky header. The observer now accounts for responsive header height.",
+    "Mobile Appearance clipping was fixed within v2-landing.css.",
+    "The local Next.js development badge appears in screenshots.",
+    "The existing QA harness reports two resource 404 console messages. The favicon 404 is a documented pre-existing issue; the additional checks report no page errors.",
+    "No commits, pushes, PRs, deployments, infrastructure, authentication, financial authorization or agent execution changes."
+  ]
+}
