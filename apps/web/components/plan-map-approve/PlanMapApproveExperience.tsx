@@ -63,7 +63,7 @@ export function PlanMapApproveExperience() {
       try {
         const id = new URLSearchParams(window.location.search).get("session") ?? sessionStorage.getItem(SELECTED_SESSION_KEY);
         if (!id) throw new Error("Start with Understand, then continue with the same migration.");
-        if (!isSessionId(id)) throw new Error("Invalid session reference. Open an existing migration from My Migration.");
+        if (!isSessionId(id)) throw new Error("Invalid session reference. Open an existing migration from My migration.");
         sessionRef.current = id;
         const data = validate(await api<Snapshot>(`/v1/migration-sessions/${id}`, { signal: controller.signal }), id);
         if (!active) return;
@@ -198,5 +198,5 @@ export function PlanMapApproveExperience() {
 }
 
 function ApprovedHandoff({ snapshot }: { snapshot: Snapshot }) {
-  return ["APPROVED", "MIGRATION_READY"].includes(snapshot.workflow_status) ? <ActionLink label="Continue to Move" href={`/migrate-resolve?session=${snapshot.id}`} /> : <ActionLink label="Return to My migration" href={`/workspace?session=${snapshot.id}`} />;
+  return ["APPROVED", "MIGRATION_READY"].includes(snapshot.workflow_status) ? <ActionLink label="Continue to Move" href={`/migrate-resolve?session=${snapshot.id}`} /> : <ActionLink label="Return to my migration" href={`/workspace?session=${snapshot.id}`} />;
 }

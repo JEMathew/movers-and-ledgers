@@ -271,7 +271,7 @@ export function DiscoverAssessExperience() {
       </section>
   );
 
-  const nextLabel = assessment ? pastAssessment ? "Return to My migration" : assessment.blocker_count ? `Review ${count(assessment.blocker_count, "readiness issue")}` : "Create my migration plan" : "";
+  const nextLabel = assessment ? pastAssessment ? "Return to my migration" : assessment.blocker_count ? `Review ${count(assessment.blocker_count, "readiness issue")}` : "Create my migration plan" : "";
   const guide = running ? "The rules are checking your books now. Nothing moves and nothing is approved while they run."
     : assessment && discovery && pastAssessment ? "This readiness check is complete and the migration has moved on. Its result and evidence stay here for reference."
     : assessment && discovery ? assessment.blocker_count ? `The rules found ${count(assessment.blocker_count, "blocker")} in the source books for ${discovery.company_name}. Fix ${assessment.blocker_count === 1 ? "it" : "them"} in the source, then check again; planning keeps every blocker visible.`

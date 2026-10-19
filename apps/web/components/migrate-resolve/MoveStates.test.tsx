@@ -88,4 +88,13 @@ describe("Move stage states", () => {
     expect(primary).toEqual([verify]);
     expect(screen.queryByRole("region", { name: "How to recover" })).not.toBeInTheDocument();
   });
+
+  it("points a migration that has moved past Verify to its current step, not back to Verify", async () => {
+    const done = { ...paused, status: "MIGRATION_COMPLETE", safe_to_validate: true, progress_percent: 100, failures: [], resolutions: [], batches: paused.batches.map(b => ({ ...b, status: "COMPLETED", succeeded_count: b.record_count })) };
+    vi.spyOn(globalThis, "fetch").mockImplementation(() => json(session(done, "VERIFIED_FIRST_PRODUCTIVE_USE")));
+    render(<MigrateResolveExperience />);
+    expect(await screen.findByRole("link", { name: "Open my migration" })).toHaveAttribute("href", "/workspace?session=s-move");
+    expect(screen.queryByRole("link", { name: "Verify my books" })).toBeNull();
+    expect(screen.getByText(/have since been checked against the old ones/)).toBeVisible();
+  });
 });

@@ -285,7 +285,7 @@ describe("authoritative approval failures and resume", () => {
   });
   it("does not restart migration from an already executed session", async () => {
     read({ workflow_status: "MIGRATION_COMPLETE", mappings: [reviewed] }); render(<PlanMapApproveExperience />);
-    expect(await screen.findByRole("link", { name: "Return to My migration" })).toHaveAttribute("href", `/workspace?session=${id}`);
+    expect(await screen.findByRole("link", { name: "Return to my migration" })).toHaveAttribute("href", `/workspace?session=${id}`);
     expect(screen.queryByRole("link", { name: "Continue to Move" })).not.toBeInTheDocument();
   });
   it("stops early session actions at the authoritative Assess stage", async () => {

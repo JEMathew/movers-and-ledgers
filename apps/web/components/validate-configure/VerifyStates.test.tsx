@@ -70,4 +70,14 @@ describe("Verify stage states", () => {
     expect(applied).toHaveTextContent("Payment termsNET_15");
     expect(screen.getByRole("link", { name: /Complete setup/ })).toHaveAttribute("href", "/onboard-fpu?session=s-verify");
   });
+
+  it.each(["ONBOARDING", "VERIFIED_FIRST_PRODUCTIVE_USE"])("never offers Apply again once the migration has moved on (%s)", async status => {
+    const applied = { id: "p1", label: "Payment terms", state: "APPLIED", risk: "LOW", source_value: "NET_15", selected_value: "NET_15", decided_by: "owner-2" };
+    read({ ...base, workflow_status: status, ready_for_onboarding: false, report: report([check("ar", "A/R", "0.00")]), configuration: { id: "c", target_settings: { payment_terms: "NET_15" }, proposals: [applied] } as unknown as Snapshot["configuration"] });
+    expect(await screen.findByRole("heading", { level: 1, name: "Your books match and settings are applied" })).toBeVisible();
+    expect(screen.queryByRole("button", { name: "Apply reviewed configuration" })).toBeNull();
+    expect(document.body).not.toHaveTextContent("Apply the reviewed settings");
+    if (status === "VERIFIED_FIRST_PRODUCTIVE_USE") expect(screen.getByRole("link", { name: /Open Start/ })).toHaveAttribute("href", "/onboard-fpu?session=s-verify");
+    else expect(screen.getByRole("link", { name: /Complete setup/ })).toHaveAttribute("href", "/onboard-fpu?session=s-verify");
+  });
 });

@@ -197,6 +197,7 @@ export function MigrateResolveExperience() {
     : "Move your approved books";
   const guide = !session && readState === "loading" ? "Reading your migration. Nothing is assumed until it loads."
     : !session ? "Open a migration from My migration to move its approved records. A standalone scenario is at the end of this page."
+    : complete && (journeyStepFor(session.workflow_status) ?? 0) > 6 ? "Every batch moved, and the new books have since been checked against the old ones."
     : complete ? "Every batch moved and no blocking issue remains. Next, check the new books against the old ones."
     : blocked ? `${pausedName} stays blocked because the proposed fix was not approved. Batches that already moved are kept.`
     : retryPending ? "You approved the proposed fix. Retrying runs the paused batch again; batches that already moved are not repeated."
@@ -204,7 +205,11 @@ export function MigrateResolveExperience() {
     : execution ? "MoveBooks is moving your records in checkpointed batches."
     : "Your plan is approved. MoveBooks moves your records in checkpointed batches; a problem pauses one batch, not the move.";
 
-  const next = complete
+  // A migration that has moved past Verify keeps this page as a record; its next step lives in My migration.
+  const pastVerify = complete && (journeyStepFor(session?.workflow_status ?? "") ?? 0) > 6;
+  const next = pastVerify
+    ? { title: "Your records moved and your books are verified", detail: "This page keeps the record of the move. My migration opens your current step.", action: <a className="button" href={sessionHref("/workspace", session?.id)}>Open my migration</a> }
+    : complete
     ? { title: "Verify your books", detail: "Compare the new books with the source. Every check must match before setup.", action: <a className="button" href={sessionHref("/validate-configure", session?.id)}><ShieldCheck aria-hidden="true" size={17} />Verify my books</a> }
     : retryPending
       ? { title: "Retry the paused batch", detail: "Only the paused batch runs again.", action: <Button onClick={retry} disabled={busy} leadingIcon={RefreshCw}>Retry failed batch</Button> }

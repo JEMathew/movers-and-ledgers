@@ -58,6 +58,8 @@ function CheckCard({ check, currency, policy }: { check: Check; currency: string
   </article>;
 }
 
+const APPLIED_STATUSES = ["CONFIGURED", "ONBOARDING", "ONBOARDING_BLOCKED", "READY_FOR_FIRST_PRODUCTIVE_USE", "FIRST_PRODUCTIVE_USE_IN_PROGRESS", "FIRST_PRODUCTIVE_USE_BLOCKED", "VERIFIED_FIRST_PRODUCTIVE_USE"];
+
 export function ValidateConfigureExperience() {
   const statusRef = useRef<HTMLParagraphElement>(null);
   const [snapshot, setSnapshot] = useState<Snapshot>();
@@ -130,6 +132,10 @@ export function ValidateConfigureExperience() {
   const decidedSettings = plan?.proposals.filter(p => p.decided_by) ?? [];
   const retryHref = sessionHref("/validate-configure", snapshot?.session_id ?? requested);
   const moved = snapshot ? (journeyStepFor(snapshot.workflow_status) ?? -1) >= 6 : false;
+  // Settings are applied once the migration reaches Start; `ready_for_onboarding` is only true at CONFIGURED, so a
+  // migration that has moved on must not be offered "Apply" again (the API would refuse it).
+  const settingsApplied = Boolean(snapshot?.ready_for_onboarding) || APPLIED_STATUSES.includes(snapshot?.workflow_status ?? "");
+  const firstInvoiceVerified = snapshot?.workflow_status === "VERIFIED_FIRST_PRODUCTIVE_USE";
 
   function openDecision(proposal: Proposal, action: "approve" | "modify" | "reject") {
     setSelected(proposal.selected_value); setComment(""); setError(undefined);
@@ -144,24 +150,26 @@ export function ValidateConfigureExperience() {
 
   // Page title, guide and the one next step, from the read alone.
   const verified = report?.status === "VERIFIED";
-  const step = snapshot?.ready_for_onboarding ? "settings applied" : plan ? "review settings" : "check your books";
+  const step = settingsApplied ? "settings applied" : plan ? "review settings" : "check your books";
   const title = !report ? "Verify your books"
     : !verified ? "Your books don't match yet"
-    : snapshot?.ready_for_onboarding ? "Your books match and settings are applied"
+    : settingsApplied ? "Your books match and settings are applied"
     : plan ? "Review the settings for your new books"
     : "Your books match";
   const guide = !snapshot && readState === "loading" ? "Reading your migration. Nothing is assumed until it loads."
     : !snapshot ? "Open a migration from My migration to check its books. Standalone scenarios are at the end of this page."
     : !report ? "Compare the new books with the source. Every count and balance must match exactly before setup; nothing is rounded or written off."
     : !verified ? `${groups!.matched} of ${groups!.total} checks matched. Nothing is written off; review the permitted repair, then verify again.`
-    : snapshot.ready_for_onboarding ? `${groups!.matched} of ${groups!.total} checks matched and every required setting is applied. Next, finish the essentials and post your first invoice.`
+    : firstInvoiceVerified ? `${groups!.matched} of ${groups!.total} checks matched, every required setting is applied and your first invoice is verified.`
+    : settingsApplied ? `${groups!.matched} of ${groups!.total} checks matched and every required setting is applied. Next, finish the essentials and post your first invoice.`
     : plan ? `${groups!.matched} of ${groups!.total} checks matched. ${pendingSettings.length ? `${plural(pendingSettings.length, "setting")} need${pendingSettings.length === 1 ? "s" : ""} your decision; unchanged low-risk settings apply on their own.` : "Every setting is decided; apply them to finish setup."}`
     : `${groups!.matched} of ${groups!.total} checks matched. Next, review the settings that shape your new books.`;
 
   const next = !snapshot ? undefined
     : !report ? { title: "Check your books", detail: "MoveBooks compares every record and balance with the source under an exact-decimal rule.", action: revalidate }
     : !verified ? { title: repairLeads ? "Review the permitted repair" : appliedRepairs.length ? "Verify again" : "Investigate the difference", detail: repairLeads ? "A changed record can be restored to its approved source with your approval. Then verify again." : appliedRepairs.length ? "The restored record is in place. Run every check again." : "Missing records, source errors or unsupported repairs can't be waived here.", action: <>{repairActions}{revalidate}</> }
-    : snapshot.ready_for_onboarding ? { title: "Finish the essentials and post your first invoice", detail: "Start uses the settings you applied here.", action: <ActionLink label="Complete setup" href={sessionHref("/onboard-fpu", snapshot.session_id)} /> }
+    : firstInvoiceVerified ? { title: "Your first invoice is verified", detail: "Verification and settings are complete. Start shows the verified invoice and its evidence.", action: <ActionLink label="Open Start" href={sessionHref("/onboard-fpu", snapshot.session_id)} /> }
+    : settingsApplied ? { title: "Finish the essentials and post your first invoice", detail: "Start uses the settings you applied here.", action: <ActionLink label="Complete setup" href={sessionHref("/onboard-fpu", snapshot.session_id)} /> }
     : !plan ? { title: "Review your settings", detail: "Settings that need a person are listed for your decision. Nothing is applied until you confirm.", action: <Button disabled={!ready || report.status !== "VERIFIED"} leadingIcon={ShieldCheck} onClick={() => perform(`${root}/configuration`)}>Continue to configuration</Button> }
     : approved ? { title: "Apply the reviewed settings", detail: "Every required setting is decided. Applying sets up your new books with them.", action: apply }
     : { title: pendingSettings.length ? `Decide ${plural(pendingSettings.length, "setting")}` : "Review your settings", detail: <>Approve, modify or reject each one in <a className="v2s-text-link" href="#configuration-title">Settings for your new books</a>. A rejection keeps setup blocked until you revise it.</> };
@@ -171,7 +179,7 @@ export function ValidateConfigureExperience() {
     ...(groups ? [`${groups.matched} of ${groups.total} checks matched`] : []),
     ...(appliedRepairs.length ? [`${plural(appliedRepairs.length, "record")} restored with your approval`] : []),
     ...(plan ? [`${plan.proposals.filter(p => DONE_STATES.includes(p.state)).length} of ${plan.proposals.length} settings approved, changed or applied`] : []),
-    ...(snapshot?.ready_for_onboarding ? ["Settings applied"] : []),
+    ...(settingsApplied ? ["Settings applied"] : []),
   ];
   const outstanding: Outstanding[] = [
     ...(discrepancies.length ? [{ label: `${plural(discrepancies.length, "check")} ${discrepancies.length === 1 ? "doesn't" : "don't"} match`, tone: "blocked" as const }] : []),
@@ -180,7 +188,7 @@ export function ValidateConfigureExperience() {
     ...(pendingSettings.filter(p => !stuckSettings.includes(p)).length ? [{ label: `${plural(pendingSettings.filter(p => !stuckSettings.includes(p)).length, "setting")} to decide`, href: "#configuration-title" }] : []),
     ...(verified && !plan ? [{ label: "Review your settings" }] : []),
     ...(!report && snapshot ? [{ label: "Check your books" }] : []),
-    ...(approved && !snapshot?.ready_for_onboarding ? [{ label: "Apply the reviewed settings" }] : []),
+    ...(approved && !settingsApplied ? [{ label: "Apply the reviewed settings" }] : []),
   ];
 
   const recovery = error && !dialog && snapshot
@@ -237,7 +245,7 @@ export function ValidateConfigureExperience() {
           <div className="v2s-buttons">{proposal.state !== "APPLIED" && <>{proposal.state === "APPROVED" ? <Button size="small" variant="secondary" disabled leadingIcon={CheckCircle2} aria-label={`${proposal.label} approved`}>Approved</Button> : <Button size="small" variant={approved ? "secondary" : "primary"} disabled={!ready || proposal.state === "BLOCKED"} onClick={() => openDecision(proposal, "approve")}>Approve {proposal.label.toLowerCase()}</Button>}<Button size="small" variant="secondary" disabled={!ready} onClick={() => openDecision(proposal, "modify")}>Modify {proposal.label.toLowerCase()}</Button><Button size="small" variant="danger" disabled={!ready} onClick={() => openDecision(proposal, "reject")}>Reject {proposal.label.toLowerCase()}</Button></>}<Button variant="ghost" size="small" disabled={!ready} onClick={() => { setError(undefined); setDialog({ kind: "explain", proposal }); }}>Explain {proposal.label.toLowerCase()}</Button></div>
         </article>; })}
         {!approved && currentConfiguration && DONE_STATES.includes(currentConfiguration.state) && <div><Button variant="secondary" disabled={!ready} onClick={() => setConfigurationId(plan.proposals.find(p => !DONE_STATES.includes(p.state))?.id)}>Review next setting</Button></div>}
-        {!snapshot?.ready_for_onboarding && !approved && <div className="v2s-buttons">{apply}<span className="v2s-small">All eight areas need valid evidence and every required approval before handoff.</span></div>}
+        {!settingsApplied && !approved && <div className="v2s-buttons">{apply}<span className="v2s-small">All eight areas need valid evidence and every required approval before handoff.</span></div>}
       </div>
       <div className="v2s-split-side v2-card v2s-section">
         <h3>{plan.proposals.filter(p => DONE_STATES.includes(p.state)).length} of {plan.proposals.length} settings settled</h3>
@@ -266,11 +274,11 @@ export function ValidateConfigureExperience() {
       evidence={{ href: evidenceHref(snapshot.session_id), detail: "Every check with source, target and evidence, and each decision.", label: "Open evidence" }}
     />}
 
-    {readState === "ready" && snapshot?.ready_for_onboarding && plan && <section className="v2-card v2s-section" aria-labelledby="applied-title">
+    {readState === "ready" && settingsApplied && plan && <section className="v2-card v2s-section" aria-labelledby="applied-title">
       <div className="v2s-section-head"><h2 id="applied-title">Settings applied to your new books</h2><StateChip tone="approved">Applied</StateChip></div>
       <Facts rows={Object.entries(plan.target_settings).map(([key, value]) => ({ label: sentence(key), value }))} />
     </section>}
-    {plan && !snapshot?.ready_for_onboarding ? <>{settings}<details className="v2s-details v2s-section"><summary>Verified financial report · exact source, target and evidence</summary>{results}</details></>
+    {plan && !settingsApplied ? <>{settings}<details className="v2s-details v2s-section"><summary>Verified financial report · exact source, target and evidence</summary>{results}</details></>
       : plan ? <><details className="v2s-details v2s-section"><summary>Verified financial report · exact source, target and evidence</summary>{results}</details><details className="v2s-details v2s-section"><summary>How each setting was decided</summary>{settings}</details></>
       : results}
     {!!snapshot?.activity.length && <details className="v2s-details v2s-section"><summary>Decisions and activity</summary><ol className="v2s-activity" aria-label="Decisions and activity">{snapshot.activity.slice().reverse().map(item => <li key={item.id}><strong>{item.action}</strong><span className="v2s-quiet">{sentence(item.agent)} · {sentence(item.provenance ?? "")} · {sentence(item.status)}</span><details><summary>Action evidence</summary><Evidence values={item.evidence_references} /></details></li>)}</ol></details>}
