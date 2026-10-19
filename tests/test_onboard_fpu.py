@@ -277,3 +277,116 @@ def test_versioned_api_auth_ownership_forged_events_and_end_to_end():
         assert client.get(root + "/fpu", headers=AUTH).status_code == 404
     finally:
         app.dependency_overrides.clear()
+
+
+def fpu_audit(session):
+    task = session.onboarding.fpu
+    return (
+        [d.model_dump() for d in task.decisions],
+        [d.model_dump() for d in session.human_decisions if d.stage == "first_productive_use"],
+        [e.name for e in session.events if e.name == "fpu_decision"],
+    )
+
+
+def test_repeated_invoice_approval_records_one_decision():
+    flow, session, fixture = setup()
+    prepare(flow, session, fixture)
+    first = fpu_audit(session)
+    assert [len(part) for part in first] == [1, 1, 1]
+    status, workflow = session.onboarding.fpu.status, session.workflow_status
+    flow.decide_fpu(session, fixture, DecisionInput(action="approve"), "owner")
+    assert fpu_audit(session) == first  # Same actor, timestamp, hash and evidence.
+    assert (session.onboarding.fpu.status, session.workflow_status) == (status, workflow)
+    with pytest.raises(ValueError, match="already approved"):
+        flow.decide_fpu(session, fixture, DecisionInput(action="approve", comment="again"), "owner")
+    assert fpu_audit(session) == first
+    decision = session.onboarding.fpu.decisions[0]
+    assert decision.actor == "owner" and decision.action == "approve"
+    assert decision.evidence_hash == session.onboarding.fpu.contract_hash
+    flow.execute(session, fixture, "key", "owner")
+    assert flow.verified(session, fixture)
+    assert len(session.onboarding.invoices) == len(session.onboarding.journals) == 1
+
+
+def test_concurrent_identical_approvals_commit_one_decision():
+    from movebooks_api.discover_assess.service import InMemoryMigrationSessionRepository
+
+    flow, session, fixture = setup()
+    prepare(flow, session, fixture, approve=False)
+    repo = InMemoryMigrationSessionRepository()
+    repo.put(session)
+    first, second = repo.get(session.id, "owner"), repo.get(session.id, "owner")
+    before_first, before_second = deepcopy(first), deepcopy(second)
+    flow.decide_fpu(first, fixture, DecisionInput(action="approve"), "owner")
+    flow.decide_fpu(second, fixture, DecisionInput(action="approve"), "owner")
+    repo.put_if_unchanged(before_first, first)
+    with pytest.raises(ValueError, match="concurrently"):
+        repo.put_if_unchanged(before_second, second)
+    saved = repo.get(session.id, "owner")
+    assert [len(part) for part in fpu_audit(saved)] == [1, 1, 1]
+    retried = deepcopy(saved)
+    flow.decide_fpu(retried, fixture, DecisionInput(action="approve"), "owner")
+    repo.put_if_unchanged(saved, retried)  # A retry after the winner commits is a no-op.
+    assert [len(part) for part in fpu_audit(repo.get(session.id, "owner"))] == [1, 1, 1]
+
+
+def test_changed_invoice_contract_requires_a_fresh_decision():
+    flow, session, fixture = setup()
+    prepare(flow, session, fixture)
+    old_hash = session.onboarding.fpu.contract_hash
+    flow.prepare(session, fixture, INPUT.model_copy(update={"quantity": 2}), "owner")
+    task = session.onboarding.fpu
+    assert task.contract_hash != old_hash and not task.decisions
+    assert session.onboarding.fpu_history[-1].decisions[0].evidence_hash == old_hash
+    flow.execute(session, fixture, "key", "owner")  # Refused: the old approval does not carry.
+    assert not session.onboarding.invoices and task.status == "BLOCKED"
+    flow.decide_fpu(session, fixture, DecisionInput(action="approve"), "owner")
+    assert [d.evidence_hash for d in task.decisions] == [task.contract_hash]
+    flow.execute(session, fixture, "key", "owner")
+    assert flow.verified(session, fixture)
+
+
+def test_rejection_replay_and_reconsideration():
+    flow, session, fixture = setup()
+    prepare(flow, session, fixture, approve=False)
+    flow.decide_fpu(session, fixture, DecisionInput(action="reject", comment="wrong"), "owner")
+    rejected = fpu_audit(session)
+    blocked_events = sum(e.name == "fpu_blocked" for e in session.events)
+    flow.decide_fpu(session, fixture, DecisionInput(action="reject", comment="wrong"), "owner")
+    assert fpu_audit(session) == rejected
+    assert sum(e.name == "fpu_blocked" for e in session.events) == blocked_events
+    flow.decide_fpu(session, fixture, DecisionInput(action="approve"), "owner")
+    assert [d.action for d in session.onboarding.fpu.decisions] == ["reject", "approve"]
+    flow.decide_fpu(session, fixture, DecisionInput(action="approve"), "owner")
+    assert [d.action for d in session.onboarding.fpu.decisions] == ["reject", "approve"]
+    flow.execute(session, fixture, "key", "owner")
+    assert flow.verified(session, fixture)
+
+
+def test_api_repeated_invoice_approval_is_idempotent():
+    client = TestClient(app)
+    response = client.post("/v1/onboarding-demo-sessions", headers=AUTH, json={"scenario": "clean"})
+    assert response.status_code == 201, response.text
+    root = f"/v1/migration-sessions/{response.json()['session_id']}"
+    for key, (_, choices) in TASKS.items():
+        if choices:
+            path = root + f"/onboarding/tasks/{key}/decision"
+            assert client.post(path, headers=AUTH, json={"action": "approve"}).status_code == 200
+    assert client.post(root + "/fpu/task", headers=AUTH, json=INPUT.model_dump()).status_code == 200
+    bodies = [
+        client.post(root + "/fpu/decision", headers=AUTH, json={"action": "approve"})
+        for _ in range(3)
+    ]
+    assert [b.status_code for b in bodies] == [200, 200, 200]
+    decisions = [b.json()["onboarding"]["fpu"]["decisions"] for b in bodies]
+    assert len(decisions[0]) == 1 and decisions[1] == decisions[0] == decisions[2]
+    trust = client.get(root + "/intake-trust", headers=AUTH)
+    assert trust.status_code == 200, trust.text
+    audit = trust.json()["human_decisions"]
+    assert sum(d["stage"] == "first_productive_use" for d in audit) == 1
+    repeat = client.post(
+        root + "/fpu/decision", headers=AUTH, json={"action": "approve", "comment": "twice"}
+    )
+    assert repeat.status_code == 409
+    result = client.post(root + "/fpu/execute", headers={**AUTH, "Idempotency-Key": "api"})
+    assert result.status_code == 200 and result.json()["verified_fpu"]

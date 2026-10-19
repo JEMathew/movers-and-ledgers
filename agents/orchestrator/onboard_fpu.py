@@ -218,6 +218,23 @@ class OnboardFpuOrchestrator:
             )
         if self.fpu_agent.propose(session, task.inputs) != task.contract:
             raise ValueError("Invoice contract changed; do not approve stale evidence.")
+        latest = task.decisions[-1] if task.decisions else None
+        if (
+            latest
+            and latest.action == request.action
+            and latest.actor == actor
+            and latest.role == owner_decision_role(actor)
+            and latest.evidence_hash == task.contract_hash
+        ):
+            if (latest.comment or "") == (request.comment or ""):
+                # The same decision on these exact terms is already recorded: succeed without a
+                # second decision, audit record or event, and without rewriting who decided or when.
+                return
+            decided = "approved" if request.action == "approve" else "rejected"
+            raise ValueError(
+                f"This invoice is already {decided} for these exact terms; "
+                "a repeat decision is not recorded."
+            )
         task.decisions.append(
             Decision(
                 actor=actor,
