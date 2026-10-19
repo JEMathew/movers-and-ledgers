@@ -829,3 +829,5 @@ video:focus, .field-control:focus-within:has(input[type="file"]:focus-visible), 
 .dialog::backdrop { backdrop-filter: none; }
 /* Schibsted Grotesk widens the decimal point and comma under tnum ("107 . 25"), so V2 keeps proportional figures. */
 .type-financial, .tabular, table td, .data-table .num, .tile-value { font-variant-numeric: normal; }
+/* The vision frame clips its children (rounded corners), which hid the video's own focus ring: draw it on the frame. */
+.vision-frame:has(video:focus-visible) { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
