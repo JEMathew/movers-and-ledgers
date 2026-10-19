@@ -73,6 +73,13 @@ jobs:
         run: pytest tests/test_google_runtime.py tests/test_postgres_runtime.py -q
         env:
           MOVEBOOKS_TEST_DATABASE_URL: postgresql+pg8000://contract:ephemeral-ci-only@localhost:5432/contract
+      # Separate, later step: this fixture drops and recreates the schema before every test, so it must
+      # never share a pytest run with the suites above. Fails if any PostgreSQL case is skipped.
+      - name: Owner-scoped migration listing and cross-owner denial on PostgreSQL
+        shell: bash  # explicit bash runs with -eo pipefail, so a pytest failure is not hidden by tee
+        run: pytest tests/test_migration_listing.py -q -k postgres -rs | tee listing.log && ! grep -q SKIPPED listing.log
+        env:
+          MOVEBOOKS_TEST_POSTGRES_URL: postgresql+pg8000://contract:ephemeral-ci-only@localhost:5432/contract
   containers:
     runs-on: ubuntu-latest
     steps:
