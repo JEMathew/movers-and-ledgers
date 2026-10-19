@@ -48,7 +48,10 @@ describe("public surface contracts", () => {
   it("leads with Explore Demo as the one primary action and Try Your Data (Beta) as the outlined second", () => {
     render(<Home/>);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Move Your BooksWith Confidence.");
-    expect(screen.getByText("Migrate, validate and get ready to operate — with AI guidance and human control.")).toBeVisible();
+    expect(screen.getByText("Prepare, move and validate your books with guided workflows, transparent checks and human control.")).toBeVisible();
+    expect(screen.getByText("Guided accounting migration")).toBeVisible();
+    // The hero makes no AI capability claim; AI appears only as Planned in the trust strip.
+    expect(document.querySelector(".lp-hero-copy")).not.toHaveTextContent(/\bAI\b/);
     const demo = screen.getByRole("link", { name: "Explore Demo" });
     expect(demo).toHaveAttribute("href", "/simulator");
     expect(demo).toHaveAttribute("data-hero-cta");
@@ -74,14 +77,15 @@ describe("public surface contracts", () => {
   it("restores the compact Your Data. Your Control. strip with the Planned badge and a working Trust link", () => {
     render(<Home/>);
     const strip = screen.getByRole("heading", { name: "Your Data. Your Control." }).closest("section")!;
-    expect(strip).toHaveTextContent("AI can provide recommendations and explanations");
+    expect(strip).toHaveTextContent("AI recommendations and explanations are planned and unavailable in this Beta");
+    expect(strip).toHaveTextContent("you approve every consequential decision");
     expect(within(strip).getByText("Planned")).toHaveAttribute("data-ai-status", "planned");
     expect(within(strip).getByRole("link", { name: "View Trust and Security" })).toHaveAttribute("href", "/trust");
   });
   it("shows the attribution once, in the header beneath the brand, and not in the page body", () => {
     render(<IdentityProvider><Nav/><Home/></IdentityProvider>);
     const lines = [...document.querySelectorAll<HTMLElement>(".v2-attribution")];
-    expect(lines[0]).toHaveTextContent("Built on Google Cloud|, Powered by Gemini AI");
+    expect(lines[0]).toHaveTextContent("Built on Google Cloud and powered by Gemini AI");
     expect(lines).toHaveLength(1);
     expect(screen.getByRole("banner")).toContainElement(lines[0]);
     expect(screen.getByRole("main")).not.toHaveTextContent(/Google Cloud|Gemini/);

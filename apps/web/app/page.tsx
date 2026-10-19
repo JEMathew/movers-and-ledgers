@@ -19,9 +19,9 @@ export default function Home() {
     <section className="lp-hero" aria-labelledby="product-heading">
       <div className="shell lp-hero-inner">
         <div className="lp-hero-copy">
-          <p className="lp-eyebrow">AI-guided accounting migration</p>
+          <p className="lp-eyebrow">Guided accounting migration</p>
           <h1 id="product-heading" className="lp-title">Move Your Books<br />With <span className="lp-title-accent">Confidence.</span></h1>
-          <p className="lp-lead">Migrate, validate and get ready to operate — with AI guidance and human control.</p>
+          <p className="lp-lead">Prepare, move and validate your books with guided workflows, transparent checks and human control.</p>
           <div className="lp-actions">
             <Link href="/simulator" className="lp-button lp-button-primary" data-hero-cta>Explore Demo<ArrowRight size={20} aria-hidden="true" /></Link>
             <Link href="/try-your-data" className="lp-button lp-button-secondary">Try Your Data (Beta)</Link>
@@ -59,7 +59,7 @@ export default function Home() {
         <span className="lp-control-icon" aria-hidden="true"><ShieldCheck size={22} /></span>
         <div className="lp-control-copy">
           <h2 id="control-heading" className="lp-h3">Your Data. Your Control.</h2>
-          <p>AI can provide recommendations and explanations <AiStatusBadge />. You review and approve every consequential decision, and authorized workflows keep their validation and evidence. Data handling follows the protections actually in place; this Beta uses synthetic data.</p>
+          <p>AI recommendations and explanations are planned and unavailable in this Beta <AiStatusBadge />. Today, rules check your data, you approve every consequential decision, and authorized workflows keep their validation and evidence. Data handling follows the protections actually in place; this Beta uses synthetic data.</p>
         </div>
         <Link href="/trust" className="lp-link lp-control-link">View Trust and Security<ArrowRight size={18} aria-hidden="true" /></Link>
       </div>

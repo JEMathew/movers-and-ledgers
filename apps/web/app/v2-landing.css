@@ -66,9 +66,6 @@ html { scroll-padding-top: 6rem; }
 .site-brand-block { grid-template-columns: auto; }
 .site-attribution { display: flex; flex-wrap: wrap; align-items: center; gap: .1rem .5rem; margin: -.55rem 0 0 3.5rem; font-size: .8125rem; color: var(--text-secondary); }
 .site-header-bar[data-tone=navy] .site-attribution { color: var(--lp-hero-secondary); }
-.v2-attribution-part { display: inline-flex; align-items: center; gap: .4rem; }
-.v2-attribution-sep { margin-right: .1rem; opacity: .7; }
-.v2-attribution-logo { width: .9rem; height: .9rem; object-fit: contain; }
 .site-nav a { font-size: 1rem; }
 .site-header-bar[data-tone=navy] .site-nav a, .site-header-bar[data-tone=navy] .nav-link { color: var(--lp-hero-ink); }
 .site-header-bar[data-tone=navy] .site-nav a:hover, .site-header-bar[data-tone=navy] .nav-link:hover,

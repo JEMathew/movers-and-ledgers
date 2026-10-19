@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Checkbox, Select } from "@/components/ui";
 import { Surface } from "./Surface";
 import { safeContext, type SafeContext } from "./context";
-const categories = ["Product experience", "Bug or blocker", "Knowledge / explanation", "Agent recommendation", "Accessibility", "Security / privacy"];
+const categories = ["Product experience", "Bug or blocker", "Knowledge / explanation", "Rule-based recommendation", "Accessibility", "Security / privacy"];
 export function Feedback() {
   const [kind, setKind] = useState("Share Feedback");
   const [category, setCategory] = useState(categories[0]);

@@ -68,7 +68,7 @@ export function V2ComponentSheet() {
 
         <Group title="Attribution (one quiet line)">
           <Attribution />
-          <p className="v2-ink-2" style={{ margin: 0 }}>Shows the owner-approved line only when AI assistance is verified live.</p>
+          <p className="v2-ink-2" style={{ margin: 0 }}>Owner-approved technology attribution; it does not indicate that AI assistance is live.</p>
         </Group>
 
         <Group title="Money figures">

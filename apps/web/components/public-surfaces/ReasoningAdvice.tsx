@@ -60,7 +60,7 @@ function WorkspaceAdvice({ path, session }: { path: string; session: string }) {
   }
   return <section className="panel mt-4 p-5" aria-label="Optional reasoning guidance">
     <div className="flex flex-wrap items-center gap-2"><h2 className="type-card">Reasoning guidance · advisory only</h2><AiStatusBadge /></div>
-    <p className="mt-2 text-sm text-secondary">Optional advice about the current proposal. It cannot approve, retry, post or verify. The public Beta uses deterministic fallback; live Gemini requires explicit operator configuration.</p>
+    <p className="mt-2 text-sm text-secondary">Available here: rule-based guidance about the current proposal. Gemini Advisor assistance is planned and unavailable in this Beta. Guidance cannot approve, retry, post or verify; you approve every consequential change.</p>
     <div className="mt-3 flex flex-wrap gap-2">{capabilities[path].map(capability => <button className="button secondary small" type="button" key={capability} disabled={busy} onClick={() => request(capability)}>Explain {capability}</button>)}</div>
     <p role="status" className="mt-2 text-sm">{busy ? "Preparing bounded guidance…" : result ? `Guidance: ${result.state}` : "No reasoning requested."}</p>
     {error && <p role="alert" className="mt-3">{error}</p>}
