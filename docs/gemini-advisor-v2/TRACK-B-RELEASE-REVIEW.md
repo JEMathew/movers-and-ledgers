@@ -1,5 +1,7 @@
 # Track B integration and release review — October 20, 2026
 
+> Latest scoped verification: [Final evaluation readiness](EVALUATION-READINESS.md). It records the newer UX checkpoint, source/hash reuse, security applicability and current integration gate. The dated build/test evidence below remains unchanged.
+
 **Local safety candidate: `ae8535acc71e78752b508ef57e597d9baaf426a7` (safety commit `bb85b2c` plus validated SDK pin). Production NO-GO.** This report is an evidence addendum; it neither changes approved scope nor certifies Track A. The original live evaluation and its exhausted four-call ledger remain unchanged. No new generation or countTokens calls occurred.
 
 ## Requirement → implementation → evidence
