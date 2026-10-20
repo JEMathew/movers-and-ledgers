@@ -7,7 +7,7 @@ import { journeyPosition } from "./journey";
 afterEach(() => { cleanup(); vi.restoreAllMocks(); sessionStorage.clear(); window.history.replaceState(null, "", "/"); });
 
 const journey = () => within(screen.getByRole("list", { name: "Migration Journey" })).getAllByRole("listitem").map(step => step.textContent);
-const fresh = ["AssessCurrent", "PlanNot Started", "MapNot Started", "ApproveNot Started", "MigrateNot Started", "ResolveNot Started", "ValidateNot Started", "Set UpNot Started", "Start UsingNot Started"];
+const fresh = ["AssessNow", "PlanNot started", "MapNot started", "ApproveNot started", "MigrateNot started", "ResolveNot started", "ValidateNot started", "Set upNot started", "Start usingNot started"];
 
 describe("journey starting state", () => {
   it("keeps the empty home explicit and starts the operational journey only in Assess", async () => {

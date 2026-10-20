@@ -15,7 +15,7 @@ describe('verified member read continuity',()=>{
   it('clears private home immediately on identity loss and retains the safe deep-link destination',async()=>{
     const fetch=vi.spyOn(globalThis,'fetch').mockImplementation(()=>Promise.resolve(response()));const root=render(<WorkspaceEntry reference={a}/>);await screen.findByRole('link',{name:'Review recovery'});
     mocks.session.identity=null;mocks.session.ready=false;root.rerender(<WorkspaceEntry reference={a}/>);
-    expect(screen.queryByText(/Selected migration/)).not.toBeInTheDocument();expect(screen.queryByRole('link',{name:'Evidence & Results'})).not.toBeInTheDocument();expect(screen.getByRole('heading',{name:'Sign in to continue your migration'})).toBeVisible();expect(fetch).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText(/Selected migration/)).not.toBeInTheDocument();expect(screen.queryByRole('link',{name:'Open evidence'})).not.toBeInTheDocument();expect(screen.getByRole('heading',{name:'Sign in to continue your migration'})).toBeVisible();expect(fetch).toHaveBeenCalledTimes(1);
     mocks.session.hasSession=false;mocks.session.ready=true;root.rerender(<WorkspaceEntry reference={a}/>);fireEvent.click(screen.getByRole('button',{name:'Continue with Google'}));expect(mocks.session.signIn).toHaveBeenCalledWith(`/workspace?session=${a}`);
     mocks.session.hasSession=true;mocks.session.identity={subject:'firebase:a',email:'a@example.test'};root.rerender(<WorkspaceEntry reference={a}/>);await screen.findByRole('link',{name:'Review recovery'});expect(fetch).toHaveBeenCalledTimes(2);
     expect(fetch.mock.calls.every(call=>call[1]?.method===undefined)).toBe(true);

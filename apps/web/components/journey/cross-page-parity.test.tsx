@@ -62,25 +62,25 @@ function respond(state: State, url: string) {
 
 const pages: [string, ComponentType][] = [
   ["My Migration", MyMigration], ["Assess", DiscoverAssessExperience], ["Plan", PlanMapApproveExperience],
-  ["Migrate", MigrateResolveExperience], ["Validate", ValidateConfigureExperience], ["Start Using", OnboardFpuExperience],
+  ["Migrate", MigrateResolveExperience], ["Validate", ValidateConfigureExperience], ["Start using", OnboardFpuExperience],
 ];
 const steps = () => within(screen.getByRole("list", { name: "Migration Journey" })).getAllByRole("listitem").map(step => step.textContent);
 const reviewed = (n: number) => Array.from({ length: n }, () => ({ state: "APPROVED" }));
 const open = (n: number) => Array.from({ length: n }, () => ({ state: "REVIEW_REQUIRED" }));
 const state = (status: string, mappings: { state: string }[] = [], blockers = 0, execution: State["run"] = null): State => ({ status, mappings, blockers, run: execution });
-const C = "Completed", N = "Not Started";
-const labels = ["Assess", "Plan", "Map", "Approve", "Migrate", "Resolve", "Validate", "Set Up", "Start Using"];
+const C = "Done", N = "Not started";
+const labels = ["Assess", "Plan", "Map", "Approve", "Migrate", "Resolve", "Validate", "Set up", "Start using"];
 const expected = (...states: string[]) => labels.map((label, i) => label + (states[i] ?? N));
 
 describe.each([
-  ["a fresh migration", state("CREATED"), expected("Current")],
-  ["a readiness blocker during mapping", state("MAPPING", [...reviewed(3), ...open(8)], 1), expected("Blocked", C, "Current")],
-  ["pending mappings", state("AWAITING_APPROVAL", [...reviewed(3), ...open(8)]), expected(C, C, "Current")],
-  ["all mappings reviewed, awaiting approval", state("AWAITING_APPROVAL", reviewed(11)), expected(C, C, C, "Current")],
-  ["an approved plan", state("APPROVED", reviewed(11)), expected(C, C, C, C, "Current")],
-  ["a paused migration", state("RESOLVING", reviewed(11), 0, run("RESOLVING")), expected(C, C, C, C, "Paused", "Needs Attention")],
+  ["a fresh migration", state("CREATED"), expected("Now")],
+  ["a readiness blocker during mapping", state("MAPPING", [...reviewed(3), ...open(8)], 1), expected("Blocked", C, "Now")],
+  ["pending mappings", state("AWAITING_APPROVAL", [...reviewed(3), ...open(8)]), expected(C, C, "Now")],
+  ["all mappings reviewed, awaiting approval", state("AWAITING_APPROVAL", reviewed(11)), expected(C, C, C, "Now")],
+  ["an approved plan", state("APPROVED", reviewed(11)), expected(C, C, C, C, "Now")],
+  ["a paused migration", state("RESOLVING", reviewed(11), 0, run("RESOLVING")), expected(C, C, C, C, "Paused", "Needs attention")],
   ["blocked validation", state("VALIDATION_BLOCKED", reviewed(11), 0, run("MIGRATION_COMPLETE")), expected(C, C, C, C, C, C, "Blocked")],
-  ["Set Up", state("ONBOARDING", reviewed(11), 0, run("MIGRATION_COMPLETE")), expected(C, C, C, C, C, C, C, "Current")],
+  ["Set up", state("ONBOARDING", reviewed(11), 0, run("MIGRATION_COMPLETE")), expected(C, C, C, C, C, C, C, "Now")],
   ["a completed migration", state("VERIFIED_FIRST_PRODUCTIVE_USE", reviewed(11), 0, run("MIGRATION_COMPLETE")), expected(C, C, C, C, C, C, C, C, C)],
 ])("journey parity for %s", (_name, migration, journey) => {
   it.each(pages)("%s shows the same journey", async (_page, Page) => {

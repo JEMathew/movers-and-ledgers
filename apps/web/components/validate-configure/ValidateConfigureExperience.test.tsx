@@ -21,7 +21,7 @@ describe("ValidateConfigureExperience", () => {
     render(<ValidateConfigureExperience />);
     expect(screen.getByText(/No production readiness claim/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", {name: "Load discrepancy scenario"}));
-    fireEvent.click(await screen.findByRole("button", {name: "Verify My Books"}));
+    fireEvent.click(await screen.findByRole("button", {name: "Verify my books"}));
     expect(await screen.findByText("-20.00")).toBeInTheDocument();
     expect(screen.getByRole("button", {name: "Continue to configuration"})).toBeDisabled();
     expect(mock).toHaveBeenCalledTimes(2);
@@ -34,24 +34,24 @@ describe("ValidateConfigureExperience", () => {
     fireEvent.click(screen.getByRole("button", {name: "Load discrepancy scenario"}));
     fireEvent.click(await screen.findByRole("button", {name: "Review repair: invoices:invoice-001"}));
     expect(await screen.findByRole("dialog", {name: "Approve synthetic record restoration?"})).toBeInTheDocument();
-    expect(screen.getByRole("button", {name: "Revalidate Migration"})).toBeDisabled();
+    expect(screen.getByRole("button", {name: "Verify again"})).toBeDisabled();
     fireEvent.click(screen.getByRole("button", {name: "Approve restoration"}));
-    await waitFor(() => expect(screen.getByRole("button", {name: "Revalidate Migration"})).toBeEnabled());
+    await waitFor(() => expect(screen.getByRole("button", {name: "Verify again"})).toBeEnabled());
     expect(screen.getByRole("button", {name: "Continue to configuration"})).toBeDisabled();
     expect(mock.mock.calls[2][0]).toContain("/validation/resolutions/repair/approve");
   });
 
-  it("makes Complete Setup the single dominant action once configured", async () => {
+  it("makes Complete setup the single dominant action once configured", async () => {
     const configured: Snapshot = { ...review, workflow_status: "CONFIGURED", ready_for_onboarding: true, configuration: { ...review.configuration!, proposals: review.configuration!.proposals.map(p => ({ ...p, state: "APPLIED" })) } };
     vi.spyOn(globalThis, "fetch").mockImplementationOnce(() => response(configured));
     window.history.replaceState(null, "", "?session=session-vc");
     render(<ValidateConfigureExperience />);
-    const complete = await screen.findByRole("link", { name: /Complete Setup/ });
+    const complete = await screen.findByRole("link", { name: /Complete setup/ });
     const primary = Array.from(document.querySelectorAll<HTMLElement>(".button")).filter(el => !["secondary", "ghost", "danger", "icon-button"].some(c => el.classList.contains(c)));
     expect(primary).toEqual([complete]);
-    expect(screen.getByRole("button", { name: "Revalidate Migration" })).toHaveClass("secondary");
+    expect(screen.getByRole("button", { name: "Verify again" })).toHaveClass("secondary");
     fireEvent.click(screen.getByText("Verified financial report · exact source, target and evidence"));
-    expect(screen.getByText(/Revalidating reruns every check and discards the current configuration/)).toBeVisible();
+    expect(screen.getByText(/Verifying again reruns every check and discards the current configuration/)).toBeVisible();
   });
 
   it("keeps verification as the lead action while the books do not match", async () => {
@@ -59,7 +59,7 @@ describe("ValidateConfigureExperience", () => {
     window.history.replaceState(null, "", "?session=session-vc");
     render(<ValidateConfigureExperience />);
     expect(await screen.findByRole("button", { name: "Review repair: invoices:invoice-001" })).not.toHaveClass("secondary");
-    expect(screen.getByRole("button", { name: "Revalidate Migration" })).toHaveClass("secondary");
+    expect(screen.getByRole("button", { name: "Verify again" })).toHaveClass("secondary");
     expect(screen.queryByText(/discards the current configuration/)).not.toBeInTheDocument();
   });
 
@@ -74,7 +74,8 @@ describe("ValidateConfigureExperience", () => {
     fireEvent.change(screen.getByLabelText("Supported target value"), { target: {value: "FIFO"} });
     fireEvent.change(screen.getByLabelText("Decision note (optional)"), {target: {value: "Reviewed synthetic policy"}});
     fireEvent.click(screen.getByRole("button", {name: "Confirm modify"}));
-    await screen.findByText("MODIFIED");
+    // The setting now reads Changed, in the setting card and in the settings list.
+    expect(await screen.findAllByText("Changed")).toHaveLength(2);
     expect(JSON.parse(mock.mock.calls[1][1]!.body as string)).toEqual({action: "modify", value: "FIFO", comment: "Reviewed synthetic policy"});
     expect(screen.getByRole("button", {name: "Apply reviewed configuration"})).toBeEnabled();
   });
@@ -126,7 +127,8 @@ describe("ValidateConfigureExperience", () => {
     fireEvent.click(screen.getByRole("button", {name: "Load reconciled scenario"}));
     fireEvent.click(await screen.findByRole("button", {name: "Reject inventory valuation"}));
     fireEvent.click(screen.getByRole("button", {name: "Confirm reject"}));
-    await screen.findByText("REJECTED");
+    expect(await screen.findAllByText("Rejected")).toHaveLength(2);
+    expect(screen.getByRole("region", { name: "How to recover" })).toHaveTextContent("Inventory valuation is rejected");
     expect(screen.getByRole("button", {name: "Apply reviewed configuration"})).toBeDisabled();
     expect(screen.getByRole("button", {name: "Modify inventory valuation"})).toBeEnabled();
   });
@@ -142,19 +144,19 @@ describe("ValidateConfigureExperience", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("Evidence changed");
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(screen.getByRole("button", {name: "Confirm approve"})).toBeDisabled();
-    expect(screen.queryByText("APPROVED")).not.toBeInTheDocument();
+    expect(screen.queryByText("Approved")).not.toBeInTheDocument();
     expect(screen.getByRole("link", {name: "Read current evidence"})).toHaveAttribute("href", "/validate-configure?session=session-vc");
   });
 
-  it("hands off to onboarding with one Complete Setup action once configuration is applied", async () => {
+  it("hands off to onboarding with one Complete setup action once configuration is applied", async () => {
     const configured = { ...structuredClone(review), workflow_status: "CONFIGURED", ready_for_onboarding: true };
     configured.configuration!.proposals[0].state = "APPLIED";
     vi.spyOn(globalThis, "fetch").mockImplementation(() => response(configured));
     window.history.replaceState(null, "", "/validate-configure?session=session-vc");
     render(<ValidateConfigureExperience />);
-    expect(await screen.findByRole("link", {name: "Complete Setup"})).toHaveAttribute("href", "/onboard-fpu?session=session-vc");
+    expect(await screen.findByRole("link", {name: "Complete setup"})).toHaveAttribute("href", "/onboard-fpu?session=session-vc");
     expect(screen.queryByRole("link", {name: /Continue to Onboard/})).not.toBeInTheDocument();
-    expect(screen.getByRole("list", {name: "Migration Journey"}).querySelector('[aria-current="step"]')).toHaveTextContent("Set UpCurrent");
+    expect(screen.getByRole("list", {name: "Migration Journey"}).querySelector('[aria-current="step"]')).toHaveTextContent("Set upNow");
   });
   it("keeps keyboard focus inside the review dialog in both directions", async () => {
     vi.spyOn(globalThis, "fetch").mockImplementation(() => response(review));

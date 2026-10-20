@@ -17,7 +17,7 @@ function select(f = file()) {
 }
 function consent() { fireEvent.click(screen.getByRole("checkbox", { name: /de-identified test data/ })); }
 function response(data: unknown, status = 200) { return { ok: status < 400, status, json: async () => data }; }
-const validate = () => fireEvent.click(screen.getByRole("button", { name: "Validate Files" }));
+const validate = () => fireEvent.click(screen.getByRole("button", { name: "Validate files" }));
 beforeEach(() => { vi.stubGlobal("fetch", fetchMock); fetchMock.mockReset(); sessionStorage.clear(); });
 afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
 
@@ -25,21 +25,21 @@ describe("test export check", () => {
   it("offers browser-local compatibility checks while hosted handoff stays gated", () => {
     vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "firebase");
     render(<TryYourData/>);
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Check Your Export in This Browser");
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Check your export in this browser");
     expect(screen.getByLabelText("Test files")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Validate Files" })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "Download Template ZIP" })).toBeVisible();
+    expect(screen.getByRole("button", { name: "Validate files" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Download template ZIP" })).toBeVisible();
     expect(screen.getByText(/Hosted upload and workspace creation are unavailable/)).toBeVisible();
     expect(fetchMock).not.toHaveBeenCalled();
   });
   it("leads with four plain steps and keeps format detail behind a disclosure", () => {
     render(<TryYourData/>);
-    expect(screen.getByRole("heading", { level: 1, name: "Check Your Export Before Migration" })).toBeVisible();
+    expect(screen.getByRole("heading", { level: 1, name: "Check your export before migration" })).toBeVisible();
     expect(screen.getByText("We'll check the files, identify missing or inconsistent data, and show what needs attention before anything moves.")).toBeVisible();
-    for (const name of ["1. Download Sample Package", "2. Choose Test Files", "3. Validate Files"]) expect(screen.getByRole("heading", { name })).toBeVisible();
+    for (const name of ["1. Download sample package", "2. Choose test files", "3. Validate files"]) expect(screen.getByRole("heading", { name })).toBeVisible();
     expect(screen.getByText("See a small example of the files and formats MoveBooks accepts.")).toBeVisible();
-    expect(screen.getByText("De-Identified Test Data Only")).toBeVisible();
-    const format = screen.getByText("View Supported File Format and Limits").closest("details")!;
+    expect(screen.getByText("De-identified test data only")).toBeVisible();
+    const format = screen.getByText("View supported file format and limits").closest("details")!;
     expect(format).not.toHaveAttribute("open");
     expect(within(format).getByText("customers.csv")).toBeInTheDocument();
     expect(format).toHaveTextContent("Up to 9 files, 256 KiB per file and 2 MiB in total.");
@@ -53,7 +53,7 @@ describe("test export check", () => {
     vi.stubGlobal("URL", { createObjectURL: create, revokeObjectURL: revoke });
     const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
     render(<TryYourData/>);
-    fireEvent.click(screen.getByRole("button", { name: "Download Sample Package" }));
+    fireEvent.click(screen.getByRole("button", { name: "Download sample package" }));
     await waitFor(() => expect(click).toHaveBeenCalled());
     expect(fetchMock.mock.calls[0][0]).toMatch(/\/v1\/intake\/template$/);
     expect(revoke).toHaveBeenCalledWith("blob:sample");
@@ -61,20 +61,20 @@ describe("test export check", () => {
   it("has an accessible file picker, a privacy notice and no automatic upload", () => {
     render(<TryYourData/>); select();
     expect(screen.getByLabelText("Test files")).toHaveAttribute("type", "file");
-    expect(screen.getByRole("button", { name: "Validate Files" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Validate files" })).toBeDisabled();
     expect(screen.getByText(/No data goes to an LLM/)).toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
   });
   it("validates, requires review, continues to the same assessment and focuses the result", async () => {
     fetchMock.mockResolvedValueOnce(response(report)).mockResolvedValueOnce(response({ session_id: id, workflow_status: "ASSESSED" }));
     render(<TryYourData/>); select(); consent(); validate();
-    await screen.findByText("Your Files Are Ready");
-    const next = screen.getByRole("button", { name: "Continue to Assessment" });
+    await screen.findByText("Your files are ready");
+    const next = screen.getByRole("button", { name: "Continue to assessment" });
     expect(next).toBeDisabled();
-    await waitFor(() => expect(screen.getByRole("heading", { name: "3. Validate Files" })).toHaveFocus());
+    await waitFor(() => expect(screen.getByRole("heading", { name: "3. Validate files" })).toHaveFocus());
     fireEvent.click(screen.getByRole("checkbox", { name: /I reviewed the results/ }));
     fireEvent.click(next);
-    expect(await screen.findByRole("link", { name: "View Assessment Results" })).toHaveAttribute("href", `/assess?session=${id}`);
+    expect(await screen.findByRole("link", { name: "View assessment results" })).toHaveAttribute("href", `/assess?session=${id}`);
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe(id);
     expect(fetchMock.mock.calls[1][0]).toContain(`/intake/${id}/workspace`);
     expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toEqual({ reviewed: true });
@@ -87,24 +87,24 @@ describe("test export check", () => {
     ];
     fetchMock.mockResolvedValueOnce(response({ ...report, status: "BLOCKED", issues }));
     render(<TryYourData/>); select(); consent(); validate();
-    expect(await screen.findByRole("heading", { name: "3 Things Need Attention Before We Can Use These Files." })).toBeVisible();
+    expect(await screen.findByRole("heading", { name: "3 things need attention before we can use these files." })).toBeVisible();
     const invoices = screen.getByRole("region", { name: "Issues in invoices.csv" });
-    expect(invoices).toHaveTextContent("Broken Reference · Row 18 · Column customer_id");
+    expect(invoices).toHaveTextContent("Broken reference · Row 18 · Column customer_id");
     expect(invoices).toHaveTextContent("Row 18 references customer C104, but C104 does not exist in customers.csv.");
     expect(invoices).toHaveTextContent("Fix: Add C104 to customers.csv or correct the reference.");
-    expect(screen.getByRole("region", { name: "Issues in configuration.json" })).toHaveTextContent("Missing Required Key · Key company.base_currency");
+    expect(screen.getByRole("region", { name: "Issues in configuration.json" })).toHaveTextContent("Missing required key · Key company.base_currency");
     expect(screen.getByText("We couldn't use this package yet. Nothing was imported or changed.")).toBeVisible();
     // A blocked package never offers the next step.
-    expect(screen.queryByRole("button", { name: "Continue to Assessment" })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Fix Files and Validate Again" }));
+    expect(screen.queryByRole("button", { name: "Continue to assessment" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Fix files and validate again" }));
     expect(screen.getByLabelText("Test files")).toHaveFocus();
-    fireEvent.click(screen.getByRole("button", { name: "View Expected Format" }));
-    expect(screen.getByText("View Supported File Format and Limits").closest("details")).toHaveAttribute("open");
+    fireEvent.click(screen.getByRole("button", { name: "View expected format" }));
+    expect(screen.getByText("View supported file format and limits").closest("details")).toHaveAttribute("open");
   });
   it("words a single problem in the singular", async () => {
     fetchMock.mockResolvedValueOnce(response({ ...report, status: "BLOCKED", issues: [blocker({})] }));
     render(<TryYourData/>); select(); consent(); validate();
-    expect(await screen.findByRole("heading", { name: "1 Thing Needs Attention Before We Can Use These Files." })).toBeVisible();
+    expect(await screen.findByRole("heading", { name: "1 thing needs attention before we can use these files." })).toBeVisible();
   });
   it("lets a blocked package be replaced and validated again without keeping earlier review", async () => {
     fetchMock.mockResolvedValueOnce(response({ ...report, status: "BLOCKED", issues: [blocker({})] })).mockResolvedValueOnce(response({})).mockResolvedValueOnce(response(report));
@@ -113,14 +113,14 @@ describe("test export check", () => {
     fireEvent.click(screen.getByRole("button", { name: "Remove customers.csv" }));
     expect(screen.queryByText("Missing required column: display_name.")).not.toBeInTheDocument();
     select(); validate();
-    await screen.findByText("Your Files Are Ready");
-    expect(screen.getByRole("button", { name: "Continue to Assessment" })).toBeDisabled();
+    await screen.findByText("Your files are ready");
+    expect(screen.getByRole("button", { name: "Continue to assessment" })).toBeDisabled();
   });
   it("shows warnings as notes that allow continuing after review", async () => {
     fetchMock.mockResolvedValueOnce(response({ ...report, status: "NEEDS ATTENTION", issues: [blocker({ code: "IGNORED_FIELDS", severity: "WARNING", row: 1, message: "Unsupported columns will not migrate: memo.", fix: "Remove the columns or continue without them.", can_continue: true })] }));
     render(<TryYourData/>); select(); consent(); validate();
-    expect(await screen.findByText("Your Files Can Be Used After Review")).toBeVisible();
-    expect(screen.getByRole("heading", { name: "1 Note to Review" })).toBeVisible();
+    expect(await screen.findByText("Your files can be used after review")).toBeVisible();
+    expect(screen.getByRole("heading", { name: "1 note to review" })).toBeVisible();
     expect(screen.getByText("You can continue after reviewing this.")).toBeVisible();
   });
   it("rejects oversized files before anything is sent", async () => {
@@ -138,7 +138,7 @@ describe("test export check", () => {
     fetchMock.mockResolvedValue(response({ detail: "ignored" }, status));
     render(<TryYourData/>); select(); consent(); validate();
     expect(await screen.findByText(new RegExp(text.replace(/[.()?]/g, "\\$&")))).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: "View Assessment Results" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "View assessment results" })).not.toBeInTheDocument();
     expect(sessionStorage.getItem("movebooks-migration-session")).toBeNull();
   });
   it("explains a lost response to validation without promising nothing changed", async () => {
@@ -156,16 +156,16 @@ describe("test export check", () => {
       // Retrying the same ticket replays the existing workspace.
       .mockResolvedValueOnce(response({ session_id: id, workflow_status: "ASSESSED" }));
     render(<TryYourData/>); select(); consent(); validate();
-    await screen.findByText("Your Files Are Ready");
+    await screen.findByText("Your files are ready");
     fireEvent.click(screen.getByRole("checkbox", { name: /I reviewed the results/ }));
-    fireEvent.click(screen.getByRole("button", { name: "Continue to Assessment" }));
+    fireEvent.click(screen.getByRole("button", { name: "Continue to assessment" }));
     const alert = await screen.findByRole("alert");
     expect(alert).toHaveTextContent("We Couldn't Confirm This Step");
     expect(alert).toHaveTextContent("Your request may have been received.");
     expect(alert).not.toHaveTextContent(/Nothing was (imported or )?changed/);
     expect(sessionStorage.getItem("movebooks-migration-session")).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: "Try Again" }));
-    expect(await screen.findByRole("link", { name: "View Assessment Results" })).toHaveAttribute("href", `/assess?session=${id}`);
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
+    expect(await screen.findByRole("link", { name: "View assessment results" })).toHaveAttribute("href", `/assess?session=${id}`);
     const creates = fetchMock.mock.calls.filter(([url]) => String(url).endsWith("/workspace"));
     // Both attempts used the same package ticket; no second package or new workspace was requested.
     expect(creates.map(([url]) => url)).toEqual([expect.stringContaining(`/intake/${id}/workspace`), expect.stringContaining(`/intake/${id}/workspace`)]);

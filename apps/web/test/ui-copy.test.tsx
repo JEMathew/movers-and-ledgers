@@ -6,17 +6,17 @@ import { footerLinks, memberLinks, publicLinks } from "@/components/public-surfa
 
 afterEach(() => vi.unstubAllEnvs());
 
-// Grammatical Title Case: every word capitalised except short articles, conjunctions and
-// prepositions after the first word. Numbers and the "·" separator are allowed.
-const small = new Set(["a", "an", "the", "and", "or", "for", "to", "of", "in", "on", "with", "at", "by"]);
-const titleCase = (label: string) => label.split(/\s+/).every((word, index) =>
-  /^[\d·→&]/.test(word) || (index > 0 && small.has(word)) || /^[A-Z]/.test(word));
+// V2 sentence case: the first word capitalised, later words lower case except proper nouns, product
+// and stage names. Numbers and the "·" separator are allowed.
+const proper = /^(MoveBooks|AI|USD|Harbor|Light|Books|Northstar|Gemini|Google|Cloud|Beta|Demo|Understand|Prepare|Move|Verify|Start|Play|Advisor|Reviewer|I)$/;
+const sentenceCase = (label: string) => label.split(/\s+/).every((word, index) =>
+  /^[\d·→&]/.test(word) || (index === 0 ? !/^[a-z]/.test(word) : !/^[A-Z]/.test(word) || proper.test(word.replace(/[^A-Za-z]/g, ""))));
 
 const statuses = ["CREATED", "DISCOVERED", "ASSESSED", "PLANNED", "MAPPING", "AWAITING_APPROVAL", "APPROVED", "MIGRATION_READY", "MIGRATING", "MIGRATION_PAUSED", "RESOLVING", "RETRY_PENDING", "MIGRATION_BLOCKED", "MIGRATION_COMPLETE", "VALIDATING", "VALIDATION_BLOCKED", "VALIDATED", "CONFIGURING", "CONFIGURATION_REVIEW_REQUIRED", "CONFIGURED", "ONBOARDING", "ONBOARDING_BLOCKED", "READY_FOR_FIRST_PRODUCTIVE_USE", "FIRST_PRODUCTIVE_USE_IN_PROGRESS", "FIRST_PRODUCTIVE_USE_BLOCKED", "VERIFIED_FIRST_PRODUCTIVE_USE", "UNKNOWN"];
 const id = "11111111-1111-4111-8111-111111111111";
 
 describe("customer-facing label casing", () => {
-  it("uses Title Case for menus, journey steps and every next action", () => {
+  it("uses sentence case for menus, journey steps and every next action", () => {
     const labels = [
       ...[...publicLinks, ...memberLinks, ...footerLinks].map(([label]) => label),
       ...journeySteps.map(step => step.label),
@@ -26,12 +26,12 @@ describe("customer-facing label casing", () => {
       })),
       nextActionFor(undefined).label, nextActionFor(undefined).heading,
     ];
-    expect(labels.filter(label => !titleCase(label))).toEqual([]);
+    expect(labels.filter(label => !sentenceCase(label))).toEqual([]);
   });
   it("frames readiness as readiness to migrate", () => {
     expect(nextActionFor(undefined)).toMatchObject({
-      heading: "See If Your Books Are Ready to Migrate",
-      label: "Check If My Books Are Ready to Migrate",
+      heading: "See if your books are ready to migrate",
+      label: "Check if my books are ready to migrate",
       detail: "We'll review your accounting data and identify anything that could block or complicate the migration.",
     });
   });
@@ -44,8 +44,8 @@ describe("customer-facing label casing", () => {
       "Migrate — Move your approved data",
       "Resolve — Fix items needing attention",
       "Validate — Confirm balances and accuracy",
-      "Set Up — Complete your business setup",
-      "Start Using — Start working in your migrated books",
+      "Set up — Complete your business setup",
+      "Start using — Start working in your migrated books",
     ]);
     expect(JSON.stringify(journeySteps)).not.toMatch(/FPU|first live cycle|First Use/);
   });
@@ -57,7 +57,7 @@ describe("customer-facing label casing", () => {
     expect(projectJourney({ status: "ASSESSED", readinessIssues: 0 }).held).toBeUndefined();
   });
   it("names every journey state as part of the current product", () => {
-    expect(journeySteps.map(step => step.label)).toEqual(["Assess", "Plan", "Map", "Approve", "Migrate", "Resolve", "Validate", "Set Up", "Start Using"]);
+    expect(journeySteps.map(step => step.label)).toEqual(["Assess", "Plan", "Map", "Approve", "Migrate", "Resolve", "Validate", "Set up", "Start using"]);
     expect(journeyCurrentLabelFor("VALIDATION_BLOCKED")).toBe("Blocked");
     expect(journeyCurrentLabelFor("MIGRATION_BLOCKED")).toBe("Blocked");
     expect(journeyCurrentLabelFor("RESOLVING")).toBe("Needs Attention");
@@ -67,7 +67,7 @@ describe("customer-facing label casing", () => {
 });
 
 describe("Plan-stage label casing", () => {
-  it("keeps Plan, Map and Approve headings and buttons in Title Case", async () => {
+  it("keeps Plan, Map and Approve headings and buttons in sentence case", async () => {
     const { readFileSync, readdirSync } = await import("node:fs");
     const { join, resolve } = await import("node:path");
     const dir = resolve(__dirname, "../components/plan-map-approve");
@@ -80,7 +80,31 @@ describe("Plan-stage label casing", () => {
       ];
     });
     expect(labels.length).toBeGreaterThan(10);
-    expect(labels.filter(label => !titleCase(label.replace(/[?.]$/, "")))).toEqual([]);
+    expect(labels.filter(label => !sentenceCase(label.replace(/[?.]$/, "")))).toEqual([]);
+  });
+});
+
+describe("Workstream B screens label casing", () => {
+  it("keeps entry, My migration, Understand and Prepare headings, buttons and labels in sentence case", async () => {
+    const { readFileSync, readdirSync } = await import("node:fs");
+    const { join, resolve } = await import("node:path");
+    const root = resolve(__dirname, "..");
+    const inDir = (dir: string) => readdirSync(join(root, dir)).filter(name => /\.tsx$/.test(name) && !name.includes(".test.")).map(name => join(dir, name));
+    const files = [...inDir("components/plan-map-approve"), ...inDir("components/discover-assess"), "components/MyMigration.tsx", "components/WorkspaceEntry.tsx", "components/IdentityEntry.tsx", "app/sign-in/page.tsx",
+      "components/journey/MemberProgress.tsx", "components/journey/MigrationSnapshot.tsx", "components/journey/ChecksTable.tsx", "components/journey/MigrationPicker.tsx"];
+    const labels = files.flatMap(file => {
+      const source = readFileSync(join(root, file), "utf8");
+      return [
+        ...[...source.matchAll(/<h[1-5][^>]*>([^<{]+)<\/h[1-5]>/g)].map(match => match[1].trim()),
+        // Text directly before a closing button tag, whatever the attributes contain.
+        ...[...source.matchAll(/>([A-Z][^<{>]+)<\/(?:Button|button)>/g)].map(match => match[1].trim()),
+        ...[...source.matchAll(/<summary[^>]*>([A-Z][^<{]+)<\/summary>/g)].map(match => match[1].trim()),
+        ...[...source.matchAll(/(?:title|label)="([A-Z][^"]+)"/g)].map(match => match[1]),
+      ];
+    });
+    expect(labels.length).toBeGreaterThan(40);
+    // "My migration" is the name of a place in the product, like a stage name.
+    expect(labels.filter(label => !sentenceCase(label.replace(/[?.:]$/, "").replace(/ ·.*$/, "").replace(/ My migration\b/, " my migration")))).toEqual([]);
   });
 });
 
@@ -106,10 +130,12 @@ describe("internal terms stay out of customer copy", () => {
 describe("demo workspace entry", () => {
   it("explains the local demo workspace without identity jargon", async () => {
     render(await SignIn({ searchParams: Promise.resolve({ next: "/assess" }) }));
-    expect(screen.getByRole("heading", { level: 1, name: "Continue Your Migration" })).toBeVisible();
+    expect(screen.getByRole("heading", { level: 1, name: "Continue your migration" })).toBeVisible();
     expect(screen.getByText("Review and continue your migration using the demo workspace.")).toBeVisible();
-    expect(screen.getByRole("link", { name: /Enter Demo Workspace/ })).toHaveAttribute("href", "/api/auth/demo?next=%2Fassess");
-    expect(screen.getByText("Synthetic Data Only")).toBeVisible();
+    expect(screen.getByRole("link", { name: /^Enter demo workspace/ })).toHaveAttribute("href", "/api/auth/demo?next=%2Fassess");
+    expect(screen.getByText("Synthetic data only")).toBeVisible();
+    // One primary action on the page.
+    expect(document.querySelectorAll("main a.button:not(.secondary), main button.button:not(.secondary)")).toHaveLength(1);
     expect(document.body).not.toHaveTextContent(/Local demo identity|controlled de-identified test exports only/i);
   });
   // Google sign-in copy stays as it was; test/google-sign-in.test.tsx asserts it in cloud mode.

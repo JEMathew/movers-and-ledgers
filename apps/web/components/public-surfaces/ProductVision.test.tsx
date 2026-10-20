@@ -5,17 +5,16 @@ import { resolve } from "node:path";
 import Home from "@/app/page";
 
 describe("Product Vision media", () => {
-  it("places the conceptual vision inline above the fold hero with user-initiated, native playback", () => {
+  it("places the conceptual vision after the hero with user-initiated, native playback", () => {
     render(<Home/>);
-    const hero = document.querySelector(".discovery-hero")!;
     const vision = document.querySelector("#product-vision")!;
-    expect(hero.contains(vision)).toBe(true);
     expect(document.querySelector("details#product-vision-disclosure")).toBeNull();
     expect(screen.getByText("Our vision · 25 sec")).toBeVisible();
-    expect(document.querySelector("#product-vision")).toHaveAccessibleName("Our vision · 25 sec");
-    // DOM order: headline, then video, then CTA (mobile reads the video directly under the headline).
-    const order = [...hero.querySelectorAll("h1, video, a.button")].map(node => node.tagName);
-    expect(order).toEqual(["H1", "VIDEO", "A"]);
+    expect(vision).toHaveAccessibleName("Our vision · 25 sec");
+    // V2: the hero leads with the proof of a verified result; the vision follows the explanation sections.
+    const hero = document.querySelector(".v2-hero")!;
+    expect(hero.contains(vision)).toBe(false);
+    expect(hero.compareDocumentPosition(vision) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     const video = screen.getByLabelText("MoveBooks AI Product Vision");
     expect(video.tagName).toBe("VIDEO");
     expect(video).toHaveAttribute("controls");

@@ -1,0 +1,157 @@
+[
+ {
+  "step": "start a sample migration",
+  "ok": true
+ },
+ {
+  "step": "assess",
+  "ok": true
+ },
+ {
+  "step": "create plan",
+  "ok": true
+ },
+ {
+  "step": "create plan (plan page)",
+  "ok": true
+ },
+ {
+  "step": "open mappings",
+  "ok": true
+ },
+ {
+  "step": "mappings screenshot",
+  "ok": true
+ },
+ {
+  "step": "confirm all 12 mappings one by one",
+  "ok": true
+ },
+ {
+  "step": "review plan",
+  "ok": true
+ },
+ {
+  "step": "approve plan",
+  "ok": true
+ },
+ {
+  "step": "confirm plan approval",
+  "ok": true
+ },
+ {
+  "step": "continue to Move",
+  "ok": true
+ },
+ {
+  "step": "start migration",
+  "ok": true
+ },
+ {
+  "step": "wait for exception",
+  "ok": true
+ },
+ {
+  "step": "approve the proposed resolution",
+  "ok": true
+ },
+ {
+  "step": "retry the failed batch",
+  "ok": true
+ },
+ {
+  "step": "wait for completion",
+  "ok": true
+ },
+ {
+  "step": "go to Verify",
+  "ok": true
+ },
+ {
+  "step": "run verification",
+  "ok": true
+ },
+ {
+  "step": "wait",
+  "ok": true
+ },
+ {
+  "step": "verification screenshot",
+  "ok": true
+ },
+ {
+  "step": "continue to configuration",
+  "ok": true
+ },
+ {
+  "step": "approve the settings that need approval",
+  "ok": true
+ },
+ {
+  "step": "settings screenshot",
+  "ok": true
+ },
+ {
+  "step": "apply configuration",
+  "ok": true
+ },
+ {
+  "step": "wait",
+  "ok": true
+ },
+ {
+  "step": "go to Start",
+  "ok": true
+ },
+ {
+  "step": "start onboarding",
+  "ok": true
+ },
+ {
+  "step": "approve onboarding essentials",
+  "ok": true
+ },
+ {
+  "step": "essentials screenshot",
+  "ok": true
+ },
+ {
+  "step": "prepare invoice",
+  "ok": true
+ },
+ {
+  "step": "approve invoice",
+  "ok": true
+ },
+ {
+  "step": "post and verify",
+  "ok": true
+ },
+ {
+  "step": "wait for verified",
+  "ok": true
+ },
+ {
+  "step": "final screenshot",
+  "ok": true
+ },
+ {
+  "step": "api facts",
+  "ok": true,
+  "facts": {
+   "workflow_status": "VERIFIED_FIRST_PRODUCTIVE_USE",
+   "company": "Harbor Light Books",
+   "invoice_total_107_25": true,
+   "checks_verified": 17,
+   "checks_total": 17
+  }
+ },
+ {
+  "step": "API confirms verified result",
+  "ok": true
+ },
+ {
+  "status": "complete",
+  "page_errors": []
+ }
+]

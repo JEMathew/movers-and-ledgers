@@ -11,33 +11,33 @@ describe("five-phase task progress", () => {
     ["CONFIGURED", 4], ["ONBOARDING_BLOCKED", 4], ["FIRST_PRODUCTIVE_USE_IN_PROGRESS", 4],
   ])("projects %s without enabling forward navigation", (status, expected) => {
     render(<PhaseProgress {...projectJourney({ status, mappingIssues: 0 })} status={status} session={id} />);
-    const list = screen.getAllByRole("list", { name: "Five-phase migration journey" })[0];
+    const list = screen.getAllByRole("list", { name: "Five-stage migration journey" })[0];
     const items = within(list).getAllByRole("listitem");
     expect(items).toHaveLength(5);
     expect(items[expected]).toHaveAttribute("aria-current", "step");
     expect(items.slice(expected + 1).every(item => !item.querySelector("a"))).toBe(true);
     expect(within(list).getAllByRole("link").every(link => link.getAttribute("href")?.endsWith(`session=${id}`))).toBe(true);
-    expect(screen.getByText("Five phases and operational steps").closest("details")).not.toHaveAttribute("open");
+    expect(screen.getByText("Steps in each stage").closest("details")).not.toHaveAttribute("open");
   });
   it("keeps readiness held during Prepare and recovery within Move", () => {
     const view = render(<PhaseProgress {...projectJourney({ status: "MAPPING", readinessIssues: 2 })} session={id} />);
-    expect(screen.getAllByRole("list", { name: "Five-phase migration journey" })[0].firstElementChild).toHaveTextContent("UnderstandBlocked");
+    expect(screen.getAllByRole("list", { name: "Five-stage migration journey" })[0].firstElementChild).toHaveTextContent("UnderstandBlocked");
     view.rerender(<PhaseProgress {...projectJourney({ status: "RESOLVING" })} session={id} />);
-    const move = screen.getAllByRole("list", { name: "Five-phase migration journey" })[0].children[2];
-    expect(move).toHaveTextContent("MoveNeeds Attention");
-    expect(move).not.toHaveTextContent("Completed");
+    const move = screen.getAllByRole("list", { name: "Five-stage migration journey" })[0].children[2];
+    expect(move).toHaveTextContent("MoveNeeds attention");
+    expect(move).not.toHaveTextContent("Done");
   });
   it.each(["loading", "unavailable"] as const)("assumes no phase or navigation when %s", unknown => {
     render(<PhaseProgress current={null} unknown={unknown} session={id} />);
-    const list = screen.getAllByRole("list", { name: "Five-phase migration journey" })[0];
+    const list = screen.getAllByRole("list", { name: "Five-stage migration journey" })[0];
     expect(list.querySelector("[aria-current]")).toBeNull();
     expect(list.querySelector("a")).toBeNull();
-    expect(list.textContent).not.toContain("Completed");
+    expect(list.textContent).not.toContain("Done");
   });
   it("does not present a measured percentage for named work", () => {
     render(<PhaseProgress current={0} processing={PROCESSING.assess} />);
     expect(screen.getAllByRole("status").find(item => item.textContent?.includes("Assessing"))).not.toHaveTextContent("%");
-    fireEvent.click(screen.getByText("Five phases and operational steps"));
+    fireEvent.click(screen.getByText("Steps in each stage"));
     expect(screen.getByRole("list", { name: "Migration Journey" })).toBeVisible();
   });
   it("keeps context navigation tied to the selected reference", () => {

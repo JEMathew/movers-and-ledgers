@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { authHeaders } from "@/lib/identity";
 import { isSessionId } from "./session";
+import { AiStatusBadge } from "@/components/v2/primitives";
 
 const capabilities: Record<string, string[]> = {
   "/plan-map-approve": ["planning", "mapping"],
@@ -58,7 +59,7 @@ function WorkspaceAdvice({ path, session }: { path: string; session: string }) {
     finally { setBusy(false); }
   }
   return <section className="panel mt-4 p-5" aria-label="Optional reasoning guidance">
-    <h2 className="type-card">Reasoning guidance · advisory only</h2>
+    <div className="flex flex-wrap items-center gap-2"><h2 className="type-card">Reasoning guidance · advisory only</h2><AiStatusBadge /></div>
     <p className="mt-2 text-sm text-secondary">Optional advice about the current proposal. It cannot approve, retry, post or verify. The public Beta uses deterministic fallback; live Gemini requires explicit operator configuration.</p>
     <div className="mt-3 flex flex-wrap gap-2">{capabilities[path].map(capability => <button className="button secondary small" type="button" key={capability} disabled={busy} onClick={() => request(capability)}>Explain {capability}</button>)}</div>
     <p role="status" className="mt-2 text-sm">{busy ? "Preparing bounded guidance…" : result ? `Guidance: ${result.state}` : "No reasoning requested."}</p>

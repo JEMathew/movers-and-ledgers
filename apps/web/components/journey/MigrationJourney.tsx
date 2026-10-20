@@ -4,6 +4,8 @@ import { useEffect, useId, useRef } from "react";
 import { cn } from "@/components/ui/utils";
 import { JOURNEY_COMPLETE, journeySteps, type CurrentStepLabel, type HeldStep, type Processing, type UnknownProgress } from "./journey";
 
+const stateText = (label?: string) => label === "Current" ? "Now" : label === "Needs Attention" ? "Needs attention" : label;
+
 /** Persistent operational journey: completed, current and upcoming steps, stated in text as well as colour.
  *  A held step sits before the current one but is not finished, for example a paused migration.
  *  `current` is null only while a selected migration is read or after that read failed (see
@@ -22,8 +24,8 @@ export function MigrationJourney({ current, held, currentLabel = "Current", unkn
   }, [current]);
   return <section className={cn("journey", className)} aria-labelledby={`${id}-title`} aria-busy={Boolean(working)}>
     <div className="journey-head">
-      <p id={`${id}-title`} className="font-semibold">Migration Journey</p>
-      <p className="text-sm text-secondary">{!known ? (unknown === "loading" ? "Checking your progress…" : "Progress unavailable · nothing is assumed") : done ? `All ${JOURNEY_COMPLETE} steps complete` : `Step ${current + 1} of ${JOURNEY_COMPLETE} · ${journeySteps[current].label}: ${journeySteps[current].summary}`}</p>
+      <p id={`${id}-title`} className="font-semibold">Steps in this migration</p>
+      <p className="text-sm text-secondary">{!known ? (unknown === "loading" ? "Checking your progress…" : "Progress unavailable. Nothing is assumed.") : done ? `All ${JOURNEY_COMPLETE} steps complete` : `Step ${current + 1} of ${JOURNEY_COMPLETE} · ${journeySteps[current].label}: ${journeySteps[current].summary}`}</p>
     </div>
     <ol ref={list} className="stepper journey-steps" aria-label="Migration Journey">
       {journeySteps.map((step, index) => {
@@ -33,7 +35,7 @@ export function MigrationJourney({ current, held, currentLabel = "Current", unkn
         const busy = active && Boolean(working);
         return <li key={step.label} aria-current={active ? "step" : undefined} title={`${step.label}: ${step.summary}`} className={cn(complete && "is-complete", active && "is-active", isHeld && (held?.label === "Blocked" ? "is-blocked" : "is-held"), active && currentLabel === "Blocked" && "is-blocked", active && currentLabel === "Needs Attention" && "is-attention", busy && "is-processing")}>
           <span className="step-marker" aria-hidden="true">{complete ? <Check size={15} /> : <Circle size={12} fill={active ? "currentColor" : "none"} />}</span>
-          <span><strong>{step.label}</strong>{known && <small>{isHeld ? held?.label : complete ? "Completed" : busy ? working?.action : active ? currentLabel : "Not Started"}</small>}</span>
+          <span><strong>{step.label}</strong>{known && <small>{isHeld ? stateText(held?.label) : complete ? "Done" : busy ? working?.action : active ? stateText(currentLabel) : "Not started"}</small>}</span>
         </li>;
       })}
     </ol>

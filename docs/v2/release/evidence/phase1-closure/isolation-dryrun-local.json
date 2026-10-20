@@ -1,0 +1,62 @@
+{
+ "base": "http://localhost:3101",
+ "checks": [
+  {
+   "check": "B cannot read A on /workspace",
+   "pass": true,
+   "detail": "leaked=[]"
+  },
+  {
+   "check": "B cannot read A on /assess",
+   "pass": true,
+   "detail": "leaked=[]"
+  },
+  {
+   "check": "B cannot read A on /plan-map-approve",
+   "pass": true,
+   "detail": "leaked=[]"
+  },
+  {
+   "check": "B cannot read A on /migrate-resolve",
+   "pass": false,
+   "detail": "leaked=['decided by']"
+  },
+  {
+   "check": "B cannot read A on /validate-configure",
+   "pass": true,
+   "detail": "leaked=[]"
+  },
+  {
+   "check": "B cannot read A on /onboard-fpu",
+   "pass": false,
+   "detail": "leaked=['USD 107.25']"
+  },
+  {
+   "check": "B cannot read A on /trust",
+   "pass": true,
+   "detail": "leaked=[]"
+  },
+  {
+   "check": "B cannot read A on /product",
+   "pass": true,
+   "detail": "leaked=[]"
+  },
+  {
+   "check": "every API read of A by B is refused",
+   "pass": false,
+   "detail": "7 requests; unexpected=[('migration-sessions/724d1304-d4c4-51d2-8796-6ee1f57df15d', 200), ('migration-sessions/724d1304-d4c4-51d2-8796-6ee1f57df15d', 200), ('migration-sessions/724d1304-d4c4-51d2-8796-6ee1f57df15d/validation-configuration', 200), ('migration-sessions/724d1304-d4c4-51d2-8796-6ee1f57df15d/onboarding', 200), ('migration-sessions/724d1304-d4c4-51d2-8796-6ee1f57df15d', 200), ('migration-sessions/724d1304-d4c4-51d2-8796-6ee1f57df15d/intake-trust', 200), ('migration-sessions/724d1304-d4c4-51d2-8796-6ee1f57df15d/intake-trust', 200)]"
+  },
+  {
+   "check": "A still reads its migration after refresh",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B is signed out",
+   "pass": true,
+   "detail": ""
+  }
+ ],
+ "pass": false,
+ "session_reference": "724d1304\u2026"
+}
