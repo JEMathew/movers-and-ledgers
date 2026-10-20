@@ -1,5 +1,7 @@
 # MoveBooks AI — Gemini evidence for technical review
 
+> Current Track B status: [October 20 release review](TRACK-B-RELEASE-REVIEW.md). The prior checkpoint narrative below is retained as dated history; it is not the latest UX acceptance, test-count or source-candidate decision. All approved scope remains OPEN where incomplete; no omission or release waiver is authorized.
+
 **October 20 addendum, not a revision of the October 18 submission.** This evidence supports a bounded synthetic prototype. It does not establish production readiness, broad accounting accuracy, hosted UX integration or an official judging score.
 
 Persona: an accountant or migration owner deciding how a legacy chart of accounts should map into a cloud accounting system. The exception is `1200 · Misc Clearing`: type compatibility does not establish the account's business purpose. The useful outcome is an explained unresolved decision, source-purpose questions and a human approval boundary—not an automatically applied mapping.

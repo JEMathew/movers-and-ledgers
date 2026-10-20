@@ -1,5 +1,7 @@
 # Gemini product completion checklist — October 20, 2026
 
+> Current Track B status: [October 20 release review](TRACK-B-RELEASE-REVIEW.md). The prior checkpoint narrative below is retained as dated history; it is not the latest UX acceptance, test-count or source-candidate decision. All approved scope remains OPEN where incomplete; no omission or release waiver is authorized.
+
 Scope: Gemini worktree only, starting at `ccc58311256cae50ccb9317ea2d075cfed6458dc`. No new inference, cloud operation, real-ledger operation, UX change or integration worktree.
 
 | Work item | Rubric link | Completion evidence |

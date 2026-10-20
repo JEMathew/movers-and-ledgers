@@ -1,5 +1,7 @@
 # Gemini Advisor/Reviewer post-inference integration contract — 20 October 2026
 
+> Current Track B status: [October 20 release review](TRACK-B-RELEASE-REVIEW.md). The prior checkpoint narrative below is retained as dated history; it is not the latest UX acceptance, test-count or source-candidate decision. All approved scope remains OPEN where incomplete; no omission or release waiver is authorized.
+
 **Gemini standalone deterministic contract: validated. Integration: WAITING FOR UX CHECKPOINT. NO-GO for live activation, a complete request-evidence workflow, or production readiness.** See [current product readiness](PRODUCT-READINESS.md) and [judge-readable evidence](AI-BUILDER-EVIDENCE.md). The UX source status was checked read-only during completion; no UX file was modified and no combined worktree or hosted acceptance is claimed.
 
 The one approved Cloud Shell evaluation completed at 11:48:40–11:48:49 UTC with four generation attempts. Its persistent authorization is consumed. No new generation, authentication, cloud inspection, installation or ledger operation occurred in this review. Do not reset, delete, move or bypass the ledger. Historical approval and readiness reports are superseded by this status; they are not authorization to repeat the evaluation.
