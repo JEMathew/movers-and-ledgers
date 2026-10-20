@@ -31,8 +31,9 @@ Use strict request models: reject extra fields, client actor/owner/timestamps an
 | OPEN | Submit valid source answer/references | SUBMITTED | Hold remains; evidence awaits human review |
 | SUBMITTED | REQUEST_MORE with explanation | OPEN | Hold remains; prior submission stays in history |
 | SUBMITTED | ACCEPT_EVIDENCE after checking current context | SATISFIED | This request's hold clears; mapping remains unresolved and requires a separate approve/reject decision |
+| SATISFIED | REQUEST_MORE on the same unresolved, pre-execution mapping and current context | OPEN | Restore this request's required-evidence hold atomically; preserve prior submission/review history |
 
-SATISFIED is terminal for that request; any further evidence question is a new request. No cancellation, deletion, automatic expiration, model-driven transition or “approve anyway” bypass is proposed. Evidence acceptance acknowledges sufficiency for subsequent mapping review, not correctness of the target account.
+The owner's latest lifecycle clarification permits additional evidence requests to return the item to OPEN, including from SATISFIED. This supersedes the earlier terminal-SATISFIED proposal. Reopening must fail with 409 after a final mapping decision, execution, or a context/version change; it must not silently undo financial approval. No cancellation, deletion, automatic expiration, model-driven transition or “approve anyway” bypass is proposed. Evidence acceptance acknowledges sufficiency for subsequent mapping review, not correctness of the target account.
 
 The smallest initial contract freezes mapping edits/reconsideration while a required request is OPEN or SUBMITTED (409); read, evidence submission and human rejection remain available. Rejecting the mapping does not satisfy or delete its evidence request and cannot make it executable. This restriction requires product review; a later context-replacement workflow must not silently discard a hold.
 
@@ -59,6 +60,19 @@ These are **proposed tests, not current passing coverage**:
 9. Workspace/mapping/auth changes clear private UI; loading/error/unavailable/stale states preserve unresolved status. Existing approve/reject and recorded Advisor/Reviewer separation tests continue to pass.
 
 Review must approve the routes, owner-only permission model, mapping-edit restriction, stale-context limitation and durable transaction support before implementation begins.
+
+## Compact decision record for approval — not implementation
+
+| Decision | Recommended initial default | Exact acceptance criterion |
+| --- | --- | --- |
+| Authority | Existing authenticated workspace owner creates/submits/reviews; same-person review explicitly disclosed, no invented four-eyes guarantee | 401 without identity; 404 for every foreign nested resource; client-supplied actor rejected; record authenticated actor for each transition |
+| Durability | Existing SQL-backed session aggregate and CAS; request, hold, operation record and audit commit together | Restart preserves state; injected failure changes none of the four; concurrent create/approve has exactly one valid winner |
+| Retention | Inherit an explicitly approved workspace/evidence and audit policy; no separate implicit TTL; no automatic expiration of an unresolved hold | Enablement requires policy ID and durations; replay retention covers request lifetime; policy deletion cannot release a hold or silently discard audit history. Exact durations remain an owner/security decision |
+| Stale source/context | Reject submission/review/reopen with 409 and retain history/hold; no implicit rebinding | Mutate source or mapping after request; all stale actions fail without writing or invoking a model. Any supersession workflow requires separate review |
+| Lifecycle | OPEN → SUBMITTED → SATISFIED; REQUEST_MORE from SUBMITTED or SATISFIED → OPEN, only while mapping remains unresolved and pre-execution | Check every transition and replay; reopening restores hold in the same transaction; SATISFIED never approves mapping; requests after final decision fail |
+| Evaluation UI now | Missing-purpose guidance only; no persistence control, sent/submitted claim or hidden automatic approval | No network call or financial mutation on render, Advisor completion or Reviewer ACCEPT; unresolved mapping remains unresolved until a separately authorized human decision |
+
+The existing Advisor/Reviewer demonstration does not depend on implementing this future workflow. Combined integration validation remains first in the owner's sequence; review of these defaults follows. No proposed acceptance test is counted as a passing implementation test.
 
 ## October 20 completion decision — contract only
 

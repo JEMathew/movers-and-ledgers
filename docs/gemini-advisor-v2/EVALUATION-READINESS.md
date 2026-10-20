@@ -1,5 +1,7 @@
 # Track B — final evaluation readiness, October 20, 2026
 
+> Later runtime fix and current release gate: [Track B release candidate](RELEASE-CANDIDATE.md). This earlier review and its original judge archive remain dated evidence, unchanged in scope.
+
 **GO for the existing local deterministic demonstration and recorded-inference evidence review. NO-GO for combined integration under the current UX acceptance condition, and NO-GO for live activation.** No additional model calls, real-ledger operations, cloud writes or Track A changes occurred. No new product defect was established that warrants changing the validated runtime in this scoped review.
 
 Branch: `feature/gemini-advisor-v2`. Starting documentation HEAD: `c5cdaeff2f379289d12a613d12e5696624173ce8`; runtime candidate remains `ae8535acc71e78752b508ef57e597d9baaf426a7`. This update changes evidence documentation only. The final receipt records its commit and exact paths. All newer commits are preserved.
