@@ -13,6 +13,7 @@ function shell() { return <ThemeProvider><Nav /><button>Outside control</button>
 function account() { return screen.getByRole("button", { name: /^Account:/ }); }
 function signedIn() { session.hasSession = true; session.identity = { subject: "firebase:internal-only", email: "verified@example.test" }; }
 beforeEach(() => {
+  window.history.replaceState(null, "", "/");
   HTMLDialogElement.prototype.showModal = function () { this.setAttribute("open", ""); };
   HTMLDialogElement.prototype.close = function () { this.removeAttribute("open"); };
   vi.stubGlobal("matchMedia", vi.fn().mockImplementation((media: string) => ({ media, matches: false, addListener: vi.fn(), removeListener: vi.fn(), addEventListener: vi.fn(), removeEventListener: vi.fn() })));
@@ -23,6 +24,27 @@ beforeEach(() => {
 afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); });
 
 describe("global account and settings shell", () => {
+  it.each(["/", "/sign-in", "/simulator", "/try-your-data", "/workspace", "/settings", "/migration/synthetic"])(
+    "keeps factual provider attribution exclusive to the marketing homepage: %s", pathname => {
+      window.history.replaceState(null, "", pathname);
+      render(shell());
+      const lines = document.querySelectorAll(".v2-attribution");
+      expect(lines).toHaveLength(pathname === "/" ? 1 : 0);
+      if (pathname === "/") expect(lines[0]).toHaveTextContent(/^Built on Google Cloud$/);
+      expect(screen.getByRole("banner")).not.toHaveTextContent(/Gemini|powered by|endorsed|sponsored|partnership/i);
+      const brand = screen.getByRole("link", { name: "MoveBooks AI home" });
+      expect(brand).toHaveAttribute("href", "/");
+      expect(brand.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
+      expect(brand.querySelector("svg")).toHaveAttribute("viewBox", "0 0 32 32");
+    });
+  it("preserves the verified member-home identity without persistent provider attribution", () => {
+    window.history.replaceState(null, "", "/workspace");
+    signedIn();
+    render(shell());
+    expect(screen.getByRole("link", { name: "MoveBooks AI, member home" })).toHaveAttribute("href", "/workspace");
+    expect(document.querySelector(".v2-attribution")).toBeNull();
+    expect(screen.getByRole("banner")).not.toHaveTextContent(/Google Cloud|Gemini/);
+  });
   it("in the local demo workspace offers My Migration and no dead Sign in control", () => {
     vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "demo");
     render(shell());

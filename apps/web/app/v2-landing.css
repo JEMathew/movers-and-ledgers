@@ -64,6 +64,9 @@ html { scroll-padding-top: 6rem; }
 .site-brand .brand-mark { width: 2.75rem; height: 2.75rem; color: var(--lp-accent); grid-row: span 2; }
 .site-header-bar[data-tone=navy] .brand-mark { color: var(--lp-hero-accent); }
 .site-brand-block { grid-template-columns: auto; }
+/* Keep the shared header footprint when the marketing-only line is absent.
+   An empty CSS box reserves the same line metrics without hidden attribution text. */
+.site-brand-block[data-attribution=none]::after { content: ""; font-size: .8125rem; height: 1lh; margin-top: -.55rem; }
 .site-attribution { display: flex; flex-wrap: wrap; align-items: center; gap: .1rem .5rem; margin: -.55rem 0 0 3.5rem; font-size: .8125rem; color: var(--text-secondary); }
 .site-header-bar[data-tone=navy] .site-attribution { color: var(--lp-hero-secondary); }
 .site-nav a { font-size: 1rem; }
@@ -143,15 +146,18 @@ body:has(.lp) .site-footer-inner { width: min(1360px, calc(100% - 5rem)); }
 .lp-play-text strong { font-size: 1.25rem; font-weight: 600; }
 .lp-play-text span { font-size: .9375rem; color: #f5f8fc; }
 
-.lp-video-dialog { width: min(64rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: 0; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-elevated); color: var(--foreground); }
-.lp-video-dialog::backdrop { background: rgb(5 10 20 / .78); }
-.lp-video-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .6rem .6rem .6rem 1.1rem; }
-.lp-video-head h2 { margin: 0; font-size: 1.0625rem; font-weight: 600; }
-.lp-video-close { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 0; border-radius: var(--radius-md); background: transparent; color: inherit; cursor: pointer; }
-.lp-video-close:hover { background: var(--surface-subtle); }
-.lp-video-close:focus-visible { outline: 3px solid var(--focus-ring); }
+/* The global reduced-motion duration must not animate visibility and delay focus restoration. */
+.lp-play { transition-property: none; }
+.lp-play[aria-hidden=true] { visibility: hidden; }
+.lp-inline-player[hidden] { display: none; }
+.lp-inline-player { position: absolute; z-index: 3; inset: 1rem 1rem 1rem 16%; overflow: auto; border-radius: var(--radius-md); background: #08121f; color: #fff; }
+.lp-video-actions { display: flex; flex-wrap: wrap; gap: .5rem; padding: .25rem .75rem; }
+.lp-video-actions button { min-height: 2.75rem; padding: .4rem .75rem; border: 1px solid #8c9aab; border-radius: var(--radius-md); background: transparent; color: inherit; cursor: pointer; }
+.lp-video-actions button:focus-visible, .lp-video:focus-visible { outline: 3px solid #8bbcff; outline-offset: -3px; }
+.lp-caption-status { margin: .25rem .75rem; font-size: .8125rem; line-height: 1.4; }
 .lp-video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #000; }
-.lp-video-dialog .vision-transcript { padding: 0 1.1rem .5rem; }
+.lp-inline-player .vision-transcript { padding: .25rem .75rem .75rem; color: inherit; }
+.lp-inline-player .vision-transcript summary { min-height: 2.75rem; align-content: center; }
 
 /* ---------- Five-phase journey ---------- */
 .lp-journey { padding: 1rem 0; background: var(--surface); }
@@ -223,9 +229,11 @@ body:has(.lp) .site-footer-inner { width: min(1360px, calc(100% - 5rem)); }
   .header-cta { min-height: 2.25rem; padding: 0 .75rem; font-size: .875rem; }
   .lp-hero-inner { grid-template-columns: 1fr; }
   .lp-hero-copy { padding: 2.25rem 0 1.5rem; }
-  .lp-hero-media { position: relative; display: grid; width: auto; margin-inline: -1.25rem; }
+  /* Add clearance to the existing document scroll padding when the sticky mobile CTA wraps. */
+  .lp-hero-media { position: relative; display: grid; width: auto; margin-inline: -1.25rem; scroll-margin-top: 1rem; }
   .lp-hero-picture { position: relative; aspect-ratio: 16 / 10; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12%); mask-image: linear-gradient(180deg, transparent 0, #000 12%); }
   .lp-hero-picture img { position: absolute; inset: 0; }
+  .lp-inline-player { inset: 0; }
   /* Give the photograph its own space so the mug and screen remain unobscured on mobile. */
   .lp-play { position: relative; justify-self: start; left: auto; bottom: auto; margin: .5rem 1rem 1rem; max-width: calc(100% - 2rem); }
   .lp-phases { grid-template-columns: 1fr; gap: .25rem; }
@@ -248,6 +256,7 @@ body:has(.lp) .site-footer-inner { width: min(1360px, calc(100% - 5rem)); }
   .site-header { min-height: 4rem; }
   .site-brand { font-size: 1.125rem; gap: .5rem; }
   .site-brand .brand-mark { width: 2rem; height: 2rem; }
+  .site-brand-block[data-attribution=none]::after { font-size: .6875rem; margin-top: -.35rem; }
   .site-attribution { margin: -.35rem 0 0 2.5rem; font-size: .6875rem; gap: 0 .35rem; }
   .lp-title { font-size: 2.375rem; }
   .lp-actions { flex-direction: column; }
@@ -266,4 +275,8 @@ body:has(.lp) .site-footer-inner { width: min(1360px, calc(100% - 5rem)); }
   .lp-play-text strong { font-size: 1rem; line-height: 1.3; }
   .lp-play-text span { font-size: .8125rem; }
   .lp-hero-media { margin-inline: -1rem; }
+}
+/* Preserve the prior two-line header footprint on the narrowest supported phones. */
+@media (max-width: 368px) {
+  .site-brand-block { min-height: calc(2rem + 2 * .6875rem * 1.55 - .35rem + .1rem); align-content: start; }
 }

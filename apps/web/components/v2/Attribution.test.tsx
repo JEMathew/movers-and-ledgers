@@ -6,8 +6,8 @@ import { APPROVED_ATTRIBUTION, Attribution } from "./Attribution";
 describe("product attribution", () => {
   it("renders the rule's exact line as one quiet line, with no logo, link or claim of endorsement", () => {
     render(<Attribution className="site-attribution" />);
-    expect(APPROVED_ATTRIBUTION).toBe("Built on Google Cloud and powered by Gemini AI");
-    const line = screen.getByText("Built on Google Cloud and powered by Gemini AI");
+    expect(APPROVED_ATTRIBUTION).toBe("Built on Google Cloud");
+    const line = screen.getByText("Built on Google Cloud");
     expect(line.tagName).toBe("P");
     expect(line).toHaveClass("v2-attribution", "site-attribution");
     expect(line.textContent).toBe(APPROVED_ATTRIBUTION);

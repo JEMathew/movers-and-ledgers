@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
@@ -8,8 +8,6 @@ import { Guide } from "./Guide";
 import { GuidedDemo } from "./GuidedDemo";
 
 beforeEach(() => {
-  HTMLDialogElement.prototype.showModal = function () { this.setAttribute("open", ""); };
-  HTMLDialogElement.prototype.close = function () { this.removeAttribute("open"); this.dispatchEvent(new Event("close")); };
   HTMLMediaElement.prototype.play = vi.fn().mockResolvedValue(undefined);
   HTMLMediaElement.prototype.pause = vi.fn();
 });
@@ -33,7 +31,8 @@ describe("hero video", () => {
       expect(targets).toHaveLength(1);
       expect(targets[0]).toContainElement(play);
     }
-    expect(document.querySelector(".lp-video-dialog")).not.toHaveAttribute("open");
+    expect(document.querySelector("dialog")).toBeNull();
+    expect(document.querySelector(".lp-inline-player")).toHaveAttribute("hidden");
     expect(HTMLMediaElement.prototype.play).not.toHaveBeenCalled();
   });
   it("has one play control, titled with the asset's real duration, inside the hero", () => {
@@ -46,27 +45,80 @@ describe("hero video", () => {
     expect(hero).toHaveTextContent("0:25 · Product overview");
     expect(hero).not.toHaveTextContent("3:43");
   });
-  it("opens one native, user-initiated player from the button or the picture, and pauses on close", () => {
+  it("plays inline only on request, preserves native controls, and restores the photograph and focus", async () => {
     render(<Home/>);
-    const dialog = document.querySelector("dialog.lp-video-dialog") as HTMLDialogElement;
-    expect(dialog).not.toHaveAttribute("open");
-    const video = within(dialog).getByLabelText("MoveBooks AI Product Vision");
+    const video = document.querySelector("video")!;
+    const panel = document.querySelector(".lp-inline-player")!;
+    expect(panel).toHaveAttribute("hidden");
+    expect(document.querySelector("dialog")).toBeNull();
     expect(video).toHaveAttribute("controls");
     expect(video).toHaveAttribute("playsinline");
     expect(video).toHaveAttribute("preload", "none");
     expect(video).not.toHaveAttribute("autoplay");
     expect(video).not.toHaveAttribute("muted");
-    expect(video).toHaveAttribute("poster", "/media/movebooks-ai-product-vision-poster.webp");
+    expect(video).toHaveAttribute("poster", HERO_IMAGE.src);
     expect(video.querySelector("source")).toHaveAttribute("src", "/media/movebooks-ai-product-vision.mp4");
     fireEvent.click(screen.getByRole("button", { name: /^Play video/ }));
-    expect(dialog).toHaveAttribute("open");
+    expect(panel).not.toHaveAttribute("hidden");
+    expect(video).toHaveFocus();
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalledTimes(1);
-    fireEvent.click(within(dialog).getByRole("button", { name: "Close video" }));
-    expect(dialog).not.toHaveAttribute("open");
+    fireEvent.click(screen.getByRole("button", { name: "Restore photograph" }));
+    expect(panel).toHaveAttribute("hidden");
     expect(HTMLMediaElement.prototype.pause).toHaveBeenCalled();
+    await waitFor(() => expect(screen.getByRole("button", { name: /^Play video/ })).toHaveFocus());
     fireEvent.click(document.querySelector(".lp-hero-picture")!);
-    expect(dialog).toHaveAttribute("open");
-    expect(within(dialog).getByText("Video description").closest("details")).toHaveTextContent("spoken captions are not provided yet");
+    expect(panel).not.toHaveAttribute("hidden");
+    expect(screen.getByText("Video description").closest("details")).toHaveTextContent("spoken captions are not provided yet");
+    expect(video.querySelector("track")).toBeNull();
+    expect(screen.getByText(/Captions pending human review/)).toBeVisible();
+    fireEvent.keyDown(video, { key: "Escape" });
+    expect(panel).toHaveAttribute("hidden");
+  });
+  it("offers replay after completion without auto-replaying", async () => {
+    render(<Home/>);
+    fireEvent.click(screen.getByRole("button", { name: /^Play video/ }));
+    const video = document.querySelector("video")!;
+    expect(video).toHaveAttribute("controls");
+    fireEvent.ended(video);
+    expect(HTMLMediaElement.prototype.play).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole("button", { name: "Replay video" }));
+    expect(HTMLMediaElement.prototype.play).toHaveBeenCalledTimes(2);
+    expect(video).toHaveFocus();
+    expect(screen.queryByRole("button", { name: "Replay video" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Restore photograph" }));
+    expect(video.currentTime).toBe(0);
+    await waitFor(() => expect(screen.getByRole("button", { name: /^Play video/ })).toHaveFocus());
+  });
+  it("explains rejected playback, preserves the photograph, and allows a clean retry", async () => {
+    vi.mocked(HTMLMediaElement.prototype.play).mockRejectedValueOnce(new Error("Playback unavailable"));
+    render(<Home/>);
+    fireEvent.click(screen.getByRole("button", { name: /^Play video/ }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("The video couldn’t play");
+    expect(screen.getByRole("img", { name: /laptop and coffee/ })).toHaveAttribute("src", HERO_IMAGE.src);
+    expect(document.querySelector("video")).not.toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Restore photograph" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Play video/ }));
+    await waitFor(() => expect(HTMLMediaElement.prototype.play).toHaveBeenCalledTimes(2));
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(document.querySelector("video")).toBeVisible();
+    expect(document.querySelectorAll("video")).toHaveLength(1);
+  });
+  it("recovers from a source failure and ignores a late rejection after restore", async () => {
+    let rejectPlay!: (reason: Error) => void;
+    vi.mocked(HTMLMediaElement.prototype.play).mockImplementationOnce(() => new Promise((_, reject) => { rejectPlay = reject; }));
+    render(<Home/>);
+    fireEvent.click(screen.getByRole("button", { name: /^Play video/ }));
+    fireEvent.error(document.querySelector("video source")!);
+    expect(screen.getByRole("alert")).toBeVisible();
+    const video = document.querySelector("video")!;
+    Object.defineProperty(video, "networkState", { configurable: true, value: 3 });
+    video.load = vi.fn();
+    fireEvent.click(screen.getByRole("button", { name: "Restore photograph" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Play video/ }));
+    rejectPlay(new Error("Old request failed"));
+    await waitFor(() => expect(video.load).toHaveBeenCalledTimes(1));
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(video).toBeVisible();
   });
   it("keeps the hero image slot marked pending visual acceptance until the approved photo replaces the poster", () => {
     render(<Home/>);

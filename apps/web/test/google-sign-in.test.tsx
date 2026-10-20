@@ -29,6 +29,7 @@ async function enabled(name: string, scope: Pick<typeof screen, "findByRole"> = 
 beforeEach(() => {
   vi.clearAllMocks();
   vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "firebase");
+  vi.stubEnv("NEXT_PUBLIC_LOCAL_UX_PREVIEW", "false");
   mocks.prepare.mockResolvedValue(runtime);
   mocks.verify.mockResolvedValue({ subject: "firebase:user-b", email: "verified-b@example.test" });
   mocks.popup.mockReturnValue(new Promise(() => {}));
@@ -254,5 +255,19 @@ describe("shared Google authentication controls", () => {
     fireEvent.click(await enabled("Continue with Google"));
     await waitFor(() => expect(mocks.replace).toHaveBeenCalledWith("/workspace"));
     expect(mocks.navigate).not.toHaveBeenCalled();
+  });
+});
+
+
+describe("isolated local UX preview", () => {
+  it("does not initialize Firebase or open a popup and explains the local boundary", () => {
+    vi.stubEnv("NEXT_PUBLIC_LOCAL_UX_PREVIEW", "true");
+    mount();
+    expect(mocks.prepare).not.toHaveBeenCalled();
+    expect(mocks.popup).not.toHaveBeenCalled();
+    expect(mocks.verify).not.toHaveBeenCalled();
+    expect(screen.queryByRole("button", { name: "Continue with Google" })).not.toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Google sign-in is disabled in this local UX preview");
+    expect(screen.getByRole("link", { name: "Sign In" })).toHaveAttribute("href", "/sign-in");
   });
 });

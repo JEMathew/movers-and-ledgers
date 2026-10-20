@@ -10,12 +10,11 @@ import { AppearanceMenu } from "@/components/theme/AppearanceMenu";
 import { Attribution } from "@/components/v2/Attribution";
 import { features } from "@/lib/features";
 
-/** Open-book mark from the approved design. Decorative: the link carries the name. */
+/** Owner-approved ledger-book (Option B). Option A is retained in baseline e7f1e28 and review evidence. */
 export function BrandMark() {
   return <svg className="brand-mark" viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" strokeLinecap="round">
-    <path d="M4 7.5c3.6-1.4 7.6-1.2 12 1.2v18c-4.4-2.4-8.4-2.6-12-1.2z" />
-    <path d="M28 7.5c-3.6-1.4-7.6-1.2-12 1.2v18c4.4-2.4 8.4-2.6 12-1.2z" />
-    <path d="M7.5 12.5h5M7.5 16.5h5M7.5 20.5h5M19.5 12.5h5M19.5 16.5h5M19.5 20.5h5" />
+    <path d="M7 3.5 16 6.5 25 3.5v22L16 29l-9-3.5z" />
+    <path d="M7 7 3 6v23l13 2 13-2V6l-4 1M16 6.5V29M10 10l3 1M10 15l3 1M10 20l3 1M19 11l3-1M19 16l3-1M19 21l3-1" />
   </svg>;
 }
 
@@ -74,13 +73,13 @@ export function Nav() {
     <header ref={root} className="shell site-header" onKeyDown={event => {
       if (event.key === "Escape" && open) { event.preventDefault(); setOpen(false); trigger.current?.focus(); }
     }}>
-      <div className="site-brand-block">
+      <div className="site-brand-block" data-attribution={pathname === "/" ? "marketing" : "none"}>
         {/* The logo is Home: Public Home before sign-in, Member Home after. */}
         <Link href={identity ? "/workspace" : "/"} aria-label={identity ? "MoveBooks AI, member home" : "MoveBooks AI home"} className="site-brand">
           <BrandMark />
           <span>MoveBooks AI</span>
         </Link>
-        <Attribution className="site-attribution" />
+        {pathname === "/" && <Attribution className="site-attribution" />}
       </div>
       <div className="mobile-discovery-controls">
         {headerCta}

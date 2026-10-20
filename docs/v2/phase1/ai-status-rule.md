@@ -18,20 +18,24 @@ is activated and verified.
 
 ## Copy
 
-- No copy says or implies that AI advice is running today ("AI advises", "agents coordinate"). The one exception
-  is the attribution line below.
+- No copy says or implies that AI advice is running today ("AI advises", "agents coordinate").
+  The historical Gemini attribution exception was removed by the owner on 20 October 2026.
 - Scripted examples (design files, prototypes) are labelled "Example of planned behaviour. Not live model output."
 - Every Advisor or Reviewer surface repeats that the person approves every change and that advice never changes
   the books.
 
 ## Attribution
 
-Owner decision (19 Oct 2026): the landing page and the signed-in workspace show the exact line
-"Built on Google Cloud and powered by Gemini AI". It is approved Phase 1 copy, rendered by
-`apps/web/components/v2/Attribution.tsx`, and it does not depend on `AI_ASSISTANCE_STATUS`.
+Owner decision (20 Oct 2026), superseding the historical attribution exception:
 
-- One quiet line. No supporting text, badges or official logos.
-- It does not change the Advisor or Reviewer status. Those surfaces keep the Planned badge, and
-  `AI_ASSISTANCE_STATUS` stays `planned`.
-- Hosted live Gemini inference is not active in Phase 1. Technical documentation and release reports say so,
-  and none of them cite runtime model evidence.
+- The marketing homepage `/` shows exactly "Built on Google Cloud", once beneath the MoveBooks AI wordmark.
+- All other shared-header routes omit provider attribution, preserving header dimensions.
+- No Google Cloud/Gemini logos, powered-by claim, endorsement, sponsorship or partnership implication.
+- Do not substitute "Built with Google Gemini" without a separately verified permissible basis and approval.
+- `apps/web/components/v2/Attribution.tsx` owns the fixed marketing copy; `Nav` restricts its placement.
+- This factual infrastructure statement does not certify live inference. The Advisor and Reviewer keep their
+  Planned badges; `AI_ASSISTANCE_STATUS` and its live-activation requirements above remain unchanged.
+- Hosted live Gemini inference is not active in Phase 1; do not cite branding as runtime model evidence.
+
+Usage basis: Google's April 2026 customer co-branding guidance, pages 5–7:
+https://services.google.com/fh/files/misc/external_customer_co_branding_eligibility.pdf

@@ -5,7 +5,10 @@ import { Button } from "@/components/ui";
 import { useIdentity } from "./IdentityProvider";
 
 export function GoogleSignIn({ destination, compact = false }: { destination?: string; compact?: boolean }) {
-  const { ready, busy, identity, hasSession, error, signIn } = useIdentity();
+  const { ready, busy, identity, hasSession, error, localPreview, signIn } = useIdentity();
+  if (localPreview) return compact
+    ? <a className="button small header-sign-in" href="/sign-in">Sign In</a>
+    : <p role="status" className="mt-7">Google sign-in is disabled in this local UX preview. Explore Demo uses synthetic data; Try Your Data checks files in your browser. Account and workspace access require a separately approved hosted test.</p>;
   // The label is always the real action. Until the SDK is ready the button is disabled, never clickable,
   // so the first enabled click can open the popup synchronously (Safari). A failed start is not "busy".
   const preparing = !ready && !error;

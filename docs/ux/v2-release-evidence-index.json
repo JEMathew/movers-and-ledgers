@@ -1,0 +1,1107 @@
+{
+  "created_utc": "2026-10-20T12:59:58.128067+00:00",
+  "source_commit": "e7f1e288fd7f378045950fc94d5d7c89e298575f",
+  "source_tree": "3fb9346234f58edc9ba11f5217d105317edb3c53",
+  "registry_index_digest": "sha256:f9c72c0bbc66497920357f7a37ab79c4ad25c3c421bf063a9d03706cf80e2e63",
+  "runtime_config_digest": "sha256:772717195e16bb816d7eec534e2a032d6c3854e9561dc629ceb5c307a19aa997",
+  "registry_artifact_status": "REMOVED during approved Stage 2 cleanup; retained local archive unchanged",
+  "tested_mobile_patch_sha256": "793caf4e33e33d45215eec53a6cbd83443f45a49764d5d45a094478a8acdc971",
+  "current_css_file_sha256": "b9e8f58c61edea18c86fc4fe914a86360f93f0a5dc9c8369313f9cc8ecb362f2",
+  "candidate_distinction": "Current local candidate is e7f1e28 plus approved 13-web-file patch bbefc321d95cfcc159a7d27b6df4d26e360f70dbcfd420575cd6a47dc593bd58; production Next build e_XSGu_TXXIfsebJPisvN. No new commit or container. All earlier image/native scan/PASS evidence remains historical and does not certify changed source.",
+  "selected_paths": [
+    "apps/web/app/v2-landing.css",
+    "docs/ux/v2-release-closeout.md",
+    "docs/ux/v2-release-checkpoint-files.txt",
+    "docs/ux/v2-release-evidence-index.json",
+    "docs/ux/v2-track-a-media-review.md",
+    "docs/ux/v2-release-disclosure-drafts.md",
+    "docs/ux/v2-release-manual-auth-acceptance.md",
+    "apps/web/components/public-surfaces/HeroVideo.tsx",
+    "apps/web/components/public-surfaces/HeroVideo.test.tsx",
+    "apps/web/components/IdentityProvider.tsx",
+    "apps/web/components/IdentityEntry.tsx",
+    "apps/web/test/google-sign-in.test.tsx",
+    "docs/ux/v2-final-acceptance.md",
+    "apps/web/components/Nav.tsx",
+    "apps/web/app/icon.svg",
+    "apps/web/components/v2/Attribution.tsx",
+    "apps/web/components/v2/Attribution.test.tsx",
+    "apps/web/components/v2/ai-copy.test.ts",
+    "apps/web/components/public-surfaces/surfaces.test.tsx",
+    "apps/web/test/account-shell.test.tsx",
+    "docs/v2/phase1/ai-status-rule.md"
+  ],
+  "evidence": [
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/container-build/image-record.json",
+      "group": "container-build",
+      "bytes": 2427,
+      "sha256": "fc80002b72541277891c818c239089138205e8a4409a658f34bf09122dd0aa17",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/container-build/build-metadata.json",
+      "group": "container-build",
+      "bytes": 2558,
+      "sha256": "7f431d317c17f6cca6c234bf1062dd9c40fb74cc5efa24daeaafe45693ceba4c",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/container-build/security-results.json",
+      "group": "container-build",
+      "bytes": 3740,
+      "sha256": "c5fe8c39174f40be6a2f8e261a47694417d541d463a499b03be2064888ec9906",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/container-build/grype.json",
+      "group": "container-build",
+      "bytes": 19350,
+      "sha256": "eba91ac3b2235f145ceb7a760e4c19ea4a329988a25e415aa9c31eeb3fbfcea8",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/container-build/image-sbom.cdx.json",
+      "group": "container-build",
+      "bytes": 337076,
+      "sha256": "434cc494f080576d5a9897b2e2ebdb28ebc8cf7f841fb49a7bfe2d829cdfb2ec",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/container-build/build-dependency-review.json",
+      "group": "container-build",
+      "bytes": 1655,
+      "sha256": "272448b5e7a1ca012e10d7df38ee771b6f18908184ce37faa96d8b289e362b70",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/container-build/npm-audit-all.json",
+      "group": "container-build",
+      "bytes": 3025,
+      "sha256": "58b3f6f176055a772200e6e028bc50b7e49a564a1c9ca97f2394ac85e13ddcf0",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/container-build/npm-audit-production.json",
+      "group": "container-build",
+      "bytes": 367,
+      "sha256": "e36ac43d0a60856b03d80987478791c61df928c4ae5a98ada8322c7ddb372284",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/container-build/SHA256SUMS",
+      "group": "container-build",
+      "bytes": 3340,
+      "sha256": "8e88d0f767f5f0fe5901b9da386b4e9f99b3b62fa07af97672a0b69f57ca50c5",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/stage2-preview/execution.json",
+      "group": "stage2-preview",
+      "bytes": 2567,
+      "sha256": "872b75c6c84e5ea83ed5557f768ab69b348c60bbe3e8b708d6acb947ac63f3b3",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/stage2-preview/deployment.json",
+      "group": "stage2-preview",
+      "bytes": 4121,
+      "sha256": "ff5b8a8b74f3bf2a41ec9da9e5af0aa0447b0fb8f2bd9fee36c9b2b8381353cb",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/stage2-preview/service-config.json",
+      "group": "stage2-preview",
+      "bytes": 4010,
+      "sha256": "d2499c9869bfb263437a0a31fb5f2111ee58dcc40a5f9cc5cc144ba8b1f9adfc",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/stage2-preview/isolation-verification.json",
+      "group": "stage2-preview",
+      "bytes": 1043,
+      "sha256": "3db0c98616ebd9c140dc9a3a3df9776673f8ae86d0a96488ab94d11481c4a8e5",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/stage2-preview/results-summary.json",
+      "group": "stage2-preview",
+      "bytes": 3058,
+      "sha256": "3a70c03c9424dbc442fe81eb53ec0e0e10883c0eec2d6f7af9fcec8950ae6c64",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/stage2-preview/http-results.json",
+      "group": "stage2-preview",
+      "bytes": 36268,
+      "sha256": "b8b182fc16f08c703c04d993be3bf5a4917c259fbeaeddcfadf77cdba44bcb42",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/stage2-preview/final-observation.json",
+      "group": "stage2-preview",
+      "bytes": 253280,
+      "sha256": "3b1acbb120880f58158fe8b847570b006c8293caa5e298e77e14aebb77640800",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/stage2-preview/cleanup.json",
+      "group": "stage2-preview",
+      "bytes": 3445,
+      "sha256": "696ea88ace3ba39c9cd1cc437c23d392e418674a439ea4e1c26524e704e317b0",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/stage2-preview/source-preservation.json",
+      "group": "stage2-preview",
+      "bytes": 432,
+      "sha256": "564a31868ec14744929268bdc65326dde1f9ec334cc4a5cdf26ae4e270c9c620",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/stage2-preview/SHA256SUMS",
+      "group": "stage2-preview",
+      "bytes": 2186,
+      "sha256": "a0cfd7314224cc9d2fb4b046d97b1c1e05e88fa4348e281224f15444270710c0",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/track-a-gate-closure/candidate-provenance.json",
+      "group": "track-a-gate-closure",
+      "bytes": 1110,
+      "sha256": "c7c4e869c25b22a1878d12e51d9bcee6cffe529e6638b762ab9e6ce99bf64837",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/track-a-gate-closure/validation-summary.json",
+      "group": "track-a-gate-closure",
+      "bytes": 346,
+      "sha256": "54c3a613ab216b6c0c93354de4de203253a659779078648180999f8786ee4d5a",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/track-a-gate-closure/anchor-check.json",
+      "group": "track-a-gate-closure",
+      "bytes": 7675,
+      "sha256": "905be2f4e2cce734a06b49eba8d70b4ee4143c452e58784d738ef5c4580dff1d",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/track-a-gate-closure/pixel-comparison.json",
+      "group": "track-a-gate-closure",
+      "bytes": 2592,
+      "sha256": "5772f6862ccfa98eda583e2c5fa24ea930bbe01487164fe15ba05e1605d0617a",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/track-a-gate-closure/browser-qa.json",
+      "group": "track-a-gate-closure",
+      "bytes": 6984,
+      "sha256": "b1cec424270ed9733911672968e49128c9d80b462e3d544b4ed487c669f6e6bb",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/track-a-gate-closure/mobile-anchor.patch",
+      "group": "track-a-gate-closure",
+      "bytes": 1105,
+      "sha256": "793caf4e33e33d45215eec53a6cbd83443f45a49764d5d45a094478a8acdc971",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/track-a-gate-closure/candidate-desktop-dark-full.png",
+      "group": "track-a-gate-closure",
+      "bytes": 573553,
+      "sha256": "c971a83056494eb93d74afb1d76840ced9ac7c90bc889ef65c3e89ef4970cc7e",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/track-a-gate-closure/candidate-desktop-light-full.png",
+      "group": "track-a-gate-closure",
+      "bytes": 574615,
+      "sha256": "467ba0f4bd287428abb11a79a65662915903ff9a97f4561e7ad46d875e48a579",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/track-a-gate-closure/candidate-mobile-dark-full.png",
+      "group": "track-a-gate-closure",
+      "bytes": 827987,
+      "sha256": "94686699b86831c05f2f90b9c9a26c8c6b2d60b0e5733946aeca084651642e6e",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/track-a-gate-closure/candidate-mobile-light-full.png",
+      "group": "track-a-gate-closure",
+      "bytes": 836298,
+      "sha256": "88aa8d672adb6561dea529ceb655a040382795d5ca9638457a77d299f8ebae7d",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/track-a-gate-closure/audio-assessment.json",
+      "group": "track-a-gate-closure",
+      "bytes": 9511,
+      "sha256": "fbba5036c4cd4096c9d667bfb94d74c9fff5045ae8cc0c71dcc3cf6977e534db",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/track-a-gate-closure/captions-unreviewed.vtt",
+      "group": "track-a-gate-closure",
+      "bytes": 720,
+      "sha256": "c2d1286ad2c1811e4df0c20c8d2e120ff09c633f2c9dac222ccbaf22e9890dfc",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/track-a-gate-closure/SHA256SUMS",
+      "group": "track-a-gate-closure",
+      "bytes": 2269,
+      "sha256": "d290effe14947c23cf2f2661cec769a8d3df743161882cd5180ab6448e6b0a92",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/validation.json",
+      "group": "checkpoint-validation",
+      "bytes": 2712,
+      "sha256": "f75d07b11f6c2ff35734326d964902d38fe76080d1081909066b636a659bd3e9",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/focused-tests.log",
+      "group": "checkpoint-validation",
+      "bytes": 700,
+      "sha256": "702fe45b20b67d1812ab353595dab342ff8a56ad70281553295b6af3ae691c46",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/typescript.log",
+      "group": "checkpoint-validation",
+      "bytes": 50,
+      "sha256": "04089b092e9d5b0bdce7abd751d05829fd2463367e5eb08f0db7a29b0c0b8360",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/eslint.log",
+      "group": "checkpoint-validation",
+      "bytes": 41,
+      "sha256": "f3db99a6e5da4937054435c89cddf3a57bfaf342961900cdc58f99844b1a0543",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/production-build.log",
+      "group": "checkpoint-validation",
+      "bytes": 2503,
+      "sha256": "735c54f0236b370671ba2046cf4cd86b207c170c1f7bf33e1c77bc778a2f2349",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/anchor-check.json",
+      "group": "checkpoint-validation",
+      "bytes": 7675,
+      "sha256": "905be2f4e2cce734a06b49eba8d70b4ee4143c452e58784d738ef5c4580dff1d",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/pixel-comparison.json",
+      "group": "checkpoint-validation",
+      "bytes": 536,
+      "sha256": "37092e70391909bf84f70dc96b6c852fb4b41862a36a1761cb49a1125956109d",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/browser/qa-report.json",
+      "group": "checkpoint-validation",
+      "bytes": 6794,
+      "sha256": "bcb61c67892560c4288d1f513f3086cd809ee7bd6691a3aa783e48d7f1d97b54",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/security-summary.json",
+      "group": "checkpoint-validation",
+      "bytes": 406,
+      "sha256": "476a4c52e6cb1365fc6d9786010ba4e6ed1720ef74b803aa411a22fd4c76da46",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/npm-audit-production.json",
+      "group": "checkpoint-validation",
+      "bytes": 367,
+      "sha256": "e36ac43d0a60856b03d80987478791c61df928c4ae5a98ada8322c7ddb372284",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/npm-audit-all.json",
+      "group": "checkpoint-validation",
+      "bytes": 3025,
+      "sha256": "58b3f6f176055a772200e6e028bc50b7e49a564a1c9ca97f2394ac85e13ddcf0",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/smoke.log",
+      "group": "checkpoint-validation",
+      "bytes": 794,
+      "sha256": "ed58e8cf347f39cbf6fe0b0ec9569aa9169fe49dbbbe884057bfad91cb7236a0",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/screenshots/candidate-desktop-dark-full.png",
+      "group": "checkpoint-validation",
+      "bytes": 573553,
+      "sha256": "c971a83056494eb93d74afb1d76840ced9ac7c90bc889ef65c3e89ef4970cc7e",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/screenshots/candidate-desktop-light-full.png",
+      "group": "checkpoint-validation",
+      "bytes": 574615,
+      "sha256": "467ba0f4bd287428abb11a79a65662915903ff9a97f4561e7ad46d875e48a579",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/screenshots/candidate-mobile-dark-full.png",
+      "group": "checkpoint-validation",
+      "bytes": 827987,
+      "sha256": "94686699b86831c05f2f90b9c9a26c8c6b2d60b0e5733946aeca084651642e6e",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/screenshots/candidate-mobile-light-full.png",
+      "group": "checkpoint-validation",
+      "bytes": 836298,
+      "sha256": "88aa8d672adb6561dea529ceb655a040382795d5ca9638457a77d299f8ebae7d",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/validation.json",
+      "group": "acceleration",
+      "bytes": 1890,
+      "sha256": "10311ee82ee63df42d5edf31cae0e2baaf9c74f83aa95428e115ad2ec9df0376",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/final-summary.json",
+      "group": "acceleration",
+      "bytes": 2044,
+      "sha256": "3f57848064efe67ebc49b85757053010bc40e487bc00e3420d35e0eacc0c2100",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/selected-source.patch",
+      "group": "acceleration",
+      "bytes": 21056,
+      "sha256": "646214eb13a7d31b9139fe19090b75d1ed4dd3b1069440bb51621f56cf9127dd",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/focused-tests.log",
+      "group": "acceleration",
+      "bytes": 836,
+      "sha256": "aa6545399523494c443d04a1c04452a897ae59e4fcfb0764df1e4ae74327464b",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/typescript.log",
+      "group": "acceleration",
+      "bytes": 50,
+      "sha256": "04089b092e9d5b0bdce7abd751d05829fd2463367e5eb08f0db7a29b0c0b8360",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/eslint.log",
+      "group": "acceleration",
+      "bytes": 41,
+      "sha256": "f3db99a6e5da4937054435c89cddf3a57bfaf342961900cdc58f99844b1a0543",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/production-build.log",
+      "group": "acceleration",
+      "bytes": 2503,
+      "sha256": "67a6649a861c574e9fe2f6b076932874025bab840490750856b3ff7c43db00f0",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/anchor-check.json",
+      "group": "acceleration",
+      "bytes": 7675,
+      "sha256": "905be2f4e2cce734a06b49eba8d70b4ee4143c452e58784d738ef5c4580dff1d",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/pixel-comparison.json",
+      "group": "acceleration",
+      "bytes": 536,
+      "sha256": "37092e70391909bf84f70dc96b6c852fb4b41862a36a1761cb49a1125956109d",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/browser/qa-report.json",
+      "group": "acceleration",
+      "bytes": 13131,
+      "sha256": "b638fbb3281c25962b8c6c9d498bbfba9bf21dfeef74e1f89f3152cc1660711b",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/public-flows.json",
+      "group": "acceleration",
+      "bytes": 234,
+      "sha256": "8ef0bb1327fcb344eaac3cd7042a591a0e8324b19cda7c9c1f40f5885e6ba068",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/media-controls.json",
+      "group": "acceleration",
+      "bytes": 605,
+      "sha256": "f0b889fa1e61d6925523179bde1eb0edad07e4dda3a61e74fbe4de325fa7abc6",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/security-summary.json",
+      "group": "acceleration",
+      "bytes": 406,
+      "sha256": "476a4c52e6cb1365fc6d9786010ba4e6ed1720ef74b803aa411a22fd4c76da46",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/npm-audit-all.json",
+      "group": "acceleration",
+      "bytes": 3025,
+      "sha256": "58b3f6f176055a772200e6e028bc50b7e49a564a1c9ca97f2394ac85e13ddcf0",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/npm-audit-production.json",
+      "group": "acceleration",
+      "bytes": 367,
+      "sha256": "e36ac43d0a60856b03d80987478791c61df928c4ae5a98ada8322c7ddb372284",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/scope-verification.json",
+      "group": "acceleration",
+      "bytes": 1168,
+      "sha256": "12b6a714bb19e58f71a4e451b41873ec766d98223d220055fc746a979ef8488a",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/execution-notes.json",
+      "group": "acceleration",
+      "bytes": 1078,
+      "sha256": "e550ca06b63757585a6b8dc3b91532d86ff64ef84af0a248a696966e25e0f533",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/smoke.log",
+      "group": "acceleration",
+      "bytes": 794,
+      "sha256": "ed58e8cf347f39cbf6fe0b0ec9569aa9169fe49dbbbe884057bfad91cb7236a0",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/screenshots/candidate-desktop-dark-full.png",
+      "group": "acceleration",
+      "bytes": 573553,
+      "sha256": "c971a83056494eb93d74afb1d76840ced9ac7c90bc889ef65c3e89ef4970cc7e",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/screenshots/candidate-desktop-light-full.png",
+      "group": "acceleration",
+      "bytes": 574615,
+      "sha256": "467ba0f4bd287428abb11a79a65662915903ff9a97f4561e7ad46d875e48a579",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/screenshots/candidate-mobile-dark-full.png",
+      "group": "acceleration",
+      "bytes": 827987,
+      "sha256": "94686699b86831c05f2f90b9c9a26c8c6b2d60b0e5733946aeca084651642e6e",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/acceleration/screenshots/candidate-mobile-light-full.png",
+      "group": "acceleration",
+      "bytes": 836298,
+      "sha256": "88aa8d672adb6561dea529ceb655a040382795d5ca9638457a77d299f8ebae7d",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/final-acceptance/validation.json",
+      "group": "final-acceptance",
+      "bytes": 1747,
+      "sha256": "5d0b3f0a90d4e6ac71e4b4d643aea3a3b53fbd91eff1b09d850d25d92d7842bc",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/final-acceptance/browser.json",
+      "group": "final-acceptance",
+      "bytes": 95091,
+      "sha256": "aa11e102f51ea3acfb88542c3b773047fec4239f658edbc5308be847a3bd977a",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/final-acceptance/test-matrix.json",
+      "group": "final-acceptance",
+      "bytes": 22118,
+      "sha256": "d44e6917e9fb2ea131c1041c32d97fd419c6144419ab8b5d62f4c91119acc00f",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/final-acceptance/security.json",
+      "group": "final-acceptance",
+      "bytes": 466,
+      "sha256": "a12bcff9fb2655801482bd827a4dadac9f8c533a0abd83c2b4b53739debe1d69",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/final-acceptance/qa/qa-report.json",
+      "group": "final-acceptance",
+      "bytes": 13131,
+      "sha256": "b87b5d206f3b4bce232d7b536655ffd7ff3263c80bbaab1f05cf37239f4eca10",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/final-acceptance/anchor-check.json",
+      "group": "final-acceptance",
+      "bytes": 7675,
+      "sha256": "905be2f4e2cce734a06b49eba8d70b4ee4143c452e58784d738ef5c4580dff1d",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/final-acceptance/public-flows.json",
+      "group": "final-acceptance",
+      "bytes": 234,
+      "sha256": "8ef0bb1327fcb344eaac3cd7042a591a0e8324b19cda7c9c1f40f5885e6ba068",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/final-acceptance/navigation.json",
+      "group": "final-acceptance",
+      "bytes": 160,
+      "sha256": "1de5113cc6f5a416efdd81a1218beb8be02e292e4726207ad0383e86badfa1c4",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/final-acceptance/position.json",
+      "group": "final-acceptance",
+      "bytes": 197,
+      "sha256": "fd345623d080ba2c6ec4573d1b26687e694cfea23a32a5ea7be21c88ea88fe9d",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/brand-decision/brand-review.json",
+      "group": "brand-decision",
+      "bytes": 6442,
+      "sha256": "f71535720fe5d5bb28456389ee50fb9c42c7dd6c07213c63c33bed5eb017a9e1",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/brand-decision/unresolved-cases.json",
+      "group": "brand-decision",
+      "bytes": 12848,
+      "sha256": "6c2e4828bbfb037a6a40ca11100cb3a89820961f40a86b7220450812a4f15067",
+      "checkpoint_selected": false
+    },
+    {
+      "path": "docs/v2/release/evidence/ux-production-2026-10-20/brand-decision/proposed-checkpoint-files.txt",
+      "group": "brand-decision",
+      "bytes": 807,
+      "sha256": "a5d371c9e75ec7640134a62652595c03314379a585f9b48258f2ada1f0be1faf",
+      "checkpoint_selected": false
+    }
+  ],
+  "retained_archives": {
+    "directory": "/Users/jincenmathew/Downloads/Intuit/movebooks-ux-release-artifacts/e7f1e28-20261020",
+    "image_tar_sha256_previously_verified": "79c643d3c22cff8fceece5176d9910a59c3f6537ac1f64301c9bd530c570e458",
+    "source_tar_sha256_previously_verified": "0a1d7274d855e49cc7776d362aca9dc1f32da829014380fdecad841c40b5ea3a",
+    "rehash_this_closeout": false
+  },
+  "human_gates": {
+    "captions": "UNAPPROVED; uncertain word and timing/sounds pending",
+    "privacy_terms": "UNAPPROVED; owner facts missing",
+    "account_a": "UNVERIFIED",
+    "account_b": "UNVERIFIED",
+    "hosted_isolation": "NOT PASSED",
+    "advisory_disposition": "OPEN",
+    "api_replay_disposition": "OPEN"
+  },
+  "evidence_access": "Raw evidence remains local, outside proposed checkpoint. Hash inventory is not a substitute for underlying evidence. Separate approval required for external sharing.",
+  "closeout_validation": {
+    "checked_utc": "2026-10-20T13:00:49.135754+00:00",
+    "checksums_matched": {
+      "container-build": 39,
+      "stage2-preview": 26,
+      "track-a-gate-closure": 26
+    },
+    "source_workflow_test_files_preserved": 330,
+    "source_changes_this_closeout": [],
+    "seven_path_allowlist": "PASS",
+    "review_document_local_links": "PASS",
+    "index_empty": true,
+    "head_unchanged": true,
+    "diff_check_exit": 0,
+    "expensive_checks_repeated": false,
+    "cloud_calls_this_closeout": false
+  },
+  "checkpoint_validation": {
+    "record": "docs/v2/release/evidence/ux-production-2026-10-20/checkpoint-validation/validation.json",
+    "source_kind": "Isolated archived web subtree plus exact selected uncommitted CSS patch; not a committed release or container image",
+    "results": {
+      "fragment_cases": 30,
+      "axe_layout_cases": 9,
+      "axe_violations": 0,
+      "overflow": false,
+      "video_keyboard_theme_reduced_motion": "PASS",
+      "page_errors": 0,
+      "full_page_zero_pixel_difference": 4,
+      "smoke_passed": 24
+    },
+    "security": {
+      "production_npm_findings": 0,
+      "development_high_entries": 5,
+      "disposition": "OPEN",
+      "new_image_or_image_scan": false
+    },
+    "local_next_build_id": "OdIjDkxsrul0do6d5SZKS",
+    "source_preservation": 330,
+    "new_source_commit": null,
+    "new_image_digest": null
+  },
+  "baseline_css_file_sha256": "53aced767cdf140db42f95a308adbf657a5b43abebd2a9867809c41773ac4446",
+  "acceleration_validation": {
+    "completed_utc": "2026-10-20T14:23:13.888909+00:00",
+    "base_commit": "e7f1e288fd7f378045950fc94d5d7c89e298575f",
+    "source_patch_sha256": "646214eb13a7d31b9139fe19090b75d1ed4dd3b1069440bb51621f56cf9127dd",
+    "local_next_build_id": "NJIXhwzHriW2tFDEvlulT",
+    "local_preview_flag": true,
+    "private_api_database_gemini_connections": false,
+    "firebase_project_key_auth_domain": false,
+    "source_tests": {
+      "files": 13,
+      "passed": 211
+    },
+    "typescript": "PASS",
+    "eslint": "PASS",
+    "production_mode_local_build": "PASS",
+    "fragment_navigation": {
+      "passed": 30,
+      "failed": 0
+    },
+    "axe": {
+      "idle_layouts": 9,
+      "active_players": 4,
+      "violations": 0,
+      "full_wcag_compliance_claim": false
+    },
+    "inline_playback_keyboard_replay_restore": "PASS",
+    "native_seek_mute_volume_fullscreen_api": "PASS in Chromium desktop/touch emulation; not real Safari/device acceptance",
+    "local_sign_in": "No Firebase initialization or popup; explanatory local notice; zero external requests",
+    "public_flows": "Five demo phases and browser-only synthetic template validation/clear PASS",
+    "smoke": {
+      "passed": 24,
+      "failed": 0
+    },
+    "idle_visual_comparisons": {
+      "pixel_identical": 4,
+      "reference": "track-a-gate-closure retained candidate"
+    },
+    "dependencies": {
+      "npm-audit-production": {
+        "exit_code": 0,
+        "findings": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 0,
+          "critical": 0,
+          "total": 0
+        },
+        "error": null
+      },
+      "npm-audit-all": {
+        "exit_code": 1,
+        "findings": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 5,
+          "critical": 0,
+          "total": 5
+        },
+        "error": null
+      }
+    },
+    "new_container_image": false,
+    "prior_image_scan_applies_to_changed_artifact": false,
+    "selected_file_count": 12,
+    "index_empty": true,
+    "unrelated_changes_preserved": true,
+    "diff_check": "PASS",
+    "verdict": "READY FOR OWNER REVIEW AND LOCAL CHECKPOINT APPROVAL; PRODUCTION NO-GO"
+  },
+  "final_local_acceptance": {
+    "updated_utc": "2026-10-20T14:51:50.069890+00:00",
+    "base_commit": "e7f1e288fd7f378045950fc94d5d7c89e298575f",
+    "source_patch_sha256": "adeef2d84c2e5baaa1d0087c59c987d926ec501b201854a45d224ec0636ea68f",
+    "local_build_id": "z8GVOKz0YfQnLPLMylsiK",
+    "preview": "http://127.0.0.1:3118/",
+    "prior_preview_preserved": "http://127.0.0.1:3117/",
+    "selected_file_count": 13,
+    "tests_passed": 213,
+    "new_container": false,
+    "production": "NO-GO",
+    "report": "docs/ux/v2-final-acceptance.md",
+    "source_hashes": {
+      "apps/web/app/v2-landing.css": "d77317a431bb965957737fef4b73c75be5154763439252ce7b52a0159c208ec2",
+      "apps/web/components/public-surfaces/HeroVideo.tsx": "56b6ea60e7e4a65254d8610c0a01302384646d24e4404eb40973c1bbde9f2e03",
+      "apps/web/components/public-surfaces/HeroVideo.test.tsx": "84cb21252dc4a07693b28e3e607c98596c8e138b3f9b11c8dac94f16b8b6adca",
+      "apps/web/components/IdentityProvider.tsx": "48e8740879fa3c3d86cd8c81fe0f5c9e909382de2d995e42ed5de71e71106cc7",
+      "apps/web/components/IdentityEntry.tsx": "2f3d5df887342734b44203fe54aa440021b6046368adb3532c8936e4d1b685e8",
+      "apps/web/test/google-sign-in.test.tsx": "5b917f352ee432a614dc15982a2d4c7d3bcfbd2961eddb483f1c83dab99ed575"
+    }
+  },
+  "brand_decision_proposal": {
+    "recorded_utc": "2026-10-20T15:05:50.807436+00:00",
+    "option_b": "Owner preference, pending final mockup approval; not installed",
+    "provider_copy": "Proposed homepage-only Built on Google Cloud; no provider attribution elsewhere; not implemented",
+    "current_selected_paths": 13,
+    "prospective_selected_paths": 21,
+    "public_source_changed": false,
+    "test_statuses_unchanged": true,
+    "gallery": "docs/v2/release/evidence/ux-production-2026-10-20/brand-decision/approval-gallery.html"
+  },
+  "branding_implementation": {
+    "recorded_utc": "2026-10-20T15:24:55.500714+00:00",
+    "preview": "http://127.0.0.1:3119/",
+    "base_commit": "e7f1e288fd7f378045950fc94d5d7c89e298575f",
+    "patch_sha256": "bbefc321d95cfcc159a7d27b6df4d26e360f70dbcfd420575cd6a47dc593bd58",
+    "build_id": "e_XSGu_TXXIfsebJPisvN",
+    "source_hashes": {
+      "apps/web/app/v2-landing.css": "b9e8f58c61edea18c86fc4fe914a86360f93f0a5dc9c8369313f9cc8ecb362f2",
+      "apps/web/components/public-surfaces/HeroVideo.tsx": "56b6ea60e7e4a65254d8610c0a01302384646d24e4404eb40973c1bbde9f2e03",
+      "apps/web/components/public-surfaces/HeroVideo.test.tsx": "84cb21252dc4a07693b28e3e607c98596c8e138b3f9b11c8dac94f16b8b6adca",
+      "apps/web/components/IdentityProvider.tsx": "48e8740879fa3c3d86cd8c81fe0f5c9e909382de2d995e42ed5de71e71106cc7",
+      "apps/web/components/IdentityEntry.tsx": "2f3d5df887342734b44203fe54aa440021b6046368adb3532c8936e4d1b685e8",
+      "apps/web/test/google-sign-in.test.tsx": "5b917f352ee432a614dc15982a2d4c7d3bcfbd2961eddb483f1c83dab99ed575",
+      "apps/web/components/Nav.tsx": "e8ee5c502267c84da968231cfd0e536d0a79c2b02b93bdff60ebb888593e48ac",
+      "apps/web/app/icon.svg": "f934d33c7a9d71ca5291f9f62d49bbb130386168d8179e8a2c8b139059a11936",
+      "apps/web/components/v2/Attribution.tsx": "a02f7e79868927d0d7ac32bb69f531000769726bbb51f80298b9efddbc97d780",
+      "apps/web/components/v2/Attribution.test.tsx": "1f88cd158a4ae84e344ad4e3d502e3857a895d19956b8c9191a882827fd1fa85",
+      "apps/web/components/v2/ai-copy.test.ts": "8b8d5bf5eb9dd8196e806d1a735e689663e1ea57059cabdd17a31fbfb659680e",
+      "apps/web/components/public-surfaces/surfaces.test.tsx": "796ebf490c51f900fe647a984d3b5b4785ec811876d9afc87c2403916f6dd3ea",
+      "apps/web/test/account-shell.test.tsx": "8c2be4d7db529929e1568405d878f2dad53bbf9f3ab230d13688b8c656186ff0"
+    },
+    "matrix": {
+      "PASS": 48,
+      "FAIL": 0,
+      "BLOCKED": 12,
+      "NOT RUN": 3
+    },
+    "focused_tests": 221,
+    "fragment_cases": 30,
+    "axe_scans": 25,
+    "axe_violations": 0,
+    "new_container": false,
+    "production": "NO-GO",
+    "checkpoint": "Ready for separately authorized explicit 21-path staging and one local commit",
+    "evidence": [
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/acceptance.mjs",
+        "sha256": "124250b5387a495d0a2ed3fca954c15372e73837274707ecc9341a10b482c3bd"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/anchor-check.json",
+        "sha256": "68d242c501023129289d6df95efaad52d6755acb778199325dc7e4652dcad68a"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/anchor-check.mjs",
+        "sha256": "645043e6c2ef0cbe0e726154ea4ee2bc64ceb7dd52093a6233e07f201152283a"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/before-hashes.json",
+        "sha256": "dc7ef22b14380e7f30fbf7b4ea8dd0a7ca539003f6b49ad54ddb60eaa78e98e3"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/brand-qa.json",
+        "sha256": "e95f0fd67f6c9487fa6d160b2004efe0c110728806aa9f0a71ced8b433b3a4f6"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/brand-qa.mjs",
+        "sha256": "429c5738285524b97026f4a05d80034a7f56d46b19d5b9a89d02345ca24e3424"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/browser.json",
+        "sha256": "21d58e53d1031b4431a3055957bce7290ca88b5baaab3c1e4593aa79fa620a27"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/compare.mjs",
+        "sha256": "037bc6a9567184c2954cb16a19509c33086eea9d8c68b2a37bf6bfbe76667d7a"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/desktop-dark-header.png",
+        "sha256": "5488b603572891bfb9107291ec163e49f8e983037583afa3c1c5e255f6703c13"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/desktop-light-header.png",
+        "sha256": "48defee6a3bcf3497e5806b53424c0d9124fc55524c39967e02ac52ececcd516"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/eslint.log",
+        "sha256": "f3db99a6e5da4937054435c89cddf3a57bfaf342961900cdc58f99844b1a0543"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/favicon-dark.png",
+        "sha256": "6f007d16f52ce9e346aa1e87525fe0ab96cb673c6ae3ee9bd14294a0554f9329"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/favicon-light.png",
+        "sha256": "fb74226834903b9909498637fc6996196a7b021631d418234f8ddebef077b4a6"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/focused-tests.log",
+        "sha256": "922068fdafdfc48682934d7cead665e86e36049df873e8a27876e34a3572d9d3"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/gallery.html",
+        "sha256": "106222ba05e370caf1f246cb2f496c9028487a0466c10930888597de09028889"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/header-before.json",
+        "sha256": "d561add2b9429a9662ae540340a1add092c1deda8513d437daadbc794c6f3088"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/mobile-dark-header.png",
+        "sha256": "8dc8e2aa0c0bf0bbf7db83359525941bfaee9ae7d0c69930dd2862b8dc8b631a"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/mobile-light-header.png",
+        "sha256": "6ac93d05102a79ff261338a2906b6d4d9bf666338c2e0816363082246b8e01b8"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/navigation.json",
+        "sha256": "1de5113cc6f5a416efdd81a1218beb8be02e292e4726207ad0383e86badfa1c4"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/navigation.mjs",
+        "sha256": "05993c195f73d1b56fc729369c8dbea779e8fe43711aee364201340926b11f13"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/npm-audit-all.json",
+        "sha256": "58b3f6f176055a772200e6e028bc50b7e49a564a1c9ca97f2394ac85e13ddcf0"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/npm-audit-production.json",
+        "sha256": "e36ac43d0a60856b03d80987478791c61df928c4ae5a98ada8322c7ddb372284"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/position.json",
+        "sha256": "86a70784c765134de683c328df411f1a6084eb04de3bc7bb1e3271dca63b3c36"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/position.mjs",
+        "sha256": "42b26780834463ae82b08816246e8a441b40188584e223c3dec9ad220a02c7e5"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/preview.json",
+        "sha256": "c37c3522c497b2dbb774560dff9c20e90ca868ed5195330b17bba301d13c100c"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/production-build.log",
+        "sha256": "642f44babaf309dc93ff12803ecce5a1c6dedf71ad7f3feab0d9b7a5436b3db7"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/public-flows.json",
+        "sha256": "8ef0bb1327fcb344eaac3cd7042a591a0e8324b19cda7c9c1f40f5885e6ba068"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/public-flows.mjs",
+        "sha256": "1979a52a47df794da8c415eb084f42b1985d8cf78a50567186a3f80d987b91af"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/appearance-dropdown.png",
+        "sha256": "d1d6474cd7ebc5ab08d83e216dd9650c3190e4db0652113ea40cadd57b8f5ea9"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/inline-1440-dark.png",
+        "sha256": "424c0735f891728c6ea061d3869d72faa9a616de924ae9acd85fccc4f63822d3"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/inline-1440-light.png",
+        "sha256": "ed6620b1c39973bdcfff61cf2f8a124f119f6d99ba0fb2a4b1b66ddfbe1f71c2"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/inline-390-dark.png",
+        "sha256": "08bae6ae162354d5e9d3a6e8fc890fcba8ba8c414a13767201dcc1faaca521c9"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/inline-390-light.png",
+        "sha256": "0e4b5960f1e10083182e6693353cfc43b345c214c598f478d8fa42ad9b89b6d5"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/journey-100ms.png",
+        "sha256": "67d5ee4a6dc4e952d27a91b64ee4f145fc0a9d47a8dd566c5e061fe91312f5f2"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/journey-1700ms.png",
+        "sha256": "2586f3c63ef0c2bcfad80185e60993225cfdfc257e2c7f817a512edc39509425"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/journey-2500ms.png",
+        "sha256": "6f3cf6f9ffc6e43423874563014fb637cc20d347173a12783619d4daa681b849"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/journey-3600ms.png",
+        "sha256": "54e198f1e3df79a13bcd17d4a0ae9bb809d5f6c049098c549927d05a6061da29"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/journey-5000ms.png",
+        "sha256": "54e198f1e3df79a13bcd17d4a0ae9bb809d5f6c049098c549927d05a6061da29"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/journey-900ms.png",
+        "sha256": "2cf02593a37f7a391d33f7c4d9fbd9b27c9b9c109495b6aef6cea1592a881d11"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/local-sign-in.png",
+        "sha256": "8bbc05cd57a6b19a65891c88be921ca552127b6ac9157ebaa41fee12e5d83708"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/mobile-sticky-header.png",
+        "sha256": "59de0210a57bd93fb0de4c04f8454d577f8c5ab21d36bdd6247fc3e8a16e327b"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/qa-report.json",
+        "sha256": "dee0b5cd79fa4365a78184429d9306cc1f0c4ab34e6873c332229031bc849ea4"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/sticky-header-scrolled.png",
+        "sha256": "c60feb7f6ba2dbbefc37f1e23243b3e8b535b917e7730c31a6af0b58bcad6359"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa/zoom200-dark-full.png",
+        "sha256": "37e889365b01394fc84faa2a7baa3c350386d72a6f3165cc73ae2f97fd286bd5"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa-console.log",
+        "sha256": "9fd3ecf2ee7d04cc5c802187edb0fa1a1dba2b8f81ee1eb7db815f01f8450da5"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/qa.mjs",
+        "sha256": "1aa33115a5cb305d20b2208db5fd668a524934f7cb8740e6b3c752d39d60d917"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/scope.json",
+        "sha256": "8fe018831a3fc48c3a4aa0b26294d0990f942773383371d0f745576bc86006c4"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/desktop-dark-completed.png",
+        "sha256": "9f603b6c77cd1e91eb4857fd98e7462e5ad4e9048872b973a39d618db337ef58"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/desktop-dark-error.png",
+        "sha256": "f859a727859879824e7a580a66085a51696e94195366c3a09477e36ffbaed597"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/desktop-dark-idle.png",
+        "sha256": "51018f35d37384c8a11e62cb3964954aab7b68b0572670a009d051b92afed8b5"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/desktop-dark-playing.png",
+        "sha256": "e9b779ae5f272ec170049fd229be21313a96d6e5da34a8837675313a4bacb044"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/desktop-dark-restored.png",
+        "sha256": "51018f35d37384c8a11e62cb3964954aab7b68b0572670a009d051b92afed8b5"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/desktop-light-completed.png",
+        "sha256": "d9b97ed088730c76eeea719e26047705a0bf626f4e3151c7bc17865e9643bff5"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/desktop-light-error.png",
+        "sha256": "8de4d27de49713595745ce094eee8cd7814dc46feb0efd6728e5f72e32ce2fcc"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/desktop-light-idle.png",
+        "sha256": "903a6cde95619fa70d7ca01227d87d8af81adbf9c94f1574c93099803581aafb"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/desktop-light-playing.png",
+        "sha256": "e56f04b6d0b91b7cc9f14e0c583037bd9a43a48b5b1e87be78e085e7e8efbc1e"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/desktop-light-restored.png",
+        "sha256": "903a6cde95619fa70d7ca01227d87d8af81adbf9c94f1574c93099803581aafb"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/mobile-dark-completed.png",
+        "sha256": "4782aebfdb3b4b6b1a72aa2ed5d9523a07b8181564cac61b56e0bd5f394de600"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/mobile-dark-error.png",
+        "sha256": "c7c7a4b9cd47f1906302ac5c6133196527a0cb556237c901410d02849f419bde"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/mobile-dark-idle.png",
+        "sha256": "9d5d730955c5fc4fac98b24b332f143fa75025d11ebc7a85d86af4feacbe4502"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/mobile-dark-playing.png",
+        "sha256": "3bb4ea2f63b0c4a6f7a6a111348bc61ffcaa63de4c477342cbc2a7cf2f951521"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/mobile-dark-restored.png",
+        "sha256": "9d5d730955c5fc4fac98b24b332f143fa75025d11ebc7a85d86af4feacbe4502"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/mobile-light-completed.png",
+        "sha256": "03b2dca6956e576c625f9727472e534d6b79a6c2a0ff6973642508de5cba3465"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/mobile-light-error.png",
+        "sha256": "73b67020fc78b9272f04253493726fb529fca67a14066fae778c7bb8de7f560b"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/mobile-light-idle.png",
+        "sha256": "b89b12f3304862ac15ec8d0a07895ce894ec1292fecf57690bd8db0c763c3408"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/mobile-light-playing.png",
+        "sha256": "0b0e54fa47093ed49d24716310cdd72de9a011db5ff6b0a5f05e31f1a989486b"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/screenshots/mobile-light-restored.png",
+        "sha256": "b89b12f3304862ac15ec8d0a07895ce894ec1292fecf57690bd8db0c763c3408"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/security.json",
+        "sha256": "473a97a5e2a3deeead81f53e0c4a7c009140bd94c869a050ab23fe87aaf1f43e"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/selected-source.patch",
+        "sha256": "bbefc321d95cfcc159a7d27b6df4d26e360f70dbcfd420575cd6a47dc593bd58"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/server.log",
+        "sha256": "8810108b1452a544ea764b03621242c96e11641d70f715d8be8e071a80defe02"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/summary.json",
+        "sha256": "2a2287ec9fea870acb8dd7b7ac4501f1b4bbf986d3f59a6cba91078e3fd95365"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/test-matrix.json",
+        "sha256": "7b0217cdd86f60582fa0a91e8caa090f946546e24ee30b14705615eb0c8b09d1"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/typescript.log",
+        "sha256": "04089b092e9d5b0bdce7abd751d05829fd2463367e5eb08f0db7a29b0c0b8360"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/validation.json",
+        "sha256": "36fc458c1fc32f5b75615fb4aa9a334c21c2e9a85db2931aaf85975c26492051"
+      },
+      {
+        "path": "docs/v2/release/evidence/ux-production-2026-10-20/branding-implementation/visual-comparison.json",
+        "sha256": "ef97bac12a728c847b3f3b2bcaba3348b73ad27b6a2160e396b3c2cf9c55662e"
+      }
+    ]
+  }
+}
