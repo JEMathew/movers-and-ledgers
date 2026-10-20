@@ -1,6 +1,6 @@
 import { allowedQuery, allowedRoute, assistedAnalysisRoute, cloudIntake } from "./proxy-policy";
 
-export type ProxyConfig = { upstream: string; publicOrigin: string; projectId: string; additionalOrigins?: string[] };
+export type ProxyConfig = { upstream: string; publicOrigin: string; projectId: string; additionalOrigins?: string[]; workloadAudience?: string };
 export type ProxyDependencies = {
   verifyUser: (token: string, projectId: string) => Promise<void>;
   workloadAuthorization: (audience: string) => Promise<string>;
@@ -22,6 +22,17 @@ export function proxyConfig(env: Partial<NodeJS.ProcessEnv>): ProxyConfig {
       env.NEXT_PUBLIC_IDENTITY_MODE !== "firebase" || !env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
     throw new Error("Private API proxy is not configured");
   }
+  // A revision tag changes routing, but Cloud Run still requires the base service audience.
+  // Both values are deployment-owned; never accept an audience from browser headers.
+  const audience = new URL(env.MOVEBOOKS_PRIVATE_API_AUDIENCE ?? upstream.origin);
+  const tag = upstream.hostname.endsWith(`---${audience.hostname}`)
+    ? upstream.hostname.slice(0, -(`---${audience.hostname}`.length)) : "";
+  if (audience.protocol !== "https:" || audience.href !== `${audience.origin}/` ||
+      audience.port !== upstream.port || !audience.hostname.endsWith(".run.app") ||
+      audience.hostname.includes("---") ||
+      (audience.origin !== upstream.origin && !/^[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(tag))) {
+    throw new Error("Private API workload audience is not configured");
+  }
   const additionalOrigins = env.MOVEBOOKS_ADDITIONAL_WEB_ORIGINS?.split(",").map(value => {
     const origin = new URL(value.trim());
     if (origin.protocol !== "https:" || origin.href !== `${origin.origin}/` ||
@@ -32,6 +43,7 @@ export function proxyConfig(env: Partial<NodeJS.ProcessEnv>): ProxyConfig {
   });
   return { upstream: upstream.origin, publicOrigin: publicOrigin.origin, projectId: env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
     ...(additionalOrigins ? { additionalOrigins } : {}),
+    ...(audience.origin !== upstream.origin ? { workloadAudience: audience.origin } : {}),
   };
 }
 
@@ -92,7 +104,7 @@ export async function proxyRequest(request: Request, config: ProxyConfig, depend
   }
   try {
     // Cloud Run IAM uses this header; Firebase continues to use Authorization in the API.
-    headers.set("X-Serverless-Authorization", await dependencies.workloadAuthorization(config.upstream));
+    headers.set("X-Serverless-Authorization", await dependencies.workloadAuthorization(config.workloadAudience ?? config.upstream));
     const upstream = await dependencies.fetch(`${config.upstream}${path}${query}`, {
       method: request.method, headers, body: body ? Buffer.from(body) : undefined,
       cache: "no-store", redirect: "error",

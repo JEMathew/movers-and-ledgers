@@ -9,7 +9,7 @@ const read = (file: string) => readFileSync(join(root, file), "utf8");
 // Every public and signed-in surface whose copy mentions AI, Gemini, the Advisor or the Reviewer.
 // Attribution.tsx is deliberately absent: its line is the owner-approved exception tested on its own below.
 const files = [
-  "app/page.tsx", "components/Nav.tsx", "components/Footer.tsx",
+  "app/page.tsx", "components/Nav.tsx", "components/Footer.tsx", "components/policies/policy-content.json",
   "components/public-surfaces/Trust.tsx", "components/public-surfaces/GuidedDemo.tsx", "components/public-surfaces/Guide.tsx",
   "components/public-surfaces/ReasoningAdvice.tsx", "components/public-surfaces/OperationalActivity.tsx",
   "components/public-surfaces/Feedback.tsx", "components/public-surfaces/HeroVideo.tsx", "components/public-surfaces/LandingJourney.tsx",

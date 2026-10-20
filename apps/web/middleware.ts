@@ -12,7 +12,7 @@ const protectedPrefixes = ["/try-your-data", "/workspace", "/approvals", "/repor
  */
 export const STATIC_HTML_ROUTES = [
   "/", "/assess", "/design-system", "/feedback", "/guide", "/learn", "/migrate-resolve", "/onboard-fpu",
-  "/plan-map-approve", "/play", "/simulator", "/support", "/try-your-data", "/validate-configure",
+  "/plan-map-approve", "/play", "/privacy", "/terms", "/simulator", "/support", "/try-your-data", "/validate-configure",
 ] as const;
 export const STATIC_HTML_CACHE = "public, max-age=0, s-maxage=60, must-revalidate";
 
@@ -37,6 +37,6 @@ export const config = {
   matcher: [
     "/try-your-data/:path*", "/workspace/:path*", "/approvals/:path*", "/reports/:path*", "/assess/:path*",
     "/", "/design-system", "/feedback", "/guide", "/learn", "/migrate-resolve", "/onboard-fpu",
-    "/plan-map-approve", "/play", "/simulator", "/support", "/validate-configure",
+    "/plan-map-approve", "/play", "/privacy", "/terms", "/simulator", "/support", "/validate-configure",
   ],
 };

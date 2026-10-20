@@ -22,8 +22,8 @@ export const topics = [
 export const publicLinks = [["Learn", "/learn"], ["Trust and Security", "/trust"], ["Play", "/play"]] as const;
 // Signed-in navigation. The logo is Member Home (/workspace); Account is the identity menu itself.
 export const memberLinks = [["My Migration", "/workspace"], ["Explore Demo", "/simulator"], ["Learn", "/learn"], ["Trust and Security", "/trust"], ["Play", "/play"]] as const;
-// Minimal legal footer. Privacy and Terms are withheld until owner-reviewed documents exist (release blocker).
-export const footerLinks = [["Contact", "/support"]] as const;
+// Local policy-review routes. Publication remains blocked until exact policy text is approved.
+export const footerLinks = [["Privacy", "/privacy"], ["Terms", "/terms"], ["Contact", "/support"]] as const;
 export const startMigrationHref = "/workspace";
 export const sampleEntry = "/assess?sample=harbor-light-migrate-demo";
 export const scope = "Synthetic Data · Public Reference · Beta. No live provider migration or production readiness claim.";

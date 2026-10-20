@@ -7,7 +7,7 @@ export function Footer() {
     <div className="shell site-footer-inner">
       <p>© 2026 Movers & Ledgers</p>
       <nav aria-label="Footer" className="site-footer-links">
-        {footerLinks.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}
+        {footerLinks.map(([label, href]) => <Link key={href} href={href} aria-label={label}>{label}</Link>)}
       </nav>
     </div>
   </footer>;

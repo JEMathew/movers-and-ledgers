@@ -15,6 +15,26 @@ beforeEach(() => {
 });
 
 describe("private API proxy", () => {
+  it("routes to the approved revision tag using the base service audience and preserves Firebase identity", async () => {
+    const base = "https://movebooks-beta-api-33s3hhbhua-as.a.run.app";
+    const upstream = "https://b598-on---movebooks-beta-api-33s3hhbhua-as.a.run.app";
+    const env = { NEXT_PUBLIC_IDENTITY_MODE: "firebase", NEXT_PUBLIC_FIREBASE_PROJECT_ID: config.projectId,
+      MOVEBOOKS_PRIVATE_API_ORIGIN: upstream, MOVEBOOKS_PUBLIC_WEB_ORIGIN: config.publicOrigin,
+      MOVEBOOKS_PRIVATE_API_AUDIENCE: base };
+    const tagged = proxyConfig(env);
+    const response = await proxyRequest(request(path, { headers: { "X-Forwarded-Host": "evil.run.app" } }), tagged, dependencies);
+    expect(response.status).toBe(200);
+    expect(dependencies.workloadAuthorization).toHaveBeenCalledExactlyOnceWith(base);
+    expect(dependencies.fetch).toHaveBeenCalledTimes(1);
+    const [url, init] = vi.mocked(dependencies.fetch).mock.calls[0];
+    expect(url).toBe(`${upstream}/v1/migration-sessions/${id}`);
+    expect(new Headers(init?.headers).get("Authorization")).toBe(`Bearer ${token}`);
+    expect(new Headers(init?.headers).get("X-Serverless-Authorization")).toBe("Bearer workload-only");
+    for (const audience of [undefined, upstream, "https://other.run.app", `${base}/path`, `${base}?x=1`, "http://movebooks-beta-api-33s3hhbhua-as.a.run.app", "https://user:pass@movebooks-beta-api-33s3hhbhua-as.a.run.app"]) {
+      expect(() => proxyConfig({ ...env, MOVEBOOKS_PRIVATE_API_AUDIENCE: audience })).toThrow();
+    }
+    expect(() => proxyConfig({ ...env, MOVEBOOKS_PRIVATE_API_ORIGIN: "https://b598-on---other-api-33s3hhbhua-as.a.run.app" })).toThrow();
+  });
   it("forwards only the explicit analysis POST with a bounded paired deadline and no retries", async () => {
     const route = `${path}/analysis/mapping/${id}`;
     const timeout = vi.spyOn(AbortSignal, "timeout");

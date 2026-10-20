@@ -1,0 +1,99 @@
+# MoveBooks AI — final Privacy Policy and Terms
+
+## Privacy Policy
+
+Effective date: the date this policy is first published at https://movebooks-si.web.app/.
+
+How the current MoveBooks AI hackathon MVP handles information.
+
+### Scope and operator
+
+MoveBooks AI is an independent, non-commercial hackathon MVP operated by Jincen Mathew, Independent Developer — MoveBooks AI, based in India. Movers & Ledgers is the project name, not a representation of an incorporated company. The English-language prototype is intended for a global audience, including AI Builder Cup judges, interview panelists and authorized evaluators. The operator’s location does not restrict users to India.
+
+Public demonstrations use synthetic data. No production accounting integrations are intended for this release. Do not submit real customer or production accounting records, passwords, access tokens, account numbers or tax identifiers.
+
+### Google Sign-In
+
+Google Sign-In uses Firebase Authentication. Firebase can receive your Google account identifier, email address and basic profile information, such as a display name or profile photo. The MoveBooks API uses your verified account identifier and email to identify your session and control access to workspaces. The application does not request additional Google data scopes beyond its standard Google sign-in flow.
+
+Your Google password is entered with Google, not into a MoveBooks password form. Authentication tokens are used for requests to the application API. Signing out ends the application session; it does not delete your Firebase account, saved workspaces or operational records.
+
+### Saved synthetic workspaces
+
+Authenticated migration workspaces can persist synthetic business records, workflow progress, checkpoints, decisions and supporting evidence in backend storage. These records support resuming work and reviewing decisions. The API checks access using the signed-in identity. This describes the implemented access controls, not a claim that every hosted isolation scenario has been tested.
+
+### Files checked in your browser
+
+Try Your Data validates selected files in the browser. This feature does not upload file contents, validation results or file hashes to the MoveBooks API or Gemini, and does not save them in browser storage. Use only permitted synthetic or de-identified test files, without confidential customer records. Clear the files or reload the page to discard the in-tab check. Files and reports you download remain under your control on your device.
+
+This local-file behavior does not mean that sign-in information or saved synthetic workspaces remain only on your device. Hosted export uploads are disabled in this release.
+
+### Browser storage and feedback
+
+The application uses browser storage for appearance preferences, Firebase session persistence and migration-selection conveniences. Browser storage can be managed through your browser settings. Clearing it does not delete server-side records.
+
+The feedback feature prepares an unsent draft for you to download. It does not submit a support ticket. Do not put credentials, personal details or financial records in a feedback draft.
+
+### Infrastructure and diagnostics
+
+Google Cloud and Firebase provide application hosting, authentication and infrastructure services. The web application and API run in Google Cloud’s asia-southeast1 region. This is not a statement that all authentication, logging, storage or backup data stays in that region.
+
+Application diagnostics include bounded request references, status and timing information. Infrastructure providers also process network and request metadata to operate their services.
+
+### Guidance in this release
+
+Current in-product guidance uses deterministic rules. Gemini Advisor and Reviewer assistance is planned and unavailable in this release. Technology attribution does not establish that live Gemini assistance is available to users or imply Google endorsement.
+
+### Retention, deletion and privacy requests
+
+The application does not currently provide a self-service account or workspace deletion control. No fixed retention period or automatic deletion schedule has been established for Firebase Authentication accounts or saved workspaces. Signing out, clearing browser files or removing Google access does not delete saved workspace, log or backup records.
+
+Configuration reviewed on 21 October 2026 shows 30-day retention for the default Cloud Logging bucket and 400-day retention for the required audit-log bucket. The artifact storage bucket has a seven-day soft-delete window after deletion; this does not automatically delete active objects. These settings do not establish a complete account or workspace deletion schedule or the retention of separate copies and exports.
+
+Automated backups are disabled in the inspected Cloud SQL configuration. This does not establish that no manual backups, exports or other copies exist. No verified removal schedule is available for these copies.
+
+Privacy inquiries, account-data requests and deletion requests can be sent to jeasom@gmail.com. Describe the request without including passwords, access tokens or financial records. There is no verified end-to-end deletion procedure or committed completion timeframe for accounts, workspaces and backups in this MVP. Sending a request does not automatically erase records, and removal from all backups or copies is not promised. These limitations do not limit rights that apply under law.
+
+Self-service deletion and a documented retention and deletion procedure remain future improvements; they are not current capabilities. The Help page provides self-service product guidance and does not receive privacy requests.
+
+### Contact
+
+Jincen Mathew — Independent Developer, MoveBooks AI, India. For privacy inquiries, account-data requests and deletion requests, email: [jeasom@gmail.com](mailto:jeasom@gmail.com).
+
+## Terms of Use
+
+Effective date: the date this policy is first published at https://movebooks-si.web.app/.
+
+Conditions for evaluation of the MoveBooks AI demonstration prototype.
+
+### Purpose and audience
+
+MoveBooks AI is an independent, non-commercial hackathon MVP operated by Jincen Mathew, Independent Developer — MoveBooks AI, based in India, under the Movers & Ledgers project name. It is intended for a global audience, including AI Builder Cup judges, interview panelists and authorized evaluators. The initial language is English. India identifies the operator’s location, not a geographic restriction on users.
+
+You must be at least 18 years old to use the MVP.
+
+The MVP is a demonstration prototype for guided accounting-migration workflows using synthetic data. It is not a commercial accounting or financial advisory service. Synthetic results do not certify a real business’s books, regulatory compliance or readiness to operate.
+
+### Permitted evaluation
+
+Use accounts and test data you are authorized to use. Hosted workspaces are for synthetic demonstrations. Browser-local checks accept permitted synthetic or de-identified test files; do not select confidential customer records. Do not submit credentials, tokens or production financial records.
+
+Do not attempt to access another person’s workspaces, bypass authorization or disrupt the service. No production accounting integration is intended for this release.
+
+### Accounts, guidance and decisions
+
+Review your signed-in account before acting. You remain responsible for decisions you make during evaluation. Follow the workflow’s approval and validation requirements; a suggestion or synthetic demonstration is not permission to bypass a failed check.
+
+Current in-product guidance uses deterministic rules. Gemini Advisor and Reviewer assistance is planned and unavailable in this release. Provider logos and attribution do not imply endorsement, sponsorship or a formal partnership.
+
+The MVP does not provide accounting, tax or legal advice. Do not use its synthetic demonstrations to carry out real financial transactions.
+
+### Help and availability
+
+Help provides self-service guidance. The feedback feature prepares an unsent draft; it does not submit a ticket. No staffed support, response-time or uptime commitment is made.
+
+Evaluation features may be incomplete. Do not rely on the MVP as the only copy of records you need to keep. Signing out does not delete stored account or workspace data. Read the Privacy Policy for the current data-handling description.
+
+### Contact
+
+Jincen Mathew — Independent Developer, MoveBooks AI, India. For privacy inquiries, account-data requests and deletion requests, email: [jeasom@gmail.com](mailto:jeasom@gmail.com).
