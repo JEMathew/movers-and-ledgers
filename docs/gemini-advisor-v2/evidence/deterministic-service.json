@@ -1,0 +1,136 @@
+{
+  "mode": "deterministic-fallback; no model called",
+  "started_at": "2026-10-20T08:45:29.096528+00:00",
+  "completed_at": "2026-10-20T08:45:29.109854+00:00",
+  "status": "fallback",
+  "model_id": null,
+  "endpoint": null,
+  "location": null,
+  "synthetic_case_id": "account-clearing",
+  "source": "1200 \u00b7 Misc Clearing",
+  "evidence_and_results": {
+    "case_id": "account-clearing",
+    "advisor": {
+      "request_id": "5ecb2398-ba28-465f-bed4-0efe8577179d",
+      "capability": "mapping",
+      "context_hash": "3126e3cc581d92a01895b418bbc4767eea7bfd93a235fb5bb2d762474c4668b6",
+      "requested_at": "2026-10-20T08:45:29.098430Z",
+      "completed_at": "2026-10-20T08:45:29.101232Z",
+      "state": "FALLBACK",
+      "provider": "deterministic-fallback",
+      "model": null,
+      "prompt_version": "bounded-reasoning-v4",
+      "advice": {
+        "observation": "1 evidence references at AWAITING_APPROVAL.",
+        "inference": "No model inference is asserted by this versioned fallback.",
+        "recommendation": "Inspect the existing deterministic proposal and evidence in this workflow.",
+        "rationale": "A model explanation cannot change a control, approval, or financial result.",
+        "evidence_references": [
+          "mapping:40526000-24c6-4496-a176-70a30317894b"
+        ],
+        "confidence": 0.0,
+        "uncertainty": [
+          "No calibrated model recommendation is available."
+        ],
+        "alternatives": [
+          "Stop and request qualified human review."
+        ],
+        "next_action": "ESCALATE",
+        "human_approval_required": true,
+        "financial_authority": false
+      },
+      "evidence": [
+        {
+          "reference": "mapping:40526000-24c6-4496-a176-70a30317894b",
+          "observation": "{\"source_concept\": \"1200 \\u00b7 Misc Clearing\", \"candidate\": \"Other Current Asset\", \"supported_targets\": [\"Other Current Asset\", \"Fixed Asset\"], \"candidate_confidence\": 0.76, \"state\": \"REVIEW_REQUIRED\", \"policy_flags\": [\"Sensitive accounting or tax mappings require human approval.\", \"Confidence is below the 90% auto-acceptable threshold.\"], \"approval_required\": true, \"source_purpose_supplied\": false}"
+        }
+      ],
+      "deterministic_results": [
+        "Compatibility validates allowed target classes, not the account's business purpose.",
+        "A review is an independent challenge, never an approval or financial result."
+      ],
+      "failure_category": "live_disabled",
+      "validation_issues": [],
+      "response_shape": {},
+      "usage_status": "unknown",
+      "finish_reason": null,
+      "reserved_model_calls": 0,
+      "model_calls": 0,
+      "tool_calls": 0,
+      "input_tokens": null,
+      "output_tokens": null,
+      "latency_ms": 1,
+      "estimated_cost_usd": null,
+      "confidence_note": "Self-reported, uncalibrated; not permission or financial verification."
+    },
+    "reviewer": {
+      "advisor_request_id": "5ecb2398-ba28-465f-bed4-0efe8577179d",
+      "request_id": "5ecb2398-ba28-465f-bed4-0efe8577179d",
+      "mapping_id": "40526000-24c6-4496-a176-70a30317894b",
+      "context_hash": "4c6bc07ee3d4d817c1e344066c08a3023619625a99b2eff355ef6e2c0d9e4e1c",
+      "requested_at": "2026-10-20T08:45:29.104627Z",
+      "completed_at": "2026-10-20T08:45:29.107289Z",
+      "version": "mapping-recommendation-review-v1",
+      "state": "FALLBACK",
+      "provider": "deterministic-fallback",
+      "model": null,
+      "finding": {
+        "recommendation_outcome": "QUESTION",
+        "outcome": "CHALLENGED",
+        "summary": "The candidate is not established by the available source evidence. A permitted target class is not proof of the account's business purpose.",
+        "evidence_references": [
+          "mapping:40526000-24c6-4496-a176-70a30317894b"
+        ],
+        "concerns": [
+          "Source account purpose and settlement history are absent from this projection.",
+          "Misc Clearing does not establish whether the balance is a temporary asset.",
+          "The mapping has policy flags requiring inspection in the current task."
+        ],
+        "uncertainty": [
+          "No statement of business purpose or settlement history is supplied; the Reviewer cannot select the correct accounting treatment."
+        ],
+        "suggested_next_action": "INSPECT_SOURCE_PURPOSE",
+        "human_approval_required": true,
+        "financial_authority": false
+      },
+      "evidence": [
+        {
+          "reference": "mapping:40526000-24c6-4496-a176-70a30317894b",
+          "observation": "{\"source_concept\": \"1200 \\u00b7 Misc Clearing\", \"candidate\": \"Other Current Asset\", \"supported_targets\": [\"Other Current Asset\", \"Fixed Asset\"], \"candidate_confidence\": 0.76, \"state\": \"REVIEW_REQUIRED\", \"policy_flags\": [\"Sensitive accounting or tax mappings require human approval.\", \"Confidence is below the 90% auto-acceptable threshold.\"], \"approval_required\": true, \"source_purpose_supplied\": false}"
+        }
+      ],
+      "model_calls": 0,
+      "tool_calls": 0,
+      "input_tokens": null,
+      "output_tokens": null,
+      "usage_status": "unknown",
+      "validation_issues": [],
+      "response_shape": {},
+      "failure_category": "live_disabled"
+    },
+    "human_approval_required": true,
+    "financial_authority": false
+  },
+  "output_validation": {
+    "advisor": "live_disabled",
+    "reviewer": "live_disabled",
+    "semantic_quality": "requires qualified human review; schema acceptance is insufficient"
+  },
+  "business_state_unchanged": true,
+  "human_control": "No approval or financial write tools. Existing human controls are required.",
+  "estimated_cost_usd": null,
+  "pricing": {
+    "usd_per_million_input": 0.3,
+    "usd_per_million_output_including_thinking": 2.5,
+    "source": "https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing",
+    "checked_date": "2026-10-20",
+    "note": "Standard global text list-price estimate, not billed spend. Unknown is not zero."
+  },
+  "limits": {
+    "maximum_generation_calls": 4,
+    "transport_retries": 0,
+    "maximum_output_tokens_per_call": 2048,
+    "maximum_request_bytes_per_call": 65536,
+    "deadline_seconds_per_role": 30.0
+  }
+}

@@ -1,4 +1,4 @@
-import { allowedQuery, allowedRoute, cloudIntake } from "./proxy-policy";
+import { allowedQuery, allowedRoute, assistedAnalysisRoute, cloudIntake } from "./proxy-policy";
 
 export type ProxyConfig = { upstream: string; publicOrigin: string; projectId: string; additionalOrigins?: string[] };
 export type ProxyDependencies = {
@@ -95,7 +95,9 @@ export async function proxyRequest(request: Request, config: ProxyConfig, depend
     headers.set("X-Serverless-Authorization", await dependencies.workloadAuthorization(config.upstream));
     const upstream = await dependencies.fetch(`${config.upstream}${path}${query}`, {
       method: request.method, headers, body: body ? Buffer.from(body) : undefined,
-      cache: "no-store", redirect: "error", signal: AbortSignal.timeout(60_000),
+      cache: "no-store", redirect: "error",
+      // Two sequential role deadlines (max 60s each), plus bounded control overhead.
+      signal: AbortSignal.timeout(assistedAnalysisRoute(request.method, path) ? 130_000 : 60_000),
     });
     if (upstream.status >= 500) return failure(503, "Workspace service temporarily unavailable. Retry safely; no approval is implied.");
     const template = path === "/v1/intake/template" && upstream.status === 200;

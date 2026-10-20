@@ -10,6 +10,8 @@ from pydantic import ValidationError
 from .prompts import instruction
 from .provider import ProviderFailure, ProviderResult, safe_shape, safe_validation_issues
 
+MAX_REQUEST_BYTES = 65_536
+
 
 def protect_sdk_telemetry():
     # Process-wide, fail-safe policy: do not restore unsafe SDK content logging
@@ -63,8 +65,14 @@ def generation_config(model):
 
 
 async def run_advisor(
-    context, model, settings, *, llm=None, output_contract=None,
-    role_instruction=None, role_name=None,
+    context,
+    model,
+    settings,
+    *,
+    llm=None,
+    output_contract=None,
+    role_instruction=None,
+    role_name=None,
 ):
     from google.adk.agents import LlmAgent
     from google.adk.agents.run_config import RunConfig
@@ -85,6 +93,7 @@ async def run_advisor(
 
     calls, reads = 0, 0
     input_tokens, output_tokens, usage_reports = 0, 0, 0
+    complete_usage_reports = 0
     response_shape = {}
     finish_reason = None
     client = None
@@ -109,8 +118,7 @@ async def run_advisor(
 
     def before_model(callback_context, llm_request):
         nonlocal calls
-        calls += 1
-        if calls > 2:
+        if calls >= 2:
             raise ValueError("Model call budget exceeded")
         # ADK's generated response tool uses field annotations only, dropping Field
         # constraints. Send the full strict wire schema instead; never relax host validation.
@@ -119,9 +127,27 @@ async def run_advisor(
                 if declaration.name == "set_model_response":
                     declaration.parameters = None
                     declaration.parameters_json_schema = WireAdvice.model_json_schema()
+        # Bound the complete text/tool-schema request on every turn, including
+        # previous model/tool output. This is a byte guard, not a tokenizer or billing meter.
+        if len(llm_request.model_dump_json(exclude_none=True).encode()) > MAX_REQUEST_BYTES:
+            raise ProviderFailure(
+                ProviderResult(
+                    "",
+                    calls,
+                    reads,
+                    input_tokens if usage_reports else None,
+                    output_tokens if usage_reports else None,
+                    validation_issues=[
+                        {"path": "$", "rule": "capacity", "reason": "Request capacity exceeded"}
+                    ],
+                ),
+                "input_capacity",
+            )
+        calls += 1
 
     def after_model(callback_context, llm_response):
         nonlocal input_tokens, output_tokens, usage_reports, response_shape, finish_reason
+        nonlocal complete_usage_reports
         # Enum membership only: never forward arbitrary provider error messages/codes.
         known_reasons = {reason.value for reason in types.FinishReason}
         observed = llm_response.finish_reason or llm_response.error_code
@@ -129,8 +155,18 @@ async def run_advisor(
         usage = llm_response.usage_metadata
         if usage:
             usage_reports += 1
-            input_tokens += usage.prompt_token_count or 0
-            output_tokens += (usage.candidates_token_count or 0) + (usage.thoughts_token_count or 0)
+            counts = (
+                usage.prompt_token_count, usage.candidates_token_count, usage.thoughts_token_count
+            )
+            known = [type(value) is int and value >= 0 for value in counts]
+            complete_usage_reports += int(all(known))
+            # Retain reported components, but never treat an omitted thinking
+            # count as evidence of zero billable thinking. Zero explicitly reported
+            # by the provider is valid; missing metadata makes the aggregate partial.
+            input_tokens += counts[0] if known[0] else 0
+            output_tokens += sum(
+                value for value, valid in zip(counts[1:], known[1:], strict=True) if valid
+            )
         # Inspect in memory before ADK validates/saves the final result. Retain shape only.
         parts = llm_response.content.parts if llm_response.content else []
         for part in parts or []:
@@ -201,7 +237,8 @@ async def run_advisor(
             response_shape=response_shape,
             finish_reason=finish_reason,
             usage_status=(
-                "complete" if usage_reports == calls else "partial" if usage_reports else "unknown"
+                "complete" if calls and complete_usage_reports == calls
+                else "partial" if usage_reports else "unknown"
             ),
         )
     except ValidationError as error:

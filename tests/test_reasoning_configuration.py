@@ -109,3 +109,10 @@ def test_legacy_generation_settings_are_preserved():
     assert config.thinking_config.thinking_budget == 128
     assert config.thinking_config.thinking_level is None
     assert config.thinking_config.include_thoughts is False
+def test_application_sdk_pins_match_the_validated_evaluation_runtime():
+    import tomllib
+    from pathlib import Path
+
+    project = tomllib.loads((Path(__file__).parents[1] / "pyproject.toml").read_text())
+    assert "google-adk==1.39.1" in project["project"]["optional-dependencies"]["agents"]
+    assert "google-genai==2.28.0" in project["project"]["optional-dependencies"]["agents"]

@@ -6,12 +6,19 @@ from uuid import UUID
 
 from pydantic import Field
 
-from .models import EvidenceFact, StrictModel
+from .models import Advice, EvidenceFact, ReasoningInput, StrictModel
 
 REVIEW_VERSION = "mapping-challenge-v1"
+RECOMMENDATION_REVIEW_VERSION = "mapping-recommendation-review-v1"
+
+
+class RecommendationReviewInput(ReasoningInput):
+    # Deliberately outside facts: the proposal is a claim to test, never source evidence.
+    advisor_recommendation: Advice
 
 
 class ReviewFinding(StrictModel):
+    recommendation_outcome: Literal["ACCEPT", "QUESTION", "REJECT"] | None = None
     outcome: Literal["CHALLENGED", "EVIDENCE_INCOMPLETE", "NO_CONTRADICTION_FOUND", "ESCALATE"]
     summary: str = Field(min_length=1, max_length=800)
     evidence_references: list[str] = Field(min_length=1, max_length=12)
@@ -25,6 +32,7 @@ class ReviewFinding(StrictModel):
 
 
 class ReviewRecord(StrictModel):
+    advisor_request_id: UUID | None = None
     request_id: UUID
     mapping_id: UUID
     context_hash: str

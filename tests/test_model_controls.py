@@ -170,6 +170,7 @@ def test_firestore_adapter_builds_one_atomic_pseudonymous_reservation(monkeypatc
     class Snapshot:
         def __init__(self, value):
             self.value = value
+            self.exists = value is not None
 
         def to_dict(self):
             return self.value
@@ -217,6 +218,75 @@ def test_firestore_adapter_builds_one_atomic_pseudonymous_reservation(monkeypatc
     client.data["policy"]["enabled"] = False
     with pytest.raises(ControlDenied, match="kill_switch"):
         asyncio.run(adapter.reserve("firebase:private-owner", "new-request", "mapping"))
+
+
+@pytest.mark.parametrize(
+    "prefix,value",
+    [
+        ("reservation-", {}),
+        ("reservation-", {"state": None}),
+        ("owner-", {}),
+        ("owner-", {"unrelated": 5}),
+        ("global-", {}),
+        ("global-", {"reserved_calls": 2}),
+        ("global-", {"reserved_microusd": 100}),
+        ("global-", {"reserved_calls": True, "reserved_microusd": 100}),
+    ],
+)
+def test_existing_damaged_control_document_never_resets_allowance(monkeypatch, prefix, value):
+    from types import SimpleNamespace
+
+    from google.cloud import firestore
+    from movebooks_api.runtime.model_controls import FirestoreModelControls
+
+    monkeypatch.setattr(firestore, "async_transactional", lambda callback: callback)
+    writes = []
+
+    class Reference:
+        def __init__(self, key):
+            self.key = key
+
+        async def get(self, **kwargs):
+            data = dict(POLICY) if self.key == "policy" else (
+                value if self.key.startswith(prefix) else None
+            )
+            return SimpleNamespace(exists=data is not None, to_dict=lambda: data)
+
+    class Client:
+        def collection(self, name):
+            return self
+
+        document = staticmethod(Reference)
+
+        def transaction(self, **kwargs):
+            return self
+
+        def set(self, ref, data):
+            writes.append((ref.key, data))
+
+    category = "already_exists" if prefix == "reservation-" else "model_control_integrity"
+    with pytest.raises(ControlDenied, match=category):
+        asyncio.run(
+            FirestoreModelControls(cloud_settings(), Client()).reserve(
+                "firebase:owner", "synthetic-key", "mapping"
+            )
+        )
+    assert writes == []  # Failure precedes every counter/reservation write.
+
+
+@pytest.mark.parametrize(
+    "exists,data",
+    [(True, {}), (True, None), (False, {}), (None, None), (1, {"reserved_calls": 0})],
+)
+def test_counter_snapshot_requires_consistent_existence_and_required_fields(exists, data):
+    from types import SimpleNamespace
+
+    from movebooks_api.runtime.model_controls import usage_document
+
+    with pytest.raises(ControlDenied, match="model_control_integrity"):
+        usage_document(
+            SimpleNamespace(exists=exists, to_dict=lambda: data), ("reserved_calls",)
+        )
 
 
 def test_reservation_timeout_does_not_block_other_requests_or_call_provider(monkeypatch):

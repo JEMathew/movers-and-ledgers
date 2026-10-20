@@ -36,6 +36,7 @@ class Settings(BaseSettings):
 
     model_control_timeout_seconds: float = Field(default=2, ge=0.05, le=5)
     synthetic_beta_authorized: bool = False
+    synthetic_analysis_enabled: bool = False
     model_controls_backend: Literal["disabled", "firestore"] = "disabled"
     # Proposed isolated operational database; selecting it never provisions a database.
     firestore_database: str = Field(
@@ -55,6 +56,9 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def safe_modes(self):
         import os
+
+        if self.synthetic_analysis_enabled and self.env in {"staging", "production"}:
+            raise ValueError("Synthetic analysis is limited to dev/test environments")
 
         if self.model_provider_mode == "gemini-adk":
             import re
