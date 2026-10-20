@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { IndependentReview } from "./IndependentReview";
-vi.mock("@/lib/identity", () => ({authHeaders: async () => ({})}));
+vi.mock("@/lib/identity", () => ({cloudIdentity: () => false, authHeaders: async () => ({})}));
 const id = "11111111-1111-4111-8111-111111111111";
 const review = { state: "FALLBACK", provider: "deterministic-fallback", requested_at:"2026-10-17", context_hash:"snapshot", evidence:[{reference:"mapping:1",observation:"source purpose absent"}], finding:{outcome:"CHALLENGED",summary:"Source purpose is not established", evidence_references:["mapping:1"],concerns:["Clearing name is ambiguous"],uncertainty:["Settlement history unavailable"],suggested_next_action:"INSPECT_SOURCE_PURPOSE"} };
 beforeEach(() => window.history.replaceState(null,"",`/plan-map-approve?session=${id}`));

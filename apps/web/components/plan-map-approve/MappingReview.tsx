@@ -197,7 +197,7 @@ function SecondOpinion({ mapping }: { mapping: MappingProposal }) {
   const titleId = useId();
   const analysisPreview = process.env.NEXT_PUBLIC_SYNTHETIC_ANALYSIS_ENABLED === "true" && mapping.source_id === "account-clearing";
   return <section className="pm-second" aria-labelledby={titleId}>
-    <div className="pm-second-head"><h4 id={titleId}>Want a second opinion?</h4><AiStatusBadge withDetail /></div>
+    <div className="pm-second-head"><h4 id={titleId}>Want a second opinion?</h4>{analysisPreview ? <span className="pm-meta">Synthetic preview · explicit invocation</span> : <AiStatusBadge withDetail />}</div>
     {analysisPreview ? <AssistedAnalysis key={`analysis:${mapping.id}:${mapping.state}:${mapping.selected_target}`} mappingId={mapping.id} /> : <>
     <p className="pm-meta">The Advisor will explain a mapping and the Reviewer will challenge it. Neither decides: you approve every change, and advice never changes your books.</p>
     <div className="pm-second-actions"><button type="button" className="button secondary small" disabled>Ask the Advisor</button><button type="button" className="button secondary small" disabled>Ask the Reviewer</button></div>

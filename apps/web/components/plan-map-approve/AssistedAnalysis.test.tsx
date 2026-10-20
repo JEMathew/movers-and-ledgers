@@ -55,7 +55,8 @@ it.each([
   render(<MappingReview mappings={[mapping]} history={[]} editable={false} busy={false} planApproved={false}
     decide={vi.fn()} reconsider={vi.fn()} runBulk={vi.fn()} onReviewPlan={vi.fn()} />);
   expect(screen.queryByRole("button", { name: "Run AI-Assisted Analysis" }) !== null).toBe(shown);
-  expect(screen.getByText("Planned · not available in the Beta")).toBeVisible();
+  expect(screen.getByText(shown ? "Synthetic preview · explicit invocation" : "Planned · not available in the Beta")).toBeVisible();
+  if (shown) expect(screen.queryByText("Planned · not available in the Beta")).not.toBeInTheDocument();
 });
 
 it("requires a click, sends explicit confirmation, and separates advisory results", async () => {
