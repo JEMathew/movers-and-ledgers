@@ -1,0 +1,24 @@
+{
+  "retrieved_utc": "2026-10-20T16:40:50.318562+00:00",
+  "scope": "owner-authorized local hackathon preview only; no publication",
+  "assets": [
+    {
+      "path": "apps/web/public/brand/google-cloud-official.png",
+      "url": "https://docs.cloud.google.com/static/architecture/identity/images/logo-cloud.png",
+      "official_referring_page": "https://docs.cloud.google.com/architecture/identity/okta-provisioning-and-single-sign-on?hl=en",
+      "sha256": "a90b4e56cf87bc04be1438f7a34b99f653f1f3be1a0456d3ac32f66ec5378053",
+      "bytes": 4119,
+      "modifications": "none; original bytes",
+      "public_usage_permission": "UNVERIFIED; public availability is not permission"
+    },
+    {
+      "path": "apps/web/public/brand/google-gemini-official.png",
+      "url": "https://www.gstatic.com/images/branding/productlogos/gemini_2025/v1/web-24dp/logo_gemini_2025_color_2x_web_24dp.png",
+      "official_referring_page": "https://cloud.google.com/",
+      "sha256": "b6306682f0dca297c4fa94ea359eee760d04435fc2d39256d98f6e4281f690be",
+      "bytes": 2187,
+      "modifications": "none; original bytes",
+      "public_usage_permission": "UNVERIFIED; public availability is not permission"
+    }
+  ]
+}

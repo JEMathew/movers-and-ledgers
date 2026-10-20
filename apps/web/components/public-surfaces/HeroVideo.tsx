@@ -24,19 +24,12 @@ export const HERO_IMAGE = { src: "/media/movebooks-ai-hero-desk-v2.webp", width:
  */
 export function HeroVideo() {
   const playButton = useRef<HTMLButtonElement>(null);
-  const restoreButton = useRef<HTMLButtonElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const restoreFocus = useRef(false);
   const playAttempt = useRef(0);
   const [active, setActive] = useState(false);
   const [ended, setEnded] = useState(false);
   const [playbackError, setPlaybackError] = useState(false);
-  useEffect(() => {
-    if (playbackError) {
-      video.current?.pause();
-      restoreButton.current?.focus();
-    }
-  }, [playbackError]);
   useEffect(() => {
     if (active) video.current?.focus();
     else if (restoreFocus.current) {
@@ -52,51 +45,45 @@ export function HeroVideo() {
     setEnded(false);
     setPlaybackError(false);
     if (active) video.current?.focus();
-    if (video.current?.ended) video.current.currentTime = 0;
-    const failed = () => { if (playAttempt.current === attempt) setPlaybackError(true); };
+    if (video.current) video.current.currentTime = 0;
+    const failed = () => { if (playAttempt.current === attempt) restore("error"); };
     try {
       // Re-select the unchanged source after a failed media request.
       if (video.current?.error || video.current?.networkState === 3) video.current.load();
       void video.current?.play()?.catch(failed);
     } catch { failed(); }
   }
-  function close() {
+  function restore(reason: "restore" | "complete" | "error" = "restore") {
     ++playAttempt.current; // Ignore a rejected play promise after the user restores the photograph.
     video.current?.pause?.();
     if (video.current) video.current.currentTime = 0;
-    restoreFocus.current = true;
+    restoreFocus.current = reason !== "complete" || !!video.current?.closest("section")?.contains(document.activeElement);
     setActive(false);
-    setEnded(false);
-    setPlaybackError(false);
+    setEnded(reason === "complete");
+    setPlaybackError(reason === "error");
   }
   return <div id="product-vision" className="lp-hero-media" data-image-status={HERO_IMAGE.approved ? "approved" : "pending-visual-acceptance"}>
     {/* The picture repeats the play control for pointer users; keyboard and screen readers use the one button. */}
-    <div className="lp-hero-picture" onClick={open} aria-hidden="true">
+    <div className="lp-hero-picture" style={active ? { visibility: "hidden" } : undefined} onClick={open} aria-hidden="true">
       {/* eslint-disable-next-line @next/next/no-img-element -- locally optimized, art-directed hero photograph */}
       <img src={HERO_IMAGE.src} alt="" width={HERO_IMAGE.width} height={HERO_IMAGE.height} fetchPriority="high" decoding="async" />
     </div>
-    <button ref={playButton} aria-hidden={active || undefined} disabled={active} type="button" className="lp-play" onClick={open} aria-label={`Play video: ${VIDEO.title}, ${VIDEO.durationLabel}`}>
+    <button ref={playButton} aria-hidden={active || undefined} disabled={active} type="button" className="lp-play" onClick={open} aria-label={`${ended ? "Replay" : playbackError ? "Retry" : "Play"} video: ${VIDEO.title}, ${VIDEO.durationLabel}`}>
       <span className="lp-play-icon" aria-hidden="true"><Play size={26} fill="currentColor" /></span>
-      <span className="lp-play-text" aria-hidden="true"><strong>{VIDEO.title}</strong><span>{VIDEO.duration} · {VIDEO.kind}</span></span>
+      <span className="lp-play-text" aria-hidden="true"><strong>{ended ? "Replay video" : playbackError ? "Retry video" : VIDEO.title}</strong><span>{VIDEO.duration} · {VIDEO.kind}</span></span>
     </button>
+    {playbackError && <p role="alert" className="lp-video-error">The video couldn’t play. The photograph has been restored. Select Retry video to try again.</p>}
     <section hidden={!active} className="lp-inline-player" aria-label={VIDEO.title}
-      onKeyDown={event => { if (event.key === "Escape" && !document.fullscreenElement) { event.preventDefault(); close(); } }}>
+      onKeyDown={event => { if (event.key === "Escape" && !document.fullscreenElement) { event.preventDefault(); restore(); } }}>
       <video ref={video} className="lp-video" width="1920" height="1080" controls playsInline preload="none"
-        style={playbackError ? { display: "none" } : undefined}
         tabIndex={0} poster={HERO_IMAGE.src} aria-label="MoveBooks AI Product Vision" aria-describedby="lp-caption-status"
-        onEnded={() => setEnded(true)} onPlay={() => { setEnded(false); setPlaybackError(false); }}
-        onError={() => { if (active) setPlaybackError(true); }}>
-        <source src={VIDEO.src} type="video/mp4" onError={() => { if (active) setPlaybackError(true); }} />
+        onEnded={() => { if (active) restore("complete"); }} onPlay={() => { setEnded(false); setPlaybackError(false); }}
+        onError={() => { if (active) restore("error"); }}>
+        <source src={VIDEO.src} type="video/mp4" onError={() => { if (active) restore("error"); }} />
         <a href={VIDEO.src}>Watch the MoveBooks AI Product Vision</a>
       </video>
-      {playbackError && <>
-        {/* eslint-disable-next-line @next/next/no-img-element -- same approved local photograph as the idle hero */}
-        <img className="lp-video" src={HERO_IMAGE.src} alt="The approved laptop and coffee desk photograph" width={HERO_IMAGE.width} height={HERO_IMAGE.height} />
-        <p role="alert" className="lp-caption-status">The video couldn’t play. Restore the photograph, then select Play to try again.</p>
-      </>}
       <div className="lp-video-actions">
-        {ended && !playbackError && <button type="button" onClick={open}>Replay video</button>}
-        <button ref={restoreButton} type="button" onClick={close}>Restore photograph</button>
+        <button type="button" onClick={() => restore()}>Restore photograph</button>
       </div>
       <p id="lp-caption-status" className="lp-caption-status">Captions pending human review. The description below covers on-screen visuals only.</p>
       <details className="vision-transcript"><summary>Video description</summary>

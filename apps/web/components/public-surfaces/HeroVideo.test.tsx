@@ -79,12 +79,16 @@ describe("hero video", () => {
     fireEvent.click(screen.getByRole("button", { name: /^Play video/ }));
     const video = document.querySelector("video")!;
     expect(video).toHaveAttribute("controls");
+    video.currentTime = 25;
     fireEvent.ended(video);
+    expect(document.querySelector(".lp-inline-player")).toHaveAttribute("hidden");
+    expect(document.querySelector(".lp-hero-picture")).toBeVisible();
+    expect(video.currentTime).toBe(0);
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalledTimes(1);
-    fireEvent.click(screen.getByRole("button", { name: "Replay video" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Replay video/ }));
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalledTimes(2);
     expect(video).toHaveFocus();
-    expect(screen.queryByRole("button", { name: "Replay video" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /^Replay video/ })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Restore photograph" }));
     expect(video.currentTime).toBe(0);
     await waitFor(() => expect(screen.getByRole("button", { name: /^Play video/ })).toHaveFocus());
@@ -94,10 +98,10 @@ describe("hero video", () => {
     render(<Home/>);
     fireEvent.click(screen.getByRole("button", { name: /^Play video/ }));
     expect(await screen.findByRole("alert")).toHaveTextContent("The video couldn’t play");
-    expect(screen.getByRole("img", { name: /laptop and coffee/ })).toHaveAttribute("src", HERO_IMAGE.src);
+    expect(document.querySelector(".lp-hero-picture")).toBeVisible();
+    expect(document.querySelector(".lp-hero-picture img")).toHaveAttribute("src", HERO_IMAGE.src);
     expect(document.querySelector("video")).not.toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "Restore photograph" }));
-    fireEvent.click(screen.getByRole("button", { name: /^Play video/ }));
+    fireEvent.click(screen.getByRole("button", { name: /^Retry video/ }));
     await waitFor(() => expect(HTMLMediaElement.prototype.play).toHaveBeenCalledTimes(2));
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     expect(document.querySelector("video")).toBeVisible();
@@ -113,12 +117,32 @@ describe("hero video", () => {
     const video = document.querySelector("video")!;
     Object.defineProperty(video, "networkState", { configurable: true, value: 3 });
     video.load = vi.fn();
-    fireEvent.click(screen.getByRole("button", { name: "Restore photograph" }));
-    fireEvent.click(screen.getByRole("button", { name: /^Play video/ }));
+    fireEvent.click(screen.getByRole("button", { name: /^Retry video/ }));
     rejectPlay(new Error("Old request failed"));
     await waitFor(() => expect(video.load).toHaveBeenCalledTimes(1));
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     expect(video).toBeVisible();
+  });
+  it("keeps only the video visible while paused and resumed, including three complete cycles", () => {
+    render(<Home/>);
+    const video = document.querySelector("video")!;
+    const picture = document.querySelector(".lp-hero-picture")!;
+    for (let cycle = 0; cycle < 3; cycle++) {
+      fireEvent.click(screen.getByRole("button", { name: cycle ? /^Replay video/ : /^Play video/ }));
+      expect(video.currentTime).toBe(0);
+      expect(picture).not.toBeVisible();
+      video.currentTime = 10;
+      fireEvent.pause(video);
+      expect(picture).not.toBeVisible();
+      expect(video).toBeVisible();
+      fireEvent.play(video);
+      expect(video.currentTime).toBe(10);
+      expect(picture).not.toBeVisible();
+      fireEvent.ended(video);
+      expect(picture).toBeVisible();
+      expect(video).not.toBeVisible();
+      expect(document.querySelectorAll("video")).toHaveLength(1);
+    }
   });
   it("keeps the hero image slot marked pending visual acceptance until the approved photo replaces the poster", () => {
     render(<Home/>);

@@ -19,23 +19,21 @@ is activated and verified.
 ## Copy
 
 - No copy says or implies that AI advice is running today ("AI advises", "agents coordinate").
-  The historical Gemini attribution exception was removed by the owner on 20 October 2026.
+  The homepage-only owner-approved marketing exception below does not establish live capability.
 - Scripted examples (design files, prototypes) are labelled "Example of planned behaviour. Not live model output."
 - Every Advisor or Reviewer surface repeats that the person approves every change and that advice never changes
   the books.
 
 ## Attribution
 
-Owner decision (20 Oct 2026), superseding the historical attribution exception:
+Owner scope lock and subsequent local implementation approval (20 October 2026):
 
-- The marketing homepage `/` shows exactly "Built on Google Cloud", once beneath the MoveBooks AI wordmark.
-- All other shared-header routes omit provider attribution, preserving header dimensions.
-- No Google Cloud/Gemini logos, powered-by claim, endorsement, sponsorship or partnership implication.
-- Do not substitute "Built with Google Gemini" without a separately verified permissible basis and approval.
-- `apps/web/components/v2/Attribution.tsx` owns the fixed marketing copy; `Nav` restricts its placement.
-- This factual infrastructure statement does not certify live inference. The Advisor and Reviewer keep their
-  Planned badges; `AI_ASSISTANCE_STATUS` and its live-activation requirements above remain unchanged.
-- Hosted live Gemini inference is not active in Phase 1; do not cite branding as runtime model evidence.
+- The marketing homepage `/` must show both official Google Cloud and Google Gemini graphical logos (not Gemini Enterprise), alongside exactly "Built on Google Cloud · Built with Google Gemini", once in the approved branding area.
+- Other shared-header routes omit provider attribution. Preserve established product identity and geometry.
+- Local implementation for owner review is authorized. Public usage permission and qualifying Gemini-use evidence remain OPEN; public availability/non-commercial hackathon status do not prove permission.
+- No powered-by, endorsement, sponsorship or partnership claim. No alteration of official asset appearance.
+- `Attribution.tsx` owns the exact copy/assets; `Nav` restricts placement. Tests assert exact text and both original asset hashes.
+- This exception does not certify live inference. Planned badges, `AI_ASSISTANCE_STATUS`, financial controls and all live-activation requirements above remain unchanged.
+- Public release remains BLOCKED until the owner resolves applicable permission and evidence gates; keep the entire requirement intact.
 
-Usage basis: Google's April 2026 customer co-branding guidance, pages 5–7:
-https://services.google.com/fh/files/misc/external_customer_co_branding_eligibility.pdf
+External-reference assessment and current acceptance: `docs/ux/v2-owner-scope-acceptance.md`.

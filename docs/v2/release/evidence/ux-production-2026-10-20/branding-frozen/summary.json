@@ -1,0 +1,138 @@
+{
+  "recorded_utc": "2026-10-20T17:16:27.515541+00:00",
+  "branding": "FROZEN",
+  "positioning": "Built on Google Cloud [existing official Cloud logo] \u00b7 Built with Google Gemini [existing official Gemini logo]",
+  "keyboard_fix": {
+    "owner_approved": true,
+    "scope": "One CSS focus-conditional scroll-padding rule; no Nav logic or geometry change",
+    "final_result": "PASS",
+    "evidence": "acceptance.json",
+    "initial_failure_preserved": "acceptance-before-focus-fix.json"
+  },
+  "preview": {
+    "pid": 99244,
+    "url": "http://127.0.0.1:3121/",
+    "build_id": "jC0Izrhbic6Pzz7Y86_ez",
+    "http_status": 200,
+    "local_only": true,
+    "qa_same_build": true,
+    "keyboard_fix_included": true
+  },
+  "source": {
+    "base_commit": "3e55d8871175ae9dd31e14c14143352da40b0625",
+    "state": "base commit plus exact uncommitted UX overlay; NOT an exact committed release",
+    "uncommitted_changes_included": true,
+    "web_overlay_sha256": {
+      "apps/web/app/v2-landing.css": "5ed9fa29f0e43887d599da0811834d4a622319493f72a3811a84ffc1d5e5d940",
+      "apps/web/components/public-surfaces/HeroVideo.tsx": "27c131c9099b0bfedf937eac17bdf92ef07c5de5927cfc10d2bb17be649f09e9",
+      "apps/web/components/public-surfaces/HeroVideo.test.tsx": "57fa68b01056f0de74465b82229cd6ab87287e0af3a972cc8b8e578f2d82e567",
+      "apps/web/test/google-sign-in.test.tsx": "e86db75545d66883f4f58954f42fab4e5b201d16f56bb1ece580a98bb86029c7",
+      "apps/web/components/v2/Attribution.tsx": "82cc9a40cc5feb4b55cbe6fa6cd9645df79ac12fb6cda9dd60f78b249877d011",
+      "apps/web/components/v2/Attribution.test.tsx": "0b2876da9ef993a286a393e84f7d651f17f9f6a378b48b4bcd81cb3fd46f938a",
+      "apps/web/components/v2/ai-copy.test.ts": "39af3c6a6c619e1992e891bd398f3b08642b80464de3045e18d724107e76e80c",
+      "apps/web/test/account-shell.test.tsx": "66bf1c31a04a6cc9aea86e26dc275037cec2f276072a5f78fea498307faef9d7",
+      "apps/web/components/public-surfaces/surfaces.test.tsx": "cc255ecd608dfa047c0b966c75649c0324877a11c11bcd13d205b365517157d7",
+      "apps/web/public/brand/google-cloud-official.png": "a90b4e56cf87bc04be1438f7a34b99f653f1f3be1a0456d3ac32f66ec5378053",
+      "apps/web/public/brand/google-gemini-official.png": "b6306682f0dca297c4fa94ea359eee760d04435fc2d39256d98f6e4281f690be"
+    },
+    "source_archive_sha256": "e812af79bf20bf56c02bfc968fe48f6f63efbce9df17d5e705e41060e33b1b7a",
+    "build_context": "Git HEAD archive plus 11 reviewed web source/test/assets; pending documentation changes are outside runtime build inputs",
+    "selected_checkpoint_files": [
+      "apps/web/app/v2-landing.css",
+      "apps/web/components/public-surfaces/HeroVideo.tsx",
+      "apps/web/components/public-surfaces/HeroVideo.test.tsx",
+      "apps/web/test/google-sign-in.test.tsx",
+      "docs/ux/v2-final-ux-fixes-readiness.md",
+      "docs/ux/v2-final-ux-fixes-files.txt",
+      "docs/v2/release/evidence/ux-production-2026-10-20/branding-frozen/summary.json",
+      "docs/ux/v2-owner-scope-acceptance.md",
+      "docs/ux/v2-final-acceptance.md",
+      "apps/web/components/v2/Attribution.tsx",
+      "apps/web/components/v2/Attribution.test.tsx",
+      "apps/web/components/v2/ai-copy.test.ts",
+      "apps/web/components/public-surfaces/surfaces.test.tsx",
+      "apps/web/test/account-shell.test.tsx",
+      "apps/web/public/brand/google-cloud-official.png",
+      "apps/web/public/brand/google-gemini-official.png",
+      "docs/v2/phase1/ai-status-rule.md",
+      "docs/ux/v2-provider-branding-local-review.md",
+      "docs/v2/release/evidence/ux-production-2026-10-20/provider-branding-local/assets.json"
+    ],
+    "selected_count": 19,
+    "staged": false,
+    "committed": false,
+    "excluded_files_preserved": 497
+  },
+  "validation": {
+    "focused_tests": 113,
+    "test_files": 4,
+    "local_production_build": "PASS",
+    "container_build": "PASS on unchanged-source retry; original SIGSEGV preserved",
+    "responsive_width_theme_combinations": 12,
+    "header_states": 24,
+    "header_height_changes": 0,
+    "keyboard_flows": 4,
+    "real_tab_enter": "PASS",
+    "focus_scroll_delta_px": 0,
+    "axe_scans": 8,
+    "axe_violations": 0,
+    "fragment_checks_passed": 30,
+    "below_header_pixel_identical_all_four": true,
+    "diff_check": "PASS"
+  },
+  "image": {
+    "local_tag": "movebooks-ux-web:branding-frozen-final-20261020-local",
+    "oci_index_digest": "sha256:ce09c5e5f8bc7e4925fe44283664a84b0b36ef2254113aecc16b8d40933834b1",
+    "linux_amd64_manifest_digest": "sha256:65803e6156d970094968a0603ad9cc5eeeaa1320205f2d89c44a28c1517a7bcd",
+    "configuration_digest": "sha256:a4fd30793c3800734b905ca25a2f3dbfef0fe68f407155a697cd8a7661395b01",
+    "archive_sha256": "4e9d51e7464bbcf60c59822c991ee7663669636b63a9fb107a00dfbc737566e7",
+    "artifact_directory": "/Users/jincenmathew/Downloads/Intuit/movebooks-ux-release-artifacts/branding-frozen-final-20261020",
+    "published": false,
+    "sbom_components": 519,
+    "sbom_sha256": "09e5a4eaf5a5e77371d5a3aca0c9103615295cf4da157272a3562ea17b4e4dc2",
+    "scan": "PASS",
+    "severity_counts": {
+      "Critical": 0,
+      "High": 0,
+      "Medium": 0,
+      "Low": 0,
+      "Negligible": 0,
+      "Unknown": 0
+    },
+    "scan_database": {
+      "built": "2026-10-20T06:29:49Z",
+      "age_hours": 10.75,
+      "update": "Retained same-day database; no claim of freshly downloaded latest DB"
+    },
+    "runtime_braces_matches": [],
+    "local_smoke": {
+      "memory_mib": 512,
+      "requests": 30,
+      "bytes": 7077887,
+      "p95_ms": 1412,
+      "oom": false,
+      "network": "none",
+      "verdict": "PASS",
+      "native_acceptance": "NOT RUN for this changed image; QEMU local emulation only"
+    }
+  },
+  "production": "NO-GO",
+  "open_gates": [
+    "Explicit local checkpoint staging/commit authorization and source/artifact reconciliation",
+    "Native runtime acceptance for the final changed image under separate isolated-hosting authorization",
+    "Reviewed captions/media accessibility",
+    "Privacy/Terms approval and authorized publication",
+    "Hosted authentication and synthetic two-account isolation",
+    "Existing public-use authorization and qualifying implementation evidence; branding layout stays frozen",
+    "High development-tool advisory owner disposition",
+    "API replay owner disposition",
+    "Final release approval and fresh rollback/traffic preflight"
+  ],
+  "boundaries": {
+    "git_push": false,
+    "cloud_write": false,
+    "production_change": false,
+    "gemini_worktree_change": false,
+    "source_publication": false
+  }
+}

@@ -85,7 +85,7 @@ describe("public surface contracts", () => {
   it("shows the attribution once, in the header beneath the brand, and not in the page body", () => {
     render(<IdentityProvider><Nav/><Home/></IdentityProvider>);
     const lines = [...document.querySelectorAll<HTMLElement>(".v2-attribution")];
-    expect(lines[0]).toHaveTextContent("Built on Google Cloud");
+    expect(lines[0]).toHaveTextContent("Built on Google Cloud · Built with Google Gemini");
     expect(lines).toHaveLength(1);
     expect(screen.getByRole("banner")).toContainElement(lines[0]);
     expect(screen.getByRole("main")).not.toHaveTextContent(/Google Cloud|Gemini/);

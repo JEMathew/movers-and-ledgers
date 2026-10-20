@@ -30,8 +30,15 @@ describe("global account and settings shell", () => {
       render(shell());
       const lines = document.querySelectorAll(".v2-attribution");
       expect(lines).toHaveLength(pathname === "/" ? 1 : 0);
-      if (pathname === "/") expect(lines[0]).toHaveTextContent(/^Built on Google Cloud$/);
-      expect(screen.getByRole("banner")).not.toHaveTextContent(/Gemini|powered by|endorsed|sponsored|partnership/i);
+      if (pathname === "/") expect(lines[0]).toHaveTextContent(/^Built on Google Cloud · Built with Google Gemini$/);
+      expect(screen.getByRole("banner")).not.toHaveTextContent(/powered by|endorsed|sponsored|partnership/i);
+      if (pathname === "/") {
+        expect(screen.getByRole("img", { name: "Google Cloud logo" })).toBeInTheDocument();
+        expect(screen.getByRole("img", { name: "Google Gemini logo" })).toBeInTheDocument();
+      } else {
+        expect(screen.getByRole("banner")).not.toHaveTextContent(/Gemini|Built on Google Cloud/i);
+        expect(screen.queryByRole("img", { name: /Google (Cloud|Gemini) logo/ })).not.toBeInTheDocument();
+      }
       const brand = screen.getByRole("link", { name: "MoveBooks AI home" });
       expect(brand).toHaveAttribute("href", "/");
       expect(brand.querySelector("svg")).toHaveAttribute("aria-hidden", "true");

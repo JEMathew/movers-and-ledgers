@@ -260,6 +260,16 @@ describe("shared Google authentication controls", () => {
 
 
 describe("isolated local UX preview", () => {
+  it("keeps hosted Google sign-in enabled when the local-only flag is absent", async () => {
+    vi.stubEnv("NEXT_PUBLIC_LOCAL_UX_PREVIEW", undefined);
+    mocks.popup.mockResolvedValue({ user });
+    render(<IdentityProvider><IdentityEntry destination="/workspace" /></IdentityProvider>);
+    fireEvent.click(await enabled("Continue with Google"));
+    await waitFor(() => expect(mocks.replace).toHaveBeenCalledWith("/workspace"));
+    expect(mocks.prepare).toHaveBeenCalledTimes(1);
+    expect(mocks.popup).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText(/disabled in this local UX preview/)).not.toBeInTheDocument();
+  });
   it("does not initialize Firebase or open a popup and explains the local boundary", () => {
     vi.stubEnv("NEXT_PUBLIC_LOCAL_UX_PREVIEW", "true");
     mount();

@@ -1,6 +1,6 @@
 # MoveBooks AI V2 — final local acceptance report
 
-**Latest (20 October 2026): approved Option B and homepage-only attribution implemented; BR-01–08 PASS. Local checkpoint ready for separate commit authorization; production NO-GO.** Preview http://127.0.0.1:3119/. See [implemented branding acceptance](#implemented-branding-acceptance--20-october-2026). Earlier sections below are preserved historical evidence and proposals, superseded where noted.
+**Historical evidence — superseded for current scope and acceptance.** The [owner-locked scope and acceptance matrix](v2-owner-scope-acceptance.md) is authoritative. In particular, BR-06/BR-07 PASS labels below apply only to the earlier text-only requirement and do not satisfy the mandatory Google Cloud/Gemini graphical logos and exact combined attribution. The current requirements are now implemented and locally verified with owner-directed positioning: **BRANDING FROZEN**. Public-use authorization and the other release gates remain open; see the current matrix and [final report](v2-provider-branding-local-review.md). Historical test results and decisions below are preserved unchanged.
 
 ## A. Implementation and source identity
 

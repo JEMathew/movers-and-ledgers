@@ -48,10 +48,10 @@ describe("AI status in product copy", () => {
     expect(unqualified).toEqual([]);
   });
 
-  it("limits marketing attribution to infrastructure without a Gemini capability claim", () => {
+  it("limits the owner-locked marketing exception to exact attribution without live-capability claims", () => {
     const attribution = read("components/v2/Attribution.tsx");
-    expect(attribution).toContain('APPROVED_ATTRIBUTION = "Built on Google Cloud"');
-    expect(attribution).not.toMatch(/powered by|Built with Google Gemini|AI[- ]guided|AI guidance|advises|recommends/i);
+    expect(attribution).toContain('APPROVED_ATTRIBUTION = "Built on Google Cloud · Built with Google Gemini"');
+    expect(attribution).not.toMatch(/powered by|AI[- ]guided|AI guidance|advises|recommends|verified live/i);
   });
 
   it.each(["components/public-surfaces/ReasoningAdvice.tsx", "components/plan-map-approve/IndependentReview.tsx", "app/page.tsx"])(
