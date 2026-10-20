@@ -59,3 +59,18 @@ These are **proposed tests, not current passing coverage**:
 9. Workspace/mapping/auth changes clear private UI; loading/error/unavailable/stale states preserve unresolved status. Existing approve/reject and recorded Advisor/Reviewer separation tests continue to pass.
 
 Review must approve the routes, owner-only permission model, mapping-edit restriction, stale-context limitation and durable transaction support before implementation begins.
+
+## October 20 completion decision — contract only
+
+No persistence, route, state machine or working button has been added. Existing session ownership and `put_if_unchanged(original, updated)` establish useful conventions, but do not themselves approve a new workflow. The in-memory repository is explicitly ephemeral; an owner-scoped SQL repository also exists. Selecting a durable deployment mode, retention policy and transactional audit encoding is still required.
+
+| Decision to approve | Proposed minimum | Why implementation remains blocked |
+| --- | --- | --- |
+| Requester/reviewer authority | Existing authenticated owner only | Whether the requester may also accept evidence, or a separate accountant must do so, has not been approved; do not invent separation-of-duty roles |
+| Persistence/audit | Versioned session aggregate and audit events committed together using existing CAS conventions | Durable backend, retention/deletion, record size limits and audit access need an explicit choice and restart/concurrency validation |
+| Outstanding request hold | Block approval/execution; preserve unresolved status | Mapping-edit/reconsideration freeze and the ability to reject while held require product acceptance |
+| Stale context | Fail with 409 and preserve the hold | How an authorized user replaces or supersedes a stale request is unresolved; current proposal deliberately has no unsafe automatic release |
+| Evidence intake | Bounded text plus existing owner-scoped source references | New document uploads, external requests and sharing are outside this contract; evidence references must support the requested source purpose |
+| Idempotency/review | Durable operation key, expected version/context, explicit human decision | Replay storage/retention and conflicting-payload behavior must be accepted with the lifecycle |
+
+The acceptance tests above are the review checklist for these choices, not passing implementation tests. The safe Gemini-owned supporting work is the separate role/citation/uncertainty contract and the tested absence of a working evidence-request action. `SATISFIED` remains an evidence status only in this proposal and never grants financial approval.

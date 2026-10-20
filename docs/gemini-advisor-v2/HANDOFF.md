@@ -1,6 +1,6 @@
 # Gemini Advisor/Reviewer post-inference integration contract — 20 October 2026
 
-**GO for controlled local integration with the refreshed UX using flags off, mocks or deterministic fallback. NO-GO for live activation, a complete request-evidence workflow, or production readiness.** The separate UX branch/worktree was neither inspected nor modified in this review; compatibility here means a tested contract for its integrator, not a completed cross-branch merge or hosted acceptance test.
+**Gemini standalone deterministic contract: validated. Integration: WAITING FOR UX CHECKPOINT. NO-GO for live activation, a complete request-evidence workflow, or production readiness.** See [current product readiness](PRODUCT-READINESS.md) and [judge-readable evidence](AI-BUILDER-EVIDENCE.md). The UX source status was checked read-only during completion; no UX file was modified and no combined worktree or hosted acceptance is claimed.
 
 The one approved Cloud Shell evaluation completed at 11:48:40–11:48:49 UTC with four generation attempts. Its persistent authorization is consumed. No new generation, authentication, cloud inspection, installation or ledger operation occurred in this review. Do not reset, delete, move or bypass the ledger. Historical approval and readiness reports are superseded by this status; they are not authorization to repeat the evaluation.
 
@@ -44,7 +44,7 @@ Same-context requests may return an earlier cached pair. Do not require returned
 
 ## Frontend integration and human controls
 
-Reuse `AssistedAnalysis` and the exported `Analysis`/`parseAnalysis` contract in `apps/web/components/plan-map-approve/analysis-contract.ts`. The parser validates consumed fields, authority literals, nonempty grounded evidence and uncertainties, and role/mapping linkage before either panel renders. Backend metadata may be additive; this is not a second implementation of the entire financial validator. Current component props remain `{ mappingId: string }` and the selected workspace is the validated `session` URL parameter. The refreshed shell must rerender/remount on workspace navigation and clear private UI on identity change. It must not reuse a previously authorized workspace view after sign-out. No localStorage cache of advice is introduced.
+Reuse `AssistedAnalysis` and the exported `Analysis`/`parseAnalysis` contract in `apps/web/components/plan-map-approve/analysis-contract.ts`. The parser validates consumed fields, authority literals, nonempty grounded evidence and uncertainties, and role/mapping linkage, citations belonging to the selected mapping and consistent unavailable states before either panel renders. Backend metadata may be additive; this is not a second implementation of the entire financial validator. Current component props remain `{ mappingId: string }` and the selected workspace is the validated `session` URL parameter. The refreshed shell must rerender/remount on workspace navigation and clear its own private UI on identity change. AssistedAnalysis now also subscribes directly to the existing Firebase identity runtime: account changes clear results/error/retry IDs and abort in-flight work; sign-out or initialization failure disables analysis. Runtime identity is checked after asynchronous boundaries, without treating a browser UID as server authorization. Same-account token refresh preserves results and never invokes analysis. It must not reuse a previously authorized workspace view after sign-out. No localStorage cache of advice is introduced.
 
 | UI state/action | Required behavior | Validation/status |
 | --- | --- | --- |
@@ -65,7 +65,7 @@ Existing human mutation routes are separate `POST .../mappings/{mapping_id}/appr
 
 The paired proxy timeout remains 130 seconds; browser deadline 135 seconds; role timeout defaults to 30 seconds (maximum 60). Request/record limits, retries, generation configuration, owner controls and financial policies are unchanged. The 50,000-token pre-call check and persistent one-run ledger belong to the **evaluation harness**, not the regular application endpoint. Do not claim that the consumed evaluation authorization covers UI calls. The application retains its byte guard and configured cloud reservation controls; any future live integration requires separate authorization and an explicitly reviewed operational cost-control gate.
 
-## Integration commit scope and validation
+## Historical integration commit scope and validation (ccc5831)
 
 The exact commit file list, deterministic configuration, commands and acceptance checklist are in [integration validation](INTEGRATION-VALIDATION.md). The approved application changes correct usage completeness, parse consumed response fields fail-closed, and clear result/request state across workspace and mapping selection. No model, prompt, financial policy, approval route or UX design changes are introduced.
 
@@ -87,4 +87,4 @@ The live archive, original JSON, guard and harness remain unchanged. The updated
 - Before any later live activation: investigate countTokens/reporting differences, approve operational call/cost controls separately from the consumed harness ledger, review qualified accounting feedback, and validate a broader synthetic set under fresh authorization. Preserve unknown costs rather than blocking display of valid advisory content or inventing zero usage.
 - No production/customer-data assurance follows from one synthetic case. No hosted integration, refreshed-branch merge, calibrated confidence, actual invoice total, regional-residency guarantee, or production readiness is asserted.
 
-**Decision: GO for local controlled UX integration with mocks/deterministic mode and the documented caveats. NO-GO for complete interactive or live product enablement. Four historical attempts remain consumed; this review used zero additional attempts.**
+**Current decision: WAITING FOR UX CHECKPOINT.** The Gemini-only completion adds identity/citation hardening, 116 passing backend tests and 75 passing frontend tests, an exception matrix and a rubric evidence pack. Local combination requires an accepted immutable UX checkpoint and separate integration authorization. NO-GO for complete interactive or live enablement. Four historical attempts remain consumed; no additional attempt was made.

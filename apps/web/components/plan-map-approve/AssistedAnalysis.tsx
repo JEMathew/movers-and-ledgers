@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { authHeaders } from "@/lib/identity";
+import { authHeaders, cloudIdentity, prepareGoogleIdentity } from "@/lib/identity";
 import { isSessionId } from "@/components/public-surfaces/session";
 import { Button } from "@/components/ui/primitives";
 import { parseAnalysis, type Analysis, type RecordBase } from "./analysis-contract";
@@ -42,21 +42,65 @@ function AnalysisPanel({ mappingId }: { mappingId: string }) {
   const [error, setError] = useState("");
   const requestId = useRef<string | null>(null);
   const active = useRef<AbortController | null>(null);
-  useEffect(() => () => active.current?.abort(), []);
+  const identityRevision = useRef(0);
+  const identityCurrent = useRef<() => boolean>(() => !cloudIdentity());
+  const [identityReady, setIdentityReady] = useState(() => !cloudIdentity());
+  useEffect(() => {
+    let disposed = false;
+    let unsubscribe: (() => void) | undefined;
+    let subject: string | null | undefined;
+    identityCurrent.current = () => !cloudIdentity();
+    if (cloudIdentity()) {
+      void prepareGoogleIdentity().then(runtime => {
+        if (disposed) return;
+        unsubscribe = runtime.subscribe(user => {
+          if (disposed) return;
+          const next = user?.uid ?? null;
+          if (subject !== next) {
+            identityRevision.current += 1;
+            active.current?.abort();
+            active.current = null;
+            requestId.current = null;
+            setResult(undefined); setError(""); setBusy(false);
+            subject = next;
+          }
+          // Check the runtime again after every await, even before its callback fires.
+          identityCurrent.current = () => next !== null && runtime.auth.currentUser?.uid === next;
+          setIdentityReady(next !== null);
+        });
+      }).catch(() => {
+        if (disposed) return;
+        identityCurrent.current = () => false;
+        setIdentityReady(false);
+        setError("Analysis is unavailable because the current sign-in could not be established.");
+      });
+    }
+    return () => {
+      disposed = true;
+      unsubscribe?.();
+      identityRevision.current += 1;
+      identityCurrent.current = () => false;
+      active.current?.abort();
+      active.current = null;
+    };
+  }, []);
 
   async function analyze() {
-    if (active.current) return;
+    if (active.current || !identityCurrent.current()) return;
     const controller = new AbortController();
     active.current = controller;
     setBusy(true); setError(""); setResult(undefined);
     const session = new URLSearchParams(window.location.search).get("session") ?? "";
+    const revision = identityRevision.current;
+    const current = () => identityRevision.current === revision && identityCurrent.current() &&
+      new URLSearchParams(window.location.search).get("session") === session;
     // A timed-out POST may have completed. Reuse its ID; never silently rebill a retry.
     requestId.current ??= crypto.randomUUID();
     const deadline = window.setTimeout(() => controller.abort(), 135_000);
     try {
       if (!isSessionId(session)) throw new Error("workspace");
       const headers = await authHeaders();
-      if (controller.signal.aborted) return;
+      if (controller.signal.aborted || !current()) return;
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"}/v1/migration-sessions/${session}/analysis/mapping/${mappingId}`, {
         method: "POST", headers: { ...headers, "Content-Type": "application/json" },
         body: JSON.stringify({ request_id: requestId.current, confirmed: true }),
@@ -64,16 +108,18 @@ function AnalysisPanel({ mappingId }: { mappingId: string }) {
       });
       if (!response.ok) throw new Error("unavailable");
       const analysis = parseAnalysis(await response.json(), mappingId);
-      if (controller.signal.aborted || new URLSearchParams(window.location.search).get("session") !== session) return;
+      if (controller.signal.aborted || !current()) return;
       setResult(analysis);
     } catch {
-      if (new URLSearchParams(window.location.search).get("session") === session) {
+      if (current()) {
         setError("Analysis is unavailable or the evidence changed. Use the rule check or request human review. Retrying uses the same request and does not restart a pending model call.");
       }
     } finally {
       window.clearTimeout(deadline);
-      active.current = null;
-      setBusy(false);
+      if (active.current === controller) {
+        active.current = null;
+        setBusy(false);
+      }
     }
   }
   const stale = result?.advisor.state === "UNAVAILABLE" || result?.reviewer?.state === "UNAVAILABLE";
@@ -83,10 +129,10 @@ function AnalysisPanel({ mappingId }: { mappingId: string }) {
     <h5 className="font-semibold">AI-Assisted Analysis · synthetic preview</h5>
     <p>Analyze only 1200 · Misc Clearing and its proposed destination. The Advisor explains the evidence; a separate Reviewer checks that recommendation against the source facts.</p>
     <p>No balances, uploaded records, or customer data are sent. Live Gemini requires operator authorization; otherwise this uses deterministic fallback.</p>
-    <Button size="small" variant="secondary" disabled={busy} onClick={() => void analyze()}>
+    <Button size="small" variant="secondary" disabled={busy || !identityReady} onClick={() => void analyze()}>
       {busy ? "Analyzing and reviewing…" : "Run AI-Assisted Analysis"}
     </Button>
-    <p role="status">{busy ? "Advisor analysis, then independent review. This can take up to two minutes." : stale ? "Evidence changed — both results are unavailable. Reopen the current mapping." : result ? "Analysis finished. Your approval is still required." : "Nothing is sent until you request analysis."}</p>
+    <p role="status">{!identityReady ? "Analysis requires the current signed-in account." : busy ? "Advisor analysis, then independent review. This can take up to two minutes." : stale ? "Evidence changed — both results are unavailable. Reopen the current mapping." : result ? "Analysis finished. Your approval is still required." : "Nothing is sent until you request analysis."}</p>
     {error && <p role="alert">{error}</p>}
     {advice && result && <section aria-label="Advisor result" className="space-y-2">
       <h6 className="font-semibold">Advisor</h6>

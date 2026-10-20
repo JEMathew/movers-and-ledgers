@@ -1,4 +1,6 @@
-# Local integration handoff — 20 October 2026
+# Local integration handoff — ccc5831 historical validation
+
+**Current completion addendum:** [Product readiness](PRODUCT-READINESS.md) supersedes the integration decision below: WAITING FOR UX CHECKPOINT. Latest Gemini-only checks pass 116 backend and 75 frontend tests; current source adds account-change and citation hardening. The 14-file list and 107/60 results below describe the preserved ccc5831 checkpoint, not a combined UX tree.
 
 **GO for creating a separate local integration worktree in a future authorized step, with deterministic providers and synthetic fixtures.** No integration worktree was created here. NO-GO for live activation, deployment or a working Request Source Evidence action. This commit does not authorize generation. The prior four attempts remain consumed.
 

@@ -49,6 +49,7 @@ export function parseAnalysis(value: unknown, mappingId: string): Analysis {
   if (!object(value) || !authority(value) || value.case_id !== "account-clearing") return invalid();
   const advisor = value.advisor;
   if (!record(advisor) || !object(advisor) ||
+    !advisor.evidence.every(fact => fact.reference === `mapping:${mappingId}`) ||
     !["COMPLETED", "ESCALATED", "FALLBACK", "UNAVAILABLE"].includes(advisor.state)) return invalid();
   const advice = advisor.advice;
   if (advisor.state === "UNAVAILABLE") {
@@ -61,6 +62,8 @@ export function parseAnalysis(value: unknown, mappingId: string): Analysis {
   } else {
     if (!record(reviewer) || !object(reviewer) || reviewer.mapping_id !== mappingId ||
       reviewer.advisor_request_id !== advisor.request_id ||
+      !reviewer.evidence.every(fact => fact.reference === `mapping:${mappingId}`) ||
+      (advisor.state === "UNAVAILABLE") !== (reviewer.state === "UNAVAILABLE") ||
       !["COMPLETED", "FALLBACK", "UNAVAILABLE"].includes(reviewer.state)) return invalid();
     if (reviewer.state === "UNAVAILABLE") {
       if (reviewer.finding !== null) return invalid();
