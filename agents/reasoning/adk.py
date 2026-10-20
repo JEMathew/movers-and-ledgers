@@ -29,6 +29,12 @@ def vertex_client(settings):
     from google import genai
     from google.genai import types
 
+    from .transport import cloud_guard
+
+    guard = cloud_guard(settings)
+    if guard is not None and not guard.prepared:
+        raise ValueError("Hosted authorization must be claimed before client creation")
+
     return genai.Client(
         vertexai=True,
         project=settings.reasoning_project,
@@ -98,8 +104,15 @@ async def run_advisor(
     finish_reason = None
     client = None
     if llm is None:
+        from .transport import cloud_guard
+
+        guard = cloud_guard(settings)
+        if guard is not None:
+            await guard.prepare()
         # Explicit normal ADC; no API keys, browser credentials or secret material in prompts.
         client = vertex_client(settings)
+        if guard is not None:
+            guard.install(client, "reviewer" if role_name else "advisor")
 
         class ScopedGemini(Gemini):
             @property

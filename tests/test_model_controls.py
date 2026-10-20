@@ -155,7 +155,7 @@ def test_advisor_cloud_policy_denies_before_provider_and_returns_explicit_fallba
     provider = GoodProvider()
     result = run(repo, session, provider, settings=settings, cap=Capability.MAPPING)
     assert provider.calls == 0 and result.state == "FALLBACK"
-    assert result.failure_category == "public_model_controls_required"
+    assert result.failure_category == "hosted_pair_authorization_required"
     assert original.mappings == repo.get(session.id, "owner").mappings
 
 
@@ -247,8 +247,10 @@ def test_existing_damaged_control_document_never_resets_allowance(monkeypatch, p
             self.key = key
 
         async def get(self, **kwargs):
-            data = dict(POLICY) if self.key == "policy" else (
-                value if self.key.startswith(prefix) else None
+            data = (
+                dict(POLICY)
+                if self.key == "policy"
+                else (value if self.key.startswith(prefix) else None)
             )
             return SimpleNamespace(exists=data is not None, to_dict=lambda: data)
 
@@ -284,9 +286,7 @@ def test_counter_snapshot_requires_consistent_existence_and_required_fields(exis
     from movebooks_api.runtime.model_controls import usage_document
 
     with pytest.raises(ControlDenied, match="model_control_integrity"):
-        usage_document(
-            SimpleNamespace(exists=exists, to_dict=lambda: data), ("reserved_calls",)
-        )
+        usage_document(SimpleNamespace(exists=exists, to_dict=lambda: data), ("reserved_calls",))
 
 
 def test_reservation_timeout_does_not_block_other_requests_or_call_provider(monkeypatch):
@@ -338,6 +338,16 @@ def test_reservation_timeout_does_not_block_other_requests_or_call_provider(monk
     repo.put(original)
     provider = GoodProvider()
     monkeypatch.setattr(module, "FirestoreModelControls", lambda settings: SlowControls())
+
+    # Admit the new outer gate in this double so the test still reaches the
+    # independently bounded daily-reservation timeout under investigation.
+    class ApprovedScopeDouble:
+        async def prepare(self):
+            return None
+
+    monkeypatch.setattr(
+        "movebooks_api.reasoning.cloud_guard", lambda settings: ApprovedScopeDouble()
+    )
     from uuid import uuid4
 
     from movebooks_api.reasoning import request_advice

@@ -294,7 +294,7 @@ async def bounded_control(settings, operation):
             # Do not wait for SDK rollback: capacity remains occupied until cleanup.
             # A late durable reservation is conservatively consumed, never reused.
             raise ControlDenied("model_controls_timeout")
-        task.result()
+        return task.result()
     except ControlDenied:
         raise
     except asyncio.CancelledError:

@@ -12,6 +12,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from agents.model_policy import live_route
 from agents.reasoning.projection import context_hash, project
 from agents.reasoning.provider import GeminiAdkProvider, ProviderResult, fallback, reason
+from agents.reasoning.transport import TransportDenied, cloud_guard
 from agents.reviewer.agent import review_context
 from domain.reasoning.models import PROMPT_VERSION, Capability, ReasoningRecord, ReasoningRequest
 
@@ -122,10 +123,13 @@ async def request_advice(
     control_error = None
     if route.provider == "gemini-adk":
         try:
+            if settings.cloud:
+                guard = cloud_guard(settings)
+                await guard.prepare()
             await reserve_live(
                 settings, owner, f"advice:{session_id}:{request.request_id}", capability.value
             )
-        except ControlDenied as denied:
+        except (ControlDenied, TransportDenied) as denied:
             control_error = str(denied)
     if route.provider == "gemini-adk" and control_error is None:
         advice, usage, error = await reason(

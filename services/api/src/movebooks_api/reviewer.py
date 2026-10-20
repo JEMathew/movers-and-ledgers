@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from agents.model_policy import live_route
 from agents.reasoning.projection import context_hash
+from agents.reasoning.transport import TransportDenied, cloud_guard
 from agents.reviewer.agent import GeminiReviewProvider, independent_check, review, review_context
 from domain.reasoning.models import Capability, ReasoningRequest
 from domain.reasoning.reviewer import RECOMMENDATION_REVIEW_VERSION, REVIEW_VERSION, ReviewRecord
@@ -78,10 +79,13 @@ async def request_review(
     control_error = None
     if route.provider == "gemini-adk":
         try:
+            if settings.cloud:
+                guard = cloud_guard(settings)
+                await guard.prepare()
             await reserve_live(
                 settings, owner, f"review:{session_id}:{request.request_id}", "mapping-review"
             )
-        except ControlDenied as denied:
+        except (ControlDenied, TransportDenied) as denied:
             control_error = str(denied)
     if route.provider == "gemini-adk" and control_error is None:
         finding, usage, error = await review(
