@@ -1,0 +1,187 @@
+{
+  "source_evidence_sha256": "b87d0537e5b74203236b66b63379f263a062d4f756cc2b5b5679f69363f313f7",
+  "description": "Derived synthetic regression fixture. Historical usage_status is preserved; missing thinking tokens make complete billable cost unverified. No authorization or ledger is included.",
+  "evaluation": {
+    "evidence_and_results": {
+      "case_id": "account-clearing",
+      "advisor": {
+        "request_id": "520f3b07-4032-48e3-9713-5b941b0b5905",
+        "capability": "mapping",
+        "context_hash": "cccc60743905226079a1094453cb1e37ef8f1cfb84faa98db01601c9cdd91c8c",
+        "requested_at": "2026-10-20T11:48:40.009227Z",
+        "completed_at": "2026-10-20T11:48:46.318406Z",
+        "state": "ESCALATED",
+        "provider": "gemini-adk",
+        "model": "gemini-3.5-flash-lite",
+        "prompt_version": "bounded-reasoning-v4",
+        "advice": {
+          "observation": "Source concept '1200 \u00b7 Misc Clearing' is mapped to candidate 'Other Current Asset' with confidence 0.76 and state 'REVIEW_REQUIRED'. Policy flags indicate sensitive accounting/tax mapping requiring human approval and confidence below the 90% threshold. Requires escalation is true.",
+          "inference": "The mapping candidate 'Other Current Asset' for source '1200 \u00b7 Misc Clearing' has a candidate confidence of 0.76 and requires escalation due to explicit policy flags and the requires_escalation flag. Source purpose is not supplied, and acceptance criteria are not supplied.",
+          "recommendation": "Escalate the mapping proposal for qualified human investigation.",
+          "rationale": "The explicit requires_escalation flag and stated uncertainty mandate escalation, and acceptance criteria are not supplied in the policy.",
+          "evidence_references": [
+            "mapping:fc420757-f8cc-40a4-ac1f-ff0a3a43d019"
+          ],
+          "confidence": 0.85,
+          "uncertainty": [
+            "Source account purpose is not supplied, leaving ambiguity in classification.",
+            "Acceptance criteria are not supplied in the policy."
+          ],
+          "alternatives": [
+            "Request more evidence regarding source account purpose to clarify classification.",
+            "Forward candidate to qualified human investigator for manual mapping review."
+          ],
+          "next_action": "ESCALATE",
+          "human_approval_required": true,
+          "financial_authority": false
+        },
+        "evidence": [
+          {
+            "reference": "mapping:fc420757-f8cc-40a4-ac1f-ff0a3a43d019",
+            "observation": "{\"source_concept\": \"1200 \\u00b7 Misc Clearing\", \"candidate\": \"Other Current Asset\", \"supported_targets\": [\"Other Current Asset\", \"Fixed Asset\"], \"candidate_confidence\": 0.76, \"state\": \"REVIEW_REQUIRED\", \"policy_flags\": [\"Sensitive accounting or tax mappings require human approval.\", \"Confidence is below the 90% auto-acceptable threshold.\"], \"approval_required\": true, \"source_purpose_supplied\": false}"
+          }
+        ],
+        "deterministic_results": [
+          "Compatibility validates allowed target classes, not the account's business purpose.",
+          "A review is an independent challenge, never an approval or financial result."
+        ],
+        "failure_category": null,
+        "validation_issues": [],
+        "response_shape": {
+          "observation": "string",
+          "inference": "string",
+          "recommendation": "string",
+          "rationale": "string",
+          "evidence_references": "array",
+          "confidence": "number",
+          "uncertainty": "array",
+          "alternatives": "array",
+          "next_action": "string",
+          "human_approval_required": "boolean",
+          "financial_authority": "boolean"
+        },
+        "usage_status": "complete",
+        "finish_reason": "STOP",
+        "reserved_model_calls": 2,
+        "model_calls": 2,
+        "tool_calls": 1,
+        "input_tokens": 2524,
+        "output_tokens": 329,
+        "latency_ms": 6303,
+        "estimated_cost_usd": null,
+        "confidence_note": "Self-reported, uncalibrated; not permission or financial verification."
+      },
+      "reviewer": {
+        "advisor_request_id": "520f3b07-4032-48e3-9713-5b941b0b5905",
+        "request_id": "520f3b07-4032-48e3-9713-5b941b0b5905",
+        "mapping_id": "fc420757-f8cc-40a4-ac1f-ff0a3a43d019",
+        "context_hash": "ca10eee07724a46c17278f8ca107aac3555d479b872561e3b7f56b631c39fb1f",
+        "requested_at": "2026-10-20T11:48:46.332069Z",
+        "completed_at": "2026-10-20T11:48:48.900863Z",
+        "version": "mapping-recommendation-review-v1",
+        "state": "COMPLETED",
+        "provider": "gemini-adk",
+        "model": "gemini-3.5-flash-lite",
+        "finding": {
+          "recommendation_outcome": "ACCEPT",
+          "outcome": "CHALLENGED",
+          "summary": "The mapping proposal for '1200 \u00b7 Misc Clearing' to 'Other Current Asset' lacks a supplied business purpose and has low confidence (0.76). Independent review supports the advisor's recommendation to escalate for human investigation and inspect source purpose.",
+          "evidence_references": [
+            "mapping:fc420757-f8cc-40a4-ac1f-ff0a3a43d019"
+          ],
+          "concerns": [
+            "Source purpose is not supplied for clearing account '1200 \u00b7 Misc Clearing'.",
+            "Confidence is below the 90% threshold and requires human approval."
+          ],
+          "uncertainty": [
+            "Exact underlying transactions and business purpose of the clearing account remain unknown."
+          ],
+          "suggested_next_action": "INSPECT_SOURCE_PURPOSE",
+          "human_approval_required": true,
+          "financial_authority": false
+        },
+        "evidence": [
+          {
+            "reference": "mapping:fc420757-f8cc-40a4-ac1f-ff0a3a43d019",
+            "observation": "{\"source_concept\": \"1200 \\u00b7 Misc Clearing\", \"candidate\": \"Other Current Asset\", \"supported_targets\": [\"Other Current Asset\", \"Fixed Asset\"], \"candidate_confidence\": 0.76, \"state\": \"REVIEW_REQUIRED\", \"policy_flags\": [\"Sensitive accounting or tax mappings require human approval.\", \"Confidence is below the 90% auto-acceptable threshold.\"], \"approval_required\": true, \"source_purpose_supplied\": false}"
+          }
+        ],
+        "model_calls": 2,
+        "tool_calls": 1,
+        "input_tokens": 2683,
+        "output_tokens": 228,
+        "usage_status": "complete",
+        "validation_issues": [],
+        "response_shape": {
+          "recommendation_outcome": "string",
+          "outcome": "string",
+          "summary": "string",
+          "evidence_references": "array",
+          "concerns": "array",
+          "uncertainty": "array",
+          "suggested_next_action": "string",
+          "human_approval_required": "boolean",
+          "financial_authority": "boolean"
+        },
+        "failure_category": null
+      },
+      "human_approval_required": true,
+      "financial_authority": false
+    },
+    "sanitized_transport_traces": [
+      {
+        "role": "advisor",
+        "local_request_id": "5df09082-3697-4f3b-8338-e10bd98c3137",
+        "response_id_sha256": "22165426d26a6a3cd443f277470736e542fed7accd1b6ea07278c0924603ba51",
+        "model_version": "gemini-3.5-flash-lite",
+        "counted_input_tokens": 964,
+        "response_received": true,
+        "latency_ms": 959,
+        "input_tokens": 1161,
+        "output_tokens": 10,
+        "thinking_tokens": null,
+        "estimated_cost_usd": null
+      },
+      {
+        "role": "advisor",
+        "local_request_id": "27a7aa3e-4376-4f73-a10a-57402fa6cd3f",
+        "response_id_sha256": "0e15011630cf4e8f3c0303ea511e7be54b4b092bda88c909e0d2dce5e8e02d13",
+        "model_version": "gemini-3.5-flash-lite",
+        "counted_input_tokens": 1158,
+        "response_received": true,
+        "latency_ms": 1539,
+        "input_tokens": 1363,
+        "output_tokens": 319,
+        "thinking_tokens": null,
+        "estimated_cost_usd": null
+      },
+      {
+        "role": "reviewer",
+        "local_request_id": "3e110fcf-e3a8-4af7-8457-4286001f2475",
+        "response_id_sha256": "7fb1d21cf37508fc74f4a376ac36c87766d0616b1efb6d6eda080d4643cd989c",
+        "model_version": "gemini-3.5-flash-lite",
+        "counted_input_tokens": 901,
+        "response_received": true,
+        "latency_ms": 808,
+        "input_tokens": 1107,
+        "output_tokens": 10,
+        "thinking_tokens": null,
+        "estimated_cost_usd": null
+      },
+      {
+        "role": "reviewer",
+        "local_request_id": "54ababdc-8436-47b1-a652-05c302076438",
+        "response_id_sha256": "b91e1941bf4eed477a5f6e498b97cd618dd4f8fb7e0b0fc2cd4db25d8af01043",
+        "model_version": "gemini-3.5-flash-lite",
+        "counted_input_tokens": 1359,
+        "response_received": true,
+        "latency_ms": 1274,
+        "input_tokens": 1576,
+        "output_tokens": 218,
+        "thinking_tokens": null,
+        "estimated_cost_usd": null
+      }
+    ],
+    "transport_estimated_cost_usd": null
+  }
+}

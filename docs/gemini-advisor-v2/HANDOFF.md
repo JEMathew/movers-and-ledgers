@@ -1,198 +1,90 @@
-# Gemini Advisor/Reviewer integration gate — 20 October 2026
+# Gemini Advisor/Reviewer post-inference integration contract — 20 October 2026
 
-**GO for local integration review with flags off. NO-GO for live enablement or deployment.**
-The paired application service and authenticated mapping UI are implemented and tested.
-Fresh inference on this implementation has **not** been authorized or performed.
+**GO for controlled local integration with the refreshed UX using flags off, mocks or deterministic fallback. NO-GO for live activation, a complete request-evidence workflow, or production readiness.** The separate UX branch/worktree was neither inspected nor modified in this review; compatibility here means a tested contract for its integrator, not a completed cross-branch merge or hosted acceptance test.
 
-## Branch, base and ownership
+The one approved Cloud Shell evaluation completed at 11:48:40–11:48:49 UTC with four generation attempts. Its persistent authorization is consumed. No new generation, authentication, cloud inspection, installation or ledger operation occurred in this review. Do not reset, delete, move or bypass the ledger. Historical approval and readiness reports are superseded by this status; they are not authorization to repeat the evaluation.
 
-- Repository: `JEMathew/movers-and-ledgers`
-- Branch: `feature/gemini-advisor-v2`
-- Worktree: `/Users/jincenmathew/Downloads/Intuit/movebooks-gemini-advisor-v2`
-- Base: `e7f1e288fd7f378045950fc94d5d7c89e298575f`, including UX checkpoint `9ed2273`.
-- Starting state: clean. Thread 1's source checkout was not edited.
-- Delivery identifier: the local commit at `feature/gemini-advisor-v2`; obtain with
-  `git rev-parse feature/gemini-advisor-v2`. The final chat handoff records its exact SHA.
-- Exact changed paths: [changed-files.txt](evidence/changed-files.txt).
-- No push, PR, merge, deployment, IAM/API change, database provisioning or production model enablement.
+## Recorded evidence and accounting
 
-## What the accountant receives
+Immutable source: [live evidence bundle](evidence/gemini-v2-live-evidence-20261020T114840Z.json), SHA-256 `b87d0537e5b74203236b66b63379f263a062d4f756cc2b5b5679f69363f313f7`. Its four original file hashes, derived role responses, and ledger snapshot hash are checked locally. Raw live evidence and prior staging receipts remain unchanged and untracked; they are intentionally absent from the integration commit. The portable [derived synthetic fixture](../../tests/fixtures/gemini-recorded-pair.json) retains the source SHA and exact response/usage projection, with no authentication or authorization-ledger data. See [reconciliation](evidence/post-inference-reconciliation.json).
 
-Open the synthetic Harbor Light sample, complete assessment and planning, and select
-**1200 · Misc Clearing** in Prepare → Mappings. In an opted-in development preview,
-**Run AI-Assisted Analysis** sends one confirmed POST. Loading the page invokes no model.
+| Role/call | countTokens input | Reported input | Reported candidate output | Thinking | Latency ms |
+| --- | ---: | ---: | ---: | --- | ---: |
+| Advisor 1 | 964 | 1,161 | 10 | missing | 959 |
+| Advisor 2 | 1,158 | 1,363 | 319 | missing | 1,539 |
+| Reviewer 1 | 901 | 1,107 | 10 | missing | 808 |
+| Reviewer 2 | 1,359 | 1,576 | 218 | missing | 1,274 |
+| Total | 4,382 | 5,207 | 557 | unknown | 4,580 transport time |
 
-The Advisor receives only that mapping's bounded source facts and deterministic controls.
-A separate Reviewer run receives freshly projected source facts and the validated Advisor
-recommendation in a separate `advisor_recommendation` field. The recommendation is explicitly
-an untrusted claim to examine, never a source citation or instruction.
+Application totals exactly match the transport's reported input and candidate-output totals. The application previously added missing thinking counts as zero and called usage complete whenever metadata existed for every response. The focused adapter fix now requires explicit nonnegative integer prompt, candidate and thinking counts on every call before labeling usage `complete`. Explicit zero is valid. Missing components leave `partial`; no metadata leaves `unknown`. Known components remain reported totals, not a complete billing meter. API shapes and persistence encoding are unchanged. Historical records are not rewritten or backfilled.
 
-The UI separates the recommendation, rationale, evidence and uncertainty from the Reviewer's
-`ACCEPT`, `QUESTION` or `REJECT` assessment. Accepting a recommendation to investigate does
-not clear the ambiguous mapping: the mapping evidence can still be `CHALLENGED`.
-The accountant must establish business purpose/settlement history and use the existing
-decision controls. Deterministic validation remains authoritative.
+The known-component estimate is `(5207 × $0.30 + 557 × $2.50) / 1,000,000 = $0.0029546`, using the prices recorded at execution. Complete token cost and actual billed cost are **UNVERIFIED**, never zero. The pre-call planning bound was $0.08048 against $0.20; this was not a hard cloud billing cap. The transport correctly retained null complete cost. The revised adapter makes future application completeness agree with that uncertainty; it cannot recover missing historical thinking usage.
 
-The original evidence-only independent rule check remains available. No generic chat or
-public landing changes were introduced. `AI_ASSISTANCE_STATUS` remains `planned`.
+Generation reported 825 more input tokens than countTokens (per call: 197, 205, 206, 217). The harness counted the assembled token-bearing wire fields; SDK retries were disabled. Raw request/response bodies were deliberately not retained, only hashes, validated outputs and allowlisted metadata. The precise counting difference cannot be proven from these artifacts. Do not invent a correction factor or treat countTokens as a guaranteed billing meter. All counted and reported inputs were far below 50,000.
 
-## Implementation and boundaries
+The Advisor escalated the ambiguous clearing account. The Reviewer accepted that investigation recommendation while challenging the mapping and requesting source purpose. No recommendation disagreement was observed in the live run; QUESTION/REJECT are exercised only with mocks. Separate run/context IDs and separately supplied source facts demonstrate procedural separation, not statistically independent errors from the same model. Neither output establishes the correct accounting classification. Confidence is uncalibrated; do not show it as verified accuracy. Qualified accounting assessment and broader synthetic coverage remain outstanding.
 
-- `POST /v1/migration-sessions/{session_id}/analysis/mapping/{mapping_id}` requires authentication,
-  ownership, `request_id` and `confirmed: true`. Extra client fields are forbidden.
-- Only repository synthetic samples with source ID `account-clearing`, an account mapping,
-  and no migration execution are admitted. Uploads/raw uploaded context are rejected before calls.
-- Reuses `request_advice`, `request_review`, existing Gemini/ADK providers, projections,
-  strict output validation, CAS reservations, model policy and optional Firestore controls.
-- Fresh ADK role/session for each agent. Only the read-only evidence tool is registered.
-  No approval, accounting, mapping or execution tool is exposed to either agent.
-  Independence is at the role/context level; both use the configured Gemini model.
-- Advisor/review records are bound by advisor request ID and context hash. Review hash
-  includes the tested recommendation. Stale results are withheld; both UI panels are suppressed
-  if the review observes changed evidence.
-- Same-context results are cached; pending/interrupted runs are not automatically replayed.
-  Browser retries retain the request ID. Existing limits remain: 10 Advisor records and
-  3 Reviewer records per session, plus cloud owner/global quotas.
-- Each role permits at most two generation calls and two evidence reads; one pair permits
-  four generation calls. Transport retries and semantic retries are zero.
-- Each call allows 2,048 output tokens and now rejects serialized model requests above
-  65,536 UTF-8 bytes, including tool schemas/history. This byte guard is not a token meter.
-  Per-role timeout defaults to 30 seconds, maximum 60; only the paired proxy route receives
-  a 130-second upstream deadline and the browser a 135-second deadline.
-- Invalid/unavailable Advisor output produces labeled deterministic fallback and does not
-  trigger a paid Reviewer. Invalid/unavailable Reviewer output produces its independent
-  deterministic check. Unknown token counts remain unknown.
-- No model-supplied authority or financial assertions can enter business-state decisions.
-  Telemetry retains allowlisted counters and failure categories; raw provider errors,
-  unvalidated output, prompts, actor IDs and credentials are not logged.
+## Exact API boundary
 
-Snapshot compatibility: old snapshots retain their original encoding when the new optional
-review fields are absent. **New paired-review records are not readable by an older strict
-backend schema.** Keep this preview ephemeral until a deployment/rollback plan is approved;
-do not roll an older backend onto persistent sessions that contain paired-review records.
+Backend: `services/api/src/movebooks_api/analysis.py`; reused services `reasoning.py` and `reviewer.py`. Complete request/response JSON Schemas are generated directly from the current Pydantic models in [analysis-api-schema.json](analysis-api-schema.json).
 
-## Evidence: deterministic, mocked and live are distinct
+- Explicit action: `POST /v1/migration-sessions/{session_id}/analysis/mapping/{mapping_id}`.
+- Body: `{"request_id":"<UUID>","confirmed":true}`. Missing/false confirmation, client owner fields, approval flags and extra fields fail with 422. GET is 405 at the backend; the browser proxy refuses the route for GET.
+- Authentication: existing `authHeaders()` and verified principal. Owner comes from authentication, never the body. Unknown/non-owned workspace returns 404; missing authentication 401. The hosted browser uses its configured same-origin `/api` base, whose allowlisted proxy forwards to `/v1`, verifies identity/origin, strips unapproved headers and uses no-store. No credentials belong in response fixtures.
+- Admission: synthetic sample only, no uploaded context, source ID `account-clearing`, existing account mapping, pre-execution state, enabled synthetic analysis. Live mode additionally requires explicit operator authorization. Gate/unsupported/stale/concurrent/pending/budget failures return 409. A valid request does not guarantee a live result; fallback can return 200.
+- One POST orchestrates Advisor, then Reviewer. Do not also POST the independent-review route automatically: that is a separate explicit action.
+- `case_id` is `account-clearing`; top-level `human_approval_required` is true and `financial_authority` false.
+- `advisor`: `request_id`, `capability`, `context_hash`, timestamps, provider/model/prompt version, state, advice or null, supplied evidence, deterministic results, failure category and validation details, usage fields. Advice contains observation, inference, recommendation, rationale, uncertainty, alternatives, next action and cited evidence references; authority literals remain true/false.
+- `reviewer`: null only when Advisor is unavailable, otherwise a separate record with `mapping_id`, `advisor_request_id`, request ID/context hash/version/timestamps, provider/model/state, finding or null, its own evidence and usage. `advisor_request_id` links the reviewed claim. Shared request IDs may identify the pair; independence is not inferred from those IDs.
+- Recommendation assessment: `ACCEPT | QUESTION | REJECT`. Mapping-evidence finding: `CHALLENGED | EVIDENCE_INCOMPLETE | NO_CONTRADICTION_FOUND | ESCALATE`. These are independent axes. ACCEPT never grants mapping approval. Suggested next action: `INSPECT_SOURCE_PURPOSE | REQUEST_MORE_EVIDENCE | HUMAN_REVIEW`.
+- Each role cites supplied source references (`mapping:<mapping UUID>`), never another model's claim as evidence. Reviewer source facts are independently projected; the validated Advisor claim is supplied separately.
+- Usage: nullable observed totals; `unknown | partial | complete`. `output_tokens` sums reported candidate and reported thinking components, so partial output is only the known sum. Cost remains nullable; completeness of token metadata does not prove billed cost. Historical `complete` records from the old adapter must retain the explicit caveat in this report.
 
-| Evidence | What it proves | What it does not prove |
+Same-context requests may return an earlier cached pair. Do not require returned request IDs to equal a newly generated client ID; require the Reviewer to link to the returned Advisor and selected mapping. Reuse the client request ID after an uncertain HTTP failure. Pending/interrupted work is not replayed, and there is no automatic browser retry.
+
+## Frontend integration and human controls
+
+Reuse `AssistedAnalysis` and the exported `Analysis`/`parseAnalysis` contract in `apps/web/components/plan-map-approve/analysis-contract.ts`. The parser validates consumed fields, authority literals, nonempty grounded evidence and uncertainties, and role/mapping linkage before either panel renders. Backend metadata may be additive; this is not a second implementation of the entire financial validator. Current component props remain `{ mappingId: string }` and the selected workspace is the validated `session` URL parameter. The refreshed shell must rerender/remount on workspace navigation and clear private UI on identity change. It must not reuse a previously authorized workspace view after sign-out. No localStorage cache of advice is introduced.
+
+| UI state/action | Required behavior | Validation/status |
 | --- | --- | --- |
-| [deterministic-service.json](evidence/deterministic-service.json) | Actual paired service with models disabled; timestamps, one synthetic case, projected evidence, validated fallback, unchanged business state, zero calls | Gemini execution or semantic quality |
-| [backend-tests.txt](evidence/backend-tests.txt) | 184 passing focused tests, including scripted providers and real ADK orchestration with scripted LLMs | Live networking, workload inference access or paid usage |
-| [frontend-tests.txt](evidence/frontend-tests.txt) | 54 passing frontend/proxy tests | Hosted acceptance |
-| [Advisor screenshot](evidence/browser-deterministic.png), [Reviewer screenshot](evidence/browser-reviewer-deterministic.png), [accessibility tree](evidence/browser-accessibility.txt) | Actual localhost UI → API flow; explicit click, separate fallback panels, human control, zero recorded decisions | Live Gemini UI output; mobile/zoom or full accessibility certification |
-| [Read-only preflight](evidence/cloud-preflight.json) | Existing service identity, role binding and APIs; current public model documentation | Effective access under every org policy, quota availability, or successful generation |
-| [18 October historical trace](../reviews/live-gemini-l1-16e31e9.md) | Owner-reported earlier live harness result on the same model | This new flow: that Reviewer never received Advisor output; underlying trace is held privately |
+| Feature off | Keep `NEXT_PUBLIC_SYNTHETIC_ANALYSIS_ENABLED` off by default; only the supported case opts in. Preserve planned-product status. | Existing opt-in/case tests pass. |
+| Idle/page load | No model POST. Show explicit invocation and what synthetic evidence would be sent. | Mock fetch remains untouched on render. |
+| Explicit click | One confirmed POST, stable retry ID, no financial action. | Component and HTTP tests pass. |
+| Loading | Disable duplicate invocation; expose busy/status text. No polling or background generation. | Component tests pass. |
+| Valid pair | Distinct Advisor recommendation/explanation and Reviewer assessment; source-purpose gaps, uncertainty, evidence and provenance remain visible. Do not show a fabricated accuracy percentage. | Recorded pair rendered in tests. |
+| Disagreement | Keep QUESTION/REJECT visible; do not collapse them into agreement or approval. | Mock tests pass; not observed live. |
+| Fallback/disabled Gemini | Label deterministic fallback and failure reason, not successful model execution. Never automatically invoke a paid Reviewer after Advisor fallback. | UI/service tests pass. |
+| Unavailable/stale | Suppress both panels on unavailable context; safe recovery to rule check/human review. | Service/UI tests pass. |
+| Malformed/empty/ungrounded pair | Reject before rendering; show safe unavailable/error state without raw server/model errors. | New parser tests pass. |
+| Workspace/mapping change | Abort/discard old in-flight response; clear prior result and request ID when selection rerenders; unmount also aborts. Server ownership remains authoritative. | Mock tests cover pending and completed results. |
+| Approve/reject | Keep existing explicit human mapping controls; analysis must never call them. | Combined panel test proves no decision callback fires. |
+| Request source evidence | Explain missing source-purpose evidence only. **Do not render a working Request Source Evidence button.** There is no implemented endpoint or durable workflow. Do not display “request sent” or reinterpret reconsideration as an evidence request. | [Proposal only](REQUEST-SOURCE-EVIDENCE-PROPOSAL.md); requires review and approval before implementation. |
 
-No new live trace or live-model screenshot is supplied. No mocked result is represented as
-Gemini evidence. A successful schema check is not a human assessment of accounting quality.
+Existing human mutation routes are separate `POST .../mappings/{mapping_id}/approve` and `/reject`, with `{ "comment": <string or null> }`, and `/modify` with `{ "selected_target": <string>, "comment": <string or null> }`. The same owner/state/policy checks still apply. Only a successful response to that separately initiated human action permits the UI to refresh decision status. Reviewer ACCEPT and suggestion text never call these routes. Existing reconsideration handles a prior rejection and is not an evidence-request workflow. Do not auto-apply recommended targets or claim migration/financial completion.
 
-## Verification performed
+The paired proxy timeout remains 130 seconds; browser deadline 135 seconds; role timeout defaults to 30 seconds (maximum 60). Request/record limits, retries, generation configuration, owner controls and financial policies are unchanged. The 50,000-token pre-call check and persistent one-run ledger belong to the **evaluation harness**, not the regular application endpoint. Do not claim that the consumed evaluation authorization covers UI calls. The application retains its byte guard and configured cloud reservation controls; any future live integration requires separate authorization and an explicitly reviewed operational cost-control gate.
 
-Python: **184 passed, zero skipped**, including paired explicit invocation, grounding,
-Reviewer separation, owner isolation, spoof/unauthorized-write rejection, unchanged business state,
-disabled gates, output rejection, timeout/cancellation, bounded retries/calls, input capacity,
-stale evidence, pending/replay protection, quotas, human approval, secret canaries and snapshot CAS.
-The only warning is the existing Starlette/httpx test-client deprecation.
+## Integration commit scope and validation
 
-Frontend: **54 passed** across `AssistedAnalysis`, `IndependentReview`, mapping-state and
-private-proxy tests. Covers opt-in/case gating, click-only invocation, loading/error status,
-separate role regions, fallback labels, stale-workspace discard, abort on unmount, stable retry ID,
-authenticated same-origin proxying and the paired deadline.
+The exact commit file list, deterministic configuration, commands and acceptance checklist are in [integration validation](INTEGRATION-VALIDATION.md). The approved application changes correct usage completeness, parse consumed response fields fail-closed, and clear result/request state across workspace and mapping selection. No model, prompt, financial policy, approval route or UX design changes are introduced.
 
-`npm run typecheck`, targeted ESLint, targeted Ruff and `git diff --check` pass.
-Full unrelated suites and a production build were not run.
-Exact verification commands are in [verification.txt](evidence/verification.txt).
+The commit also preserves the existing guarded evaluation harness and guard byte-for-byte, along with its historical read-only preflight dependency and focused tests. The preflight still pins baseline `4b71b28`; it must reject this newer integration revision for historical live authorization. Its test now uses isolated files and mocked Git metadata to verify that frozen gate instead of requiring every subsequent development commit to retain the old HEAD. No cloud authentication is performed.
 
-Browser: local demo identity, normal sample assessment/plan/mapping flow, explicit analysis,
-separate results, keyboard Enter expands/collapses evidence, original mapping remains Needs review,
-and Recorded decisions remains zero. No human mapping decision or migration was executed.
+The backend and frontend tests now use a 9,093-byte derived synthetic fixture rather than depending on the untracked original bundle. The generated API schema is tracked separately and checked for equality against the current application models. Copies of recorded responses are rebound to test mapping references only in memory. The original recorded `usage_status: complete` defect remains visible in the fixture; scripted tests establish the corrected `partial` result for missing thinking counts.
 
-## Model, environment and IAM
+Final focused checks: **107 backend tests passed** (77 application/recorded integration tests plus 30 guard tests), **60 frontend tests passed**, TypeScript, targeted ESLint, Ruff and diff checks passed. The Python process denied socket connections and DNS; recorded integration tests additionally prohibited ADC/client creation. Guard tests replaced Google transports and wrote only temporary mock ledgers. Deterministic integration rejects entry into either provider or the Gemini adapter. Existing subprocess tests use deterministic mode or reject missing live approval before any execution. One existing Starlette/httpx deprecation warning remains.
 
-The [current model page](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-5-flash-lite)
-documents `gemini-3.5-flash-lite`, structured output/function calling and global Standard PayGo.
-The [lifecycle table](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions)
-lists retirement no earlier than 21 July 2027; the older `gemini-2.5-flash` retires on 20 October 2026.
-This verifies documented availability, not an actual workload invocation.
+Local receipts: [backend](evidence/integration-backend-tests.txt), [frontend](evidence/integration-frontend-tests.txt), [checks](evidence/integration-checks.json). These local receipts are intentionally outside the commit; the tracked validation document records results for reviewers without the evidence directory.
 
-- Endpoint: `https://aiplatform.googleapis.com`
-- Resource: `projects/movebooks-ai/locations/global/publishers/google/models/gemini-3.5-flash-lite`
-- Location: explicit `global`; this does not promise Singapore-resident processing.
-- Generation: existing replacement-specific LOW thinking, no thought disclosure, no custom sampling.
-- Read-only Cloud Run inspection verified service identity
-  `movebooks-beta-api@movebooks-ai.iam.gserviceaccount.com`.
-- Existing project-level `roles/aiplatform.user` binding and enabled `aiplatform.googleapis.com`
-  and `firestore.googleapis.com` were observed. No roles/APIs were changed.
-- Cloud mode still requires verified Firebase identity, explicit synthetic authorization,
-  an enabled Firestore control policy, and atomic quota/cost reservations.
-  The policy document was not read or changed in this task.
-- No default local ADC file was present. CLI authentication does not prove ADC availability.
-  The proposed live harness needs an existing approved ADC environment (such as the prior
-  Cloud Shell environment). Do not create credentials or extend IAM as an implicit step.
-- Existing guards reject live inference in staging/production. The new preview flag is
-  also rejected in staging/production. All defaults keep inference off.
+The live archive, original JSON, guard and harness remain unchanged. The updated adapter is validated with recorded metadata and mocks only; it is not present in the historical staged archive. No new runtime package was built, and the earlier Cloud Shell 44-test runtime validation was not repeated. Do not represent the archive's prior live validation as live validation of this fix. No cloud, real-ledger, production, push, merge or UX-worktree operation occurred.
 
-## Costs and proposed approval scope
+## Minimum integration gates and recommendation
 
-[Published Standard global text rates](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing),
-checked 20 October: **$0.30 per million input tokens; $2.50 per million output tokens,
-including reasoning**. Estimate: `(input_tokens × 0.30 + output_tokens × 2.50) / 1,000,000`.
-For example, 6,000 input and 2,000 output tokens across a pair would cost about **$0.0068**.
-This is an illustration, not observed usage or a guaranteed bill.
+- Incorporate the focused adapter/parser fixes and this exact API contract into the controlled integration review; retain both preview flags off for any ordinary release. Do not push, merge or deploy from this task.
+- The refreshed UX must preserve explicit click, distinct role panels, missing-evidence/uncertainty display, mapping/request linkage, safe state handling and separate human decisions. Resolve any overlap in `AssistedAnalysis` at integration time; no separate UX branch was read or modified here. Run these focused tests against the combined tree before a merge decision.
+- Review and approve the separate [Request Source Evidence proposal](REQUEST-SOURCE-EVIDENCE-PROPOSAL.md) before implementing its routes, durable hold, states or controls. Until implementation passes its proposed acceptance tests, omit the working action. Existing approve/reject remain explicit and independent.
+- Before any later live activation: investigate countTokens/reporting differences, approve operational call/cost controls separately from the consumed harness ledger, review qualified accounting feedback, and validate a broader synthetic set under fresh authorization. Preserve unknown costs rather than blocking display of valid advisory content or inventing zero usage.
+- No production/customer-data assurance follows from one synthetic case. No hosted integration, refreshed-branch merge, calibrated confidence, actual invoice total, regional-residency guarantee, or production readiness is asserted.
 
-Existing cloud controls conservatively reserve $0.10 per role, hence $0.20 for a pair,
-with default global daily reservation budget $1 and owner/global daily call limits 20/100.
-Local execution uses the per-session/per-run bounds; it does not create a cloud budget.
-Output/call/byte caps constrain cost but do not implement a provider-side hard billing cap.
-
-Proposed next approval: **one synthetic pair, maximum four generation calls, no retries,
-$0.20 spend allowance, global processing**, using the pinned model and existing ADC permissions.
-No deployment, IAM/API change, push or public claim is included. Stop after the pair even if it
-falls back; review failures rather than repeatedly sampling until success.
-
-## Reproduction and integration
-
-From this worktree, with the repository's installed Python dependencies:
-
-```sh
-python scripts/gemini_analysis_eval.py --out /tmp/gemini-analysis-offline.json
-```
-
-The output path must be new, in an existing directory. Default execution is deterministic;
-no provider client or credentials are used. It exercises the same application service as the UI.
-
-For a local browser preview, start the existing API with
-`MOVEBOOKS_MODEL_PROVIDER_MODE=deterministic-only` and
-`MOVEBOOKS_SYNTHETIC_ANALYSIS_ENABLED=true`; start the web app with
-`NEXT_PUBLIC_SYNTHETIC_ANALYSIS_ENABLED=true` and its matching API URL/CORS origin.
-Use only local demo identity and a synthetic workspace. The test used web port 3002 and API 8012.
-Both preview processes were stopped after verification.
-No checked-in environment file enables these flags.
-
-**Only after fresh approval**, in the approved ADC environment:
-
-```sh
-export MOVEBOOKS_ENV=local
-export MOVEBOOKS_MODEL_PROVIDER_MODE=gemini-adk
-export MOVEBOOKS_REASONING_PROJECT=movebooks-ai
-export MOVEBOOKS_REASONING_LOCATION=global
-export MOVEBOOKS_SYNTHETIC_ANALYSIS_ENABLED=true
-export MOVEBOOKS_SYNTHETIC_BETA_AUTHORIZED=true
-export MOVEBOOKS_REASONING_MODELS='{"planning":"gemini-3.5-flash-lite","mapping":"gemini-3.5-flash-lite","resolution":"gemini-3.5-flash-lite","configuration":"gemini-3.5-flash-lite","onboarding":"gemini-3.5-flash-lite"}'
-python scripts/gemini_analysis_eval.py --live --confirm-usd020-synthetic-test \
-  --out /tmp/gemini-analysis-live.json
-```
-
-The script uses normal ADC, creates only an in-memory synthetic repository, exports validated
-redacted results and observed usage, and exits nonzero for live fallback or business-state change.
-It never deploys, starts a hosted API or provisions operational storage.
-
-Thread 1 integration, when approved: review the local commit/diff against `e7f1e28`, then
-cherry-pick onto an integration branch. Keep both preview flags off for the UX production release.
-Resolve any overlap in `MappingReview.tsx` and the proxy files with Thread 1; no public design
-changes are included. Re-run the focused tests listed in the saved test output, typecheck and lint.
-Do not deploy or change the public AI-status constant until a separate hosted authenticated
-inference and human acceptance gate passes.
-
-Remaining gate: approve and perform the bounded live test, inspect the actual recommendation
-and Reviewer assessment for usefulness/grounding, then decide separately on hosted integration.
-Stop here pending approval.
+**Decision: GO for local controlled UX integration with mocks/deterministic mode and the documented caveats. NO-GO for complete interactive or live product enablement. Four historical attempts remain consumed; this review used zero additional attempts.**

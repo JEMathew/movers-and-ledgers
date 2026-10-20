@@ -93,6 +93,7 @@ async def run_advisor(
 
     calls, reads = 0, 0
     input_tokens, output_tokens, usage_reports = 0, 0, 0
+    complete_usage_reports = 0
     response_shape = {}
     finish_reason = None
     client = None
@@ -146,6 +147,7 @@ async def run_advisor(
 
     def after_model(callback_context, llm_response):
         nonlocal input_tokens, output_tokens, usage_reports, response_shape, finish_reason
+        nonlocal complete_usage_reports
         # Enum membership only: never forward arbitrary provider error messages/codes.
         known_reasons = {reason.value for reason in types.FinishReason}
         observed = llm_response.finish_reason or llm_response.error_code
@@ -153,8 +155,18 @@ async def run_advisor(
         usage = llm_response.usage_metadata
         if usage:
             usage_reports += 1
-            input_tokens += usage.prompt_token_count or 0
-            output_tokens += (usage.candidates_token_count or 0) + (usage.thoughts_token_count or 0)
+            counts = (
+                usage.prompt_token_count, usage.candidates_token_count, usage.thoughts_token_count
+            )
+            known = [type(value) is int and value >= 0 for value in counts]
+            complete_usage_reports += int(all(known))
+            # Retain reported components, but never treat an omitted thinking
+            # count as evidence of zero billable thinking. Zero explicitly reported
+            # by the provider is valid; missing metadata makes the aggregate partial.
+            input_tokens += counts[0] if known[0] else 0
+            output_tokens += sum(
+                value for value, valid in zip(counts[1:], known[1:], strict=True) if valid
+            )
         # Inspect in memory before ADK validates/saves the final result. Retain shape only.
         parts = llm_response.content.parts if llm_response.content else []
         for part in parts or []:
@@ -225,7 +237,8 @@ async def run_advisor(
             response_shape=response_shape,
             finish_reason=finish_reason,
             usage_status=(
-                "complete" if usage_reports == calls else "partial" if usage_reports else "unknown"
+                "complete" if calls and complete_usage_reports == calls
+                else "partial" if usage_reports else "unknown"
             ),
         )
     except ValidationError as error:

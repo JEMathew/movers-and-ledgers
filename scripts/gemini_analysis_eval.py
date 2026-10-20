@@ -8,6 +8,7 @@ No API deployment, Firestore, SQL, IAM mutation, customer data or financial writ
 import argparse
 import asyncio
 import json
+import os
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -27,6 +28,61 @@ MODEL = "gemini-3.5-flash-lite"
 
 
 async def run(settings, live=False):
+    if not live:
+        return await _run_pair(settings, live=False)
+    from gemini_eval_guard import EvaluationGuard, guarded_clients
+
+    guard = EvaluationGuard()
+    try:
+        with guarded_clients(guard):
+            result = await _run_pair(settings, live=True)
+        result["pre_inference_guard"] = {
+            "maximum_input_tokens_per_call": 50_000,
+            "count_tokens_requests": guard.counts,
+            "generation_attempts_reserved": guard.calls,
+            "blocked": guard.blocked,
+            "ledger_path": str(guard.path),
+            "reruns_permitted": False,
+        }
+        result["sanitized_transport_traces"] = guard.traces
+        result["independent_role_runs"] = guard.role_runs
+        result["project_id"] = settings.reasoning_project
+        result["returned_model_versions"] = sorted({
+            trace["model_version"] for trace in guard.traces if trace.get("model_version")
+        })
+        result["evaluation_criteria"] = {
+            "both_roles_live_and_validated": "PASS" if result["status"] == "accepted" else "FAIL",
+            "business_state_unchanged": "PASS" if result["business_state_unchanged"] else "FAIL",
+            "guard_completed": "FAIL" if guard.blocked else "PASS",
+            "usage_and_cost_known": (
+                "PASS" if guard.traces and all(
+                    trace.get("estimated_cost_usd") is not None for trace in guard.traces
+                ) else "UNVERIFIED"
+            ),
+            "independent_role_contexts": (
+                "PASS" if [role["role"] for role in guard.role_runs] == ["advisor", "reviewer"]
+                else "FAIL"
+            ),
+            "semantic_correctness": "UNVERIFIED: qualified human review required",
+        }
+        result["overall_evaluation"] = (
+            "FAIL" if "FAIL" in result["evaluation_criteria"].values()
+            else "UNVERIFIED: human semantic assessment pending"
+        )
+        result["transport_estimated_cost_usd"] = (
+            sum(trace["estimated_cost_usd"] for trace in guard.traces)
+            if guard.traces and all(
+                trace.get("estimated_cost_usd") is not None for trace in guard.traces
+            ) else None
+        )
+        if guard.blocked:
+            result["status"] = "guard-blocked"
+        return result
+    finally:
+        guard.close()
+
+
+async def _run_pair(settings, live=False):
     session, mapping = synthetic_mapping()
     repo = InMemoryMigrationSessionRepository()
     repo.put(session)
@@ -143,7 +199,7 @@ def main():
     ):
         parser.error("Live requires approved local synthetic configuration and exact model pins")
     result = asyncio.run(run(settings, live=args.live))
-    with args.out.open("x") as output:
+    with os.fdopen(os.open(args.out, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600), "w") as output:
         json.dump(result, output, indent=2)
         output.write("\n")
     print(

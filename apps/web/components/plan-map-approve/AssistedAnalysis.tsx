@@ -4,23 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { authHeaders } from "@/lib/identity";
 import { isSessionId } from "@/components/public-surfaces/session";
 import { Button } from "@/components/ui/primitives";
-
-type Fact = { reference: string; observation: string };
-type RecordBase = {
-  state: string; model: string | null; provider: string; requested_at: string;
-  context_hash: string; failure_category: string | null; evidence: Fact[];
-};
-export type Analysis = {
-  advisor: RecordBase & { advice: null | {
-    observation: string; recommendation: string; rationale: string;
-    uncertainty: string[]; evidence_references: string[];
-  } };
-  reviewer: null | (RecordBase & { finding: null | {
-    recommendation_outcome: "ACCEPT" | "QUESTION" | "REJECT";
-    outcome: string; summary: string; concerns: string[]; uncertainty: string[];
-    evidence_references: string[];
-  } });
-};
+import { parseAnalysis, type Analysis, type RecordBase } from "./analysis-contract";
+export type { Analysis } from "./analysis-contract";
 
 function provenance(record: RecordBase) {
   return record.provider === "gemini-adk" && ["COMPLETED", "ESCALATED"].includes(record.state)
@@ -45,6 +30,13 @@ function Evidence({ record, references }: { record: RecordBase; references: stri
 }
 
 export function AssistedAnalysis({ mappingId }: { mappingId: string }) {
+  // Reusing this integration component for another case must discard its request,
+  // response and in-flight work, even when the caller does not supply a React key.
+  const session = typeof window === "undefined" ? "" : new URLSearchParams(window.location.search).get("session");
+  return <AnalysisPanel key={`${session}:${mappingId}`} mappingId={mappingId} />;
+}
+
+function AnalysisPanel({ mappingId }: { mappingId: string }) {
   const [result, setResult] = useState<Analysis>();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -71,7 +63,7 @@ export function AssistedAnalysis({ mappingId }: { mappingId: string }) {
         signal: controller.signal,
       });
       if (!response.ok) throw new Error("unavailable");
-      const analysis: Analysis = await response.json();
+      const analysis = parseAnalysis(await response.json(), mappingId);
       if (controller.signal.aborted || new URLSearchParams(window.location.search).get("session") !== session) return;
       setResult(analysis);
     } catch {

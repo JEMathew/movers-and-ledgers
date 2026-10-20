@@ -1,0 +1,729 @@
+{
+  "method": "POST",
+  "path": "/v1/migration-sessions/{session_id}/analysis/mapping/{mapping_id}",
+  "request_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "request_id": {
+        "format": "uuid",
+        "title": "Request Id",
+        "type": "string"
+      },
+      "confirmed": {
+        "const": true,
+        "title": "Confirmed",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "request_id",
+      "confirmed"
+    ],
+    "title": "AnalysisRequest",
+    "type": "object"
+  },
+  "response_schema": {
+    "$defs": {
+      "Advice": {
+        "additionalProperties": false,
+        "properties": {
+          "observation": {
+            "maxLength": 800,
+            "minLength": 1,
+            "title": "Observation",
+            "type": "string"
+          },
+          "inference": {
+            "maxLength": 800,
+            "minLength": 1,
+            "title": "Inference",
+            "type": "string"
+          },
+          "recommendation": {
+            "maxLength": 800,
+            "minLength": 1,
+            "title": "Recommendation",
+            "type": "string"
+          },
+          "rationale": {
+            "maxLength": 800,
+            "minLength": 1,
+            "title": "Rationale",
+            "type": "string"
+          },
+          "evidence_references": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 40,
+            "minItems": 1,
+            "title": "Evidence References",
+            "type": "array"
+          },
+          "confidence": {
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Confidence",
+            "type": "number"
+          },
+          "uncertainty": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 6,
+            "minItems": 1,
+            "title": "Uncertainty",
+            "type": "array"
+          },
+          "alternatives": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 6,
+            "minItems": 1,
+            "title": "Alternatives",
+            "type": "array"
+          },
+          "next_action": {
+            "enum": [
+              "REVIEW_EXISTING_PROPOSAL",
+              "REQUEST_MORE_EVIDENCE",
+              "ESCALATE"
+            ],
+            "title": "Next Action",
+            "type": "string"
+          },
+          "human_approval_required": {
+            "const": true,
+            "title": "Human Approval Required",
+            "type": "boolean"
+          },
+          "financial_authority": {
+            "const": false,
+            "title": "Financial Authority",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "observation",
+          "inference",
+          "recommendation",
+          "rationale",
+          "evidence_references",
+          "confidence",
+          "uncertainty",
+          "alternatives",
+          "next_action",
+          "human_approval_required",
+          "financial_authority"
+        ],
+        "title": "Advice",
+        "type": "object"
+      },
+      "Capability": {
+        "enum": [
+          "planning",
+          "mapping",
+          "resolution",
+          "configuration",
+          "onboarding"
+        ],
+        "title": "Capability",
+        "type": "string"
+      },
+      "EvidenceFact": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "observation": {
+            "maxLength": 800,
+            "minLength": 1,
+            "title": "Observation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reference",
+          "observation"
+        ],
+        "title": "EvidenceFact",
+        "type": "object"
+      },
+      "ReasoningRecord": {
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "capability": {
+            "$ref": "#/$defs/Capability"
+          },
+          "context_hash": {
+            "title": "Context Hash",
+            "type": "string"
+          },
+          "requested_by": {
+            "title": "Requested By",
+            "type": "string"
+          },
+          "requested_at": {
+            "format": "date-time",
+            "title": "Requested At",
+            "type": "string"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Completed At"
+          },
+          "state": {
+            "default": "PENDING",
+            "enum": [
+              "PENDING",
+              "COMPLETED",
+              "FALLBACK",
+              "ESCALATED",
+              "UNAVAILABLE"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "provider": {
+            "title": "Provider",
+            "type": "string"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Model"
+          },
+          "prompt_version": {
+            "default": "bounded-reasoning-v4",
+            "title": "Prompt Version",
+            "type": "string"
+          },
+          "advice": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Advice"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/$defs/EvidenceFact"
+            },
+            "title": "Evidence",
+            "type": "array"
+          },
+          "deterministic_results": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Deterministic Results",
+            "type": "array"
+          },
+          "failure_category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Failure Category"
+          },
+          "validation_issues": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "title": "Validation Issues",
+            "type": "array"
+          },
+          "response_shape": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Response Shape",
+            "type": "object"
+          },
+          "usage_status": {
+            "default": "unknown",
+            "enum": [
+              "unknown",
+              "partial",
+              "complete"
+            ],
+            "title": "Usage Status",
+            "type": "string"
+          },
+          "finish_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Finish Reason"
+          },
+          "reserved_model_calls": {
+            "default": 0,
+            "title": "Reserved Model Calls",
+            "type": "integer"
+          },
+          "model_calls": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Model Calls"
+          },
+          "tool_calls": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Tool Calls"
+          },
+          "input_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Input Tokens"
+          },
+          "output_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Tokens"
+          },
+          "latency_ms": {
+            "default": 0,
+            "title": "Latency Ms",
+            "type": "integer"
+          },
+          "estimated_cost_usd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Estimated Cost Usd"
+          },
+          "confidence_note": {
+            "default": "Self-reported, uncalibrated; not permission or financial verification.",
+            "title": "Confidence Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "capability",
+          "context_hash",
+          "requested_by",
+          "provider"
+        ],
+        "title": "ReasoningRecord",
+        "type": "object"
+      },
+      "ReviewFinding": {
+        "additionalProperties": false,
+        "properties": {
+          "recommendation_outcome": {
+            "anyOf": [
+              {
+                "enum": [
+                  "ACCEPT",
+                  "QUESTION",
+                  "REJECT"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Recommendation Outcome"
+          },
+          "outcome": {
+            "enum": [
+              "CHALLENGED",
+              "EVIDENCE_INCOMPLETE",
+              "NO_CONTRADICTION_FOUND",
+              "ESCALATE"
+            ],
+            "title": "Outcome",
+            "type": "string"
+          },
+          "summary": {
+            "maxLength": 800,
+            "minLength": 1,
+            "title": "Summary",
+            "type": "string"
+          },
+          "evidence_references": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 12,
+            "minItems": 1,
+            "title": "Evidence References",
+            "type": "array"
+          },
+          "concerns": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 6,
+            "minItems": 1,
+            "title": "Concerns",
+            "type": "array"
+          },
+          "uncertainty": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 6,
+            "minItems": 1,
+            "title": "Uncertainty",
+            "type": "array"
+          },
+          "suggested_next_action": {
+            "enum": [
+              "INSPECT_SOURCE_PURPOSE",
+              "REQUEST_MORE_EVIDENCE",
+              "HUMAN_REVIEW"
+            ],
+            "title": "Suggested Next Action",
+            "type": "string"
+          },
+          "human_approval_required": {
+            "const": true,
+            "default": true,
+            "title": "Human Approval Required",
+            "type": "boolean"
+          },
+          "financial_authority": {
+            "const": false,
+            "default": false,
+            "title": "Financial Authority",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "outcome",
+          "summary",
+          "evidence_references",
+          "concerns",
+          "uncertainty",
+          "suggested_next_action"
+        ],
+        "title": "ReviewFinding",
+        "type": "object"
+      },
+      "ReviewRecord": {
+        "additionalProperties": false,
+        "properties": {
+          "advisor_request_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Advisor Request Id"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "mapping_id": {
+            "format": "uuid",
+            "title": "Mapping Id",
+            "type": "string"
+          },
+          "context_hash": {
+            "title": "Context Hash",
+            "type": "string"
+          },
+          "requested_by": {
+            "title": "Requested By",
+            "type": "string"
+          },
+          "requested_at": {
+            "format": "date-time",
+            "title": "Requested At",
+            "type": "string"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Completed At"
+          },
+          "version": {
+            "default": "mapping-challenge-v1",
+            "title": "Version",
+            "type": "string"
+          },
+          "state": {
+            "default": "PENDING",
+            "enum": [
+              "PENDING",
+              "COMPLETED",
+              "FALLBACK",
+              "UNAVAILABLE"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "provider": {
+            "title": "Provider",
+            "type": "string"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Model"
+          },
+          "finding": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ReviewFinding"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/$defs/EvidenceFact"
+            },
+            "title": "Evidence",
+            "type": "array"
+          },
+          "model_calls": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Model Calls"
+          },
+          "tool_calls": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Tool Calls"
+          },
+          "input_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Input Tokens"
+          },
+          "output_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Tokens"
+          },
+          "usage_status": {
+            "default": "unknown",
+            "enum": [
+              "unknown",
+              "partial",
+              "complete"
+            ],
+            "title": "Usage Status",
+            "type": "string"
+          },
+          "validation_issues": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "title": "Validation Issues",
+            "type": "array"
+          },
+          "response_shape": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Response Shape",
+            "type": "object"
+          },
+          "failure_category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Failure Category"
+          }
+        },
+        "required": [
+          "request_id",
+          "mapping_id",
+          "context_hash",
+          "requested_by",
+          "provider"
+        ],
+        "title": "ReviewRecord",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "case_id": {
+        "const": "account-clearing",
+        "default": "account-clearing",
+        "title": "Case Id",
+        "type": "string"
+      },
+      "advisor": {
+        "$ref": "#/$defs/ReasoningRecord"
+      },
+      "reviewer": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/ReviewRecord"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "human_approval_required": {
+        "const": true,
+        "default": true,
+        "title": "Human Approval Required",
+        "type": "boolean"
+      },
+      "financial_authority": {
+        "const": false,
+        "default": false,
+        "title": "Financial Authority",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "advisor",
+      "reviewer"
+    ],
+    "title": "AnalysisResult",
+    "type": "object"
+  },
+  "response_schema_is_full_backend_contract": true,
+  "frontend_parser_validates_only_consumed_fields": true
+}

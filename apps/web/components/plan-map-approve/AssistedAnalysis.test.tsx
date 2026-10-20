@@ -3,21 +3,27 @@ import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { AssistedAnalysis, type Analysis } from "./AssistedAnalysis";
 import { MappingReview } from "./MappingReview";
 import type { MappingProposal } from "./types";
+import liveEvidence from "../../../../tests/fixtures/gemini-recorded-pair.json";
 
 vi.mock("@/lib/identity", () => ({ authHeaders: async () => ({ Authorization: "test-only" }) }));
 const id = "11111111-1111-4111-8111-111111111111";
 const record = {
+  request_id: id,
   state: "FALLBACK", provider: "deterministic-fallback", model: null,
   requested_at: "2026-10-20T08:00:00Z", context_hash: "test-snapshot",
   failure_category: "live_disabled", evidence: [{ reference: "mapping:1", observation: "Source purpose absent" }],
 };
+const authority = { human_approval_required: true, financial_authority: false } as const;
 const result: Analysis = {
+  ...authority, case_id: "account-clearing",
   advisor: { ...record, advice: {
+    ...authority,
     observation: "Misc Clearing candidate", recommendation: "Inspect source purpose.",
     rationale: "A compatible type does not establish purpose.", uncertainty: ["Settlement history absent."],
     evidence_references: ["mapping:1"],
   } },
-  reviewer: { ...record, finding: {
+  reviewer: { ...record, mapping_id: id, advisor_request_id: id, finding: {
+    ...authority,
     recommendation_outcome: "QUESTION", outcome: "CHALLENGED", summary: "The candidate remains unproven.",
     concerns: ["Source evidence is missing."], uncertainty: ["Ask the accountant."],
     evidence_references: ["mapping:1"],
@@ -74,7 +80,8 @@ it("labels genuine provider success separately from fallback without changing pr
 
 it("does not display either result after evidence changes", async () => {
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => ({
-    ...result, reviewer: { ...result.reviewer, state: "UNAVAILABLE" },
+    ...result, advisor: { ...result.advisor, state: "UNAVAILABLE", advice: null },
+    reviewer: { ...result.reviewer, state: "UNAVAILABLE", finding: null },
   }) }));
   render(<AssistedAnalysis mappingId={id} />);
   fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
@@ -118,4 +125,111 @@ it("aborts the request on unmount", async () => {
   view.unmount();
   const signal = (fetcher.mock.calls as unknown as [string, RequestInit][])[0][1].signal;
   expect(signal?.aborted).toBe(true);
+});
+
+it("renders the recorded live pair without treating ACCEPT as mapping approval", async () => {
+  const recorded = liveEvidence.evaluation.evidence_and_results;
+  const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => recorded });
+  vi.stubGlobal("fetch", fetcher);
+  render(<AssistedAnalysis mappingId={recorded.reviewer.mapping_id} />);
+  expect(fetcher).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
+  expect(await screen.findByText(/Recommendation assessment: ACCEPT/)).toBeVisible();
+  expect(screen.getByText(/Mapping evidence: CHALLENGED/)).toHaveTextContent("never approval");
+  expect(screen.getByText(/Escalate the mapping proposal/)).toBeVisible();
+  expect(document.body).not.toHaveTextContent("85%");
+  expect(fetcher).toHaveBeenCalledTimes(1);
+});
+
+it("keeps the existing human decision controls separate from analysis", async () => {
+  vi.stubEnv("NEXT_PUBLIC_SYNTHETIC_ANALYSIS_ENABLED", "true");
+  const decide = vi.fn(), reconsider = vi.fn(), runBulk = vi.fn();
+  const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => result });
+  vi.stubGlobal("fetch", fetcher);
+  const mapping = {
+    id, source_id: "account-clearing", source_label: "1200 · Misc Clearing",
+    area: "chart_of_accounts", state: "REVIEW_REQUIRED", selected_target: "Other Current Asset",
+    supported_targets: ["Other Current Asset"], evidence: [], policy_reasons: [],
+    risk: "MEDIUM", confidence: 0.76,
+  } as unknown as MappingProposal;
+  render(<MappingReview mappings={[mapping]} history={[]} editable busy={false} planApproved={false}
+    decide={decide} reconsider={reconsider} runBulk={runBulk} onReviewPlan={vi.fn()} />);
+  expect(fetcher).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
+  await screen.findByRole("region", { name: "Reviewer result" });
+  expect(decide).not.toHaveBeenCalled();
+  expect(reconsider).not.toHaveBeenCalled();
+  expect(runBulk).not.toHaveBeenCalled();
+  expect(screen.getByRole("button", { name: "Approve as Other Current Asset" })).toBeEnabled();
+  expect(screen.getByRole("button", { name: /^Reject$/ })).toBeEnabled();
+  expect(fetcher).toHaveBeenCalledTimes(1);
+});
+
+it.each(["REJECT", "QUESTION"] as const)("exposes reviewer %s without collapsing it into agreement", async outcome => {
+  const value = structuredClone(result);
+  value.reviewer!.finding!.recommendation_outcome = outcome;
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => value }));
+  render(<AssistedAnalysis mappingId={id} />);
+  fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
+  expect(await screen.findByText(new RegExp(`Recommendation assessment: ${outcome}`))).toBeVisible();
+});
+
+it.each(["empty", "empty-evidence", "authority", "wrong-mapping", "wrong-advisor", "missing-reviewer", "malformed-outcome"])(
+  "fails closed on %s response without exposing a partial success", async failure => {
+    const value = structuredClone(result);
+    if (failure === "empty-evidence") value.advisor.evidence = [];
+    if (failure === "authority") Object.assign(value, { financial_authority: true });
+    if (failure === "wrong-mapping") value.reviewer!.mapping_id = "another-mapping";
+    if (failure === "wrong-advisor") value.reviewer!.advisor_request_id = "another-request";
+    if (failure === "missing-reviewer") value.reviewer = null;
+    if (failure === "malformed-outcome") Object.assign(value.reviewer!.finding!, { recommendation_outcome: ["ACCEPT"] });
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => failure === "empty" ? {} : value }));
+    render(<AssistedAnalysis mappingId={id} />);
+    fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Analysis is unavailable");
+    expect(screen.queryByRole("region", { name: "Advisor result" })).toBeNull();
+    expect(screen.queryByRole("region", { name: "Reviewer result" })).toBeNull();
+  },
+);
+
+it("clears completed results when the selected mapping changes without invoking a model", async () => {
+  const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => result });
+  vi.stubGlobal("fetch", fetcher);
+  const view = render(<AssistedAnalysis mappingId={id} />);
+  fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
+  await screen.findByRole("region", { name: "Advisor result" });
+  view.rerender(<AssistedAnalysis mappingId="22222222-2222-4222-8222-222222222222" />);
+  expect(screen.queryByRole("region", { name: "Advisor result" })).toBeNull();
+  expect(screen.getByRole("status")).toHaveTextContent("Nothing is sent");
+  expect(fetcher).toHaveBeenCalledTimes(1);
+});
+
+it("does not reuse completed results or request IDs across workspace renders", async () => {
+  const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => result });
+  vi.stubGlobal("fetch", fetcher);
+  const view = render(<AssistedAnalysis mappingId={id} />);
+  fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
+  await screen.findByRole("region", { name: "Advisor result" });
+  window.history.replaceState(null, "", "/plan-map-approve?session=22222222-2222-4222-8222-222222222222");
+  view.rerender(<AssistedAnalysis mappingId={id} />);
+  expect(screen.queryByRole("region", { name: "Advisor result" })).toBeNull();
+  expect(fetcher).toHaveBeenCalledTimes(1);
+  fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
+  await waitFor(() => expect(fetcher).toHaveBeenCalledTimes(2));
+  expect(fetcher.mock.calls[1][0]).toContain("/22222222-2222-4222-8222-222222222222/analysis/");
+  expect(fetcher.mock.calls[0][1].body).not.toEqual(fetcher.mock.calls[1][1].body);
+});
+
+it("aborts and discards an in-flight response when the selected mapping changes", async () => {
+  let finish!: (value: unknown) => void;
+  const fetcher = vi.fn(() => new Promise(resolve => { finish = resolve; }));
+  vi.stubGlobal("fetch", fetcher);
+  const view = render(<AssistedAnalysis mappingId={id} />);
+  fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
+  await waitFor(() => expect(fetcher).toHaveBeenCalledTimes(1));
+  view.rerender(<AssistedAnalysis mappingId="22222222-2222-4222-8222-222222222222" />);
+  expect((fetcher.mock.calls as unknown as [string, RequestInit][])[0][1].signal?.aborted).toBe(true);
+  finish({ ok: true, json: async () => result });
+  await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Nothing is sent"));
+  expect(screen.queryByRole("region", { name: "Advisor result" })).toBeNull();
 });
