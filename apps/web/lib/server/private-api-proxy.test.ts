@@ -15,6 +15,24 @@ beforeEach(() => {
 });
 
 describe("private API proxy", () => {
+  it("forwards only the explicit analysis POST with a bounded paired deadline and no retries", async () => {
+    const route = `${path}/analysis/mapping/${id}`;
+    const timeout = vi.spyOn(AbortSignal, "timeout");
+    try {
+      const response = await proxyRequest(request(route, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ request_id: id, confirmed: true }),
+      }), config, dependencies);
+      expect(response.status).toBe(200);
+      expect(timeout).toHaveBeenCalledWith(130_000);
+      expect(dependencies.fetch).toHaveBeenCalledTimes(1);
+      expect(allowedRoute("GET", route.replace("/api", ""))).toBe(false);
+      expect(allowedRoute("POST", route.replace("/api", "") + "/approve")).toBe(false);
+      expect((await proxyRequest(request(route, { method: "POST", headers: { Authorization: "" } }), config, dependencies)).status).toBe(401);
+      expect((await proxyRequest(request(route, { method: "POST", headers: { Origin: "https://evil.test" } }), config, dependencies)).status).toBe(403);
+      expect(dependencies.fetch).toHaveBeenCalledTimes(1);
+    } finally { timeout.mockRestore(); }
+  });
   it("accepts only the explicit additional Hosting origin without changing the API audience", async () => {
     const hosted = { ...config, additionalOrigins: ["https://movebooks-si.web.app"] };
     for (const Origin of [config.publicOrigin, "https://movebooks-si.web.app"]) {

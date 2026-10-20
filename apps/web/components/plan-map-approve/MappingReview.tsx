@@ -8,6 +8,7 @@ import { AiStatusBadge, PlannedExample, StatusChip } from "@/components/v2/primi
 import { V2_STATUS_LABEL, V2_STATUS_RECOVERY } from "@/components/v2/mapping-status";
 import { BulkApproval } from "./BulkApproval";
 import { IndependentReview } from "./IndependentReview";
+import { AssistedAnalysis } from "./AssistedAnalysis";
 import { MappingEvidence } from "./MappingEvidence";
 import { MappingReconsideration } from "./MappingReconsideration";
 import { areaLabel } from "./PlanSummary";
@@ -194,11 +195,14 @@ function MappingDetail({ mapping, history, editable, busy, decide, reconsider, h
 
 function SecondOpinion({ mapping }: { mapping: MappingProposal }) {
   const titleId = useId();
+  const analysisPreview = process.env.NEXT_PUBLIC_SYNTHETIC_ANALYSIS_ENABLED === "true" && mapping.source_id === "account-clearing";
   return <section className="pm-second" aria-labelledby={titleId}>
     <div className="pm-second-head"><h4 id={titleId}>Want a second opinion?</h4><AiStatusBadge withDetail /></div>
+    {analysisPreview ? <AssistedAnalysis key={`analysis:${mapping.id}:${mapping.state}:${mapping.selected_target}`} mappingId={mapping.id} /> : <>
     <p className="pm-meta">The Advisor will explain a mapping and the Reviewer will challenge it. Neither decides: you approve every change, and advice never changes your books.</p>
     <div className="pm-second-actions"><button type="button" className="button secondary small" disabled>Ask the Advisor</button><button type="button" className="button secondary small" disabled>Ask the Reviewer</button></div>
     <PlannedExample><p>Advisor: “Here is why the rules suggest this target, and what to check in your old books before you approve it.”</p><p>Reviewer: “Here is what could be wrong with this mapping, and the evidence that would settle it.”</p></PlannedExample>
+    </>}
     {mapping.area === "chart_of_accounts" && <IndependentReview key={`${mapping.id}:${mapping.state}:${mapping.selected_target}`} mappingId={mapping.id} />}
   </section>;
 }

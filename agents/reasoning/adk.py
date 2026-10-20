@@ -10,6 +10,8 @@ from pydantic import ValidationError
 from .prompts import instruction
 from .provider import ProviderFailure, ProviderResult, safe_shape, safe_validation_issues
 
+MAX_REQUEST_BYTES = 65_536
+
 
 def protect_sdk_telemetry():
     # Process-wide, fail-safe policy: do not restore unsafe SDK content logging
@@ -63,8 +65,14 @@ def generation_config(model):
 
 
 async def run_advisor(
-    context, model, settings, *, llm=None, output_contract=None,
-    role_instruction=None, role_name=None,
+    context,
+    model,
+    settings,
+    *,
+    llm=None,
+    output_contract=None,
+    role_instruction=None,
+    role_name=None,
 ):
     from google.adk.agents import LlmAgent
     from google.adk.agents.run_config import RunConfig
@@ -109,8 +117,7 @@ async def run_advisor(
 
     def before_model(callback_context, llm_request):
         nonlocal calls
-        calls += 1
-        if calls > 2:
+        if calls >= 2:
             raise ValueError("Model call budget exceeded")
         # ADK's generated response tool uses field annotations only, dropping Field
         # constraints. Send the full strict wire schema instead; never relax host validation.
@@ -119,6 +126,23 @@ async def run_advisor(
                 if declaration.name == "set_model_response":
                     declaration.parameters = None
                     declaration.parameters_json_schema = WireAdvice.model_json_schema()
+        # Bound the complete text/tool-schema request on every turn, including
+        # previous model/tool output. This is a byte guard, not a tokenizer or billing meter.
+        if len(llm_request.model_dump_json(exclude_none=True).encode()) > MAX_REQUEST_BYTES:
+            raise ProviderFailure(
+                ProviderResult(
+                    "",
+                    calls,
+                    reads,
+                    input_tokens if usage_reports else None,
+                    output_tokens if usage_reports else None,
+                    validation_issues=[
+                        {"path": "$", "rule": "capacity", "reason": "Request capacity exceeded"}
+                    ],
+                ),
+                "input_capacity",
+            )
+        calls += 1
 
     def after_model(callback_context, llm_response):
         nonlocal input_tokens, output_tokens, usage_reports, response_shape, finish_reason

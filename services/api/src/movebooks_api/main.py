@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse
 from agents.contracts import WorkflowState
 from agents.registry import AGENT_RESPONSIBILITIES
 
+from .analysis import router as analysis_router
 from .auth import Principal, require_principal
 from .discover_assess import router as discover_assess_router
 from .discover_assess.onboard_fpu import router as onboard_fpu_router
@@ -60,6 +61,7 @@ app.include_router(onboard_fpu_router)
 app.include_router(intake_router)
 app.include_router(reasoning_router)
 app.include_router(reviewer_router)
+app.include_router(analysis_router)
 app.include_router(operational_activity_router)
 
 

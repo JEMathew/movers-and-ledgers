@@ -17,6 +17,7 @@ const routes = {
     `${session}/(discovery|assessment|plan|mappings|events)`,
     `${session}/mappings/${id}/(approve|reject|modify|reconsiderations)`,
     `${session}/reviewer/mapping/${id}`,
+    `${session}/analysis/mapping/${id}`,
     `${session}/mappings/${id}/reconsiderations/${id}/review`,
     `${session}/migration/(start|retry|resume)`,
     `${session}/migration/resolutions/${id}/decision`,
@@ -32,6 +33,10 @@ const routes = {
 export function allowedRoute(method: string, path: string) {
   const patterns = routes[method as keyof typeof routes];
   return patterns?.some(pattern => new RegExp(`^/v1/${pattern}$`).test(path)) ?? false;
+}
+
+export function assistedAnalysisRoute(method: string, path: string) {
+  return method === "POST" && new RegExp(`^/v1/${session}/analysis/mapping/${id}$`).test(path);
 }
 
 export function cloudIntake(path: string) {
