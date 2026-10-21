@@ -54,7 +54,7 @@
         "id": "guidance",
         "title": "Guidance in this release",
         "paragraphs": [
-          "Current in-product guidance uses deterministic rules. Gemini Advisor and Reviewer assistance is planned and unavailable in this release. Technology attribution does not establish that live Gemini assistance is available to users or imply Google endorsement."
+          "Live Gemini Advisor and independent Reviewer analysis is available only to approved synthetic evaluation accounts when an eligible user explicitly requests analysis. The Advisor and Reviewer use separate model runs; the Reviewer examines the recommendation against independently selected source facts. Selected synthetic mapping facts and the recommendation needed for review are processed by Gemini on Google Cloud Vertex AI using its global endpoint. This processing is not restricted to Singapore. Raw uploads, customer records, balances and credentials are excluded from the model context. Do not submit real accounting data. Recommendations and Reviewer findings are retained with the migration workspace; bounded usage, timing and request-reference metadata support operation and audit. The retention limitations below still apply. Offline Judge and any explicitly labeled deterministic fallback do not call Gemini. Provider attribution does not imply Google endorsement."
         ]
       },
       {
@@ -96,7 +96,7 @@
         "title": "Accounts, guidance and decisions",
         "paragraphs": [
           "Review your signed-in account before acting. You remain responsible for decisions you make during evaluation. Follow the workflow’s approval and validation requirements; a suggestion or synthetic demonstration is not permission to bypass a failed check.",
-          "Current in-product guidance uses deterministic rules. Gemini Advisor and Reviewer assistance is planned and unavailable in this release. Provider logos and attribution do not imply endorsement, sponsorship or a formal partnership.",
+          "Live Gemini analysis is limited to approved synthetic evaluation accounts and requires an explicit user request. When a live analysis completes, Advisor recommendations and independent Reviewer findings appear separately. They may be incomplete or incorrect and do not approve a mapping, correct financial records or execute a migration. Review the evidence and uncertainty and make any permitted approval or rejection yourself. Offline Judge and explicitly labeled deterministic fallback are rule-based, not live Gemini responses. Missing-evidence guidance does not create or send a source-evidence request. Provider logos and attribution do not imply endorsement, sponsorship or a formal partnership.",
           "The MVP does not provide accounting, tax or legal advice. Do not use its synthetic demonstrations to carry out real financial transactions."
         ]
       },
@@ -105,7 +105,8 @@
         "title": "Help and availability",
         "paragraphs": [
           "Help provides self-service guidance. The feedback feature prepares an unsent draft; it does not submit a ticket. No staffed support, response-time or uptime commitment is made.",
-          "Evaluation features may be incomplete. Do not rely on the MVP as the only copy of records you need to keep. Signing out does not delete stored account or workspace data. Read the Privacy Policy for the current data-handling description."
+          "Evaluation features may be incomplete. Do not rely on the MVP as the only copy of records you need to keep. Signing out does not delete stored account or workspace data. Read the Privacy Policy for the current data-handling description.",
+          "Live analysis is offered during a limited, nonrenewing seven-day evaluation window, subject to a shared usage allowance. Each approved user may request at most five paired analyses per UTC day, and each approved workspace at most ten. Starting an analysis consumes an allowance even if it fails; a repeated request for the same analysis does not start another model run. Access can stop earlier if the shared allowance is exhausted, an operational safety check fails or the operator disables the feature. Availability and a successful model response are not guaranteed."
         ]
       }
     ]

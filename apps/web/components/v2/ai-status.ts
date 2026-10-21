@@ -10,11 +10,11 @@ export const AI_ASSISTANCE_STATUS: AiAssistanceStatus = "planned";
 export const AI_STATUS_LABEL: Record<AiAssistanceStatus, string> = {
   planned: "Planned",
   prototype: "Prototype",
-  live: "Live",
+  live: "Live · limited evaluation",
 };
 
 export const AI_STATUS_DETAIL: Record<AiAssistanceStatus, string> = {
   planned: "not available in the Beta",
   prototype: "scripted example, not live model output",
-  live: "answers come from a live model",
+  live: "Gemini for approved synthetic accounts; Offline Judge stays deterministic",
 };

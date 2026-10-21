@@ -1,10 +1,36 @@
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { AI_ASSISTANCE_STATUS } from "./ai-status";
+import { AI_ASSISTANCE_STATUS, AI_STATUS_DETAIL, AI_STATUS_LABEL } from "./ai-status";
 
 const root = join(__dirname, "..", "..");
 const read = (file: string) => readFileSync(join(root, file), "utf8");
+
+// Exact owner-approved prospective disclosures. This local checkpoint is not a live
+// activation: publication must wait for the corresponding hosted acceptance gates.
+// Hashes freeze the reviewed wording; all remaining policy copy keeps the existing guard.
+const approvedDisclosures = [
+  ["privacy", "guidance", 0, "683e78da89e66f829fdb132dd8e4bd95bf26027403b572b46475e53a8908f617"],
+  ["terms", "decisions", 1, "add1a27697f707cefbb0a7a6bb4217bc993119d4c5dd5012b29181bb9d27ea23"],
+  ["terms", "availability", 2, "cfc1a8c0ac1185661d314e1660d031c4d73ad5d3e86ace2881a9ae887173f84a"],
+] as const;
+
+function copyWithReviewedDisclosuresChecked(file: string) {
+  const source = read(file);
+  if (file !== "components/policies/policy-content.json") return source;
+  const policy = JSON.parse(source) as Record<string, {
+    sections: { id: string; paragraphs: string[] }[];
+  }>;
+  for (const [document, id, index, hash] of approvedDisclosures) {
+    const section = policy[document].sections.find(s => s.id === id);
+    expect(section, `${document}.${id} exists`).toBeDefined();
+    const paragraph = section!.paragraphs[index];
+    expect(createHash("sha256").update(paragraph).digest("hex"), `${document}.${id} matches owner-approved wording`).toBe(hash);
+    section!.paragraphs[index] = "";
+  }
+  return JSON.stringify(policy, null, 2);
+}
 
 // Every public and signed-in surface whose copy mentions AI, Gemini, the Advisor or the Reviewer.
 // Attribution.tsx is deliberately absent: its line is the owner-approved exception tested on its own below.
@@ -39,12 +65,19 @@ describe("AI status in product copy", () => {
     expect(AI_ASSISTANCE_STATUS).toBe("planned");
   });
 
+  it("prepares the limited-evaluation labels without changing current availability", () => {
+    expect(AI_STATUS_LABEL.live).toBe("Live · limited evaluation");
+    expect(AI_STATUS_DETAIL.live).toBe("Gemini for approved synthetic accounts; Offline Judge stays deterministic");
+    expect(AI_STATUS_LABEL[AI_ASSISTANCE_STATUS]).toBe("Planned");
+    expect(AI_STATUS_DETAIL[AI_ASSISTANCE_STATUS]).toBe("not available in the Beta");
+  });
+
   it.each(files)("%s claims no AI advice that is running today", (file) => {
     expect(read(file)).not.toMatch(presentTenseAi);
   });
 
   it.each(files)("%s qualifies every AI offer as planned, unavailable or dev/test only", (file) => {
-    const unqualified = sentences(read(file)).filter(s => aiOffer.test(s) && !qualified.test(s));
+    const unqualified = sentences(copyWithReviewedDisclosuresChecked(file)).filter(s => aiOffer.test(s) && !qualified.test(s));
     expect(unqualified).toEqual([]);
   });
 
