@@ -5,6 +5,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
 
+from agents.reasoning.projection import context_hash
 from agents.reasoning.transport import ACTIVE, paired_transport
 from agents.reviewer.agent import review_context
 from domain.reasoning.models import Capability, ReasoningRecord, ReasoningRequest, StrictModel
@@ -15,6 +16,7 @@ from .discover_assess.service import discover_assess_service
 from .reasoning import request_advice
 from .reviewer import request_review
 from .runtime.hosted_evaluation import new_pair_guard
+from .runtime.judge_budget import JudgeAuthority, new_judge_guard
 from .runtime.model_controls import ControlDenied
 from .settings import get_settings
 
@@ -57,7 +59,8 @@ async def request_analysis(
         )
     guard = None
     try:
-        guard = new_pair_guard(settings, owner, session_id, mapping_id, request.request_id)
+        factory = new_judge_guard if settings.judge_campaign_enabled else new_pair_guard
+        guard = factory(settings, owner, session_id, mapping_id, request.request_id)
         with paired_transport(guard):
             return await _request_analysis(
                 repository,
@@ -105,9 +108,12 @@ async def _request_analysis(
     if mapping is None or mapping.source_id != CASE_ID:
         raise HTTPException(409, "Only the synthetic 1200 · Misc Clearing case is supported.")
     try:
-        review_context(session, mapping_id)  # Admission before reserving any model call.
+        context = review_context(session, mapping_id)  # Admission before any model call.
     except ValueError as error:
         raise HTTPException(409, str(error)) from None
+    guard = ACTIVE.get() if settings.cloud else None
+    if guard is not None and isinstance(guard.authority, JudgeAuthority):
+        guard.authority.bind_context(context_hash(context))
     advisor = await request_advice(
         repository,
         owner,
@@ -119,6 +125,10 @@ async def _request_analysis(
         mapping_id=mapping_id,
     )
     guard = ACTIVE.get() if settings.cloud else None
+    if guard is not None and isinstance(guard.authority, JudgeAuthority) and not guard.prepared:
+        # A cached Advisor may replay a cached pair, but may not buy a new Reviewer
+        # under a fresh campaign claim. Interrupted pairs require explicit review.
+        guard.blocked = True
     if guard is not None and guard.prepared:
         if advisor.state in {"COMPLETED", "ESCALATED"}:
             await guard.authority.change("advisor_complete")

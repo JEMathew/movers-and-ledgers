@@ -1,0 +1,9 @@
+{
+  "decision": "ACCEPTED",
+  "owner_answer": "Accept this bounded policy",
+  "accepted_question": "$5 aggregate inference allowance for one nonrenewing seven-day window, at most 5 paired analyses per user per UTC day and 10 per workspace per UTC day, restricted to explicitly approved synthetic judge identities/workspaces. Separate from the four-attempt hosted-validation grant; activation requires all release gates.",
+  "identity_answer": "No approved manifest exists yet",
+  "activation_authorized_now": false,
+  "start_utc": null,
+  "end_utc": null
+}
