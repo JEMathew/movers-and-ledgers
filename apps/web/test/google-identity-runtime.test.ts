@@ -109,6 +109,30 @@ describe("server-verified identity display", () => {
     const { verifiedIdentity } = await import("@/lib/identity");
     await expect(verifiedIdentity(user)).rejects.toThrow("Session verification failed");
   });
+  it("allows the browser's same-origin IAP session while independently checking Firebase identity", async () => {
+    vi.stubGlobal("window", { location: { origin: "https://preview.example.test" } });
+    vi.stubEnv("NEXT_PUBLIC_API_BASE_URL", "/api");
+    const fetch = vi.fn().mockImplementation((_url: string, options: RequestInit) =>
+      Promise.resolve(options.credentials === "same-origin"
+        ? Response.json({ subject: "firebase:user-b", email: "server@example.test" })
+        : Response.json({}, { status: 401 })));
+    vi.stubGlobal("fetch", fetch);
+    const { verifiedIdentity } = await import("@/lib/identity");
+    expect(await verifiedIdentity(user)).toEqual({ subject: "firebase:user-b", email: "server@example.test" });
+    expect(fetch).toHaveBeenCalledWith("https://preview.example.test/api/v1/identity", expect.objectContaining({
+      headers: { Authorization: "Bearer synthetic-token" }, credentials: "same-origin", cache: "no-store", redirect: "error",
+    }));
+    fetch.mockResolvedValueOnce(Response.json({ subject: "firebase:other-owner", email: "other@example.test" }));
+    await expect(verifiedIdentity(user)).rejects.toThrow("Session identity mismatch");
+  });
+  it("never attaches session cookies to a different HTTPS API origin", async () => {
+    vi.stubGlobal("window", { location: { origin: "https://preview.example.test" } });
+    const fetch = vi.fn().mockResolvedValue(Response.json({ subject: "firebase:user-b", email: "server@example.test" }));
+    vi.stubGlobal("fetch", fetch);
+    const { verifiedIdentity } = await import("@/lib/identity");
+    await verifiedIdentity(user);
+    expect(fetch).toHaveBeenCalledWith("https://beta.example.test/api/v1/identity", expect.objectContaining({ credentials: "omit" }));
+  });
   it.each([
     { subject: "firebase:other-owner", email: "other@example.test" },
     { subject: "firebase:user-b", email: null }, { subject: "firebase:user-b", email: "" },
