@@ -168,6 +168,58 @@
     "sha256": "f318ebaf7a98fc3fb2ba3994628eded310bbb7aff99cb5713c254d4444f79923"
   },
   {
+    "path": "evidence/controls-followup-2026-10-23/fullscreen-02.jpg",
+    "sha256": "edb5ef2dca7c1b75c5424d9ffa718611e7a24bdfdbb12cef8e426ae96ec58d62"
+  },
+  {
+    "path": "evidence/controls-followup-2026-10-23/fullscreen-03.jpg",
+    "sha256": "623f0df8b082e5ae626372a76e34ffe5cce906f81959a3853a1437e5ac3f730d"
+  },
+  {
+    "path": "evidence/controls-followup-2026-10-23/fullscreen-03.txt",
+    "sha256": "a24e2ec91048f249a98db58960a8ec50a3e9547c6637a42ee90e8052989911dc"
+  },
+  {
+    "path": "evidence/controls-followup-2026-10-23/fullscreen-06.jpg",
+    "sha256": "da9fbd18c79f01f71f53ff727d1f3de174b2630d7aa2781d8051879016fc681d"
+  },
+  {
+    "path": "evidence/controls-followup-2026-10-23/fullscreen-06.txt",
+    "sha256": "67a17ad09dfc181604e7a7e535d5e5a9b668bf109df0c5ea815e150e554a2e36"
+  },
+  {
+    "path": "evidence/controls-followup-2026-10-23/fullscreen-08.jpg",
+    "sha256": "9c3bbce14fd36165e99a300c110d8f8c90368f844d43768142db3fb2247e7789"
+  },
+  {
+    "path": "evidence/controls-followup-2026-10-23/fullscreen-08.txt",
+    "sha256": "c076c3605ec78a6b4c527dc6244a8367af955d39b80e27dd54bee6a48408efec"
+  },
+  {
+    "path": "evidence/controls-followup-2026-10-23/fullscreen-exit-02.txt",
+    "sha256": "bf2f9c6defad2e35a387bfddb1ee001316e5d5bfcc4736be9c3359f3f7f7bc9f"
+  },
+  {
+    "path": "evidence/controls-followup-2026-10-23/fullscreen-exit-03.txt",
+    "sha256": "800caaa4d2acce05065732bbad4049ad236a17a6475d5b1cbc145aada7c5d1e5"
+  },
+  {
+    "path": "evidence/controls-followup-2026-10-23/fullscreen-exit-06.txt",
+    "sha256": "273c43c92e943f005dea838c309f6cb1403bb48e0ed9fe318ac2e6bbb7e300ad"
+  },
+  {
+    "path": "evidence/controls-followup-2026-10-23/fullscreen-exit-08.txt",
+    "sha256": "1b00dbf32d2c82bbd03a93dce9b46ae36a3048e055698c99817ac2db6703bb9d"
+  },
+  {
+    "path": "evidence/controls-followup-2026-10-23/inline-restored.jpg",
+    "sha256": "1852ecb854a9856cf34d437c1ae1b8fe68cd96a3a0aa2a2e87183979724e5835"
+  },
+  {
+    "path": "evidence/controls-followup-2026-10-23/results.json",
+    "sha256": "57b1c0168a4d7c198a5c361fda7afb0a3bd26c0c7a697ddd153114bef76ef54c"
+  },
+  {
     "path": "evidence/desktop-dark.jpg",
     "sha256": "ebef5f8353f60036cde34a8f65aadb708c63694933be48ebd16b1dbca6172fc5"
   },

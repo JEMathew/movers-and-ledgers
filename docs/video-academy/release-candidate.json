@@ -18,7 +18,8 @@
       "api": "Existing verified corrected SDK/receipt-bound continuation image; exact source manifest in proof evidence"
     },
     "proposedWebAmd64Digest": "sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad",
-    "proposedIsReleased": false
+    "proposedIsReleased": false,
+    "latestObservedState": "Active production promotion; await completed release receipt"
   },
   "media": {
     "hosting": "same-origin existing web service; approved bundle outside public/",
@@ -49,7 +50,8 @@
     "productionHttpSyntheticChecksPassed": 108,
     "actualOriginalCaptionPlayback": "NOT VERIFIED",
     "reviewCutProductFidelity": "NOT VERIFIED",
-    "finalImageBuildAndScan": "NOT VERIFIED"
+    "finalImageBuildAndScan": "NOT VERIFIED",
+    "fullscreenAllSix": "PASS"
   },
   "productionWrites": 0,
   "additionalPaidServices": 0,
@@ -57,5 +59,6 @@
     "targetWebRevision": null,
     "targetWebDigest": null,
     "strategy": "Capture exact Gemini-enabled serving web revision and digest immediately before any future Track C publication. Roll back only the web selection to that revision, with its matching bundled media. Preserve API selection, Gemini policy/campaign, budgets and financial records; use existing release authorization controls."
-  }
+  },
+  "productionHold": true
 }

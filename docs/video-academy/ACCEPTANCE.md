@@ -2,7 +2,7 @@
 
 **NO-GO for production handoff. Implementation remains partial.** Six original MP4s genuinely play locally, but captions are absent, Cillian identity is not certified, and no production media is configured or approved.
 
-Subsequent media-route correction: [release coordination](RELEASE-COORDINATION.md). The historical matrix below remains scoped to the original acceptance run; current production serving supports explicitly approved bundles, while all current original assets remain unpublished.
+Subsequent media-route correction: [release coordination](RELEASE-COORDINATION.md). The matrix below retains the original evidence, with fullscreen coverage explicitly updated by the controls follow-up; current production serving supports explicitly approved bundles, while all current original assets remain unpublished.
 
 Live preview: http://127.0.0.1:3107/learn?tab=videos
 
@@ -20,7 +20,7 @@ PASS means the stated check was executed with the stated limits. NOT VERIFIED is
 | Six original MP4 Play, pause and resume | **PASS** | Native Play clicked for all six. Time advanced, stayed fixed while paused, then advanced after resume. Original AAC audio enabled. This is not a voice-identity or audible-output certification. Evidence: `playback.json`. |
 | Six keyboard seek, mute/unmute and speed controls | **PASS** | Each player accepted seek, mute/unmute and 2x speed; 1.5x also exercised on 07. Evidence: `controls.json`. |
 | Adjustable volume level on all six | **NOT VERIFIED** | Native volume slider was operated on 07, but numeric volume was not exposed by the browser inspection bridge; full range and all six volume controls were not independently verified. Evidence: `fullscreen-07.jpg`. |
-| Fullscreen entry and exit on all six | **NOT VERIFIED** | Native entry/exit verified for 01 and 07, including restored inline page and normal tab interaction. The remaining four are not marked PASS after an unreliable automated continuation. Evidence: `fullscreen.json; fullscreen-07.jpg; fullscreen-exited-07.jpg`. |
+| Fullscreen entry and exit on all six | **PASS** | Original acceptance verified 01/07. Follow-up verified 02/03/06/08 with actual native fullscreen screenshots and restored inline-page accessibility states. Viewport override was reset to align native control targeting; no player code changed. New evidence: `evidence/controls-followup-2026-10-23/results.json`. |
 | Loading, playback error and retry | **PASS** | Loading messages observed during original media loads. A temporary readonly localhost proxy returned 503 for lesson 01 MP4. Actual player error UI appeared; restoring upstream and clicking Retry removed the alert and resumed time progression. Original files untouched; test proxy stopped. Shared component tested, not a separate outage for every lesson. Evidence: `fault-recovery.json; playback-error.jpg; playback-recovered.jpg`. |
 | Integrity and full file decode | **PASS** | Nine source SHA-256 values still match the prior full FFmpeg decode evidence. All H.264 1920x1080/AAC stereo 48kHz, non-silent audio; six preview copies unchanged. Evidence: `preservation.json; ../media-review/playback.json; ../../media-manifest.json`. |
 | Clean seek-to-end completion | **PASS** | All six reached ended=true at duration with error=null. This is seek-to-end validation, not six uninterrupted browser viewings. Lesson 07 also naturally reached its end after pause/resume; prior browser evidence has 03 completion. Evidence: `end-state.json; playback.json`. |
@@ -42,7 +42,7 @@ All evidence paths in the table are relative to [the acceptance evidence directo
 
 1. Copy the original `Subtitles` directory into `/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/source/`. Do not re-download or regenerate the videos. Convert those originals to VTT, render captions in all six players, and verify synchronization at beginning/middle/end.
 2. Have a reviewer listen to the originals and confirm Cillian narration, intelligibility and content accuracy. Complete full sensitive-content and exact final-release UI review. All originals retain review watermarks; none was silently approved for publication.
-3. Complete the outstanding per-video volume/fullscreen and browser compatibility checks; preserve the explicit evidence limits above.
+3. Complete the outstanding per-video volume and browser compatibility checks; preserve the explicit evidence limits above.
 4. Select existing approved stable HTTPS hosting for the six eligible originals, verify ranges/MIME/CORS and populate the production registry only after publication approval. Keep 04/05/09 denied until separately approved genuine Gemini replacements and Track B evidence exist.
 5. Compare the feature with the final owner-approved integrated release. Deployment remains separately approval-gated; this branch was not merged or deployed.
 

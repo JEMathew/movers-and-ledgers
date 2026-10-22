@@ -63,7 +63,7 @@ npm run build
 Real in-app browser verification:
 
 - All six eligible originals loaded and progressed with original audio enabled; lesson 03 reached its end. This proves browser playback and enabled audio, not a human voice-identity audit.
-- Play/pause, keyboard seek, mute/unmute and 1.5× speed exercised. Subsequent acceptance verified native fullscreen entry/exit on 01 and 07; the other four remain unverified. Inline tab cleanup was independently retested. See ACCEPTANCE.md for exact coverage.
+- Play/pause, keyboard seek, mute/unmute and 1.5× speed exercised. Acceptance and the controls follow-up verified native fullscreen entry/exit on all six. Numeric volume-range coverage remains unverified. Inline tab cleanup was independently retested. See ACCEPTANCE.md for exact coverage.
 - Both tabs, all nine tiles, ten original topics and accordion behavior; desktop 1440px, tablet 768px and mobile 390px, 3/2/1 columns without horizontal overflow; light and dark appearances.
 - Earlier focused browser check covered original landing photo/CTAs, local demo sign-in and `/assess` Watch guide → lesson 02. No migration was advanced.
 - Actual six MP4 endpoints returned 206 byte ranges with video/mp4; restricted 04/05/09 returned 404. Boundary tests additionally cover absent caption routes, traversal, symlink containment and production denial.

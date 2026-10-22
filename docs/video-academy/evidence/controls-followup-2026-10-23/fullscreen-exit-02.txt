@@ -1,0 +1,164 @@
+Browser tab: 1, Title: "Learn · MoveBooks AI", URL: "http://127.0.0.1:3107/learn?tab=videos".
+0 AXWebArea Learn · MoveBooks AI, URL: 127.0.0.1:3107/learn?tab=videos
+	1 container
+		2 link Description: MoveBooks AI home, Value: 127.0.0.1:3107/
+		3 container Primary navigation
+			4 link Description: Learn, Value: 127.0.0.1:3107/learn
+			5 link Description: Trust and Security, Value: 127.0.0.1:3107/trust
+		6 pop up button (collapsed) Description: Change appearance, Secondary Actions: Expand
+		7 link Description: My Migration, Value: 127.0.0.1:3107/workspace
+	8 container main-content
+		9 container
+			10 text Learn
+			11 heading Understand one decision., Value: 1
+				12 text Understand one decision.
+			13 text Choose a concept, review its meaning, then return to your task. Synthetic Beta No real customer or production provider data. No live provider migration.
+			14 link Description: Go to my migration, Value: 127.0.0.1:3107/workspace
+			15 text Learning leaves migration progress unchanged.
+		16 tab group Learn formats
+			17 tab (selected, settable, boolean) Video Guides, Value: 1, ID: tab-videos
+			18 tab (selectable, settable, boolean) Learn the Concepts, Value: 0, ID: tab-concepts
+		19 container Description: Video Guides, ID: panel-videos
+			20 heading One guide. Your next step., Value: 2
+				21 text One guide. Your next step.
+			22 text Short walkthroughs for every stage, with decisions and evidence in view.
+			23 text 9 guides · 4 collections
+			24 container
+				25 text Start with Getting Started. Local review previews only; original subtitles and publication approval are pending.  The three Gemini review cuts remain unavailable pending approval.
+			26 container Understand Your Migration player
+				27 heading Understand Your Migration, Value: 2
+					28 text Understand Your Migration
+				29 button Close video
+				30 container Understand Your Migration
+					31 container
+						32 button
+						33 slider
+						34 button
+						35 button
+						36 pop up button
+					37 slider video time scrubber
+				38 container
+					39 text Playback speed 
+					40 pop up button (collapsed, settable) Playback speed, Value: 1×, Secondary Actions: Expand
+						41 menu
+							42 0.75×
+							43 (selected) 1×
+							44 1.25×
+							45 1.5×
+							46 2×
+				47 text Original English subtitles not yet connected
+				48 text Local review preview · not approved for publication. Original recording retained; caption and content review is incomplete.
+				49 container academy-player-help
+					50 text Space or K: play/pause · ← / →: seek · M: mute.  Fullscreen is in the player controls.
+			51 container Getting Started
+				52 heading Getting Started, Value: 3, ID: collection-0
+					53 text Getting Started
+				54 container lesson-01
+					55 container
+						56 image Video frame from Getting Started
+						57 text 1:28
+					58 text GUIDE  01 Start here
+					59 heading Getting Started, Value: 4
+						60 text Getting Started
+					61 text Find your way around the demo and take your first step with synthetic books.
+					62 text Captions awaiting verification Local review only · unpublished
+					63 button Watch Getting Started
+				64 container lesson-09
+					65 container
+						66 container Video poster not yet available
+							67 text Review cut
+						68 text 2:58
+					69 text GUIDE  09
+					70 heading Three-Minute Journey, Value: 4
+						71 text Three-Minute Journey
+					72 text A guided overview from understanding your books to verified first use.
+					73 text Captions awaiting verification Not published · review cut
+			74 container Migration Journey
+				75 heading Migration Journey, Value: 3, ID: collection-1
+					76 text Migration Journey
+				77 container lesson-02
+					78 container
+						79 image Video frame from Understand Your Migration
+						80 text 1:10
+					81 text GUIDE  02
+					82 heading Understand Your Migration, Value: 4
+						83 text Understand Your Migration
+					84 text Read the migration scope, source evidence and items that need attention.
+					85 text Captions awaiting verification Local review only · unpublished
+					86 button Watch Understand Your Migration
+				87 container lesson-03
+					88 container
+						89 image Video frame from Prepare and Approve
+						90 text 1:34
+					91 text GUIDE  03
+					92 heading Prepare and Approve, Value: 4
+						93 text Prepare and Approve
+					94 text Review mappings and make informed decisions before your books move.
+					95 text Captions awaiting verification Local review only · unpublished
+					96 button Watch Prepare and Approve
+				97 container lesson-06
+					98 container
+						99 image Video frame from Move and Verify
+						100 text 1:31
+					101 text GUIDE  06
+					102 heading Move and Verify, Value: 4
+						103 text Move and Verify
+					104 text Follow migration checkpoints, resolve blockers and inspect reconciliation.
+					105 text Captions awaiting verification Local review only · unpublished
+					106 button Watch Move and Verify
+				107 container lesson-07
+					108 container
+						109 image Video frame from First Productive Use
+						110 text 1:30
+					111 text GUIDE  07
+					112 heading First Productive Use, Value: 4
+						113 text First Productive Use
+					114 text Complete your first synthetic task and check the evidence of readiness.
+					115 text Captions awaiting verification Local review only · unpublished
+					116 button Watch First Productive Use
+			117 container Gemini AI
+				118 heading Gemini AI, Value: 3, ID: collection-2
+					119 text Gemini AI
+				120 container lesson-04
+					121 container
+						122 container Video poster not yet available
+							123 text Review cut
+						124 text 1:46
+					125 text GUIDE  04
+					126 heading Gemini Advisor, Value: 4
+						127 text Gemini Advisor
+					128 text Understand AI suggestions, their evidence and the decisions that stay yours.
+					129 text Captions awaiting verification Not published · review cut
+				130 container lesson-05
+					131 container
+						132 container Video poster not yet available
+							133 text Review cut
+						134 text 1:43
+					135 text GUIDE  05
+					136 heading Independent Gemini Reviewer, Value: 4
+						137 text Independent Gemini Reviewer
+					138 text See how independent review checks advice without replacing financial controls.
+					139 text Captions awaiting verification Not published · review cut
+			140 container Trust & Help
+				141 heading Trust & Help, Value: 3, ID: collection-3
+					142 text Trust & Help
+				143 container lesson-08
+					144 container
+						145 image Video frame from Trust and Troubleshooting
+						146 text 1:30
+					147 text GUIDE  08
+					148 heading Trust and Troubleshooting, Value: 4
+						149 text Trust and Troubleshooting
+					150 text Understand safeguards, find evidence and return safely to a paused task.
+					151 text Captions awaiting verification Local review only · unpublished
+					152 button Watch Trust and Troubleshooting
+	153 container
+		154 text © 2026 Movers & Ledgers
+		155 container Footer
+			156 link Description: Privacy, Value: 127.0.0.1:3107/privacy
+			157 link Description: Terms, Value: 127.0.0.1:3107/terms
+			158 link Description: Contact, Value: 127.0.0.1:3107/support
+	159 pop up button (collapsed) Description: Open Next.js Dev Tools, ID: next-logo, Secondary Actions: Expand
+		160 image
+
+The focused UI element is 35 button

@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-22T20:16:24.536915+00:00",
+  "sourceCommit": "ec2394b6875bbe53a96b411bb63b294d15615293",
+  "environment": "Existing localhost:3107 review preview; actual original MP4s; no production interactions",
+  "fullscreen": {
+    "priorVerified": [
+      "01",
+      "07"
+    ],
+    "newlyVerified": [
+      "02",
+      "03",
+      "06",
+      "08"
+    ],
+    "result": "PASS all six entry and exit",
+    "evidence": "fullscreen-ID.jpg and fullscreen-exit-ID.txt; previous 01/07 evidence retained",
+    "limitationResolved": "Native fullscreen has a different pixel surface from emulated viewport. Resetting viewport restored reliable native exit control targeting. No product code fix required."
+  },
+  "volumeRange": "NOT VERIFIED: browser inspection does not expose numeric volume and native slider has no settable accessibility value. No pass inferred. Prior mute/unmute evidence retained.",
+  "captions": "FAIL original SRT assets still absent in accessible authorized folder; no generated substitutes",
+  "trackB": "Active promotion in progress; no completed released-baseline confirmation observed",
+  "productionHold": true,
+  "sourceFilesChanged": false,
+  "allOriginalAssetsUnmodified": true
+}
