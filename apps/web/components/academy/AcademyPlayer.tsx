@@ -27,6 +27,7 @@ export function AcademyPlayer({ lesson, media, onClose }: { lesson: Lesson; medi
       Your browser does not support inline video playback.
     </video>
     <div className="academy-player-tools"><label>Playback speed <select value={speed} onChange={event => { setSpeed(event.target.value); if (video.current) video.current.playbackRate = Number(event.target.value); }}>{["0.75", "1", "1.25", "1.5", "2"].map(rate => <option key={rate} value={rate}>{rate}×</option>)}</select></label><span>{media.captions ? "English captions · CC in player controls" : "Original English subtitles not yet connected"}</span></div>
+    {media.transcript && <a className="public-text-link" href={media.transcript} target="_blank" rel="noopener noreferrer">Read English transcript</a>}
     {media.reviewOnly && <p className="academy-review-notice">Local review preview · not approved for publication. Original recording retained; caption and content review is incomplete.</p>}
     {loading && !error && <p role="status">Loading video…</p>}
     {error && <div role="alert"><p>This video couldn’t load. Your migration is unchanged.</p><button className="public-text-link" onClick={() => { setError(false); setLoading(true); video.current?.load(); }}>Retry video</button></div>}

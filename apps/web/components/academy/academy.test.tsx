@@ -7,7 +7,7 @@ import { lessons, type AcademyManifest } from "@/lib/academy/catalog";
 import { AnchoredDetails } from "@/components/public-surfaces/AnchoredDetails";
 import { topics } from "@/components/public-surfaces/content";
 
-const sample = { src: "/test/01.mp4", captions: "/test/01.vtt", poster: "/test/01.webp", durationSeconds: 88.1 };
+const sample = { src: "/test/01.mp4", captions: "/test/01.vtt", transcript: "/test/01.txt", poster: "/test/01.webp", durationSeconds: 88.1 };
 const concepts = topics.map(topic => <AnchoredDetails key={topic.id} id={topic.id} title={topic.title}><p>{topic.body}</p><p>{topic.question}</p></AnchoredDetails>);
 describe("Academy", () => {
   it("labels caption-incomplete review previews and emits no phantom caption track", () => {
@@ -21,15 +21,15 @@ describe("Academy", () => {
     expect(screen.getAllByRole("tab")).toHaveLength(2);
     expect(screen.getByRole("tab", { name: "Video Guides" })).toHaveAttribute("aria-selected", "true");
     expect(container.querySelectorAll("article")).toHaveLength(9);
-    expect(container.querySelectorAll('[data-publication="review-cut"]')).toHaveLength(3);
+    expect(container.querySelectorAll('[data-publication="review-cut"]')).toHaveLength(0);
     expect(container.querySelector("video, source, track, img")).toBeNull();
   });
-  it("never exposes review cuts even with injected media metadata", () => {
+  it("shows all nine reviewed lessons when the server supplies verified media", () => {
     const media = Object.fromEntries(lessons.map(lesson => [lesson.id, sample])) as AcademyManifest;
     render(<LearnAcademy media={media}>{concepts}</LearnAcademy>);
-    expect(screen.getAllByRole("button", { name: /^Watch / })).toHaveLength(6);
-    expect(screen.queryByRole("button", { name: "Watch Gemini Advisor" })).toBeNull();
-    expect(screen.getAllByText("Not published · review cut")).toHaveLength(3);
+    expect(screen.getAllByRole("button", { name: /^Watch / })).toHaveLength(9);
+    expect(screen.getByRole("button", { name: "Watch Gemini Advisor" })).toBeVisible();
+    expect(screen.queryByText("Not published · review cut")).toBeNull();
   });
   it("retains all original concepts and accordion state across keyboard tab changes", () => {
     render(<LearnAcademy media={{}}>{concepts}</LearnAcademy>);
@@ -76,10 +76,11 @@ describe("Academy", () => {
     fireEvent.keyDown(video, { key: "m" }); expect(video.muted).toBe(true);
     fireEvent.keyDown(video, { key: "Escape" }); expect(close).toHaveBeenCalledOnce();
     expect(container.querySelector("track")).toHaveAttribute("srclang", "en");
+    expect(screen.getByRole("link", { name: "Read English transcript" })).toHaveAttribute("href", sample.transcript);
   });
-  it("does not expose Gemini context links and strips untrusted navigation context", () => {
+  it("exposes corrected Gemini guides and strips untrusted navigation context", () => {
     const { container } = render(<><WatchGuide lesson="04"/><WatchGuide lesson="05"/><WatchGuide lesson="01" session="https://evil.example" stage={99}/></>);
-    expect(container.querySelectorAll("a")).toHaveLength(1);
-    expect(screen.getByRole("link")).toHaveAttribute("href", "/learn?tab=videos#lesson-01");
+    expect(container.querySelectorAll("a")).toHaveLength(3);
+    expect(container.querySelector('a[href="/learn?tab=videos#lesson-01"]')).not.toBeNull();
   });
 });

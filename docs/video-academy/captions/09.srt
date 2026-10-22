@@ -1,0 +1,238 @@
+1
+00:00:02,480 --> 00:00:06,460
+Here's a complete migration with
+MoveBooks AI in three minutes, using
+
+2
+00:00:06,460 --> 00:00:09,320
+Harbor Light Books, a
+synthetic sample book shop.
+
+3
+00:00:09,800 --> 00:00:13,420
+Explore the demo without signing in, or
+enter the demo workspace to keep your
+
+4
+00:00:13,420 --> 00:00:15,940
+progress. My migration
+shows the five stages,
+
+5
+00:00:16,580 --> 00:00:17,800
+understand, prepare, move,
+
+6
+00:00:18,440 --> 00:00:20,400
+verify and start, and
+always your one next step.
+
+7
+00:00:22,420 --> 00:00:25,640
+Understand. Choose the sample business
+and check whether the books are ready.
+
+8
+00:00:25,960 --> 00:00:28,420
+The rules report what can
+move and what would block it.
+
+9
+00:00:28,720 --> 00:00:30,580
+Harbor Light passes, with no blockers.
+
+10
+00:00:31,000 --> 00:00:34,180
+Try Northstar Supplies to see how
+findings and blockers are reported.
+
+11
+00:00:36,660 --> 00:00:38,860
+Prepare. 12 mappings, riskiest first.
+
+12
+00:00:39,400 --> 00:00:41,140
+Select 1200, Misc Clearing.
+
+13
+00:00:41,310 --> 00:00:45,310
+It's proposed as other current asset,
+but the rule check flags an ambiguous
+
+14
+00:00:45,310 --> 00:00:49,250
+name, and the evidence
+shows a 76% match below the
+
+15
+00:00:49,250 --> 00:00:52,230
+90% threshold. Read the
+evidence before you decide.
+
+16
+00:00:53,870 --> 00:00:57,410
+For a judgment call, ask the Gemini
+Advisor to explain the mapping.
+
+17
+00:00:57,810 --> 00:01:01,610
+Check the label first, AI generated or
+deterministic fallback, then read the
+
+18
+00:01:01,610 --> 00:01:03,900
+recommendation, uncertainty
+and cited evidence.
+
+19
+00:01:04,420 --> 00:01:08,160
+Advice belongs to a snapshot of the
+evidence, and the Advisor can't approve
+
+20
+00:01:08,160 --> 00:01:08,660
+anything.
+
+21
+00:01:10,770 --> 00:01:12,830
+For a clearing account,
+expect a challenge.
+
+22
+00:01:13,150 --> 00:01:14,810
+Agreement is support. Not proof.
+
+23
+00:01:15,290 --> 00:01:16,510
+Disagreement means look harder.
+
+24
+00:01:19,290 --> 00:01:19,970
+Now you decide.
+
+25
+00:01:20,650 --> 00:01:22,030
+Approve, change or reject.
+
+26
+00:01:22,490 --> 00:01:23,450
+Recorded with your name.
+
+27
+00:01:24,110 --> 00:01:27,570
+Approve the six routine low-risk
+items together with explicit consent.
+
+28
+00:01:28,050 --> 00:01:30,830
+Decide the rest one by
+one, then approve the plan.
+
+29
+00:01:31,490 --> 00:01:34,270
+Tax and chart of accounts mappings
+always get their own decision.
+
+30
+00:01:36,850 --> 00:01:40,730
+Move. Once the plan is approved,
+records move in eight ordered batches.
+
+31
+00:01:41,310 --> 00:01:45,490
+When the customers batch hits a duplicate,
+the move pauses there, and earlier
+
+32
+00:01:45,490 --> 00:01:46,650
+batches stay moved.
+
+33
+00:01:47,230 --> 00:01:48,270
+Review the proposed fix.
+
+34
+00:01:48,910 --> 00:01:51,290
+Approve it, then retry the batch from its
+
+35
+00:01:51,290 --> 00:01:53,550
+checkpoint.
+
+36
+00:01:54,130 --> 00:01:54,630
+Verify.
+
+37
+00:01:55,450 --> 00:01:59,710
+17 of 17 checks match, eight
+record counts, and nine balance and
+
+38
+00:01:59,710 --> 00:02:00,670
+integrity checks,
+
+39
+00:02:01,270 --> 00:02:05,550
+and the trial balance shows no difference
+in exact decimals with no write-off.
+
+40
+00:02:05,930 --> 00:02:09,030
+Review the settings that need
+a person and confirm them.
+
+41
+00:02:10,790 --> 00:02:11,470
+Start.
+
+42
+00:02:12,230 --> 00:02:15,650
+Approve a first invoice
+to Cedar School, $100 plus
+
+43
+00:02:15,650 --> 00:02:19,730
+$7.25 in tax, $107.25 in total,
+
+44
+00:02:20,230 --> 00:02:22,170
+then post it. The journal balances.
+
+45
+00:02:22,710 --> 00:02:24,250
+A retry can never post twice,
+
+46
+00:02:24,810 --> 00:02:26,390
+and the rules verify the result.
+
+47
+00:02:28,770 --> 00:02:30,650
+Ten of ten readiness checks pass.
+
+48
+00:02:31,490 --> 00:02:35,490
+Harbor Light Books is ready to
+use with every decision, check and
+
+49
+00:02:35,490 --> 00:02:36,750
+result kept as evidence.
+
+50
+00:02:36,750 --> 00:02:38,430
+That's MoveBooks AI.
+
+51
+00:02:38,970 --> 00:02:39,490
+Rules check.
+
+52
+00:02:40,050 --> 00:02:40,630
+You decide.
+
+53
+00:02:41,250 --> 00:02:45,390
+And nothing is finished until the
+old and new books agree to the cent.

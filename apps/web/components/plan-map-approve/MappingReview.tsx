@@ -1,4 +1,5 @@
 "use client";
+import { WatchGuide } from "@/components/academy/WatchGuide";
 
 import type { ReactNode, RefObject } from "react";
 import { useEffect, useId, useRef, useState } from "react";
@@ -189,6 +190,7 @@ function MappingDetail({ mapping, history, editable, busy, decide, reconsider, h
     {next && <div className="pm-next">{next}</div>}
     {editable && <MappingReconsideration mapping={mapping} history={history} submit={(path, body) => reconsider(mapping, path, body)} />}
     <p className="pm-footnote">You approve every change. Advice never changes your books. Your decision is recorded with your name.</p>
+    <div className="pm-second-actions"><WatchGuide lesson="04" label="Watch Advisor guide"/><WatchGuide lesson="05" label="Watch Reviewer guide"/></div>
     <SecondOpinion mapping={mapping} />
   </article>;
 }

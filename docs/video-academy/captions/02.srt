@@ -1,0 +1,94 @@
+1
+00:00:02,480 --> 00:00:06,080
+Understand answers one
+question before anything moves.
+
+2
+00:00:06,720 --> 00:00:08,100
+Are these books ready to migrate?
+
+3
+00:00:08,660 --> 00:00:12,580
+Choose how to check your books. You
+can try a sample business, or use a de
+
+4
+00:00:12,580 --> 00:00:13,980
+-identified test export.
+
+5
+00:00:14,460 --> 00:00:16,580
+For this course, pick Harbor Light Books.
+
+6
+00:00:17,100 --> 00:00:19,760
+Then choose Check if my
+books are ready to migrate.
+
+7
+00:00:20,420 --> 00:00:23,260
+The rules read the source
+books, including accounts,
+
+8
+00:00:23,980 --> 00:00:27,780
+customers, vendors, products,
+taxes, settings and transactions
+
+9
+00:00:27,780 --> 00:00:29,680
+and report what can move.
+
+10
+00:00:30,260 --> 00:00:32,200
+Harbor Light passes with no blockers.
+
+11
+00:00:32,820 --> 00:00:36,960
+To see what a problem looks like
+try the second sample Northstar
+
+12
+00:00:36,960 --> 00:00:37,460
+supplies.
+
+13
+00:00:38,140 --> 00:00:39,740
+It's deliberately imperfect,
+
+14
+00:00:40,300 --> 00:00:44,160
+a duplicate customer, a missing
+value, an invalid relationship
+
+15
+00:00:44,160 --> 00:00:45,940
+and an unsupported setting.
+
+16
+00:00:46,320 --> 00:00:50,520
+Each finding says what's wrong and what
+has to happen before the move and the
+
+17
+00:00:50,520 --> 00:00:54,340
+result shows what's ready, what
+needs attention, and what's blocked.
+
+18
+00:00:54,900 --> 00:00:58,880
+Keep the scope in mind. This beta
+works only with synthetic or de
+
+19
+00:00:58,880 --> 00:01:02,540
+-identified files, and never
+connects to your accounting provider.
+
+20
+00:01:03,060 --> 00:01:04,180
+When readiness passes,
+
+21
+00:01:04,740 --> 00:01:06,300
+your next step is prepare.

@@ -1,0 +1,123 @@
+1
+00:00:02,540 --> 00:00:05,740
+MoveBooks is built so you
+can inspect every step.
+
+2
+00:00:06,480 --> 00:00:08,920
+Open trust and security to
+see its four principles.
+
+3
+00:00:09,580 --> 00:00:10,160
+People approve.
+
+4
+00:00:10,720 --> 00:00:13,420
+Consequential decisions are
+explicit and attributable.
+
+5
+00:00:14,220 --> 00:00:15,100
+Rules verify.
+
+6
+00:00:15,800 --> 00:00:17,800
+Failed financial checks block progress.
+
+7
+00:00:18,300 --> 00:00:19,460
+Workspaces are owned.
+
+8
+00:00:20,160 --> 00:00:24,340
+The service checks who you are before
+it shows a migration, and one account
+
+9
+00:00:24,340 --> 00:00:25,560
+can't open another's.
+
+10
+00:00:26,020 --> 00:00:30,180
+The fourth principle covers AI, and
+its badge shows whether the advisor
+
+11
+00:00:30,180 --> 00:00:32,180
+and reviewer are live in your release.
+
+12
+00:00:32,660 --> 00:00:34,480
+When they're on, they can only suggest.
+
+13
+00:00:35,120 --> 00:00:38,860
+Their answers are labelled, limited
+in number and tied to a snapshot,
+
+14
+00:00:39,420 --> 00:00:41,820
+and they never approve, post or verify.
+
+15
+00:00:42,260 --> 00:00:46,260
+If AI is unavailable, the product
+falls back to its deterministic
+
+16
+00:00:46,260 --> 00:00:47,880
+evidence and says so.
+
+17
+00:00:48,320 --> 00:00:52,340
+Every decision lands in evidence and
+results, such as mapping approved
+
+18
+00:00:52,340 --> 00:00:56,560
+or first invoice approved, with
+the result, who made it and when,
+
+19
+00:00:57,040 --> 00:00:58,720
+and its recorded details underneath.
+
+20
+00:00:59,160 --> 00:01:01,840
+When something is locked,
+the screen tells you why.
+
+21
+00:01:02,580 --> 00:01:05,420
+Later stages stay locked
+until earlier ones finish.
+
+22
+00:01:05,900 --> 00:01:09,400
+A blocked mapping has no approve
+button and shows its recovery.
+
+23
+00:01:09,860 --> 00:01:12,880
+A paused batch waits for your
+decision on a proposed fix.
+
+24
+00:01:13,640 --> 00:01:17,880
+This beta uses synthetic and
+de-identified data only, and never
+
+25
+00:01:17,880 --> 00:01:19,440
+connects to an accounting provider.
+
+26
+00:01:19,440 --> 00:01:23,540
+If you're stuck, open Help for
+the current stage or choose Get
+
+27
+00:01:23,540 --> 00:01:26,020
+Help with this step for
+one clear way forward.

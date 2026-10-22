@@ -10,6 +10,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
   const manifest = await academyMedia();
   if (!Object.hasOwn(manifest, id)) return new Response(null, { status: 404 });
   if (extension === "vtt" && !manifest[id as LessonId]?.captions) return new Response(null, { status: 404 });
+  if (extension === "txt" && !manifest[id as LessonId]?.transcript) return new Response(null, { status: 404 });
   const filename = await academyFile(id, extension);
   if (!filename) return new Response(null, { status: 404 });
   try {
@@ -40,7 +41,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
       cancel: close,
     });
     return new Response(body, { status: range ? 206 : 200, headers: {
-      "Content-Type": extension === "mp4" ? "video/mp4" : extension === "vtt" ? "text/vtt; charset=utf-8" : "image/jpeg",
+      "Content-Type": extension === "mp4" ? "video/mp4" : extension === "vtt" ? "text/vtt; charset=utf-8" : extension === "txt" ? "text/plain; charset=utf-8" : "image/jpeg",
       "Content-Length": String(end - start + 1), "Accept-Ranges": "bytes", "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff",
       ...(range ? { "Content-Range": `bytes ${start}-${end}/${size}` } : {}),
     } });
