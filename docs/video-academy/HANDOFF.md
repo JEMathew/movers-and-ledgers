@@ -7,7 +7,7 @@ Latest release coordination: [media-path correction and pending candidate](RELEA
 ## Branch and baseline
 
 Worktree: `movebooks-video-academy`, branch `feature/video-academy-v1`.
-Baseline: `b20ef66` (`integration/ux-gemini-v2-local`), the committed combined UX/Gemini source with approved disclosures. This is a development integration baseline, not production approval. Track A/B and private acceptance worktrees were not edited. No merge, deployment, IAM change, media generation or credit expenditure occurred.
+Baseline: `b20ef66` (`integration/ux-gemini-v2-local`), the committed combined UX/Gemini source with approved disclosures. Track B subsequently released this exact baseline plus its approved live-status selector as movebooks-beta-web-b20-live-sdk1. Track C now preserves that exact selector; this is source integration, not Track C production approval. Track A/B and private acceptance worktrees were not edited. No merge, deployment, IAM change, media generation or credit expenditure occurred.
 
 Before eventual integration, compare this feature against the final owner-approved release commit, especially Learn, task utilities and public disclosures. Private acceptance overlay changes and subsequent Track B proofs remain independently controlled.
 
@@ -50,7 +50,7 @@ Start from `apps/web` using `./node_modules/.bin/next dev -H 127.0.0.1 -p 3107`.
 
 ## Validation and evidence
 
-**310 tests across 20 files, typecheck, lint and production build passed.**
+Original acceptance: **310 tests across 20 files, typecheck, lint and production build passed.** Latest released-baseline integration: **552 focused tests across 36 files, types, lint and production-source build pass**; three unrelated legacy copy/footer failures were reproduced on the frozen released baseline and remain documented. Learn caching was corrected without changing identity logic.
 
 ```sh
 cd apps/web

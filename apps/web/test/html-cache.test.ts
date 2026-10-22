@@ -32,7 +32,7 @@ describe("HTML caching for prerendered pages", () => {
   });
   it("leaves dynamic pages to Next's own private, no-store", () => {
     vi.stubEnv("NEXT_PUBLIC_IDENTITY_MODE", "firebase");
-    for (const route of ["/trust", "/sign-in", "/workspace", "/product"]) {
+    for (const route of ["/learn", "/trust", "/sign-in", "/workspace", "/product"]) {
       expect(middleware(new NextRequest(`http://localhost${route}`)).headers.get("Cache-Control")).toBeNull();
     }
   });

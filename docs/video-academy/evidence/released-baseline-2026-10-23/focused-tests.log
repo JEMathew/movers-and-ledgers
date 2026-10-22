@@ -1,0 +1,17 @@
+
+> @movebooks/web@0.1.0 test
+> vitest run components/academy/academy.test.tsx lib/academy/media.test.ts components/public-surfaces components/journey components/v2 components/discover-assess components/onboard-fpu components/plan-map-approve test/html-cache.test.ts test/hosting-origin.test.ts
+
+
+ RUN  v5.0.2 /Users/jincenmathew/Downloads/Intuit/movebooks-video-academy/apps/web
+
+
+ Test Files  36 passed (36)
+      Tests  552 passed (552)
+   Start at  02:40:09
+   Duration  4.30s (environment 37%, tests 36%, setup 11%, transform 10%, import 5%)
+
+Environment  jsdom was created 36 times · 24.68s total, 37% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments
+

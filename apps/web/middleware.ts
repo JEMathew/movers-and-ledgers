@@ -11,7 +11,7 @@ const protectedPrefixes = ["/try-your-data", "/workspace", "/approvals", "/repor
  * Keep this list equal to the `○ (Static)` routes in `next build` output (test/html-cache.test.ts checks it).
  */
 export const STATIC_HTML_ROUTES = [
-  "/", "/assess", "/design-system", "/feedback", "/guide", "/learn", "/migrate-resolve", "/onboard-fpu",
+  "/", "/assess", "/design-system", "/feedback", "/guide", "/migrate-resolve", "/onboard-fpu",
   "/plan-map-approve", "/play", "/privacy", "/terms", "/simulator", "/support", "/try-your-data", "/validate-configure",
 ] as const;
 export const STATIC_HTML_CACHE = "public, max-age=0, s-maxage=60, must-revalidate";

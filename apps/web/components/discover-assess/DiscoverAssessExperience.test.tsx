@@ -307,7 +307,7 @@ describe("DiscoverAssessExperience", () => {
 });
 
 describe("V2 Understand workflow pattern", () => {
-  it("shows the stage, a guide from the result, a recovery path for blockers, evidence and planned AI", async () => {
+  it("shows the stage, a guide from the result, a recovery path for blockers, evidence and released AI status", async () => {
     const blocker = { ...discovery.findings[0], id: "finding:003", category: "BLOCKER", title: "An invoice references a missing customer", recommended_action: "Restore the customer or correct the invoice." };
     window.history.replaceState(null, "", "?session=session-003");
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ id: "session-003", sample_company_id: "northstar-supplies", activity, discovery: { ...discovery, findings: [blocker] }, assessment: { ...assessment, readiness: "BLOCKED", blocker_count: 1, warning_count: 0 } })));
@@ -317,6 +317,6 @@ describe("V2 Understand workflow pattern", () => {
     expect(screen.getByText("The rules found 1 blocker in the source books for Northstar Supplies. Fix it in the source, then check again; planning keeps every blocker visible.")).toBeVisible();
     expect(within(screen.getByRole("region", { name: "How to recover" })).getByText(/nothing in MoveBooks can waive one/)).toBeVisible();
     expect(screen.getByRole("link", { name: "Open evidence" })).toHaveAttribute("href", "/trust?view=evidence&session=session-003");
-    expect(within(screen.getByRole("region", { name: "Second opinions" })).getByText("Planned")).toBeVisible();
+    expect(within(screen.getByRole("region", { name: "Second opinions" })).getByText("Live · limited evaluation")).toBeVisible();
   });
 });

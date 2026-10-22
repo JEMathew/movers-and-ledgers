@@ -75,7 +75,7 @@ describe("Start: verified first invoice", () => {
     expect(decisions).toHaveTextContent("Essentials confirmed1");
     expect(decisions).toHaveTextContent("First invoice approved1");
     expect(decisions).toHaveTextContent("No AI advice was used. The Advisor and Reviewer are planned and not switched on in the Beta.");
-    expect(within(decisions).getByText("Planned")).toBeInTheDocument();
+    expect(within(decisions).getByText("Live · limited evaluation")).toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Start: ready for daily use" })).toHaveTextContent("Readiness checks2 of 2");
   });
 

@@ -5,7 +5,7 @@
  */
 export type AiAssistanceStatus = "planned" | "prototype" | "live";
 
-export const AI_ASSISTANCE_STATUS: AiAssistanceStatus = "planned";
+export const AI_ASSISTANCE_STATUS: AiAssistanceStatus = "live";
 
 export const AI_STATUS_LABEL: Record<AiAssistanceStatus, string> = {
   planned: "Planned",

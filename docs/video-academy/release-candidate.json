@@ -1,16 +1,16 @@
 {
-  "recordedUtc": "2026-10-22T20:12:28.765049+00:00",
-  "status": "BLOCKED_NOT_READY_FOR_PUBLICATION",
+  "recordedUtc": "2026-10-22T21:11:39.390458+00:00",
+  "status": "SOURCE_INTEGRATED_WITH_RELEASED_GEMINI_WEB; MEDIA_AND_PUBLIC_PROOF_GATES_OPEN",
   "trackCBranch": "feature/video-academy-v1",
   "startingHead": "f8ac6ee15b05687afdc4273dda182b037307bf4d",
-  "releasedGeminiWebRevision": null,
-  "releasedGeminiWebDigest": null,
+  "releasedGeminiWebRevision": "movebooks-beta-web-b20-live-sdk1",
+  "releasedGeminiWebDigest": "sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad",
   "trackCImageDigest": null,
   "trackB": {
     "thread": "01a15871-ad65-7bf0-a48b-4fd9291f42b0",
     "receipt": "/Users/jincenmathew/Downloads/Intuit/movebooks-integrated-release/public-gemini-rc-20261023/EXACT-PRODUCTION-APPROVAL.json",
     "receiptSha256": "3469741c10d075e568bccb267e5cda9c2ff53eca90ba148759082e2aed26ec4d",
-    "status": "OWNER_DECISION_REQUIRED_EXISTING_PUBLIC_URL_OR_CUSTOM_DOMAIN_GATE",
+    "status": "DEPLOYED_PUBLIC_GEMINI_VERIFICATION_PENDING",
     "genuineProof": "PASS, 4 calls consumed, policy disabled",
     "proposedSource": {
       "web_base": "b20ef668736a520387753dee4c8c19e4f66ae8da",
@@ -18,8 +18,10 @@
       "api": "Existing verified corrected SDK/receipt-bound continuation image; exact source manifest in proof evidence"
     },
     "proposedWebAmd64Digest": "sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad",
-    "proposedIsReleased": false,
-    "latestObservedState": "Active production promotion; await completed release receipt"
+    "proposedIsReleased": true,
+    "latestObservedState": "Completed production promotion recorded; authenticated public Gemini inference proof still pending",
+    "deploymentReceipt": "/Users/jincenmathew/Downloads/Intuit/movebooks-integrated-release/public-gemini-rc-20261023/production-execution-20261023/DEPLOYMENT-RECEIPT-PENDING-PUBLIC-PROOF.json",
+    "deploymentReceiptSha256": "51ea506ebd6961405d647d34b3af6521d9be68dd8f0a664c9e8068380c286171"
   },
   "media": {
     "hosting": "same-origin existing web service; approved bundle outside public/",
@@ -37,28 +39,52 @@
     "mediaApprovalChanged": false
   },
   "blockers": [
-    "Track B production promotion awaiting authorization; no exact released revision yet",
     "Original SRT unavailable; actual captions and synchronization not verified",
-    "Recordings have review watermark; content and narration publication review incomplete"
+    "Recordings have review watermark; complete content/narration publication review incomplete",
+    "Track B authenticated public Gemini proof pending; do not certify 04/05/09 against public product yet",
+    "Three legacy footer/copy assertions fail on both frozen release and Track C; disposition recorded without modifying product copy"
   ],
   "checks": {
-    "focusedTestsPassed": 311,
-    "testFiles": 20,
+    "focusedTestsPassed": 552,
+    "testFiles": 36,
     "typecheck": "PASS",
     "lint": "PASS",
-    "productionBuild": "PASS",
+    "productionBuild": "PASS with exact released public build settings",
     "productionHttpSyntheticChecksPassed": 108,
     "actualOriginalCaptionPlayback": "NOT VERIFIED",
     "reviewCutProductFidelity": "NOT VERIFIED",
-    "finalImageBuildAndScan": "NOT VERIFIED",
-    "fullscreenAllSix": "PASS"
+    "finalImageBuildAndScan": "NOT VERIFIED: approved media bundle incomplete",
+    "fullscreenAllSix": "PASS",
+    "releasedSourcePreservation": "PASS 228 files compared; only Track C changes",
+    "learnCacheHeader": "PASS private, no-cache, no-store verified locally",
+    "actualUnapprovedBundleDenial": "PASS 27 routes",
+    "fullSuite": {
+      "passed": 945,
+      "failed": 3,
+      "files": 69,
+      "baselineFailuresConfirmed": true,
+      "failures": [
+        "legacy footer: expects Contact only",
+        "navigation copy: expects Contact only",
+        "synthetic analysis headings: capitalization"
+      ]
+    }
   },
   "productionWrites": 0,
   "additionalPaidServices": 0,
   "rollback": {
-    "targetWebRevision": null,
-    "targetWebDigest": null,
-    "strategy": "Capture exact Gemini-enabled serving web revision and digest immediately before any future Track C publication. Roll back only the web selection to that revision, with its matching bundled media. Preserve API selection, Gemini policy/campaign, budgets and financial records; use existing release authorization controls."
+    "targetWebRevision": "movebooks-beta-web-b20-live-sdk1",
+    "targetWebDigest": "sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad",
+    "strategy": "Capture exact Gemini-enabled serving web revision and digest immediately before any future Track C publication. Roll back only the web selection to that revision, with its matching bundled media. Preserve API selection, Gemini policy/campaign, budgets and financial records; use existing release authorization controls.",
+    "revalidateImmediatelyBeforePublication": true
   },
-  "productionHold": true
+  "productionHold": true,
+  "releasedBaselineSource": {
+    "gitBase": "b20ef668736a520387753dee4c8c19e4f66ae8da",
+    "exactDelta": [
+      "apps/web/components/v2/ai-status.ts: planned -> live"
+    ],
+    "sourceFilesVerified": 228,
+    "evidence": "evidence/released-baseline-2026-10-23/source-provenance.json"
+  }
 }

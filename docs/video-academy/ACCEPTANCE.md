@@ -2,6 +2,8 @@
 
 **NO-GO for production handoff. Implementation remains partial.** Six original MP4s genuinely play locally, but captions are absent, Cillian identity is not certified, and no production media is configured or approved.
 
+Released-baseline follow-up: Track C preserves the exact deployed Gemini status, passes 552 focused tests and the released-settings build, and fixes Learn-only cache policy. Three pre-existing footer/copy failures are recorded against the frozen release. Final image and caption gates remain open.
+
 Subsequent media-route correction: [release coordination](RELEASE-COORDINATION.md). The matrix below retains the original evidence, with fullscreen coverage explicitly updated by the controls follow-up; current production serving supports explicitly approved bundles, while all current original assets remain unpublished.
 
 Live preview: http://127.0.0.1:3107/learn?tab=videos

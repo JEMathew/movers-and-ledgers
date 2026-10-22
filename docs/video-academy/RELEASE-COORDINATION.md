@@ -1,6 +1,6 @@
 # Track C release coordination — 23 October 2026
 
-**NO-GO for publication. Media-path code is corrected; the final web-only production candidate is not yet buildable against a confirmed released Gemini revision.** Machine-readable state: [release-candidate.json](release-candidate.json).
+**NO-GO for publication. Track C source is integrated with the confirmed released Gemini web baseline. The final media-bearing image still awaits original subtitles, content review and the remaining acceptance gates.** Machine-readable state: [release-candidate.json](release-candidate.json).
 
 ## Smallest correction
 
@@ -21,7 +21,7 @@ This change does not approve or publish any original recording. All nine origina
 | Both Learn tabs and mobile regression | PASS | Original topics present, switching tabs removes the video, mobile tabs and all nine entries remain available. Fresh desktop playback/mobile screenshots saved. Prior light/dark desktop/tablet/mobile coverage remains applicable because no UI changed. |
 | All nine originals preserved | PASS | SHA-256 rechecked against the inventory; no original changed, redownloaded or regenerated. |
 | Six original caption sets and actual rendering | FAIL | Original SRT inputs remain unavailable; no caption acceptance claimed. |
-| Exact released Gemini web revision | NOT VERIFIED | Track B's latest receipt is still OWNER_DECISION_REQUIRED. Genuine private Gemini proof passed, but the public candidate has not been reported promoted. Its proposed image must not be represented as a released image. |
+| Exact released Gemini web revision and source integration | PASS | Track B deployment receipt confirms movebooks-beta-web-b20-live-sdk1 at 100%, serving digest sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad. All 228 frozen source files compared; its exact live-status selector is preserved. Authenticated public Gemini execution proof remains pending. |
 | 04/05/09 fidelity against released product | NOT VERIFIED | Retain restrictions. Genuine model proof alone cannot certify recordings, narration or precise UI fidelity. |
 | Final Track C image digest and scan | NOT VERIFIED | No final candidate image built. Digest is null, not borrowed from Track B's proposed image. |
 
@@ -45,3 +45,15 @@ An hourly follow-up in this chat checks for changed Track B release evidence and
 ## Controls follow-up during the production hold
 
 Native fullscreen entry/exit is now verified on all six eligible originals. Fresh evidence for 02, 03, 06 and 08 is in `evidence/controls-followup-2026-10-23/`; earlier 01/07 evidence remains intact. No product source changed. Volume range remains NOT VERIFIED because the inspection bridge does not expose numeric volume and the native slider cannot be set through accessibility. Track B is actively promoting production; the hourly follow-up must wait for a completed receipt before selecting an integration baseline. The production hold remains in force.
+
+## Released baseline integration
+
+Track B's `DEPLOYMENT-RECEIPT-PENDING-PUBLIC-PROOF.json` records the completed promotion. Its exact web source is `b20ef668736a520387753dee4c8c19e4f66ae8da` plus the one-line approved live-status selector. Track C copied that exact file; every other runtime difference from the 228-file released source inventory is confined to Academy integration and its additive guide links, styles and Learn caching. AI components, API proxy, identity, package lock, Dockerfile and release inputs remain byte-identical to the released source. This does not claim that the pending public inference verification has passed.
+
+The integrated build uses the released Firebase identity, same-origin `/api`, synthetic-analysis enablement, project and auth-domain build settings. No production environment was changed. A localhost-only build smoke test returned private/no-store for `/learn`, all nine tiles and both tabs, and denied all 27 current unapproved media URLs even with the development review flag present.
+
+A broader regression run exposed `/learn` still listed as static HTML after Track C made it dynamic. The only middleware correction removes `/learn` from that cache list; protected prefixes, identity checks and route matcher are unchanged. Tests now check that Learn retains Next's private/no-store policy. Eight test files had historical Planned expectations; only those expectations were aligned with the exact released limited-live status, retaining strict labels and all finance/invocation assertions.
+
+552 focused tests across 36 files, typecheck, lint and the production-source build pass. Three unrelated footer/copy assertions also fail on a fresh, byte-identical copy of the released source: two expect the old Contact-only footer and one rejects the released synthetic-analysis capitalization. They remain unchanged and explicitly recorded in the full-suite and baseline-comparison logs. No test failure was hidden by changing the product or release controls.
+
+Evidence is in `evidence/released-baseline-2026-10-23/`. The current web-only rollback reference is `movebooks-beta-web-b20-live-sdk1` at `sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad`; revalidate it immediately before any future approved publication. Preserve the serving Gemini API and its policy/campaign. No Track C image has been built or published yet, since the required approved MP4/JPG/VTT bundle is still incomplete. The exact final image digest remains null.

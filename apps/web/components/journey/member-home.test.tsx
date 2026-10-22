@@ -41,7 +41,7 @@ describe("My migration copy comes from the session evidence", () => {
 describe("My migration screen", () => {
   const json = (value: unknown) => Promise.resolve(new Response(JSON.stringify(value)));
   const evidence = { id, synthetic: true, workflow_status: "AWAITING_APPROVAL", mapping_review: { total: 12, pending: 2 }, discovery: { findings: [] }, execution: { failures: [] }, validation_reports: [], configuration: { proposals: [] }, onboarding: { tasks: [], fpu: {} }, activity: [], human_decisions: [], events: [] };
-  it("shows stage, guide, one next action, progress lines, evidence, planned AI and attribution", async () => {
+  it("shows stage, guide, one next action, progress lines, evidence, released AI status and attribution", async () => {
     vi.spyOn(globalThis, "fetch").mockImplementation(() => json(evidence));
     render(<MyMigration reference={id} />);
     expect(await screen.findByText(/stage 2 of 5 · map and approve/)).toHaveTextContent("Prepare · stage 2 of 5 · map and approve");
@@ -50,7 +50,7 @@ describe("My migration screen", () => {
     expect(within(screen.getByRole("region", { name: "How this move is going" })).getAllByRole("listitem")).toHaveLength(5);
     expect(within(screen.getByRole("region", { name: "At a glance" })).getByText("Mappings waiting for you").nextSibling).toHaveTextContent("2");
     expect(screen.getByRole("link", { name: "Open evidence" })).toHaveAttribute("href", `/trust?view=evidence&session=${id}`);
-    expect(within(screen.getByRole("region", { name: "Second opinions" })).getByText("Planned")).toBeVisible();
+    expect(within(screen.getByRole("region", { name: "Second opinions" })).getByText("Live · limited evaluation")).toBeVisible();
     // The attribution now appears once per page, in the shared header, not in this screen.
     expect(screen.queryByText(/Built on Google Cloud/)).not.toBeInTheDocument();
     expect(screen.queryByText(/Gemini AI planned/)).toBeNull();

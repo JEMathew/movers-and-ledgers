@@ -1,0 +1,147 @@
+{
+  "utc": "2026-10-22T21:11:07.996662+00:00",
+  "scope": "Local production build with released Firebase/synthetic-analysis build settings; no authentication or inference requested",
+  "learnStatus": 200,
+  "learnCacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "lessonTiles": 9,
+  "tabs": 2,
+  "actualUnapprovedBundleDenied": [
+    {
+      "id": "01",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "id": "01",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "id": "01",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "id": "02",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "id": "02",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "id": "02",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "id": "03",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "id": "03",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "id": "03",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "id": "04",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "id": "04",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "id": "04",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "id": "05",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "id": "05",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "id": "05",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "id": "06",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "id": "06",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "id": "06",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "id": "07",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "id": "07",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "id": "07",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "id": "08",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "id": "08",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "id": "08",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "id": "09",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "id": "09",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "id": "09",
+      "extension": "vtt",
+      "status": 404
+    }
+  ],
+  "publicationApprovalChanged": false,
+  "productionWrites": 0
+}

@@ -50,7 +50,7 @@ describe("public surface contracts", () => {
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Move Your BooksWith Confidence.");
     expect(screen.getByText("Prepare, move and validate your books with guided workflows, transparent checks and human control.")).toBeVisible();
     expect(screen.getByText("Guided accounting migration")).toBeVisible();
-    // The hero makes no AI capability claim; AI appears only as Planned in the trust strip.
+    // The hero makes no AI capability claim; AI status appears only in the trust strip and matches the released baseline.
     expect(document.querySelector(".lp-hero-copy")).not.toHaveTextContent(/\bAI\b/);
     const demo = screen.getByRole("link", { name: "Explore Demo" });
     expect(demo).toHaveAttribute("href", "/simulator");
@@ -74,12 +74,12 @@ describe("public surface contracts", () => {
     expect(screen.queryByRole("heading", { name: "Who decides what" })).not.toBeInTheDocument();
     expect(screen.queryByText("Start a sample migration")).not.toBeInTheDocument();
   });
-  it("restores the compact Your Data. Your Control. strip with the Planned badge and a working Trust link", () => {
+  it("restores the compact Your Data. Your Control. strip with the released status badge and a working Trust link", () => {
     render(<Home/>);
     const strip = screen.getByRole("heading", { name: "Your Data. Your Control." }).closest("section")!;
     expect(strip).toHaveTextContent("AI recommendations and explanations are planned and unavailable in this Beta");
     expect(strip).toHaveTextContent("you approve every consequential decision");
-    expect(within(strip).getByText("Planned")).toHaveAttribute("data-ai-status", "planned");
+    expect(within(strip).getByText("Live · limited evaluation")).toHaveAttribute("data-ai-status", "live");
     expect(within(strip).getByRole("link", { name: "View Trust and Security" })).toHaveAttribute("href", "/trust");
   });
   it("shows the attribution once, in the header beneath the brand, and not in the page body", () => {

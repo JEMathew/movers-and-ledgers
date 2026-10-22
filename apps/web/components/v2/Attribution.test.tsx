@@ -36,7 +36,7 @@ describe("product attribution", () => {
     expect(createHash("sha256").update(readFileSync(resolve(process.cwd(), "public/brand/google-cloud-official.png"))).digest("hex")).toBe("a90b4e56cf87bc04be1438f7a34b99f653f1f3be1a0456d3ac32f66ec5378053");
     expect(createHash("sha256").update(readFileSync(resolve(process.cwd(), "public/brand/google-gemini-official.png"))).digest("hex")).toBe("b6306682f0dca297c4fa94ea359eee760d04435fc2d39256d98f6e4281f690be");
   });
-  it("leaves the AI assistance status Planned in Phase 1", () => {
-    expect(AI_ASSISTANCE_STATUS).toBe("planned");
+  it("preserves the released limited-live status independently of attribution", () => {
+    expect(AI_ASSISTANCE_STATUS).toBe("live");
   });
 });

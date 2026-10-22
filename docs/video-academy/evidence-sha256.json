@@ -332,6 +332,50 @@
     "sha256": "01389e99b3336e490035f5385a2f9abbff7576fc3cf15c56cc27f378565ff214"
   },
   {
+    "path": "evidence/released-baseline-2026-10-23/build-inputs.json",
+    "sha256": "188db487ecd904530aeffbc5b251f6f50344dbba4107826291440a439f87d2da"
+  },
+  {
+    "path": "evidence/released-baseline-2026-10-23/build.log",
+    "sha256": "a4944d859b5fc336ab75aadb286852b3f71f3758f64aba47dc80c469be04ef3e"
+  },
+  {
+    "path": "evidence/released-baseline-2026-10-23/focused-tests.log",
+    "sha256": "2670a9fc4e4ac654eef6940f0b19ee094d3ab75b6a615d178b4fee84674e3d13"
+  },
+  {
+    "path": "evidence/released-baseline-2026-10-23/full-tests.log",
+    "sha256": "975f1e2566876fcd804660907352b66d64540cec465be9de9529b7867f5cfca9"
+  },
+  {
+    "path": "evidence/released-baseline-2026-10-23/integration-preservation.json",
+    "sha256": "9ed5290acc3b12cf48c56faa3280fa5c5db1f3cd999e668b5df94703e305b921"
+  },
+  {
+    "path": "evidence/released-baseline-2026-10-23/lint.log",
+    "sha256": "f3db99a6e5da4937054435c89cddf3a57bfaf342961900cdc58f99844b1a0543"
+  },
+  {
+    "path": "evidence/released-baseline-2026-10-23/production-http.json",
+    "sha256": "d6070c7c2de3b63cc279041eae30c161b10bcade3ecd72e89fef1e5b02d97741"
+  },
+  {
+    "path": "evidence/released-baseline-2026-10-23/released-baseline-test-comparison.log",
+    "sha256": "7936a8b18c758dd59b822c0292aa3d8517e673a4c586b1e7e43adcdf5f479689"
+  },
+  {
+    "path": "evidence/released-baseline-2026-10-23/results.json",
+    "sha256": "f86a730bae44d4b1376a396bc99ae74de82b572bc3bbad2bfcd6ced872a38366"
+  },
+  {
+    "path": "evidence/released-baseline-2026-10-23/source-provenance.json",
+    "sha256": "90e3925430c6d88142f07fbc47e34c1658e8a0d1fc5c6442c8d90a91c51e6211"
+  },
+  {
+    "path": "evidence/released-baseline-2026-10-23/typecheck.log",
+    "sha256": "04089b092e9d5b0bdce7abd751d05829fd2463367e5eb08f0db7a29b0c0b8360"
+  },
+  {
     "path": "evidence/tablet-light.jpg",
     "sha256": "cbd5c234b88877de13a8d68db2277330430507fe20ddbe878b06a6c91e98a286"
   }

@@ -9,10 +9,10 @@ import {
 const stagesFor = (status: string, detail?: string) => v2Stages(journeyStepFor(status), status, detail);
 
 describe("V2 AI status rule", () => {
-  it("stays Planned until a separate release gate verifies live inference", () => {
-    expect(AI_ASSISTANCE_STATUS).toBe("planned");
+  it("preserves the exact status selected by the released Gemini web revision", () => {
+    expect(AI_ASSISTANCE_STATUS).toBe("live");
     render(<AiStatusBadge withDetail />);
-    expect(screen.getByText("Planned · not available in the Beta")).toBeVisible();
+    expect(screen.getByText("Live · limited evaluation · Gemini for approved synthetic accounts; Offline Judge stays deterministic")).toBeVisible();
   });
 });
 
@@ -99,6 +99,6 @@ describe("V2 component sheet", () => {
     expect(screen.getByText("First invoice (sample)")).toBeVisible();
     expect(screen.getByText("Not available")).toBeVisible();
     expect(screen.getByText("Example of planned behaviour. Not live model output.")).toBeVisible();
-    expect(sheet.textContent).not.toMatch(/\bLive\b/);
+    expect(within(sheet).getByText("Live · limited evaluation · Gemini for approved synthetic accounts; Offline Judge stays deterministic")).toHaveAttribute("data-ai-status", "live");
   });
 });

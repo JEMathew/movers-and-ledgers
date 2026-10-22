@@ -61,15 +61,15 @@ function sentences(source: string) {
 }
 
 describe("AI status in product copy", () => {
-  it("keeps the Advisor and Reviewer Planned (the rule's constant is unchanged)", () => {
-    expect(AI_ASSISTANCE_STATUS).toBe("planned");
+  it("preserves the released limited-live Advisor and Reviewer status", () => {
+    expect(AI_ASSISTANCE_STATUS).toBe("live");
   });
 
-  it("prepares the limited-evaluation labels without changing current availability", () => {
+  it("retains the exact released limited-evaluation labels", () => {
     expect(AI_STATUS_LABEL.live).toBe("Live · limited evaluation");
     expect(AI_STATUS_DETAIL.live).toBe("Gemini for approved synthetic accounts; Offline Judge stays deterministic");
-    expect(AI_STATUS_LABEL[AI_ASSISTANCE_STATUS]).toBe("Planned");
-    expect(AI_STATUS_DETAIL[AI_ASSISTANCE_STATUS]).toBe("not available in the Beta");
+    expect(AI_STATUS_LABEL[AI_ASSISTANCE_STATUS]).toBe("Live · limited evaluation");
+    expect(AI_STATUS_DETAIL[AI_ASSISTANCE_STATUS]).toBe("Gemini for approved synthetic accounts; Offline Judge stays deterministic");
   });
 
   it.each(files)("%s claims no AI advice that is running today", (file) => {
