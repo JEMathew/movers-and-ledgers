@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { WatchGuide } from "@/components/academy/WatchGuide";
 import { Alert, Button } from "@/components/ui";
 import { IdentityEntry } from "@/components/IdentityEntry";
 import { useIdentity } from "@/components/IdentityProvider";
@@ -18,6 +19,7 @@ export function Trust({ evidenceMode = false, session }: { evidenceMode?: boolea
   // Plain public Trust never mounts a session reader, including with a saved selection.
   if (evidenceMode) return cloudIdentity() ? <CloudEvidence session={session}/> : <Evidence key={session ?? "selected"} reference={session}/>;
   return <Surface compact eyebrow="Trust" title="A move you can inspect." intro="MoveBooks coordinates the work, rules verify financial facts, and people approve consequential decisions." action={<Link className="button" href="/workspace">Start a sample migration</Link>}>
+    <WatchGuide lesson="08"/>
     <ul className="trust-principles v2-principles"><li><strong>People approve:</strong> consequential decisions are explicit and attributable.</li><li><strong>Rules verify:</strong> failed financial checks block progress.</li><li><strong>Workspaces are owned:</strong> the API verifies identity and access.</li><li className="v2-principle-planned"><span className="v2-principle-badge"><AiStatusBadge /></span><strong>AI is planned:</strong> the Advisor and independent Reviewer are not switched on in the Beta. When they are, they can only suggest; the same rules and approvals apply.</li></ul>
     <AnchoredDetails id="financial-controls" title="Financial controls and human approvals"><p>Versioned rules check counts, balances and relationships. The same inputs and rule versions produce the same financial result. An AI recommendation or human approval cannot waive a failed check.</p><p>People approve mappings, plan consent, bounded recovery, consequential settings, onboarding and first-task decisions. Decisions retain actor, time and evidence. Automated steps coordinate permitted discovery, batches and retries; they cannot approve their own proposals.</p></AnchoredDetails>
     <AnchoredDetails id="workspace-access" title="Identity, saved progress and evidence"><p>Google sign-in identifies your account; the API checks ownership and approval identity. Cloud synthetic workspaces and checkpoints persist. Local demo sessions may expire when the API restarts.</p><p>Open Evidence &amp; Results from your migration task to inspect its authorized snapshot. Public Trust does not read a stored migration pointer. Empty evidence is not a passed check; refresh reads a snapshot, not live monitoring. Raw financial payloads, prompts and hidden reasoning are excluded.</p><Link className="public-text-link" href="/guide#trust">How to inspect migration evidence</Link></AnchoredDetails>

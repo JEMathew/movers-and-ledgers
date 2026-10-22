@@ -1,0 +1,47 @@
+{
+  "implementation": "partial",
+  "preview": "http://127.0.0.1:3107/learn",
+  "checks": {
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "productionBuild": "PASS",
+    "focusedTests": {
+      "files": 20,
+      "passed": 308
+    },
+    "browser": {
+      "desktop": {
+        "width": 1440,
+        "columns": 3,
+        "overflow": false
+      },
+      "tablet": {
+        "width": 768,
+        "columns": 2,
+        "overflow": false
+      },
+      "mobile": {
+        "width": 390,
+        "columns": 1,
+        "overflow": false
+      },
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "tabs": "PASS",
+      "conceptDisclosure": "PASS",
+      "keyboardTabs": "PASS",
+      "contextualLink": "PASS /assess -> /learn?tab=videos&stage=0#lesson-02",
+      "landing": "PASS preserved photo, overview and CTA source hashes",
+      "finalConsoleErrors": []
+    },
+    "academyPlayback": "BLOCKED source assets inaccessible",
+    "academyNarration": "UNVERIFIED",
+    "academyCaptions": "UNVERIFIED",
+    "hostedAuthIsolation": "Not rerun; no implementation changes",
+    "financialOutcomes": "Not rerun; no implementation changes"
+  },
+  "publication": "all lessons unpublished; review cuts hard denied",
+  "creditsSpent": 0
+}

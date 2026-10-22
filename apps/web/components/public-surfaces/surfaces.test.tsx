@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import Home from "@/app/page";
-import Learn from "@/app/learn/page";
+import { LearnContent as Learn } from "@/components/academy/LearnContent";
 import Simulator from "@/app/simulator/page";
 import { Nav } from "@/components/Nav";
 import { IdentityProvider } from "@/components/IdentityProvider";
@@ -139,6 +139,7 @@ describe("public surface contracts", () => {
   });
   it("renders all ten concise Learn topics with contextual destinations", () => {
     render(<Learn/>);
+    fireEvent.click(screen.getByRole("tab", { name: "Learn the Concepts" }));
     for (const topic of topics) {
       expect(document.getElementById(topic.id)?.querySelector("summary")).toHaveTextContent(topic.title);
       expect(document.getElementById(topic.id)?.tagName).toBe("DETAILS");
@@ -154,6 +155,7 @@ describe("public surface contracts", () => {
     if (source === "query") window.history.replaceState(null, "", `/learn?session=${id}`);
     else { window.history.replaceState(null, "", "/learn"); sessionStorage.setItem("movebooks-migration-session", id); }
     render(<Learn/>);
+    fireEvent.click(screen.getByRole("tab", { name: "Learn the Concepts" }));
     const links = await screen.findAllByRole("link", { name: /in your migration$/, hidden: true });
     expect(links).toHaveLength(10);
     const reconciliation = within(document.getElementById("reconciliation") as HTMLElement).getByRole("link", { hidden: true });
@@ -167,6 +169,7 @@ describe("public surface contracts", () => {
   it("ignores an invalid stored session on Learn topic links", async () => {
     sessionStorage.setItem("movebooks-migration-session", "../../private");
     render(<Learn/>);
+    fireEvent.click(screen.getByRole("tab", { name: "Learn the Concepts" }));
     await waitFor(() => expect(screen.getAllByRole("link", { name: "Open my migration", hidden: true })).toHaveLength(10));
     sessionStorage.clear();
   });
@@ -174,12 +177,14 @@ describe("public surface contracts", () => {
     window.history.replaceState(null, "", `/learn?stage=3&session=${id}#reconciliation`);
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<Learn/>);
+    fireEvent.click(screen.getByRole("tab", { name: "Learn the Concepts" }));
     expect(screen.getByRole("link", { name: "Return to Verify" })).toHaveAttribute("href", `/validate-configure?session=${id}`);
     expect(fetch).not.toHaveBeenCalled();
   });
   it("does not invent a current migration from invalid Learn context", () => {
     window.history.replaceState(null, "", "/learn?stage=99&session=invalid");
     render(<Learn/>);
+    fireEvent.click(screen.getByRole("tab", { name: "Learn the Concepts" }));
     expect(screen.getByRole("link", { name: "Go to my migration" })).toHaveAttribute("href", "/workspace");
   });
   it("opens the isolated pixel office mission without changing any workflow", () => {

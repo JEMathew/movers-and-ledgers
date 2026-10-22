@@ -1,4 +1,5 @@
 "use client";
+import { WatchGuide } from "@/components/academy/WatchGuide";
 import { features } from "@/lib/features";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -22,6 +23,7 @@ export function GuidedDemo() {
   const title = phase?.title ?? (debrief ? "You’ve explored the five stages." : "See a move before you make one.");
   return <main ref={main} id="main-content" className="shell guided-demo">
     <header>
+      <WatchGuide lesson="01"/>
       <p className="v2-surface-eyebrow">Explore demo</p>
       <p className="demo-mode">Read-only guided demo · synthetic</p>
       <h1 ref={heading} tabIndex={-1} className="type-page">{title}</h1>

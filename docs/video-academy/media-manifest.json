@@ -1,0 +1,128 @@
+{
+  "baseline": "b20ef668736a520387753dee4c8c19e4f66ae8da",
+  "status": "media-access-blocked",
+  "lessons": [
+    {
+      "id": "01",
+      "title": "Getting Started",
+      "inventoryDuration": "1:28",
+      "sourceStatus": "completed-per-owner-inventory",
+      "publicationApproved": false,
+      "previewApproved": false,
+      "actualDurationSeconds": null,
+      "sourceSha256": null,
+      "videoAsset": null,
+      "captionAsset": null,
+      "qa": "not inspected; source assets inaccessible"
+    },
+    {
+      "id": "02",
+      "title": "Understand Your Migration",
+      "inventoryDuration": "1:10",
+      "sourceStatus": "completed-per-owner-inventory",
+      "publicationApproved": false,
+      "previewApproved": false,
+      "actualDurationSeconds": null,
+      "sourceSha256": null,
+      "videoAsset": null,
+      "captionAsset": null,
+      "qa": "not inspected; source assets inaccessible"
+    },
+    {
+      "id": "03",
+      "title": "Prepare and Approve",
+      "inventoryDuration": "1:34",
+      "sourceStatus": "completed-per-owner-inventory",
+      "publicationApproved": false,
+      "previewApproved": false,
+      "actualDurationSeconds": null,
+      "sourceSha256": null,
+      "videoAsset": null,
+      "captionAsset": null,
+      "qa": "not inspected; source assets inaccessible"
+    },
+    {
+      "id": "04",
+      "title": "Gemini Advisor",
+      "inventoryDuration": "1:46",
+      "sourceStatus": "review-cut",
+      "publicationApproved": false,
+      "previewApproved": false,
+      "actualDurationSeconds": null,
+      "sourceSha256": null,
+      "videoAsset": null,
+      "captionAsset": null,
+      "qa": "not inspected; source assets inaccessible"
+    },
+    {
+      "id": "05",
+      "title": "Independent Gemini Reviewer",
+      "inventoryDuration": "1:43",
+      "sourceStatus": "review-cut",
+      "publicationApproved": false,
+      "previewApproved": false,
+      "actualDurationSeconds": null,
+      "sourceSha256": null,
+      "videoAsset": null,
+      "captionAsset": null,
+      "qa": "not inspected; source assets inaccessible"
+    },
+    {
+      "id": "06",
+      "title": "Move and Verify",
+      "inventoryDuration": "1:31",
+      "sourceStatus": "completed-per-owner-inventory",
+      "publicationApproved": false,
+      "previewApproved": false,
+      "actualDurationSeconds": null,
+      "sourceSha256": null,
+      "videoAsset": null,
+      "captionAsset": null,
+      "qa": "not inspected; source assets inaccessible"
+    },
+    {
+      "id": "07",
+      "title": "First Productive Use",
+      "inventoryDuration": "1:30",
+      "sourceStatus": "completed-per-owner-inventory",
+      "publicationApproved": false,
+      "previewApproved": false,
+      "actualDurationSeconds": null,
+      "sourceSha256": null,
+      "videoAsset": null,
+      "captionAsset": null,
+      "qa": "not inspected; source assets inaccessible"
+    },
+    {
+      "id": "08",
+      "title": "Trust and Troubleshooting",
+      "inventoryDuration": "1:30",
+      "sourceStatus": "completed-per-owner-inventory",
+      "publicationApproved": false,
+      "previewApproved": false,
+      "actualDurationSeconds": null,
+      "sourceSha256": null,
+      "videoAsset": null,
+      "captionAsset": null,
+      "qa": "not inspected; source assets inaccessible"
+    },
+    {
+      "id": "09",
+      "title": "Three-Minute Journey",
+      "inventoryDuration": "2:58",
+      "sourceStatus": "review-cut",
+      "publicationApproved": false,
+      "previewApproved": false,
+      "actualDurationSeconds": null,
+      "sourceSha256": null,
+      "videoAsset": null,
+      "captionAsset": null,
+      "qa": "not inspected; source assets inaccessible"
+    }
+  ],
+  "discovery": {
+    "local": "Project search found product/demo videos, not Academy sources. Downloads enumeration denied by macOS, including after escalation.",
+    "higgsfield": "Nine recent video upload candidates found. Download escalation rejected by user. Identity-to-lesson mapping, integrity, narration, captions and content not verified. No URL configured.",
+    "creditsSpent": 0
+  }
+}

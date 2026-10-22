@@ -1,5 +1,44 @@
 @import "tailwindcss";
 
+/* Academy uses the existing product tokens in every theme. */
+.academy-tabs { display: flex; gap: .25rem; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; }
+.academy-tabs button { padding: .85rem 1.1rem; border-bottom: 3px solid transparent; font-weight: 650; color: var(--text-secondary); }
+.academy-tabs button[aria-selected="true"] { color: var(--primary); border-bottom-color: var(--primary); }
+.academy [hidden] { display: none !important; }
+.academy-intro, .academy-player-heading, .academy-player-tools { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.academy-intro h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: .3rem; }
+.academy-count, .academy-caption, .academy-card-meta, .academy-unavailable { font-size: .75rem; color: var(--text-secondary); }
+.academy-count { border: 1px solid var(--border); border-radius: 99px; padding: .4rem .7rem; }
+.academy-availability { color: var(--text-secondary); font-size: .85rem; margin: .75rem 0 1.25rem; }
+.academy-collection { margin-top: 1.5rem; }
+.academy-collection > h3 { font-size: .95rem; font-weight: 650; margin-bottom: .7rem; }
+.academy-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.academy-card { overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); scroll-margin-top: 2rem; }
+.academy-card:target { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
+.academy-poster { aspect-ratio: 16 / 9; position: relative; background: var(--surface-subtle); }
+.academy-poster img { width: 100%; height: 100%; object-fit: cover; }
+.academy-placeholder { height: 100%; display: flex; align-items: center; justify-content: center; gap: .7rem; color: var(--text-muted); font-size: .85rem; background: linear-gradient(135deg, var(--surface-subtle), var(--primary-subtle)); }
+.academy-duration { position: absolute; right: .65rem; bottom: .6rem; background: var(--surface); color: var(--foreground); border: 1px solid var(--border); padding: .1rem .4rem; font-size: .75rem; border-radius: .3rem; font-variant-numeric: tabular-nums; }
+.academy-play-icon { position: absolute; inset: 0; display: grid; place-items: center; color: white; background: rgb(0 0 0 / .15); pointer-events: none; }
+.academy-card-body { padding: 1rem; display: flex; flex-direction: column; gap: .65rem; }
+.academy-card-meta { display: flex; justify-content: space-between; letter-spacing: .04em; }
+.academy-card h4 { font-size: 1rem; font-weight: 700; line-height: 1.35; }
+.academy-card-body > p { color: var(--text-secondary); font-size: .85rem; line-height: 1.55; min-height: 3.95em; }
+.academy-caption, .academy-unavailable, .academy-context-link { display: inline-flex; align-items: center; gap: .4rem; }
+.academy-unavailable { min-height: 2.2rem; }
+.academy-card .button { align-self: flex-start; }
+.academy-player { scroll-margin-top: 1rem; margin: 1.25rem 0; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); }
+.academy-player-heading { margin-bottom: .8rem; }
+.academy-player-heading h2 { font-size: 1.15rem; font-weight: 700; }
+.academy-player video { width: 100%; max-height: 65vh; aspect-ratio: 16/9; background: black; border-radius: var(--radius-sm); }
+.academy-player-tools { margin: .8rem 0; font-size: .85rem; }
+.academy-player select { background: var(--surface); border: 1px solid var(--border); border-radius: .3rem; padding: .3rem; margin-left: .3rem; }
+.academy-player > p { font-size: .8rem; margin-top: .6rem; }
+.academy-context-link { font-size: .85rem; }
+#panel-concepts > p { margin-top: 1rem; }
+@media (max-width: 1023px) { .academy-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 639px) { .academy-grid { grid-template-columns: minmax(0, 1fr); } .academy-tabs button { flex: 1; padding: .8rem .45rem; } .academy-count { display: none; } }
+
 /* MoveBooks semantic tokens. Components consume meanings, never raw color values. */
 :root {
   color-scheme: light;

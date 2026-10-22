@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import Learn from "@/app/learn/page";
+import { LearnContent as Learn } from "@/components/academy/LearnContent";
 import { ProductEntry } from "./ProductEntry";
 import ProductPage from "@/app/product/page";
 import TrustPage from "@/app/trust/page";

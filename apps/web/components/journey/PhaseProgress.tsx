@@ -6,6 +6,8 @@ import { MigrationJourney } from "./MigrationJourney";
 import { phases } from "../public-surfaces/content";
 import { phaseIndexFor, withSession } from "./journey";
 import type { CurrentStepLabel, HeldStep, Processing, UnknownProgress } from "./journey";
+import { WatchGuide } from "@/components/academy/WatchGuide";
+import type { LessonId } from "@/lib/academy/catalog";
 
 /** Display text for each stage state. data-state keeps the stable value used by styles and tests. */
 const STATE_TEXT: Record<string, string> = {
@@ -43,6 +45,7 @@ export function PhaseProgress({ current, held, currentLabel = "Current", unknown
 export function TaskContext({ phase, session }: { phase: number; session?: string }) {
   const q = session ? encodeURIComponent(session) : "";
   return <nav className="task-context" aria-label="Migration utilities">
+    <WatchGuide lesson={(["02", "03", "06", "06", "07"] as LessonId[])[phase] ?? "01"} session={session} stage={phase}/>
     {session && <a href={`/trust?view=evidence&session=${q}`} aria-label="Evidence & results"><FileSearch size={15} aria-hidden="true"/>Evidence</a>}
     {session && <a href={`/trust?view=evidence&session=${q}#ai-activity`} aria-label="AI activity"><Sparkles size={15} aria-hidden="true"/>AI activity</a>}
     <a href={session ? `/support?session=${q}&stage=${phase}` : "/support"} aria-label="Help with this task"><LifeBuoy size={15} aria-hidden="true"/>Help</a>
