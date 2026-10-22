@@ -1,16 +1,16 @@
 import { open, stat } from "node:fs/promises";
-import { academyMedia, previewFile } from "@/lib/academy/media";
+import { academyMedia, academyFile } from "@/lib/academy/media";
 import type { LessonId } from "@/lib/academy/catalog";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// Local development only. Review cuts cannot be fetched even by guessing a URL.
+// Same-origin media, gated by approval metadata. Review cuts cannot be fetched by guessing a URL.
 export async function GET(request: Request, context: { params: Promise<{ id: string; extension: string }> }) {
   const { id, extension } = await context.params;
   const manifest = await academyMedia();
   if (!Object.hasOwn(manifest, id)) return new Response(null, { status: 404 });
   if (extension === "vtt" && !manifest[id as LessonId]?.captions) return new Response(null, { status: 404 });
-  const filename = await previewFile(id, extension);
+  const filename = await academyFile(id, extension);
   if (!filename) return new Response(null, { status: 404 });
   try {
     const { size } = await stat(filename);

@@ -248,6 +248,38 @@
     "sha256": "85dfcfb1713a28d9c3a441c5610fd2dce0b6c28dd1b65a23569ebaad459a8bfa"
   },
   {
+    "path": "evidence/release-coordination-2026-10-23/browser-playback.json",
+    "sha256": "bfd5b01bf4e453f555fb2aa80d5a765811cd78259c699d4a16ee181ec5670d8e"
+  },
+  {
+    "path": "evidence/release-coordination-2026-10-23/build.log",
+    "sha256": "aff8b537e9bcb136fd69f85ded9b5c66d41ab6794a4d6c8070c2d026f3bf8441"
+  },
+  {
+    "path": "evidence/release-coordination-2026-10-23/checks.json",
+    "sha256": "6026d6086b4ecef6921f0e1232e0a493c7cd8c2cff66da5ce8459788747f4b8a"
+  },
+  {
+    "path": "evidence/release-coordination-2026-10-23/desktop-player.jpg",
+    "sha256": "0bd5a49c0833ed9c5a7323473d658608343f3632a0f0146ff6ac94f377a0c3ee"
+  },
+  {
+    "path": "evidence/release-coordination-2026-10-23/mobile-concepts.jpg",
+    "sha256": "ac796b85162e61a458944e4add9770958c9cce91e823b3e9290c4eace2cd81c8"
+  },
+  {
+    "path": "evidence/release-coordination-2026-10-23/mobile-videos.jpg",
+    "sha256": "cb57d06dd32b9909227acd02628af65ff9f4e0f4bfb50e01859f1fa55b53cb23"
+  },
+  {
+    "path": "evidence/release-coordination-2026-10-23/production-routes.json",
+    "sha256": "4b23b47a2c7facd961b8f0e30763b306909f9c4e4d4b83b82b3721ff755e87cf"
+  },
+  {
+    "path": "evidence/release-coordination-2026-10-23/source-preservation.json",
+    "sha256": "01389e99b3336e490035f5385a2f9abbff7576fc3cf15c56cc27f378565ff214"
+  },
+  {
     "path": "evidence/tablet-light.jpg",
     "sha256": "cbd5c234b88877de13a8d68db2277330430507fe20ddbe878b06a6c91e98a286"
   }

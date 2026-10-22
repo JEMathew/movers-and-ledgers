@@ -2,7 +2,7 @@
 
 Implementation status: **six original videos play in the local review preview; caption acceptance remains blocked on original SRT access**.
 
-Latest verification: [final PASS/FAIL/NOT VERIFIED acceptance report](ACCEPTANCE.md). Recommendation: **NO-GO for production handoff**.
+Latest release coordination: [media-path correction and pending candidate](RELEASE-COORDINATION.md). Latest complete verification: [PASS/FAIL/NOT VERIFIED acceptance report](ACCEPTANCE.md). Recommendation: **NO-GO for production handoff**.
 
 ## Branch and baseline
 
@@ -19,7 +19,7 @@ Before eventual integration, compare this feature against the final owner-approv
 - Native inline MP4 player with original AAC audio, controls, speed, keyboard play/pause/seek/mute, loading/error/retry and conditional WebVTT captions. No autoplay; selection mounts the player and changing tabs removes it.
 - Watch guide links in task utilities (Understand, Prepare, Move, Verify, Start), Explore Demo and Trust. Valid session/stage context retained; Gemini review-cut links omitted; no workflow writes introduced.
 - Landing page, hero photo, overview MP4, both CTAs and original concept content unchanged (hashes in `preservation.json`).
-- Server-only media registry; production publication remains empty. Local files stay outside Git. Development routes enforce lesson/extension allowlists, realpath containment, byte ranges, MIME, no-store and nosniff. Videos 04/05/09 return 404 even with injected approval metadata. Missing/unverified captions do not expose a VTT route or a phantom track.
+- Server-only media manifest; no actual media is approved for production. Approved production bundles now use the same origin and route as development. Local files stay outside Git. Media routes enforce lesson/extension allowlists, realpath containment, byte ranges, MIME, no-store and nosniff. Videos 04/05/09 return 404 even with injected approval metadata. Missing/unverified captions do not expose a VTT route or a phantom track.
 
 ## Actual source assets and limitations
 
@@ -86,6 +86,6 @@ The script validates H.264/AAC/1080p, runtime tolerance, full decoding and SRT c
 
 1. Verify original subtitles, Cillian narration identity, caption synchronization, exact approved release UI and sensitive-content absence.
 2. Complete Track B genuine Advisor/independent Reviewer captures for 04/05/09, with capability/fallback labeling and human approval. Their hard restrictions require a separately reviewed change.
-3. Choose existing approved stable HTTPS storage/CDN and verify video/mp4, text/vtt, image/jpeg, range and cross-origin behavior. No new paid service or cloud/IAM change is authorized.
-4. Obtain explicit publication and deployment approval before populating the server registry. A production build currently exposes no Academy media.
+3. Package only the approved six-video bundle outside public/ in the future web-only image, with MOVEBOOKS_ACADEMY_MEDIA_DIR pointing to /app/academy-media. Keep existing same-origin /api/academy-media URLs; no CDN, DNS, IAM or Hosting change is needed. Verify real MP4/VTT/JPG bytes and range behavior on that exact candidate.
+4. Production serving requires publicationApproved, technicalChecksPassed and captionsVerified for each eligible lesson, plus MP4/JPG/VTT presence. Review-preview flags do not bypass this. Current real assets remain unapproved and unavailable in production. Obtain final publication/deployment authorization only after a fully reviewed candidate is prepared.
 5. Compare against the final integrated release, repeat relevant browser QA and obtain release-owner approval. Do not merge or deploy this feature automatically.

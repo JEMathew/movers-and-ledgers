@@ -2,6 +2,8 @@
 
 **NO-GO for production handoff. Implementation remains partial.** Six original MP4s genuinely play locally, but captions are absent, Cillian identity is not certified, and no production media is configured or approved.
 
+Subsequent media-route correction: [release coordination](RELEASE-COORDINATION.md). The historical matrix below remains scoped to the original acceptance run; current production serving supports explicitly approved bundles, while all current original assets remain unpublished.
+
 Live preview: http://127.0.0.1:3107/learn?tab=videos
 
 Repository: `JEMathew/movers-and-ledgers`. Isolated worktree: `/Users/jincenmathew/Downloads/Intuit/movebooks-video-academy`. Branch: `feature/video-academy-v1`. Audited starting HEAD and live GitHub branch were both `69c0c68313e56bcc6630f1a79db526e2038dd9fc`. The delivered acceptance commit adds this evidence and the one-line help correction; its SHA is reported in the delivery response. No other worktree, production, IAM, financial or Gemini behavior was changed.

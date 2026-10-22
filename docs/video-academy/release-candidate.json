@@ -1,0 +1,61 @@
+{
+  "recordedUtc": "2026-10-22T20:12:28.765049+00:00",
+  "status": "BLOCKED_NOT_READY_FOR_PUBLICATION",
+  "trackCBranch": "feature/video-academy-v1",
+  "startingHead": "f8ac6ee15b05687afdc4273dda182b037307bf4d",
+  "releasedGeminiWebRevision": null,
+  "releasedGeminiWebDigest": null,
+  "trackCImageDigest": null,
+  "trackB": {
+    "thread": "01a15871-ad65-7bf0-a48b-4fd9291f42b0",
+    "receipt": "/Users/jincenmathew/Downloads/Intuit/movebooks-integrated-release/public-gemini-rc-20261023/EXACT-PRODUCTION-APPROVAL.json",
+    "receiptSha256": "3469741c10d075e568bccb267e5cda9c2ff53eca90ba148759082e2aed26ec4d",
+    "status": "OWNER_DECISION_REQUIRED_EXISTING_PUBLIC_URL_OR_CUSTOM_DOMAIN_GATE",
+    "genuineProof": "PASS, 4 calls consumed, policy disabled",
+    "proposedSource": {
+      "web_base": "b20ef668736a520387753dee4c8c19e4f66ae8da",
+      "web_local_patch": "Only AI_ASSISTANCE_STATUS planned -> live using previously approved labels; 227 other source files identical; no private overlay.",
+      "api": "Existing verified corrected SDK/receipt-bound continuation image; exact source manifest in proof evidence"
+    },
+    "proposedWebAmd64Digest": "sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad",
+    "proposedIsReleased": false
+  },
+  "media": {
+    "hosting": "same-origin existing web service; approved bundle outside public/",
+    "runtimeRoot": "/app/academy-media",
+    "runtimeEnvironment": "MOVEBOOKS_ACADEMY_MEDIA_DIR=/app/academy-media",
+    "urlPattern": "/api/academy-media/{01,02,03,06,07,08}/{mp4,jpg,vtt}",
+    "bundleDigest": null,
+    "restrictedIds": [
+      "04",
+      "05",
+      "09"
+    ],
+    "originalSourcesPreserved": 9,
+    "accessibleOriginalSubtitleSets": 0,
+    "mediaApprovalChanged": false
+  },
+  "blockers": [
+    "Track B production promotion awaiting authorization; no exact released revision yet",
+    "Original SRT unavailable; actual captions and synchronization not verified",
+    "Recordings have review watermark; content and narration publication review incomplete"
+  ],
+  "checks": {
+    "focusedTestsPassed": 311,
+    "testFiles": 20,
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "productionBuild": "PASS",
+    "productionHttpSyntheticChecksPassed": 108,
+    "actualOriginalCaptionPlayback": "NOT VERIFIED",
+    "reviewCutProductFidelity": "NOT VERIFIED",
+    "finalImageBuildAndScan": "NOT VERIFIED"
+  },
+  "productionWrites": 0,
+  "additionalPaidServices": 0,
+  "rollback": {
+    "targetWebRevision": null,
+    "targetWebDigest": null,
+    "strategy": "Capture exact Gemini-enabled serving web revision and digest immediately before any future Track C publication. Roll back only the web selection to that revision, with its matching bundled media. Preserve API selection, Gemini policy/campaign, budgets and financial records; use existing release authorization controls."
+  }
+}

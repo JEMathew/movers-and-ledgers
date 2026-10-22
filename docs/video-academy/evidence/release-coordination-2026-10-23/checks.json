@@ -1,0 +1,11 @@
+{
+  "focusedTestsPassed": 311,
+  "testFiles": 20,
+  "typecheck": "PASS",
+  "lint": "PASS",
+  "productionBuild": "PASS",
+  "productionHttpSyntheticChecksPassed": 108,
+  "actualOriginalCaptionPlayback": "NOT VERIFIED",
+  "reviewCutProductFidelity": "NOT VERIFIED",
+  "finalImageBuildAndScan": "NOT VERIFIED"
+}
