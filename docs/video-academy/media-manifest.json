@@ -1,6 +1,6 @@
 {
   "baseline": "b20ef668736a520387753dee4c8c19e4f66ae8da",
-  "status": "media-access-blocked",
+  "status": "six-original-videos-playing-locally; original-SRT-access-blocked",
   "lessons": [
     {
       "id": "01",
@@ -9,11 +9,37 @@
       "sourceStatus": "completed-per-owner-inventory",
       "publicationApproved": false,
       "previewApproved": false,
-      "actualDurationSeconds": null,
-      "sourceSha256": null,
-      "videoAsset": null,
+      "actualDurationSeconds": 87.9,
+      "sourceSha256": "9a7322ae23918efc8282fe84e5457de30c5380a8a19f2a42c7f69fc747645b92",
+      "videoAsset": "/api/academy-media/01/mp4",
       "captionAsset": null,
-      "qa": "not inspected; source assets inaccessible"
+      "qa": "Original title verified; H.264 1080p/AAC full decode and non-silent audio pass. Original SRT unavailable. Cillian identity, caption synchronization and full content approval remain unverified.",
+      "sourceFilename": "f09a8cc5-6e47-4ff6-aaaa-a7e8f5628cf0.mp4",
+      "sourceBytes": 8809833,
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "sample_rate": "48000",
+          "channels": 2
+        }
+      ],
+      "fullDecodePass": true,
+      "volume": [
+        "mean_volume: -18.9 dB",
+        "max_volume: -2.7 dB"
+      ],
+      "sourceTitleVerified": true,
+      "sourceReviewWatermark": true,
+      "reviewPreviewAllowed": true,
+      "captionsVerified": false,
+      "sourceUnchanged": true
     },
     {
       "id": "02",
@@ -22,11 +48,37 @@
       "sourceStatus": "completed-per-owner-inventory",
       "publicationApproved": false,
       "previewApproved": false,
-      "actualDurationSeconds": null,
-      "sourceSha256": null,
-      "videoAsset": null,
+      "actualDurationSeconds": 70.0,
+      "sourceSha256": "1e10c06bdb24b0b505d99ccbe1038977a8a11316cb04c0a8969d83e1b16ff139",
+      "videoAsset": "/api/academy-media/02/mp4",
       "captionAsset": null,
-      "qa": "not inspected; source assets inaccessible"
+      "qa": "Original title verified; H.264 1080p/AAC full decode and non-silent audio pass. Original SRT unavailable. Cillian identity, caption synchronization and full content approval remain unverified.",
+      "sourceFilename": "7be88d46-cee6-49cd-b931-163f82ebf4ed.mp4",
+      "sourceBytes": 8093381,
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "sample_rate": "48000",
+          "channels": 2
+        }
+      ],
+      "fullDecodePass": true,
+      "volume": [
+        "mean_volume: -19.0 dB",
+        "max_volume: -3.1 dB"
+      ],
+      "sourceTitleVerified": true,
+      "sourceReviewWatermark": true,
+      "reviewPreviewAllowed": true,
+      "captionsVerified": false,
+      "sourceUnchanged": true
     },
     {
       "id": "03",
@@ -35,11 +87,37 @@
       "sourceStatus": "completed-per-owner-inventory",
       "publicationApproved": false,
       "previewApproved": false,
-      "actualDurationSeconds": null,
-      "sourceSha256": null,
-      "videoAsset": null,
+      "actualDurationSeconds": 93.8,
+      "sourceSha256": "994ed2221c00a47e96e02c5c93ae8026248d31fe514aa9c9a42ddf8fef0e7f22",
+      "videoAsset": "/api/academy-media/03/mp4",
       "captionAsset": null,
-      "qa": "not inspected; source assets inaccessible"
+      "qa": "Original title verified; H.264 1080p/AAC full decode and non-silent audio pass. Original SRT unavailable. Cillian identity, caption synchronization and full content approval remain unverified.",
+      "sourceFilename": "f9c6b77f-8751-429e-977d-a5042d010b04.mp4",
+      "sourceBytes": 17377988,
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "sample_rate": "48000",
+          "channels": 2
+        }
+      ],
+      "fullDecodePass": true,
+      "volume": [
+        "mean_volume: -18.6 dB",
+        "max_volume: -2.5 dB"
+      ],
+      "sourceTitleVerified": true,
+      "sourceReviewWatermark": true,
+      "reviewPreviewAllowed": true,
+      "captionsVerified": false,
+      "sourceUnchanged": true
     },
     {
       "id": "04",
@@ -48,11 +126,37 @@
       "sourceStatus": "review-cut",
       "publicationApproved": false,
       "previewApproved": false,
-      "actualDurationSeconds": null,
-      "sourceSha256": null,
+      "actualDurationSeconds": 105.8,
+      "sourceSha256": "ac42f5c1d702475bb6fb03fd0eff2f422e3148402f485a99254a2a3420f024ce",
       "videoAsset": null,
       "captionAsset": null,
-      "qa": "not inspected; source assets inaccessible"
+      "qa": "Original title verified; H.264 1080p/AAC full decode and non-silent audio pass. Original SRT unavailable. Cillian identity, caption synchronization and full content approval remain unverified.",
+      "sourceFilename": "a989085c.mp4",
+      "sourceBytes": 10851960,
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "sample_rate": "48000",
+          "channels": 2
+        }
+      ],
+      "fullDecodePass": true,
+      "volume": [
+        "mean_volume: -18.3 dB",
+        "max_volume: -2.1 dB"
+      ],
+      "sourceTitleVerified": true,
+      "sourceReviewWatermark": true,
+      "reviewPreviewAllowed": false,
+      "captionsVerified": false,
+      "sourceUnchanged": true
     },
     {
       "id": "05",
@@ -61,11 +165,37 @@
       "sourceStatus": "review-cut",
       "publicationApproved": false,
       "previewApproved": false,
-      "actualDurationSeconds": null,
-      "sourceSha256": null,
+      "actualDurationSeconds": 103.08,
+      "sourceSha256": "39aa4dea32c66b14897bcccde58e18e34398ff3356c3cc39f9741b6e49ee6a0f",
       "videoAsset": null,
       "captionAsset": null,
-      "qa": "not inspected; source assets inaccessible"
+      "qa": "Original title verified; H.264 1080p/AAC full decode and non-silent audio pass. Original SRT unavailable. Cillian identity, caption synchronization and full content approval remain unverified.",
+      "sourceFilename": "a676795e-1485-4f73-9c6e-febbad2ccf08.mp4",
+      "sourceBytes": 13054898,
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "sample_rate": "48000",
+          "channels": 2
+        }
+      ],
+      "fullDecodePass": true,
+      "volume": [
+        "mean_volume: -18.6 dB",
+        "max_volume: -3.8 dB"
+      ],
+      "sourceTitleVerified": true,
+      "sourceReviewWatermark": true,
+      "reviewPreviewAllowed": false,
+      "captionsVerified": false,
+      "sourceUnchanged": true
     },
     {
       "id": "06",
@@ -74,11 +204,37 @@
       "sourceStatus": "completed-per-owner-inventory",
       "publicationApproved": false,
       "previewApproved": false,
-      "actualDurationSeconds": null,
-      "sourceSha256": null,
-      "videoAsset": null,
+      "actualDurationSeconds": 91.1,
+      "sourceSha256": "5ee4a34308ee59492ad3c204a2801c1ba2f84c92acd05b619b0f8599608c293d",
+      "videoAsset": "/api/academy-media/06/mp4",
       "captionAsset": null,
-      "qa": "not inspected; source assets inaccessible"
+      "qa": "Original title verified; H.264 1080p/AAC full decode and non-silent audio pass. Original SRT unavailable. Cillian identity, caption synchronization and full content approval remain unverified.",
+      "sourceFilename": "7f27e008-e862-48e4-bd85-3e7003dac1d8.mp4",
+      "sourceBytes": 11535240,
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "sample_rate": "48000",
+          "channels": 2
+        }
+      ],
+      "fullDecodePass": true,
+      "volume": [
+        "mean_volume: -18.7 dB",
+        "max_volume: -2.3 dB"
+      ],
+      "sourceTitleVerified": true,
+      "sourceReviewWatermark": true,
+      "reviewPreviewAllowed": true,
+      "captionsVerified": false,
+      "sourceUnchanged": true
     },
     {
       "id": "07",
@@ -87,11 +243,37 @@
       "sourceStatus": "completed-per-owner-inventory",
       "publicationApproved": false,
       "previewApproved": false,
-      "actualDurationSeconds": null,
-      "sourceSha256": null,
-      "videoAsset": null,
+      "actualDurationSeconds": 89.578,
+      "sourceSha256": "1f0fd86bc98d558d7b5519bab0c95cd0cb3cd1c07cc16677057558eee482503d",
+      "videoAsset": "/api/academy-media/07/mp4",
       "captionAsset": null,
-      "qa": "not inspected; source assets inaccessible"
+      "qa": "Original title verified; H.264 1080p/AAC full decode and non-silent audio pass. Original SRT unavailable. Cillian identity, caption synchronization and full content approval remain unverified.",
+      "sourceFilename": "07147473-4448-4bee-95e5-ba96531d90f2.mp4",
+      "sourceBytes": 10692185,
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "sample_rate": "48000",
+          "channels": 2
+        }
+      ],
+      "fullDecodePass": true,
+      "volume": [
+        "mean_volume: -18.8 dB",
+        "max_volume: -1.8 dB"
+      ],
+      "sourceTitleVerified": true,
+      "sourceReviewWatermark": true,
+      "reviewPreviewAllowed": true,
+      "captionsVerified": false,
+      "sourceUnchanged": true
     },
     {
       "id": "08",
@@ -100,11 +282,37 @@
       "sourceStatus": "completed-per-owner-inventory",
       "publicationApproved": false,
       "previewApproved": false,
-      "actualDurationSeconds": null,
-      "sourceSha256": null,
-      "videoAsset": null,
+      "actualDurationSeconds": 89.578,
+      "sourceSha256": "3666a70792fe0c1a7ff652257e83e30cb86faaab6e86ed92908814cf3ca6afb7",
+      "videoAsset": "/api/academy-media/08/mp4",
       "captionAsset": null,
-      "qa": "not inspected; source assets inaccessible"
+      "qa": "Original title verified; H.264 1080p/AAC full decode and non-silent audio pass. Original SRT unavailable. Cillian identity, caption synchronization and full content approval remain unverified.",
+      "sourceFilename": "c0fdf1fe-c237-4bb6-9307-2261d687e10e.mp4",
+      "sourceBytes": 9358130,
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "sample_rate": "48000",
+          "channels": 2
+        }
+      ],
+      "fullDecodePass": true,
+      "volume": [
+        "mean_volume: -18.6 dB",
+        "max_volume: -1.8 dB"
+      ],
+      "sourceTitleVerified": true,
+      "sourceReviewWatermark": true,
+      "reviewPreviewAllowed": true,
+      "captionsVerified": false,
+      "sourceUnchanged": true
     },
     {
       "id": "09",
@@ -113,16 +321,43 @@
       "sourceStatus": "review-cut",
       "publicationApproved": false,
       "previewApproved": false,
-      "actualDurationSeconds": null,
-      "sourceSha256": null,
+      "actualDurationSeconds": 177.877,
+      "sourceSha256": "22cdcf3c840ceb76326ff099d62da936a32a2bdb2e306e047cb7fd1e130a7594",
       "videoAsset": null,
       "captionAsset": null,
-      "qa": "not inspected; source assets inaccessible"
+      "qa": "Original title verified; H.264 1080p/AAC full decode and non-silent audio pass. Original SRT unavailable. Cillian identity, caption synchronization and full content approval remain unverified.",
+      "sourceFilename": "92b7537f-29aa-4495-90fd-6c4ee5f015a3.mp4",
+      "sourceBytes": 25777176,
+      "streams": [
+        {
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "sample_rate": "48000",
+          "channels": 2
+        }
+      ],
+      "fullDecodePass": true,
+      "volume": [
+        "mean_volume: -19.4 dB",
+        "max_volume: -4.5 dB"
+      ],
+      "sourceTitleVerified": true,
+      "sourceReviewWatermark": true,
+      "reviewPreviewAllowed": false,
+      "captionsVerified": false,
+      "sourceUnchanged": true
     }
   ],
   "discovery": {
-    "local": "Project search found product/demo videos, not Academy sources. Downloads enumeration denied by macOS, including after escalation.",
-    "higgsfield": "Nine recent video upload candidates found. Download escalation rejected by user. Identity-to-lesson mapping, integrity, narration, captions and content not verified. No URL configured.",
-    "creditsSpent": 0
+    "local": "Original Downloads folder read denied by macOS even after escalation; source folder was not changed.",
+    "higgsfield": "Latest user explicitly renewed original-asset download authorization. Nine original MP4 uploads retrieved, title-mapped and hashed. Accessible project data exposed no matching SRT. No embedded subtitle streams.",
+    "creditsSpent": 0,
+    "regeneratedMedia": false
   }
 }

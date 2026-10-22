@@ -10,6 +10,12 @@ import { topics } from "@/components/public-surfaces/content";
 const sample = { src: "/test/01.mp4", captions: "/test/01.vtt", poster: "/test/01.webp", durationSeconds: 88.1 };
 const concepts = topics.map(topic => <AnchoredDetails key={topic.id} id={topic.id} title={topic.title}><p>{topic.body}</p><p>{topic.question}</p></AnchoredDetails>);
 describe("Academy", () => {
+  it("labels caption-incomplete review previews and emits no phantom caption track", () => {
+    const { container } = render(<AcademyPlayer lesson={lessons[0]} media={{ src: sample.src, poster: sample.poster, durationSeconds: 88, reviewOnly: true }} onClose={() => {}}/>);
+    expect(container.querySelector("track")).toBeNull();
+    expect(screen.getByText("Original English subtitles not yet connected")).toBeVisible();
+    expect(screen.getByText(/Local review preview · not approved for publication/)).toBeVisible();
+  });
   it("shows nine lessons, exactly two tabs and no media requests while unavailable", () => {
     const { container } = render(<LearnAcademy media={{}}>{concepts}</LearnAcademy>);
     expect(screen.getAllByRole("tab")).toHaveLength(2);

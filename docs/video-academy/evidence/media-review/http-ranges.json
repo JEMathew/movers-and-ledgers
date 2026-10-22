@@ -1,0 +1,56 @@
+[
+  {
+    "id": "01",
+    "status": 206,
+    "type": "video/mp4",
+    "range": "bytes 0-1023/8809833",
+    "bytes": 1024
+  },
+  {
+    "id": "02",
+    "status": 206,
+    "type": "video/mp4",
+    "range": "bytes 0-1023/8093381",
+    "bytes": 1024
+  },
+  {
+    "id": "03",
+    "status": 206,
+    "type": "video/mp4",
+    "range": "bytes 0-1023/17377988",
+    "bytes": 1024
+  },
+  {
+    "id": "04",
+    "status": 404
+  },
+  {
+    "id": "05",
+    "status": 404
+  },
+  {
+    "id": "06",
+    "status": 206,
+    "type": "video/mp4",
+    "range": "bytes 0-1023/11535240",
+    "bytes": 1024
+  },
+  {
+    "id": "07",
+    "status": 206,
+    "type": "video/mp4",
+    "range": "bytes 0-1023/10692185",
+    "bytes": 1024
+  },
+  {
+    "id": "08",
+    "status": 206,
+    "type": "video/mp4",
+    "range": "bytes 0-1023/9358130",
+    "bytes": 1024
+  },
+  {
+    "id": "09",
+    "status": 404
+  }
+]

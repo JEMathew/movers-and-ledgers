@@ -1,0 +1,102 @@
+[
+  {
+    "path": "evidence/concepts-desktop.jpg",
+    "sha256": "ebad96204a2d1a934852405eecccdf8e33bf8b79ca7fa88743ecd617dcea18bc"
+  },
+  {
+    "path": "evidence/concepts-mobile.jpg",
+    "sha256": "8fdc1e452c8b7921e27632599848544c5be39d5f404d7ab40e51d7bc5c5c82c4"
+  },
+  {
+    "path": "evidence/contextual-assess-mobile.jpg",
+    "sha256": "6da4585002e5b85802e9eacc399f83445ffe61276f6a725169ef962d7ce85bd8"
+  },
+  {
+    "path": "evidence/contextual-lesson-mobile.jpg",
+    "sha256": "f318ebaf7a98fc3fb2ba3994628eded310bbb7aff99cb5713c254d4444f79923"
+  },
+  {
+    "path": "evidence/desktop-dark.jpg",
+    "sha256": "ebef5f8353f60036cde34a8f65aadb708c63694933be48ebd16b1dbca6172fc5"
+  },
+  {
+    "path": "evidence/desktop-light.jpg",
+    "sha256": "d2346a946f1dc5fb4e430ff0b39a856485358ed0c6e17d088931cf25d26c2a3d"
+  },
+  {
+    "path": "evidence/desktop-preview.jpg",
+    "sha256": "bd6e799e9c056a8d84cfa916e852c14a0605531c62d89673351a8d06c6d2fa1a"
+  },
+  {
+    "path": "evidence/landing-desktop.jpg",
+    "sha256": "b011d135696b6080156e8d4036eda38dc0fc92b514c544436e775e805d3aad12"
+  },
+  {
+    "path": "evidence/media-review/desktop-concepts.jpg",
+    "sha256": "ba4481c0de5c87d0110c4faa84ba7c80c2552275c46fe2a5e04d2b6c437c06c5"
+  },
+  {
+    "path": "evidence/media-review/desktop-guides-light.jpg",
+    "sha256": "f60d11929d6985f2be43b028976890a5d62ddff32830f1c54283e2b35a80fabc"
+  },
+  {
+    "path": "evidence/media-review/desktop-guides-viewport.jpg",
+    "sha256": "fafedd9a883ca6a97d3f8c405dcde0e1b68921c0196ea34ce6f5fd5d3caffbb5"
+  },
+  {
+    "path": "evidence/media-review/desktop-guides.jpg",
+    "sha256": "ad593cd8efd76d13edf2a55109b3fc9d73908184c6b54f3904dfd2d25a2bd233"
+  },
+  {
+    "path": "evidence/media-review/desktop-playing-01.jpg",
+    "sha256": "33e15b86c0d4a15568f910295fdfde3db5abfd8c9f9d196ea86ec5caa4ea6112"
+  },
+  {
+    "path": "evidence/media-review/desktop-playing-06.jpg",
+    "sha256": "784b6eaa0de857d028c033fb305271509ed98aa33da6dcea04017d1191fbab2f"
+  },
+  {
+    "path": "evidence/media-review/http-ranges.json",
+    "sha256": "8a709c073ddf842618b6646d6748cf54e4e9b64ade46e5076fa82b546ee17294"
+  },
+  {
+    "path": "evidence/media-review/mobile-concepts-viewport.jpg",
+    "sha256": "a0223bf93069caba113cd214c063870abe2a711e05af646625acdf68483b3657"
+  },
+  {
+    "path": "evidence/media-review/mobile-concepts.jpg",
+    "sha256": "1ef40a7c9e5bc916e519cd39af87d4bc68f781262d6e2319af449c5a0a032333"
+  },
+  {
+    "path": "evidence/media-review/mobile-guides.jpg",
+    "sha256": "38b0b6f504b977808cca85917083a5c03ef7eaf837580be8697a27e748b4b9bb"
+  },
+  {
+    "path": "evidence/media-review/mobile-playing-07.jpg",
+    "sha256": "26047b422ca9c278f7618ffda6ac1837b6fec77cddc8634dc21abe44ef52860a"
+  },
+  {
+    "path": "evidence/media-review/mobile-playing-08.jpg",
+    "sha256": "8d5f20da8b0e600537ddbab8de14d743eff663cbc0616c0b41acdc7b205d8b29"
+  },
+  {
+    "path": "evidence/media-review/playback.json",
+    "sha256": "0bbfe1ff1d20e2555eb0c8e14ad000122eb3f237b8b17061d7131ba058f99ce5"
+  },
+  {
+    "path": "evidence/mobile-dark.jpg",
+    "sha256": "6dfb2403b29b310ff7396353d978c665540fb6bc1e2efb477860451d1fb9d955"
+  },
+  {
+    "path": "evidence/mobile-light.jpg",
+    "sha256": "d06a5ca9edbcb25b2b06b76019c0ba5399084fcbdb395dc01e5526aa57e98443"
+  },
+  {
+    "path": "evidence/mobile-preview.jpg",
+    "sha256": "85dfcfb1713a28d9c3a441c5610fd2dce0b6c28dd1b65a23569ebaad459a8bfa"
+  },
+  {
+    "path": "evidence/tablet-light.jpg",
+    "sha256": "cbd5c234b88877de13a8d68db2277330430507fe20ddbe878b06a6c91e98a286"
+  }
+]

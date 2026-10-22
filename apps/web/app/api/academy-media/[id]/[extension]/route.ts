@@ -1,5 +1,6 @@
 import { open, stat } from "node:fs/promises";
 import { academyMedia, previewFile } from "@/lib/academy/media";
+import type { LessonId } from "@/lib/academy/catalog";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -8,6 +9,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
   const { id, extension } = await context.params;
   const manifest = await academyMedia();
   if (!Object.hasOwn(manifest, id)) return new Response(null, { status: 404 });
+  if (extension === "vtt" && !manifest[id as LessonId]?.captions) return new Response(null, { status: 404 });
   const filename = await previewFile(id, extension);
   if (!filename) return new Response(null, { status: 404 });
   try {
@@ -38,7 +40,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
       cancel: close,
     });
     return new Response(body, { status: range ? 206 : 200, headers: {
-      "Content-Type": extension === "mp4" ? "video/mp4" : extension === "vtt" ? "text/vtt; charset=utf-8" : "image/webp",
+      "Content-Type": extension === "mp4" ? "video/mp4" : extension === "vtt" ? "text/vtt; charset=utf-8" : "image/jpeg",
       "Content-Length": String(end - start + 1), "Accept-Ranges": "bytes", "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff",
       ...(range ? { "Content-Range": `bytes ${start}-${end}/${size}` } : {}),
     } });

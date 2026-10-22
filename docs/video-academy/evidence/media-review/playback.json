@@ -1,0 +1,66 @@
+[
+  {
+    "duration": 87.9,
+    "lesson": "Getting Started",
+    "muted": false,
+    "paused": false,
+    "ready": 4,
+    "time": 0,
+    "tracks": 0,
+    "controls": {
+      "muted": false,
+      "paused": true,
+      "rate": 1.5,
+      "time": 45.800206
+    }
+  },
+  {
+    "duration": 70,
+    "lesson": "Understand Your Migration",
+    "muted": false,
+    "paused": false,
+    "ready": 4,
+    "time": 9.458614,
+    "tracks": 0
+  },
+  {
+    "duration": 93.8,
+    "ended": true,
+    "lesson": "Prepare and Approve",
+    "muted": false,
+    "paused": true,
+    "ready": 4,
+    "time": 93.8,
+    "tracks": 0
+  },
+  {
+    "duration": 91.1,
+    "ended": false,
+    "lesson": "Move and Verify",
+    "muted": false,
+    "paused": false,
+    "ready": 4,
+    "time": 38.456918,
+    "tracks": 0
+  },
+  {
+    "duration": 89.578,
+    "ended": false,
+    "lesson": "First Productive Use",
+    "muted": false,
+    "paused": true,
+    "ready": 4,
+    "time": 10.601283,
+    "tracks": 0
+  },
+  {
+    "duration": 89.578,
+    "ended": false,
+    "lesson": "Trust and Troubleshooting",
+    "muted": false,
+    "paused": false,
+    "ready": 4,
+    "time": 49.496166,
+    "tracks": 0
+  }
+]

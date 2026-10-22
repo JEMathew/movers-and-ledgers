@@ -1,6 +1,6 @@
 export const academyGroups = ["Getting Started", "Migration Journey", "Gemini AI", "Trust & Help"] as const;
 export type LessonId = "01" | "02" | "03" | "04" | "05" | "06" | "07" | "08" | "09";
-export type AcademyMedia = { src: string; poster: string; captions: string; durationSeconds: number };
+export type AcademyMedia = { src: string; poster: string; captions?: string; durationSeconds: number; reviewOnly?: boolean };
 export type Lesson = {
   id: LessonId; title: string; group: typeof academyGroups[number]; duration: string;
   description: string; sourceStatus: "completed" | "review-cut";

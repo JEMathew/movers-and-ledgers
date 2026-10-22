@@ -1,79 +1,89 @@
 # Video Academy v1 — Track C handoff
 
-Implementation status: **partial; UI and publication boundary verified, media acceptance blocked**.
+Implementation status: **six original videos play in the local review preview; caption acceptance remains blocked on original SRT access**.
 
 ## Branch and baseline
 
 Worktree: `movebooks-video-academy`, branch `feature/video-academy-v1`.
-Baseline: `b20ef66` (`integration/ux-gemini-v2-local`), the committed combined UX/Gemini source with approved disclosures. This is a development integration baseline, not a claim of production approval. The older `movebooks-prod-candidate` directory is not the latest integrated source. Active private acceptance overlay and Track A/B worktrees were not edited. Their uncommitted evidence was not copied. No merges, cherry-picks, deployment, permissions changes or cloud calls were performed.
+Baseline: `b20ef66` (`integration/ux-gemini-v2-local`), the committed combined UX/Gemini source with approved disclosures. This is a development integration baseline, not production approval. Track A/B and private acceptance worktrees were not edited. No merge, deployment, IAM change, media generation or credit expenditure occurred.
 
-Before eventual integration, compare this feature against the final owner-approved release commit, especially Learn, task utilities and public disclosures. Private acceptance overlay changes and subsequent Track B proofs are independently controlled.
+Before eventual integration, compare this feature against the final owner-approved release commit, especially Learn, task utilities and public disclosures. Private acceptance overlay changes and subsequent Track B proofs remain independently controlled.
 
 ## Delivered behavior
 
-- Existing `/learn` and navigation, with exactly two tabs; Video Guides defaults, old concept fragment links open Learn the Concepts.
-- Nine metadata entries in four collections; 3/2/1-column desktop/tablet/mobile layout. Missing assets are explicitly unavailable. Inventory durations are shown until measurements exist.
-- Original ten topics, explanatory copy, questions, accordions, task return, Synthetic Beta and legal notices preserved. Open accordions persist when switching tabs.
-- Native inline player prepared for MP4/AAC, posters, English WebVTT, native controls/fullscreen, playback speed, keyboard controls, loading/error/retry. No autoplay; no video element is mounted until selected; changing tabs unmounts playback. **Real Academy playback is not verified.**
-- Watch guide links in the real task utilities (Understand, Prepare, Move, Verify, Start), Explore Demo and public Trust. Valid session/stage context is retained. Gemini review-cut links are omitted. No API mutations or workflow state writes are introduced.
-- Existing landing page and Learn more link unchanged; that link now reaches Video Guides by default. Hero photo, overview MP4, both CTAs and existing attribution unchanged.
-- Central server-only media registry; production publication is empty/closed. Local preview media is outside Git and served only in development. Exact lesson/extension allowlists, realpath containment, range requests, MIME headers, no-store and nosniff. Review cuts 04/05/09 return 404 even when their files and approval flags exist.
+- Existing `/learn` and navigation with exactly two tabs; Video Guides defaults, old concept fragment links open Learn the Concepts.
+- Nine entries in four collections; 3/2/1-column desktop/tablet/mobile layout. Six originals have real extracted posters and measured runtimes. Three review cuts remain unavailable.
+- All ten original topics, copy, questions, accordions, task return, Synthetic Beta and legal notices preserved. Accordion state survives tab switches.
+- Native inline MP4 player with original AAC audio, controls, speed, keyboard play/pause/seek/mute, loading/error/retry and conditional WebVTT captions. No autoplay; selection mounts the player and changing tabs removes it.
+- Watch guide links in task utilities (Understand, Prepare, Move, Verify, Start), Explore Demo and Trust. Valid session/stage context retained; Gemini review-cut links omitted; no workflow writes introduced.
+- Landing page, hero photo, overview MP4, both CTAs and original concept content unchanged (hashes in `preservation.json`).
+- Server-only media registry; production publication remains empty. Local files stay outside Git. Development routes enforce lesson/extension allowlists, realpath containment, byte ranges, MIME, no-store and nosniff. Videos 04/05/09 return 404 even with injected approval metadata. Missing/unverified captions do not expose a VTT route or a phantom track.
 
-## Preview and verification
+## Actual source assets and limitations
 
-Running UI preview: http://127.0.0.1:3107/learn (local machine only).
+macOS denied access to the original Downloads folder even after escalation. The latest user request explicitly renewed permission to retrieve original Higgsfield assets. Nine original MP4 uploads were downloaded once into `/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/`, identified by actual title frames, hashed and fully decoded. No upload order assumptions, generated footage, transcription or paid credits were used. The original Downloads folder was not modified.
 
-Reproduce from repository root:
+All nine files are 1920×1080 H.264 with stereo 48 kHz AAC and non-silent audio. All passed full FFmpeg decoding. Six byte-identical MP4 copies and extracted JPEG posters are in `review-preview-v1/`. The three restricted MP4s are absent from the serving directory. Source hashes were rechecked unchanged after preview work.
+
+**All retrieved videos visibly include a REVIEW CUT watermark**, including the six listed as completed in owner inventory. The six therefore play only in an explicitly labeled local review mode; none received publication approval. Title and sampled middle frames were inspected, but comprehensive sensitive-content review, exact release-UI fidelity and Cillian narrator identity are not certified.
+
+No MP4 has an embedded subtitle stream. Accessible Higgsfield project data did not expose the accompanying SRT files. Captions remain unavailable; the UI states this plainly and emits no caption track. No subtitle text was invented.
+
+**Remaining owner action:** copy the original `Subtitles` folder into `/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/source/`. There is no need to download or regenerate the nine videos again. Then map the originals to these verified identities, convert SRT to VTT and check beginning/middle/end synchronization in the actual player.
+
+## Preview configuration
+
+Running preview: http://127.0.0.1:3107/learn (local machine only).
+
+The ignored `apps/web/.env.development.local` points to external preview assets:
+
+```dotenv
+MOVEBOOKS_ACADEMY_MEDIA_DIR=/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/review-preview-v1
+MOVEBOOKS_ACADEMY_REVIEW_PREVIEW=1
+```
+
+The second flag additionally requires per-lesson `reviewPreviewAllowed: true` and passed technical checks. It only works with `NODE_ENV=development`; it cannot expose 04/05/09. All external manifest entries keep `previewApproved: false`, `publicationApproved: false`, and `captionsVerified: false`. These local files and environment settings are not committed or shipped with the feature branch.
+
+Start from `apps/web` using `./node_modules/.bin/next dev -H 127.0.0.1 -p 3107`. This session reused identical-baseline installed dependencies through an ignored node_modules symlink; no lockfile changes. Free FFmpeg/ffprobe was installed from Homebrew for inspection and poster extraction.
+
+## Validation and evidence
+
+**310 tests across 20 files, typecheck, lint and production build passed.**
 
 ```sh
 cd apps/web
-npm ci
+npm run test -- components/academy/academy.test.tsx lib/academy/media.test.ts components/public-surfaces components/journey
 npm run typecheck
 npm run lint
-npm run test -- components/academy/academy.test.tsx lib/academy/media.test.ts components/public-surfaces components/journey
 npm run build
-./node_modules/.bin/next dev -H 127.0.0.1 -p 3107
 ```
 
-This session reused the existing identical-baseline installed dependencies via an ignored node_modules symlink; no package/lockfile changes.
+Real in-app browser verification:
 
-Verified: **308 tests across 20 files passed**, typecheck, lint, production build. The new range/publication tests use synthetic bytes and do not prove codec or playback compatibility. Player unit tests cover selection, no autoplay, tab cleanup, controls and failure handling. The preparation script was syntax checked; it has not been run against the missing Academy sources.
+- All six eligible originals loaded and progressed with original audio enabled; lesson 03 reached its end. This proves browser playback and enabled audio, not a human voice-identity audit.
+- Play/pause, keyboard seek, mute/unmute and 1.5× speed exercised. Native fullscreen opened, but automated exit was unreliable in this in-app browser; manual fullscreen entry/exit retest remains required. Inline tab cleanup was independently retested after reload.
+- Both tabs, all nine tiles, ten original topics and accordion behavior; desktop 1440px, tablet 768px and mobile 390px, 3/2/1 columns without horizontal overflow; light and dark appearances.
+- Earlier focused browser check covered original landing photo/CTAs, local demo sign-in and `/assess` Watch guide → lesson 02. No migration was advanced.
+- Actual six MP4 endpoints returned 206 byte ranges with video/mp4; restricted 04/05/09 returned 404. Boundary tests additionally cover absent caption routes, traversal, symlink containment and production denial.
 
-Real in-app browser: nine cards; two tabs; original accordion expansion and retained state; keyboard tab navigation; 1440px/768px/390px layouts (3/2/1 columns, no horizontal overflow); light and dark themes; original landing photo/CTAs; local demo sign-in and `/assess` Watch guide → lesson 02. No migration was created or advanced. No browser console errors were reported in the final inspection. This does not certify hosted identity isolation or financial execution; their implementation is unchanged.
+Current screenshots and browser/HTTP receipts are under `evidence/media-review/`; screenshots directly under `evidence/` are historical UI-only evidence. `media-manifest.json` records each source hash, runtime, codec, audio check and remaining gap. `evidence-sha256.json` indexes the captured files.
 
-Screenshots are in `evidence/`. Source/asset byte preservation hashes are in `preservation.json`. Asset-by-asset approval and QA gaps are in `media-manifest.json`.
+Hosted identity isolation and financial execution were not rerun; their implementations are unchanged. Full media acceptance remains incomplete without original captions, synchronization and human content/narration review.
 
-## Media blocker and next owner action
+## Completing captions without changing sources
 
-Accessible project folders contained existing product/demo recordings but no nine-lesson Academy source set. macOS rejected broader Downloads enumeration, including an escalated attempt. Higgsfield returned nine recent upload candidates, but a request to download one for identification and validation was rejected by the user. No workaround was attempted. No generation, credits, uploads, or public media publication occurred.
-
-**Next owner action:** place the original nine named MP4s and matching SRTs in `/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/source/`, which is within the authorized workspace, then resume asset verification. Alternatively explicitly authorize the previously rejected download; original SRT access will still be needed. Do not infer lesson identity from upload ordering.
-
-Actual runtime, codecs/resolution, Cillian voice, audibility, caption synchronization, UI fidelity, sensitive-content review and source hashes are **unverified for all nine**. Placeholder frames are explicitly labeled; no substitute media or invented captions are used.
-
-## Safe local media preparation
-
-Create an external source map such as `{"01":{"video":"/absolute/01.mp4","captions":"/absolute/01.srt"}}`. Map identities only after checking titles/content. With ffmpeg/ffprobe already available, run:
+Create an external source map such as `{"01":{"video":"/absolute/original.mp4","captions":"/absolute/original.srt"}}`, using the verified title mapping in `media-manifest.json`. With ffmpeg/ffprobe on PATH:
 
 ```sh
 python3 scripts/prepare-academy-media.py /absolute/source-map.json /absolute/new-preview-media
 ```
 
-It validates MP4/H.264/AAC/1080p, inventory runtime tolerance, full decode and SRT order/bounds, computes SHA-256, converts existing SRT to browser VTT and extracts real poster frames. It never generates audio or video. Review-cut MP4s/posters/captions are never copied into the serving directory. The script leaves `previewApproved: false` for every entry. After actual human narration, synchronization, UI and sensitive-content review, set that field true only for the six completed lessons in the external manifest. This preview approval is separate from publication approval.
-
-```sh
-cd apps/web
-MOVEBOOKS_ACADEMY_MEDIA_DIR=/absolute/new-preview-media ./node_modules/.bin/next dev -H 127.0.0.1 -p 3107
-```
-
-Then test each of the six videos in an actual browser: play/pause, scrub/end/replay, audible narration, captions at beginning/middle/end, speed, mute/volume, fullscreen and keyboard, network failure/retry, mobile and tab switching. Record runtime, hashes, tests and human reviewer in the manifest. No playback PASS exists yet.
+The script validates H.264/AAC/1080p, runtime tolerance, full decoding and SRT cue order/bounds, computes hashes, converts existing SRT to VTT and extracts JPEG posters. Original files are read-only inputs. Review-cut MP4s/posters/captions are never copied into the serving directory. It leaves `previewApproved` and `captionsVerified` false until actual human content and synchronization checks. Set them true only after those checks for eligible lessons; this remains separate from publication approval. The complete script awaits real SRT inputs; original MP4 technical validation was performed independently in this session.
 
 ## Publication gates
 
-1. Verify source identity and every media QA item; use exact approved release UI. Human check that narration is Cillian and the content contains no sensitive material.
-2. Complete Track B genuine Advisor/independent Reviewer captures for 04, 05 and 09, with actual capability/fallback labeling and human approval. Review-cut metadata and route restrictions must remain until a separately reviewed change.
-3. Choose existing approved stable HTTPS object storage/CDN; no temporary CloudFront permanence assumption. Test video/mp4, text/vtt, image/webp, byte ranges and cross-origin access as needed. No new paid service or cloud/IAM change is authorized.
-4. Obtain explicit owner publication and deployment approval, then add only approved HTTPS URLs to the server registry. Local paths are disabled in production; empty publication registry means all lessons stay unavailable on a production build.
-5. Verify compatibility against the final integrated release, repeat browser/media QA, and obtain release-owner approval. This branch must not be merged/deployed automatically.
-
-Acceptance remains partial until actual audio/captions/posters and six playback paths are verified. A pushed UI branch is not media publication or production readiness.
+1. Verify original subtitles, Cillian narration identity, caption synchronization, exact approved release UI and sensitive-content absence.
+2. Complete Track B genuine Advisor/independent Reviewer captures for 04/05/09, with capability/fallback labeling and human approval. Their hard restrictions require a separately reviewed change.
+3. Choose existing approved stable HTTPS storage/CDN and verify video/mp4, text/vtt, image/jpeg, range and cross-origin behavior. No new paid service or cloud/IAM change is authorized.
+4. Obtain explicit publication and deployment approval before populating the server registry. A production build currently exposes no Academy media.
+5. Compare against the final integrated release, repeat relevant browser QA and obtain release-owner approval. Do not merge or deploy this feature automatically.

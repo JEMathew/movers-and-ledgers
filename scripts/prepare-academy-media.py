@@ -22,8 +22,11 @@ def run(*args):
 
 
 def digest(file):
+    checksum = hashlib.sha256()
     with file.open("rb") as stream:
-        return hashlib.file_digest(stream, "sha256").hexdigest()
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            checksum.update(chunk)
+    return checksum.hexdigest()
 
 
 def seconds(value):
@@ -86,14 +89,14 @@ def main():
         run("ffmpeg", "-v", "error", "-xerror", "-i", str(source), "-f", "null", "-")
         vtt, count = convert_captions(captions, duration)
         entry = {"durationSeconds": duration, "sourceSha256": digest(source), "srtSha256": digest(captions), "captionCueCount": count,
-                 "technicalChecksPassed": True, "previewApproved": False, "publicationApproved": False,
+                 "technicalChecksPassed": True, "previewApproved": False, "publicationApproved": False, "captionsVerified": False,
                  "sourceStatus": "review-cut" if lesson in REVIEW else "completed", "humanChecks": "pending narration, sync, UI fidelity, sensitive-content review"}
         if lesson not in REVIEW:
             shutil.copyfile(source, output / f"{lesson}.mp4")
             (output / f"{lesson}.vtt").write_text(vtt)
-            run("ffmpeg", "-v", "error", "-ss", "3", "-i", str(source), "-frames:v", "1", "-vf", "scale=960:-1", str(output / f"{lesson}.webp"))
+            run("ffmpeg", "-v", "error", "-ss", "3", "-i", str(source), "-frames:v", "1", "-vf", "scale=960:-1", str(output / f"{lesson}.jpg"))
             entry["vttSha256"] = digest(output / f"{lesson}.vtt")
-            entry["posterSha256"] = digest(output / f"{lesson}.webp")
+            entry["posterSha256"] = digest(output / f"{lesson}.jpg")
         manifest[lesson] = entry
     (output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     print("Technical validation complete. Review cuts were not copied. Human preview approval is still required.")
