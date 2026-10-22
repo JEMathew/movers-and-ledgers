@@ -166,7 +166,9 @@
     "scope": "Original supplied narration retained; H.264/AAC, non-silent audio and complete decode verified on same exact files before publication. Voice actor identity not independently certified.",
     "captions": "Nine VTT tracks loaded/showing in actual public browser, caption screenshots saved; exact bytes match previously timestamp-validated SRT/VTT",
     "publicBrowserTestScope": "Actual public playback start and progression, loaded visible caption tracks; prior complete-file decode and full completion reused for exact matching bytes",
-    "voiceActorIdentity": "Not independently certified; original supplied voice retained"
+    "voiceActorIdentity": "Not independently certified; original supplied voice retained",
+    "reviewerCaptionScreenshot": "evidence/publication-2026-10-23/public-05-caption-active.png",
+    "reviewerCaptionNote": "Initial public 05 screenshot fell between cues; additional screenshot confirms actual caption rendering at 2.21248 seconds."
   },
   "learnNavigation": "PASS both tabs, ten concepts and public contextual Advisor link",
   "geminiFrontend": {
