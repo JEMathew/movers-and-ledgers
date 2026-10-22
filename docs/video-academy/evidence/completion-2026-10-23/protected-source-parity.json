@@ -1,0 +1,15 @@
+{
+  "releasedSource": "/Users/jincenmathew/Downloads/Intuit/movebooks-integrated-release/public-gemini-rc-20261023/build-source/apps/web",
+  "byteIdentical": [
+    "components/plan-map-approve/AssistedAnalysis.tsx",
+    "components/plan-map-approve/IndependentReview.tsx",
+    "components/v2/ai-status.ts",
+    "components/public-surfaces/content.ts",
+    "app/page.tsx",
+    "app/api/v1/[...path]/route.ts",
+    "app/api/auth/demo/route.ts",
+    "package-lock.json",
+    "Dockerfile"
+  ],
+  "mappingReviewChange": "Only two WatchGuide links added before existing SecondOpinion. No analysis/approval props or control logic changed."
+}

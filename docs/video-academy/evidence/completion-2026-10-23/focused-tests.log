@@ -1,0 +1,21 @@
+
+> @movebooks/web@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @movebooks/web@0.1.0 lint
+> eslint .
+
+
+> @movebooks/web@0.1.0 test
+> vitest run --run lib/academy components/academy components/plan-map-approve components/v2/ai-copy.test.ts components/public-surfaces/public-content.test.tsx test/next-config.test.ts
+
+
+ RUN  v5.0.2 /Users/jincenmathew/Downloads/Intuit/movebooks-video-academy/apps/web
+
+
+ Test Files  11 passed (11)
+      Tests  195 passed (195)
+   Start at  03:11:15
+   Duration  2.13s (environment 49%, tests 20%, setup 15%, transform 12%, import 5%)
+

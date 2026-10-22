@@ -1,0 +1,106 @@
+{
+  "exactReleasedLockfile": true,
+  "matchedPackages": [
+    {
+      "path": "styled-jsx/package.json",
+      "version": "5.1.6"
+    },
+    {
+      "path": "next/package.json",
+      "version": "15.5.27"
+    },
+    {
+      "path": "next/dist/compiled/react-is/package.json",
+      "version": "19.2.0-canary-0bdb9206-20250818"
+    },
+    {
+      "path": "next/dist/compiled/regenerator-runtime/package.json",
+      "version": "0.13.4"
+    },
+    {
+      "path": "next/dist/compiled/react-refresh/package.json",
+      "version": "0.12.0"
+    },
+    {
+      "path": "next/dist/compiled/@edge-runtime/ponyfill/package.json",
+      "version": "4.0.0"
+    },
+    {
+      "path": "next/dist/compiled/@edge-runtime/primitives/package.json",
+      "version": "6.0.0"
+    },
+    {
+      "path": "next/dist/compiled/@edge-runtime/cookies/package.json",
+      "version": "6.0.0"
+    },
+    {
+      "path": "@emnapi/runtime/package.json",
+      "version": "1.11.3"
+    },
+    {
+      "path": "detect-libc/package.json",
+      "version": "2.1.2"
+    },
+    {
+      "path": "nanoid/package.json",
+      "version": "3.3.19"
+    },
+    {
+      "path": "typescript/package.json",
+      "version": "5.9.3"
+    },
+    {
+      "path": "@swc/helpers/package.json",
+      "version": "0.5.15"
+    },
+    {
+      "path": "postcss/package.json",
+      "version": "8.5.28"
+    },
+    {
+      "path": "react-dom/package.json",
+      "version": "19.3.0"
+    },
+    {
+      "path": "picocolors/package.json",
+      "version": "1.1.1"
+    },
+    {
+      "path": "semver/package.json",
+      "version": "7.8.5"
+    },
+    {
+      "path": "client-only/package.json",
+      "version": "0.0.1"
+    },
+    {
+      "path": "@img/sharp-wasm32/package.json",
+      "version": "0.35.5"
+    },
+    {
+      "path": "@img/colour/package.json",
+      "version": "1.1.0"
+    },
+    {
+      "path": "@next/env/package.json",
+      "version": "15.5.27"
+    },
+    {
+      "path": "caniuse-lite/package.json",
+      "version": "1.0.30001812"
+    },
+    {
+      "path": "react/package.json",
+      "version": "19.3.0"
+    },
+    {
+      "path": "sharp/package.json",
+      "version": "0.35.5"
+    },
+    {
+      "path": "source-map-js/package.json",
+      "version": "1.2.2"
+    }
+  ],
+  "platformPackages": "Existing released Linux packages retained; native build only uses Darwin equivalents."
+}

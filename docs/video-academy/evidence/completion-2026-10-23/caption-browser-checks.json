@@ -1,0 +1,49 @@
+{
+  "checks": [
+    {
+      "id": "01",
+      "captionMode": "showing",
+      "paused": true,
+      "time": 5.879
+    },
+    {
+      "id": "02",
+      "captionMode": "showing",
+      "paused": true,
+      "time": 5.7
+    },
+    {
+      "id": "03",
+      "captionMode": "showing",
+      "paused": true,
+      "time": 5.938
+    },
+    {
+      "id": "06",
+      "captionMode": "showing",
+      "paused": true,
+      "time": 5.911
+    },
+    {
+      "id": "07",
+      "captionMode": "showing",
+      "paused": true,
+      "time": 5.89578
+    },
+    {
+      "id": "08",
+      "captionMode": "showing",
+      "paused": true,
+      "time": 5.89578
+    },
+    {
+      "id": "09",
+      "captionMode": "showing",
+      "paused": true,
+      "time": 6.69007
+    }
+  ],
+  "renderingEvidence": "Actual browser screenshots 01 through 09; Video 08 additionally sought to 10.896 s to avoid a natural speech gap.",
+  "container": "movebooks-video-academy:5515ee1-local",
+  "priorFullPlayback": "Six unchanged originals reuse existing uninterrupted completion evidence; all three corrected copies completed in this run."
+}

@@ -1,0 +1,18 @@
+{
+  "source_commit": "5515ee1002265c18d098e718761db4b3292d041a",
+  "base": "asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/web@sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad",
+  "manifest_digest": "sha256:9fc3ce1cecd87f464517c0df96a1d98f33027b529594067e37081a5a6f604201",
+  "builds": {
+    "web": {
+      "local_tag": "movebooks-video-academy:5515ee1-local",
+      "image_id": "sha256:9fc3ce1cecd87f464517c0df96a1d98f33027b529594067e37081a5a6f604201",
+      "runtime_user": "65532:65532",
+      "image_size": 189229251,
+      "archive_sha256": "97e62258df633ecbb36e6deba7c79d2d5d8835af9b93b0d1a6b98ac68f74f565"
+    }
+  },
+  "registryPushed": false,
+  "deployed": false,
+  "amd64_manifest_digest": "sha256:ed88d48d45372a59adf3bc081cadca4252bab112f3cb5bf7de9bd843705d79e4",
+  "configuration_digest": "sha256:a48ec91b6851486b0ee812c5b6139ed3e699a532fe0dbd3733087918427db584"
+}

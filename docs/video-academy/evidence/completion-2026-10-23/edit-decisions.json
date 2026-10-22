@@ -1,0 +1,185 @@
+{
+  "04": {
+    "source": "a989085c.mp4",
+    "duration": 105.8,
+    "cuts": [
+      [
+        27.05,
+        59.6
+      ],
+      [
+        61.95,
+        63.18
+      ],
+      [
+        65.35,
+        71.0
+      ],
+      [
+        84.98,
+        87.55
+      ]
+    ],
+    "scenes": [
+      [
+        "entry",
+        17,
+        59.61
+      ],
+      [
+        "advisor",
+        59.61,
+        77
+      ],
+      [
+        "authority",
+        77,
+        102.5
+      ]
+    ],
+    "reason": "Remove obsolete Explain Mapping invocation, old literal labels/confidence/alternatives instructions and old per-migration quota; replace planned/fallback product shots with existing released-product captures.",
+    "keep": [
+      [
+        0,
+        27.05
+      ],
+      [
+        59.6,
+        61.95
+      ],
+      [
+        63.18,
+        65.35
+      ],
+      [
+        71.0,
+        84.98
+      ],
+      [
+        87.55,
+        105.8
+      ]
+    ],
+    "finalDuration": 63.8
+  },
+  "05": {
+    "source": "a676795e-1485-4f73-9c6e-febbad2ccf08.mp4",
+    "duration": 103.08,
+    "cuts": [
+      [
+        9.5,
+        25.3
+      ],
+      [
+        32.2,
+        45.4
+      ],
+      [
+        83.55,
+        90.5
+      ]
+    ],
+    "scenes": [
+      [
+        "entry",
+        9.5,
+        32.2
+      ],
+      [
+        "reviewer",
+        32.2,
+        70.5
+      ],
+      [
+        "pair",
+        70.5,
+        83.55
+      ],
+      [
+        "authority",
+        83.55,
+        101
+      ]
+    ],
+    "reason": "Remove old separate rule-check invocation, never-reads-Advisor assertion, obsolete literal labels and three-review quota. Preserve independent assessment and human authority explanation.",
+    "keep": [
+      [
+        0,
+        9.5
+      ],
+      [
+        25.3,
+        32.2
+      ],
+      [
+        45.4,
+        83.55
+      ],
+      [
+        90.5,
+        103.08
+      ]
+    ],
+    "finalDuration": 67.13
+  },
+  "09": {
+    "source": "92b7537f-29aa-4495-90fd-6c4ee5f015a3.mp4",
+    "duration": 177.877,
+    "cuts": [
+      [
+        41.3,
+        42.25
+      ],
+      [
+        63.15,
+        64.12
+      ],
+      [
+        72.5,
+        79.45
+      ]
+    ],
+    "scenes": [
+      [
+        "entry",
+        48,
+        54.5
+      ],
+      [
+        "advisor",
+        54.5,
+        71.6
+      ],
+      [
+        "reviewer",
+        71.6,
+        88
+      ],
+      [
+        "authority",
+        88,
+        96.8
+      ]
+    ],
+    "reason": "Replace obsolete Gemini scenes; remove obsolete separate Reviewer request/never-reads claim and a short unintelligible duplicate phrase after Misc Clearing. Preserve the rest of the original full journey.",
+    "keep": [
+      [
+        0,
+        41.3
+      ],
+      [
+        42.25,
+        63.15
+      ],
+      [
+        64.12,
+        72.5
+      ],
+      [
+        79.45,
+        177.877
+      ]
+    ],
+    "finalDuration": 169.007
+  }
+}

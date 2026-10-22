@@ -1,0 +1,19 @@
+{
+  "capturedUtc": "2026-10-22T21:29:28.914545+00:00",
+  "source": "https://movebooks-si.web.app/plan-map-approve",
+  "method": "Existing authenticated browser view, no reload or inference invocation. Expanded and collapsed Advisor evidence only. Exact pixels cropped from full-page capture; no response words edited.",
+  "observedModel": "gemini-3.5-flash-lite",
+  "observedAdvisorRequestedAt": "2026-10-22T21:02:42.334165Z",
+  "observedReviewerRequestedAt": "2026-10-22T21:02:50.554948Z",
+  "scope": "Existing synthetic account and mapping, user-authorized instructional capture",
+  "modelCallsByTrackC": 0,
+  "files": {
+    "production-full.png": "c76c575f66470dcfceb2393db9dffcda0e03ef2f39ac019f36674fed19215e29",
+    "entry.png": "41b761784a5ed92d9f2e131e5fc32e956131d6aac5542f01182694576aa5d1b5",
+    "advisor.png": "0bc4a2d816cc8c939cc3a6c3a5faee3e4100dea5f9958ec133d775bf6f0a4ff1",
+    "reviewer.png": "99a336d134853ab8d471b9c3249a491ee741d96496418669e1e6d249ce845dbb",
+    "authority.png": "ce07c54d4167d74b85ad83fadb5a1c67bf7d4dec21719f673a43d25042b68e65",
+    "visible-results.txt": "8ae206eff02b577ca240467e6fddeadd6a11affb84ba8f5dbf2297f5db58955d"
+  },
+  "limit": "Visible production result provenance captured; no new backend inference/accounting audit or generation call performed."
+}

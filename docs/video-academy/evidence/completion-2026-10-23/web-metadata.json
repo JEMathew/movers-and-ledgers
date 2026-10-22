@@ -1,0 +1,60 @@
+{
+  "buildx.build.provenance": {
+    "builder": {
+      "id": ""
+    },
+    "buildType": "https://mobyproject.org/buildkit@v1",
+    "materials": [
+      {
+        "uri": "pkg:docker/asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/web?digest=sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad\u0026platform=linux%2Famd64",
+        "digest": {
+          "sha256": "617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad"
+        }
+      }
+    ],
+    "invocation": {
+      "configSource": {
+        "entryPoint": "Dockerfile"
+      },
+      "parameters": {
+        "frontend": "dockerfile.v0",
+        "args": {
+          "label:org.movebooks.purpose": "video-academy-web-candidate",
+          "label:org.opencontainers.image.revision": "5515ee1002265c18d098e718761db4b3292d041a"
+        },
+        "locals": [
+          {
+            "name": "context"
+          },
+          {
+            "name": "dockerfile"
+          }
+        ],
+        "root": {
+          "configSource": {
+            "path": "Dockerfile"
+          },
+          "request": {
+            "args": {
+              "label:org.movebooks.purpose": "video-academy-web-candidate",
+              "label:org.opencontainers.image.revision": "5515ee1002265c18d098e718761db4b3292d041a"
+            }
+          }
+        },
+        "compatibilityVersion": 20
+      },
+      "environment": {
+        "dockerfileVersion": "1.24.0",
+        "platform": "linux/arm64"
+      }
+    }
+  },
+  "buildx.build.ref": "default/default/5uyhwq3ccamze3kl420ma3qf6",
+  "containerimage.descriptor": {
+    "mediaType": "application/vnd.oci.image.index.v1+json",
+    "digest": "sha256:9fc3ce1cecd87f464517c0df96a1d98f33027b529594067e37081a5a6f604201",
+    "size": 856
+  },
+  "containerimage.digest": "sha256:9fc3ce1cecd87f464517c0df96a1d98f33027b529594067e37081a5a6f604201",
+  "image.name": "docker.io/library/movebooks-video-academy:5515ee1-local"
+}

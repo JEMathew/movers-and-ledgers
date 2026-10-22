@@ -1,0 +1,110 @@
+[
+  {
+    "id": "01",
+    "sourceAlignment": "/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/correction-v2/captions/01.json",
+    "cues": 25,
+    "words": 206,
+    "duration": 87.9146875,
+    "firstSpeech": 2.51,
+    "lastSpeech": 84.17,
+    "timestampBoundsAndOrdering": "PASS",
+    "maxLines": 2,
+    "provenance": "Local faster-whisper small.en CPU int8 word timestamps; corrected cuts retimed from original audio word alignment using exact edit intervals; compared with continuous-context and independent base.en passes; technical spelling normalized. No speech synthesis."
+  },
+  {
+    "id": "02",
+    "sourceAlignment": "/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/correction-v2/captions/02.json",
+    "cues": 21,
+    "words": 159,
+    "duration": 70.016,
+    "firstSpeech": 2.48,
+    "lastSpeech": 66.3,
+    "timestampBoundsAndOrdering": "PASS",
+    "maxLines": 2,
+    "provenance": "Local faster-whisper small.en CPU int8 word timestamps; corrected cuts retimed from original audio word alignment using exact edit intervals; compared with continuous-context and independent base.en passes; technical spelling normalized. No speech synthesis."
+  },
+  {
+    "id": "03",
+    "sourceAlignment": "/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/correction-v2/captions/03.json",
+    "cues": 28,
+    "words": 277,
+    "duration": 93.8026875,
+    "firstSpeech": 2.42,
+    "lastSpeech": 89.68,
+    "timestampBoundsAndOrdering": "PASS",
+    "maxLines": 2,
+    "provenance": "Local faster-whisper small.en CPU int8 word timestamps; corrected cuts retimed from original audio word alignment using exact edit intervals; compared with continuous-context and independent base.en passes; technical spelling normalized. No speech synthesis."
+  },
+  {
+    "id": "04",
+    "sourceAlignment": "/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/correction-v2/captions/04-rendered.json",
+    "cues": 22,
+    "words": 149,
+    "duration": 63.853333,
+    "firstSpeech": 2.2,
+    "lastSpeech": 60.28,
+    "timestampBoundsAndOrdering": "PASS",
+    "maxLines": 2,
+    "provenance": "Local faster-whisper small.en CPU int8 word timestamps; corrected cuts retimed from original audio word alignment using exact edit intervals; compared with continuous-context and independent base.en passes; technical spelling normalized. No speech synthesis."
+  },
+  {
+    "id": "05",
+    "sourceAlignment": "/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/correction-v2/captions/05-rendered.json",
+    "cues": 18,
+    "words": 154,
+    "duration": 67.146667,
+    "firstSpeech": 2.08,
+    "lastSpeech": 63.39,
+    "timestampBoundsAndOrdering": "PASS",
+    "maxLines": 2,
+    "provenance": "Local faster-whisper small.en CPU int8 word timestamps; corrected cuts retimed from original audio word alignment using exact edit intervals; compared with continuous-context and independent base.en passes; technical spelling normalized. No speech synthesis."
+  },
+  {
+    "id": "06",
+    "sourceAlignment": "/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/correction-v2/captions/06.json",
+    "cues": 26,
+    "words": 236,
+    "duration": 91.1146875,
+    "firstSpeech": 2.1,
+    "lastSpeech": 87.54,
+    "timestampBoundsAndOrdering": "PASS",
+    "maxLines": 2,
+    "provenance": "Local faster-whisper small.en CPU int8 word timestamps; corrected cuts retimed from original audio word alignment using exact edit intervals; compared with continuous-context and independent base.en passes; technical spelling normalized. No speech synthesis."
+  },
+  {
+    "id": "07",
+    "sourceAlignment": "/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/correction-v2/captions/07.json",
+    "cues": 29,
+    "words": 195,
+    "duration": 89.5786875,
+    "firstSpeech": 2.61,
+    "lastSpeech": 85.99,
+    "timestampBoundsAndOrdering": "PASS",
+    "maxLines": 2,
+    "provenance": "Local faster-whisper small.en CPU int8 word timestamps; corrected cuts retimed from original audio word alignment using exact edit intervals; compared with continuous-context and independent base.en passes; technical spelling normalized. No speech synthesis."
+  },
+  {
+    "id": "08",
+    "sourceAlignment": "/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/correction-v2/captions/08.json",
+    "cues": 27,
+    "words": 217,
+    "duration": 89.5786875,
+    "firstSpeech": 2.54,
+    "lastSpeech": 86.02,
+    "timestampBoundsAndOrdering": "PASS",
+    "maxLines": 2,
+    "provenance": "Local faster-whisper small.en CPU int8 word timestamps; corrected cuts retimed from original audio word alignment using exact edit intervals; compared with continuous-context and independent base.en passes; technical spelling normalized. No speech synthesis."
+  },
+  {
+    "id": "09",
+    "sourceAlignment": "/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/correction-v2/captions/09-rendered.json",
+    "cues": 53,
+    "words": 391,
+    "duration": 169.007,
+    "firstSpeech": 2.48,
+    "lastSpeech": 165.39,
+    "timestampBoundsAndOrdering": "PASS",
+    "maxLines": 2,
+    "provenance": "Local faster-whisper small.en CPU int8 word timestamps; corrected cuts retimed from original audio word alignment using exact edit intervals; compared with continuous-context and independent base.en passes; technical spelling normalized. No speech synthesis."
+  }
+]

@@ -1,61 +1,45 @@
-# Track C nine-video readiness — 23 October 2026
+# Track C nine-video release readiness — 23 October 2026
 
-**NO-GO. Production remains on the working Gemini release.** This report supersedes earlier candidate planning where it differs. The only application change in this verification pass is the requested collection name, **Start Here**. All nine originals and the previous implementation remain preserved.
+**GO for the final publication decision. No deployment has occurred.** This receipt supersedes the earlier missing-subtitle and stale-Gemini blockers. Work resumed from `8e9ee4ba71c21ee3fb9dd1a38db9a3c068400cdf`; the exact image uses source commit `5515ee1002265c18d098e718761db4b3292d041a` on `feature/video-academy-v1`.
 
-| Requested result | Status | Evidence / remaining work |
+| Check | Result | Evidence / scope |
 |---|---|---|
-| Nine-video package | BLOCKED | Nine originals and tiles preserved; six local players already passed completion/fullscreen checks. Final captions, transcripts and three current-product recordings are unavailable. |
-| Subtitles and synchronization | NOT VERIFIED | macOS denies the original Subtitles directory. Accessible media package has none. The local 175-second demo scripts do not match these lessons; the connected catalog exposes no matching Academy narration. No replacement text was invented. |
-| Videos 04, 05, 09 | RESTRICTED; fidelity FAIL | 04 at 53s and 05 at 52s explicitly show “Live Gemini capture pending”, Planned and FALLBACK. 09 at 90s shows “Planned · not available in the Beta” and disabled Advisor/Reviewer. This differs from the released live-status source. See the extracted frames in current-production evidence. |
-| Public media delivery | STOP | Read-only public checks: Learn returns 200 without the Academy video tab; all nine MP4 URLs return 404. Track C is not deployed. Its earlier production route defect is fixed and verified with 108 fixture checks, but real media cannot be approved merely to suppress 404s. |
-| Gemini frontend compatibility | PASS for isolated source integration | Exact released source is base b20ef668736a520387753dee4c8c19e4f66ae8da plus the approved live-status selector. Existing 228-file comparison, 552 focused tests, typecheck/lint/build evidence reused. This pass: 14 Academy tests pass and actual browser shows Start Here. No new inference calls. Public authenticated inference proof is not asserted. |
-| Rollback | NOT READY for final candidate | Recovery target exists, is Ready and serves 100%; digest is still in Artifact Registry. No Academy image/revision exists yet, so complete release rollback readiness cannot be claimed. |
-| New web revision and digest | NOT CREATED | Both remain null. No candidate with incomplete or stale media was built, published or deployed. |
-| Production promotion | BLOCKED | Production hold retained. No final publication approval requested prematurely. |
-| Public verification | Executed; Academy unavailable | Current production, registry and public HTTP receipts are saved below. No production write, model generation, campaign mutation or paid service. |
-| Indispensable owner action | Provide the complete source package | Copy the original Subtitles folder and any existing release-correct versions of 04/05/09 with their matching transcripts into the accessible media source directory. If those versions do not exist, the nine-video release remains blocked; the current recordings cannot be relabeled as genuine released Gemini demonstrations. |
+| Nine final narrated MP4s | PASS — READY | All nine H.264/AAC files fully decode. Six original approved recordings unchanged; 04/05/09 corrected copies. Original nine SHA-256 hashes unchanged. |
+| Nine synchronized caption sets | PASS — VERIFIED | Local ASR from original audio, technical spelling corrected, word timestamps and exact edit retiming, bounded non-overlapping SRT/VTT. All nine render in actual browser screenshots; matching transcripts included. |
+| Gemini 04/05/09 fidelity | PASS — VERIFIED | Existing authenticated production result captures show actual Advisor and independent Reviewer, `gemini-3.5-flash-lite`. Removed obsolete controls, labels, quota claims and never-reads-Advisor assertion. No new inference or invented response. Original audio edited, never synthesized. |
+| Original restricted cut isolation | PASS | Exact corrected MP4 hashes pinned server-side. Wrong/replaced binaries remain 404 even with publication flags. Original restricted cuts are absent from the candidate bundle. |
+| Media delivery | PASS in production build and exact image | 36 asset GETs + 36 seek-range requests pass in each environment, matching bundle bytes. Existing Firebase catch-all routes to the same web service; no Hosting change needed. |
+| Public production media URLs | NOT VERIFIED after release | Production is deliberately unchanged. The final publication and its same-origin smoke checks are pending authorization. |
+| Learn navigation / ten concepts | PASS | Two tabs, keyboard switching, nine lesson tiles, original concept text unchanged; 195 focused tests pass. |
+| Contextual video help | PASS | Existing journey links retained; Advisor/Reviewer guide links added beside existing analysis without changing control logic. |
+| Existing player controls | PASS, reused plus focused checks | Prior six-video pause/resume/seek/mute/speed/fullscreen/error checks retained. Three corrected copies complete uninterrupted in browser (04/05 at 1×, 09 at 2×); all nine caption tracks render. |
+| Numeric volume / Cillian identity | NOT VERIFIED independently | No new claim of voice-actor certification or numeric-volume UI test. The supplied narration is retained; no new audio generated. |
+| Responsive light/dark layouts | PASS | Desktop 1440, tablet 768, mobile 390; both tabs, no mobile horizontal overflow; real captures saved. |
+| Gemini / identity / finance compatibility | PASS source parity | Exact released Gemini, auth proxy, landing, concept and dependency sources retained. Only additive guide links in MappingReview. No API, inference, tenant, financial or release-control modifications. |
+| Build / focused checks | PASS | Typecheck, lint, production build, 195 tests. Prior unrelated full-suite failures remain documented; no broad acceptance cycle repeated. |
+| Image security | PASS | Offline Syft/Grype, zero vulnerability matches, zero ignored findings, valid 21 October database. Non-root 65532, read-only smoke container. |
+| Rollback | READY | Captured web revision remains Ready and 100% serving; immutable base pulled and retained. Exact web-only traffic rollback below. |
 
-## Exact current production and recovery target
+## Exact candidate and media
 
-Read back at 2026-10-22T21:13:56Z:
+- Proposed revision (not yet created): `movebooks-beta-web-c5515ee1-academy`.
+- Deployment image: `asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/web@sha256:ed88d48d45372a59adf3bc081cadca4252bab112f3cb5bf7de9bd843705d79e4` (local image built; registry push pending authorization).
+- OCI index digest: `sha256:9fc3ce1cecd87f464517c0df96a1d98f33027b529594067e37081a5a6f604201`.
+- Media bundle: `/Users/jincenmathew/Downloads/Intuit/movebooks-academy-media/approved-bundle-v2`; archive `/Users/jincenmathew/Downloads/Intuit/movebooks-academy-candidate-20261023/academy-media-v2.tar`; SHA-256 `143f16defd56106b7c4176bf39ca5358e123e4cf72c24f770ef45315ad198f1b`.
+- Files resolve at `/api/academy-media/{01..09}/{mp4,jpg,vtt,txt}`; SRT source files are included in the handoff archive. No new provider, bucket, Firebase rewrite or production configuration change is needed.
+- Measured corrected runtimes: 04 **63.853s**, 05 **67.147s**, 09 **169.007s**. Tiles show measured durations rather than obsolete inventory lengths.
+- Preview: http://127.0.0.1:3112/learn?tab=videos (exact Linux candidate), http://127.0.0.1:3111/learn?tab=videos (native production build).
 
-- Web: `movebooks-beta-web-b20-live-sdk1`, 100%, Ready=True.
-- Full web image: `asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/web@sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad`.
-- Web revision configuration SHA-256: `ccdf55ed1ed59a9f8164644e05a1260708822d97d134e93b305a7d99a0eed903`.
-- API: `movebooks-beta-api-b20-judge-sdk1`, 100%, Ready=True; digest `sha256:a89eee7d3264c81c0a6fbf77991a1ac6dd8c38a305306bb2d3972dbccdd53a21`.
-- Track C performed no production or campaign writes. API selection matches the release receipt. Campaign environment remains enabled; campaign Firestore contents were deliberately not re-read, so no independent campaign-record audit is claimed.
+## Final authorization required
 
-The existing web revision is ready and its immutable image is available. No redeployment was needed to verify those facts. Revalidate the serving revision, digest, traffic and competing release activity immediately before any future publication; never substitute a planned/disabled Gemini revision.
+Authorize pushing the preserved image to the existing web registry and creating `movebooks-beta-web-c5515ee1-academy` at **0% traffic**, then promoting **only the web service to 100%** after release smoke checks. Preserve the current service settings, Firebase Hosting, DNS, IAM, API, Gemini campaign and budgets. This publication includes the corrected 04/05/09 copies; their obsolete originals remain restricted.
 
-The following command is a **documented future web-only recovery operation, not executed or authorized by this report**. It requires the applicable publication/recovery authorization and a fresh target check:
-
-```sh
-gcloud run services update-traffic movebooks-beta-web \
-  --project=movebooks-ai \
-  --region=asia-southeast1 \
-  --account=jeasom@gmail.com \
-  --to-revisions=movebooks-beta-web-b20-live-sdk1=100
-```
-
-Read back the result with:
+If verification fails or the released baseline changes, stop promotion. Roll back any promoted web traffic to `movebooks-beta-web-b20-live-sdk1` with:
 
 ```sh
-gcloud run services describe movebooks-beta-web \
-  --project=movebooks-ai --region=asia-southeast1 \
-  --account=jeasom@gmail.com --format='json(status.traffic,status.latestReadyRevisionName)'
-gcloud run revisions describe movebooks-beta-web-b20-live-sdk1 \
-  --project=movebooks-ai --region=asia-southeast1 \
-  --account=jeasom@gmail.com --format='json(status.imageDigest,status.conditions)'
+gcloud run services update-traffic movebooks-beta-web --project=movebooks-ai --region=asia-southeast1 --account=jeasom@gmail.com --to-revisions=movebooks-beta-web-b20-live-sdk1=100
 ```
 
-This restores the already verified Gemini-enabled web. It does not select an API revision, edit campaign/grants/budgets, change Firebase/DNS/IAM or delete media or financial data. No automatic rollback is claimed. Existing revision tags are recorded in the receipt; this command does not remove them.
+This changes web traffic only and returns to image `sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad`. No API or data rollback is required. Production deployment has not been performed by Track C.
 
-## Final media publication requirements
-
-Use the existing same-origin web service and an immutable bundle outside `public/`, at `/app/academy-media`. No new hosting service is required. Original MP4 sources stay read-only. Final approved copies, posters, derived VTT and human-readable transcripts must be associated with all nine lesson IDs and hashed before the exact web image is built. Current code deliberately excludes 04/05/09 and requires verified captions plus publication approval; do not lift those gates until actual content QA passes. Transcript delivery remains outstanding because matching source text is unavailable.
-
-Media packaged with the future web image switches atomically with that image. Recovery to today's Gemini web returns to today's non-Academy experience; it must not depend on a mutable development directory or an external unversioned media store. Preserve original source assets independently. Record the exact candidate revision, OCI/platform digest, bundle hash, final nine-video audio/caption QA and cost estimate before requesting one final publication authorization. No new paid services or credits were consumed in this work.
-
-Existing six-video playback, fullscreen, keyboard, responsive light/dark layouts, both Learn tabs, ten original concepts and landing-page preservation evidence remains applicable. Cillian voice identity and native numeric volume range remain NOT VERIFIED. The three unrelated full-suite footer/copy failures were also reproduced on the released baseline; they remain documented and were not changed to conceal failures.
-
-Evidence: [current production and verification](evidence/current-production-2026-10-23/), [released source comparison](evidence/released-baseline-2026-10-23/), [earlier acceptance](ACCEPTANCE.md), [machine-readable candidate](release-candidate.json).
+All new evidence is in `evidence/completion-2026-10-23/`; machine-readable receipt: `release-candidate.json`. Earlier dated evidence is retained for provenance, not asserted as new execution.

@@ -1,3 +1,5 @@
+> **Current status (23 October 2026): nine-video candidate READY for final publication authorization.** See [FINAL-READINESS.md](FINAL-READINESS.md) and [release-candidate.json](release-candidate.json). Earlier statuses below are historical and superseded. No production deployment has occurred.
+
 # Video Academy v1 — Track C handoff
 
 Latest owner-scope verification: [FINAL-READINESS.md](FINAL-READINESS.md). Current production was read back; 04/05/09 now have demonstrable stale Gemini UI evidence and remain restricted. Missing matching captions/transcripts still block the nine-video release. Historical evidence below is retained.

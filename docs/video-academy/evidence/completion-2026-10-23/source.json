@@ -1,0 +1,10 @@
+{
+  "sourceCommit": "5515ee1002265c18d098e718761db4b3292d041a",
+  "baseImage": "asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/web@sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad",
+  "sourceWorktree": "/Users/jincenmathew/Downloads/Intuit/movebooks-video-academy",
+  "lockSha256": "649b6297596269acbfb9199e0f94797becbb4c60b1348090e90e72e69e1b68e4",
+  "verifiedLinuxPackages": 25,
+  "mediaBundle": "../movebooks-academy-media/approved-bundle-v2",
+  "deployed": false,
+  "registryPushed": false
+}
