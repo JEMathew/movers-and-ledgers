@@ -1,0 +1,13 @@
+
+> @movebooks/web@0.1.0 test
+> vitest run components/academy/academy.test.tsx lib/academy/media.test.ts components/public-surfaces components/journey
+
+
+ RUN  v5.0.2 /Users/jincenmathew/Downloads/Intuit/movebooks-video-academy/apps/web
+
+
+ Test Files  20 passed (20)
+      Tests  310 passed (310)
+   Start at  01:18:26
+   Duration  3.41s (environment 54%, tests 15%, setup 14%, transform 13%, import 4%)
+

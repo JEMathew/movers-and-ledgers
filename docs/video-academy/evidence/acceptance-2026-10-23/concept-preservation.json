@@ -1,0 +1,129 @@
+{
+  "observedTopics": {
+    "topics": [
+      {
+        "id": "why-migrate",
+        "paragraphs": [
+          "Growth, collaboration and connected workflows can outgrow the current accounting setup. A move should solve an operating problem, not simply replace software.",
+          "Ask: What will your team be able to do afterward?"
+        ],
+        "title": "Why businesses migrate"
+      },
+      {
+        "id": "what-moves",
+        "paragraphs": [
+          "Accounts, customers, suppliers, products and transactions are only part of the picture. History, tax, settings, access and integrations need explicit scope too. Unsupported items must be visible, never silently dropped.",
+          "Ask: What is included, excluded or blocked?"
+        ],
+        "title": "What gets migrated"
+      },
+      {
+        "id": "mappings",
+        "paragraphs": [
+          "A mapping connects a source concept to its intended destination. Similar names do not guarantee the same accounting meaning. Review evidence and compatible alternatives before approving.",
+          "Ask: Does this destination preserve the meaning of the source?"
+        ],
+        "title": "Why mappings matter"
+      },
+      {
+        "id": "reconciliation",
+        "paragraphs": [
+          "Moving a record is not proof that it moved correctly. Rules compare counts, references and balances against source evidence. A mismatch blocks progress; approval cannot turn a failed check into a pass.",
+          "Ask: Which check passed, and which evidence supports it?"
+        ],
+        "title": "What reconciliation means"
+      },
+      {
+        "id": "approvals",
+        "paragraphs": [
+          "Decisions affecting accounting treatment, access or business operations need an accountable person. You may approve, reject or stop. An agent cannot approve its own consequential proposal.",
+          "Ask: What changes, what is the risk, and can it be reversed?"
+        ],
+        "title": "Why some decisions require approval"
+      },
+      {
+        "id": "confidence",
+        "paragraphs": [
+          "Confidence expresses uncertainty in a recommendation. It is not a guarantee or permission to act. The current Beta uses versioned policy-based suggestions, not a live model's calibrated predictions.",
+          "Ask: What uncertainty remains, even if confidence looks high?"
+        ],
+        "title": "What confidence means"
+      },
+      {
+        "id": "evidence",
+        "paragraphs": [
+          "Evidence connects a finding to source facts, a rule result or an attributable decision. Explanations help you understand the evidence; they cannot replace it.",
+          "Ask: Can I trace this recommendation to a fact or check?"
+        ],
+        "title": "What evidence means"
+      },
+      {
+        "id": "financial-truth",
+        "paragraphs": [
+          "The same inputs and versioned rules must produce the same accounting result. Models may explain or suggest; exact calculations, reconciliation and approval controls decide whether work can proceed.",
+          "Ask: Is this a suggestion or a verified result?"
+        ],
+        "title": "Why financial truth is deterministic"
+      },
+      {
+        "id": "recovery",
+        "paragraphs": [
+          "Work pauses at a safe boundary, preserving completed checkpoints and failure evidence. Review the proposed remedy. Consequential recovery needs your approval; retry only when the workflow permits it.",
+          "Ask: What completed, what failed, and what will retry do?"
+        ],
+        "title": "What happens when migration fails"
+      },
+      {
+        "id": "business-ready",
+        "paragraphs": [
+          "Required data, setup, access and onboarding checks pass, then an authorized user completes an agreed task with verified evidence. In this Beta that is a synthetic invoice—not proof of production readiness.",
+          "Ask: Has the productive task been verified, not merely posted?"
+        ],
+        "title": "What Business ready · verified means"
+      }
+    ],
+    "videos": 0
+  },
+  "exactTopics": [
+    {
+      "id": "why-migrate",
+      "match": true
+    },
+    {
+      "id": "what-moves",
+      "match": true
+    },
+    {
+      "id": "mappings",
+      "match": true
+    },
+    {
+      "id": "reconciliation",
+      "match": true
+    },
+    {
+      "id": "approvals",
+      "match": true
+    },
+    {
+      "id": "confidence",
+      "match": true
+    },
+    {
+      "id": "evidence",
+      "match": true
+    },
+    {
+      "id": "financial-truth",
+      "match": true
+    },
+    {
+      "id": "recovery",
+      "match": true
+    },
+    {
+      "id": "business-ready",
+      "match": true
+    }
+  ]
+}

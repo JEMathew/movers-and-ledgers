@@ -1,0 +1,173 @@
+[
+  {
+    "lesson": "01",
+    "extension": "mp4",
+    "status": 206,
+    "type": "video/mp4",
+    "range": "bytes 0-1023/8809833",
+    "bytes": 1024
+  },
+  {
+    "lesson": "01",
+    "extension": "jpg",
+    "status": 206,
+    "type": "image/jpeg",
+    "range": "bytes 0-1023/18857",
+    "bytes": 1024
+  },
+  {
+    "lesson": "01",
+    "extension": "vtt",
+    "status": 404
+  },
+  {
+    "lesson": "02",
+    "extension": "mp4",
+    "status": 206,
+    "type": "video/mp4",
+    "range": "bytes 0-1023/8093381",
+    "bytes": 1024
+  },
+  {
+    "lesson": "02",
+    "extension": "jpg",
+    "status": 206,
+    "type": "image/jpeg",
+    "range": "bytes 0-1023/16959",
+    "bytes": 1024
+  },
+  {
+    "lesson": "02",
+    "extension": "vtt",
+    "status": 404
+  },
+  {
+    "lesson": "03",
+    "extension": "mp4",
+    "status": 206,
+    "type": "video/mp4",
+    "range": "bytes 0-1023/17377988",
+    "bytes": 1024
+  },
+  {
+    "lesson": "03",
+    "extension": "jpg",
+    "status": 206,
+    "type": "image/jpeg",
+    "range": "bytes 0-1023/19122",
+    "bytes": 1024
+  },
+  {
+    "lesson": "03",
+    "extension": "vtt",
+    "status": 404
+  },
+  {
+    "lesson": "04",
+    "extension": "mp4",
+    "status": 404
+  },
+  {
+    "lesson": "04",
+    "extension": "jpg",
+    "status": 404
+  },
+  {
+    "lesson": "04",
+    "extension": "vtt",
+    "status": 404
+  },
+  {
+    "lesson": "05",
+    "extension": "mp4",
+    "status": 404
+  },
+  {
+    "lesson": "05",
+    "extension": "jpg",
+    "status": 404
+  },
+  {
+    "lesson": "05",
+    "extension": "vtt",
+    "status": 404
+  },
+  {
+    "lesson": "06",
+    "extension": "mp4",
+    "status": 206,
+    "type": "video/mp4",
+    "range": "bytes 0-1023/11535240",
+    "bytes": 1024
+  },
+  {
+    "lesson": "06",
+    "extension": "jpg",
+    "status": 206,
+    "type": "image/jpeg",
+    "range": "bytes 0-1023/17162",
+    "bytes": 1024
+  },
+  {
+    "lesson": "06",
+    "extension": "vtt",
+    "status": 404
+  },
+  {
+    "lesson": "07",
+    "extension": "mp4",
+    "status": 206,
+    "type": "video/mp4",
+    "range": "bytes 0-1023/10692185",
+    "bytes": 1024
+  },
+  {
+    "lesson": "07",
+    "extension": "jpg",
+    "status": 206,
+    "type": "image/jpeg",
+    "range": "bytes 0-1023/19144",
+    "bytes": 1024
+  },
+  {
+    "lesson": "07",
+    "extension": "vtt",
+    "status": 404
+  },
+  {
+    "lesson": "08",
+    "extension": "mp4",
+    "status": 206,
+    "type": "video/mp4",
+    "range": "bytes 0-1023/9358130",
+    "bytes": 1024
+  },
+  {
+    "lesson": "08",
+    "extension": "jpg",
+    "status": 206,
+    "type": "image/jpeg",
+    "range": "bytes 0-1023/18713",
+    "bytes": 1024
+  },
+  {
+    "lesson": "08",
+    "extension": "vtt",
+    "status": 404
+  },
+  {
+    "lesson": "09",
+    "extension": "mp4",
+    "status": 404
+  },
+  {
+    "lesson": "09",
+    "extension": "jpg",
+    "status": 404
+  },
+  {
+    "lesson": "09",
+    "extension": "vtt",
+    "status": 404
+  }
+]

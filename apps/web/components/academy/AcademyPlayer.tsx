@@ -30,6 +30,6 @@ export function AcademyPlayer({ lesson, media, onClose }: { lesson: Lesson; medi
     {media.reviewOnly && <p className="academy-review-notice">Local review preview · not approved for publication. Original recording retained; caption and content review is incomplete.</p>}
     {loading && !error && <p role="status">Loading video…</p>}
     {error && <div role="alert"><p>This video couldn’t load. Your migration is unchanged.</p><button className="public-text-link" onClick={() => { setError(false); setLoading(true); video.current?.load(); }}>Retry video</button></div>}
-    <p id="academy-player-help" className="text-muted">Space or K: play/pause · ← / →: seek · M: mute. Fullscreen and captions are in the player controls.</p>
+    <p id="academy-player-help" className="text-muted">Space or K: play/pause · ← / →: seek · M: mute. {media.captions ? "Fullscreen and captions are in the player controls." : "Fullscreen is in the player controls."}</p>
   </section>;
 }

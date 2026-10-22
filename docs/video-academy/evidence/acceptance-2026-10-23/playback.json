@@ -1,0 +1,373 @@
+[
+  {
+    "id": "01",
+    "startedBy": "native Play click",
+    "playing": {
+      "duration": 87.9,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/01/mp4",
+      "time": 17.96485,
+      "title": "Getting Started",
+      "tracks": 0
+    },
+    "paused": {
+      "duration": 87.9,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/01/mp4",
+      "time": 23.215385,
+      "title": "Getting Started",
+      "tracks": 0
+    },
+    "pauseHeld": {
+      "duration": 87.9,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/01/mp4",
+      "time": 23.215385,
+      "title": "Getting Started",
+      "tracks": 0
+    },
+    "resumed": {
+      "duration": 87.9,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/01/mp4",
+      "time": 35.604557,
+      "title": "Getting Started",
+      "tracks": 0
+    }
+  },
+  {
+    "id": "02",
+    "before": {
+      "duration": 70,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/02/mp4",
+      "time": 0,
+      "title": "Understand Your Migration",
+      "tracks": 0
+    },
+    "startedBy": "native Play click",
+    "playing": {
+      "duration": 70,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/02/mp4",
+      "time": 24.521655,
+      "title": "Understand Your Migration",
+      "tracks": 0
+    },
+    "paused": {
+      "duration": 70,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/02/mp4",
+      "time": 24.535787,
+      "title": "Understand Your Migration",
+      "tracks": 0
+    },
+    "pauseHeld": {
+      "duration": 70,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/02/mp4",
+      "time": 24.535787,
+      "title": "Understand Your Migration",
+      "tracks": 0
+    },
+    "resumed": {
+      "duration": 70,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/02/mp4",
+      "time": 33.128348,
+      "title": "Understand Your Migration",
+      "tracks": 0
+    }
+  },
+  {
+    "id": "03",
+    "before": {
+      "duration": 93.8,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/03/mp4",
+      "time": 0,
+      "title": "Prepare and Approve",
+      "tracks": 0
+    },
+    "startedBy": "native Play click",
+    "playing": {
+      "duration": 93.8,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/03/mp4",
+      "time": 17.482962,
+      "title": "Prepare and Approve",
+      "tracks": 0
+    },
+    "paused": {
+      "duration": 93.8,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/03/mp4",
+      "time": 27.328093,
+      "title": "Prepare and Approve",
+      "tracks": 0
+    },
+    "pauseHeld": {
+      "duration": 93.8,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/03/mp4",
+      "time": 27.328093,
+      "title": "Prepare and Approve",
+      "tracks": 0
+    },
+    "resumed": {
+      "duration": 93.8,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/03/mp4",
+      "time": 38.895603,
+      "title": "Prepare and Approve",
+      "tracks": 0
+    }
+  },
+  {
+    "id": "06",
+    "before": {
+      "duration": 91.1,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/06/mp4",
+      "time": 0,
+      "title": "Move and Verify",
+      "tracks": 0
+    },
+    "startedBy": "native Play click",
+    "playing": {
+      "duration": 91.1,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/06/mp4",
+      "time": 10.899578,
+      "title": "Move and Verify",
+      "tracks": 0
+    },
+    "paused": {
+      "duration": 91.1,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/06/mp4",
+      "time": 10.914116,
+      "title": "Move and Verify",
+      "tracks": 0
+    },
+    "pauseHeld": {
+      "duration": 91.1,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/06/mp4",
+      "time": 10.914116,
+      "title": "Move and Verify",
+      "tracks": 0
+    },
+    "resumed": {
+      "duration": 91.1,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/06/mp4",
+      "time": 15.447825,
+      "title": "Move and Verify",
+      "tracks": 0
+    }
+  },
+  {
+    "id": "07",
+    "before": {
+      "duration": 89.578,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/07/mp4",
+      "time": 0,
+      "title": "First Productive Use",
+      "tracks": 0
+    },
+    "startedBy": "native Play click",
+    "playing": {
+      "duration": 89.578,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/07/mp4",
+      "time": 21.832964,
+      "title": "First Productive Use",
+      "tracks": 0
+    },
+    "paused": {
+      "duration": 89.578,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/07/mp4",
+      "time": 21.846646,
+      "title": "First Productive Use",
+      "tracks": 0
+    },
+    "pauseHeld": {
+      "duration": 89.578,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/07/mp4",
+      "time": 21.846646,
+      "title": "First Productive Use",
+      "tracks": 0
+    },
+    "muteCheck": {
+      "duration": 89.578,
+      "error": null,
+      "muted": true,
+      "paused": false,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/07/mp4",
+      "time": 52.400812,
+      "title": "First Productive Use",
+      "tracks": 0
+    },
+    "unmuteCheck": {
+      "duration": 89.578,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/07/mp4",
+      "time": 58.607013,
+      "title": "First Productive Use",
+      "tracks": 0
+    },
+    "resumed": {
+      "duration": 89.578,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/07/mp4",
+      "time": 86.698219,
+      "title": "First Productive Use",
+      "tracks": 0
+    },
+    "completion": {
+      "duration": 89.578,
+      "ended": true,
+      "error": null,
+      "time": 89.578
+    }
+  },
+  {
+    "id": "08",
+    "before": {
+      "duration": 89.578,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/08/mp4",
+      "time": 0,
+      "title": "Trust and Troubleshooting",
+      "tracks": 0
+    },
+    "startedBy": "native Play click",
+    "playing": {
+      "duration": 89.578,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/08/mp4",
+      "time": 22.265338,
+      "title": "Trust and Troubleshooting",
+      "tracks": 0
+    },
+    "paused": {
+      "duration": 89.578,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/08/mp4",
+      "time": 22.282796,
+      "title": "Trust and Troubleshooting",
+      "tracks": 0
+    },
+    "pauseHeld": {
+      "duration": 89.578,
+      "error": null,
+      "muted": false,
+      "paused": true,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/08/mp4",
+      "time": 22.282796,
+      "title": "Trust and Troubleshooting",
+      "tracks": 0
+    },
+    "resumed": {
+      "duration": 89.578,
+      "error": null,
+      "muted": false,
+      "paused": false,
+      "ready": 4,
+      "src": "http://127.0.0.1:3107/api/academy-media/08/mp4",
+      "time": 34.396575,
+      "title": "Trust and Troubleshooting",
+      "tracks": 0
+    }
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "baseline": "b20ef668736a520387753dee4c8c19e4f66ae8da",
+  "auditedHead": "69c0c68313e56bcc6630f1a79db526e2038dd9fc",
+  "remoteHeadVerified": "69c0c68313e56bcc6630f1a79db526e2038dd9fc",
+  "trackedFilesReviewed": 48,
+  "protectedPathsChanged": [],
+  "sourceReview": "Academy components, server registry, route, preparation script, tests, scoped CSS, Learn extraction and three additive WatchGuide hooks reviewed. Other changed files are Track C evidence and handoff documents.",
+  "unintendedWorkflowChanges": false,
+  "runtimePID": 54315,
+  "runtimeCwd": "apps/web in movebooks-video-academy",
+  "newDefectFixed": "Player keyboard help incorrectly advertised captions when no captions were connected; conditional wording now matches track availability."
+}

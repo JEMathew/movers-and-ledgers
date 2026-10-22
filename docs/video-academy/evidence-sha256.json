@@ -1,5 +1,157 @@
 [
   {
+    "path": "evidence/acceptance-2026-10-23/acceptance.json",
+    "sha256": "0ec8422259f302a2bdbcaea838820dea98959ef45c3783c53025c7e9a524cd94"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/build.log",
+    "sha256": "03fb9e573b8f2546841ad0fe89a7187775f6586dc5152b5c999bec8cc43d4b58"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/changed-files.txt",
+    "sha256": "36317b075403683e77c96b2bf09b3bf8869c23d470225f400b4ae7e81a20cffc"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/concept-preservation.json",
+    "sha256": "9bd395e162552d9deef5ecce2db00929508b59da8ea3da79886dbfd4b1704a43"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/contextual-assess.jpg",
+    "sha256": "690aab4b4260249ab18b644b41c55c69b1e846a3d65b2cae819706236898024d"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/contextual-lesson.jpg",
+    "sha256": "05154bb6b860ae46a077883b86a75b182a6052af15d572ce113614741b2a585c"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/controls.json",
+    "sha256": "402fad4cfb43279982afe583fa7d3a4612287093f79838eb704551eef373ca0a"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/desktop-concepts.jpg",
+    "sha256": "f47066022c902208b2ec052d1ade6514020f2f9a1952e0f25c92f563501c914d"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/desktop-dark.jpg",
+    "sha256": "b53a3abc85788ac591d180cfecae3fe8918aebfbb6f9a74e8ee6ddc0bfc85dd7"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/desktop-light.jpg",
+    "sha256": "b1b511835f0ef4e08322149b3fafa23bd088610e9908adcba05f8a9bfbf2f796"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/desktop-playing-01.jpg",
+    "sha256": "8585204521560136cdff9c1eed1e59ae6c5ffafab2faa90a9d506dc56f8041d0"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/desktop-playing-08.jpg",
+    "sha256": "aba9f1e0fb84dc665dcd8b782a795f14f08589410d25a3a67107ab0614325cb5"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/end-state.json",
+    "sha256": "8084dce1f90fea2c23e1fc5380f83a77b0fb45cd948ec84dd3d65e98d7763a8c"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/fault-recovery.json",
+    "sha256": "073837d09126487b072ef84710051933a6c3644b071201cc5aed031950585187"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/fullscreen-07.jpg",
+    "sha256": "ae91f017dec705ab31527b572ac351f38734b2abe592bb220f6087812f1f454d"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/fullscreen-exited-07.jpg",
+    "sha256": "15412f61d907850177d391c5d9007930dead4854ba6d3d2c6342716a4f88df74"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/fullscreen.json",
+    "sha256": "aaec01f8655ed59c536084726b99a8beb71b07d68b6629c3acdb90894b13985b"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/http.json",
+    "sha256": "f84068954af67e5b09867613d87525bacedf835c2f94773f98cb4868b56cde32"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/inline-playing.jpg",
+    "sha256": "b53b11f05aca701ce2baa4e371c301157fb4a595d504068df4fd17f6d7104c56"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/landing.jpg",
+    "sha256": "ec0ce1f0134a9f7f013df987199f10ca80f3321ef3d740c81a5e1733413dcbe4"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/layouts.json",
+    "sha256": "58eb3cedf2c2da901600a50d19e79150e2cc861c12061b3144911936a4009ecd"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/lint.log",
+    "sha256": "f3db99a6e5da4937054435c89cddf3a57bfaf342961900cdc58f99844b1a0543"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/mobile-concepts.jpg",
+    "sha256": "76834bac8769f93d5b0b1601965be09cf87d65e6ec3263a8b7da0275cf9bf88c"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/mobile-dark.jpg",
+    "sha256": "cfb2c95d4b5d121216be2be6b320d1055ed7656b5b9946eb61fcca099c3b0370"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/mobile-light.jpg",
+    "sha256": "4a22ced511a0f87a6c474e9b80abe377a73d38580c22de8317853ec28482ef8d"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/original-topics.json",
+    "sha256": "618ea9cbd5c795619bcec039fac3f79fd630fc388a9846bb3f18ada10e8cec40"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/playback-error.jpg",
+    "sha256": "b44b18472bc440dd6a74b0e30f5249968f7890deafeb92f2e8c47a1c17e7fa74"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/playback-recovered.jpg",
+    "sha256": "d72c35a9df3dc8f0a40aa2d656fb7b264f3f37a9536fdc86a3575f8f4bcf7c81"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/playback.json",
+    "sha256": "1db0941ab1b318934f913cc999a8f58991d6532520f123b641430afb0778e74d"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/preservation.json",
+    "sha256": "517507b5e98ce0cc93f1492dced5a03511242c7d9be5461a927313b5d3abbb19"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/production-boundary.json",
+    "sha256": "27dd1e86c0f4e51766989567a4db803b0d44d604930c2be0678dec914659b836"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/scope-audit.json",
+    "sha256": "e0aadcf692d3eebf7627703a975368fa25ac47f37323fbc409a3f42f6adb4bd4"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/tablet-dark.jpg",
+    "sha256": "3945c03022caa8b4c4105d5705708b1f360bee3f70efbafcce4ae6e7f90b81ca"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/tablet-light.jpg",
+    "sha256": "2211b32dfe4d0f24499e8714c35d20f7f794ca89d4a7ce9c45e1b427b42e52f4"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/tests.log",
+    "sha256": "13bd2f242ca23ecda0d9638096b0d4710ae9f7ee6d724c7d04a9b4a79c23dbd1"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/tiles.json",
+    "sha256": "a3cb465ae65309c50bd28a9fd717ef3b7ab1a39de198328db82e18ce0475b5cd"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/typecheck.log",
+    "sha256": "04089b092e9d5b0bdce7abd751d05829fd2463367e5eb08f0db7a29b0c0b8360"
+  },
+  {
+    "path": "evidence/acceptance-2026-10-23/uninterrupted-playback.json",
+    "sha256": "b0b66c31b215d0fd1a2375050e1c3ee5298b341e055eda722e55404288659809"
+  },
+  {
     "path": "evidence/concepts-desktop.jpg",
     "sha256": "ebad96204a2d1a934852405eecccdf8e33bf8b79ca7fa88743ecd617dcea18bc"
   },

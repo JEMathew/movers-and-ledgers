@@ -35,8 +35,12 @@
       "contextualLink": "PASS /assess -> /learn?tab=videos&stage=0#lesson-02",
       "landing": "PASS preserved photo, overview and CTA source hashes",
       "finalConsoleErrors": [],
-      "fullscreen": "PARTIAL: native fullscreen entered; automated exit unreliable in in-app browser; manual retest required",
-      "inlineTabCleanup": "PASS: switching to Concepts removes player and preserves all ten topics"
+      "fullscreen": "PASS entry/exit on 01 and 07; NOT VERIFIED for the other four",
+      "inlineTabCleanup": "PASS: switching to Concepts removes player and preserves all ten topics",
+      "errorRetry": "PASS controlled 503 and recovery in actual browser",
+      "exactConceptCopy": "PASS all ten titles, bodies and questions matched baseline",
+      "sixPlayerControls": "PASS native Play/pause/resume and keyboard seek/mute/speed; volume range not certified",
+      "endState": "PASS all six uninterrupted from zero at 2x muted, ended=true/error=null; also separate seek-to-end tests"
     },
     "academyPlayback": "PASS six eligible originals progressed in real browser; 03 reached end",
     "academyNarration": "Original AAC stereo audio enabled in browser and non-silent through full decode; human listening and Cillian identity not independently certified",
@@ -48,5 +52,7 @@
   },
   "publication": "all unpublished; six available only with explicit development review flag; 04/05/09 hard denied",
   "creditsSpent": 0,
-  "evidence": "evidence/media-review/ is current original-media preview; root evidence screenshots are historical UI-only preview"
+  "evidence": "evidence/media-review/ is current original-media preview; root evidence screenshots are historical UI-only preview",
+  "acceptanceReport": "ACCEPTANCE.md",
+  "recommendation": "NO-GO for production handoff"
 }

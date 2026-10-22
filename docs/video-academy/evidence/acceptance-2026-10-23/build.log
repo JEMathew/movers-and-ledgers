@@ -1,0 +1,58 @@
+
+> @movebooks/web@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.27
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 1655ms
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/27) ...
+   Generating static pages (6/27) 
+   Generating static pages (13/27) 
+   Generating static pages (20/27) 
+ ✓ Generating static pages (27/27)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    4.89 kB         111 kB
+├ ○ /_not-found                            995 B         104 kB
+├ ƒ /api/academy-media/[id]/[extension]    144 B         103 kB
+├ ƒ /api/auth/demo                         144 B         103 kB
+├ ƒ /api/v1/[...path]                      144 B         103 kB
+├ ƒ /approvals                             144 B         103 kB
+├ ○ /assess                              11.5 kB         131 kB
+├ ○ /design-system                       3.88 kB         119 kB
+├ ○ /feedback                            3.07 kB         127 kB
+├ ○ /guide                                4.9 kB         111 kB
+├ ƒ /healthz                               144 B         103 kB
+├ ○ /icon.svg                                0 B            0 B
+├ ƒ /learn                               9.18 kB         124 kB
+├ ○ /migrate-resolve                     6.07 kB         131 kB
+├ ○ /onboard-fpu                         11.5 kB         136 kB
+├ ○ /plan-map-approve                    23.2 kB         143 kB
+├ ○ /play                                9.66 kB         125 kB
+├ ○ /privacy                               168 B         106 kB
+├ ƒ /product                             1.16 kB         128 kB
+├ ƒ /reports                               144 B         103 kB
+├ ƒ /sign-in                             3.53 kB         119 kB
+├ ○ /simulator                           7.08 kB         122 kB
+├ ○ /support                              3.8 kB         127 kB
+├ ○ /terms                                 168 B         106 kB
+├ ƒ /trust                               11.5 kB         138 kB
+├ ○ /try-your-data                         14 kB         129 kB
+├ ○ /validate-configure                  8.34 kB         133 kB
+└ ƒ /workspace                           11.7 kB         138 kB
++ First Load JS shared by all             103 kB
+  ├ chunks/20845870-674e8ac256657cbd.js  54.2 kB
+  ├ chunks/2910-b15c02f3acdb5d67.js      46.5 kB
+  └ other shared chunks (total)          2.07 kB
+
+
+ƒ Middleware                             34.6 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
