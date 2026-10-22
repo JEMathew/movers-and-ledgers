@@ -1,0 +1,96 @@
+{
+  "utc": "2026-10-22T22:02:42.814Z",
+  "result": "PASS",
+  "playback": [
+    {
+      "id": "01",
+      "caption": "showing",
+      "duration": 87.9,
+      "paused": false,
+      "src": "https://academy-c5515ee1---movebooks-beta-web-33s3hhbhua-as.a.run.app/api/academy-media/01/mp4",
+      "time": 11.160524,
+      "track": 2
+    },
+    {
+      "id": "02",
+      "caption": "showing",
+      "duration": 70,
+      "paused": false,
+      "src": "https://academy-c5515ee1---movebooks-beta-web-33s3hhbhua-as.a.run.app/api/academy-media/02/mp4",
+      "time": 9.509551,
+      "track": 2
+    },
+    {
+      "id": "03",
+      "caption": "showing",
+      "duration": 93.8,
+      "paused": false,
+      "src": "https://academy-c5515ee1---movebooks-beta-web-33s3hhbhua-as.a.run.app/api/academy-media/03/mp4",
+      "time": 12.873607,
+      "track": 2
+    },
+    {
+      "id": "04",
+      "caption": "showing",
+      "duration": 63.853333,
+      "paused": false,
+      "src": "https://academy-c5515ee1---movebooks-beta-web-33s3hhbhua-as.a.run.app/api/academy-media/04/mp4",
+      "time": 21.398062,
+      "track": 2
+    },
+    {
+      "id": "05",
+      "caption": "showing",
+      "duration": 67.146667,
+      "paused": false,
+      "src": "https://academy-c5515ee1---movebooks-beta-web-33s3hhbhua-as.a.run.app/api/academy-media/05/mp4",
+      "time": 23.396424,
+      "track": 2
+    },
+    {
+      "id": "06",
+      "caption": "showing",
+      "duration": 91.1,
+      "paused": false,
+      "src": "https://academy-c5515ee1---movebooks-beta-web-33s3hhbhua-as.a.run.app/api/academy-media/06/mp4",
+      "time": 9.526084,
+      "track": 2
+    },
+    {
+      "id": "07",
+      "caption": "showing",
+      "duration": 89.578,
+      "paused": false,
+      "src": "https://academy-c5515ee1---movebooks-beta-web-33s3hhbhua-as.a.run.app/api/academy-media/07/mp4",
+      "time": 10.805073,
+      "track": 2
+    },
+    {
+      "id": "08",
+      "caption": "showing",
+      "duration": 89.578,
+      "paused": false,
+      "src": "https://academy-c5515ee1---movebooks-beta-web-33s3hhbhua-as.a.run.app/api/academy-media/08/mp4",
+      "time": 9.826482,
+      "track": 2
+    },
+    {
+      "id": "09",
+      "caption": "showing",
+      "duration": 169.007,
+      "paused": false,
+      "src": "https://academy-c5515ee1---movebooks-beta-web-33s3hhbhua-as.a.run.app/api/academy-media/09/mp4",
+      "time": 10.002275,
+      "track": 2
+    }
+  ],
+  "scope": "Actual start/progression for nine staged MP4s; full decode/completion reused from identical approved media",
+  "captions": "All nine tracks loaded and showing; actual caption screenshots saved",
+  "learnTabs": "PASS",
+  "tenConcepts": "PASS",
+  "syntheticReadOnlyJourney": "All five preview stages traversed; no database writes",
+  "contextualVideoLink": "Simulator Watch guide reached /learn?tab=videos#lesson-01",
+  "geminiCompatibility": "Byte-identical released Advisor/Reviewer sources and runtime configuration; existing authenticated genuine production results retained; no inference invoked",
+  "focusedRegression": "Reuse 195 passing tests from exact approved candidate",
+  "generationRequests": 0
+}

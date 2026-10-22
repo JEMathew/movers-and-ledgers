@@ -1,0 +1,56 @@
+{
+  "utc": "2026-10-22T22:05:43.035225+00:00",
+  "services": {
+    "movebooks-beta-web": {
+      "traffic": [
+        [
+          "movebooks-beta-web-c5515ee1-academy",
+          100
+        ]
+      ],
+      "specHash": "3959a49d011ede4178a9fbf23928c17159ad361cf15f2daa6594f49baaf3c0f0",
+      "iamHash": "5154bb36beaf43f80dec4b9f81cb0189f168b5df0094a601a93ff36fc1e384a0",
+      "revisionSpecs": {
+        "movebooks-beta-web-c5515ee1-academy": "74d9d9a0f3b46767214bdfeb3286e714327604736edfefdbc2df663f2263af51"
+      },
+      "digests": {
+        "movebooks-beta-web-c5515ee1-academy": "asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/web@sha256:ed88d48d45372a59adf3bc081cadca4252bab112f3cb5bf7de9bd843705d79e4"
+      },
+      "generation": 67
+    },
+    "movebooks-beta-api": {
+      "traffic": [
+        [
+          "movebooks-beta-api-b20-judge-sdk1",
+          100
+        ]
+      ],
+      "specHash": "740fe2a171b9a91bc6e415f13194c894575d2dc4cff74225c9641943eaa1710b",
+      "iamHash": "794d7f64ab772ad2445faecaa1fc9a20711427738e52be1983a9d3f54c78d633",
+      "revisionSpecs": {
+        "movebooks-beta-api-b20-judge-sdk1": "361e5ce879f0179f1361a1ffcee33cd957168ad0d95672f8b3885661918ca709"
+      },
+      "digests": {
+        "movebooks-beta-api-b20-judge-sdk1": "asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/api@sha256:a89eee7d3264c81c0a6fbf77991a1ac6dd8c38a305306bb2d3972dbccdd53a21"
+      },
+      "generation": 55
+    }
+  },
+  "controls": {
+    "policy": {
+      "fieldsHash": "c10765aeac6ab4cf3e0992d94388e8fc076acf71ae9ac34e723b9cfcc2ff7af3",
+      "updateTime": "2026-10-22T20:27:37.259028Z"
+    },
+    "judge-judge-mvp-20261021-v1": {
+      "fieldsHash": "d0cab2e8820b1c1d4756806d68de6ca1916a9ede95504086c8f7df596409fffd",
+      "updateTime": "2026-10-22T21:02:54.127373Z"
+    }
+  },
+  "rollback": {
+    "revision": "movebooks-beta-web-b20-live-sdk1",
+    "digest": "asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/web@sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad",
+    "Ready": true,
+    "command": "gcloud run services update-traffic movebooks-beta-web --project=movebooks-ai --region=asia-southeast1 --account=jeasom@gmail.com --to-revisions=movebooks-beta-web-b20-live-sdk1=100"
+  },
+  "apiCampaignAndIamUnchanged": true
+}

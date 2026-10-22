@@ -1,3 +1,5 @@
+> **Production update — 23 October 2026:** The exact owner-approved Academy web revision is now serving 100% traffic. All nine public playback/caption checks pass; Gemini API and campaign are unchanged. See [production-release.json](production-release.json) and `evidence/publication-2026-10-23/`. The readiness record below is historical pre-authorization evidence.
+
 # Track C nine-video release readiness — 23 October 2026
 
 **GO for the final publication decision. No deployment has occurred.** This receipt supersedes the earlier missing-subtitle and stale-Gemini blockers. Work resumed from `8e9ee4ba71c21ee3fb9dd1a38db9a3c068400cdf`; the exact image uses source commit `5515ee1002265c18d098e718761db4b3292d041a` on `feature/video-academy-v1`.

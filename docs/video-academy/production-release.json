@@ -1,0 +1,245 @@
+{
+  "recordedUtc": "2026-10-22T22:07:54.883138+00:00",
+  "result": "PASS",
+  "publicApplication": "https://movebooks-si.web.app",
+  "publicAcademy": "https://movebooks-si.web.app/learn?tab=videos",
+  "servingWebRevision": "movebooks-beta-web-c5515ee1-academy",
+  "deploymentImageDigest": "sha256:ed88d48d45372a59adf3bc081cadca4252bab112f3cb5bf7de9bd843705d79e4",
+  "ociIndexDigest": "sha256:9fc3ce1cecd87f464517c0df96a1d98f33027b529594067e37081a5a6f604201",
+  "approvedReceiptSourceCommit": "474d839f0d48218e5d82edd9c20512cb96f6aeb6",
+  "imageImplementationSourceCommit": "5515ee1002265c18d098e718761db4b3292d041a",
+  "sourceExplanation": "474d839 is the approved receipt HEAD; application/media image was built at 5515ee1. Intervening commits are documentation/evidence only. Exact image was preserved, not rebuilt.",
+  "traffic": {
+    "academyPercent": 100,
+    "stagedAndSmokedAtPercent": 0,
+    "previousWebPercent": 0
+  },
+  "ninePublicVideos": [
+    {
+      "id": "01",
+      "caption": "showing",
+      "duration": 87.9,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/01/mp4",
+      "time": 10.328721,
+      "track": 2,
+      "title": "Getting Started",
+      "result": "PASS",
+      "publicMp4Http": 200,
+      "rangeHttp": 206,
+      "captionRendering": "PASS",
+      "approvedBytesMatch": true
+    },
+    {
+      "id": "02",
+      "caption": "showing",
+      "duration": 70,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/02/mp4",
+      "time": 10.636831,
+      "track": 2,
+      "title": "Understand Your Migration",
+      "result": "PASS",
+      "publicMp4Http": 200,
+      "rangeHttp": 206,
+      "captionRendering": "PASS",
+      "approvedBytesMatch": true
+    },
+    {
+      "id": "03",
+      "caption": "showing",
+      "duration": 93.8,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/03/mp4",
+      "time": 23.637529,
+      "track": 2,
+      "title": "Prepare and Approve",
+      "result": "PASS",
+      "publicMp4Http": 200,
+      "rangeHttp": 206,
+      "captionRendering": "PASS",
+      "approvedBytesMatch": true
+    },
+    {
+      "id": "04",
+      "caption": "showing",
+      "duration": 63.853333,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/04/mp4",
+      "time": 13.580633,
+      "track": 2,
+      "title": "Gemini Advisor",
+      "result": "PASS",
+      "publicMp4Http": 200,
+      "rangeHttp": 206,
+      "captionRendering": "PASS",
+      "approvedBytesMatch": true
+    },
+    {
+      "id": "05",
+      "caption": "showing",
+      "duration": 67.146667,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/05/mp4",
+      "time": 14.327873,
+      "track": 2,
+      "title": "Independent Gemini Reviewer",
+      "result": "PASS",
+      "publicMp4Http": 200,
+      "rangeHttp": 206,
+      "captionRendering": "PASS",
+      "approvedBytesMatch": true
+    },
+    {
+      "id": "06",
+      "caption": "showing",
+      "duration": 91.1,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/06/mp4",
+      "time": 16.156585,
+      "track": 2,
+      "title": "Move and Verify",
+      "result": "PASS",
+      "publicMp4Http": 200,
+      "rangeHttp": 206,
+      "captionRendering": "PASS",
+      "approvedBytesMatch": true
+    },
+    {
+      "id": "07",
+      "caption": "showing",
+      "duration": 89.578,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/07/mp4",
+      "time": 17.173871,
+      "track": 2,
+      "title": "First Productive Use",
+      "result": "PASS",
+      "publicMp4Http": 200,
+      "rangeHttp": 206,
+      "captionRendering": "PASS",
+      "approvedBytesMatch": true
+    },
+    {
+      "id": "08",
+      "caption": "showing",
+      "duration": 89.578,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/08/mp4",
+      "time": 14.888676,
+      "track": 2,
+      "title": "Trust and Troubleshooting",
+      "result": "PASS",
+      "publicMp4Http": 200,
+      "rangeHttp": 206,
+      "captionRendering": "PASS",
+      "approvedBytesMatch": true
+    },
+    {
+      "id": "09",
+      "caption": "showing",
+      "duration": 169.007,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/09/mp4",
+      "time": 33.492142,
+      "track": 2,
+      "title": "Three-Minute Journey",
+      "result": "PASS",
+      "publicMp4Http": 200,
+      "rangeHttp": 206,
+      "captionRendering": "PASS",
+      "approvedBytesMatch": true
+    }
+  ],
+  "media": {
+    "assetsVerified": 36,
+    "rangeChecks": 36,
+    "exactApprovedBytes": true,
+    "originalReviewCutsAbsent": true,
+    "corrected04_05_09Published": true,
+    "urlPattern": "https://movebooks-si.web.app/api/academy-media/{01..09}/{mp4,jpg,vtt,txt}",
+    "hosting": "Files embedded in exact web image; existing same-origin route and Firebase catch-all; no hosting changes",
+    "bundleManifestSha256": "72fd4c77534ca47492a5b7a4776e4dfc34dc69e0000833b4b5a3e57d7e93db80"
+  },
+  "narrationAndCaptions": {
+    "result": "PASS",
+    "scope": "Original supplied narration retained; H.264/AAC, non-silent audio and complete decode verified on same exact files before publication. Voice actor identity not independently certified.",
+    "captions": "Nine VTT tracks loaded/showing in actual public browser, caption screenshots saved; exact bytes match previously timestamp-validated SRT/VTT",
+    "publicBrowserTestScope": "Actual public playback start and progression, loaded visible caption tracks; prior complete-file decode and full completion reused for exact matching bytes",
+    "voiceActorIdentity": "Not independently certified; original supplied voice retained"
+  },
+  "learnNavigation": "PASS both tabs, ten concepts and public contextual Advisor link",
+  "geminiFrontend": {
+    "result": "PASS",
+    "pairedAnalysisEnabled": true,
+    "existingSessionApiVerified": true,
+    "advisorReviewerSourcesUnchanged": true,
+    "newGenerationCalls": 0,
+    "scope": "Read-only UI checks; no new inference invoked; genuine paired results reused from historical proof"
+  },
+  "syntheticJourney": {
+    "result": "PASS",
+    "scope": "Five read-only guided stages traversed on staging; existing approved mapping loaded on new public frontend, decisions unchanged; prior 195 focused tests reused"
+  },
+  "api": {
+    "traffic": [
+      [
+        "movebooks-beta-api-b20-judge-sdk1",
+        100
+      ]
+    ],
+    "specHash": "740fe2a171b9a91bc6e415f13194c894575d2dc4cff74225c9641943eaa1710b",
+    "iamHash": "794d7f64ab772ad2445faecaa1fc9a20711427738e52be1983a9d3f54c78d633",
+    "revisionSpecs": {
+      "movebooks-beta-api-b20-judge-sdk1": "361e5ce879f0179f1361a1ffcee33cd957168ad0d95672f8b3885661918ca709"
+    },
+    "digests": {
+      "movebooks-beta-api-b20-judge-sdk1": "asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/api@sha256:a89eee7d3264c81c0a6fbf77991a1ac6dd8c38a305306bb2d3972dbccdd53a21"
+    },
+    "generation": 55
+  },
+  "campaignControls": {
+    "policy": {
+      "fieldsHash": "c10765aeac6ab4cf3e0992d94388e8fc076acf71ae9ac34e723b9cfcc2ff7af3",
+      "updateTime": "2026-10-22T20:27:37.259028Z"
+    },
+    "judge-judge-mvp-20261021-v1": {
+      "fieldsHash": "d0cab2e8820b1c1d4756806d68de6ca1916a9ede95504086c8f7df596409fffd",
+      "updateTime": "2026-10-22T21:02:54.127373Z"
+    }
+  },
+  "apiCampaignAndIamUnchanged": true,
+  "rollback": {
+    "revision": "movebooks-beta-web-b20-live-sdk1",
+    "digest": "asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/web@sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad",
+    "Ready": true,
+    "command": "gcloud run services update-traffic movebooks-beta-web --project=movebooks-ai --region=asia-southeast1 --account=jeasom@gmail.com --to-revisions=movebooks-beta-web-b20-live-sdk1=100"
+  },
+  "excludedChanges": {
+    "api": 0,
+    "firebaseHosting": 0,
+    "dns": 0,
+    "iam": 0,
+    "databaseFinancialRecords": 0,
+    "inference": 0,
+    "campaignBudgets": 0,
+    "higgsfieldSpending": 0
+  },
+  "remainingMandatoryIssues": [],
+  "observations": [
+    {
+      "check": "External /healthz",
+      "status": "PRE_EXISTING",
+      "detail": "Google front-end 404 on unchanged baseline and new revision, including cache-busted requests. Local exact image health is 200; real application and media routes pass. No configuration workaround made."
+    },
+    {
+      "check": "Separate Google account chooser",
+      "status": "NOT USED",
+      "detail": "Automatic approval review rejected opening Google Accounts because release authorization did not explicitly authorize account selection. Existing authenticated application session restored normally and completed Gemini UI verification; no additional permission needed."
+    }
+  ],
+  "rollbackExecuted": false,
+  "branch": "feature/video-academy-v1",
+  "evidenceDirectory": "evidence/publication-2026-10-23",
+  "nextOwnerAction": "None; authorized release completed."
+}

@@ -1,0 +1,9 @@
+{
+  "check": "GET /healthz and cache-busted /healthz",
+  "unchangedProduction": "Google front-end HTTP 404",
+  "stagedRevision": "Identical Google front-end HTTP 404",
+  "exactLocalImage": "HTTP 200, status ok, service movebooks-web",
+  "applicationRoot": "HTTP 200 on both production and staging",
+  "decision": "Pre-existing public edge behavior, not an Academy regression; actual application routes, media and Cloud Run Ready used for release health",
+  "productionConfigurationChangedToAddressThis": false
+}

@@ -1,0 +1,343 @@
+{
+  "utc": "2026-10-22T21:59:13.557730+00:00",
+  "base": "https://academy-c5515ee1---movebooks-beta-web-33s3hhbhua-as.a.run.app",
+  "phase": "staged",
+  "generationRequests": 0,
+  "databaseWrites": 0,
+  "assets": [
+    {
+      "id": "01",
+      "extension": "mp4",
+      "GET": 200,
+      "range": 206,
+      "bytes": 8809833,
+      "sha256": "9a7322ae23918efc8282fe84e5457de30c5380a8a19f2a42c7f69fc747645b92",
+      "contentType": null
+    },
+    {
+      "id": "01",
+      "extension": "jpg",
+      "GET": 200,
+      "range": 206,
+      "bytes": 26425,
+      "sha256": "010f723e4ae6194832ac7451fffc3a2b415f88d360f18d85e2433de2c99a8683",
+      "contentType": null
+    },
+    {
+      "id": "01",
+      "extension": "vtt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 1984,
+      "sha256": "5e7b0e61df7bac7cb792b33731588bbd645dc8e23a77928dff83ec59f3d8c77d",
+      "contentType": null
+    },
+    {
+      "id": "01",
+      "extension": "txt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 1202,
+      "sha256": "8a8c3a85af4e80e04e221e3ab1a1bae890b5e188ef70e296acd3cf95d09e19ce",
+      "contentType": null
+    },
+    {
+      "id": "02",
+      "extension": "mp4",
+      "GET": 200,
+      "range": 206,
+      "bytes": 8093381,
+      "sha256": "1e10c06bdb24b0b505d99ccbe1038977a8a11316cb04c0a8969d83e1b16ff139",
+      "contentType": null
+    },
+    {
+      "id": "02",
+      "extension": "jpg",
+      "GET": 200,
+      "range": 206,
+      "bytes": 32368,
+      "sha256": "314793a0977a0a6b3252e5589401a2787e99993ea42924c94f20feae9c6074d6",
+      "contentType": null
+    },
+    {
+      "id": "02",
+      "extension": "vtt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 1646,
+      "sha256": "f62c3ca8376604d11fdd8affaa6901b97db3c3595c965f56d2c72c87912c3a99",
+      "contentType": null
+    },
+    {
+      "id": "02",
+      "extension": "txt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 988,
+      "sha256": "460cae1f2be748b2f00f40366bbe977ee4efc1768df68a571f2f8ea99f5cabf9",
+      "contentType": null
+    },
+    {
+      "id": "03",
+      "extension": "mp4",
+      "GET": 200,
+      "range": 206,
+      "bytes": 17377988,
+      "sha256": "994ed2221c00a47e96e02c5c93ae8026248d31fe514aa9c9a42ddf8fef0e7f22",
+      "contentType": null
+    },
+    {
+      "id": "03",
+      "extension": "jpg",
+      "GET": 200,
+      "range": 206,
+      "bytes": 29819,
+      "sha256": "5b4bca69048d3b92c610db5af637ca6d3b195255aeae53640aedf990cf47dd35",
+      "contentType": null
+    },
+    {
+      "id": "03",
+      "extension": "vtt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 2478,
+      "sha256": "777b8a354a89ffaf2f91a778f313f63204434fb4ad65f482fdc1b65aa221cbba",
+      "contentType": null
+    },
+    {
+      "id": "03",
+      "extension": "txt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 1603,
+      "sha256": "04e561b7553968356d4308a7537bd7f2267daacfe15bba2ca0d6a32789774d78",
+      "contentType": null
+    },
+    {
+      "id": "04",
+      "extension": "mp4",
+      "GET": 200,
+      "range": 206,
+      "bytes": 3868281,
+      "sha256": "0b18f0dac1e3b2444898151da57ae69c23751ebe0c1d46f546b5f89bc4405f2d",
+      "contentType": null
+    },
+    {
+      "id": "04",
+      "extension": "jpg",
+      "GET": 200,
+      "range": 206,
+      "bytes": 20040,
+      "sha256": "0b34e68ca56a5452ad1cb5afce148c4bad3110872cf3c6a99b3007f962598aa5",
+      "contentType": null
+    },
+    {
+      "id": "04",
+      "extension": "vtt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 1598,
+      "sha256": "a64f25d7d6774124514f016fc48524d4e665c63334862a9cacaadbf8767701fc",
+      "contentType": null
+    },
+    {
+      "id": "04",
+      "extension": "txt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 909,
+      "sha256": "93354f11fc9e6f7c6d9160a23e5e22a0aa3d4ea64fe585d941e8122fcc8a1866",
+      "contentType": null
+    },
+    {
+      "id": "05",
+      "extension": "mp4",
+      "GET": 200,
+      "range": 206,
+      "bytes": 3408152,
+      "sha256": "8166cc8eae5c65185fc7528427b9c14caf9c22abf1f14003a3047cf23f5ee4e5",
+      "contentType": null
+    },
+    {
+      "id": "05",
+      "extension": "jpg",
+      "GET": 200,
+      "range": 206,
+      "bytes": 20078,
+      "sha256": "eb073d962fab9a6fd1dcf9408b3d2e68081eea748c242bedb4179a6ce210af86",
+      "contentType": null
+    },
+    {
+      "id": "05",
+      "extension": "vtt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 1521,
+      "sha256": "64a3849fef81829c0483b869272d9e3d1fc523c61b8cc4415bc20a8206e3e801",
+      "contentType": null
+    },
+    {
+      "id": "05",
+      "extension": "txt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 956,
+      "sha256": "c078d2b160041c0d86cafc2b64eaffc06fe94d91d82b51fb2134e9c9e0984872",
+      "contentType": null
+    },
+    {
+      "id": "06",
+      "extension": "mp4",
+      "GET": 200,
+      "range": 206,
+      "bytes": 11535240,
+      "sha256": "5ee4a34308ee59492ad3c204a2801c1ba2f84c92acd05b619b0f8599608c293d",
+      "contentType": null
+    },
+    {
+      "id": "06",
+      "extension": "jpg",
+      "GET": 200,
+      "range": 206,
+      "bytes": 27633,
+      "sha256": "a0721fefe50bcbe3b70defd0a9625b2d5280577c4d0da8dd1591274b84be4c40",
+      "contentType": null
+    },
+    {
+      "id": "06",
+      "extension": "vtt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 2225,
+      "sha256": "7909eea2ab43de67f42f0b7fa4bb37db34a8111ee757f1122f7523c7e922ad65",
+      "contentType": null
+    },
+    {
+      "id": "06",
+      "extension": "txt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 1412,
+      "sha256": "28f1ef11c9563a53ffedc1dd28b0021798f0e5f33cc512140bf511113ac9f7a1",
+      "contentType": null
+    },
+    {
+      "id": "07",
+      "extension": "mp4",
+      "GET": 200,
+      "range": 206,
+      "bytes": 10692185,
+      "sha256": "1f0fd86bc98d558d7b5519bab0c95cd0cb3cd1c07cc16677057558eee482503d",
+      "contentType": null
+    },
+    {
+      "id": "07",
+      "extension": "jpg",
+      "GET": 200,
+      "range": 206,
+      "bytes": 22234,
+      "sha256": "947b4c0deb8a7af1997daab44c979c60927469a3bcb8de808030e818e07e8aff",
+      "contentType": null
+    },
+    {
+      "id": "07",
+      "extension": "vtt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 2034,
+      "sha256": "f657140e11ac26e82a019acd1ed48ab7bb61020edd4efe761e7c67cf23266b23",
+      "contentType": null
+    },
+    {
+      "id": "07",
+      "extension": "txt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 1128,
+      "sha256": "c75a9aaebe0d41032bb0f594c00a84405d376aaf0df9f6ed34627e5b2657fd82",
+      "contentType": null
+    },
+    {
+      "id": "08",
+      "extension": "mp4",
+      "GET": 200,
+      "range": 206,
+      "bytes": 9358130,
+      "sha256": "3666a70792fe0c1a7ff652257e83e30cb86faaab6e86ed92908814cf3ca6afb7",
+      "contentType": null
+    },
+    {
+      "id": "08",
+      "extension": "jpg",
+      "GET": 200,
+      "range": 206,
+      "bytes": 28418,
+      "sha256": "917dc0336101b6ada0f9a6d85f1baaa00ddaf4ac17842bd813a5d3efd3983b54",
+      "contentType": null
+    },
+    {
+      "id": "08",
+      "extension": "vtt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 2150,
+      "sha256": "f4d12f6657b1984106a025b56bf16577f9e54c57a35bbf88d5c05e62ce6c75b3",
+      "contentType": null
+    },
+    {
+      "id": "08",
+      "extension": "txt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 1306,
+      "sha256": "91fbfd75e8623dcf74885b8f6b31426b2edc88320dbf0fb71a523ccfba9e358f",
+      "contentType": null
+    },
+    {
+      "id": "09",
+      "extension": "mp4",
+      "GET": 200,
+      "range": 206,
+      "bytes": 19244827,
+      "sha256": "23fa7231d9edd63116e34b16a2dbe8036fc8f0a1dbb7fd1de6d102c7aa19866e",
+      "contentType": null
+    },
+    {
+      "id": "09",
+      "extension": "jpg",
+      "GET": 200,
+      "range": 206,
+      "bytes": 30625,
+      "sha256": "119cf5c353f98365757278677676ab4770fa7943b61e7ee0445f610a35482d69",
+      "contentType": null
+    },
+    {
+      "id": "09",
+      "extension": "vtt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 4009,
+      "sha256": "50c2456cad77db192b9a81934a95eab6cb1f944e9415c035fece6a3129dc5f45",
+      "contentType": null
+    },
+    {
+      "id": "09",
+      "extension": "txt",
+      "GET": 200,
+      "range": 206,
+      "bytes": 2359,
+      "sha256": "3ad9dfb314c2b019df357e2efa291a34f1182f3af120ed38b908900f60063866",
+      "contentType": null
+    }
+  ],
+  "pages": [
+    {
+      "path": "/healthz",
+      "expected": 200,
+      "actual": 404,
+      "sha256": "c2076d92bf1fa30a8ac80cd72fea16056c06f545fd856660c8c34556d10478b0"
+    }
+  ],
+  "result": "STOP",
+  "failure": "('/healthz', 404)"
+}

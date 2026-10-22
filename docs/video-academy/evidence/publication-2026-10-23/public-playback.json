@@ -1,0 +1,89 @@
+{
+  "utc": "2026-10-22T22:06:08.746Z",
+  "result": "PASS",
+  "checks": [
+    {
+      "id": "01",
+      "caption": "showing",
+      "duration": 87.9,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/01/mp4",
+      "time": 10.328721,
+      "track": 2
+    },
+    {
+      "id": "02",
+      "caption": "showing",
+      "duration": 70,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/02/mp4",
+      "time": 10.636831,
+      "track": 2
+    },
+    {
+      "id": "03",
+      "caption": "showing",
+      "duration": 93.8,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/03/mp4",
+      "time": 23.637529,
+      "track": 2
+    },
+    {
+      "id": "04",
+      "caption": "showing",
+      "duration": 63.853333,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/04/mp4",
+      "time": 13.580633,
+      "track": 2
+    },
+    {
+      "id": "05",
+      "caption": "showing",
+      "duration": 67.146667,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/05/mp4",
+      "time": 14.327873,
+      "track": 2
+    },
+    {
+      "id": "06",
+      "caption": "showing",
+      "duration": 91.1,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/06/mp4",
+      "time": 16.156585,
+      "track": 2
+    },
+    {
+      "id": "07",
+      "caption": "showing",
+      "duration": 89.578,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/07/mp4",
+      "time": 17.173871,
+      "track": 2
+    },
+    {
+      "id": "08",
+      "caption": "showing",
+      "duration": 89.578,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/08/mp4",
+      "time": 14.888676,
+      "track": 2
+    },
+    {
+      "id": "09",
+      "caption": "showing",
+      "duration": 169.007,
+      "paused": false,
+      "src": "https://movebooks-si.web.app/api/academy-media/09/mp4",
+      "time": 33.492142,
+      "track": 2
+    }
+  ],
+  "scope": "Actual public playback start and progression, loaded visible caption tracks; prior complete-file decode and full completion reused for exact matching bytes",
+  "audio": "Original supplied narration retained; H.264/AAC, non-silent audio and complete decode verified on same exact files before publication. Voice actor identity not independently certified."
+}

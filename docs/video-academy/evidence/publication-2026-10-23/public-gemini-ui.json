@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-22T22:05:28.521Z",
+  "authenticatedExistingSession": true,
+  "runPairedAnalysisEnabled": true,
+  "independentRuleReviewEnabled": true,
+  "advisorLink": "/learn?tab=videos#lesson-04",
+  "reviewerLink": "/learn?tab=videos#lesson-05",
+  "newInferenceCalls": 0,
+  "financialWrites": 0,
+  "evidenceScope": "Fresh approved frontend loaded; existing authenticated synthetic mapping read-only; original genuine paired results retained in pre-release capture evidence; no new result generated",
+  "newAccountSignIn": "Not used; automatic approval review blocked Google account chooser; existing session restored without account selection",
+  "contextualAdvisorNavigation": {
+    "hash": "#lesson-04",
+    "path": "/learn",
+    "search": "?tab=videos"
+  }
+}

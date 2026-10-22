@@ -1,0 +1,49 @@
+{
+  "utc": "2026-10-22T22:02:50.229908+00:00",
+  "services": {
+    "movebooks-beta-web": {
+      "traffic": [
+        [
+          "movebooks-beta-web-b20-live-sdk1",
+          100
+        ]
+      ],
+      "specHash": "d039155016e7a125ffb0ee43e10b193439482f1d29e5d8594654a839dd52661d",
+      "iamHash": "5154bb36beaf43f80dec4b9f81cb0189f168b5df0094a601a93ff36fc1e384a0",
+      "revisionSpecs": {
+        "movebooks-beta-web-b20-live-sdk1": "ccdf55ed1ed59a9f8164644e05a1260708822d97d134e93b305a7d99a0eed903"
+      },
+      "digests": {
+        "movebooks-beta-web-b20-live-sdk1": "asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/web@sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad"
+      },
+      "generation": 66
+    },
+    "movebooks-beta-api": {
+      "traffic": [
+        [
+          "movebooks-beta-api-b20-judge-sdk1",
+          100
+        ]
+      ],
+      "specHash": "740fe2a171b9a91bc6e415f13194c894575d2dc4cff74225c9641943eaa1710b",
+      "iamHash": "794d7f64ab772ad2445faecaa1fc9a20711427738e52be1983a9d3f54c78d633",
+      "revisionSpecs": {
+        "movebooks-beta-api-b20-judge-sdk1": "361e5ce879f0179f1361a1ffcee33cd957168ad0d95672f8b3885661918ca709"
+      },
+      "digests": {
+        "movebooks-beta-api-b20-judge-sdk1": "asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/api@sha256:a89eee7d3264c81c0a6fbf77991a1ac6dd8c38a305306bb2d3972dbccdd53a21"
+      },
+      "generation": 55
+    }
+  },
+  "controls": {
+    "policy": {
+      "fieldsHash": "c10765aeac6ab4cf3e0992d94388e8fc076acf71ae9ac34e723b9cfcc2ff7af3",
+      "updateTime": "2026-10-22T20:27:37.259028Z"
+    },
+    "judge-judge-mvp-20261021-v1": {
+      "fieldsHash": "d0cab2e8820b1c1d4756806d68de6ca1916a9ede95504086c8f7df596409fffd",
+      "updateTime": "2026-10-22T21:02:54.127373Z"
+    }
+  }
+}
