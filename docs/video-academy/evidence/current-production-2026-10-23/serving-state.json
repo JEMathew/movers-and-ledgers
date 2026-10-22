@@ -1,0 +1,173 @@
+{
+  "utc": "2026-10-22T21:13:56.719975+00:00",
+  "readOnly": true,
+  "productionWrites": 0,
+  "services": {
+    "movebooks-beta-web": {
+      "traffic": [
+        {
+          "percent": 100,
+          "revisionName": "movebooks-beta-web-b20-live-sdk1"
+        },
+        {
+          "revisionName": "movebooks-beta-web-r16e31e9-1041",
+          "tag": "c16e31e9",
+          "url": "https://c16e31e9---movebooks-beta-web-33s3hhbhua-as.a.run.app"
+        },
+        {
+          "revisionName": "movebooks-beta-web-rel01d105c",
+          "tag": "cand",
+          "url": "https://cand---movebooks-beta-web-33s3hhbhua-as.a.run.app"
+        },
+        {
+          "revisionName": "movebooks-beta-web-rel2997e20fb",
+          "tag": "rel2997e20fb",
+          "url": "https://rel2997e20fb---movebooks-beta-web-33s3hhbhua-as.a.run.app"
+        },
+        {
+          "revisionName": "movebooks-beta-web-ux8231a32",
+          "tag": "uxfinal",
+          "url": "https://uxfinal---movebooks-beta-web-33s3hhbhua-as.a.run.app"
+        }
+      ],
+      "serving": [
+        {
+          "revision": "movebooks-beta-web-b20-live-sdk1",
+          "percent": 100,
+          "image": "asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/web@sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad",
+          "resolvedImageDigest": "asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/web@sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad",
+          "ready": "True",
+          "configurationSha256": "ccdf55ed1ed59a9f8164644e05a1260708822d97d134e93b305a7d99a0eed903",
+          "environmentNames": [
+            "MOVEBOOKS_ADDITIONAL_WEB_ORIGINS",
+            "MOVEBOOKS_PRIVATE_API_AUDIENCE",
+            "MOVEBOOKS_PRIVATE_API_ORIGIN",
+            "MOVEBOOKS_PUBLIC_WEB_ORIGIN",
+            "NEXT_PUBLIC_API_BASE_URL",
+            "NEXT_PUBLIC_FIREBASE_PROJECT_ID",
+            "NEXT_PUBLIC_IDENTITY_MODE"
+          ],
+          "routingAndModeConfiguration": {
+            "MOVEBOOKS_PRIVATE_API_ORIGIN": "https://movebooks-beta-api-33s3hhbhua-as.a.run.app",
+            "MOVEBOOKS_PUBLIC_WEB_ORIGIN": "https://movebooks-si.web.app",
+            "NEXT_PUBLIC_IDENTITY_MODE": "firebase",
+            "NEXT_PUBLIC_API_BASE_URL": "/api",
+            "MOVEBOOKS_ADDITIONAL_WEB_ORIGINS": "https://movebooks-beta-web-411600344727.asia-southeast1.run.app,https://uxfinal---movebooks-beta-web-33s3hhbhua-as.a.run.app",
+            "MOVEBOOKS_PRIVATE_API_AUDIENCE": "https://movebooks-beta-api-33s3hhbhua-as.a.run.app"
+          },
+          "resources": {
+            "limits": {
+              "cpu": "1",
+              "memory": "512Mi"
+            }
+          },
+          "containerConcurrency": 8,
+          "serviceAccount": "movebooks-beta-web@movebooks-ai.iam.gserviceaccount.com"
+        }
+      ],
+      "latestReady": "movebooks-beta-web-b20-live-sdk1",
+      "serviceSpecSha256": "669e9b21949368315d96358dabb54195ae3ab02d0bf5b24d846717bdecef6069"
+    },
+    "movebooks-beta-api": {
+      "traffic": [
+        {
+          "percent": 100,
+          "revisionName": "movebooks-beta-api-b20-judge-sdk1",
+          "tag": "b20-judge-sdk1",
+          "url": "https://b20-judge-sdk1---movebooks-beta-api-33s3hhbhua-as.a.run.app"
+        },
+        {
+          "revisionName": "movebooks-beta-api-bc8fec04-proof",
+          "tag": "bc8fec04-proof",
+          "url": "https://bc8fec04-proof---movebooks-beta-api-33s3hhbhua-as.a.run.app"
+        },
+        {
+          "revisionName": "movebooks-beta-api-bc8fec04-proof-r1",
+          "tag": "bc8fec04-proof-r1",
+          "url": "https://bc8fec04-proof-r1---movebooks-beta-api-33s3hhbhua-as.a.run.app"
+        },
+        {
+          "revisionName": "movebooks-beta-api-bc8fec04-proof-sdk1",
+          "tag": "bc8fec04-proof-sdk1",
+          "url": "https://bc8fec04-proof-sdk1---movebooks-beta-api-33s3hhbhua-as.a.run.app"
+        },
+        {
+          "revisionName": "movebooks-beta-api-bc8fec04-safe",
+          "tag": "bc8fec04-safe",
+          "url": "https://bc8fec04-safe---movebooks-beta-api-33s3hhbhua-as.a.run.app"
+        },
+        {
+          "revisionName": "movebooks-beta-api-bc8fec04-test",
+          "tag": "bc8fec04-test",
+          "url": "https://bc8fec04-test---movebooks-beta-api-33s3hhbhua-as.a.run.app"
+        },
+        {
+          "revisionName": "movebooks-beta-api-r16e31e9-1041",
+          "tag": "c16e31e9",
+          "url": "https://c16e31e9---movebooks-beta-api-33s3hhbhua-as.a.run.app"
+        },
+        {
+          "revisionName": "movebooks-beta-api-rel01d105c",
+          "tag": "cand",
+          "url": "https://cand---movebooks-beta-api-33s3hhbhua-as.a.run.app"
+        },
+        {
+          "revisionName": "movebooks-beta-api-rel2997e20",
+          "tag": "rel2997e20",
+          "url": "https://rel2997e20---movebooks-beta-api-33s3hhbhua-as.a.run.app"
+        }
+      ],
+      "serving": [
+        {
+          "revision": "movebooks-beta-api-b20-judge-sdk1",
+          "percent": 100,
+          "image": "asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/api@sha256:a89eee7d3264c81c0a6fbf77991a1ac6dd8c38a305306bb2d3972dbccdd53a21",
+          "resolvedImageDigest": "asia-southeast1-docker.pkg.dev/movebooks-ai/movebooks-beta/api@sha256:a89eee7d3264c81c0a6fbf77991a1ac6dd8c38a305306bb2d3972dbccdd53a21",
+          "ready": "True",
+          "configurationSha256": "361e5ce879f0179f1361a1ffcee33cd957168ad0d95672f8b3885661918ca709",
+          "environmentNames": [
+            "MOVEBOOKS_CORS_ORIGINS",
+            "MOVEBOOKS_DEMO_IDENTITY_ENABLED",
+            "MOVEBOOKS_ENV",
+            "MOVEBOOKS_FIRESTORE_DATABASE",
+            "MOVEBOOKS_GOOGLE_PROJECT",
+            "MOVEBOOKS_IDENTITY_MODE",
+            "MOVEBOOKS_JUDGE_CAMPAIGN_ENABLED",
+            "MOVEBOOKS_LOGGING_MODE",
+            "MOVEBOOKS_MODEL_CONTROLS_BACKEND",
+            "MOVEBOOKS_MODEL_PROVIDER_MODE",
+            "MOVEBOOKS_PERSISTENCE_BACKEND",
+            "MOVEBOOKS_REASONING_GLOBAL_DAILY_CALLS",
+            "MOVEBOOKS_REASONING_GLOBAL_DAILY_MICROUSD",
+            "MOVEBOOKS_REASONING_LOCATION",
+            "MOVEBOOKS_REASONING_MODELS",
+            "MOVEBOOKS_REASONING_OWNER_DAILY_CALLS",
+            "MOVEBOOKS_REASONING_PROJECT",
+            "MOVEBOOKS_REASONING_RESERVATION_MICROUSD",
+            "MOVEBOOKS_SQL_DATABASE",
+            "MOVEBOOKS_SQL_IAM_USER",
+            "MOVEBOOKS_SQL_INSTANCE",
+            "MOVEBOOKS_STORAGE_BACKEND",
+            "MOVEBOOKS_STORAGE_BUCKET",
+            "MOVEBOOKS_SYNTHETIC_ANALYSIS_ENABLED",
+            "MOVEBOOKS_SYNTHETIC_BETA_AUTHORIZED"
+          ],
+          "routingAndModeConfiguration": {
+            "MOVEBOOKS_JUDGE_CAMPAIGN_ENABLED": "true"
+          },
+          "resources": {
+            "limits": {
+              "cpu": "1",
+              "memory": "512Mi"
+            }
+          },
+          "containerConcurrency": 8,
+          "serviceAccount": "movebooks-beta-api@movebooks-ai.iam.gserviceaccount.com"
+        }
+      ],
+      "latestReady": "movebooks-beta-api-b20-judge-sdk1",
+      "serviceSpecSha256": "740fe2a171b9a91bc6e415f13194c894575d2dc4cff74225c9641943eaa1710b"
+    }
+  },
+  "campaignRecordsReadOrWritten": false
+}

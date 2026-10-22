@@ -220,6 +220,42 @@
     "sha256": "57b1c0168a4d7c198a5c361fda7afb0a3bd26c0c7a697ddd153114bef76ef54c"
   },
   {
+    "path": "evidence/current-production-2026-10-23/04-at-53s.jpg",
+    "sha256": "d5625d0c371ee55e07c59ccf616bb1d03bc2bee11f79f92d7dfc5368484dc740"
+  },
+  {
+    "path": "evidence/current-production-2026-10-23/05-at-52s.jpg",
+    "sha256": "fb88c0be6c15e4523e6875fe97617d7bfb155825c9f48b67dd2b4ad771e3615e"
+  },
+  {
+    "path": "evidence/current-production-2026-10-23/09-at-90s.jpg",
+    "sha256": "405b51c070ea23a4160764364f1eebc7df8ee1e50fb9ce7e9ddd3d3a047a8f22"
+  },
+  {
+    "path": "evidence/current-production-2026-10-23/focused-tests.log",
+    "sha256": "aabf943bd2212ebf3b3d316b47d179cfd9470182e5f548b6534cecc26827768c"
+  },
+  {
+    "path": "evidence/current-production-2026-10-23/public-http.json",
+    "sha256": "6b9307678a2a2b8d56eb60b688049e7add6c9eed8dc28911a8f819c1ae183a2d"
+  },
+  {
+    "path": "evidence/current-production-2026-10-23/rollback-image.json",
+    "sha256": "4313e9e3cbe000a5c7f20e729c17af0a723e0b994aea80bb280e244672e32fb0"
+  },
+  {
+    "path": "evidence/current-production-2026-10-23/serving-state.json",
+    "sha256": "cfba21c14a725424e8ec4a09b8da1e4710302e449312ff824f8532426da94f34"
+  },
+  {
+    "path": "evidence/current-production-2026-10-23/start-here-desktop.jpg",
+    "sha256": "20e8cb5ae5d700a0355ac83be9366cd8501ce180e5db0c67379cf25f5b447f8d"
+  },
+  {
+    "path": "evidence/current-production-2026-10-23/verification.json",
+    "sha256": "a03070fc4a49b4b8f5063dabf27954389c6977148f7f2715c2a1a2ef3b6741a0"
+  },
+  {
     "path": "evidence/desktop-dark.jpg",
     "sha256": "ebef5f8353f60036cde34a8f65aadb708c63694933be48ebd16b1dbca6172fc5"
   },

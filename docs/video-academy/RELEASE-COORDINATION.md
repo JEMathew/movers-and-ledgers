@@ -1,5 +1,7 @@
 # Track C release coordination — 23 October 2026
 
+Latest owner-scope verification: [FINAL-READINESS.md](FINAL-READINESS.md). Current production was read back; 04/05/09 now have demonstrable stale Gemini UI evidence and remain restricted. Missing matching captions/transcripts still block the nine-video release. Historical evidence below is retained.
+
 **NO-GO for publication. Track C source is integrated with the confirmed released Gemini web baseline. The final media-bearing image still awaits original subtitles, content review and the remaining acceptance gates.** Machine-readable state: [release-candidate.json](release-candidate.json).
 
 ## Smallest correction

@@ -1,5 +1,7 @@
 # Video Academy v1 — Track C handoff
 
+Latest owner-scope verification: [FINAL-READINESS.md](FINAL-READINESS.md). Current production was read back; 04/05/09 now have demonstrable stale Gemini UI evidence and remain restricted. Missing matching captions/transcripts still block the nine-video release. Historical evidence below is retained.
+
 Implementation status: **six original videos play in the local review preview; caption acceptance remains blocked on original SRT access**.
 
 Latest release coordination: [media-path correction and pending candidate](RELEASE-COORDINATION.md). Latest complete verification: [PASS/FAIL/NOT VERIFIED acceptance report](ACCEPTANCE.md). Recommendation: **NO-GO for production handoff**.

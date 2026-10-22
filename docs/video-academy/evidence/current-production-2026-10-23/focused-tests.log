@@ -1,0 +1,9 @@
+
+ RUN  v5.0.2 /Users/jincenmathew/Downloads/Intuit/movebooks-video-academy/apps/web
+
+
+ Test Files  2 passed (2)
+      Tests  14 passed (14)
+   Start at  02:46:19
+   Duration  944ms (environment 61%, setup 15%, tests 14%, transform 6%, import 4%)
+

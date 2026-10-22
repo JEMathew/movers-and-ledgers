@@ -1,6 +1,6 @@
 {
-  "recordedUtc": "2026-10-22T21:11:39.390458+00:00",
-  "status": "SOURCE_INTEGRATED_WITH_RELEASED_GEMINI_WEB; MEDIA_AND_PUBLIC_PROOF_GATES_OPEN",
+  "recordedUtc": "2026-10-22T21:17:20.357689+00:00",
+  "status": "BLOCKED_MISSING_CAPTIONS_AND_DEMONSTRABLY_STALE_GEMINI_RECORDINGS",
   "trackCBranch": "feature/video-academy-v1",
   "startingHead": "f8ac6ee15b05687afdc4273dda182b037307bf4d",
   "releasedGeminiWebRevision": "movebooks-beta-web-b20-live-sdk1",
@@ -36,13 +36,15 @@
     ],
     "originalSourcesPreserved": 9,
     "accessibleOriginalSubtitleSets": 0,
-    "mediaApprovalChanged": false
+    "mediaApprovalChanged": false,
+    "targetApprovedLessonCount": 9,
+    "transcripts": "Unavailable; no words invented"
   },
   "blockers": [
-    "Original SRT unavailable; actual captions and synchronization not verified",
-    "Recordings have review watermark; complete content/narration publication review incomplete",
-    "Track B authenticated public Gemini proof pending; do not certify 04/05/09 against public product yet",
-    "Three legacy footer/copy assertions fail on both frozen release and Track C; disposition recorded without modifying product copy"
+    "Original subtitle directory inaccessible; no matching authorized transcript materials found; actual captions/synchronization not verified",
+    "04/05/09 demonstrably show planned/fallback Gemini UI and cannot be approved as current released-product demonstrations",
+    "All originals carry review-cut watermark; complete publication/narration review remains open",
+    "Final nine-video media bundle, transcript delivery and exact Academy image/revision are not ready"
   ],
   "checks": {
     "focusedTestsPassed": 552,
@@ -52,7 +54,7 @@
     "productionBuild": "PASS with exact released public build settings",
     "productionHttpSyntheticChecksPassed": 108,
     "actualOriginalCaptionPlayback": "NOT VERIFIED",
-    "reviewCutProductFidelity": "NOT VERIFIED",
+    "reviewCutProductFidelity": "FAIL: stale planned/fallback UI verified at 04 53s, 05 52s, 09 90s",
     "finalImageBuildAndScan": "NOT VERIFIED: approved media bundle incomplete",
     "fullscreenAllSix": "PASS",
     "releasedSourcePreservation": "PASS 228 files compared; only Track C changes",
@@ -68,6 +70,12 @@
         "navigation copy: expects Contact only",
         "synthetic analysis headings: capitalization"
       ]
+    },
+    "currentProductionReadback": "PASS: prior Gemini web still 100%, Ready=True; image digest exists",
+    "publicAcademyMedia": "STOP: all nine MP4 routes 404 on current non-Academy release",
+    "latestFocusedTests": {
+      "passed": 14,
+      "files": 2
     }
   },
   "productionWrites": 0,
@@ -76,7 +84,13 @@
     "targetWebRevision": "movebooks-beta-web-b20-live-sdk1",
     "targetWebDigest": "sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad",
     "strategy": "Capture exact Gemini-enabled serving web revision and digest immediately before any future Track C publication. Roll back only the web selection to that revision, with its matching bundled media. Preserve API selection, Gemini policy/campaign, budgets and financial records; use existing release authorization controls.",
-    "revalidateImmediatelyBeforePublication": true
+    "revalidateImmediatelyBeforePublication": true,
+    "status": "NOT READY",
+    "targetCurrentlyServingPercent": 100,
+    "targetReady": true,
+    "imageStillAvailable": true,
+    "commandDocument": "FINAL-READINESS.md",
+    "limitation": "No new Academy revision or digest; do not claim complete release rollback readiness. Existing API selection unchanged; campaign record contents not independently re-read."
   },
   "productionHold": true,
   "releasedBaselineSource": {
@@ -86,5 +100,7 @@
     ],
     "sourceFilesVerified": 228,
     "evidence": "evidence/released-baseline-2026-10-23/source-provenance.json"
-  }
+  },
+  "currentServingEvidence": "evidence/current-production-2026-10-23/serving-state.json",
+  "trackCWebRevision": null
 }

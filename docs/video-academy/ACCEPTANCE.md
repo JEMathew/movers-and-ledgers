@@ -1,5 +1,7 @@
 # Track C final acceptance — 23 October 2026
 
+Latest owner-scope verification: [FINAL-READINESS.md](FINAL-READINESS.md). Current production was read back; 04/05/09 now have demonstrable stale Gemini UI evidence and remain restricted. Missing matching captions/transcripts still block the nine-video release. Historical evidence below is retained.
+
 **NO-GO for production handoff. Implementation remains partial.** Six original MP4s genuinely play locally, but captions are absent, Cillian identity is not certified, and no production media is configured or approved.
 
 Released-baseline follow-up: Track C preserves the exact deployed Gemini status, passes 552 focused tests and the released-settings build, and fixes Learn-only cache policy. Three pre-existing footer/copy failures are recorded against the frozen release. Final image and caption gates remain open.
