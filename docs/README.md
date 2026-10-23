@@ -4,6 +4,10 @@ Use this index to find the durable decision records without turning the reposito
 
 ## Start here
 
+- [24 October capability and publication status](showcase/EVIDENCE.md) — current public observations, local/staging evidence and source/deployment distinctions; historical records below retain their original scope.
+- [Product Showcase](showcase/README.md) — eight artifacts, editable sources, authentic screenshots and provenance.
+- [Video Academy](video-academy/README.md) — nine verified published modules, captions and separate final-demo archive status.
+
 - [Product overview and live Beta](../README.md) — problem, journey, current versus future scope, and demo links.
 - [Beta User Guide](https://movebooks-si.web.app/guide) and [guide review](reviews/user-guide.md) — getting started; Learn remains the concept-learning surface.
 - [V1 final acceptance](reviews/v1-final-acceptance.md) — GREEN for its exercised bounded synthetic scope.
@@ -69,7 +73,7 @@ Use this index to find the durable decision records without turning the reposito
 
 - The product constitution is authoritative for the full canonical journey. Shorter stage lists in current UI examples are illustrative subsets, not a conflicting lifecycle.
 - The architecture reference now makes the governed transformation stage explicit between the canonical model and target adapter; this clarifies the existing ports-and-adapters decision rather than introducing a new runtime layer.
-- The current scaffold has no production metrics instrumentation, support workflow, or reviewer runtime. These documents define governance and future contracts without claiming those capabilities are implemented.
+- Production outcome instrumentation and a submitted support workflow are not established. Reviewer implementations and bounded hosted evidence now exist; see the dated capability matrix above. Governance documents and historical reviews do not establish current deployment by themselves.
 
 ## Current delivery decision packages
 
