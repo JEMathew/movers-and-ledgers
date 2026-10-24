@@ -12,6 +12,13 @@ vi.mock("@/lib/identity", () => ({
   prepareGoogleIdentity: vi.fn(),
 }));
 const id = "11111111-1111-4111-8111-111111111111";
+// Keep the generation assertions scoped to POSTs; authenticated opening now reads history.
+function mockFetch(fetcher: (url: RequestInfo | URL, init?: RequestInit) => Promise<unknown>) {
+  vi.stubGlobal("fetch", (url: RequestInfo | URL, init?: RequestInit) => init?.method === "GET"
+    ? Promise.resolve({ ok: true, json: async () => ({ id, synthetic: true,
+      mappings: [{ id, source_id: "account-clearing" }], reasoning_records: [], review_records: [] }) } as Response)
+    : fetcher(url, init));
+}
 const record = {
   request_id: id,
   state: "FALLBACK", provider: "deterministic-fallback", model: null,
@@ -61,7 +68,7 @@ it.each([
 
 it("requires a click, sends explicit confirmation, and separates advisory results", async () => {
   const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => result });
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   render(<AssistedAnalysis mappingId={id} />);
   expect(fetcher).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
@@ -80,7 +87,7 @@ it("requires a click, sends explicit confirmation, and separates advisory result
 });
 
 it("labels genuine provider success separately from fallback without changing product status", async () => {
-  vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => ({
+  mockFetch(vi.fn().mockResolvedValue({ ok: true, json: async () => ({
     ...result, advisor: { ...result.advisor, state: "ESCALATED", model: "gemini-test-model", provider: "gemini-adk", failure_category: null },
   }) }));
   render(<AssistedAnalysis mappingId={id} />);
@@ -90,7 +97,7 @@ it("labels genuine provider success separately from fallback without changing pr
 });
 
 it("does not display either result after evidence changes", async () => {
-  vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => ({
+  mockFetch(vi.fn().mockResolvedValue({ ok: true, json: async () => ({
     ...result, advisor: { ...result.advisor, state: "UNAVAILABLE", advice: null },
     reviewer: { ...result.reviewer, state: "UNAVAILABLE", finding: null },
   }) }));
@@ -103,7 +110,7 @@ it("does not display either result after evidence changes", async () => {
 
 it("reuses request identity after uncertain failure and exposes safe recovery", async () => {
   const fetcher = vi.fn().mockRejectedValue(new Error("secret-canary"));
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   render(<AssistedAnalysis mappingId={id} />);
   fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
   expect(await screen.findByRole("alert")).toHaveTextContent("request human review");
@@ -116,7 +123,7 @@ it("reuses request identity after uncertain failure and exposes safe recovery", 
 it("discards an in-flight response when the workspace changes", async () => {
   let finish!: (value: unknown) => void;
   const fetcher = vi.fn(() => new Promise(resolve => { finish = resolve; }));
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   render(<AssistedAnalysis mappingId={id} />);
   fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
   await waitFor(() => expect(fetcher).toHaveBeenCalledTimes(1));
@@ -129,7 +136,7 @@ it("discards an in-flight response when the workspace changes", async () => {
 
 it("aborts the request on unmount", async () => {
   const fetcher = vi.fn(() => new Promise(() => {}));
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   const view = render(<AssistedAnalysis mappingId={id} />);
   fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
   await waitFor(() => expect(fetcher).toHaveBeenCalledTimes(1));
@@ -141,7 +148,7 @@ it("aborts the request on unmount", async () => {
 it("renders the recorded live pair without treating ACCEPT as mapping approval", async () => {
   const recorded = liveEvidence.evaluation.evidence_and_results;
   const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => recorded });
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   render(<AssistedAnalysis mappingId={recorded.reviewer.mapping_id} />);
   expect(fetcher).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
@@ -156,7 +163,7 @@ it("keeps the existing human decision controls separate from analysis", async ()
   vi.stubEnv("NEXT_PUBLIC_SYNTHETIC_ANALYSIS_ENABLED", "true");
   const decide = vi.fn(), reconsider = vi.fn(), runBulk = vi.fn();
   const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => result });
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   const mapping = {
     id, source_id: "account-clearing", source_label: "1200 · Misc Clearing",
     area: "chart_of_accounts", state: "REVIEW_REQUIRED", selected_target: "Other Current Asset",
@@ -179,7 +186,7 @@ it("keeps the existing human decision controls separate from analysis", async ()
 it.each(["REJECT", "QUESTION"] as const)("exposes reviewer %s without collapsing it into agreement", async outcome => {
   const value = structuredClone(result);
   value.reviewer!.finding!.recommendation_outcome = outcome;
-  vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => value }));
+  mockFetch(vi.fn().mockResolvedValue({ ok: true, json: async () => value }));
   render(<AssistedAnalysis mappingId={id} />);
   fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
   expect(await screen.findByText(new RegExp(`Recommendation assessment: ${outcome}`))).toBeVisible();
@@ -200,7 +207,7 @@ it.each(["empty", "empty-evidence", "authority", "wrong-mapping", "wrong-advisor
     }
     if (failure === "advisor-only-stale") Object.assign(value.advisor, { state: "UNAVAILABLE", advice: null });
     if (failure === "reviewer-only-stale") Object.assign(value.reviewer!, { state: "UNAVAILABLE", finding: null });
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => failure === "empty" ? {} : value }));
+    mockFetch(vi.fn().mockResolvedValue({ ok: true, json: async () => failure === "empty" ? {} : value }));
     render(<AssistedAnalysis mappingId={id} />);
     fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Analysis is unavailable");
@@ -211,7 +218,7 @@ it.each(["empty", "empty-evidence", "authority", "wrong-mapping", "wrong-advisor
 
 it("clears completed results when the selected mapping changes without invoking a model", async () => {
   const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => result });
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   const view = render(<AssistedAnalysis mappingId={id} />);
   fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
   await screen.findByRole("region", { name: "Advisor result" });
@@ -223,7 +230,7 @@ it("clears completed results when the selected mapping changes without invoking 
 
 it("does not reuse completed results or request IDs across workspace renders", async () => {
   const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => result });
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   const view = render(<AssistedAnalysis mappingId={id} />);
   fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
   await screen.findByRole("region", { name: "Advisor result" });
@@ -240,7 +247,7 @@ it("does not reuse completed results or request IDs across workspace renders", a
 it("aborts and discards an in-flight response when the selected mapping changes", async () => {
   let finish!: (value: unknown) => void;
   const fetcher = vi.fn(() => new Promise(resolve => { finish = resolve; }));
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   const view = render(<AssistedAnalysis mappingId={id} />);
   fireEvent.click(screen.getByRole("button", { name: "Run AI-Assisted Analysis" }));
   await waitFor(() => expect(fetcher).toHaveBeenCalledTimes(1));
@@ -277,7 +284,7 @@ function mockIdentity() {
 it("clears completed private results and retry identity on an account change without remount", async () => {
   const identity = mockIdentity();
   const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => result });
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   render(<AssistedAnalysis mappingId={id} />);
   await waitFor(() => expect(screen.getByRole("button")).toBeEnabled());
   expect(fetcher).not.toHaveBeenCalled();
@@ -287,6 +294,7 @@ it("clears completed private results and retry identity on an account change wit
   expect(screen.queryByRole("region", { name: "Advisor result" })).toBeNull();
   expect(screen.queryByRole("region", { name: "Reviewer result" })).toBeNull();
   expect(fetcher).toHaveBeenCalledTimes(1);
+  await waitFor(() => expect(screen.getByRole("button")).toBeEnabled());
   fireEvent.click(screen.getByRole("button"));
   await screen.findByRole("region", { name: "Advisor result" });
   expect(fetcher.mock.calls[0][1].body).not.toEqual(fetcher.mock.calls[1][1].body);
@@ -299,13 +307,14 @@ it("aborts an old account request and cannot clear the new account's active requ
   const identity = mockIdentity();
   const pending: ((value: unknown) => void)[] = [];
   const fetcher = vi.fn(() => new Promise(resolve => pending.push(resolve)));
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   render(<AssistedAnalysis mappingId={id} />);
   await waitFor(() => expect(screen.getByRole("button")).toBeEnabled());
   fireEvent.click(screen.getByRole("button"));
   await waitFor(() => expect(fetcher).toHaveBeenCalledTimes(1));
   act(() => identity.change("owner-b"));
   expect((fetcher.mock.calls as unknown as [string, RequestInit][])[0][1].signal?.aborted).toBe(true);
+  await waitFor(() => expect(screen.getByRole("button")).toBeEnabled());
   fireEvent.click(screen.getByRole("button"));
   await waitFor(() => expect(fetcher).toHaveBeenCalledTimes(2));
   await act(async () => pending[0]({ ok: true, json: async () => result }));
@@ -318,11 +327,11 @@ it("aborts an old account request and cannot clear the new account's active requ
 it("does not dispatch if the account changes while authorization headers are pending", async () => {
   const identity = mockIdentity();
   let finish!: (headers: Record<string, string>) => void;
-  vi.mocked(authHeaders).mockImplementation(() => new Promise(resolve => { finish = resolve; }));
   const fetcher = vi.fn();
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   render(<AssistedAnalysis mappingId={id} />);
   await waitFor(() => expect(screen.getByRole("button")).toBeEnabled());
+  vi.mocked(authHeaders).mockImplementation(() => new Promise(resolve => { finish = resolve; }));
   fireEvent.click(screen.getByRole("button"));
   // Simulate the interval before the existing Firebase subscription delivers its event.
   identity.change("owner-b", false);
@@ -333,7 +342,7 @@ it("does not dispatch if the account changes while authorization headers are pen
 it("keeps results on same-account token refresh without an extra analysis call", async () => {
   const identity = mockIdentity();
   const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => result });
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   const view = render(<AssistedAnalysis mappingId={id} />);
   await waitFor(() => expect(screen.getByRole("button")).toBeEnabled());
   fireEvent.click(screen.getByRole("button"));
@@ -349,7 +358,7 @@ it("fails closed when identity setup fails without exposing its error", async ()
   mockIdentity();
   vi.mocked(prepareGoogleIdentity).mockRejectedValue(new Error("private-auth-canary"));
   const fetcher = vi.fn();
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   render(<AssistedAnalysis mappingId={id} />);
   expect(await screen.findByRole("alert")).toHaveTextContent("sign-in could not be established");
   expect(screen.getByRole("button")).toBeDisabled();
@@ -371,7 +380,7 @@ it("prevents duplicate clicks while credentials are pending", async () => {
   let finish!: (headers: Record<string, string>) => void;
   vi.mocked(authHeaders).mockImplementation(() => new Promise(resolve => { finish = resolve; }));
   const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => result });
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   render(<AssistedAnalysis mappingId={id} />);
   fireEvent.click(screen.getByRole("button"));
   fireEvent.click(screen.getByRole("button"));
@@ -382,7 +391,7 @@ it("prevents duplicate clicks while credentials are pending", async () => {
 
 it.each([401, 403, 404, 409, 500])("keeps HTTP %s failures non-authoritative and does not auto-retry", async status => {
   const fetcher = vi.fn().mockResolvedValue({ ok: false, status, json: async () => result });
-  vi.stubGlobal("fetch", fetcher);
+  mockFetch(fetcher);
   render(<AssistedAnalysis mappingId={id} />);
   fireEvent.click(screen.getByRole("button"));
   expect(await screen.findByRole("alert")).toHaveTextContent("Analysis is unavailable");

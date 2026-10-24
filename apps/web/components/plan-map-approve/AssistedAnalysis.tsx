@@ -5,6 +5,7 @@ import { authHeaders, cloudIdentity, prepareGoogleIdentity } from "@/lib/identit
 import { isSessionId } from "@/components/public-surfaces/session";
 import { Button } from "@/components/ui/primitives";
 import { parseAnalysis, type Analysis, type RecordBase } from "./analysis-contract";
+import { savedAnalysis } from "./saved-analysis";
 export type { Analysis } from "./analysis-contract";
 
 function provenance(record: RecordBase) {
@@ -39,9 +40,12 @@ export function AssistedAnalysis({ mappingId }: { mappingId: string }) {
 function AnalysisPanel({ mappingId }: { mappingId: string }) {
   const [result, setResult] = useState<Analysis>();
   const [busy, setBusy] = useState(false);
+  const [restoring, setRestoring] = useState(false);
+  const [historical, setHistorical] = useState(false);
   const [error, setError] = useState("");
   const requestId = useRef<string | null>(null);
   const active = useRef<AbortController | null>(null);
+  const historyRead = useRef<AbortController | null>(null);
   const identityRevision = useRef(0);
   const identityCurrent = useRef<() => boolean>(() => !cloudIdentity());
   const [identityReady, setIdentityReady] = useState(() => !cloudIdentity());
@@ -50,14 +54,49 @@ function AnalysisPanel({ mappingId }: { mappingId: string }) {
     let unsubscribe: (() => void) | undefined;
     let subject: string | null | undefined;
     identityCurrent.current = () => !cloudIdentity();
+    async function restore(subject: string) {
+      const controller = new AbortController();
+      historyRead.current = controller;
+      setRestoring(true);
+      const session = new URLSearchParams(window.location.search).get("session") ?? "";
+      const revision = identityRevision.current;
+      const current = () => !disposed && !controller.signal.aborted && identityRevision.current === revision &&
+        identityCurrent.current() && new URLSearchParams(window.location.search).get("session") === session;
+      const deadline = window.setTimeout(() => controller.abort(), 65_000);
+      try {
+        if (!isSessionId(session)) throw new Error("workspace");
+        const headers = await authHeaders();
+        if (!current()) return;
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"}/v1/migration-sessions/${session}`, {
+          method: "GET", headers, cache: "no-store", redirect: "error", signal: controller.signal,
+        });
+        if (!response.ok) throw new Error("unavailable");
+        const body: unknown = await response.json();
+        if (!current()) return;
+        const restored = savedAnalysis(body, session, mappingId, subject);
+        setResult(restored); setHistorical(Boolean(restored));
+      } catch {
+        if (!disposed && identityRevision.current === revision && identityCurrent.current() &&
+          new URLSearchParams(window.location.search).get("session") === session) {
+          setError("Saved analysis could not be verified. No model was called. Reopen this mapping to retry the read, or request human review.");
+        }
+      } finally {
+        window.clearTimeout(deadline);
+        if (historyRead.current === controller) { historyRead.current = null; setRestoring(false); }
+      }
+    }
     if (cloudIdentity()) {
       void prepareGoogleIdentity().then(runtime => {
         if (disposed) return;
         unsubscribe = runtime.subscribe(user => {
           if (disposed) return;
           const next = user?.uid ?? null;
-          if (subject !== next) {
+          const changed = subject !== next;
+          if (changed) {
             identityRevision.current += 1;
+            historyRead.current?.abort();
+            historyRead.current = null;
+            setRestoring(false); setHistorical(false);
             active.current?.abort();
             active.current = null;
             requestId.current = null;
@@ -67,6 +106,7 @@ function AnalysisPanel({ mappingId }: { mappingId: string }) {
           // Check the runtime again after every await, even before its callback fires.
           identityCurrent.current = () => next !== null && runtime.auth.currentUser?.uid === next;
           setIdentityReady(next !== null);
+          if (changed && next !== null) void restore(`firebase:${next}`);
         });
       }).catch(() => {
         if (disposed) return;
@@ -80,16 +120,18 @@ function AnalysisPanel({ mappingId }: { mappingId: string }) {
       unsubscribe?.();
       identityRevision.current += 1;
       identityCurrent.current = () => false;
+      historyRead.current?.abort();
+      historyRead.current = null;
       active.current?.abort();
       active.current = null;
     };
-  }, []);
+  }, [mappingId]);
 
   async function analyze() {
-    if (active.current || !identityCurrent.current()) return;
+    if (active.current || historyRead.current || !identityCurrent.current()) return;
     const controller = new AbortController();
     active.current = controller;
-    setBusy(true); setError(""); setResult(undefined);
+    setBusy(true); setError(""); setResult(undefined); setHistorical(false);
     const session = new URLSearchParams(window.location.search).get("session") ?? "";
     const revision = identityRevision.current;
     const current = () => identityRevision.current === revision && identityCurrent.current() &&
@@ -125,15 +167,16 @@ function AnalysisPanel({ mappingId }: { mappingId: string }) {
   const stale = result?.advisor.state === "UNAVAILABLE" || result?.reviewer?.state === "UNAVAILABLE";
   const advice = !stale && result?.advisor.advice;
   const finding = !stale && result?.reviewer?.finding;
-  return <section className="pm-independent space-y-3 text-sm" aria-label="Synthetic AI-assisted analysis" aria-busy={busy}>
+  return <section className="pm-independent space-y-3 text-sm" aria-label="Synthetic AI-assisted analysis" aria-busy={busy || restoring}>
     <h5 className="font-semibold">AI-Assisted Analysis · synthetic preview</h5>
     <p>Analyze only 1200 · Misc Clearing and its proposed destination. The Advisor explains the evidence; a separate Reviewer checks that recommendation against the source facts.</p>
     <p>No balances, uploaded records, or customer data are sent. Live Gemini requires operator authorization; otherwise this uses deterministic fallback.</p>
-    <Button size="small" variant="secondary" disabled={busy || !identityReady} onClick={() => void analyze()}>
+    <Button size="small" variant="secondary" disabled={busy || restoring || !identityReady} onClick={() => void analyze()}>
       {busy ? "Analyzing and reviewing…" : "Run AI-Assisted Analysis"}
     </Button>
-    <p role="status">{!identityReady ? "Analysis requires the current signed-in account." : busy ? "Advisor analysis, then independent review. This can take up to two minutes." : stale ? "Evidence changed — both results are unavailable. Reopen the current mapping." : result ? "Analysis finished. Your approval is still required." : "Nothing is sent until you request analysis."}</p>
+    <p role="status">{!identityReady ? "Analysis requires the current signed-in account." : restoring ? "Reading saved analysis. No model is called." : busy ? "Advisor analysis, then independent review. This can take up to two minutes." : stale ? "Evidence changed — both results are unavailable. Reopen the current mapping." : historical ? "Historical analysis restored. No model was called. Your approval is still required." : result ? "Analysis finished. Your approval is still required." : "Nothing is sent until you request analysis."}</p>
     {error && <p role="alert">{error}</p>}
+    {historical && <p>Historical results · recorded {result?.advisor.requested_at}. These explain the saved evidence snapshot and may not reflect later mapping changes. They do not approve the current mapping.</p>}
     {advice && result && <section aria-label="Advisor result" className="space-y-2">
       <h6 className="font-semibold">Advisor</h6>
       <p>{provenance(result.advisor)}</p>

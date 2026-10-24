@@ -20,7 +20,7 @@ describe("customer-facing label casing", () => {
     // The approved V2 landing design sets header labels in title case; they are fixed, not free-form copy.
     expect(publicLinks.map(([label]) => label)).toEqual(["Learn", "Trust and Security", "Play"]);
     expect(memberLinks.map(([label]) => label)).toEqual(["My Migration", "Explore Demo", "Learn", "Trust and Security", "Play"]);
-    expect(footerLinks.map(([label]) => label)).toEqual(["Contact"]);
+    expect(footerLinks.map(([label]) => label)).toEqual(["Privacy", "Terms", "Contact"]);
   });
   it("uses sentence case for journey steps and every next action", () => {
     const labels = [
@@ -109,7 +109,11 @@ describe("Workstream B screens label casing", () => {
     });
     expect(labels.length).toBeGreaterThan(40);
     // "My migration" is the name of a place in the product, like a stage name.
-    expect(labels.filter(label => !sentenceCase(label.replace(/[?.:]$/, "").replace(/ ·.*$/, "").replace(/ My migration\b/, " my migration")))).toEqual([]);
+    // Preserve the exact approved Gemini panel labels (5515ee1 / P0-04 scope).
+    // Validate them explicitly; retain the general sentence-case rule everywhere else.
+    const analysisLabels = ["AI-Assisted Analysis · synthetic preview", "Synthetic AI-assisted analysis"];
+    expect(labels.filter(label => analysisLabels.includes(label)).sort()).toEqual([...analysisLabels].sort());
+    expect(labels.filter(label => !analysisLabels.includes(label)).filter(label => !sentenceCase(label.replace(/[?.:]$/, "").replace(/ ·.*$/, "").replace(/ My migration\b/, " my migration")))).toEqual([]);
   });
 });
 

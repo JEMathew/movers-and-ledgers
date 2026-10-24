@@ -48,13 +48,15 @@ describe("legacy /approvals and /reports routes", () => {
 });
 
 describe("footer", () => {
-  it("is the minimal legal footer: copyright and Contact only, with no brand or attribution repeat", () => {
+  it("preserves the approved Privacy, Terms and Contact footer without repeated attribution", () => {
     render(<Footer />);
     const footer = screen.getByRole("navigation", { name: "Footer" });
-    expect(within(footer).getAllByRole("link").map(link => [link.textContent, link.getAttribute("href")])).toEqual([["Contact", "/support"]]);
+    expect(within(footer).getAllByRole("link").map(link => [link.textContent, link.getAttribute("href")])).toEqual([["Privacy", "/privacy"], ["Terms", "/terms"], ["Contact", "/support"]]);
     expect(screen.getByText("© 2026 Movers & Ledgers")).toBeInTheDocument();
     expect(screen.getByRole("contentinfo")).not.toHaveTextContent(/MoveBooks AI|Google Cloud|Gemini/);
-    // Privacy and Terms stay out until owner-reviewed documents exist; no invented legal pages.
-    expect(screen.queryByRole("link", { name: /Privacy|Terms/ })).not.toBeInTheDocument();
+    // Approved disclosure checkpoint 3a717cc is included in production 5515ee1.
+    for (const route of ["privacy", "terms"]) {
+      expect(existsSync(join(process.cwd(), "app", route, "page.tsx"))).toBe(true);
+    }
   });
 });
