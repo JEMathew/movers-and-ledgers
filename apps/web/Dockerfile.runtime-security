@@ -1,0 +1,20 @@
+# Runtime-only overlay: restore the approved parent from its verified OCI archive.
+# Its index contains linux/amd64 manifest e10a3c555ace95ba3efb13ec79a279d0df2162f25e37633d51568a4566849cb3.
+FROM node:22.23.4-bookworm-slim@sha256:ea11b74b986d520137cdef9a5346e447a00f275ecc4abc0055b7151226231e09 AS node_release
+FROM movebooks-p0-04:saved-results-next15528@sha256:f8e19ce2dc1494e5cc29943a5457f78e9bcfdfd47aa41ceab8ae3d86e6d40b5b
+
+USER 0:0
+# Preserve the eight existing automatic dependencies before removing the old APK.
+# Exact pins prevent unrelated runtime upgrades; only Brotli changes version.
+RUN apk add --no-cache \
+      c-ares=1.34.8-r4 libicu78=78.3-r4 icu78-data-full=78.3-r4 \
+      libssl3=3.6.5-r5 libcrypto3=3.6.5-r5 libnghttp2-14=1.70.0-r5 \
+      libstdc++=16.2.0-r1 libuv=1.53.0-r0 \
+      libbrotlicommon1=1.2.0-r7 libbrotlidec1=1.2.0-r7 libbrotlienc1=1.2.0-r7 \
+    && apk del --no-network nodejs-22-minimal
+COPY --from=node_release /usr/local/bin/node /usr/bin/node
+COPY --from=node_release /usr/local/LICENSE /usr/share/licenses/node/LICENSE
+RUN echo '94efd062ed066c1a0b332e18249859c905e920eeada5df55d24c99b919629a90  /usr/bin/node' | sha256sum -c - \
+    && echo 'c738ae413cf561f174e34f6961f8ca458aae2369a73640dda6234c629b98bcc4  /usr/share/licenses/node/LICENSE' | sha256sum -c - \
+    && test "$(node --version)" = v22.23.4
+USER 65532:65532
