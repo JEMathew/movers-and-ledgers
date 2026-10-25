@@ -1,0 +1,242 @@
+{
+  "reviewDateIST": "2026-10-25",
+  "publication": "Original 24-file refresh published in PR #40; current documentation-only acceptance update is local pending owner approval to push.",
+  "originalAssetRevision": "2026-10-18; hashes identify untracked source files, inspected worktree HEAD is context only",
+  "files": [
+    {
+      "path": "docs/showcase/assets/01-process.pptx",
+      "sourceRelativePath": "docs/presentations/01-movebooks-end-to-end-process.pptx",
+      "sourceWorkstream": "delivery/submission-integration",
+      "inspectedHead": "aacd3a50409bb2ea3e95329405e3871669cb7572",
+      "sourceTracked": false,
+      "bytes": 35238,
+      "sha256": "feae906de302f4bba93bf761d1b1cc2399565c26660f6403c727d8e8363c8d4e"
+    },
+    {
+      "path": "docs/showcase/assets/01-process.png",
+      "sourceRelativePath": "docs/presentations/01-movebooks-end-to-end-process.png",
+      "sourceWorkstream": "delivery/submission-integration",
+      "inspectedHead": "aacd3a50409bb2ea3e95329405e3871669cb7572",
+      "sourceTracked": false,
+      "bytes": 408044,
+      "sha256": "43baffaabeb7557743094724a066460a4fa8012d8bf69803f8065a682cf274ea"
+    },
+    {
+      "path": "docs/showcase/assets/02-use-cases.pptx",
+      "sourceRelativePath": "docs/presentations/02-movebooks-use-case-diagram.pptx",
+      "sourceWorkstream": "delivery/submission-integration",
+      "inspectedHead": "aacd3a50409bb2ea3e95329405e3871669cb7572",
+      "sourceTracked": false,
+      "bytes": 32918,
+      "sha256": "845ed617843e1c44100d09e72c80f39e069df9322626e42c1b90e8ed9360a2fa"
+    },
+    {
+      "path": "docs/showcase/assets/02-use-cases.png",
+      "sourceRelativePath": "docs/presentations/02-movebooks-use-case-diagram.png",
+      "sourceWorkstream": "delivery/submission-integration",
+      "inspectedHead": "aacd3a50409bb2ea3e95329405e3871669cb7572",
+      "sourceTracked": false,
+      "bytes": 456615,
+      "sha256": "90a857d252ed8c943270bb17a7b6ace89e1e715476063ea97a5c54f606a58126"
+    },
+    {
+      "path": "docs/showcase/assets/03-swimlane.pptx",
+      "sourceRelativePath": "docs/presentations/03-movebooks-multiagent-swimlane.pptx",
+      "sourceWorkstream": "delivery/submission-integration",
+      "inspectedHead": "aacd3a50409bb2ea3e95329405e3871669cb7572",
+      "sourceTracked": false,
+      "bytes": 38821,
+      "sha256": "f3ef32ec79ae43e2de1f870309619adda180416c3bf3c4278701d2d8bc538b3e"
+    },
+    {
+      "path": "docs/showcase/assets/03-swimlane.png",
+      "sourceRelativePath": "docs/presentations/03-movebooks-multiagent-swimlane.png",
+      "sourceWorkstream": "delivery/submission-integration",
+      "inspectedHead": "aacd3a50409bb2ea3e95329405e3871669cb7572",
+      "sourceTracked": false,
+      "bytes": 423773,
+      "sha256": "75d84abab90519f4c9d950cdc88cc3ab2df1bb7a9346e63be9278d206bac69d4"
+    },
+    {
+      "path": "docs/showcase/assets/04-wireframes.pptx",
+      "sourceRelativePath": "docs/presentations/04-movebooks-solution-wireframes.pptx",
+      "sourceWorkstream": "delivery/submission-integration",
+      "inspectedHead": "aacd3a50409bb2ea3e95329405e3871669cb7572",
+      "sourceTracked": false,
+      "bytes": 81989,
+      "sha256": "fba287f52f04086515fcaf85e2e02f662f55e0fb5757a7d8e7587368af22e4ca"
+    },
+    {
+      "path": "docs/showcase/assets/04-wireframes.png",
+      "sourceRelativePath": "docs/presentations/04-movebooks-wireframes-overview.png",
+      "sourceWorkstream": "delivery/submission-integration",
+      "inspectedHead": "aacd3a50409bb2ea3e95329405e3871669cb7572",
+      "sourceTracked": false,
+      "bytes": 2014384,
+      "sha256": "15067baa5300e91f8751fdb0d768183498b5c754441dfaa23d014b20e6ef00dc"
+    },
+    {
+      "path": "docs/showcase/assets/05-prototype.pptx",
+      "sourceRelativePath": "docs/submission/prototype-snapshots/movebooks-prototype-showcase.pptx",
+      "sourceWorkstream": "delivery/submission-integration",
+      "inspectedHead": "aacd3a50409bb2ea3e95329405e3871669cb7572",
+      "sourceTracked": false,
+      "bytes": 2125311,
+      "sha256": "6aacbc42e9361248e7974351b7765e4591c8dd561dfbdc2688c8ef9efb4c362c"
+    },
+    {
+      "path": "docs/showcase/assets/05-prototype.png",
+      "sourceRelativePath": "docs/submission/prototype-snapshots/movebooks-prototype-overview.png",
+      "sourceWorkstream": "delivery/submission-integration",
+      "inspectedHead": "aacd3a50409bb2ea3e95329405e3871669cb7572",
+      "sourceTracked": false,
+      "bytes": 856203,
+      "sha256": "ffb544a498dc920b2039c4005115fee7174d68465d3d7c42fe27f2ba254aeb56"
+    },
+    {
+      "path": "docs/showcase/assets/07-technology.pptx",
+      "sourceRelativePath": "docs/submission/technology-stack/movebooks-technology-stack.pptx",
+      "sourceWorkstream": "delivery/submission-integration",
+      "inspectedHead": "aacd3a50409bb2ea3e95329405e3871669cb7572",
+      "sourceTracked": false,
+      "bytes": 57962,
+      "sha256": "7a4f329d5c3145acdcfda351930611e796f41ec5f3749767b1e462de0ff15967"
+    },
+    {
+      "path": "docs/showcase/assets/07-technology.png",
+      "sourceRelativePath": "docs/submission/technology-stack/movebooks-technology-stack.png",
+      "sourceWorkstream": "delivery/submission-integration",
+      "inspectedHead": "aacd3a50409bb2ea3e95329405e3871669cb7572",
+      "sourceTracked": false,
+      "bytes": 418464,
+      "sha256": "7dcec2d632f1b1e4525b992a437028b5d33a2472f281a97873ebfc8147fd0310"
+    },
+    {
+      "path": "docs/showcase/assets/08-roadmap.pptx",
+      "sourceRelativePath": "docs/submission/future-development/movebooks-future-development-roadmap.pptx",
+      "sourceWorkstream": "delivery/submission-integration",
+      "inspectedHead": "aacd3a50409bb2ea3e95329405e3871669cb7572",
+      "sourceTracked": false,
+      "bytes": 60412,
+      "sha256": "a502f2acdfc94e561a5ac04906f5280b0ecf178b79210ec203d959e1665908d2"
+    },
+    {
+      "path": "docs/showcase/assets/08-roadmap.png",
+      "sourceRelativePath": "docs/submission/future-development/movebooks-now-next-later-roadmap.png",
+      "sourceWorkstream": "delivery/submission-integration",
+      "inspectedHead": "aacd3a50409bb2ea3e95329405e3871669cb7572",
+      "sourceTracked": false,
+      "bytes": 453834,
+      "sha256": "cd0c5604afcd21ea3822038ac0547739a2b001f879440f30deb09269c628c94c"
+    },
+    {
+      "path": "docs/architecture-experience/png/c4-container.png",
+      "source": "existing main 54f1b3f; reused without modification",
+      "bytes": 120836,
+      "sha256": "7f4e75ad6f8a2dd13625b833fda24e331e39e38f6d49c22aa97be5082026b292"
+    },
+    {
+      "path": "docs/architecture-experience/source/c4-container.mmd",
+      "source": "existing main 54f1b3f; reused without modification",
+      "bytes": 761,
+      "sha256": "654c92230637c81d1831fab09b553844c30348063adea43389b1bc86f584f0fd"
+    },
+    {
+      "path": "docs/architecture-experience/svg/c4-container.svg",
+      "source": "existing main 54f1b3f; reused without modification",
+      "bytes": 9977,
+      "sha256": "e27a6d76487771ce26bb2027c3db78243298a1bfd89b3513e5c06a838a407062"
+    },
+    {
+      "path": "docs/showcase/assets/demo-public-20261024.jpg",
+      "source": "unaltered signed-out public browser screenshot",
+      "captureDateIST": "2026-10-24",
+      "viewport": "1280x720",
+      "url": "https://movebooks-si.web.app/simulator",
+      "bytes": 55862,
+      "sha256": "4d520d47c5b4c74a16a083555f9f3deac42320fcaeef06d1f2a835eb9dd76289"
+    },
+    {
+      "path": "docs/showcase/assets/product-public-20261024.jpg",
+      "source": "unaltered signed-out public browser screenshot",
+      "captureDateIST": "2026-10-24",
+      "viewport": "1280x720",
+      "url": "https://movebooks-si.web.app/",
+      "bytes": 114398,
+      "sha256": "f738414609061902725444f236947d58d5d0b03ee07f2cbccbf5811ffa2c5e9f"
+    },
+    {
+      "path": "docs/showcase/assets/academy-public-20261024.jpg",
+      "source": "unaltered signed-out public browser screenshot",
+      "captureDateIST": "2026-10-24",
+      "viewport": "1280x720",
+      "url": "https://movebooks-si.web.app/learn",
+      "bytes": 72171,
+      "sha256": "4ce2b5c11eb6ff0220bfceab21c3607221e69894891d5b8ba698c84b5abe949d"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "01",
+      "title": "End-to-end process",
+      "evidenceStatus": "C \u2014 locally demonstrated synthetic process",
+      "preview": "assets/01-process.png",
+      "editable": "assets/01-process.pptx"
+    },
+    {
+      "id": "02",
+      "title": "Use-case diagram",
+      "evidenceStatus": "C \u2014 synthetic implementation; D \u2014 target personas/connectors",
+      "preview": "assets/02-use-cases.png",
+      "editable": "assets/02-use-cases.pptx"
+    },
+    {
+      "id": "03",
+      "title": "Multi-agent swimlane",
+      "evidenceStatus": "C \u2014 deterministic roles; D \u2014 model-led delegation",
+      "preview": "assets/03-swimlane.png",
+      "editable": "assets/03-swimlane.pptx"
+    },
+    {
+      "id": "04",
+      "title": "Solution wireframes",
+      "evidenceStatus": "D \u2014 proposed layouts, grounded in C \u2014 synthetic behavior",
+      "preview": "assets/04-wireframes.png",
+      "editable": "assets/04-wireframes.pptx"
+    },
+    {
+      "id": "05",
+      "title": "Prototype showcase",
+      "evidenceStatus": "C \u2014 genuine local UI, synthetic records",
+      "preview": "assets/05-prototype.png",
+      "editable": "assets/05-prototype.pptx"
+    },
+    {
+      "id": "06",
+      "title": "Solution architecture",
+      "evidenceStatus": "C \u2014 source architecture; historical deployment boundaries",
+      "preview": "../architecture-experience/png/c4-container.png",
+      "editable": "../architecture-experience/source/c4-container.mmd"
+    },
+    {
+      "id": "07",
+      "title": "Technology stack",
+      "evidenceStatus": "Historical implementation snapshot; D \u2014 explicitly proposed services",
+      "preview": "assets/07-technology.png",
+      "editable": "assets/07-technology.pptx"
+    },
+    {
+      "id": "08",
+      "title": "Future development roadmap",
+      "evidenceStatus": "D \u2014 planned; no delivery-date commitment",
+      "preview": "assets/08-roadmap.png",
+      "editable": "assets/08-roadmap.pptx"
+    }
+  ],
+  "acceptanceEvidence": {
+    "path": "docs/showcase/EVIDENCE.md",
+    "productionVisualSource": "Owner-reported authenticated production screenshot verification, 2026-10-25; images not attached to this update.",
+    "publicScreenshotCaptureDateIST": "2026-10-24",
+    "originalAssetsUnchanged": true
+  }
+}

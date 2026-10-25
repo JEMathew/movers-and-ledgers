@@ -4,6 +4,10 @@ Use this index to find the durable decision records without turning the reposito
 
 ## Start here
 
+- [25 October MVP acceptance and publication status](showcase/EVIDENCE.md) — four accepted functional P0s, owner-verified production Gemini restoration, prior server evidence and open security limits; historical records below retain their original scope.
+- [Product Showcase](showcase/README.md) — eight artifacts, editable sources, authentic screenshots and provenance.
+- [Video Academy](video-academy/README.md) — nine verified published modules, captions and separate final-demo archive status.
+
 - [Product overview and live Beta](../README.md) — problem, journey, current versus future scope, and demo links.
 - [Beta User Guide](https://movebooks-si.web.app/guide) and [guide review](reviews/user-guide.md) — getting started; Learn remains the concept-learning surface.
 - [V1 final acceptance](reviews/v1-final-acceptance.md) — GREEN for its exercised bounded synthetic scope.
@@ -24,8 +28,8 @@ Use this index to find the durable decision records without turning the reposito
 ## AI, trust, and evaluation
 
 - [Gemini / ADK advisory architecture](architecture/live-gemini-adk.md) and
-  [validation/review record](reviews/live-gemini-adk.md) — bounded synthetic advisory reasoning
-  validated live in dev/test; public-Beta deterministic routing and managed-runtime limits remain separate.
+  [validation/review record](reviews/live-gemini-adk.md) — historical bounded synthetic advisory reasoning
+  design and dev/test validation; the current accepted production scope is in the [MVP receipt](showcase/EVIDENCE.md).
 
 - [AI and agent constitution](AI_AGENT_CONSTITUTION.md) — responsibility boundaries, evidence, approvals, safe stops, and prohibited actions.
 - [Trust and agent operations](TRUST.md) — trace and control baseline.
@@ -69,7 +73,7 @@ Use this index to find the durable decision records without turning the reposito
 
 - The product constitution is authoritative for the full canonical journey. Shorter stage lists in current UI examples are illustrative subsets, not a conflicting lifecycle.
 - The architecture reference now makes the governed transformation stage explicit between the canonical model and target adapter; this clarifies the existing ports-and-adapters decision rather than introducing a new runtime layer.
-- The current scaffold has no production metrics instrumentation, support workflow, or reviewer runtime. These documents define governance and future contracts without claiming those capabilities are implemented.
+- Production outcome instrumentation and a submitted support workflow are not established. Reviewer implementations and bounded hosted evidence now exist; see the dated capability matrix above. Governance documents and historical reviews do not establish current deployment by themselves.
 
 ## Current delivery decision packages
 

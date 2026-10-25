@@ -2,245 +2,145 @@
 
 **Move your books. Keep your confidence.**
 
-Provider-neutral, AI-assisted accounting migration and onboarding: understand your books,
-review key decisions, and verify the result with deterministic financial controls and human approvals.
+MoveBooks AI guides a synthetic accounting migration from readiness and mapping review to
+reconciliation and **Verified First Productive Use**. Gemini explains uncertain mappings; an
+independent Reviewer challenges the recommendation. Humans approve consequential decisions,
+and deterministic checks remain authoritative.
 
-[**Launch MoveBooks AI →**](https://movebooks-si.web.app)
+**Non-commercial MVP for approved hackathon judges and interview panelists.** All four agreed
+functional P0 requirements have passed acceptance. This is not commercial production readiness,
+a real accounting-provider integration or an unrestricted AI service.
 
-[Getting Started Guide](https://movebooks-si.web.app/guide) ·
-[Product Vision](https://movebooks-si.web.app/#product-vision) ·
-[Technical documentation](docs/README.md)
+[**Launch MoveBooks AI**](https://movebooks-si.web.app/) ·
+[**Explore the read-only demo**](https://movebooks-si.web.app/simulator) ·
+[**Watch Three-Minute Journey · 2:49**](https://movebooks-si.web.app/learn?tab=videos#lesson-09)
 
-**V1.0 — Bounded Synthetic Public Beta.** Use synthetic scenarios only.
-**Do not enter real customer or production provider data.** No live provider integrations or production readiness claim.
+[Eight-artifact showcase](docs/showcase/README.md) · [Nine-video Academy](docs/video-academy/README.md) ·
+[Acceptance and evidence](docs/showcase/EVIDENCE.md) · [Developer setup](#developer-setup)
 
-MoveBooks AI is an independent, provider-neutral product concept from **Movers & Ledgers**.
-It does not represent or disclose the internal products, architecture, APIs, roadmap or
-implementation of Intuit, QuickBooks or any other accounting provider.
+[![Genuine public guided demo showing Prepare and sample mapping evidence, captured 24 October 2026](docs/showcase/assets/demo-public-20261024.jpg)](https://movebooks-si.web.app/simulator)
 
-[![Current MoveBooks AI public Beta landing page with its tagline, synthetic-data notice and Start My Migration action](docs/assets/movebooks-live-beta.jpg)](https://movebooks-si.web.app)
+*Public signed-out capture, 24 October 2026 IST: sample demo evidence, not an executed migration
+or a Gemini output. [Screenshot provenance](docs/showcase/README.md#05-prototype-showcase).*
 
-*Working Beta: genuine capture of the public landing page on 10 October 2026.
-The journey graphic on that page is an overview, not live migration progress.
-[Capture details](docs/assets/README.md).*
+## A three-minute review
 
-Explore this repository: [Getting started](#getting-started) · [Migration journey](#migration-journey) ·
-[Beta boundaries](#differentiation-and-beta-boundaries) · [Architecture](#agentic-ai-and-architecture) ·
-[Trust and evaluations](#trust-governance-and-evaluations) · [Developer setup](#developer-setup) ·
-[Release evidence](#documentation-and-release-evidence)
+1. **See the journey:** explore the public demo or captioned walkthrough above. Neither requires a model call.
+2. **Inspect the working MVP:** approved accounts use [My Migration](https://movebooks-si.web.app/workspace).
+   Existing saved analysis can be reopened without running Gemini. Access remains restricted.
+3. **Understand the decisions:** review the [eight showcase artifacts](docs/showcase/README.md),
+   [architecture](docs/architecture/beta-v1-agent-architecture.md) and [dated acceptance receipt](docs/showcase/EVIDENCE.md#four-p0-acceptance).
 
-## Getting started
+The customer problem is the handover after import: **Did the right records move? Do the numbers
+reconcile? Can the business start working?** This synthetic MVP demonstrates a completion contract,
+not measured customer savings or adoption. The [North Star](docs/METRICS_FRAMEWORK.md) is the share
+of eligible journeys reaching Verified First Productive Use.
 
-For business owners and finance operators, supported by accountants and migration
-specialists: understand, prepare for, execute, validate and adopt an accounting migration
-while keeping consequential financial decisions governed and verifiable.
+## Five stages, one completion contract
 
-1. [Launch the public Beta](https://movebooks-si.web.app) and explore the public experiences without signing in.
-2. Follow the [Getting Started Guide](https://movebooks-si.web.app/guide) to rehearse with **Harbor Light Books**, a synthetic sample business.
-3. Use Google sign-in for an owner-scoped workspace, then review and approve each consequential decision through the five-stage journey.
-
-Hosted **Try Your Data uploads are disabled**. The public deployment uses deterministic-only
-reasoning; bounded live Gemini/ADK advisory validation is separate from deployment activation.
-
-### Product Family
-
-| Experience | Purpose |
-| --- | --- |
-| **MoveBooks AI Product** | Complete a governed migration and onboarding journey. |
-| **MoveBooks AI Simulator** | Rehearse using synthetic accounting environments. |
-| **MoveBooks AI Play** | Learn by experimenting with migration concepts and decisions; not yet a 2D game. |
-
-**Learn** teaches concepts; **Guide** explains getting started and how-to tasks;
-**Trust** makes controls/evidence inspectable. Feedback is a local draft, not a submitted
-support ticket. [Surface boundaries](docs/architecture/public-product-surfaces.md).
-
-## Migration journey
-
-Accounting migrations leave teams asking both **“Did the data move correctly?”** and
-**“Can we operate confidently now?”**
-
-- Fragmented accounting data across spreadsheets, legacy tools and inconsistent formats.
-- Incomplete, duplicated or incompatible records that obscure migration readiness.
-- Manual mapping and cleanup that consume expert time.
-- Migration and reconciliation risk when transfer success is mistaken for correctness.
-- Disconnected migration and onboarding, with no clear proof of business readiness.
-
-Migration should end at productive use, not file transfer. MoveBooks connects the
-full journey through five customer-facing phases:
-
-**UNDERSTAND → PREPARE → MOVE → VERIFY → START**
-
-Discover → Assess → Plan → Map & Approve → Migrate → Resolve → Validate → Configure
-→ Onboard → **Verified First Productive Use**
-
-Completion means an authorized user performs an agreed productive task after required
-controls pass. In this Beta, that proof is a synthetic invoice with exact financial
-verification—not a claim that a real business has been migrated.
-See the [product constitution](docs/PRODUCT_CONSTITUTION.md) and
-[First Productive Use contract](docs/architecture/onboard-fpu.md).
-
-<details>
-<summary>Conceptual journey overview and Product Vision</summary>
-
-![Conceptual MoveBooks AI journey and trust overview: Understand → Prepare → Move → Verify → Start](docs/assets/movebooks-product-overview.svg)
-
-**Conceptual overview diagram, not a product screenshot.**
-[Editable overview](docs/assets/movebooks-product-overview.svg) ·
-[High-resolution PNG for presentations](docs/assets/movebooks-product-overview.png).
-On mobile, open the image to zoom; the journey and trust model are also described above.
-
-[![Conceptual MoveBooks AI Product Vision artwork — watch the 25-second narrated film](apps/web/public/media/movebooks-ai-product-vision-poster.webp)](https://movebooks-si.web.app/#product-vision)
-
-Watch the 25-second narrated MoveBooks AI product vision.
-
-**Product Vision** illustrates the intended customer experience and product direction.
-**Live Beta** is the currently implemented and validated experience. A **Demo** would be an
-actual product-screen walkthrough; this film is not one and does not imply every depicted
-screen or provider connection is implemented.
-
-</details>
-
-## Differentiation and Beta boundaries
-
-1. **Productive use is the outcome.** Migration, setup and onboarding share one completion contract.
-2. **Financial truth is deterministic.** Rules—not generated prose—verify balances and reconciliation.
-3. **Humans govern consequential decisions.** Recommendations cannot approve themselves.
-4. **Evidence-aware advice.** Recommendations expose references, uncertainty and escalation.
-5. **Recovery is part of the journey.** Checkpoints, bounded retries and explicit reconsideration preserve prior decisions and audit history.
-6. **Provider-neutral boundaries.** Source/target adapters separate accounting concepts from providers; real integrations remain future work.
-
-No production customer data, real provider integrations, autonomous financial writes or
-production/compliance readiness are claimed. Local test exports stay controlled and de-identified;
-all target operations remain synthetic. [Beta limitations](https://movebooks-si.web.app/guide#limitations).
-
-<details>
-<summary>Current V1 capability scope and future direction</summary>
-
-Future direction is not a delivery commitment or an implemented integration.
-
-| Capability | V1.0 bounded Beta / validated source | Future direction |
+| Stage | User outcome | Safeguard |
 | --- | --- | --- |
-| Discover / Assess | Synthetic inventory, evidence and readiness rules | Broader connectors and discovery |
-| Planning | Versioned plans, dependencies and checkpoints | Richer scenario optimization |
-| Mapping | Evidence-backed proposals, human review and audit-preserving reconsideration | Provider-specific adapters |
-| Migrate / Resolve | Governed synthetic batches, exceptions and recovery | Real provider integrations |
-| Validation | Deterministic synthetic reconciliation and integrity checks | Production-grade provider validation |
-| Configure | Human-approved synthetic target settings | Live provider configuration |
-| Onboarding | Role-aware synthetic setup and approvals | Broader guided adoption |
-| Verified FPU | Deterministically verified synthetic invoice | Production outcome instrumentation |
-| Gemini / ADK | Advisor and independent Reviewer passed a bounded live run on `gemini-3.5-flash-lite` (18 Oct, 14/14 checks); five advisory capabilities live-validated earlier on `gemini-2.5-flash`; public Beta remains deterministic-only | Broader evaluated advice and managed runtime |
-| Try Your Data | Controlled local/de-identified test exports; synthetic targets | Secure hosted ingestion after hardening |
-| Play | Lightweight interactive migration learning | 2D interactive migration simulation |
+| **Understand** | Know the source, scope and readiness blockers | Schema, required-field and reference checks. |
+| **Prepare** | Review the plan and account mappings | Explicit, current human approval. |
+| **Move** | Execute approved synthetic batches and resolve exceptions | Checkpoints, bounded retries and idempotency. |
+| **Verify** | Reconcile records and review configuration | Exact financial checks; approval cannot waive failure. |
+| **Start** | Complete onboarding and the first synthetic productive task | Deterministic verification of First Productive Use. |
 
-</details>
+[Product constitution](docs/PRODUCT_CONSTITUTION.md) · [FPU contract](docs/architecture/onboard-fpu.md) ·
+[User guide](https://movebooks-si.web.app/guide).
 
-## Agentic AI and architecture
+## Released and accepted — 25 October 2026
+
+| Functional requirement | Accepted evidence |
+| --- | --- |
+| **P0-01 — Judge access: PASS** | Approved Account B accessed its authenticated workspace; previously accepted evidence retained. |
+| **P0-03 — Five-stage migration: PASS** | Existing synthetic migration, reconciliation and First Productive Use previously accepted. |
+| **P0-04 — Gemini Advisor + independent Reviewer: PASS** | Owner visually verified saved production Advisor explanation, Reviewer **QUESTION** assessment, grounding and uncertainty on the correct existing mapping. The panel states: “Historical analysis restored. No model was called.” |
+| **P0-05 — Isolation and financial safeguards: PASS** | Previously accepted ownership, isolation and human-approval evidence retained. |
+
+The production visual check is **owner-reported screenshot evidence**; earlier authenticated payload
+and protected-preview checks separately verified record pairing and restoration. Server logs cover
+specific earlier read-only windows, not every action during the later manual check. No new inference
+was needed for closeout. [Evidence sources, release identity and limitations](docs/showcase/EVIDENCE.md).
+
+## Agentic AI with explicit authority
 
 **Rules verify. AI predicts. GenAI reasons. Agents orchestrate and act. Humans govern consequential decisions.**
+This responsibility model does not imply that every specialist calls a model or that predictive accuracy is proven.
 
-Agents reason and coordinate within bounded roles. Deterministic tools protect financial
-truth; lifecycle controls prevent unsafe progression. Humans approve consequential changes,
-and evidence links decisions to attributable audit history. This responsibility model does
-not imply every role uses a live model or that production predictive performance is established.
+| Role | Responsibility and boundary |
+| --- | --- |
+| **Gemini Advisor** | Explains supplied evidence, uncertainty and possible next steps. Cannot approve, migrate, reconcile or post an invoice. |
+| **Independent Reviewer** | Challenges a proposal using a distinct role, evidence projection and output contract. Independence does not mean universally hiding the Advisor proposal. |
+| **Stage agents and tools** | Coordinate allowed lifecycle transitions, bounded evidence reads and deterministic financial checks. Missing evidence stays unknown. |
+| **Human approver** | Authorizes consequential mappings, plans, remediations and the exact first invoice. Advice is not consent. |
 
-[Conceptual architecture](docs/architecture/README.md) ·
-[Integrated journey](docs/architecture/beta-v1-integration.md) ·
-[AI / Agent Constitution](docs/AI_AGENT_CONSTITUTION.md)
+The accepted saved example recommends human escalation and records a Reviewer **QUESTION** outcome;
+it demonstrates preserved disagreement and uncertainty, not automatic approval or a model-accuracy benchmark.
+[Agent workflows](docs/architecture/AGENT_WORKFLOWS.md) · [AI constitution](docs/AI_AGENT_CONSTITUTION.md) ·
+[Trust controls](docs/TRUST.md).
 
-### Agentic AI in MoveBooks
+## Architecture and product showcase
 
-“Reasoning determines what should happen; orchestration determines who or what acts next,
-under which rules.”
+| Layer | Purpose |
+| --- | --- |
+| Next.js / React / TypeScript | Guided journey, authenticated workspace and evidence review. |
+| Python / FastAPI | Typed workflow contracts, deterministic agents and tools. |
+| PostgreSQL / Cloud SQL | Owner-scoped snapshots, reconciliation and audit state. |
+| Firebase / Google Cloud | Identity, public hosting and a server-side proxy to the protected API. |
+| Google ADK / Gemini | Bounded advisory reasoning under restricted evaluation controls. |
 
-Discovery/Assessment gather evidence and expose readiness gaps. Planning and Mapping organize
-proposals; Resolution explains exceptions; Configuration and Onboarding/Knowledge guide
-governed setup. The Orchestrator controls stage handoffs and safe stops.
-**Deterministic checks are tools, not agents.**
+Built on Google Cloud with Google Gemini; **MoveBooks AI remains independent and provider-neutral**.
+[Runtime architecture](docs/architecture/google-native-runtime.md) · [Threat model](docs/security/THREAT_MODEL.md).
 
-The five optional live advisors explain existing plans, mappings, failures, configuration
-and onboarding evidence. They cannot approve, execute migration, retry, post invoices,
-reconcile or declare FPU. Invalid/unavailable advice visibly falls back without bypassing controls.
+The [eight-artifact showcase](docs/showcase/README.md) preserves the process, use cases, multi-agent
+swimlane, proposed wireframes, genuine screenshots, solution architecture, technology stack and roadmap.
+Original **18 October design exports** remain dated; planned wireframes and future services are not
+presented as deployed capabilities. Editable sources, attribution and original image bytes are retained.
 
-[Full agent architecture](docs/architecture/beta-v1-agent-architecture.md) ·
-[Canonical workflows](docs/architecture/AGENT_WORKFLOWS.md) ·
-[Bounded Gemini / ADK design](docs/architecture/live-gemini-adk.md)
+## Video Academy
 
-### Google-Native Implementation
+[![Genuine public Academy capture from 24 October 2026 showing published lesson collections](docs/showcase/assets/academy-public-20261024.jpg)](https://movebooks-si.web.app/learn?tab=videos)
 
-Next.js/TypeScript frontend and Python/FastAPI backend run in Cloud Run, with Cloud SQL /
-PostgreSQL persistence and Google/Firebase identity. The web is public; the API is private,
-reached through an authenticated server-side proxy. GCS supports permitted non-sensitive
-artifacts, and Secret Manager supports runtime configuration.
+**Nine published modules with English captions**, from Getting Started through Three-Minute Journey.
+[Exact titles, measured durations and all video/caption links](docs/video-academy/README.md).
+Watch-guide playback remains usable; the known thumbnail defect is deferred. The conceptual Product
+Vision film and older submission recordings are separately labelled in the archive.
 
-Optional Google ADK bounded runners use Gemini via Vertex AI for synthetic advisory reasoning.
-**Managed ADK hosting is not activated.**
+## Validation and known limits
 
-**GenAI today and the vision.** Today, deterministic stage agents run the whole journey: discovery,
-assessment, planning, mapping, migration, exception resolution, reconciliation, configuration,
-onboarding and verified First Productive Use. Gemini adds two bounded roles. An Advisor explains
-evidence and uncertainty, and an independent Reviewer challenges the proposed mapping. Both read
-evidence through a single read-only tool, have no write path, and every consequential step still
-needs a person's approval. These roles have passed a bounded live run in a test harness; the public
-Beta keeps them switched off. The vision is a migration agent that guides each customer through every
-stage. It would use more model-assisted reasoning, always behind the same controls: rules verify,
-people approve, and every action is evidenced. GitHub Actions covers regressions, dependency checks
-and container/image security gates.
+- **Previously validated release candidate:** 992 frontend tests, 93 offline agent tests, build,
+  TypeScript, lint and web dependency audit passed. The runtime-remediated image passed the unchanged
+  Grype High/Critical gate at release. These are dated results, not a fresh repository-wide green claim.
+- **Production checks:** earlier release smoke checks passed 34/34 public checks. Owner production
+  verification subsequently closed saved-result acceptance. [Evidence scope](docs/showcase/EVIDENCE.md).
+- **Security remains separately tracked:** [OpenTelemetry Issue #42](https://github.com/JEMathew/movers-and-ledgers/issues/42)
+  is open; repository-wide CI is **not green**. [PR #41](https://github.com/JEMathew/movers-and-ledgers/pull/41)
+  contains a separately validated web security fix. Functional MVP acceptance grants no security exception or merge approval.
+- **Bounded audience and data:** non-commercial, synthetic-data-only evaluation; approved judges and
+  interview panelists. No live accounting-provider integration, customer-data migration or commercial-readiness claim.
+- **Deferred/unverified:** Academy thumbnails; `movebooks.ai` custom-domain status; real connectors,
+  broader model evaluation and customer outcomes. Use the verified `movebooks-si.web.app` URL.
 
-[Runtime architecture](docs/architecture/google-native-runtime.md) ·
-[Cloud validation](docs/reviews/google-cloud-validation.md) ·
-[Deployment and operations](docs/deployment/public-beta.md)
-
-## Trust, governance and evaluations
-
-Human approval, deterministic financial verification, attributable evidence, authenticated
-owner isolation, bounded retries/idempotency and visible AI fallback work together.
-An approval cannot turn a failed financial check into a pass. Reconsideration creates a
-new governed decision without erasing the original rejection.
-
-[Trust controls](docs/TRUST.md) · [Security threat model](docs/security/THREAT_MODEL.md) ·
-[Reconsideration review](docs/reviews/mapping-reconsideration.md)
-
-### Evaluation & Release Discipline
-
-Product specifications are checked through golden cases, deterministic regressions,
-agent/model semantic evaluations, security/identity negative paths, P0/P1 release gates,
-bounded live Gemini tests and end-to-end acceptance. Offline contract evaluations are
-not proof of model quality; bounded live cases are not production certification.
-
-[Evaluation principles](docs/EVALUATION_PRINCIPLES.md) · [Golden cases](evals/) ·
-[Product scorecard](docs/PRODUCT_SCORECARD.md) ·
-[Agentic AI rubric](docs/rubrics/AGENTIC_AI_RUBRIC.md) ·
-[Migration & Onboarding rubric](docs/rubrics/MIGRATION_ONBOARDING_RUBRIC.md) ·
-[Release readiness](docs/RELEASE_READINESS.md)
-
-### Product Outcome & Metrics
-
-**North Star: Percentage of eligible migration journeys reaching Verified First Productive Use.**
-
-Supporting contracts cover migration completion, time to productive use, mapping
-acceptance/override, reconciliation success, exception/recovery rates, agent escalation/task
-success and support-assisted migration. Assistance is diagnostic—not a condition for success.
-
-These are **defined metric contracts for future production instrumentation**, not measured
-production results. See the [metrics framework](docs/METRICS_FRAMEWORK.md).
+[Historical local journey](docs/submission/final-experience/evidence/journey-fa13e9e/README.md) ·
+[Offline evaluation](docs/submission/final-experience/evidence/agents/offline-agent-eval.json) ·
+[Evaluation principles](docs/EVALUATION_PRINCIPLES.md) · [Roadmap](docs/showcase/README.md#08-future-development-roadmap).
+GitHub main and this documentation branch are not the production source ledger; exact serving release
+provenance is recorded in the [evidence receipt](docs/showcase/EVIDENCE.md#released-product-identity).
 
 ## Developer setup
 
-Prerequisites: Node.js 22+, Python 3.11+ (the Makefile defaults to `python3.11`);
-Docker is optional.
+Prerequisites: Node.js 22+, Python 3.11+ (the Makefile defaults to `python3.11`); Docker is optional.
 
 ```bash
 make setup
-make dev         # API on http://localhost:8000/docs and web on http://localhost:3000
+make dev         # API: http://localhost:8000/docs; web: http://localhost:3000
 ```
 
-`make dev-api` and `make dev-web` run them separately. Both must be running: the browser calls
-the local API directly. The web server stays on port 3000 (it stops if the port is busy), because
-the local API only accepts requests from `localhost:3000` or `127.0.0.1:3000`.
-
-Or use `docker compose up --build`. Default local development is deterministic and needs
-no Google credentials or paid cloud resources. Local demo identity is not public-Beta
-authentication; controlled Try Your Data exports stay local/de-identified.
+`make dev-api` and `make dev-web` run separately; both must be running. The web stays on port 3000
+and the local API permits `localhost:3000` or `127.0.0.1:3000`. Alternatively use
+`docker compose up --build`. Default local development is deterministic and needs no Google
+credentials or paid cloud resources. Local demo identity is not public-Beta authentication.
 
 ```bash
 make test
@@ -248,40 +148,10 @@ make lint
 python3 scripts/repository_checks.py
 ```
 
-[Contributing](CONTRIBUTING.md) · [Documentation index](docs/README.md)
-
-## Documentation and release evidence
-
-[Documentation index](docs/README.md) ·
-[V1.0 release](https://github.com/JEMathew/movers-and-ledgers/releases/tag/v1.0.0) ·
-[Deployment and operations](docs/deployment/public-beta.md) ·
-[Latest release remediation](docs/reviews/demo-loader-release-remediation.md)
-
-### AI Builder Cup submission evidence (18 Oct 2026)
-
-All local unless stated: real UI and real API from this repository, demo identity, deterministic-only. The integration candidate is **not deployed yet**.
-
-- [Working-product video (MP4, 3:43.7)](docs/submission/assets/movebooks-demo.mp4) · [final deck (PDF, 16 slides)](docs/submission/assets/movebooks-final-deck.pdf) · [judge FAQ](docs/submission/JUDGE-FAQ.md)
-- [End-to-end journey evidence](docs/submission/final-experience/evidence/journey-fa13e9e/README.md): 21/21 checks from readiness to a verified synthetic invoice (USD 107.25), including exception recovery, migration picker, switching and a fresh browser
-- [Offline Advisor/Reviewer evaluation](docs/submission/final-experience/evidence/agents/offline-agent-eval.json): 23/23 scenarios on grounding, authority, injected instructions, Reviewer independence and disagreement (boundaries, not model quality)
-- [Evidence manifest](docs/submission/final-experience/EVIDENCE-MANIFEST.md) · [release runbook](docs/release/RELEASE-RUNBOOK.md)
-
-### Live / Current Status
-
-Evidence is scoped and dated; a source capability is not automatically enabled in the live Beta.
-
-| Gate | Recorded result and evidence |
-| --- | --- |
-| V1.0 release and final acceptance | Released; **GREEN** for bounded synthetic acceptance ([record](docs/reviews/v1-final-acceptance.md)). |
-| Public-Beta V1 baseline | Live; original Safari identity/owner-isolation and financial controls passed. The post-merge test-fixture hold is resolved ([release checkpoint](docs/deployment/public-beta.md)). |
-| Bounded Gemini / ADK | **GREEN** for exercised advisory cases on `gemini-2.5-flash` (29 Sep), including accepted Mapping escalation ([final evidence](docs/reviews/live-gemini-adk-mapping.md)); not enabled in the public deployment. On 18 Oct the Advisor and the independent Reviewer passed a bounded live run on `gemini-3.5-flash-lite` (14/14 checks, 4 model calls; [record](docs/reviews/live-gemini-l1-16e31e9.md)); this is a test-harness result, not product activation. |
-| Post-V1 account-shell and Hosting authentication | Bounded Safari sign-in, verified identity, navigation and sign-out passed ([closure checkpoint](docs/deployment/public-beta.md#hosting-authentication-closure--1-october-2026-ist)); not a new full migration acceptance claim. |
-| Main CI | [Seven jobs passed on ac95900](https://github.com/JEMathew/movers-and-ledgers/actions/runs/36681965187); historical checkpoint, not a permanent-green badge. |
-
-No production customer data, real provider integrations, autonomous financial writes or
-production/compliance readiness are claimed. Backup/restore hardening, cost/abuse monitoring,
-residual Medium image advisories and UX simplification remain follow-ups.
-[Evidence navigation](docs/README.md) separates final decisions from historical AMBER attempts.
+[Contributing](CONTRIBUTING.md) · [Documentation index](docs/README.md) ·
+[Deployment history](docs/deployment/public-beta.md) ·
+[Release remediation](docs/reviews/demo-loader-release-remediation.md) ·
+[Mapping reconsideration](docs/reviews/mapping-reconsideration.md).
 
 ### Reference Use & Intellectual Property
 

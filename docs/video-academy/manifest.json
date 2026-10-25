@@ -1,0 +1,722 @@
+{
+  "checkedDateIST": "2026-10-24",
+  "scope": "Read-only public GETs; all nine complete MP4 files, VTT captions and transcripts; local ffprobe, SRT timing checks and SHA-256. Initial range probes returned 200 for 01\u201308 and 206 for 09; a separate full GET verified 09. No inference. Full playback not rerun.",
+  "lessons": [
+    {
+      "id": "01",
+      "localMetadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1920,
+            "height": 1080
+          },
+          {
+            "codec_name": "aac"
+          }
+        ],
+        "format": {
+          "duration": "87.900000",
+          "size": "8809833"
+        }
+      },
+      "videoSha256": "9a7322ae23918efc8282fe84e5457de30c5380a8a19f2a42c7f69fc747645b92",
+      "srtSha256": "8764ee9ce363f28703fb3391268a191149fcbf523c1ef1ddba71fec3238590f5",
+      "captionCues": 25,
+      "captionTimingValid": true,
+      "approvedManifestMatch": true,
+      "publicVideoRange": {
+        "url": "https://movebooks-si.web.app/api/academy-media/01/mp4",
+        "status": 200,
+        "bytesReceived": 8809833,
+        "sha256": "9a7322ae23918efc8282fe84e5457de30c5380a8a19f2a42c7f69fc747645b92",
+        "contentType": "video/mp4",
+        "contentRange": null
+      },
+      "publicCaptions": {
+        "url": "https://movebooks-si.web.app/api/academy-media/01/vtt",
+        "status": 200,
+        "bytesReceived": 1984,
+        "sha256": "5e7b0e61df7bac7cb792b33731588bbd645dc8e23a77928dff83ec59f3d8c77d",
+        "contentType": "text/vtt; charset=utf-8",
+        "contentRange": null
+      },
+      "publicTranscript": {
+        "url": "https://movebooks-si.web.app/api/academy-media/01/txt",
+        "status": 200,
+        "bytesReceived": 1202,
+        "sha256": "8a8c3a85af4e80e04e221e3ab1a1bae890b5e188ef70e296acd3cf95d09e19ce",
+        "contentType": "text/plain; charset=utf-8",
+        "contentRange": null
+      },
+      "publicPrefixMatchesLocal": null,
+      "publicVttMatchesApproved": true,
+      "publicFullVideoMatch": true,
+      "title": "Getting Started",
+      "learningObjective": "Find your way around the demo and take your first step with synthetic books.",
+      "migrationPhase": "Understand"
+    },
+    {
+      "id": "02",
+      "localMetadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1920,
+            "height": 1080
+          },
+          {
+            "codec_name": "aac"
+          }
+        ],
+        "format": {
+          "duration": "70.000000",
+          "size": "8093381"
+        }
+      },
+      "videoSha256": "1e10c06bdb24b0b505d99ccbe1038977a8a11316cb04c0a8969d83e1b16ff139",
+      "srtSha256": "c9a94ead904f7dfd54286790fb42b5b6af75387a89b7dddfa11d376bae6d8368",
+      "captionCues": 21,
+      "captionTimingValid": true,
+      "approvedManifestMatch": true,
+      "publicVideoRange": {
+        "url": "https://movebooks-si.web.app/api/academy-media/02/mp4",
+        "status": 200,
+        "bytesReceived": 8093381,
+        "sha256": "1e10c06bdb24b0b505d99ccbe1038977a8a11316cb04c0a8969d83e1b16ff139",
+        "contentType": "video/mp4",
+        "contentRange": null
+      },
+      "publicCaptions": {
+        "url": "https://movebooks-si.web.app/api/academy-media/02/vtt",
+        "status": 200,
+        "bytesReceived": 1646,
+        "sha256": "f62c3ca8376604d11fdd8affaa6901b97db3c3595c965f56d2c72c87912c3a99",
+        "contentType": "text/vtt; charset=utf-8",
+        "contentRange": null
+      },
+      "publicTranscript": {
+        "url": "https://movebooks-si.web.app/api/academy-media/02/txt",
+        "status": 200,
+        "bytesReceived": 988,
+        "sha256": "460cae1f2be748b2f00f40366bbe977ee4efc1768df68a571f2f8ea99f5cabf9",
+        "contentType": "text/plain; charset=utf-8",
+        "contentRange": null
+      },
+      "publicPrefixMatchesLocal": null,
+      "publicVttMatchesApproved": true,
+      "publicFullVideoMatch": true,
+      "title": "Understand Your Migration",
+      "learningObjective": "Read the migration scope, source evidence and items that need attention.",
+      "migrationPhase": "Understand"
+    },
+    {
+      "id": "03",
+      "localMetadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1920,
+            "height": 1080
+          },
+          {
+            "codec_name": "aac"
+          }
+        ],
+        "format": {
+          "duration": "93.800000",
+          "size": "17377988"
+        }
+      },
+      "videoSha256": "994ed2221c00a47e96e02c5c93ae8026248d31fe514aa9c9a42ddf8fef0e7f22",
+      "srtSha256": "df3f7ccc675f35fbea4b99ae29cd8d5c8b469131fd155b6558271ca11a07f2dc",
+      "captionCues": 28,
+      "captionTimingValid": true,
+      "approvedManifestMatch": true,
+      "publicVideoRange": {
+        "url": "https://movebooks-si.web.app/api/academy-media/03/mp4",
+        "status": 200,
+        "bytesReceived": 17377988,
+        "sha256": "994ed2221c00a47e96e02c5c93ae8026248d31fe514aa9c9a42ddf8fef0e7f22",
+        "contentType": "video/mp4",
+        "contentRange": null
+      },
+      "publicCaptions": {
+        "url": "https://movebooks-si.web.app/api/academy-media/03/vtt",
+        "status": 200,
+        "bytesReceived": 2478,
+        "sha256": "777b8a354a89ffaf2f91a778f313f63204434fb4ad65f482fdc1b65aa221cbba",
+        "contentType": "text/vtt; charset=utf-8",
+        "contentRange": null
+      },
+      "publicTranscript": {
+        "url": "https://movebooks-si.web.app/api/academy-media/03/txt",
+        "status": 200,
+        "bytesReceived": 1603,
+        "sha256": "04e561b7553968356d4308a7537bd7f2267daacfe15bba2ca0d6a32789774d78",
+        "contentType": "text/plain; charset=utf-8",
+        "contentRange": null
+      },
+      "publicPrefixMatchesLocal": null,
+      "publicVttMatchesApproved": true,
+      "publicFullVideoMatch": true,
+      "title": "Prepare and Approve",
+      "learningObjective": "Review mappings and make informed decisions before your books move.",
+      "migrationPhase": "Prepare"
+    },
+    {
+      "id": "04",
+      "localMetadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1920,
+            "height": 1080
+          },
+          {
+            "codec_name": "aac"
+          }
+        ],
+        "format": {
+          "duration": "63.853333",
+          "size": "3868281"
+        }
+      },
+      "videoSha256": "0b18f0dac1e3b2444898151da57ae69c23751ebe0c1d46f546b5f89bc4405f2d",
+      "srtSha256": "55f21c3b8d99d806deffc80c77af376a4575155cae45d98b5b43c00bca162d2b",
+      "captionCues": 22,
+      "captionTimingValid": true,
+      "approvedManifestMatch": true,
+      "publicVideoRange": {
+        "url": "https://movebooks-si.web.app/api/academy-media/04/mp4",
+        "status": 200,
+        "bytesReceived": 3868281,
+        "sha256": "0b18f0dac1e3b2444898151da57ae69c23751ebe0c1d46f546b5f89bc4405f2d",
+        "contentType": "video/mp4",
+        "contentRange": null
+      },
+      "publicCaptions": {
+        "url": "https://movebooks-si.web.app/api/academy-media/04/vtt",
+        "status": 200,
+        "bytesReceived": 1598,
+        "sha256": "a64f25d7d6774124514f016fc48524d4e665c63334862a9cacaadbf8767701fc",
+        "contentType": "text/vtt; charset=utf-8",
+        "contentRange": null
+      },
+      "publicTranscript": {
+        "url": "https://movebooks-si.web.app/api/academy-media/04/txt",
+        "status": 200,
+        "bytesReceived": 909,
+        "sha256": "93354f11fc9e6f7c6d9160a23e5e22a0aa3d4ea64fe585d941e8122fcc8a1866",
+        "contentType": "text/plain; charset=utf-8",
+        "contentRange": null
+      },
+      "publicPrefixMatchesLocal": null,
+      "publicVttMatchesApproved": true,
+      "publicFullVideoMatch": true,
+      "title": "Gemini Advisor",
+      "learningObjective": "Understand AI suggestions, their evidence and the decisions that stay yours.",
+      "migrationPhase": "Prepare (mapping)"
+    },
+    {
+      "id": "05",
+      "localMetadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1920,
+            "height": 1080
+          },
+          {
+            "codec_name": "aac"
+          }
+        ],
+        "format": {
+          "duration": "67.146667",
+          "size": "3408152"
+        }
+      },
+      "videoSha256": "8166cc8eae5c65185fc7528427b9c14caf9c22abf1f14003a3047cf23f5ee4e5",
+      "srtSha256": "1422b83f42ecf23e34f28717f893fb27695ecddfef52400271aee6f0db80cdec",
+      "captionCues": 18,
+      "captionTimingValid": true,
+      "approvedManifestMatch": true,
+      "publicVideoRange": {
+        "url": "https://movebooks-si.web.app/api/academy-media/05/mp4",
+        "status": 200,
+        "bytesReceived": 3408152,
+        "sha256": "8166cc8eae5c65185fc7528427b9c14caf9c22abf1f14003a3047cf23f5ee4e5",
+        "contentType": "video/mp4",
+        "contentRange": null
+      },
+      "publicCaptions": {
+        "url": "https://movebooks-si.web.app/api/academy-media/05/vtt",
+        "status": 200,
+        "bytesReceived": 1521,
+        "sha256": "64a3849fef81829c0483b869272d9e3d1fc523c61b8cc4415bc20a8206e3e801",
+        "contentType": "text/vtt; charset=utf-8",
+        "contentRange": null
+      },
+      "publicTranscript": {
+        "url": "https://movebooks-si.web.app/api/academy-media/05/txt",
+        "status": 200,
+        "bytesReceived": 956,
+        "sha256": "c078d2b160041c0d86cafc2b64eaffc06fe94d91d82b51fb2134e9c9e0984872",
+        "contentType": "text/plain; charset=utf-8",
+        "contentRange": null
+      },
+      "publicPrefixMatchesLocal": null,
+      "publicVttMatchesApproved": true,
+      "publicFullVideoMatch": true,
+      "title": "Independent Gemini Reviewer",
+      "learningObjective": "See how independent review checks advice without replacing financial controls.",
+      "migrationPhase": "Prepare (mapping)"
+    },
+    {
+      "id": "06",
+      "localMetadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1920,
+            "height": 1080
+          },
+          {
+            "codec_name": "aac"
+          }
+        ],
+        "format": {
+          "duration": "91.100000",
+          "size": "11535240"
+        }
+      },
+      "videoSha256": "5ee4a34308ee59492ad3c204a2801c1ba2f84c92acd05b619b0f8599608c293d",
+      "srtSha256": "3df562dd799c20b1f08bc41c5799c2a9ec883398bc6aa5f65096fe6c36d94fee",
+      "captionCues": 26,
+      "captionTimingValid": true,
+      "approvedManifestMatch": true,
+      "publicVideoRange": {
+        "url": "https://movebooks-si.web.app/api/academy-media/06/mp4",
+        "status": 200,
+        "bytesReceived": 11535240,
+        "sha256": "5ee4a34308ee59492ad3c204a2801c1ba2f84c92acd05b619b0f8599608c293d",
+        "contentType": "video/mp4",
+        "contentRange": null
+      },
+      "publicCaptions": {
+        "url": "https://movebooks-si.web.app/api/academy-media/06/vtt",
+        "status": 200,
+        "bytesReceived": 2225,
+        "sha256": "7909eea2ab43de67f42f0b7fa4bb37db34a8111ee757f1122f7523c7e922ad65",
+        "contentType": "text/vtt; charset=utf-8",
+        "contentRange": null
+      },
+      "publicTranscript": {
+        "url": "https://movebooks-si.web.app/api/academy-media/06/txt",
+        "status": 200,
+        "bytesReceived": 1412,
+        "sha256": "28f1ef11c9563a53ffedc1dd28b0021798f0e5f33cc512140bf511113ac9f7a1",
+        "contentType": "text/plain; charset=utf-8",
+        "contentRange": null
+      },
+      "publicPrefixMatchesLocal": null,
+      "publicVttMatchesApproved": true,
+      "publicFullVideoMatch": true,
+      "title": "Move and Verify",
+      "learningObjective": "Follow migration checkpoints, resolve blockers and inspect reconciliation.",
+      "migrationPhase": "Move \u2192 Verify"
+    },
+    {
+      "id": "07",
+      "localMetadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1920,
+            "height": 1080
+          },
+          {
+            "codec_name": "aac"
+          }
+        ],
+        "format": {
+          "duration": "89.578000",
+          "size": "10692185"
+        }
+      },
+      "videoSha256": "1f0fd86bc98d558d7b5519bab0c95cd0cb3cd1c07cc16677057558eee482503d",
+      "srtSha256": "2a1de092f64a90fe2e4e7a77b8f833885a05f93d11df93652a35a87aa1fe2d0a",
+      "captionCues": 29,
+      "captionTimingValid": true,
+      "approvedManifestMatch": true,
+      "publicVideoRange": {
+        "url": "https://movebooks-si.web.app/api/academy-media/07/mp4",
+        "status": 200,
+        "bytesReceived": 10692185,
+        "sha256": "1f0fd86bc98d558d7b5519bab0c95cd0cb3cd1c07cc16677057558eee482503d",
+        "contentType": "video/mp4",
+        "contentRange": null
+      },
+      "publicCaptions": {
+        "url": "https://movebooks-si.web.app/api/academy-media/07/vtt",
+        "status": 200,
+        "bytesReceived": 2034,
+        "sha256": "f657140e11ac26e82a019acd1ed48ab7bb61020edd4efe761e7c67cf23266b23",
+        "contentType": "text/vtt; charset=utf-8",
+        "contentRange": null
+      },
+      "publicTranscript": {
+        "url": "https://movebooks-si.web.app/api/academy-media/07/txt",
+        "status": 200,
+        "bytesReceived": 1128,
+        "sha256": "c75a9aaebe0d41032bb0f594c00a84405d376aaf0df9f6ed34627e5b2657fd82",
+        "contentType": "text/plain; charset=utf-8",
+        "contentRange": null
+      },
+      "publicPrefixMatchesLocal": null,
+      "publicVttMatchesApproved": true,
+      "publicFullVideoMatch": true,
+      "title": "First Productive Use",
+      "learningObjective": "Complete your first synthetic task and check the evidence of readiness.",
+      "migrationPhase": "Start"
+    },
+    {
+      "id": "08",
+      "localMetadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1920,
+            "height": 1080
+          },
+          {
+            "codec_name": "aac"
+          }
+        ],
+        "format": {
+          "duration": "89.578000",
+          "size": "9358130"
+        }
+      },
+      "videoSha256": "3666a70792fe0c1a7ff652257e83e30cb86faaab6e86ed92908814cf3ca6afb7",
+      "srtSha256": "a82cab8ee15913dbf0c0f8d427dec4d7ef76e91dee832fbe92bce4e8baf07b92",
+      "captionCues": 27,
+      "captionTimingValid": true,
+      "approvedManifestMatch": true,
+      "publicVideoRange": {
+        "url": "https://movebooks-si.web.app/api/academy-media/08/mp4",
+        "status": 200,
+        "bytesReceived": 9358130,
+        "sha256": "3666a70792fe0c1a7ff652257e83e30cb86faaab6e86ed92908814cf3ca6afb7",
+        "contentType": "video/mp4",
+        "contentRange": null
+      },
+      "publicCaptions": {
+        "url": "https://movebooks-si.web.app/api/academy-media/08/vtt",
+        "status": 200,
+        "bytesReceived": 2150,
+        "sha256": "f4d12f6657b1984106a025b56bf16577f9e54c57a35bbf88d5c05e62ce6c75b3",
+        "contentType": "text/vtt; charset=utf-8",
+        "contentRange": null
+      },
+      "publicTranscript": {
+        "url": "https://movebooks-si.web.app/api/academy-media/08/txt",
+        "status": 200,
+        "bytesReceived": 1306,
+        "sha256": "91fbfd75e8623dcf74885b8f6b31426b2edc88320dbf0fb71a523ccfba9e358f",
+        "contentType": "text/plain; charset=utf-8",
+        "contentRange": null
+      },
+      "publicPrefixMatchesLocal": null,
+      "publicVttMatchesApproved": true,
+      "publicFullVideoMatch": true,
+      "title": "Trust and Troubleshooting",
+      "learningObjective": "Understand safeguards, find evidence and return safely to a paused task.",
+      "migrationPhase": "All stages"
+    },
+    {
+      "id": "09",
+      "localMetadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1920,
+            "height": 1080
+          },
+          {
+            "codec_name": "aac"
+          }
+        ],
+        "format": {
+          "duration": "169.007000",
+          "size": "19244827"
+        }
+      },
+      "videoSha256": "23fa7231d9edd63116e34b16a2dbe8036fc8f0a1dbb7fd1de6d102c7aa19866e",
+      "srtSha256": "e927d15537f232a51e9e9eaba77ffb5c76a44b1cb7762228fe8aef7a97469284",
+      "captionCues": 53,
+      "captionTimingValid": true,
+      "approvedManifestMatch": true,
+      "publicVideoRange": {
+        "url": "https://movebooks-si.web.app/api/academy-media/09/mp4",
+        "status": 206,
+        "bytesReceived": 4096,
+        "sha256": "1771618b2e201b607bfd861cae4b2b340f219ad14834141c80f63d80346adc98",
+        "contentType": "video/mp4",
+        "contentRange": "bytes 0-4095/19244827"
+      },
+      "publicCaptions": {
+        "url": "https://movebooks-si.web.app/api/academy-media/09/vtt",
+        "status": 200,
+        "bytesReceived": 4009,
+        "sha256": "50c2456cad77db192b9a81934a95eab6cb1f944e9415c035fece6a3129dc5f45",
+        "contentType": "text/vtt; charset=utf-8",
+        "contentRange": null
+      },
+      "publicTranscript": {
+        "url": "https://movebooks-si.web.app/api/academy-media/09/txt",
+        "status": 200,
+        "bytesReceived": 2359,
+        "sha256": "3ad9dfb314c2b019df357e2efa291a34f1182f3af120ed38b908900f60063866",
+        "contentType": "text/plain; charset=utf-8",
+        "contentRange": null
+      },
+      "publicPrefixMatchesLocal": true,
+      "publicVttMatchesApproved": true,
+      "publicFullVideoMatch": true,
+      "title": "Three-Minute Journey",
+      "learningObjective": "A guided overview from understanding your books to verified first use.",
+      "migrationPhase": "Understand \u2192 Prepare \u2192 Move \u2192 Verify \u2192 Start",
+      "publicFullVideoResponse": {
+        "url": "https://movebooks-si.web.app/api/academy-media/09/mp4",
+        "status": 200,
+        "bytesReceived": 19244827,
+        "sha256": "23fa7231d9edd63116e34b16a2dbe8036fc8f0a1dbb7fd1de6d102c7aa19866e"
+      }
+    }
+  ],
+  "browserPlayback": {
+    "lesson": "09",
+    "observedStartSeconds": 0,
+    "observedProgressSeconds": 18.878579,
+    "durationSeconds": 169.007,
+    "captionTrack": "English",
+    "captionMode": "showing",
+    "pausedAfterCheck": true,
+    "fullPlaybackRetested": false
+  },
+  "linkRecheck20261025": {
+    "dateIST": "2026-10-25",
+    "scope": "Read-only public HTTP GETs; MP4 prefixes only, complete VTT and transcript responses. No full media downloads, playback or inference. Original 24 October hashes and timing evidence retained.",
+    "results": [
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/01/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/01/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/01/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/01/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/01/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/01/vtt",
+        "webvtt": true,
+        "sha256": "5e7b0e61df7bac7cb792b33731588bbd645dc8e23a77928dff83ec59f3d8c77d"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/02/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/02/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/02/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/02/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/02/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/02/vtt",
+        "webvtt": true,
+        "sha256": "f62c3ca8376604d11fdd8affaa6901b97db3c3595c965f56d2c72c87912c3a99"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/03/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/03/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/03/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/03/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/03/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/03/vtt",
+        "webvtt": true,
+        "sha256": "777b8a354a89ffaf2f91a778f313f63204434fb4ad65f482fdc1b65aa221cbba"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/04/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/04/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/04/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/04/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/04/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/04/vtt",
+        "webvtt": true,
+        "sha256": "a64f25d7d6774124514f016fc48524d4e665c63334862a9cacaadbf8767701fc"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/05/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/05/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/05/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/05/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/05/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/05/vtt",
+        "webvtt": true,
+        "sha256": "64a3849fef81829c0483b869272d9e3d1fc523c61b8cc4415bc20a8206e3e801"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/06/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/06/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/06/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/06/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/06/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/06/vtt",
+        "webvtt": true,
+        "sha256": "7909eea2ab43de67f42f0b7fa4bb37db34a8111ee757f1122f7523c7e922ad65"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/07/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/07/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/07/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/07/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/07/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/07/vtt",
+        "webvtt": true,
+        "sha256": "f657140e11ac26e82a019acd1ed48ab7bb61020edd4efe761e7c67cf23266b23"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/08/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/08/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/08/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/08/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/08/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/08/vtt",
+        "webvtt": true,
+        "sha256": "f4d12f6657b1984106a025b56bf16577f9e54c57a35bbf88d5c05e62ce6c75b3"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/09/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/09/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/09/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/09/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/09/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/09/vtt",
+        "webvtt": true,
+        "sha256": "50c2456cad77db192b9a81934a95eab6cb1f944e9415c035fece6a3129dc5f45"
+      }
+    ],
+    "allNineVttHashesMatchApproved": true
+  }
+}
