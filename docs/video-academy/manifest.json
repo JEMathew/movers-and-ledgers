@@ -522,5 +522,201 @@
     "captionMode": "showing",
     "pausedAfterCheck": true,
     "fullPlaybackRetested": false
+  },
+  "linkRecheck20261025": {
+    "dateIST": "2026-10-25",
+    "scope": "Read-only public HTTP GETs; MP4 prefixes only, complete VTT and transcript responses. No full media downloads, playback or inference. Original 24 October hashes and timing evidence retained.",
+    "results": [
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/01/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/01/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/01/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/01/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/01/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/01/vtt",
+        "webvtt": true,
+        "sha256": "5e7b0e61df7bac7cb792b33731588bbd645dc8e23a77928dff83ec59f3d8c77d"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/02/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/02/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/02/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/02/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/02/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/02/vtt",
+        "webvtt": true,
+        "sha256": "f62c3ca8376604d11fdd8affaa6901b97db3c3595c965f56d2c72c87912c3a99"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/03/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/03/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/03/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/03/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/03/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/03/vtt",
+        "webvtt": true,
+        "sha256": "777b8a354a89ffaf2f91a778f313f63204434fb4ad65f482fdc1b65aa221cbba"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/04/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/04/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/04/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/04/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/04/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/04/vtt",
+        "webvtt": true,
+        "sha256": "a64f25d7d6774124514f016fc48524d4e665c63334862a9cacaadbf8767701fc"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/05/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/05/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/05/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/05/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/05/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/05/vtt",
+        "webvtt": true,
+        "sha256": "64a3849fef81829c0483b869272d9e3d1fc523c61b8cc4415bc20a8206e3e801"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/06/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/06/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/06/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/06/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/06/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/06/vtt",
+        "webvtt": true,
+        "sha256": "7909eea2ab43de67f42f0b7fa4bb37db34a8111ee757f1122f7523c7e922ad65"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/07/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/07/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/07/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/07/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/07/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/07/vtt",
+        "webvtt": true,
+        "sha256": "f657140e11ac26e82a019acd1ed48ab7bb61020edd4efe761e7c67cf23266b23"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/08/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/08/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/08/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/08/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/08/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/08/vtt",
+        "webvtt": true,
+        "sha256": "f4d12f6657b1984106a025b56bf16577f9e54c57a35bbf88d5c05e62ce6c75b3"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/09/mp4",
+        "status": 200,
+        "type": "video/mp4",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/09/mp4",
+        "mp4Signature": true
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/09/txt",
+        "status": 200,
+        "type": "text/plain; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/09/txt"
+      },
+      {
+        "url": "https://movebooks-si.web.app/api/academy-media/09/vtt",
+        "status": 200,
+        "type": "text/vtt; charset=utf-8",
+        "finalUrl": "https://movebooks-si.web.app/api/academy-media/09/vtt",
+        "webvtt": true,
+        "sha256": "50c2456cad77db192b9a81934a95eab6cb1f944e9415c035fece6a3129dc5f45"
+      }
+    ],
+    "allNineVttHashesMatchApproved": true
   }
 }

@@ -4,12 +4,12 @@
 
 Eight product and technical artifacts explain the customer journey, authority model and platform.
 The original design exports below are **18 October 2026 snapshots**. Their embedded “live Gemini
-pending” and dormant-service labels remain historical; consult the [24 October status](EVIDENCE.md)
-for later hosted proof and public observations. No design image establishes deployment.
+pending” and dormant-service labels remain historical; consult the [25 October acceptance status](EVIDENCE.md)
+for accepted production Gemini behavior and its evidence limits. No design image establishes deployment.
 
 **Publication manifest:** [file hashes, origin and source status](manifest.json). Seven original
 PPTX/PNG pairs are preserved byte-for-byte; architecture reuses the repository's existing C4 source
-and export. All are local review candidates until owner approval to publish this branch.
+and export. The original 24-file refresh is published in PR #40; this evidence update requires owner approval before pushing.
 
 Open each PNG at full size for small labels; the wireframe and prototype overviews are navigation
 sheets. Their editable decks provide individual readable slides. Screenshots within the prototype
@@ -86,17 +86,25 @@ deck remain pixels; titles and captions are editable.
 
 [Full-size preview](assets/05-prototype.png) · [Original editable PowerPoint](assets/05-prototype.pptx). Revision: original export, 18 October 2026; source workstream inspected at `aacd3a5`. These asset files were untracked in that worktree, so the commit is context, not proof that the bytes were committed; hashes identify the exact originals.
 
-### Current public screenshots
+### Dated public production screenshots
 
 [![Public guided demo, Prepare stage, captured 24 October](assets/demo-public-20261024.jpg)](assets/demo-public-20261024.jpg)
 
 Actual signed-out guided demo, **sample evidence**, 24 October 2026 IST. It performs no migration
-and grants no approval. [Current landing capture](assets/product-public-20261024.jpg) is also genuine,
+and grants no approval. [24 October landing capture](assets/product-public-20261024.jpg) is also genuine,
 but its laptop illustration and 25-second film are conceptual marketing media, not an operational
-workspace. [Current Academy capture](assets/academy-public-20261024.jpg) shows published lessons.
+workspace. [24 October Academy capture](assets/academy-public-20261024.jpg) shows published lessons.
 All three are unaltered 1280 × 720 browser captures at the canonical public site, with no account
 identity, private session or model request. The 18 October prototype deck shows a different local
 implementation and must not be relabelled as today's production screenshots.
+
+### Accepted production Gemini result — 25 October 2026
+
+The owner verified the existing saved Advisor explanation and independent Reviewer **QUESTION**
+assessment in production, with grounding, uncertainty and “Historical analysis restored. No model
+was called.” [Four-P0 receipt and evidence attribution](EVIDENCE.md#four-p0-acceptance).
+The authenticated screenshots remain owner-held and are not embedded here. The public captures
+above and the local prototype deck are not substitutes for that acceptance evidence.
 
 ## 06 Solution architecture
 

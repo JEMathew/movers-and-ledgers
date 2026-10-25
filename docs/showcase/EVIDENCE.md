@@ -1,97 +1,123 @@
-# Capability and publication evidence — 24 October 2026
+# MVP acceptance and publication evidence — 25 October 2026
 
 [Product overview](../../README.md) · [Eight-artifact showcase](README.md) · [Video Academy](../video-academy/README.md)
 
-This is a documentation snapshot, not a product release or a new acceptance run. Read-only public
-checks, existing repository evidence and local workstream records were inspected. No Gemini call,
-cloud mutation, financial action, push, public PR, media upload or production deployment was performed.
+**GO — judge-ready functional MVP.** Non-commercial, synthetic-data-only evaluation for approved
+hackathon judges and interview panelists. This is a documentation closeout of accepted evidence,
+not a new application test, security clearance, deployment or commercial-readiness certification.
 
-## How to read a claim
+## Four-P0 acceptance
 
-| Class | Meaning |
+| Requirement | Result | Evidence and attribution |
+| --- | --- | --- |
+| P0-01 — Approved judge access | **PASS** | Previously accepted authenticated Account B workspace access; not rerun for this publication. |
+| P0-03 — Complete five-stage migration | **PASS** | Previously accepted existing synthetic migration, reconciliation and First Productive Use; no new migration or invoice. |
+| P0-04 — Genuine Gemini Advisor and independent Reviewer | **PASS** | Owner's 25 October production visual verification reports the correct existing migration/mapping showing Advisor explanation, independent Reviewer **QUESTION**, grounding, uncertainty and the historical/no-model-call notice. |
+| P0-05 — Isolation and financial safeguards | **PASS** | Previously accepted ownership, account isolation and human authority evidence retained; no new financial actions. |
+
+### What the evidence establishes
+
+- **Production screenshot-observed behavior, reported by the owner:** the saved Advisor explanation
+  and independent Reviewer assessment were visible, with supporting evidence, uncertainty and
+  retained human authority. The panel stated “Historical analysis restored. No model was called.”
+  The owner's authenticated production screenshots are not attached to this documentation update;
+  this statement records the owner's acceptance, not an independent reinspection of those images.
+- **Earlier authenticated response evidence:** complete saved Advisor/Reviewer content, matching
+  account/migration/mapping ownership and explicit Advisor–Reviewer linkage were inspected. Activity
+  counts alone were not used as proof. Raw identifiers, response bodies and credentials are excluded.
+- **Earlier exact-image protected preview:** restored genuine Advisor escalation guidance and
+  Reviewer QUESTION/CHALLENGED assessment; matching grounding, uncertainty, historical labelling,
+  clearing on mapping switch and restoration on reopening passed. This is preview evidence, not
+  a substitute for the later production visual acceptance.
+- **Earlier server-side release evidence:** 34/34 independent public smoke checks passed. The
+  recorded production window contained 73 GET requests, zero mutation requests and zero analysis
+  endpoint requests. The protected-preview window separately contained 57 GETs and zero mutation
+  or new-inference requests. These bounded windows do not prove all activity during the owner's
+  later manual check or unrelated users' activity.
+
+No new model calls, migrations, financial writes or application regressions were run for this
+portfolio update. Preserved receipts were read; raw operational evidence remains private.
+
+## Released product identity
+
+Accepted release evidence dated **25 October 2026 (IST)**; not a claim of a fresh cloud inspection
+by this documentation task. The canonical public URL is [movebooks-si.web.app](https://movebooks-si.web.app/).
+
+| Item | Accepted release identity |
 | --- | --- |
-| **A — Publicly deployed and verified** | The stated public behavior was observed; the exact scope is given. |
-| **B — Staging verified** | Bounded hosted/private acceptance evidence exists; this does not prove public behavior. |
-| **C — Locally verified** | Source/test/local UI evidence exists; neither pushing nor deployment follows from it. |
-| **D — Planned** | Proposed design or future direction; not an implementation promise. |
-| **E — Unverified** | Evidence is insufficient for the specific claim, even if adjacent capabilities work. |
+| Production web | `movebooks-beta-web-p004-555eaac`, 100% web traffic in the release record |
+| Web source commit | `555eaac961712352b5e355db10b3da1d44f605d3` |
+| Immutable web image | `sha256:538b676ee5cb1a03802e8acbda13eab4ce572f3e8fcabbbbc4afea47e69fb4c4` |
+| Production API | `movebooks-beta-api-b20-judge-sdk1`, unchanged at 100% in the release record |
+| Retained web rollback target | `movebooks-beta-web-c5515ee1-academy`; no rollback performed |
 
-A recorded result is attributed to its original run. Counts from different commits and environments
-are not combined. This refresh did not rerun application suites or generate model-quality evidence.
+GitHub [portfolio PR #40](https://github.com/JEMathew/movers-and-ledgers/pull/40) starts from
+`54f1b3f2ca29e225a99159264b2a1df84ffdbf5b`; its original 24-file refresh is
+`5bdafd173104959000d05a9626d9998407f64d3d`. Documentation publication does not merge the serving
+application source onto main, change production, or imply that a clean clone reproduces deployed overlays.
 
-## Source and GitHub state
+## Capability and evidence classes
 
-The verified repository is [JEMathew/movers-and-ledgers](https://github.com/JEMathew/movers-and-ledgers).
-Fetched main: **`54f1b3f2ca29e225a99159264b2a1df84ffdbf5b`**, merge of
-[PR #39](https://github.com/JEMathew/movers-and-ledgers/pull/39), which adds PostgreSQL migration-listing isolation coverage.
-The supplied audit checkout is a clean detached checkout at `54141f2`; it was not edited.
-
-| Source or release | Observed state | Consequence for this portfolio |
+| Capability | Status | Limit |
 | --- | --- | --- |
-| [PR #37](https://github.com/JEMathew/movers-and-ledgers/pull/37) | Merged release `16e31e9` and evidence | Historical deployed Beta and harness statements are retained with dates. |
-| UX V2 PRs #30–#35 | Merged into main | Source implementation is public; merge alone is not proof of serving revision. |
-| [PR #38: V2 Phase 1](https://github.com/JEMathew/movers-and-ledgers/pull/38) | Open draft; head `ab4654671b94f049bcf1a5959627e5d48862b97c` | Its local acceptance counts do not certify the current public deployment. |
-| `feature/video-academy-v1` | Local HEAD and fetched remote both `dbdd07fcf1ad937146faf726f375c3ee56ad0030`; not merged into main | Pushed, plus separately verified public Academy availability. |
-| `integration/ux-gemini-v2-local` | Local HEAD `b20ef668736a520387753dee4c8c19e4f66ae8da`; reachable through the fetched Academy remote branch | The commit is pushed through another branch; its original branch name alone is not deployment evidence. |
-| `feature/gemini-advisor-v2` | Local HEAD `db2ef1fe078fbc28a800241d4456e23bc5b06d81`; staging package reports have narrower scope | Local runtime checks are not live model proof. Later hosted records must be read separately. |
-| Original showcase exports | Local untracked files in the submission worktree inspected at `aacd3a5` | Hashes, not that commit, identify their exact bytes. They become tracked only in this documentation candidate. |
-| [GitHub v1.0.0 Release](https://github.com/JEMathew/movers-and-ledgers/releases/tag/v1.0.0) | Published 29 September; no attached media assets | No final-demo V2 download link can be inferred from the release. |
+| Public landing, demo, guide and Learn | **Deployed and verified** within the recorded public checks | The demo uses sample evidence and does not execute a migration. |
+| Four functional P0s | **Accepted**, with evidence attribution above | Bounded approved-account synthetic MVP; no commercial or all-user certification. |
+| Saved Gemini explanations and independent review | **Production visually verified by owner**; payload and preview evidence previously collected | No new inference was needed. A saved case is not a model-quality benchmark or promise of unrestricted generation. |
+| Nine Academy videos and captions | **Published**; dated media checks and hashes in the [manifest](../video-academy/manifest.json) | Thumbnail defect deferred; playback remains usable. Complete narration/timing review is not rerun here. |
+| Release candidate tests | **Previously validated:** 992 frontend and 93 offline agent tests, build, TypeScript and lint | Historical candidate results, not tests run by this docs branch. |
+| Exact released web security | **Previously validated:** production dependency audit and unchanged Grype High/Critical gate passed | Grype database age was 15.37 hours at promotion against a 72-hour limit; no claim that a scan stays fresh indefinitely. |
+| Earlier local journey and harness | **Previously validated**, separately scoped [local journey](../submission/final-experience/evidence/journey-fa13e9e/README.md) and [18 October live harness](../reviews/live-gemini-l1-16e31e9.md) | Do not aggregate counts, equate harness with hosted product, or relabel screenshots. |
+| Wireframes, real provider connectors, broader analytics and managed model hosting | **Planned**, see [roadmap](README.md#08-future-development-roadmap) | No real accounting-provider integration or implementation promise. |
+| Custom domain and measured customer outcomes | **Unverified/unresolved** | Use the canonical Hosting URL; no savings, adoption or production accuracy claims. |
 
-No current CI-green claim is made from a historical job. This branch changes documentation and
-reviewed documentation assets only; it does not bring the application source on main up to the serving build.
+## Security and publication limits
 
-## Claim-to-evidence matrix
+[OpenTelemetry Issue #42](https://github.com/JEMathew/movers-and-ledgers/issues/42) remains open.
+The ADK/OpenTelemetry compatibility blocker is unresolved; repository-wide CI is **not green**.
+[PR #41](https://github.com/JEMathew/movers-and-ledgers/pull/41) contains the separately validated
+Next.js web security patch. It has not been amended or merged by this work. No vulnerability
+suppression, policy change or security-gate exception is implied by functional acceptance.
 
-| Capability | Class and evidence | Practical limit |
-| --- | --- | --- |
-| Canonical public product | **A.** `https://movebooks-si.web.app` opened with the actual MoveBooks UI; public page GETs checked 24 October. [Capture](assets/product-public-20261024.jpg). | `movebooks.ai` failed DNS resolution in both browser and direct check. Retain the canonical Hosting URL. |
-| UX V2 public surfaces / Track A | **A** for the observed landing, Learn and guided demo. [Current captures](README.md#05-prototype-showcase); source evidence in [UX PR05](../ux-v2/pr05/README.md) and [PR06](../ux-v2/pr06/README.md) is historical/local. | No claim that every Track A change, draft PR #38 or authenticated migration is freshly accepted. |
-| Read-only five-stage demo | **A.** Public simulator exposes Understand, Prepare, Move, Verify, Start; sampled readiness, mapping and failed-total evidence observed. | Sample preview does not execute a migration, invoke a model or grant approval. |
-| Academy / Track C | **A.** Nine visible lesson cards, accessible MP4s, English captions and transcripts. [Measured manifest](../video-academy/manifest.json). | Public endpoint availability and bounded playback checks are narrower than complete viewing of all nine films. |
-| Deterministic migration, recovery and FPU | **C.** [21-check real local UI/API run](../submission/final-experience/evidence/journey-fa13e9e/README.md), including 17 validation checks and a verified USD 107.25 synthetic invoice. | The synthetic invoice is an observed test outcome, not customer revenue or a production provider posting. |
-| Historical deployed Beta acceptance | **A, historical.** [Deployment checkpoints](../deployment/public-beta.md), [V1 acceptance](../reviews/v1-final-acceptance.md) and merged PR #37. | Dated release scope; not a fresh full end-to-end test of today's serving frontend/API. |
-| Owner isolation, audit and recovery | **C** for [source/tests](../../tests/test_migration_listing.py), [threat model](../security/THREAT_MODEL.md) and prior acceptance; historical hosted scope remains in deployment records. | No fresh two-account authentication or isolation test here. |
-| Advisor/Reviewer offline boundaries | **C.** [23/23 scripted scenarios](../submission/final-experience/evidence/agents/offline-agent-eval.json); no network or real-model calls. | Not evidence of semantic accuracy, live availability or accounting judgment quality. |
-| 18 October live Gemini harness | **C — isolated development/test harness**, using a live cloud model; [owner-reported 14/14 checks](../reviews/live-gemini-l1-16e31e9.md). | One case, four calls, not a hosted product run and not publicly activated by that result. |
-| Later hosted paired Gemini / Track B | **B.** A subsequent private hosted record supports separate Advisor/Reviewer runs and retained human authority. The owner holds raw evidence; it is excluded from this candidate. | This audit reviewed the existing record; it did not invoke inference or publish raw responses, identities, reservations or traces. |
-| Public Gemini availability | **E** for fresh authenticated public execution. Later activation records and current “Live · limited evaluation” UI support a restricted evaluation being configured, rather than the old blanket “deterministic-only” statement. | Public activation is not general availability. No new authenticated public inference was run; a private proof, a video or a status label cannot fill that gap. |
-| Evidence retrieval and uncertainty | **C.** [Read-only ADK implementation](../../agents/reasoning/adk.py), [Reviewer contract](../../agents/reviewer/agent.py), offline cases and bounded harness record. | Evidence projections are constrained inputs; no general web search, external accounting-data retrieval or production RAG quality is claimed. |
-| Browser-local file validation | **C** in [intake architecture](../architecture/try-your-data.md); public entry **A** observed. | Browser validation is not hosted ingestion or permission to submit customer data. |
-| Production provider integrations, delegated roles, managed model hosting, broad analytics | **D.** [Roadmap](README.md#08-future-development-roadmap). | Neither a diagram nor a technology dependency establishes implementation. |
-| Customer outcomes and production model accuracy | **E.** No new measured customer evidence. [Metrics framework](../METRICS_FRAMEWORK.md) defines intended measurements. | Do not turn test pass counts into accuracy, time-saving or commercial impact claims. |
+PR #40's original CI failed web/AI security checks on its unchanged application baseline.
+The separately validated production web artifact and PR #41 do not retroactively make PR #40 green.
+Updating PR #40 is a documentation publication decision; **merge remains NO-GO while mandatory
+security gates are unresolved and requires separate authorization**.
 
-## Advisor, Reviewer and safeguards
+Other known limitations: Academy thumbnail behavior is deferred, `movebooks.ai` is unverified/unresolved,
+and the older final-demo V2 has no verified public hosting URL. The [published Academy walkthrough](https://movebooks-si.web.app/learn?tab=videos#lesson-09)
+provides the existing captioned demo. No new media, diagrams or provider integrations are introduced.
 
-The main-branch Reviewer builds an independent context and explicitly excludes Advisor wording.
-Later paired implementations may pass a proposal separately from source facts. Independence therefore
-means a distinct role, evidence projection and validated output—not a universal assertion that the
-Reviewer never sees a proposal. Both roles remain advisory; deterministic accounting and human
-approval are authoritative. The public Academy's corrected lessons 04/05/09 reflect this distinction.
+## Screenshots, provenance and privacy
 
-The historical public-source harness enforces two calls per role, one read-only evidence tool,
-2,048 maximum output tokens and no transport retries. Its 14 checks cover one synthetic case.
-Later hosted controls include admission, bounded reservations and safe-off behavior. This snapshot
-makes no promise about remaining quota, current campaign eligibility or billable cost. Historical
-usage estimates are not invoices or guaranteed spending ceilings.
+The existing three public screenshots were genuinely captured signed out on **24 October 2026 IST**
+at the canonical production site: [demo](assets/demo-public-20261024.jpg),
+[landing](assets/product-public-20261024.jpg) and [Academy](assets/academy-public-20261024.jpg).
+Their original bytes and dates remain intact. They show public surfaces, not Account B's saved
+Gemini results. The 18 October prototype deck is a genuine **local** capture; wireframes are proposals.
+No image has been relabelled as the 25 October authenticated production acceptance.
 
-Recovery preserves audit history, original posting identity and explicit decisions. Invalid advice
-falls back visibly. Operator rollback and model deactivation are separate release controls; this
-portfolio does not execute them. [Migration controls](../architecture/migrate-resolve.md) ·
-[First-use controls](../architecture/onboard-fpu.md) · [Live-model design](../architecture/live-gemini-adk.md).
+The [showcase manifest](manifest.json) preserves original hashes and attribution. Seven original
+PPTX/PNG pairs and the existing C4 sources remain unchanged; all eight artifacts are retained.
+The [Academy inventory](../video-academy/README.md) retains all nine approved video and caption links.
+Private screenshots, account/session/mapping/request identifiers, raw responses, operational logs,
+credentials and private delivery archives are excluded. The owner-reported production acceptance
+is explicitly attributed rather than illustrated using unrelated or reconstructed evidence.
 
-## Public-safety decision
+No new design, media generation, application change or release is part of this documentation update.
 
-Included: seven original safe PPTX/PNG pairs, the existing public C4 equivalent, three fresh signed-out
-screenshots, descriptive documentation and this audit's public media metadata. The original decks
-were inspected for text, notes, external relationships, embedded content and credential/private-path
-patterns; source bytes and attribution were retained. Previews were visually reviewed.
+## Documentation validation — 25 October 2026
 
-Excluded: private Gemini packages and raw release receipts, account identities, private session URLs,
-operational logs, infrastructure-specific original architecture slides, delivery ZIPs, and all new MP4
-copies. The separate source collections were read-only. The approved local SRTs remain in the archive;
-existing public VTT links provide accessible captions without duplicate caption trees.
+The existing repository documentation checker reports zero findings across 158 Markdown and
+692 text files. The portfolio link check resolves 163 internal references including anchors
+and 36 public URLs, including all nine MP4, VTT and transcript endpoints. MP4 prefixes identify
+valid containers; all nine current VTT hashes match the approved manifest. Original full-video
+hash and timing results retain their 24 October date; full playback was not repeated.
 
-Publication still requires explicit owner approval. Missing Drive parity and absent final-demo V2 hosting
-are recorded limitations; neither prevents a useful portfolio because verified local equivalents and
-the already published Academy walkthrough are available. Publishing the older V2 film as a current
-live-Gemini demonstration would be **NO-GO** without resolving its dated claims.
+All 20 showcase/source manifest hashes match, preserving the eight-artifact showcase. A bounded
+privacy scan found no private account identifiers, local paths or credential patterns in the
+updated portfolio text. Existing licensing notices remain byte-for-byte unchanged.
+
+Local GitHub-flavored Markdown previews of the README, showcase, receipt and Academy rendered
+on desktop and mobile without broken images or page overflow. All 12 existing GitHub-hosted
+PNG/JPEG/SVG assets returned HTTP 200 and matched approved hashes. The updated text has not yet
+been pushed, so its final github.com rendering remains a post-publication check.

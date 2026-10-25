@@ -30,6 +30,15 @@ serves VTT, not SRT; no nonexistent SRT hosting link is supplied.
 
 ## Verification and scope
 
+**25 October release closeout:** all nine modules and their approved caption links are retained.
+Watch-guide playback remains usable; the thumbnail defect is explicitly deferred and is not one
+of the four MVP acceptance blockers. The checks below retain their original 24 October scope;
+this documentation update does not rerender media or repeat full playback/narration QA.
+A read-only link recheck on 25 October passed for all nine MP4, VTT and transcript URLs.
+MP4 signatures were valid; all nine VTT hashes still match the approved manifest.
+These bounded requests do not repeat the earlier complete-file video hash checks.
+[Current release and functional acceptance](../showcase/EVIDENCE.md).
+
 - All nine local MP4 SHA-256 hashes and SRT hashes match the approved bundle manifest. All have H.264 video and AAC audio.
 - All nine SRT files have ordered, non-overlapping cues within their measured duration: 25, 21, 28, 22, 18, 26, 29, 27 and 53 cues respectively.
 - All nine public video, VTT and transcript requests succeeded. Public VTT hashes match the approved bundle. All nine public full-file MP4 hashes match the approved local files. Initial range requests returned HTTP 200/full files for 01–08 and HTTP 206/a matching 4,096-byte prefix for 09; a separate full GET then verified 09.
@@ -40,7 +49,9 @@ serves VTT, not SRT; no nonexistent SRT hosting link is supplied.
 [Actual Academy screenshot](../showcase/assets/academy-public-20261024.jpg).
 
 The catalogue comes from pushed branch `feature/video-academy-v1`, inspected at `dbdd07f`;
-implementation image source was `5515ee1`. That branch is not merged into the audited main baseline.
+original Academy implementation image source was `5515ee1`. The later accepted web release
+is `movebooks-beta-web-p004-555eaac`; its image identity is recorded in the linked MVP receipt.
+The Academy branch is not merged into the audited main baseline.
 Public availability is independently supported by the current page/media responses, not inferred
 from the branch or an approval flag. Corrected lessons 04/05/09 are the reviewed published cuts;
 obsolete originals remain excluded. Lessons demonstrate bounded synthetic behavior, not universal

@@ -2,176 +2,131 @@
 
 **Move your books. Keep your confidence.**
 
-Accounting migration should finish with books you can use and results you can explain.
-MoveBooks AI helps business owners, accountants and finance operators understand readiness,
-review mappings, resolve exceptions and verify a first productive task—with human approval
-and deterministic financial checks throughout.
+MoveBooks AI guides a synthetic accounting migration from readiness and mapping review to
+reconciliation and **Verified First Productive Use**. Gemini explains uncertain mappings; an
+independent Reviewer challenges the recommendation. Humans approve consequential decisions,
+and deterministic checks remain authoritative.
 
-[**Launch MoveBooks AI**](https://movebooks-si.web.app) ·
-[**Explore the guided demo**](https://movebooks-si.web.app/simulator) ·
+**Non-commercial MVP for approved hackathon judges and interview panelists.** All four agreed
+functional P0 requirements have passed acceptance. This is not commercial production readiness,
+a real accounting-provider integration or an unrestricted AI service.
+
+[**Launch MoveBooks AI**](https://movebooks-si.web.app/) ·
+[**Explore the read-only demo**](https://movebooks-si.web.app/simulator) ·
 [**Watch Three-Minute Journey · 2:49**](https://movebooks-si.web.app/learn?tab=videos#lesson-09)
 
-[Product Showcase](docs/showcase/README.md) · [Nine-video Academy](docs/video-academy/README.md) ·
-[Evidence and capability status](docs/showcase/EVIDENCE.md) · [Developer setup](#developer-setup)
+[Eight-artifact showcase](docs/showcase/README.md) · [Nine-video Academy](docs/video-academy/README.md) ·
+[Acceptance and evidence](docs/showcase/EVIDENCE.md) · [Developer setup](#developer-setup)
 
-> **Bounded synthetic Beta.** No real customer or production provider data. No live accounting-provider
-> migration or production/compliance-readiness claim. The public guided demo needs no sign-in;
-> the operational workspace requires Google sign-in. Gemini is a restricted evaluation, not general access.
+[![Genuine public guided demo showing Prepare and sample mapping evidence, captured 24 October 2026](docs/showcase/assets/demo-public-20261024.jpg)](https://movebooks-si.web.app/simulator)
 
-[![Actual public guided demo showing the Prepare stage and sample mapping evidence](docs/showcase/assets/demo-public-20261024.jpg)](https://movebooks-si.web.app/simulator)
+*Public signed-out capture, 24 October 2026 IST: sample demo evidence, not an executed migration
+or a Gemini output. [Screenshot provenance](docs/showcase/README.md#05-prototype-showcase).*
 
-*Genuine public UI capture, 24 October 2026 (IST). This is the read-only guided demo with
-sample evidence, not an executed migration. [Screenshots and provenance](docs/showcase/README.md#05-prototype-showcase).*
+## A three-minute review
 
-## Why it exists
+1. **See the journey:** explore the public demo or captioned walkthrough above. Neither requires a model call.
+2. **Inspect the working MVP:** approved accounts use [My Migration](https://movebooks-si.web.app/workspace).
+   Existing saved analysis can be reopened without running Gemini. Access remains restricted.
+3. **Understand the decisions:** review the [eight showcase artifacts](docs/showcase/README.md),
+   [architecture](docs/architecture/beta-v1-agent-architecture.md) and [dated acceptance receipt](docs/showcase/EVIDENCE.md#four-p0-acceptance).
 
-A successful import does not answer three practical questions: **Did the right records move?
-Do the numbers reconcile? Can the business start working?** Fragmented exports, ambiguous
-account mappings and unresolved exceptions make that handover difficult to trust.
-
-MoveBooks connects preparation, migration and onboarding into one governed journey. It makes
-uncertainty visible before approval and carries evidence through to **Verified First Productive Use**.
-This is a product hypothesis demonstrated with synthetic books; customer time savings and
-production adoption outcomes have not been measured.
-
-## Experience the product
-
-1. [Explore Demo](https://movebooks-si.web.app/simulator): a short, read-only tour of Harbor Light Books.
-2. [Watch the hosted product walkthrough](https://movebooks-si.web.app/learn?tab=videos#lesson-09):
-   the exact Academy title is **Three-Minute Journey**, measured at 169.007 seconds, with English captions.
-3. [Open the Guide](https://movebooks-si.web.app/guide) and use the authenticated workspace to rehearse the synthetic journey.
-
-The [Video Academy inventory](docs/video-academy/README.md) includes all nine lessons, direct video
-and caption links, and the separate **2:55 final-demo V2** archive. That older film is available
-locally but has no verified public hosting URL; it is not the hosted Academy walkthrough above.
-The landing page's 25-second **Product Vision** is conceptual media.
+The customer problem is the handover after import: **Did the right records move? Do the numbers
+reconcile? Can the business start working?** This synthetic MVP demonstrates a completion contract,
+not measured customer savings or adoption. The [North Star](docs/METRICS_FRAMEWORK.md) is the share
+of eligible journeys reaching Verified First Productive Use.
 
 ## Five stages, one completion contract
 
-| Stage | What the user does | Evidence and safeguard |
+| Stage | User outcome | Safeguard |
 | --- | --- | --- |
-| **Understand** | Discover the source and assess readiness | Schema, required-field and reference checks expose blockers. |
-| **Prepare** | Review the plan and account mappings | Consequential choices require explicit, current human approval. |
-| **Move** | Execute approved synthetic batches and resolve exceptions | Checkpoints, bounded retries and idempotency preserve recovery. |
-| **Verify** | Reconcile records and review configuration | Exact accounting checks must pass; approval cannot waive a failure. |
-| **Start** | Complete onboarding and approve the first synthetic invoice | Deterministic verification establishes First Productive Use. |
+| **Understand** | Know the source, scope and readiness blockers | Schema, required-field and reference checks. |
+| **Prepare** | Review the plan and account mappings | Explicit, current human approval. |
+| **Move** | Execute approved synthetic batches and resolve exceptions | Checkpoints, bounded retries and idempotency. |
+| **Verify** | Reconcile records and review configuration | Exact financial checks; approval cannot waive failure. |
+| **Start** | Complete onboarding and the first synthetic productive task | Deterministic verification of First Productive Use. |
 
-The underlying lifecycle remains Discover → Assess → Plan → Map & Approve → Migrate → Resolve
-→ Validate → Configure → Onboard → Verified First Productive Use.
-[Product constitution](docs/PRODUCT_CONSTITUTION.md) · [FPU contract](docs/architecture/onboard-fpu.md).
+[Product constitution](docs/PRODUCT_CONSTITUTION.md) · [FPU contract](docs/architecture/onboard-fpu.md) ·
+[User guide](https://movebooks-si.web.app/guide).
 
-## What is verified
+## Released and accepted — 25 October 2026
 
-**Snapshot: 24 October 2026 (IST).** Public hosting, source publication and test results are separate facts.
-
-| Capability | Supported statement |
+| Functional requirement | Accepted evidence |
 | --- | --- |
-| Public experience and UX | **A — publicly verified:** current landing, guided demo, Learn and nine-video Academy observed at the canonical URL. This does not certify every authenticated V2 flow. |
-| Deterministic migration and FPU | **C — locally verified:** recorded real UI/API journey passes 21 checks, including 17 reconciliation checks and an approved synthetic USD 107.25 invoice. Historical deployed Beta acceptance is separately documented. |
-| Gemini Advisor and Reviewer | **B — hosted staging proof reviewed:** a bounded paired run is recorded. Later public activation is recorded and the site displays “Live · limited evaluation”; fresh authenticated public inference remains **E — unverified in this audit**. No inference was invoked. |
-| Browser-local file checks | **A — public entry observed; C — implementation evidence:** supported file validation stays in the browser. Hosted customer-file ingestion and real provider writes are not established. |
-| Broader connectors and production adoption | **D — planned:** no production customer, live-provider migration or measured business benefit is claimed. |
+| **P0-01 — Judge access: PASS** | Approved Account B accessed its authenticated workspace; previously accepted evidence retained. |
+| **P0-03 — Five-stage migration: PASS** | Existing synthetic migration, reconciliation and First Productive Use previously accepted. |
+| **P0-04 — Gemini Advisor + independent Reviewer: PASS** | Owner visually verified saved production Advisor explanation, Reviewer **QUESTION** assessment, grounding and uncertainty on the correct existing mapping. The panel states: “Historical analysis restored. No model was called.” |
+| **P0-05 — Isolation and financial safeguards: PASS** | Previously accepted ownership, isolation and human-approval evidence retained. |
 
-[Claim-to-evidence matrix, source revisions and limits](docs/showcase/EVIDENCE.md).
-GitHub main is not a deployment ledger: the pushed Academy branch and serving experience are
-newer than this main-branch baseline; the separate V2 Phase 1 PR remains a draft.
+The production visual check is **owner-reported screenshot evidence**; earlier authenticated payload
+and protected-preview checks separately verified record pairing and restoration. Server logs cover
+specific earlier read-only windows, not every action during the later manual check. No new inference
+was needed for closeout. [Evidence sources, release identity and limitations](docs/showcase/EVIDENCE.md).
 
-## Agentic AI and human control
+## Agentic AI with explicit authority
 
 **Rules verify. AI predicts. GenAI reasons. Agents orchestrate and act. Humans govern consequential decisions.**
-This responsibility model does not claim that every specialist uses a live model or that predictive accuracy is established.
+This responsibility model does not imply that every specialist calls a model or that predictive accuracy is proven.
 
-Deterministic stage agents coordinate discovery, assessment, planning, mapping, migration,
-resolution, reconciliation, configuration and onboarding. They advance only through allowed
-states and approved intents. Financial checks are tools; generated explanations cannot replace them.
-
-| Responsibility | Authority and boundary |
+| Role | Responsibility and boundary |
 | --- | --- |
-| **Advisor** | Explains allowed evidence, uncertainty and possible next steps. Cannot approve, execute a migration, reconcile, retry or post an invoice. |
-| **Independent Reviewer** | Uses a separate role, context and output contract to challenge evidence and recommendations. Independence means separate reasoning and validation; later paired implementations may inspect a proposal, so “never sees Advisor output” is not a universal claim. |
-| **Evidence retrieval** | Bounded, read-only evidence projections with attributable references. Missing evidence stays unknown; invalid or unavailable model output becomes an explicitly labelled fallback. No general web-retrieval or raw-upload-to-model claim. |
-| **Human approver** | Retains authority over consequential mappings, plans, remediations, sensitive settings and the exact first invoice. Advice is not consent. |
-| **Deterministic controls** | Enforce owner isolation, current approvals, exact totals, checkpoints, audit history and idempotent posting. A failed check blocks progress. |
+| **Gemini Advisor** | Explains supplied evidence, uncertainty and possible next steps. Cannot approve, migrate, reconcile or post an invoice. |
+| **Independent Reviewer** | Challenges a proposal using a distinct role, evidence projection and output contract. Independence does not mean universally hiding the Advisor proposal. |
+| **Stage agents and tools** | Coordinate allowed lifecycle transitions, bounded evidence reads and deterministic financial checks. Missing evidence stays unknown. |
+| **Human approver** | Authorizes consequential mappings, plans, remediations and the exact first invoice. Advice is not consent. |
 
-[Agent architecture](docs/architecture/beta-v1-agent-architecture.md) ·
-[Canonical workflows](docs/architecture/AGENT_WORKFLOWS.md) ·
-[AI / Agent Constitution](docs/AI_AGENT_CONSTITUTION.md) · [Trust controls](docs/TRUST.md).
+The accepted saved example recommends human escalation and records a Reviewer **QUESTION** outcome;
+it demonstrates preserved disagreement and uncertainty, not automatic approval or a model-accuracy benchmark.
+[Agent workflows](docs/architecture/AGENT_WORKFLOWS.md) · [AI constitution](docs/AI_AGENT_CONSTITUTION.md) ·
+[Trust controls](docs/TRUST.md).
 
-**Cost, isolation and safe failure.** The bounded public-source harness limits each role to two
-model calls, disables transport retries and caps output; that historical harness is not a current
-public quota promise. Later hosted evaluation adds admission, reservation and kill-switch controls.
-No model run or cloud change is required to explore this portfolio. Missing permission, invalid
-output or unavailable advice must leave the deterministic workflow authoritative. Rollback is a
-separate operator-controlled release action; this documentation does not activate or roll back services.
-[Bounded run and limits](docs/reviews/live-gemini-l1-16e31e9.md) ·
-[Security threat model](docs/security/THREAT_MODEL.md).
+## Architecture and product showcase
 
-## Architecture and technology
-
-| Layer | Implementation and purpose |
+| Layer | Purpose |
 | --- | --- |
-| Experience | Next.js, React and TypeScript provide the guided journey and evidence review. |
-| API and workflow | Python, FastAPI and typed contracts coordinate deterministic agents and tools. |
-| Financial state | PostgreSQL / Cloud SQL stores owner-scoped snapshots; exact arithmetic and synthetic adapters support reconciliation. |
-| Identity and hosting | Firebase identity and Hosting front the Google Cloud runtime; a server-side proxy reaches the protected API. |
-| Optional reasoning | Google ADK and Gemini on Vertex AI provide bounded advisory reasoning; availability depends on evaluation controls. |
-| Quality | pytest, Vitest, offline contracts, PostgreSQL isolation checks and image security gates provide scoped evidence. |
+| Next.js / React / TypeScript | Guided journey, authenticated workspace and evidence review. |
+| Python / FastAPI | Typed workflow contracts, deterministic agents and tools. |
+| PostgreSQL / Cloud SQL | Owner-scoped snapshots, reconciliation and audit state. |
+| Firebase / Google Cloud | Identity, public hosting and a server-side proxy to the protected API. |
+| Google ADK / Gemini | Bounded advisory reasoning under restricted evaluation controls. |
 
-Built on Google Cloud and with Google Gemini; the product remains **independent and provider-neutral**.
-Managed Agent Engine, production connectors and broader analytics/retrieval are future directions.
-[Runtime design](docs/architecture/google-native-runtime.md) ·
-[Solution architecture and technology showcase](docs/showcase/README.md#06-solution-architecture).
+Built on Google Cloud with Google Gemini; **MoveBooks AI remains independent and provider-neutral**.
+[Runtime architecture](docs/architecture/google-native-runtime.md) · [Threat model](docs/security/THREAT_MODEL.md).
 
-## Product Showcase
-
-[Explore all eight artifacts](docs/showcase/README.md): end-to-end process, use cases,
-multi-agent swimlane, proposed wireframes, genuine prototype screenshots, solution architecture,
-technology stack and future roadmap. Each has a preview, editable source, user benefit and
-agentic AI/platform product-management context.
-
-Original 18 October design exports remain dated evidence. Their embedded “live Gemini pending”
-labels describe that baseline; the [current status matrix](docs/showcase/EVIDENCE.md) governs later claims.
-Conceptual wireframes are explicitly separated from genuine screenshots.
+The [eight-artifact showcase](docs/showcase/README.md) preserves the process, use cases, multi-agent
+swimlane, proposed wireframes, genuine screenshots, solution architecture, technology stack and roadmap.
+Original **18 October design exports** remain dated; planned wireframes and future services are not
+presented as deployed capabilities. Editable sources, attribution and original image bytes are retained.
 
 ## Video Academy
 
-[![Actual public Video Academy with lesson collections and English-caption labels](docs/showcase/assets/academy-public-20261024.jpg)](https://movebooks-si.web.app/learn?tab=videos)
+[![Genuine public Academy capture from 24 October 2026 showing published lesson collections](docs/showcase/assets/academy-public-20261024.jpg)](https://movebooks-si.web.app/learn?tab=videos)
 
-**Nine published guides, four collections, English captions.** Start with the overview, then use
-phase-specific lessons at the point of decision. [Full module inventory and media verification](docs/video-academy/README.md).
-Learning leaves migration progress unchanged.
+**Nine published modules with English captions**, from Getting Started through Three-Minute Journey.
+[Exact titles, measured durations and all video/caption links](docs/video-academy/README.md).
+Watch-guide playback remains usable; the known thumbnail defect is deferred. The conceptual Product
+Vision film and older submission recordings are separately labelled in the archive.
 
-## Evaluation and release evidence
+## Validation and known limits
 
-| Evidence | Result and scope |
-| --- | --- |
-| [Synthetic end-to-end journey](docs/submission/final-experience/evidence/journey-fa13e9e/README.md) | 21/21 local UI/API checks; synthetic invoice USD 100.00 + USD 7.25 tax = USD 107.25; recovery and migration switching included. |
-| [Offline Advisor/Reviewer evaluation](docs/submission/final-experience/evidence/agents/offline-agent-eval.json) | 23/23 scripted scenarios; grounding, authority, injection and disagreement boundaries. Zero real-model calls; not a model-quality benchmark. |
-| [18 October bounded live run](docs/reviews/live-gemini-l1-16e31e9.md) | Owner-reported 14/14 harness checks for one synthetic case, four calls. Historical evidence, not proof of public activation or statistical accuracy. |
-| [V1 final acceptance](docs/reviews/v1-final-acceptance.md) | Historical bounded synthetic acceptance; not a permanent-green status. |
-| [24 October public/media verification](docs/video-academy/manifest.json) | Nine accessible videos/caption sets; measured metadata and approved caption hashes; no inference. |
+- **Previously validated release candidate:** 992 frontend tests, 93 offline agent tests, build,
+  TypeScript, lint and web dependency audit passed. The runtime-remediated image passed the unchanged
+  Grype High/Critical gate at release. These are dated results, not a fresh repository-wide green claim.
+- **Production checks:** earlier release smoke checks passed 34/34 public checks. Owner production
+  verification subsequently closed saved-result acceptance. [Evidence scope](docs/showcase/EVIDENCE.md).
+- **Security remains separately tracked:** [OpenTelemetry Issue #42](https://github.com/JEMathew/movers-and-ledgers/issues/42)
+  is open; repository-wide CI is **not green**. [PR #41](https://github.com/JEMathew/movers-and-ledgers/pull/41)
+  contains a separately validated web security fix. Functional MVP acceptance grants no security exception or merge approval.
+- **Bounded audience and data:** non-commercial, synthetic-data-only evaluation; approved judges and
+  interview panelists. No live accounting-provider integration, customer-data migration or commercial-readiness claim.
+- **Deferred/unverified:** Academy thumbnails; `movebooks.ai` custom-domain status; real connectors,
+  broader model evaluation and customer outcomes. Use the verified `movebooks-si.web.app` URL.
 
-[Submission evidence](docs/submission/README.md) · [Judge FAQ](docs/submission/JUDGE-FAQ.md) ·
-[Final submission deck](docs/submission/assets/movebooks-final-deck.pdf) ·
-[V1.0 GitHub Release](https://github.com/JEMathew/movers-and-ledgers/releases/tag/v1.0.0) ·
-[Evaluation principles](docs/EVALUATION_PRINCIPLES.md) · [Product scorecard](docs/PRODUCT_SCORECARD.md).
-
-The North Star is the percentage of eligible journeys reaching Verified First Productive Use.
-[Metrics](docs/METRICS_FRAMEWORK.md) are defined contracts, not measured production results.
-[Agentic AI rubric](docs/rubrics/AGENTIC_AI_RUBRIC.md) ·
-[Migration rubric](docs/rubrics/MIGRATION_ONBOARDING_RUBRIC.md) · [Release readiness](docs/RELEASE_READINESS.md).
-
-## Limits and future direction
-
-Synthetic data and targets bound the current product. Public model access is restricted and may
-be unavailable; this audit did not retest authenticated isolation, execute a new migration or
-invoke Gemini. Real provider connectors, hosted ingestion hardening, backup/restore assurance,
-production observability, broader model evaluation and customer outcome measurement remain
-separate gates. [Proposed roadmap](docs/showcase/README.md#08-future-development-roadmap).
-
-Play's learning experiments, local feedback drafts and historical Product Vision material remain
-in the repository. Their existence does not establish that every experience is exposed in the current
-navigation. [Surface boundaries](docs/architecture/public-product-surfaces.md).
+[Historical local journey](docs/submission/final-experience/evidence/journey-fa13e9e/README.md) ·
+[Offline evaluation](docs/submission/final-experience/evidence/agents/offline-agent-eval.json) ·
+[Evaluation principles](docs/EVALUATION_PRINCIPLES.md) · [Roadmap](docs/showcase/README.md#08-future-development-roadmap).
+GitHub main and this documentation branch are not the production source ledger; exact serving release
+provenance is recorded in the [evidence receipt](docs/showcase/EVIDENCE.md#released-product-identity).
 
 ## Developer setup
 

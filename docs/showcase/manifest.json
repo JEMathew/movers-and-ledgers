@@ -1,6 +1,6 @@
 {
-  "reviewDateIST": "2026-10-24",
-  "publication": "local candidate; owner approval required before push, PR or upload",
+  "reviewDateIST": "2026-10-25",
+  "publication": "Original 24-file refresh published in PR #40; current documentation-only acceptance update is local pending owner approval to push.",
   "originalAssetRevision": "2026-10-18; hashes identify untracked source files, inspected worktree HEAD is context only",
   "files": [
     {
@@ -232,5 +232,11 @@
       "preview": "assets/08-roadmap.png",
       "editable": "assets/08-roadmap.pptx"
     }
-  ]
+  ],
+  "acceptanceEvidence": {
+    "path": "docs/showcase/EVIDENCE.md",
+    "productionVisualSource": "Owner-reported authenticated production screenshot verification, 2026-10-25; images not attached to this update.",
+    "publicScreenshotCaptureDateIST": "2026-10-24",
+    "originalAssetsUnchanged": true
+  }
 }

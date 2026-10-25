@@ -4,7 +4,7 @@ Use this index to find the durable decision records without turning the reposito
 
 ## Start here
 
-- [24 October capability and publication status](showcase/EVIDENCE.md) — current public observations, local/staging evidence and source/deployment distinctions; historical records below retain their original scope.
+- [25 October MVP acceptance and publication status](showcase/EVIDENCE.md) — four accepted functional P0s, owner-verified production Gemini restoration, prior server evidence and open security limits; historical records below retain their original scope.
 - [Product Showcase](showcase/README.md) — eight artifacts, editable sources, authentic screenshots and provenance.
 - [Video Academy](video-academy/README.md) — nine verified published modules, captions and separate final-demo archive status.
 
@@ -28,8 +28,8 @@ Use this index to find the durable decision records without turning the reposito
 ## AI, trust, and evaluation
 
 - [Gemini / ADK advisory architecture](architecture/live-gemini-adk.md) and
-  [validation/review record](reviews/live-gemini-adk.md) — bounded synthetic advisory reasoning
-  validated live in dev/test; public-Beta deterministic routing and managed-runtime limits remain separate.
+  [validation/review record](reviews/live-gemini-adk.md) — historical bounded synthetic advisory reasoning
+  design and dev/test validation; the current accepted production scope is in the [MVP receipt](showcase/EVIDENCE.md).
 
 - [AI and agent constitution](AI_AGENT_CONSTITUTION.md) — responsibility boundaries, evidence, approvals, safe stops, and prohibited actions.
 - [Trust and agent operations](TRUST.md) — trace and control baseline.
