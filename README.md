@@ -27,35 +27,35 @@ Viewing saved results does not trigger another model call. [Recording scope and 
 
 ### Complete Customer Journey — 7:14
 
-[![Complete Customer Journey — authentic frame from the narrated product demonstration](docs/product-demos/complete-customer-journey.jpg)](https://movebooks-si.web.app/#demo-complete-customer-journey)
+[![Complete Customer Journey — authentic frame from the narrated product demonstration](docs/product-demos/complete-customer-journey.jpg)](https://movebooks-si.web.app/learn?tab=demos#demo-complete-customer-journey)
 
 Follow the five stages from readiness and mapping through reconciliation and Verified First Productive Use.
 
-[**Watch · 7:14**](https://movebooks-si.web.app/#demo-complete-customer-journey) · [English captions](docs/product-demos/complete-customer-journey.vtt) · [Transcript](docs/product-demos/complete-customer-journey.txt) · [Chapters](docs/product-demos/complete-customer-journey.chapters.txt)
+[**Watch · 7:14**](https://movebooks-si.web.app/learn?tab=demos#demo-complete-customer-journey) · [English captions](docs/product-demos/complete-customer-journey.vtt) · [Transcript](docs/product-demos/complete-customer-journey.txt) · [Chapters](docs/product-demos/complete-customer-journey.chapters.txt)
 
 ### Gemini Advisor & Independent Reviewer — 2:34
 
-[![Gemini Advisor & Independent Reviewer — authentic frame from the narrated product demonstration](docs/product-demos/gemini-advisor-independent-reviewer.jpg)](https://movebooks-si.web.app/#demo-gemini-advisor-independent-reviewer)
+[![Gemini Advisor & Independent Reviewer — authentic frame from the narrated product demonstration](docs/product-demos/gemini-advisor-independent-reviewer.jpg)](https://movebooks-si.web.app/learn?tab=demos#demo-gemini-advisor-independent-reviewer)
 
 Examine genuine saved Gemini explanations, grounding, uncertainty and an independent Reviewer’s QUESTION assessment. Human approval remains essential.
 
-[**Watch · 2:34**](https://movebooks-si.web.app/#demo-gemini-advisor-independent-reviewer) · [English captions](docs/product-demos/gemini-advisor-independent-reviewer.vtt) · [Transcript](docs/product-demos/gemini-advisor-independent-reviewer.txt) · [Chapters](docs/product-demos/gemini-advisor-independent-reviewer.chapters.txt)
+[**Watch · 2:34**](https://movebooks-si.web.app/learn?tab=demos#demo-gemini-advisor-independent-reviewer) · [English captions](docs/product-demos/gemini-advisor-independent-reviewer.vtt) · [Transcript](docs/product-demos/gemini-advisor-independent-reviewer.txt) · [Chapters](docs/product-demos/gemini-advisor-independent-reviewer.chapters.txt)
 
 ### Assessment & Preparation — 1:39
 
-[![Assessment & Preparation — authentic frame from the narrated product demonstration](docs/product-demos/assessment-preparation.jpg)](https://movebooks-si.web.app/#demo-assessment-preparation)
+[![Assessment & Preparation — authentic frame from the narrated product demonstration](docs/product-demos/assessment-preparation.jpg)](https://movebooks-si.web.app/learn?tab=demos#demo-assessment-preparation)
 
 Explore readiness, source evidence and account mappings before approving the next step.
 
-[**Watch · 1:39**](https://movebooks-si.web.app/#demo-assessment-preparation) · [English captions](docs/product-demos/assessment-preparation.vtt) · [Transcript](docs/product-demos/assessment-preparation.txt) · [Chapters](docs/product-demos/assessment-preparation.chapters.txt)
+[**Watch · 1:39**](https://movebooks-si.web.app/learn?tab=demos#demo-assessment-preparation) · [English captions](docs/product-demos/assessment-preparation.vtt) · [Transcript](docs/product-demos/assessment-preparation.txt) · [Chapters](docs/product-demos/assessment-preparation.chapters.txt)
 
 ### Migration, Verification & FPU — 2:41
 
-[![Migration, Verification & FPU — authentic frame from the narrated product demonstration](docs/product-demos/migration-verification-fpu.jpg)](https://movebooks-si.web.app/#demo-migration-verification-fpu)
+[![Migration, Verification & FPU — authentic frame from the narrated product demonstration](docs/product-demos/migration-verification-fpu.jpg)](https://movebooks-si.web.app/learn?tab=demos#demo-migration-verification-fpu)
 
 Review recorded recovery checkpoints, deterministic reconciliation and a verified synthetic accounting task.
 
-[**Watch · 2:41**](https://movebooks-si.web.app/#demo-migration-verification-fpu) · [English captions](docs/product-demos/migration-verification-fpu.vtt) · [Transcript](docs/product-demos/migration-verification-fpu.txt) · [Chapters](docs/product-demos/migration-verification-fpu.chapters.txt)
+[**Watch · 2:41**](https://movebooks-si.web.app/learn?tab=demos#demo-migration-verification-fpu) · [English captions](docs/product-demos/migration-verification-fpu.vtt) · [Transcript](docs/product-demos/migration-verification-fpu.txt) · [Chapters](docs/product-demos/migration-verification-fpu.chapters.txt)
 
 ## Verified MVP Capabilities
 

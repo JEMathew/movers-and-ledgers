@@ -97,7 +97,7 @@ screenshots show a separate synthetic record. [Original capture context](manifes
 The accepted production example includes an Advisor explanation and independent Reviewer **QUESTION**
 assessment, grounding and uncertainty. Saved analysis is restored without another model call.
 [Acceptance evidence and attribution](EVIDENCE.md#four-p0-acceptance) ·
-[Watch the Gemini product demo](https://movebooks-si.web.app/#demo-gemini-advisor-independent-reviewer).
+[Watch the Gemini product demo](https://movebooks-si.web.app/learn?tab=demos#demo-gemini-advisor-independent-reviewer).
 Original private acceptance screenshots remain owner-held; only the approved video derivatives are offered for publication.
 
 ## 06 Solution architecture
