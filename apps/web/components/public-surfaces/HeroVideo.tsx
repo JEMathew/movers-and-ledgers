@@ -3,13 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import { Play } from "lucide-react";
 
 export const VIDEO = {
-  title: "See MoveBooks AI in Action",
+  title: "Product vision",
   src: "/media/movebooks-ai-product-vision.mp4",
   poster: "/media/movebooks-ai-product-vision-poster.webp",
   /** Measured from the asset's mvhd box: 25.04 s. */
   duration: "0:25",
   durationLabel: "25 seconds",
-  kind: "Product overview",
+  kind: "Conceptual overview",
 } as const;
 
 /**
@@ -85,9 +85,9 @@ export function HeroVideo() {
       <div className="lp-video-actions">
         <button type="button" onClick={() => restore()}>Restore photograph</button>
       </div>
-      <p id="lp-caption-status" className="lp-caption-status">Captions pending human review. The description below covers on-screen visuals only.</p>
+      <p id="lp-caption-status" className="lp-caption-status">The description below covers on-screen visuals. Explore the captioned product demonstrations that follow.</p>
       <details className="vision-transcript"><summary>Video description</summary>
-        <p>The video shows the MoveBooks AI title with the line &ldquo;From Migration Uncertainty to Business-Ready Accounting.&rdquo; Five stages light up in turn: Understand (Discover + Assess), Prepare (Plan, Map &amp; Approve), Move (Migrate + Resolve), Verify (Validate + Configure) and Start (Onboard + First Real Task). Beneath them are three statements: &ldquo;You approve key decisions,&rdquo; &ldquo;We resolve blockers before moving forward&rdquo; and &ldquo;We verify your numbers.&rdquo; It ends on &ldquo;Business ready · verified.&rdquo; This describes the on-screen visuals only; spoken captions are not provided yet.</p>
+        <p>The video shows the MoveBooks AI title with the line &ldquo;From Migration Uncertainty to Business-Ready Accounting.&rdquo; Five stages light up in turn: Understand (Discover + Assess), Prepare (Plan, Map &amp; Approve), Move (Migrate + Resolve), Verify (Validate + Configure) and Start (Onboard + First Real Task). Beneath them are three statements: &ldquo;You approve key decisions,&rdquo; &ldquo;We resolve blockers before moving forward&rdquo; and &ldquo;We verify your numbers.&rdquo; It ends on &ldquo;Business ready · verified.&rdquo; This description covers the conceptual on-screen visuals; the product demonstrations below include English captions.</p>
       </details>
     </section>
   </div>;

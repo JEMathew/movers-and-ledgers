@@ -40,9 +40,9 @@ describe("hero video", () => {
     const hero = document.querySelector(".lp-hero")!;
     const plays = screen.getAllByRole("button", { name: /^Play video/ });
     expect(plays).toHaveLength(1);
-    expect(plays[0]).toHaveAccessibleName("Play video: See MoveBooks AI in Action, 25 seconds");
+    expect(plays[0]).toHaveAccessibleName("Play video: Product vision, 25 seconds");
     expect(hero).toContainElement(plays[0]);
-    expect(hero).toHaveTextContent("0:25 · Product overview");
+    expect(hero).toHaveTextContent("0:25 · Conceptual overview");
     expect(hero).not.toHaveTextContent("3:43");
   });
   it("plays inline only on request, preserves native controls, and restores the photograph and focus", async () => {
@@ -68,9 +68,9 @@ describe("hero video", () => {
     await waitFor(() => expect(screen.getByRole("button", { name: /^Play video/ })).toHaveFocus());
     fireEvent.click(document.querySelector(".lp-hero-picture")!);
     expect(panel).not.toHaveAttribute("hidden");
-    expect(screen.getByText("Video description").closest("details")).toHaveTextContent("spoken captions are not provided yet");
+    expect(screen.getByText("Video description").closest("details")).toHaveTextContent("product demonstrations below include English captions");
     expect(video.querySelector("track")).toBeNull();
-    expect(screen.getByText(/Captions pending human review/)).toBeVisible();
+    expect(screen.getByText(/Explore the captioned product demonstrations that follow/)).toBeVisible();
     fireEvent.keyDown(video, { key: "Escape" });
     expect(panel).toHaveAttribute("hidden");
   });
@@ -105,7 +105,7 @@ describe("hero video", () => {
     await waitFor(() => expect(HTMLMediaElement.prototype.play).toHaveBeenCalledTimes(2));
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     expect(document.querySelector("video")).toBeVisible();
-    expect(document.querySelectorAll("video")).toHaveLength(1);
+    expect(document.querySelectorAll(".lp-hero video")).toHaveLength(1);
   });
   it("recovers from a source failure and ignores a late rejection after restore", async () => {
     let rejectPlay!: (reason: Error) => void;
@@ -141,7 +141,7 @@ describe("hero video", () => {
       fireEvent.ended(video);
       expect(picture).toBeVisible();
       expect(video).not.toBeVisible();
-      expect(document.querySelectorAll("video")).toHaveLength(1);
+      expect(document.querySelectorAll(".lp-hero video")).toHaveLength(1);
     }
   });
   it("keeps the hero image slot marked pending visual acceptance until the approved photo replaces the poster", () => {

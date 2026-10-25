@@ -1,0 +1,43 @@
+Complete Customer Journey
+
+00:00:00 — Complete customer journey
+MoveBooks AI is built on Google Cloud and powered by Gemini AI. It guides accounting migration from readiness assessment through verified first productive use. Follow the customer journey, with genuine Gemini results and a verified synthetic accounting outcome. The public demo needs no sign-in. My Migration uses Google access for approved accounts. This entry screen is signed out; we will move to recorded workspace evidence rather than simulate signing in. The MVP uses synthetic books, with no live accounting-provider integration.
+
+00:00:36 — Understand: establish readiness
+We begin with Understand. The public demo introduces Harbor Light Books, a fictional shop, and the questions to resolve before moving anything. For the detailed workspace journey, we now switch to a recording of the real application working with local synthetic books. This is a recorded example with synthetic books, not a new production migration. The user reviews source records, readiness and the proposed scope. Missing information needs attention before the plan progresses. The purpose is to make the risks visible early, while the user still controls what happens next.
+
+00:01:12 — Prepare: review account meaning
+Prepare turns that understanding into a migration plan. An account name alone is not enough: the destination must preserve the meaning of the source. The existing mapping view brings suggested matches, confidence and review status together. Ambiguous or sensitive choices still need a person to examine the evidence. This recorded example shows the separate human decisions around mappings and the plan. These are recorded decisions, not new approvals. A suggestion is not consent, and approving a plan is distinct from accepting an explanation.
+
+00:01:46 — Gemini: genuine saved analysis
+Now we switch records. These genuine production screenshots show previously generated Gemini results for the account twelve hundred, Misc Clearing, ready for review. Run AI-Assisted Analysis is visible, but we do not click it. We are reviewing a saved response, not generating a new one.
+
+00:02:07 — Advisor: explanation and uncertainty
+The Advisor explains why this mapping needs judgment. The proposed destination is Other Current Asset. Its supplied candidate confidence is zero point seven six: a mapping input, not a guarantee of model accuracy. The source purpose and acceptance criteria are missing. The recommendation is to escalate to a qualified human, grounded in the escalation flag and policy constraints. The explanation preserves uncertainty instead of inventing an accounting story.
+
+00:02:37 — Reviewer: independent challenge
+The independent Reviewer returns QUESTION. It challenges the recommendation against the supplied source facts. A compatible account type does not establish a clearing account's business purpose. The Reviewer highlights the missing purpose, confidence threshold and need for human review. Accepting reasoning is never approval of the mapping. Neither Advisor nor Reviewer can authorize a migration or post an invoice. The human retains that authority.
+
+00:03:05 — Saved evidence and human authority
+Here, the saved explanation brings the mapping's supporting evidence into view. Private details stay hidden. Saved results belong to their mapping; switching context clears outdated analysis. Reopening retrieves the existing explanation for review. No model is called. The reopening itself is not shown in this footage. The saved snapshot informs a person; deterministic validation remains authoritative.
+
+00:03:33 — Move: checkpoints and recovery
+We review an existing local journey. This is a different synthetic record from the Gemini analysis in this collection. In Move, the recorded run encounters a controlled duplicate and pauses the affected work. Completed checkpoints remain intact while the exception is reviewed. The footage shows the existing recovery sequence and its human decision boundary. It is historical playback, not a retry or migration executed during this recording. The practical benefit is controlled recovery: resolve the permitted problem without replaying work that has already completed.
+
+00:04:10 — Verify: exact financial checks
+Moving records is only part of the job. Verify examines whether the result is financially consistent. The accepted local run recorded seventeen deterministic validation checks, followed by review of configuration areas. These are rule-based checks, not generated opinions or AI confidence scores. A failed financial check cannot be waived by a reassuring explanation. Counts, relationships and financial results must satisfy their own contracts. Configuration and sensitive approvals remain separate decisions. The customer gains evidence of what was checked, rather than just a progress bar reaching the end.
+
+00:04:51 — Start: verified first productive use
+Start asks a more useful question than whether the import finished: can the business complete its first governed accounting task? The archival run reviews onboarding and the invoice contract, then records the approved synthetic action and its verification. No invoice is being posted now. For this local record, the invoice subtotal is one hundred US dollars, tax is seven dollars and twenty-five cents, and the total is one hundred and seven dollars and twenty-five cents. The screen confirms Verified First Productive Use. Those figures belong to this recorded local journey; they are not totals from the separate Gemini migration or a new production transaction.
+
+00:05:32 — Evidence and returning to work
+Evidence and Results lets the user inspect the recorded decisions behind progress. My Migration then provides a place to return to that work. The archived workspace is already complete. Its local AI activity view is not proof of Gemini execution. The genuine Gemini evidence shown earlier comes from the separately identified production capture.
+
+00:05:55 — Learning and support
+Learn brings nine video guides together, with English captions to support each stage of the journey. Choose a guide when you need a clear explanation of the next decision. The Guide connects the stages to practical steps, from understanding the source to reviewing results. Trust and Security explains the controls: people approve consequential decisions, rules verify financial facts, and workspaces belong to their owners. Use that guidance alongside the evidence in your own workspace. Gemini advice supports judgment; it does not replace permission, financial checks or accountability. This is a bounded synthetic MVP, not a live accounting-provider migration.
+
+00:06:35 — The customer outcome
+The customer outcome is a guided move with evidence at every consequential decision. Gemini explains uncertainty, and an independent Reviewer challenges the recommendation. People retain authority, while exact checks determine financial validity. The recorded local journey and saved production Gemini example are separate records. Together they show preparation, governed recovery and a verified first productive task, without claiming a new live session. Explore the synthetic MVP at movebooks dash s i dot web dot app.
+
+00:07:07 — Move your books. Keep your confidence.
+MoveBooks AI. Move your books. Keep your confidence.

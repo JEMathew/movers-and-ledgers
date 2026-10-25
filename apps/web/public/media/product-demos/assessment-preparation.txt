@@ -1,0 +1,13 @@
+Assessment Preparation
+
+00:00:00 — Migration assessment and preparation
+MoveBooks AI is built on Google Cloud and powered by Gemini AI. It guides accounting migration from readiness assessment through verified first productive use. This walkthrough focuses on readiness, account meaning and the human checkpoints before any books move. The workspace sequence uses a recorded local synthetic example.
+
+00:00:21 — Understand: establish readiness
+We begin with Understand. The public demo introduces Harbor Light Books, a fictional shop, and the questions to resolve before moving anything. For the detailed workspace journey, we now switch to a recording of the real application working with local synthetic books. This is a recorded example with synthetic books, not a new production migration. The user reviews source records, readiness and the proposed scope. Missing information needs attention before the plan progresses. The purpose is to make the risks visible early, while the user still controls what happens next.
+
+00:00:57 — Prepare: review account meaning
+Prepare turns that understanding into a migration plan. An account name alone is not enough: the destination must preserve the meaning of the source. The existing mapping view brings suggested matches, confidence and review status together. Ambiguous or sensitive choices still need a person to examine the evidence. This recorded example shows the separate human decisions around mappings and the plan. These are recorded decisions, not new approvals. A suggestion is not consent, and approving a plan is distinct from accepting an explanation.
+
+00:01:31 — Move your books. Keep your confidence.
+MoveBooks AI. Move your books. Keep your confidence.

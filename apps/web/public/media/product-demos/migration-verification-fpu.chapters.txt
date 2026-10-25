@@ -1,0 +1,6 @@
+00:00:00 Migration, verification and first productive use
+00:00:23 Inspect the completed journey
+00:00:35 Move: checkpoints and recovery
+00:01:12 Verify: exact financial checks
+00:01:52 Start: verified first productive use
+00:02:33 Move your books. Keep your confidence.

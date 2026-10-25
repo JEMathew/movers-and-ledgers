@@ -1,0 +1,103 @@
+1
+00:00:01,000 --> 00:00:04,613
+MoveBooks AI is built on Google Cloud and powered by Gemini AI.
+
+2
+00:00:04,793 --> 00:00:10,067
+It guides accounting migration from readiness assessment through
+verified first productive use.
+
+3
+00:00:10,247 --> 00:00:16,155
+This walkthrough focuses on readiness, account meaning and the
+human checkpoints before any books move.
+
+4
+00:00:16,335 --> 00:00:20,361
+The workspace sequence uses a recorded local synthetic example.
+
+5
+00:00:22,467 --> 00:00:23,943
+We begin with Understand.
+
+6
+00:00:24,103 --> 00:00:30,518
+The public demo introduces Harbor Light Books, a fictional shop,
+and the questions to resolve before moving
+
+7
+00:00:30,518 --> 00:00:31,058
+anything.
+
+8
+00:00:31,218 --> 00:00:37,119
+For the detailed workspace journey, we now switch to a recording
+of the real application working with local
+
+9
+00:00:37,119 --> 00:00:38,002
+synthetic books.
+
+10
+00:00:38,847 --> 00:00:43,071
+This is a recorded example with synthetic books, not a new
+production migration.
+
+11
+00:00:43,231 --> 00:00:47,050
+The user reviews source records, readiness and the proposed
+scope.
+
+12
+00:00:47,210 --> 00:00:50,742
+Missing information needs attention before the plan progresses.
+
+13
+00:00:50,902 --> 00:00:56,359
+The purpose is to make the risks visible early, while the user
+still controls what happens next.
+
+14
+00:00:58,533 --> 00:01:01,736
+Prepare turns that understanding into a migration plan.
+
+15
+00:01:01,896 --> 00:01:06,903
+An account name alone is not enough: the destination must
+preserve the meaning of the source.
+
+16
+00:01:07,063 --> 00:01:12,425
+The existing mapping view brings suggested matches, confidence
+and review status together.
+
+17
+00:01:12,585 --> 00:01:16,988
+Ambiguous or sensitive choices still need a person to examine
+the evidence.
+
+18
+00:01:17,148 --> 00:01:21,953
+This recorded example shows the separate human decisions around
+mappings and the plan.
+
+19
+00:01:22,148 --> 00:01:24,937
+These are recorded decisions, not new approvals.
+
+20
+00:01:25,097 --> 00:01:30,650
+A suggestion is not consent, and approving a plan is distinct
+from accepting an explanation.
+
+21
+00:01:32,833 --> 00:01:33,800
+MoveBooks AI.
+
+22
+00:01:33,980 --> 00:01:34,923
+Move your books.
+
+23
+00:01:35,103 --> 00:01:36,370
+Keep your confidence.

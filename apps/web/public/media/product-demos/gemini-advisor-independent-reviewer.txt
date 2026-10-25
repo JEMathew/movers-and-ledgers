@@ -1,0 +1,22 @@
+Gemini Advisor Independent Reviewer
+
+00:00:00 — Gemini Advisor and independent Reviewer
+MoveBooks AI is built on Google Cloud and powered by Gemini AI. It guides accounting migration from readiness assessment through verified first productive use. Here, focus on a mapping that needs judgment, and the two genuine Gemini roles that help a person review it. We are examining saved results, not making a new model call.
+
+00:00:21 — Review the selected mapping
+Start with the selected account twelve hundred, Misc Clearing, and the proposed destination, Other Current Asset. This saved production screen shows a recorded decision. The editorial highlight directs attention to the mapping; it is not a new selection or approval.
+
+00:00:39 — Gemini: genuine saved analysis
+These genuine production screenshots show previously generated Gemini results for the account twelve hundred, Misc Clearing, ready for review. Run AI-Assisted Analysis is visible, but we do not click it. We are reviewing a saved response, not generating a new one.
+
+00:01:00 — Advisor: explanation and uncertainty
+The Advisor explains why this mapping needs judgment. The proposed destination is Other Current Asset. Its supplied candidate confidence is zero point seven six: a mapping input, not a guarantee of model accuracy. The source purpose and acceptance criteria are missing. The recommendation is to escalate to a qualified human, grounded in the escalation flag and policy constraints. The explanation preserves uncertainty instead of inventing an accounting story.
+
+00:01:30 — Reviewer: independent challenge
+The independent Reviewer returns QUESTION. It challenges the recommendation against the supplied source facts. A compatible account type does not establish a clearing account's business purpose. The Reviewer highlights the missing purpose, confidence threshold and need for human review. Accepting reasoning is never approval of the mapping. Neither Advisor nor Reviewer can authorize a migration or post an invoice. The human retains that authority.
+
+00:01:58 — Saved evidence and human authority
+Here, the saved explanation brings the mapping's supporting evidence into view. Private details stay hidden. Saved results belong to their mapping; switching context clears outdated analysis. Reopening retrieves the existing explanation for review. No model is called. The reopening itself is not shown in this footage. The saved snapshot informs a person; deterministic validation remains authoritative.
+
+00:02:26 — Move your books. Keep your confidence.
+MoveBooks AI. Move your books. Keep your confidence.
