@@ -85,9 +85,9 @@ export function HeroVideo() {
       <div className="lp-video-actions">
         <button type="button" onClick={() => restore()}>Restore photograph</button>
       </div>
-      <p id="lp-caption-status" className="lp-caption-status">The description below covers on-screen visuals. Explore the captioned product demonstrations that follow.</p>
+      <p id="lp-caption-status" className="lp-caption-status">The description below covers on-screen visuals. Explore the captioned product demonstrations in Learn.</p>
       <details className="vision-transcript"><summary>Video description</summary>
-        <p>The video shows the MoveBooks AI title with the line &ldquo;From Migration Uncertainty to Business-Ready Accounting.&rdquo; Five stages light up in turn: Understand (Discover + Assess), Prepare (Plan, Map &amp; Approve), Move (Migrate + Resolve), Verify (Validate + Configure) and Start (Onboard + First Real Task). Beneath them are three statements: &ldquo;You approve key decisions,&rdquo; &ldquo;We resolve blockers before moving forward&rdquo; and &ldquo;We verify your numbers.&rdquo; It ends on &ldquo;Business ready · verified.&rdquo; This description covers the conceptual on-screen visuals; the product demonstrations below include English captions.</p>
+        <p>The video shows the MoveBooks AI title with the line &ldquo;From Migration Uncertainty to Business-Ready Accounting.&rdquo; Five stages light up in turn: Understand (Discover + Assess), Prepare (Plan, Map &amp; Approve), Move (Migrate + Resolve), Verify (Validate + Configure) and Start (Onboard + First Real Task). Beneath them are three statements: &ldquo;You approve key decisions,&rdquo; &ldquo;We resolve blockers before moving forward&rdquo; and &ldquo;We verify your numbers.&rdquo; It ends on &ldquo;Business ready · verified.&rdquo; This description covers the conceptual on-screen visuals; the product demonstrations in Learn include English captions.</p>
       </details>
     </section>
   </div>;

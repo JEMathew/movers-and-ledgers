@@ -3,7 +3,6 @@ import { ArrowRight, ChartColumn, CircleCheck, Database, ShieldCheck, Store } fr
 import { HeroVideo } from "@/components/public-surfaces/HeroVideo";
 import { LandingJourney } from "@/components/public-surfaces/LandingJourney";
 import { AiStatusBadge } from "@/components/v2/primitives";
-import { ProductDemos } from "@/components/public-surfaces/ProductDemos";
 
 const questions = [
   { Icon: Database, title: "Will All My Data Move Correctly?", copy: "Customers, vendors, accounts, transactions and settings need to arrive complete and usable." },
@@ -27,6 +26,7 @@ export default function Home() {
             <Link href="/simulator" className="lp-button lp-button-primary" data-hero-cta>Explore Demo<ArrowRight size={20} aria-hidden="true" /></Link>
             <Link href="/try-your-data" className="lp-button lp-button-secondary">Try Your Data (Beta)</Link>
           </div>
+          <p className="mt-4"><Link href="/learn?tab=demos" className="lp-link">Watch Product Demos<ArrowRight size={18} aria-hidden="true" /></Link></p>
           <ul className="lp-assurances">
             {assurances.map(item => <li key={item}><CircleCheck size={20} aria-hidden="true" />{item}</li>)}
           </ul>
@@ -34,8 +34,6 @@ export default function Home() {
         <HeroVideo />
       </div>
     </section>
-
-    <ProductDemos />
 
     <LandingJourney />
 

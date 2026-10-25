@@ -29,9 +29,9 @@ const demos = [
 ] as const;
 
 export function ProductDemos() {
-  return <section id="product-demos" className={`shell ${styles.section}`} aria-labelledby="product-demos-heading">
+  return <section id="product-demos" className={styles.section} aria-labelledby="product-demos-heading">
     <p className={styles.positioning}>MoveBooks AI — Built on Google Cloud and powered by Gemini AI.</p>
-    <h2 id="product-demos-heading" className="lp-h2">See MoveBooks AI in Action</h2>
+    <h2 id="product-demos-heading" className="type-section">See MoveBooks AI in Action</h2>
     <p className={styles.intro}>Explore the full customer journey and genuine Gemini advice, then focus on the stages that matter to you.</p>
     <nav className={styles.chapters} aria-label="Product demonstration chapters">{demos.map(demo => <a key={demo.id} href={`#demo-${demo.id}`}>{demo.title} · {demo.duration}</a>)}</nav>
     <div className={styles.grid}>{demos.map((demo, index) => <article key={demo.id} id={`demo-${demo.id}`} className={styles.card} aria-labelledby={`title-${demo.id}`}>

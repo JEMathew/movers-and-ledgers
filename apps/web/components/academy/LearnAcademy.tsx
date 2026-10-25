@@ -4,8 +4,10 @@ import { Captions, LockKeyhole, Play, Video } from "lucide-react";
 import { academyGroups, lessons, measuredDuration, type AcademyManifest, type LessonId } from "@/lib/academy/catalog";
 import { topics } from "@/components/public-surfaces/content";
 import { AcademyPlayer } from "./AcademyPlayer";
+import { ProductDemos } from "@/components/public-surfaces/ProductDemos";
 
-type Tab = "videos" | "concepts";
+const tabOrder = ["videos", "concepts", "demos"] as const;
+type Tab = typeof tabOrder[number];
 export function LearnAcademy({ children, media }: { children: ReactNode; media: AcademyManifest }) {
   const [tab, setTab] = useState<Tab>("videos");
   const [active, setActive] = useState<LessonId>();
@@ -13,6 +15,10 @@ export function LearnAcademy({ children, media }: { children: ReactNode; media: 
   const opener = useRef<HTMLButtonElement | null>(null);
   const player = useRef<HTMLDivElement>(null);
   useEffect(() => {
+    if (tab === "demos") {
+      const hash = window.location.hash.slice(1);
+      if (hash.startsWith("demo-")) requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView?.({ block: "start" }));
+    }
     if (tab !== "concepts") return;
     const topic = topics.find(item => `#${item.id}` === window.location.hash);
     if (topic) {
@@ -25,7 +31,7 @@ export function LearnAcademy({ children, media }: { children: ReactNode; media: 
       const query = new URLSearchParams(window.location.search);
       const hash = window.location.hash.slice(1);
       const concept = topics.some(topic => topic.id === hash);
-      setTab(concept || query.get("tab") === "concepts" ? "concepts" : "videos");
+      setTab(concept || query.get("tab") === "concepts" ? "concepts" : query.get("tab") === "demos" ? "demos" : "videos");
       setActive(undefined);
       if (hash.startsWith("lesson-")) requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView?.({ block: "center" }));
     }
@@ -35,7 +41,12 @@ export function LearnAcademy({ children, media }: { children: ReactNode; media: 
       const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
       if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       const url = new URL(link.href);
-      if (url.origin === location.origin && url.pathname === "/learn" && topics.some(topic => `#${topic.id}` === url.hash)) setTab("concepts");
+      if (url.origin !== location.origin || url.pathname !== "/learn") return;
+      if (topics.some(topic => `#${topic.id}` === url.hash)) { setTab("concepts"); setActive(undefined); }
+      else {
+        const requested = url.searchParams.get("tab");
+        if (requested === "videos" || requested === "concepts" || requested === "demos") { setTab(requested); setActive(undefined); }
+      }
     }
     document.addEventListener("click", click);
     return () => { window.removeEventListener("popstate", sync); window.removeEventListener("hashchange", sync); document.removeEventListener("click", click); };
@@ -50,11 +61,11 @@ export function LearnAcademy({ children, media }: { children: ReactNode; media: 
   const introduction = lessons.find(lesson => lesson.id === "09" && lesson.sourceStatus === "completed" && media[lesson.id]) ?? lessons.find(lesson => lesson.sourceStatus === "completed" && media[lesson.id]);
   return <div className="academy">
     <div className="academy-tabs" role="tablist" aria-label="Learn formats">
-      {(["videos", "concepts"] as const).map((item, index) => <button type="button" key={item} ref={node => { tabs.current[index] = node; }} role="tab" id={`tab-${item}`} aria-controls={`panel-${item}`} aria-selected={tab === item} tabIndex={tab === item ? 0 : -1} onClick={() => select(item)} onKeyDown={event => {
+      {tabOrder.map((item, index) => <button type="button" key={item} ref={node => { tabs.current[index] = node; }} role="tab" id={`tab-${item}`} aria-controls={`panel-${item}`} aria-selected={tab === item} tabIndex={tab === item ? 0 : -1} onClick={() => select(item)} onKeyDown={event => {
         if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
-        event.preventDefault(); const next = event.key === "Home" ? 0 : event.key === "End" ? 1 : 1 - index;
-        select(next === 0 ? "videos" : "concepts"); tabs.current[next]?.focus();
-      }}>{item === "videos" ? "Video Guides" : "Learn the Concepts"}</button>)}
+        event.preventDefault(); const next = event.key === "Home" ? 0 : event.key === "End" ? tabOrder.length - 1 : (index + (event.key === "ArrowRight" ? 1 : -1) + tabOrder.length) % tabOrder.length;
+        select(tabOrder[next]); tabs.current[next]?.focus();
+      }}>{item === "videos" ? "Video Tutorials" : item === "concepts" ? "Learn the Concepts" : "Product Demos"}</button>)}
     </div>
     <div role="tabpanel" id="panel-videos" aria-labelledby="tab-videos" hidden={tab !== "videos"} tabIndex={0}>
       <div className="academy-intro"><div><h2>One guide. Your next step.</h2><p className="text-secondary">Short walkthroughs for every stage, with decisions and evidence in view.</p></div><span className="academy-count">9 guides · 4 collections</span></div>
@@ -79,6 +90,7 @@ export function LearnAcademy({ children, media }: { children: ReactNode; media: 
         })}
       </div></section>)}
     </div>
+    <div role="tabpanel" id="panel-demos" aria-labelledby="tab-demos" hidden={tab !== "demos"} tabIndex={0}>{tab === "demos" && <ProductDemos />}</div>
     {/* Keep the original disclosures mounted so their open state survives tab changes. */}
     <div role="tabpanel" id="panel-concepts" aria-labelledby="tab-concepts" hidden={tab !== "concepts"} tabIndex={0}>{children}</div>
   </div>;

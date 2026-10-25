@@ -13,6 +13,13 @@ beforeEach(() => {
 });
 
 describe("hero video", () => {
+  it("links to Learn demos without duplicating the gallery or changing primary CTAs", () => {
+    render(<Home />);
+    expect(screen.getByRole("link", { name: "Watch Product Demos" })).toHaveAttribute("href", "/learn?tab=demos");
+    expect(document.getElementById("product-demos")).toBeNull();
+    expect(screen.getByRole("link", { name: "Explore Demo" })).toHaveAttribute("href", "/simulator");
+    expect(screen.getByRole("link", { name: "Try Your Data (Beta)" })).toHaveAttribute("href", "/try-your-data");
+  });
   it("provides the video fragment targeted by Guide and Demo without starting playback", () => {
     const destinations = [Guide, GuidedDemo].map(Page => {
       const view = render(<Page />);
@@ -68,9 +75,9 @@ describe("hero video", () => {
     await waitFor(() => expect(screen.getByRole("button", { name: /^Play video/ })).toHaveFocus());
     fireEvent.click(document.querySelector(".lp-hero-picture")!);
     expect(panel).not.toHaveAttribute("hidden");
-    expect(screen.getByText("Video description").closest("details")).toHaveTextContent("product demonstrations below include English captions");
+    expect(screen.getByText("Video description").closest("details")).toHaveTextContent("product demonstrations in Learn include English captions");
     expect(video.querySelector("track")).toBeNull();
-    expect(screen.getByText(/Explore the captioned product demonstrations that follow/)).toBeVisible();
+    expect(screen.getByText(/Explore the captioned product demonstrations in Learn/)).toBeVisible();
     fireEvent.keyDown(video, { key: "Escape" });
     expect(panel).toHaveAttribute("hidden");
   });
