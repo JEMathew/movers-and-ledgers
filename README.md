@@ -115,8 +115,7 @@ Vision film and older submission recordings are separately labelled in the archi
 - **Security remains separately tracked:** [OpenTelemetry Issue #42](https://github.com/JEMathew/movers-and-ledgers/issues/42)
   is open; repository-wide CI is **not green**. [PR #41](https://github.com/JEMathew/movers-and-ledgers/pull/41)
   contains a separately validated web security fix. Functional MVP acceptance grants no security exception or merge approval.
-- **Bounded audience and data:** non-commercial, synthetic-data-only evaluation; approved judges and
-  interview panelists. No live accounting-provider integration, customer-data migration or commercial-readiness claim.
+- **Bounded audience and data:** non-commercial, synthetic-data-only evaluation;No live accounting-provider integration, customer-data migration or commercial-readiness claim.
 - **Deferred/unverified:** Academy thumbnails; `movebooks.ai` custom-domain status; real connectors,
   broader model evaluation and customer outcomes. Use the verified `movebooks-si.web.app` URL.
 
