@@ -12,6 +12,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from agents.model_policy import live_route
 from agents.reasoning.projection import context_hash, project
 from agents.reasoning.provider import GeminiAdkProvider, ProviderResult, fallback, reason
+from agents.reasoning.transport import TransportDenied, cloud_guard
+from agents.reviewer.agent import review_context
 from domain.reasoning.models import PROMPT_VERSION, Capability, ReasoningRecord, ReasoningRequest
 
 from .auth import Principal, require_principal
@@ -56,13 +58,15 @@ def safe_telemetry(record):
 
 
 async def request_advice(
-    repository, owner, session_id, capability, request, settings, provider=None
+    repository, owner, session_id, capability, request, settings, provider=None, *, mapping_id=None
 ):
     session = repository.get(session_id, owner)
     if session is None:
         raise HTTPException(404, "Workspace not found")
     try:
-        context = project(session, capability)
+        context = (
+            review_context(session, mapping_id) if mapping_id else project(session, capability)
+        )
         route = live_route(capability, settings)
     except ValueError as error:
         raise HTTPException(409, str(error)) from None
@@ -119,10 +123,13 @@ async def request_advice(
     control_error = None
     if route.provider == "gemini-adk":
         try:
+            if settings.cloud:
+                guard = cloud_guard(settings)
+                await guard.prepare()
             await reserve_live(
                 settings, owner, f"advice:{session_id}:{request.request_id}", capability.value
             )
-        except ControlDenied as denied:
+        except (ControlDenied, TransportDenied) as denied:
             control_error = str(denied)
     if route.provider == "gemini-adk" and control_error is None:
         advice, usage, error = await reason(
@@ -157,7 +164,10 @@ async def request_advice(
         else ("ESCALATED" if advice.next_action != "REVIEW_EXISTING_PROPOSAL" else "COMPLETED")
     )
     try:
-        unchanged = context_hash(project(current, capability)) == fingerprint
+        current_context = (
+            review_context(current, mapping_id) if mapping_id else project(current, capability)
+        )
+        unchanged = context_hash(current_context) == fingerprint
     except ValueError:
         unchanged = False
     if unchanged:

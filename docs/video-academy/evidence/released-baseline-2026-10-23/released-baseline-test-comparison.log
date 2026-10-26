@@ -1,0 +1,99 @@
+
+> @movebooks/web@0.1.0 test
+> vitest run test/html-cache.test.ts test/legacy-routes.test.tsx test/ui-copy.test.tsx
+
+
+ RUN  v5.0.2 /private/tmp/track-c-released-baseline-comparison/apps/web
+
+ ❯ test/legacy-routes.test.tsx (7 tests | 1 failed) 56ms
+   ❯ footer (1)
+     × is the minimal legal footer: copyright and Contact only, with no brand or attribution repeat 46ms
+ ❯ test/ui-copy.test.tsx (10 tests | 2 failed) 58ms
+   ❯ customer-facing label casing (6)
+     × uses the approved design's exact navigation labels 6ms
+   ❯ Workstream B screens label casing (1)
+     × keeps entry, My migration, Understand and Prepare headings, buttons and labels in sentence case 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/legacy-routes.test.tsx > footer > is the minimal legal footer: copyright and Contact only, with no brand or attribution repeat
+AssertionError: expected [ [ 'Privacy', '/privacy' ], …(2) ] to deeply equal [ [ 'Contact', '/support' ] ]
+
+- Expected
++ Received
+
+  [
+    [
++     "Privacy",
++     "/privacy",
++   ],
++   [
++     "Terms",
++     "/terms",
++   ],
++   [
+      "Contact",
+      "/support",
+    ],
+  ]
+
+ ❯ test/legacy-routes.test.tsx:54:108
+     52|     render(<Footer />);
+     53|     const footer = screen.getByRole("navigation", { name: "Footer" });
+     54|     expect(within(footer).getAllByRole("link").map(link => [link.textC…
+       |                                                                                                            ^
+     55|     expect(screen.getByText("© 2026 Movers & Ledgers")).toBeInTheDocum…
+     56|     expect(screen.getByRole("contentinfo")).not.toHaveTextContent(/Mov…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  test/ui-copy.test.tsx > customer-facing label casing > uses the approved design's exact navigation labels
+AssertionError: expected [ 'Privacy', 'Terms', 'Contact' ] to deeply equal [ 'Contact' ]
+
+- Expected
++ Received
+
+  [
++   "Privacy",
++   "Terms",
+    "Contact",
+  ]
+
+ ❯ test/ui-copy.test.tsx:23:49
+     21|     expect(publicLinks.map(([label]) => label)).toEqual(["Learn", "Tru…
+     22|     expect(memberLinks.map(([label]) => label)).toEqual(["My Migration…
+     23|     expect(footerLinks.map(([label]) => label)).toEqual(["Contact"]);
+       |                                                 ^
+     24|   });
+     25|   it("uses sentence case for journey steps and every next action", () …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  test/ui-copy.test.tsx > Workstream B screens label casing > keeps entry, My migration, Understand and Prepare headings, buttons and labels in sentence case
+AssertionError: expected [ …(2) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "AI-Assisted Analysis · synthetic preview",
++   "Synthetic AI-assisted analysis",
++ ]
+
+ ❯ test/ui-copy.test.tsx:112:145
+    110|     expect(labels.length).toBeGreaterThan(40);
+    111|     // "My migration" is the name of a place in the product, like a st…
+    112|     expect(labels.filter(label => !sentenceCase(label.replace(/[?.:]$/…
+       |                                                                                                                                                 ^
+    113|   });
+    114| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  2 failed | 1 passed (3)
+      Tests  3 failed | 20 passed (23)
+   Start at  02:40:01
+   Duration  525ms (environment 58%, setup 14%, transform 11%, tests 10%, import 7%)
+

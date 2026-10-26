@@ -1,0 +1,452 @@
+{
+  "purpose": "Proposed allowlist after authorized video-anchor fix. No git add or commit has run. Await owner checkpoint approval.",
+  "subject": "feat(web): checkpoint MoveBooks AI V2 landing and hero refinement",
+  "product_paths": [
+    "apps/web/app/layout.tsx",
+    "apps/web/app/page.tsx",
+    "apps/web/components/AccountControls.tsx",
+    "apps/web/components/Footer.tsx",
+    "apps/web/components/IdentityEntry.tsx",
+    "apps/web/components/MyMigration.tsx",
+    "apps/web/components/Nav.tsx",
+    "apps/web/components/journey/member-home.test.tsx",
+    "apps/web/components/public-surfaces/ProductVision.test.tsx",
+    "apps/web/components/public-surfaces/ProductVision.tsx",
+    "apps/web/components/public-surfaces/content.ts",
+    "apps/web/components/public-surfaces/surfaces.test.tsx",
+    "apps/web/components/theme/ThemeProvider.tsx",
+    "apps/web/components/v2/Attribution.test.tsx",
+    "apps/web/components/v2/Attribution.tsx",
+    "apps/web/test/account-shell.test.tsx",
+    "apps/web/test/legacy-routes.test.tsx",
+    "apps/web/test/ui-copy.test.tsx",
+    "apps/web/app/v2-landing.css",
+    "apps/web/components/public-surfaces/HeroVideo.test.tsx",
+    "apps/web/components/public-surfaces/HeroVideo.tsx",
+    "apps/web/components/public-surfaces/LandingJourney.tsx",
+    "apps/web/components/public-surfaces/landing-motion.test.tsx",
+    "apps/web/components/theme/AppearanceMenu.tsx",
+    "apps/web/public/media/movebooks-ai-hero-desk-v2.webp"
+  ],
+  "included_paths": [
+    "apps/web/app/layout.tsx",
+    "apps/web/app/page.tsx",
+    "apps/web/app/v2-landing.css",
+    "apps/web/components/AccountControls.tsx",
+    "apps/web/components/Footer.tsx",
+    "apps/web/components/IdentityEntry.tsx",
+    "apps/web/components/MyMigration.tsx",
+    "apps/web/components/Nav.tsx",
+    "apps/web/components/journey/member-home.test.tsx",
+    "apps/web/components/public-surfaces/HeroVideo.test.tsx",
+    "apps/web/components/public-surfaces/HeroVideo.tsx",
+    "apps/web/components/public-surfaces/LandingJourney.tsx",
+    "apps/web/components/public-surfaces/ProductVision.test.tsx",
+    "apps/web/components/public-surfaces/ProductVision.tsx",
+    "apps/web/components/public-surfaces/content.ts",
+    "apps/web/components/public-surfaces/landing-motion.test.tsx",
+    "apps/web/components/public-surfaces/surfaces.test.tsx",
+    "apps/web/components/theme/AppearanceMenu.tsx",
+    "apps/web/components/theme/ThemeProvider.tsx",
+    "apps/web/components/v2/Attribution.test.tsx",
+    "apps/web/components/v2/Attribution.tsx",
+    "apps/web/public/media/movebooks-ai-hero-desk-v2.webp",
+    "apps/web/test/account-shell.test.tsx",
+    "apps/web/test/legacy-routes.test.tsx",
+    "apps/web/test/ui-copy.test.tsx",
+    "docs/ux/v2-landing-freeze-and-p0-handoff.md",
+    "docs/v2-phase2/evidence/codex-hero-refinement/acceptance.json",
+    "docs/v2-phase2/evidence/codex-hero-refinement/after/after-desktop-dark-fold.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/after/after-desktop-dark-full.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/after/after-desktop-light-fold.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/after/after-desktop-light-full.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/after/after-mobile-dark-fold.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/after/after-mobile-dark-full.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/after/after-mobile-light-fold.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/after/after-mobile-light-full.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/approved-reference.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/before/before-desktop-dark-fold.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/before/before-desktop-dark-full.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/before/before-desktop-light-fold.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/before/before-desktop-light-full.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/before/before-mobile-dark-fold.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/before/before-mobile-dark-full.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/before/before-mobile-light-fold.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/before/before-mobile-light-full.png",
+    "docs/v2-phase2/evidence/codex-hero-refinement/comparison.html",
+    "docs/v2-phase2/evidence/codex-hero-refinement/harness/codex-checks.cjs",
+    "docs/v2-phase2/evidence/codex-hero-refinement/hero-generation-prompt.txt",
+    "docs/v2-phase2/evidence/codex-hero-refinement/qa/codex-checks.json",
+    "docs/v2-phase2/evidence/codex-hero-refinement/qa/qa-report.json",
+    "docs/v2-phase2/evidence/freeze-readiness/browser-existing.json",
+    "docs/v2-phase2/evidence/freeze-readiness/browser-extra.json",
+    "docs/v2-phase2/evidence/freeze-readiness/checkpoint-inventory.json",
+    "docs/v2-phase2/evidence/freeze-readiness/git-status.txt",
+    "docs/v2-phase2/evidence/freeze-readiness/route-audit.json",
+    "docs/v2-phase2/evidence/freeze-readiness/verification.json",
+    "docs/v2-phase2/evidence/freeze-readiness/video-anchor-fix.json",
+    "docs/v2-phase2/evidence/landing-final/harness/qa.mjs",
+    "docs/v2-phase2/evidence/landing-final/harness/shots.mjs"
+  ],
+  "included_count": 58,
+  "excluded_preserved": [
+    {
+      "path": ".claude/launch.json",
+      "status": "??",
+      "reason": "Machine-local preview configuration"
+    },
+    {
+      "path": "docs/play/v1.1-design-change.md",
+      "status": "??",
+      "reason": "Unrelated design work"
+    },
+    {
+      "path": "docs/ux/v2-landing-codex-handoff.md",
+      "status": "??",
+      "reason": "Historical handoff with stale placeholder/theme/test-count and AI-rule guidance; consolidated by current handoff"
+    },
+    {
+      "path": "docs/ux/v2-landing-progress.md",
+      "status": "??",
+      "reason": "Historical handoff with stale placeholder/theme/test-count and AI-rule guidance; consolidated by current handoff"
+    },
+    {
+      "path": "docs/v2-phase2/VISUAL-REFINEMENT-BRIEF.md",
+      "status": "??",
+      "reason": "Superseded draft brief"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/appearance-desktop-dark.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/appearance-desktop-light.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/appearance-dropdown.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/journey-100ms.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/journey-1700ms.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/journey-2500ms.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/journey-3600ms.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/journey-5000ms.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/journey-900ms.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/menu-mobile-dark.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/menu-mobile-light.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/mobile-sticky-header.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/sticky-desktop-720.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/sticky-desktop-900.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/sticky-header-scrolled.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/video-dialog.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/codex-hero-refinement/qa/zoom200-dark-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-desktop-dark-fold.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-desktop-dark-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-desktop-default-fold.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-desktop-default-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-desktop-light-fold.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-desktop-light-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-desktop-system-dark-fold.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-desktop-system-dark-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-desktop-system-light-fold.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-desktop-system-light-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-mobile-dark-fold.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-mobile-dark-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-mobile-default-fold.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-mobile-default-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-mobile-light-fold.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-mobile-light-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-mobile-system-dark-fold.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-mobile-system-dark-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-mobile-system-light-fold.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/after/after-mobile-system-light-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/before/before-desktop-dark-fold.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/before/before-desktop-dark-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/before/before-desktop-default-fold.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/before/before-desktop-default-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/before/before-mobile-dark-fold.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/before/before-mobile-dark-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/before/before-mobile-default-fold.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/before/before-mobile-default-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/qa/appearance-dropdown.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/qa/journey-100ms.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/qa/journey-1700ms.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/qa/journey-2500ms.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/qa/journey-3600ms.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/qa/journey-5000ms.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/qa/journey-900ms.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/qa/mobile-sticky-header.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/qa/qa-report.json",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/qa/sticky-header-scrolled.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/qa/video-dialog.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    },
+    {
+      "path": "docs/v2-phase2/evidence/landing-final/qa/zoom200-dark-full.png",
+      "status": "??",
+      "reason": "Superseded or intermediate evidence; preserve locally"
+    }
+  ],
+  "excluded_count": 62,
+  "product_sha256": {
+    "apps/web/app/layout.tsx": "5f77b119993e2f1ad9a7e8267b48d7fb0aa95ea880a9698082340093afabaffe",
+    "apps/web/app/page.tsx": "e29a3466480680bcc49aff65bb6c97c415805a00e9a9a198cc84299a1b5b91bb",
+    "apps/web/components/AccountControls.tsx": "53f5fd73b1bc259d0f62b1a11222d9d94df9dd16680e07480eb1bc06fa950855",
+    "apps/web/components/Footer.tsx": "e778117649b3c7e791eb5ea8ef3de603d85d551e36e3be9f2bb022007fd43d02",
+    "apps/web/components/IdentityEntry.tsx": "1a60037e942671b5a9f971f8332e32a9154651094e70002692a60579a9a4e1c1",
+    "apps/web/components/MyMigration.tsx": "e93ad2da2e67fb2089c138e064b6b0d41324e13f94149009176548d9241db8ac",
+    "apps/web/components/Nav.tsx": "5fc61002397c4a9981f92f6fd49fbff5e2abe4dd60c4446d5b616ba412d9390f",
+    "apps/web/components/journey/member-home.test.tsx": "4f9f8bcca75c81765967821a794b8e6e3952e7e4dea6e6fdf1c41a3de24b6fa1",
+    "apps/web/components/public-surfaces/content.ts": "064454dc005cd98a46c6f66d0913db610066a1f41ace6a9f7d1b332b8fd48a1c",
+    "apps/web/components/public-surfaces/surfaces.test.tsx": "cecaec7432ea4b3b1ba0c0a351dc078dc6c293fdfa0dc025233f34fccc722ccb",
+    "apps/web/components/theme/ThemeProvider.tsx": "bf931c23a9752b1d867f5583c8b54f9ba85f2b38cfef61370c3f2ef4a077cf7d",
+    "apps/web/components/v2/Attribution.test.tsx": "7e8470619a58a95806bd81869d555d5a9a95e73b45bc09b40fe42a1e44bc191b",
+    "apps/web/components/v2/Attribution.tsx": "45508dc036b53310e820f27f6db9a7db750c5ad5f85aa4b185c4548c0d578ab3",
+    "apps/web/test/account-shell.test.tsx": "c152625b0fa25970713397882cd8c13bae780724bb7e52b78c68f0ee2775a636",
+    "apps/web/test/legacy-routes.test.tsx": "173f0d166a7de33e3f74c73657528dd2a4306d78bac96f4d64ea0defa5e9c4b3",
+    "apps/web/test/ui-copy.test.tsx": "53f1392506c73a35af183279c942184046b82b5a6eba74903689d2841130a729",
+    "apps/web/app/v2-landing.css": "e0a1c55822e718b2312145af1c94780b5c47b834f7e73ab0151f3c29435a2d16",
+    "apps/web/components/public-surfaces/HeroVideo.test.tsx": "a8d35d0df2137adbe955cf14343e7f77284b6f10fa99beede24e84d430a63941",
+    "apps/web/components/public-surfaces/HeroVideo.tsx": "6d96ca6f053335aafa1d726c4f2310fe5daacdea39d95f6f427f1fb36d526ab0",
+    "apps/web/components/public-surfaces/LandingJourney.tsx": "cfcfc744adb22d20a496f1922bef359059fb211c76bf09ebd5bc7bfb1db9d21b",
+    "apps/web/components/public-surfaces/landing-motion.test.tsx": "8bbe835c00a31baddc96a319a92970d05946970adaec80c23f28e7667dae3b0b",
+    "apps/web/components/theme/AppearanceMenu.tsx": "75723264e8120be595bfcdb54e106efe9c1fb61b1795821d96bf68fd8aa68673",
+    "apps/web/public/media/movebooks-ai-hero-desk-v2.webp": "b136ab9638f5c2b274657f91b2dd4d16c64092d3cdd81939451acc87cb984ce9"
+  },
+  "deletions": [
+    "apps/web/components/public-surfaces/ProductVision.test.tsx",
+    "apps/web/components/public-surfaces/ProductVision.tsx"
+  ],
+  "status_file": "git-status.txt",
+  "new_files_from_this_review": [
+    "docs/ux/v2-landing-freeze-and-p0-handoff.md",
+    "docs/v2-phase2/evidence/freeze-readiness/browser-existing.json",
+    "docs/v2-phase2/evidence/freeze-readiness/browser-extra.json",
+    "docs/v2-phase2/evidence/freeze-readiness/checkpoint-inventory.json",
+    "docs/v2-phase2/evidence/freeze-readiness/git-status.txt",
+    "docs/v2-phase2/evidence/freeze-readiness/route-audit.json",
+    "docs/v2-phase2/evidence/freeze-readiness/verification.json"
+  ],
+  "compatibility_fix_review_files": [
+    "apps/web/components/public-surfaces/HeroVideo.tsx",
+    "apps/web/components/public-surfaces/HeroVideo.test.tsx",
+    "docs/ux/v2-landing-freeze-and-p0-handoff.md",
+    "docs/v2-phase2/evidence/freeze-readiness/video-anchor-fix.json",
+    "docs/v2-phase2/evidence/freeze-readiness/checkpoint-inventory.json",
+    "docs/v2-phase2/evidence/freeze-readiness/git-status.txt"
+  ]
+}

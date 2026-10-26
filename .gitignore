@@ -15,3 +15,6 @@ dist/
 *.log
 *.tsbuildinfo
 .packaging-build/
+
+# Owner-approved demo binaries are staged for Hosting, never committed to Git.
+/apps/web/public/media/product-demos/*.mp4

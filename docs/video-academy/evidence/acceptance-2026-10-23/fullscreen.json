@@ -1,0 +1,23 @@
+{
+  "verified": [
+    {
+      "id": "01",
+      "entered": "Browser tab: 1, Title: \"Learn · MoveBooks AI\", URL: \"http://127.0.0.1:3107/learn?tab=videos\".\n1 AXWebArea Learn · MoveBooks AI, URL: 127.0.0.1:3107/learn?tab=videos\n\t2 container Getting Started\n\t\t3 container\n\t\t\t4 button\n\t\t\t5 slider\n\t\t\t6 button\n\t\t\t7 button\n\t\t\t8 pop up button\n\t\t9 slider video time scrubber\n\nThe focused UI element is 7 button",
+      "exitRestoredPage": false,
+      "normalTabInteractionAfterExit": true
+    },
+    {
+      "id": "07",
+      "entryScreenshot": "fullscreen-07.jpg",
+      "exitScreenshot": "fullscreen-exited-07.jpg",
+      "normalInlinePlayerRestored": true
+    }
+  ],
+  "notVerified": [
+    "02",
+    "03",
+    "06",
+    "08"
+  ],
+  "limitation": "Attempted batch continuation after fullscreen did not reliably target the next player in the in-app browser; no pass inferred for the remaining four."
+}

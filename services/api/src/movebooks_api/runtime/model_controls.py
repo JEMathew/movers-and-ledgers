@@ -14,6 +14,20 @@ class ControlDenied(ValueError):
     pass
 
 
+def usage_document(snapshot, required_fields):
+    """Only a genuinely absent daily counter starts at zero, never a damaged one."""
+    data = snapshot.to_dict()
+    if snapshot.exists is False and data is None:
+        return {}
+    if (
+        snapshot.exists is not True
+        or not isinstance(data, dict)
+        or not all(field in data for field in required_fields)
+    ):
+        raise ControlDenied("model_control_integrity")
+    return data
+
+
 def decide(
     policy,
     owner,
@@ -83,22 +97,35 @@ class FirestoreModelControls:
 
         @firestore.async_transactional
         async def commit(transaction):
-            policy, owner_usage, global_usage, reservation = [
-                (
-                    await ref.get(
-                        transaction=transaction,
-                        timeout=settings.model_control_timeout_seconds,
-                        retry=None,
-                    )
-                ).to_dict()
-                or {}
+            policy_snapshot, owner_snapshot, global_snapshot, reservation_snapshot = [
+                await ref.get(
+                    transaction=transaction,
+                    timeout=settings.model_control_timeout_seconds,
+                    retry=None,
+                )
                 for ref in (policy_ref, owner_ref, global_ref, reservation_ref)
             ]
+            # Existence is authoritative: an empty/corrupt reservation still consumes
+            # its identity. Missing fields must never reset daily usage to zero.
+            if reservation_snapshot.exists is True:
+                raise ControlDenied("model_reservation_already_exists")
+            if (
+                reservation_snapshot.exists is not False
+                or reservation_snapshot.to_dict() is not None
+            ):
+                raise ControlDenied("model_control_integrity")
+            policy = policy_snapshot.to_dict()
+            if not isinstance(policy, dict):
+                raise ControlDenied("model_kill_switch")
+            owner_usage = usage_document(owner_snapshot, ("reserved_calls",))
+            global_usage = usage_document(
+                global_snapshot, ("reserved_calls", "reserved_microusd")
+            )
             new_owner, new_global = decide(
                 policy,
                 owner_usage,
                 global_usage,
-                reservation,
+                {},
                 calls=2,
                 cost=settings.reasoning_reservation_microusd,
                 owner_limit=settings.reasoning_owner_daily_calls,
@@ -267,7 +294,7 @@ async def bounded_control(settings, operation):
             # Do not wait for SDK rollback: capacity remains occupied until cleanup.
             # A late durable reservation is conservatively consumed, never reused.
             raise ControlDenied("model_controls_timeout")
-        task.result()
+        return task.result()
     except ControlDenied:
         raise
     except asyncio.CancelledError:

@@ -6,6 +6,7 @@ import { cloudIdentity, navigateAfterAuth, prepareGoogleIdentity, safeDestinatio
 
 type Session = {
   ready: boolean; busy: boolean; hasSession: boolean; identity: VerifiedIdentity | null; error: string;
+  localPreview: boolean;
   signIn: (destination: string) => void; signOut: () => void;
 };
 const IdentityContext = createContext<Session | null>(null);
@@ -17,6 +18,8 @@ export function useIdentity() {
 }
 
 export function IdentityProvider({ children }: { children: React.ReactNode }) {
+  // Explicit local-review build only; hosted builds keep the existing verified sign-in flow.
+  const localPreview = process.env.NEXT_PUBLIC_LOCAL_UX_PREVIEW === "true";
   const router = useRouter();
   const runtime = useRef<GoogleIdentityRuntime | null>(null);
   const generation = useRef(0);
@@ -49,7 +52,7 @@ export function IdentityProvider({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
-    if (!cloudIdentity()) return;
+    if (localPreview || !cloudIdentity()) return;
     active.current = true;
     let disposed = false;
     let unsubscribe: (() => void) | undefined;
@@ -64,10 +67,10 @@ export function IdentityProvider({ children }: { children: React.ReactNode }) {
       if (!disposed) setError("Google sign-in initialization failed. Reload this page to retry. No demo sign-in occurred.");
     });
     return () => { disposed = true; active.current = false; invalidate(); unsubscribe?.(); };
-  }, []);
+  }, [localPreview]);
 
   function signIn(destination: string) {
-    if (!runtime.current || !ready || operation.current) return;
+    if (localPreview || !runtime.current || !ready || operation.current) return;
     operation.current = true; setBusy(true); setError("");
     // The SDK has already loaded and completed readiness. Preserve the click's activation.
     let popup: ReturnType<GoogleIdentityRuntime["signIn"]>;
@@ -98,5 +101,5 @@ export function IdentityProvider({ children }: { children: React.ReactNode }) {
     }).finally(() => { operation.current = false; if (active.current) setBusy(false); });
   }
 
-  return <IdentityContext.Provider value={{ ready, busy, hasSession, identity, error, signIn, signOut }}>{children}</IdentityContext.Provider>;
+  return <IdentityContext.Provider value={{ ready, busy, hasSession, identity, error, localPreview, signIn, signOut }}>{children}</IdentityContext.Provider>;
 }

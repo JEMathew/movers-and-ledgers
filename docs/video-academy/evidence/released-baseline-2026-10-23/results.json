@@ -1,0 +1,27 @@
+{
+  "focusedTests": {
+    "passed": 552,
+    "files": 36
+  },
+  "fullTests": {
+    "passed": 945,
+    "failed": 3,
+    "files": 69,
+    "baselineFailuresConfirmed": true,
+    "failures": [
+      "legacy footer: expects Contact only",
+      "navigation copy: expects Contact only",
+      "synthetic analysis headings: capitalization"
+    ]
+  },
+  "typecheck": "PASS",
+  "lint": "PASS",
+  "build": "PASS using released Firebase and synthetic-analysis build settings",
+  "cacheFix": "PASS /learn private/no-store",
+  "restrictedMedia": "PASS 27 actual unapproved URLs denied",
+  "releasedSource": "PASS 228 source files verified against recorded deployment",
+  "productionWrites": 0,
+  "modelInvocations": 0,
+  "finalImageDigest": null,
+  "missingOriginalSubtitles": true
+}

@@ -1,0 +1,170 @@
+[
+  {
+    "id": "01",
+    "method": "Uninterrupted original MP4 playback from zero at 2x, muted; no seeks or pauses",
+    "start": {
+      "duration": 87.9,
+      "error": null,
+      "muted": true,
+      "paused": false,
+      "rate": 2,
+      "time": 0.045649
+    },
+    "progress": {
+      "duration": 87.9,
+      "ended": true,
+      "error": null,
+      "paused": true,
+      "time": 87.9
+    },
+    "final": {
+      "duration": 87.9,
+      "ended": true,
+      "error": null,
+      "muted": true,
+      "paused": true,
+      "rate": 2,
+      "time": 87.9
+    }
+  },
+  {
+    "id": "02",
+    "method": "Uninterrupted original MP4 playback from zero at 2x, muted; no seeks or pauses",
+    "start": {
+      "duration": 70,
+      "error": null,
+      "muted": true,
+      "paused": false,
+      "rate": 2,
+      "time": 0.100311
+    },
+    "progress": {
+      "duration": 70,
+      "ended": true,
+      "error": null,
+      "paused": true,
+      "time": 70
+    },
+    "final": {
+      "duration": 70,
+      "ended": true,
+      "error": null,
+      "muted": true,
+      "paused": true,
+      "rate": 2,
+      "time": 70
+    }
+  },
+  {
+    "id": "03",
+    "method": "Uninterrupted original MP4 playback from zero at 2x, muted; no seeks or pauses",
+    "start": {
+      "duration": 93.8,
+      "error": null,
+      "muted": true,
+      "paused": false,
+      "rate": 2,
+      "time": 0.022904
+    },
+    "progress": {
+      "duration": 93.8,
+      "ended": false,
+      "error": null,
+      "paused": false,
+      "time": 73.848255
+    },
+    "final": {
+      "duration": 93.8,
+      "ended": true,
+      "error": null,
+      "muted": true,
+      "paused": true,
+      "rate": 2,
+      "time": 93.8
+    }
+  },
+  {
+    "id": "06",
+    "method": "Uninterrupted original MP4 playback from zero at 2x, muted; no seeks or pauses",
+    "start": {
+      "duration": 91.1,
+      "error": null,
+      "muted": true,
+      "paused": false,
+      "rate": 2,
+      "time": 0.250027
+    },
+    "progress": {
+      "duration": 91.1,
+      "ended": false,
+      "error": null,
+      "paused": false,
+      "time": 73.008123
+    },
+    "final": {
+      "duration": 91.1,
+      "ended": true,
+      "error": null,
+      "muted": true,
+      "paused": true,
+      "rate": 2,
+      "time": 91.1
+    }
+  },
+  {
+    "id": "07",
+    "method": "Uninterrupted original MP4 playback from zero at 2x, muted; no seeks or pauses",
+    "start": {
+      "duration": 89.578,
+      "error": null,
+      "muted": true,
+      "paused": false,
+      "rate": 2,
+      "time": 0.023658
+    },
+    "progress": {
+      "duration": 89.578,
+      "ended": false,
+      "error": null,
+      "paused": false,
+      "time": 71.627812
+    },
+    "final": {
+      "duration": 89.578,
+      "ended": true,
+      "error": null,
+      "muted": true,
+      "paused": true,
+      "rate": 2,
+      "time": 89.578
+    }
+  },
+  {
+    "id": "08",
+    "method": "Uninterrupted original MP4 playback from zero at 2x, muted; no seeks or pauses",
+    "start": {
+      "duration": 89.578,
+      "error": null,
+      "muted": true,
+      "paused": false,
+      "rate": 2,
+      "time": 0.015021
+    },
+    "progress": {
+      "duration": 89.578,
+      "ended": false,
+      "error": null,
+      "paused": false,
+      "time": 70.626799
+    },
+    "final": {
+      "duration": 89.578,
+      "ended": true,
+      "error": null,
+      "muted": true,
+      "paused": true,
+      "rate": 2,
+      "time": 89.578
+    }
+  }
+]

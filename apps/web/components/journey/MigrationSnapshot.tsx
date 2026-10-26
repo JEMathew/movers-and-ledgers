@@ -1,21 +1,22 @@
-import { ClipboardCheck, ListChecks, ShieldCheck, TriangleAlert } from "lucide-react";
-import { Tile, Tiles } from "@/components/ui/tiles";
 import type { SessionView } from "../public-surfaces/session";
 
-/** Figures come only from the session evidence already read; an absent source renders as "—", never a guess. */
+/**
+ * At-a-glance counts for My migration. Every figure is counted from the session evidence already read;
+ * a figure the snapshot does not carry is said plainly ("Not in this snapshot"), never shown as zero.
+ */
 export function MigrationSnapshot({ view }: { view: SessionView }) {
   const passed = view.checks.filter(check => check.status === "VERIFIED").length;
   const issues = view.blockers.length;
-  const mappings = view.mappingIssues !== null;
-  const hasChecks = view.checks.length > 0;
   const issuesKnown = view.attentionComplete || issues > 0;
-  // Only tiles with recorded evidence are shown. An empty strip would be noise, so fewer than two means none.
-  const tiles = [
-    mappings && <Tile key="m" icon={ListChecks} label="Mappings to review" value={view.mappingIssues} tone={view.mappingIssues ? "warning" : "success"} status={view.mappingIssues ? "Needs your review" : "All reviewed"}/>,
-    issuesKnown && <Tile key="i" icon={TriangleAlert} label="Open issues" value={issues} tone={issues ? "warning" : "success"} status={issues ? "Needs attention" : "None open"}/>,
-    hasChecks && <Tile key="c" icon={ShieldCheck} label="Checks passed" value={`${passed} of ${view.checks.length}`} tone={passed === view.checks.length ? "success" : "warning"} status={passed === view.checks.length ? "All passed" : "Not all passed"}/>,
-    view.decisions.length > 0 && <Tile key="d" icon={ClipboardCheck} label="Decisions recorded" value={view.decisions.length} status="Kept in the audit trail"/>,
-  ].filter(Boolean);
-  if (tiles.length < 2) return null;
-  return <Tiles label="Migration snapshot">{tiles}</Tiles>;
+  const early = ["CREATED", "DISCOVERED", "ASSESSED", "PLANNED"].includes(view.status);
+  const rows: [string, string, string?][] = [
+    ["Mappings waiting for you", view.mappingIssues === null ? early ? "Not proposed yet" : "Not in this snapshot" : view.mappingIssues === 0 ? "None" : String(view.mappingIssues), view.mappingIssues ? "review" : undefined],
+    ["Open issues", issuesKnown ? (issues ? String(issues) : "None") : "Not in this snapshot", issues ? "review" : undefined],
+    ["Decisions recorded", String(view.decisions.length)],
+  ];
+  if (view.checks.length) rows.push(["Checks passed", `${passed} of ${view.checks.length}`, passed === view.checks.length ? "done" : "review"]);
+  return <section className="mm-card mm-glance" aria-labelledby="glance-title">
+    <h2 id="glance-title" className="mm-card-title">At a glance</h2>
+    <dl className="mm-glance-list">{rows.map(([label, value, tone]) => <div key={label} data-tone={tone}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+  </section>;
 }

@@ -1,9 +1,10 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { authHeaders } from "@/lib/identity";
+import { useAdvisoryRequest } from "@/lib/use-advisory-request";
 import { isSessionId } from "./session";
+import { AiStatusBadge } from "@/components/v2/primitives";
 
 const capabilities: Record<string, string[]> = {
   "/plan-map-approve": ["planning", "mapping"],
@@ -37,30 +38,21 @@ function SessionAdvice({ path }: { path: string }) {
 }
 
 function WorkspaceAdvice({ path, session }: { path: string; session: string }) {
-  const [result, setResult] = useState<Result>();
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
+  const { result, busy, error, ready, request: post } = useAdvisoryRequest<Result>(
+    `${path}:${session}`,
+    "Reasoning is unavailable, not ready, or its budget is exhausted. Continue using the existing deterministic evidence; no action was approved.",
+  );
   if (!capabilities[path]) return null;
-  async function request(capability: string) {
-    setBusy(true); setError(""); setResult(undefined);
-    try {
-      if (!isSessionId(session)) throw new Error("Open an existing synthetic workspace first.");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"}/v1/migration-sessions/${session}/reasoning/${capability}`, {
-        method: "POST", headers: { ...await authHeaders(), "Content-Type": "application/json" },
-        body: JSON.stringify({request_id: crypto.randomUUID()}),
-      });
-      if (!response.ok) throw new Error("Reasoning is unavailable, not ready, or its budget is exhausted. Continue using the existing deterministic evidence; no action was approved.");
-      const data: Result = await response.json();
-      const current = new URLSearchParams(window.location.search).get("session");
-      if (current !== session) throw new Error("Workspace changed; discarded the advisory response.");
-      setResult(data);
-    } catch (caught) { setError(caught instanceof Error ? caught.message : "Reasoning unavailable. No action was approved."); }
-    finally { setBusy(false); }
+  function request(capability: string) {
+    return post(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"}/v1/migration-sessions/${session}/reasoning/${capability}`,
+      () => isSessionId(session) && new URLSearchParams(window.location.search).get("session") === session,
+    );
   }
   return <section className="panel mt-4 p-5" aria-label="Optional reasoning guidance">
-    <h2 className="type-card">Reasoning guidance · advisory only</h2>
-    <p className="mt-2 text-sm text-secondary">Optional advice about the current proposal. It cannot approve, retry, post or verify. The public Beta uses deterministic fallback; live Gemini requires explicit operator configuration.</p>
-    <div className="mt-3 flex flex-wrap gap-2">{capabilities[path].map(capability => <button className="button secondary small" type="button" key={capability} disabled={busy} onClick={() => request(capability)}>Explain {capability}</button>)}</div>
+    <div className="flex flex-wrap items-center gap-2"><h2 className="type-card">Reasoning guidance · advisory only</h2><AiStatusBadge /></div>
+    <p className="mt-2 text-sm text-secondary">Available here: rule-based guidance about the current proposal. Gemini Advisor assistance is planned and unavailable in this Beta. Guidance cannot approve, retry, post or verify; you approve every consequential change.</p>
+    <div className="mt-3 flex flex-wrap gap-2">{capabilities[path].map(capability => <button className="button secondary small" type="button" key={capability} disabled={busy || !ready} onClick={() => request(capability)}>Explain {capability}</button>)}</div>
     <p role="status" className="mt-2 text-sm">{busy ? "Preparing bounded guidance…" : result ? `Guidance: ${result.state}` : "No reasoning requested."}</p>
     {error && <p role="alert" className="mt-3">{error}</p>}
     {result && <div className="mt-4 space-y-3 text-sm">

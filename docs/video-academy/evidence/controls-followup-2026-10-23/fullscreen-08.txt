@@ -1,0 +1,12 @@
+Browser tab: 1, Title: "Learn · MoveBooks AI", URL: "http://127.0.0.1:3107/learn?tab=videos".
+0 AXWebArea Learn · MoveBooks AI, URL: 127.0.0.1:3107/learn?tab=videos
+	1 container Trust and Troubleshooting
+		2 container
+			3 button
+			4 slider
+			5 button
+			6 button
+			7 pop up button
+		8 slider video time scrubber
+
+The focused UI element is 6 button

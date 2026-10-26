@@ -1,0 +1,131 @@
+1
+00:00:02,420 --> 00:00:05,100
+Prepare is where you decide
+where every record goes.
+
+2
+00:00:05,520 --> 00:00:06,820
+Nothing moves while you review.
+
+3
+00:00:07,260 --> 00:00:11,100
+In Prepare, create your migration
+plan, then review the mappings.
+
+4
+00:00:11,660 --> 00:00:14,520
+Harbor Light has 12 mappings,
+sorted riskiest first.
+
+5
+00:00:14,940 --> 00:00:19,160
+Two need review. Four low-risk items
+are decided one by one, and six
+
+6
+00:00:19,160 --> 00:00:21,340
+low-risk items are ready. Select 1200.
+
+7
+00:00:21,980 --> 00:00:24,460
+Misc Clearing. On the left is
+the account in your old books.
+
+8
+00:00:24,740 --> 00:00:26,980
+On the right is its proposed
+home in your new books.
+
+9
+00:00:27,420 --> 00:00:30,900
+Other current asset, with fixed
+asset as another compatible target.
+
+10
+00:00:31,320 --> 00:00:34,700
+Read the rule check. It says this
+mapping needs your approval because the
+
+11
+00:00:34,700 --> 00:00:35,800
+account name is ambiguous.
+
+12
+00:00:36,400 --> 00:00:37,660
+Open evidence and policy.
+
+13
+00:00:38,100 --> 00:00:42,180
+It adds that the 76% match is below
+the 90% threshold for automatic
+
+14
+00:00:42,180 --> 00:00:45,620
+acceptance and lists the exact
+references the rules used.
+
+15
+00:00:45,960 --> 00:00:49,040
+A confidence score is not a guarantee
+and it can't clear a policy blocker.
+
+16
+00:00:49,480 --> 00:00:53,220
+Then decide, approve it as other current
+asset, change the mapping or reject
+
+17
+00:00:53,220 --> 00:00:55,780
+it. Your decision is recorded
+with your name and the time.
+
+18
+00:00:55,780 --> 00:00:59,260
+Clearing accounts deserve a closer look,
+and the next two videos show how to
+
+19
+00:00:59,260 --> 00:01:00,780
+get a second opinion before you choose.
+
+20
+00:01:01,220 --> 00:01:04,580
+Routine items are quicker. The six
+low-risk items can be approved together,
+
+21
+00:01:04,780 --> 00:01:08,460
+but only after you review the full
+list, remove any you doubt, and tick a
+
+22
+00:01:08,460 --> 00:01:10,080
+consent box that starts unticked.
+
+23
+00:01:10,500 --> 00:01:14,160
+Each one is still recorded as its own
+decision, and tax and chart of accounts
+
+24
+00:01:14,160 --> 00:01:17,700
+mappings never qualify. Some
+states stop progress on purpose.
+
+25
+00:01:18,180 --> 00:01:19,980
+A blocked mapping has no approve button.
+
+26
+00:01:20,360 --> 00:01:21,660
+It shows the fix it needs.
+
+27
+00:01:21,660 --> 00:01:25,700
+A rejected mapping keeps plan approval
+unavailable until it's reconsidered.
+
+28
+00:01:26,120 --> 00:01:29,680
+When all 12 are decided, approve
+the plan and move unlocks.

@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-20",
+  "mode": "read-only configuration inspection; no inference",
+  "project": "movebooks-ai",
+  "service": "movebooks-beta-api",
+  "service_region": "asia-southeast1",
+  "service_identity": "movebooks-beta-api@movebooks-ai.iam.gserviceaccount.com",
+  "observed_model_role": "roles/aiplatform.user",
+  "role_condition": null,
+  "observed_enabled_apis": [
+    "aiplatform.googleapis.com",
+    "firestore.googleapis.com"
+  ],
+  "documented_model_id": "gemini-3.5-flash-lite",
+  "documented_endpoint": "https://aiplatform.googleapis.com",
+  "proposed_reasoning_location": "global",
+  "model_documentation": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-5-flash-lite",
+  "lifecycle_documentation": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions",
+  "local_default_adc_file_present": false,
+  "fresh_generation_attempted": false,
+  "workload_generation_access_verified": false,
+  "policy_document_read": false,
+  "configuration_changed": false,
+  "limitations": [
+    "Role binding and API enablement do not prove effective access under all policies or quota availability.",
+    "Installed gcloud model-garden models command has no describe operation; publisher metadata was not independently retrieved through that CLI.",
+    "Historical owner-reported live evidence is separate from this implementation.",
+    "Global processing is not a Singapore residency guarantee."
+  ]
+}

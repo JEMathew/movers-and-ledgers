@@ -1,0 +1,11 @@
+{
+  "NEXT_PUBLIC_SYNTHETIC_ANALYSIS_ENABLED": "true",
+  "NEXT_PUBLIC_IDENTITY_MODE": "firebase",
+  "NEXT_PUBLIC_API_BASE_URL": "/api",
+  "NEXT_PUBLIC_FIREBASE_PROJECT_ID": "movebooks-ai",
+  "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN": "movebooks-ai.firebaseapp.com",
+  "firebasePublicKeySha256": "6f03d49efca64f43b712aad19d7dc24c0da3e08f15fe3e5c212b7cc5e743b049",
+  "source": "Exact build settings from Track B released build-native.py; existing authorized public Firebase init.json read only",
+  "productionConfigurationWrites": 0,
+  "imageBuilt": false
+}

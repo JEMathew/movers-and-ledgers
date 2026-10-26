@@ -1,0 +1,584 @@
+[
+ {
+  "route": "/",
+  "width": 1440,
+  "tab_stops": 25,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [
+   "MoveBooks AI Product Vision",
+   "MoveBooks AI Product Vision"
+  ],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/sign-in",
+  "width": 1440,
+  "tab_stops": 13,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/workspace",
+  "width": 1440,
+  "tab_stops": 22,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/workspace?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 1440,
+  "tab_stops": 26,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/assess",
+  "width": 1440,
+  "tab_stops": 19,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/plan-map-approve?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 1440,
+  "tab_stops": 30,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/migrate-resolve?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 1440,
+  "tab_stops": 28,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/validate-configure?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 1440,
+  "tab_stops": 29,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/onboard-fpu?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 1440,
+  "tab_stops": 33,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/trust",
+  "width": 1440,
+  "tab_stops": 17,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/trust?view=evidence&session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 1440,
+  "tab_stops": 32,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/support",
+  "width": 1440,
+  "tab_stops": 21,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/simulator",
+  "width": 1440,
+  "tab_stops": 20,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/guide",
+  "width": 1440,
+  "tab_stops": 24,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/learn",
+  "width": 1440,
+  "tab_stops": 24,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/feedback",
+  "width": 1440,
+  "tab_stops": 19,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/try-your-data",
+  "width": 1440,
+  "tab_stops": 16,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/play",
+  "width": 1440,
+  "tab_stops": 16,
+  "first": [
+   "MoveBooks AI home",
+   "How it works",
+   "Explore demo",
+   "Learn",
+   "Trust and security",
+   "Help"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/",
+  "width": 390,
+  "tab_stops": 19,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Start a sample migration",
+   "Explore the demo, no sign-in needed",
+   "Beta limitations",
+   "Read how it works"
+  ],
+  "without_focus_indicator": [
+   "MoveBooks AI Product Vision",
+   "MoveBooks AI Product Vision"
+  ],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/sign-in",
+  "width": 390,
+  "tab_stops": 7,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Enter demo workspace\n\u2192",
+   "How it works",
+   "Help",
+   "Send feedback"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/workspace",
+  "width": 390,
+  "tab_stops": 16,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Northstar Supplies\nIn progress\nStarted Oct 19, 09:",
+   "Harbor Light Books\nIn progress\nStarted Oct 19, 09:",
+   "Harbor Light Books\nComplete\nStarted Oct 19, 09:14 ",
+   "Harbor Light Books\nComplete\nStarted Oct 19, 09:12 "
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/workspace?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 390,
+  "tab_stops": 20,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Switch migration",
+   "Understand\nDone",
+   "Prepare\nDone",
+   "Move\nDone"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/assess",
+  "width": 390,
+  "tab_stops": 13,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Help with this task",
+   "Steps in each stage",
+   "Harbor Light Books \u2014 Ready to migrate\nNorthstar Su",
+   "Check if my books are ready to migrate"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/plan-map-approve?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 390,
+  "tab_stops": 24,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "My migration",
+   "Evidence & results",
+   "AI activity",
+   "Help with this task"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/migrate-resolve?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 390,
+  "tab_stops": 22,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Evidence & results",
+   "AI activity",
+   "Help with this task",
+   "Understand\nDone"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/validate-configure?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 390,
+  "tab_stops": 23,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Evidence & results",
+   "AI activity",
+   "Help with this task",
+   "Understand\nDone"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/onboard-fpu?session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 390,
+  "tab_stops": 28,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Evidence & results",
+   "AI activity",
+   "Help with this task",
+   "Understand\nDone"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/trust",
+  "width": 390,
+  "tab_stops": 11,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Start a sample migration",
+   "Financial controls and human approvals",
+   "Identity, saved progress and evidence",
+   "AI limitations and fallback"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/trust?view=evidence&session=071ba32e-17b1-59a2-bfae-0a33972d30f6",
+  "width": 390,
+  "tab_stops": 26,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Return to migration",
+   "Refresh evidence",
+   "Get contextual help",
+   "Open exact financial checks"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/support",
+  "width": 390,
+  "tab_stops": 15,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Readiness or mapping blocker\nApproval required\nMig",
+   "Open Prepare for this issue",
+   "Why this can happen",
+   "How it works"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/simulator",
+  "width": 390,
+  "tab_stops": 14,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Start demo",
+   "Run Harbor Light migration",
+   "Demo and Beta are different",
+   "Synthetic Beta boundaries"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/guide",
+  "width": 390,
+  "tab_stops": 18,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Start a sample migration",
+   "What is MoveBooks AI?",
+   "Start here",
+   "The five-stage journey"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/learn",
+  "width": 390,
+  "tab_stops": 18,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Go to my migration",
+   "Why businesses migrate",
+   "What gets migrated",
+   "Why mappings matter"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/feedback",
+  "width": 390,
+  "tab_stops": 13,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "",
+   "Feedback type and category",
+   "on",
+   "Prepare feedback draft"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/try-your-data",
+  "width": 390,
+  "tab_stops": 10,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Download sample package",
+   "",
+   "on",
+   "View supported file format and limits"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ },
+ {
+  "route": "/play",
+  "width": 390,
+  "tab_stops": 10,
+  "first": [
+   "MoveBooks AI home",
+   "Open navigation",
+   "Sound: off",
+   "Navigable office. Eli at column 4, row 9. Walk wit",
+   "Object shortcuts \u00b7 keyboard, touch & screen reader",
+   "Start mission"
+  ],
+  "without_focus_indicator": [],
+  "focus_on_hidden": [],
+  "motion_over_50ms": []
+ }
+]

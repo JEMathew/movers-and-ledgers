@@ -1,0 +1,140 @@
+{
+  "date": "2026-10-23",
+  "timezone": "Asia/Calcutta",
+  "recommendation": "NO-GO for production handoff",
+  "implementation": "partial",
+  "preview": "http://127.0.0.1:3107/learn?tab=videos",
+  "auditedHead": "69c0c68313e56bcc6630f1a79db526e2038dd9fc",
+  "branch": "feature/video-academy-v1",
+  "checks": [
+    {
+      "check": "Repository, worktree and branch isolation",
+      "status": "PASS",
+      "finding": "JEMathew/movers-and-ledgers; movebooks-video-academy; feature/video-academy-v1. Initial HEAD and live remote both 69c0c68313e56bcc6630f1a79db526e2038dd9fc. Other worktrees were only listed, never modified.",
+      "evidence": "scope-audit.json"
+    },
+    {
+      "check": "All Track C changes reviewed; protected behavior unchanged",
+      "status": "PASS",
+      "finding": "48 files at the audited HEAD. Academy UI/media, additive WatchGuide links, focused tests, preparation script and evidence only. No financial, identity, Gemini, release, landing source or asset changes. One player-help copy defect fixed.",
+      "evidence": "changed-files.txt; preservation.json"
+    },
+    {
+      "check": "Nine tiles, metadata, posters and labels",
+      "status": "PASS",
+      "finding": "All expected titles and rounded runtimes match original assets. Six real posters loaded at 960px; three unavailable slots. Actual grouped order: 01,09 / 02,03,06,07 / 04,05 / 08, preserving approved four collections rather than global numerical order. Six accurately labeled local review only.",
+      "evidence": "tiles.json"
+    },
+    {
+      "check": "Six original MP4 Play, pause and resume",
+      "status": "PASS",
+      "finding": "Native Play clicked for all six. Time advanced, stayed fixed while paused, then advanced after resume. Original AAC audio enabled. This is not a voice-identity or audible-output certification.",
+      "evidence": "playback.json"
+    },
+    {
+      "check": "Six keyboard seek, mute/unmute and speed controls",
+      "status": "PASS",
+      "finding": "Each player accepted seek, mute/unmute and 2x speed; 1.5x also exercised on 07.",
+      "evidence": "controls.json"
+    },
+    {
+      "check": "Adjustable volume level on all six",
+      "status": "NOT VERIFIED",
+      "finding": "Native volume slider was operated on 07, but numeric volume was not exposed by the browser inspection bridge; full range and all six volume controls were not independently verified.",
+      "evidence": "fullscreen-07.jpg"
+    },
+    {
+      "check": "Fullscreen entry and exit on all six",
+      "status": "NOT VERIFIED",
+      "finding": "Native entry/exit verified for 01 and 07, including restored inline page and normal tab interaction. The remaining four are not marked PASS after an unreliable automated continuation.",
+      "evidence": "fullscreen.json; fullscreen-07.jpg; fullscreen-exited-07.jpg"
+    },
+    {
+      "check": "Loading, playback error and retry",
+      "status": "PASS",
+      "finding": "Loading messages observed during original media loads. A temporary readonly localhost proxy returned 503 for lesson 01 MP4. Actual player error UI appeared; restoring upstream and clicking Retry removed the alert and resumed time progression. Original files untouched; test proxy stopped. Shared component tested, not a separate outage for every lesson.",
+      "evidence": "fault-recovery.json; playback-error.jpg; playback-recovered.jpg"
+    },
+    {
+      "check": "Integrity and full file decode",
+      "status": "PASS",
+      "finding": "Nine source SHA-256 values still match the prior full FFmpeg decode evidence. All H.264 1920x1080/AAC stereo 48kHz, non-silent audio; six preview copies unchanged.",
+      "evidence": "preservation.json; ../media-review/playback.json; ../../media-manifest.json"
+    },
+    {
+      "check": "Clean seek-to-end completion",
+      "status": "PASS",
+      "finding": "All six reached ended=true at duration with error=null. This is seek-to-end validation, not six uninterrupted browser viewings. Lesson 07 also naturally reached its end after pause/resume; prior browser evidence has 03 completion.",
+      "evidence": "end-state.json; playback.json"
+    },
+    {
+      "check": "Six uninterrupted browser playback completions",
+      "status": "PASS",
+      "finding": "All six original MP4s played continuously from zero to ended=true at 2x, muted to avoid overlapping audio, with error=null. No seeking or pausing during this test. This certifies browser completion, not human listening or narrator identity.",
+      "evidence": "uninterrupted-playback.json"
+    },
+    {
+      "check": "Audible Cillian narration identity",
+      "status": "NOT VERIFIED",
+      "finding": "Original non-silent AAC audio is present and enabled, but this tool session cannot certify speaker identity or human-audited audibility. No narrator was regenerated.",
+      "evidence": "../../media-manifest.json"
+    },
+    {
+      "check": "Six English caption sets, rendering and synchronization",
+      "status": "FAIL",
+      "finding": "Original SRT files still inaccessible; no SRT/VTT in the authorized media directory. All six real browser players have zero caption tracks. Missing captions return 404. No synchronization or rendered-caption PASS is claimed.",
+      "evidence": "playback.json; http.json"
+    },
+    {
+      "check": "Review-cut public-route restrictions",
+      "status": "PASS",
+      "finding": "04/05/09 MP4, poster and VTT paths return 404 in development. A localhost production build denied all 27 media paths even with review env flags set. No restricted file is in the serving directory.",
+      "evidence": "http.json; production-boundary.json"
+    },
+    {
+      "check": "Both tabs, keyboard tabs and exact ten concepts",
+      "status": "PASS",
+      "finding": "Original baseline titles, full body text and questions matched live DOM for all ten. Accordion expansion persists across tab switches. Switching to Concepts removes video. Arrow-key tab switching works.",
+      "evidence": "concept-preservation.json; desktop-concepts.jpg; mobile-concepts.jpg"
+    },
+    {
+      "check": "Contextual video help",
+      "status": "PASS",
+      "finding": "Real /assess Watch guide navigated to /learn?tab=videos&stage=0#lesson-02. No migration initiated or advanced. Explore Demo retains Watch guide to 01. All stage mappings and restricted link omission reviewed/tested.",
+      "evidence": "contextual-assess.jpg; contextual-lesson.jpg; tests.log"
+    },
+    {
+      "check": "Landing video, branding and CTAs",
+      "status": "PASS",
+      "finding": "Landing source/photo/overview hashes unchanged. Actual overview loaded and advanced with duration 25.042s. Explore Demo navigated to /simulator; Try Your Data and Google Cloud/Gemini attribution remained present.",
+      "evidence": "preservation.json; landing.jpg"
+    },
+    {
+      "check": "Desktop/tablet/mobile in light and dark",
+      "status": "PASS",
+      "finding": "1440/768/390px, 3/2/1 columns, no horizontal overflow, all six theme/viewport combinations captured. Mobile screenshots use viewport capture to avoid the known full-page crop artifact.",
+      "evidence": "layouts.json; desktop-light.jpg; desktop-dark.jpg; tablet-light.jpg; tablet-dark.jpg; mobile-light.jpg; mobile-dark.jpg"
+    },
+    {
+      "check": "Focused regression checks",
+      "status": "PASS",
+      "finding": "310 tests across 20 files, typecheck, lint and production build passed after the copy fix. No final main-preview console errors. Unit tests cover production denial, missing captions, range validation, extension allowlist and symlink/traversal failures.",
+      "evidence": "tests.log; typecheck.log; lint.log; build.log"
+    },
+    {
+      "check": "Production media availability and approved content",
+      "status": "FAIL",
+      "finding": "Six play only in explicit development review mode; production registry is empty. All retrieved originals carry REVIEW CUT watermarks. Stable approved hosting, final release-UI/content review and publication approval are outstanding.",
+      "evidence": "production-boundary.json; ../../media-manifest.json"
+    },
+    {
+      "check": "Hosted identity, financial execution and final release compatibility",
+      "status": "NOT VERIFIED",
+      "finding": "No changes in these protected areas. Hosted acceptance and final release comparison were not rerun; Tracks A/B remain separately controlled.",
+      "evidence": "scope-audit.json"
+    }
+  ],
+  "creditsSpent": 0,
+  "deploymentPerformed": false,
+  "assetRegeneration": false
+}

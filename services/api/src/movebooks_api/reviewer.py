@@ -8,9 +8,10 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from agents.model_policy import live_route
 from agents.reasoning.projection import context_hash
+from agents.reasoning.transport import TransportDenied, cloud_guard
 from agents.reviewer.agent import GeminiReviewProvider, independent_check, review, review_context
 from domain.reasoning.models import Capability, ReasoningRequest
-from domain.reasoning.reviewer import ReviewRecord
+from domain.reasoning.reviewer import RECOMMENDATION_REVIEW_VERSION, REVIEW_VERSION, ReviewRecord
 
 from .auth import Principal, require_principal
 from .discover_assess.service import discover_assess_service
@@ -21,23 +22,34 @@ router = APIRouter(prefix="/v1/migration-sessions", tags=["independent review"])
 
 
 async def request_review(
-    repository, owner, session_id, mapping_id, request, settings, provider=None
+    repository,
+    owner,
+    session_id,
+    mapping_id,
+    request,
+    settings,
+    provider=None,
+    *,
+    advisor_request_id=None,
 ):
     session = repository.get(session_id, owner)
     if session is None:
         raise HTTPException(404, "Workspace not found")
     try:
-        context = review_context(session, mapping_id)
+        context = review_context(session, mapping_id, advisor_request_id)
     except ValueError as error:
         raise HTTPException(409, str(error)) from None
     fingerprint = context_hash(context)
     route = live_route(Capability.MAPPING, settings)
+    version = RECOMMENDATION_REVIEW_VERSION if advisor_request_id else REVIEW_VERSION
     for record in session.review_records:
         same_context = (
             record.context_hash == fingerprint
             and record.mapping_id == mapping_id
             and record.provider == route.provider
             and record.model == route.model
+            and record.advisor_request_id == advisor_request_id
+            and record.version == version
         )
         if record.request_id == request.request_id and not same_context:
             raise HTTPException(409, "Review request belongs to different evidence")
@@ -49,6 +61,8 @@ async def request_review(
         raise HTTPException(409, "Review budget exhausted; request qualified human review")
     original = session.model_copy(deep=True)
     record = ReviewRecord(
+        version=version,
+        advisor_request_id=advisor_request_id,
         request_id=request.request_id,
         mapping_id=mapping_id,
         context_hash=fingerprint,
@@ -65,10 +79,13 @@ async def request_review(
     control_error = None
     if route.provider == "gemini-adk":
         try:
+            if settings.cloud:
+                guard = cloud_guard(settings)
+                await guard.prepare()
             await reserve_live(
                 settings, owner, f"review:{session_id}:{request.request_id}", "mapping-review"
             )
-        except ControlDenied as denied:
+        except (ControlDenied, TransportDenied) as denied:
             control_error = str(denied)
     if route.provider == "gemini-adk" and control_error is None:
         finding, usage, error = await review(
@@ -98,7 +115,9 @@ async def request_review(
     saved.failure_category = error
     saved.state = "FALLBACK" if error else "COMPLETED"
     try:
-        unchanged = context_hash(review_context(current, mapping_id)) == fingerprint
+        unchanged = (
+            context_hash(review_context(current, mapping_id, advisor_request_id)) == fingerprint
+        )
     except ValueError:
         unchanged = False
     if unchanged:

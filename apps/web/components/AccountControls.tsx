@@ -1,25 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronDown, SunMoon, UserRound, X } from "lucide-react";
-import { useTheme } from "next-themes";
+import { ChevronDown, ShieldCheck, UserRound, X } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { cloudIdentity } from "@/lib/identity";
 import { useIdentity } from "./IdentityProvider";
 import { GoogleSignIn } from "./IdentityEntry";
-import { exploreLinks } from "./public-surfaces/content";
-
-const themes = [["system", "System"], ["light", "Light"], ["dark", "Dark"]] as const;
+import { AppearanceOptions } from "./theme/AppearanceMenu";
 
 export function AccountControls() {
   const session = useIdentity();
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [openFor, setOpenFor] = useState<string | null>(null);
   const root = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
-  const settingsTrigger = useRef<HTMLButtonElement>(null);
   const firstAction = useRef<HTMLButtonElement>(null);
   const controls = useRef<HTMLDivElement>(null);
   const preferences = useRef<HTMLDivElement>(null);
@@ -36,7 +30,6 @@ export function AccountControls() {
   const accountKey = session.identity?.email ?? (session.hasSession ? "unverified" : null);
   const open = openFor !== null && openFor === accountKey;
 
-  useEffect(() => setMounted(true), []);
   useEffect(() => {
     if (!open) return;
     firstAction.current?.focus();
@@ -48,7 +41,9 @@ export function AccountControls() {
   }, [open]);
   useEffect(() => {
     if (!settingsOpen) return;
-    preferences.current?.querySelector<HTMLElement>("select, input[type=radio]:checked, input[type=radio]")?.focus();
+    const panel = preferences.current;
+    // A radio group takes focus on its checked option; querySelector with a list would return the first in document order.
+    (panel?.querySelector<HTMLElement>("input[type=radio]:checked") ?? panel?.querySelector<HTMLElement>("input[type=radio]"))?.focus();
     const outside = (event: PointerEvent) => {
       if (event.target instanceof Node && !controls.current?.contains(event.target)) setSettingsOpen(false);
     };
@@ -59,7 +54,7 @@ export function AccountControls() {
   function showSettings() { setOpenFor(null); setSettingsOpen(true); }
   function closeSettings() {
     setSettingsOpen(false);
-    (session.hasSession ? trigger : settingsTrigger).current?.focus();
+    trigger.current?.focus();
   }
 
   return <div ref={controls} className="account-controls flex items-center gap-2">
@@ -83,30 +78,18 @@ export function AccountControls() {
         {open && <div id={id} className="account-panel" aria-label="Account controls">
           <p role="status" className="mb-3 break-all text-sm text-secondary">{accountMessage}</p>
           <button ref={firstAction} type="button" className="button ghost small w-full" onClick={showSettings} aria-haspopup="dialog" aria-controls={settingsId}>Settings</button>
-          {session.identity && <nav aria-label="Explore MoveBooks" className="account-explore"><p className="mt-3 mb-1 text-sm font-semibold">Explore MoveBooks</p>{exploreLinks.map(([label, href]) => <Link key={href} href={href} onClick={() => setOpenFor(null)}>{label}</Link>)}</nav>}
           <button type="button" className="button secondary small mt-2 w-full" disabled={session.busy} onClick={() => { setOpenFor(null); session.signOut(); }}>Sign Out</button>
         </div>}
       </div> : <GoogleSignIn compact />}
     {!cloud && !session.hasSession && <Link className="nav-link" href="/workspace">My Migration</Link>}
-    {!session.hasSession && <button ref={settingsTrigger} type="button" className="button ghost small appearance-trigger" aria-label="Change appearance" title="Change appearance"
-      onClick={() => settingsOpen ? closeSettings() : showSettings()} aria-haspopup="dialog" aria-expanded={settingsOpen} aria-controls={settingsId}>
-      <SunMoon size={18} aria-hidden="true" />
-    </button>}
-    {settingsOpen && <div ref={preferences} id={settingsId} className="account-panel settings-panel" role="dialog" aria-modal="false" aria-labelledby={`${settingsId}-title`}
+    {settingsOpen && session.hasSession && <div ref={preferences} id={settingsId} className="account-panel settings-panel" role="dialog" aria-modal="false" aria-labelledby={`${settingsId}-title`}
       onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); closeSettings(); } }}
       onBlur={event => { if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) setSettingsOpen(false); }}>
-      <div className="mb-3 flex items-center justify-between gap-3"><h2 id={`${settingsId}-title`} className="font-semibold">{session.hasSession ? "Settings" : "Appearance"}</h2><button type="button" className="button ghost small" aria-label={session.hasSession ? "Close settings" : "Close appearance"} onClick={closeSettings}><X size={16} aria-hidden="true" /></button></div>
-      {session.hasSession ? <label className="field-label grid gap-2">Theme
-        <select className="field-control" value={mounted ? theme ?? "system" : "system"} disabled={!mounted} onChange={event => setTheme(event.target.value)}>
-          <option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option>
-        </select>
-      </label> : <fieldset className="appearance-options">
-        <legend className="sr-only">Display mode</legend>
-        {themes.map(([value, label]) => <label key={value} className="appearance-option">
-          <input type="radio" name={`${settingsId}-appearance`} value={value} checked={mounted && (theme ?? "system") === value} disabled={!mounted} onChange={() => setTheme(value)} />
-          <span>{label}</span>
-        </label>)}
-      </fieldset>}
+      <div className="mb-3 flex items-center justify-between gap-3"><h2 id={`${settingsId}-title`} className="font-semibold">Settings</h2><button type="button" className="button ghost small" aria-label="Close settings" onClick={closeSettings}><X size={16} aria-hidden="true" /></button></div>
+      {/* Settings holds only Trust and Security and Appearance. Sign Out stays an Account action. */}
+      <Link className="settings-link" href="/trust" onClick={() => setSettingsOpen(false)}><ShieldCheck size={18} aria-hidden="true" />Trust and Security</Link>
+      <h3 className="settings-heading">Appearance</h3>
+      <AppearanceOptions autoFocus />
     </div>}
   </div>;
 }

@@ -1,0 +1,442 @@
+[
+ {
+  "shot": "01-my-migration-new.png",
+  "url": "http://localhost:3101/workspace",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "shot": "02-understand.png",
+  "url": "http://localhost:3101/assess?sample=harbor-light-migrate-demo",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "shot": "03-understand-result.png",
+  "url": "http://localhost:3101/assess?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "shot": "04-status-assessed.png",
+  "url": "http://localhost:3101/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "i": 0,
+  "status": "ASSESSED",
+  "did": "button: Create my migration plan",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "shot": "05-status-planned.png",
+  "url": "http://localhost:3101/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "i": 1,
+  "status": "PLANNED",
+  "did": "button: Review mappings",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "shot": "06-status-awaiting-approval.png",
+  "url": "http://localhost:3101/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "i": 2,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Approve 6 low-risk mappings",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 3,
+  "status": "AWAITING_APPROVAL",
+  "did": "tick consent",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 4,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Approve 6 low-risk mappings",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 5,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: 1200 · Misc Clearing Needs review Medium risk 76% match",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 6,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Approve as Other Current Asset",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 7,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: CA-SALES Needs review High risk 88% match",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 8,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Approve as California sales tax",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 9,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Operating Bank Needs review 96% match",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 10,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Approve as Bank Account",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 11,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Accounts Receivable Needs review 96% match",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 12,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Approve as Accounts Receivable",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 13,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Book Sales Needs review 96% match",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 14,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Approve as Sales Income",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 15,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Accounts Payable Needs review 96% match",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 16,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Approve as Accounts Payable",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 17,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Review migration plan",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 18,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Approve migration plan",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 19,
+  "status": "AWAITING_APPROVAL",
+  "did": "button: Approve migration plan",
+  "url": "/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "shot": "07-status-approved.png",
+  "url": "http://localhost:3101/plan-map-approve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "i": 20,
+  "status": "APPROVED",
+  "did": "link: Continue to Move",
+  "url": "/migrate-resolve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 21,
+  "status": "APPROVED",
+  "did": "button: Start migration",
+  "url": "/migrate-resolve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "shot": "08-status-resolving.png",
+  "url": "http://localhost:3101/migrate-resolve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "i": 22,
+  "status": "RESOLVING",
+  "did": "button: Approve resolution",
+  "url": "/migrate-resolve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "shot": "09-status-retry-pending.png",
+  "url": "http://localhost:3101/migrate-resolve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "i": 23,
+  "status": "RETRY_PENDING",
+  "did": "button: Retry failed batch",
+  "url": "/migrate-resolve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "shot": "10-status-migration-complete.png",
+  "url": "http://localhost:3101/migrate-resolve?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "i": 24,
+  "status": "MIGRATION_COMPLETE",
+  "did": "link: Verify my books",
+  "url": "/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 25,
+  "status": "MIGRATION_COMPLETE",
+  "did": "button: Verify my books",
+  "url": "/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "shot": "11-status-validated.png",
+  "url": "http://localhost:3101/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "i": 26,
+  "status": "VALIDATED",
+  "did": "button: Continue to configuration",
+  "url": "/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "shot": "12-status-configuration-review-required.png",
+  "url": "http://localhost:3101/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "i": 27,
+  "status": "CONFIGURATION_REVIEW_REQUIRED",
+  "did": "button: Approve base currency",
+  "url": "/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 28,
+  "status": "CONFIGURATION_REVIEW_REQUIRED",
+  "did": "button: Confirm approve",
+  "url": "/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 29,
+  "status": "CONFIGURATION_REVIEW_REQUIRED",
+  "did": "button: Approve tax setup",
+  "url": "/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 30,
+  "status": "CONFIGURATION_REVIEW_REQUIRED",
+  "did": "button: Confirm approve",
+  "url": "/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 31,
+  "status": "CONFIGURATION_REVIEW_REQUIRED",
+  "did": "button: Approve inventory valuation",
+  "url": "/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 32,
+  "status": "CONFIGURATION_REVIEW_REQUIRED",
+  "did": "button: Confirm approve",
+  "url": "/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 33,
+  "status": "CONFIGURATION_REVIEW_REQUIRED",
+  "did": "button: Approve user roles / access",
+  "url": "/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 34,
+  "status": "CONFIGURATION_REVIEW_REQUIRED",
+  "did": "button: Confirm approve",
+  "url": "/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 35,
+  "status": "CONFIGURATION_REVIEW_REQUIRED",
+  "did": "button: Approve integrations / preferences",
+  "url": "/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 36,
+  "status": "CONFIGURATION_REVIEW_REQUIRED",
+  "did": "button: Confirm approve",
+  "url": "/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 37,
+  "status": "CONFIGURATION_REVIEW_REQUIRED",
+  "did": "button: Apply reviewed configuration",
+  "url": "/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "shot": "13-status-configured.png",
+  "url": "http://localhost:3101/validate-configure?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "i": 38,
+  "status": "CONFIGURED",
+  "did": "link: Complete setup",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 39,
+  "status": "CONFIGURED",
+  "did": "button: Start onboarding from configured evidence",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "shot": "14-status-onboarding.png",
+  "url": "http://localhost:3101/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "i": 40,
+  "status": "ONBOARDING",
+  "did": "button: Approve opening balances",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 41,
+  "status": "ONBOARDING",
+  "did": "button: Confirm approve",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 42,
+  "status": "ONBOARDING",
+  "did": "button: Approve synthetic invoice access",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 43,
+  "status": "ONBOARDING",
+  "did": "button: Confirm approve",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 44,
+  "status": "ONBOARDING",
+  "did": "button: Approve invoice preferences",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 45,
+  "status": "ONBOARDING",
+  "did": "button: Confirm approve",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 46,
+  "status": "ONBOARDING",
+  "did": "button: Approve tax and liability control",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 47,
+  "status": "ONBOARDING",
+  "did": "button: Confirm approve",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 48,
+  "status": "ONBOARDING",
+  "did": "button: Approve synthetic bank setup",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 49,
+  "status": "ONBOARDING",
+  "did": "button: Confirm approve",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "shot": "15-status-ready-for-first-productive-use.png",
+  "url": "http://localhost:3101/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "i": 50,
+  "status": "READY_FOR_FIRST_PRODUCTIVE_USE",
+  "did": "button: Prepare invoice contract",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 51,
+  "status": "READY_FOR_FIRST_PRODUCTIVE_USE",
+  "did": "button: Review invoice approval",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 52,
+  "status": "READY_FOR_FIRST_PRODUCTIVE_USE",
+  "did": "button: Confirm approve",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "i": 53,
+  "status": "READY_FOR_FIRST_PRODUCTIVE_USE",
+  "did": "button: Post and verify invoice",
+  "url": "/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6"
+ },
+ {
+  "shot": "16-status-verified-first-productive-use.png",
+  "url": "http://localhost:3101/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "shot": "17-final.png",
+  "url": "http://localhost:3101/onboard-fpu?session=c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "summary": {
+   "width": 1440,
+   "session": "c48f6bd1-f924-5662-bcac-e457eb11c6d6",
+   "workflow_status": "VERIFIED_FIRST_PRODUCTIVE_USE",
+   "verified_fpu": true,
+   "invoice_total": "107.25",
+   "fpu_decisions": 1,
+   "checks": "6/6",
+   "errors": [
+    "console http://localhost:3101/sign-in Failed to load resource: the server responded with a status of 404 (Not Found)"
+   ]
+  }
+ }
+]

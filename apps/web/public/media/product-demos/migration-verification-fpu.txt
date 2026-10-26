@@ -1,0 +1,19 @@
+Migration Verification FPU
+
+00:00:00 — Migration, verification and first productive use
+MoveBooks AI is built on Google Cloud and powered by Gemini AI. It guides accounting migration from readiness assessment through verified first productive use. Here, examine an existing local synthetic journey through recovery, reconciliation and its first verified accounting task. No migration, approval or financial posting is performed for this video.
+
+00:00:23 — Inspect the completed journey
+This completed workspace provides the outcome to inspect. Next, we revisit its recorded checkpoints and the decisions that led to verified first productive use.
+
+00:00:35 — Move: checkpoints and recovery
+We review an existing local journey. This is a different synthetic record from the Gemini analysis in this collection. In Move, the recorded run encounters a controlled duplicate and pauses the affected work. Completed checkpoints remain intact while the exception is reviewed. The footage shows the existing recovery sequence and its human decision boundary. It is historical playback, not a retry or migration executed during this recording. The practical benefit is controlled recovery: resolve the permitted problem without replaying work that has already completed.
+
+00:01:12 — Verify: exact financial checks
+Moving records is only part of the job. Verify examines whether the result is financially consistent. The accepted local run recorded seventeen deterministic validation checks, followed by review of configuration areas. These are rule-based checks, not generated opinions or AI confidence scores. A failed financial check cannot be waived by a reassuring explanation. Counts, relationships and financial results must satisfy their own contracts. Configuration and sensitive approvals remain separate decisions. The customer gains evidence of what was checked, rather than just a progress bar reaching the end.
+
+00:01:52 — Start: verified first productive use
+Start asks a more useful question than whether the import finished: can the business complete its first governed accounting task? The archival run reviews onboarding and the invoice contract, then records the approved synthetic action and its verification. No invoice is being posted now. For this local record, the invoice subtotal is one hundred US dollars, tax is seven dollars and twenty-five cents, and the total is one hundred and seven dollars and twenty-five cents. The screen confirms Verified First Productive Use. Those figures belong to this recorded local journey; they are not totals from the separate Gemini migration or a new production transaction.
+
+00:02:33 — Move your books. Keep your confidence.
+MoveBooks AI. Move your books. Keep your confidence.

@@ -63,7 +63,10 @@ export async function verifiedIdentity(user: import("firebase/auth").User): Prom
   const endpoint = identityEndpoint(process.env.NEXT_PUBLIC_API_BASE_URL, window.location.origin);
   const response = await fetch(`${endpoint.href.replace(/\/$/, "")}/v1/identity`, {
     headers: { Authorization: `Bearer ${await user.getIdToken()}` },
-    cache: "no-store", credentials: "omit", redirect: "error", signal: AbortSignal.timeout(IDENTITY_VERIFICATION_TIMEOUT_MS),
+    // Let the browser supply an outer IAP session only to this application's origin.
+    // Firebase remains the independently verified application identity.
+    cache: "no-store", credentials: endpoint.origin === window.location.origin ? "same-origin" : "omit",
+    redirect: "error", signal: AbortSignal.timeout(IDENTITY_VERIFICATION_TIMEOUT_MS),
   });
   if (!response.ok) throw new Error("Session verification failed");
   const value = await response.json();

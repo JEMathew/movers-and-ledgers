@@ -1,0 +1,12 @@
+
+> @movebooks/web@0.1.0 test
+> vitest run --run components/plan-map-approve/AssistedAnalysis.test.tsx components/plan-map-approve/IndependentReview.test.tsx components/plan-map-approve/mapping-states.test.tsx lib/server/private-api-proxy.test.ts
+
+
+ RUN  v5.0.2 /Users/jincenmathew/Downloads/Intuit/movebooks-gemini-advisor-v2/apps/web
+
+
+ Test Files  4 passed (4)
+      Tests  54 passed (54)
+   Start at  14:21:10
+   Duration  960ms (environment 59%, setup 17%, tests 11%, transform 9%, import 4%)

@@ -1,0 +1,233 @@
+Browser tab: 1, Title: "Prepare: map and approve · MoveBooks AI", URL: "http://localhost:3002/plan-map-approve?session=e93d570d-c552-5ba5-afd8-318787b77d45".
+1 AXWebArea Prepare: map and approve · MoveBooks AI, URL: localhost:3002/plan-map-approve?session=e93d570d-c552-5ba5-afd8-318787b77d45
+	2 container
+		3 link Description: MoveBooks AI home, Value: localhost:3002/
+		4 text Built on Google Cloud and powered by Gemini AI
+		5 container Primary navigation
+			6 link Description: Learn, Value: localhost:3002/learn
+			7 link Description: Trust and Security, Value: localhost:3002/trust
+		8 pop up button (collapsed) Description: Change appearance, Secondary Actions: Expand
+		9 link Description: My Migration, Value: localhost:3002/workspace
+	10 container main-content
+		11 container Breadcrumb
+			12 content list
+				13 link Description: My migration, Value: localhost:3002/workspace?session=e93d570d-c552-5ba5-afd8-318787b77d45
+				14 container
+					257 text › Map and approve
+		16 container
+			17 text Prepare
+			18 text  · stage  2  of 5  · map and approve
+			19 heading Map and approve, Value: 1
+				216 text Map and approve
+			21 text Riskiest first. Decide on these 2, then approve the low-risk ones together. Records move only when every mapping is approved or changed.
+		22 container Migration utilities
+			58 link Description: Evidence & results, Value: localhost:3002/trust?view=evidence&session=e93d570d-c552-5ba5-afd8-318787b77d45
+			59 link Description: AI activity, Value: localhost:3002/trust?view=evidence&session=e93d570d-c552-5ba5-afd8-318787b77d45#ai-activity
+			23 link Description: Help with this task, Value: localhost:3002/support?session=e93d570d-c552-5ba5-afd8-318787b77d45&stage=1
+		24 container Prepare, stage 2 of 5
+			25 text Prepare, stage 2 of 5
+			26 content list Five-stage migration journey
+				74 link Description: Understand Done, Value: localhost:3002/assess?session=e93d570d-c552-5ba5-afd8-318787b77d45
+				75 link Description: Prepare Now, Value: localhost:3002/plan-map-approve?session=e93d570d-c552-5ba5-afd8-318787b77d45
+				31 container
+					32 text Move Not started
+				33 container
+					34 text Verify Not started
+				35 container
+					36 text Start Not started
+			37 button (collapsed) Steps in each stage, Secondary Actions: Expand
+				38 text Steps in each stage
+		69 container Plan review views
+			70 button Plan summary
+			76 button Mappings
+		77 container Review your mappings
+			78 heading Review your mappings, Value: 2, ID: mapping-heading
+				79 text Review your mappings
+			80 container
+				81 text 0  of  12  decided.  Approving a mapping does not approve the migration plan.
+			82 container Mapping queue
+				83 container Needs review (2)
+					84 heading Needs review (2), Value: 3
+						85 text Needs review ( 2 )
+					86 text Medium and high risk. Each needs your judgement.
+					87 content list
+						88 button 1200 · Misc Clearing Needs review Medium risk 76% match
+							89 text 1200 · Misc Clearing
+							90 text Needs review
+							91 text Medium risk
+							92 text 76% match
+						93 button CA-SALES Needs review High risk 88% match
+							94 text CA-SALES
+							95 text Needs review
+							96 text High risk
+							97 text 88% match
+				98 container Low risk, decided one by one (4)
+					99 heading Low risk, decided one by one (4), Value: 3
+						100 text Low risk, decided one by one ( 4 )
+					101 text Low risk, but each needs its own approval: the rules mark it as sensitive, or it is tax or already changed.
+					102 content list
+						103 button Operating Bank Needs review 96% match
+							104 text Operating Bank
+							105 text Needs review
+							106 text 96% match
+						107 button Accounts Receivable Needs review 96% match
+							108 text Accounts Receivable
+							109 text Needs review
+							110 text 96% match
+						111 button Book Sales Needs review 96% match
+							112 text Book Sales
+							113 text Needs review
+							114 text 96% match
+						115 button Accounts Payable Needs review 96% match
+							116 text Accounts Payable
+							117 text Needs review
+							118 text 96% match
+				119 container Low risk, ready (6)
+					120 heading Low risk, ready (6), Value: 3
+						121 text Low risk, ready ( 6 )
+					122 content list
+						123 button Cedar School Low risk, ready 98% match
+							124 text Cedar School
+							125 text Low risk, ready
+							126 text 98% match
+						127 button Maple Library Low risk, ready 98% match
+							128 text Maple Library
+							129 text Low risk, ready
+							130 text 98% match
+						131 button Independent Press Distribution Low risk, ready 98% match
+							132 text Independent Press Distribution
+							133 text Low risk, ready
+							134 text 98% match
+						135 button Catalog preparation Low risk, ready 94% match
+							136 text Catalog preparation
+							137 text Low risk, ready
+							138 text 94% match
+						139 button base_currency Low risk, ready 97% match
+							140 text base_currency
+							141 text Low risk, ready
+							142 text 97% match
+						143 button fiscal_calendar Low risk, ready 97% match
+							144 text fiscal_calendar
+							145 text Low risk, ready
+							146 text 97% match
+					147 button (collapsed) Approve 6 low-risk mappings, Secondary Actions: Expand
+						148 text Approve
+						149 text 6
+						150 text  low-risk
+						151 text mappings
+					152 text Each approval is recorded separately. High and medium risk are never included.
+			153 container 1200 · Misc Clearing mapping
+				154 text Needs review Medium risk  ·  76% match Chart of accounts
+				155 text In your old books
+				156 heading 1200 · Misc Clearing, Value: 3
+					157 text 1200 · Misc Clearing
+				158 text account-clearing
+				159 text Proposed in your new books
+				160 text Other Current Asset
+				161 container
+					162 text Other compatible  target :  Fixed Asset
+				163 container
+					164 text Rule check: needs your approval.
+				165 text The source account name is semantically ambiguous; an authorized reviewer must confirm its accounting treatment.
+				166 text Confidence is not a guarantee and cannot clear a policy blocker.
+				167 container
+					168 button (expanded) Evidence and policy · 3 direct references, Secondary Actions: Collapse
+						169 text Evidence and policy
+						170 text  ·
+						171 text 3
+						172 text  direct
+						173 text references
+					174 content list
+						175 text evidence:accounts:profile_dataset
+						176 text evidence:accounts:validate_schema
+						177 text mapping-rule:mapping-policy-v1:chart_of_accounts:account-clearing
+						178 text Sensitive accounting or tax mappings require human approval.
+						179 text Confidence is below the 90% auto-acceptable threshold.
+					180 button (collapsed) Additional planning context · 16 references, Secondary Actions: Expand
+						181 text Additional planning context ·
+						182 text 16
+						183 text  references
+				184 button Approve as Other Current Asset
+					185 text Approve as
+					186 text Other Current Asset
+				187 button Change mapping
+				188 button Reject
+				189 text You approve every change. Advice never changes your books. Your decision is recorded with your name.
+				190 container Want a second opinion?
+					191 heading Want a second opinion?, Value: 4
+						192 text Want a second opinion?
+					193 text Planned · not available in the Beta
+					199 container Synthetic AI-assisted analysis
+						200 heading AI-Assisted Analysis · synthetic preview, Value: 5
+							201 text AI-Assisted Analysis · synthetic preview
+						202 text Analyze only 1200 · Misc Clearing and its proposed destination. The Advisor explains the evidence; a separate Reviewer checks that recommendation against the source facts.
+						203 text No balances, uploaded records, or customer data are sent. Live Gemini requires operator authorization; otherwise this uses deterministic fallback.
+						204 button Run AI-Assisted Analysis
+						205 text Analysis finished. Your approval is still required.
+						217 container Advisor result
+							218 heading Advisor, Value: 6
+								219 text Advisor
+							220 text Deterministic fallback · no accepted AI result
+							221 container
+								222 text No model was called.  Inspect the deterministic evidence below.
+							223 container
+								224 text Analyzed: 1 evidence references at AWAITING_APPROVAL.
+							225 container
+								226 text Recommendation: Inspect the existing deterministic proposal and evidence in this workflow.
+							227 container
+								228 text Why: A model explanation cannot change a control, approval, or financial result.
+							229 container
+								230 text Uncertainty: No calibrated model recommendation is available.
+							231 button (collapsed) Evidence supplied and cited, Secondary Actions: Expand
+								232 text Evidence supplied and cited
+						233 container Reviewer result
+							234 heading Independent Reviewer, Value: 6
+								235 text Independent Reviewer
+							236 text Deterministic fallback · no accepted AI result
+							237 container
+								238 text No model was called.  The independent rule check is shown.
+							239 container
+								240 text Recommendation assessment:  QUESTION . The candidate is not established by the available source evidence. A permitted target class is not proof of the account's business purpose.
+							241 container
+								242 text Mapping evidence:  CHALLENGED . Accepting reasoning is never approval of the mapping.
+							243 content list
+								244 container
+									245 AXListMarker •
+									246 text Source account purpose and settlement history are absent from this projection.
+								247 container
+									248 AXListMarker •
+									249 text Misc Clearing does not establish whether the balance is a temporary asset.
+								250 container
+									251 AXListMarker •
+									252 text The mapping has policy flags requiring inspection in the current task.
+							253 container
+								254 text Uncertainty: No statement of business purpose or settlement history is supplied; the Reviewer cannot select the correct accounting treatment.
+							258 button (collapsed) Evidence supplied and cited, Secondary Actions: Expand
+								259 text Evidence supplied and cited
+						206 text Your decision: establish the account’s purpose and settlement history, then use the existing mapping controls. Analysis cannot approve, change, or post anything. Deterministic validation remains authoritative.
+					207 container Independent mapping review
+						208 heading Independent rule check, Value: 5
+							209 text Independent rule check
+						210 text Available now · rules only
+						211 text Available now: a separate deterministic check challenges this candidate from source evidence. It does not read the advisor’s response or change your mapping.
+						212 text A Gemini Reviewer for this check Planned
+						213 button Request independent review
+						214 text No review requested.
+		62 button (collapsed) Recorded decisions · 0, Secondary Actions: Expand
+			63 text Recorded decisions ·
+			64 text 0
+		46 text Synthetic Beta · plan review never starts migration. Deterministic controls remain authoritative; this review uses a synthetic target and no production accounting writes are enabled.
+	47 container Help for this workflow
+		48 button (collapsed) Help for Prepare, Secondary Actions: Expand
+			49 text Help for
+			50 text Prepare
+		51 button (collapsed) Second opinion · planned, Secondary Actions: Expand
+			52 text Second opinion · planned
+	53 container
+		54 text © 2026 Movers & Ledgers
+		55 container Footer
+			56 link Description: Contact, Value: localhost:3002/support
+	65 pop up button (collapsed) Description: Open Next.js Dev Tools, ID: next-logo, Secondary Actions: Expand
+		66 image
+
+The focused UI element is 258 button (collapsed) Evidence supplied and cited, Secondary Actions: Expand

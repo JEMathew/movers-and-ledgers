@@ -4,6 +4,7 @@ COPY apps/web/package*.json ./
 RUN npm ci
 COPY apps/web .
 ARG NEXT_PUBLIC_IDENTITY_MODE=firebase
+ARG NEXT_PUBLIC_SYNTHETIC_ANALYSIS_ENABLED=false
 ARG NEXT_PUBLIC_API_BASE_URL
 ARG NEXT_PUBLIC_FIREBASE_PROJECT_ID
 ARG NEXT_PUBLIC_FIREBASE_API_KEY
@@ -18,7 +19,9 @@ FROM cgr.dev/chainguard/wolfi-base:latest@sha256:05d24163df148be377275af8374c165
 ENV NODE_ENV=production PORT=8080 HOSTNAME=0.0.0.0 NEXT_TELEMETRY_DISABLED=1
 # Keep Node 22, use the vendor-patched shared zlib, and never install runtime npm.
 # Both stages are glibc-based so standalone native dependencies use the same ABI family.
-RUN apk add --no-cache nodejs-22-minimal=22.23.2-r1
+RUN apk add --no-cache nodejs-22-minimal=22.23.2-r1 ca-certificates-bundle=20260909-r3
+# Use the vendor-maintained trust store, including revoked-CA removal.
+ENV NODE_OPTIONS=--use-openssl-ca SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 WORKDIR /app
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static

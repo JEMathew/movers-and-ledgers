@@ -21,7 +21,8 @@ describe("supplied evidence and human governance", () => {
     expect(screen.getByRole("status")).toHaveTextContent("1–8 of 35 supplied records · page 1 of 5");
     for(let i=0;i<4;i++) fireEvent.click(screen.getByRole("button",{name:"Next records"}));
     expect(screen.getByRole("status")).toHaveTextContent("33–35 of 35");
-    const record = screen.getByText("REJECTED · recorded-owner").closest("details")!;
+    const record = document.querySelector('[data-result="stop"]')!.closest("details")!;
+    expect(record).toHaveTextContent("Rejected"); expect(record).toHaveTextContent("recorded-owner");
     fireEvent.click(record.querySelector("summary")!);
     for(const text of ["Audit: decision-0","mapping-0","2026-10-11"]) expect(record).toHaveTextContent(text);
     expect(screen.getByRole("heading",{name:"Human approvals and decisions"})).toHaveFocus();
@@ -62,7 +63,7 @@ describe("read recovery and private view boundaries", () => {
     expect(await screen.findByText("Evidence unavailable")).toBeVisible(); expect(screen.queryByLabelText("Evidence category")).not.toBeInTheDocument();
     if(status===401) expect(screen.getByRole("link",{name:"Verify access to this evidence"})).toHaveAttribute("href",`/sign-in?next=${encodeURIComponent(`/trust?view=evidence&session=${id}`)}`);
     else if(status===500) expect(screen.getByRole("button",{name:"Read the same evidence again"})).toBeEnabled();
-    else expect(screen.getByRole("link",{name:"Open My Migration"})).toHaveAttribute("href","/workspace");
+    else expect(screen.getByRole("link",{name:"Open my migration"})).toHaveAttribute("href","/workspace");
     expect(fetch).toHaveBeenCalledTimes(1); expect(sessionStorage.getItem("movebooks-migration-session")).toBeNull();
   });
   it("clears evidence on verified account change and discards the late read", async () => {

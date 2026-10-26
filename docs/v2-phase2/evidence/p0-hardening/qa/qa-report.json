@@ -1,0 +1,338 @@
+{
+  "axe": [
+    {
+      "name": "desktop",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "name": "desktop",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "name": "desktop",
+      "theme": "system",
+      "violations": []
+    },
+    {
+      "name": "mobile",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "name": "mobile",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "name": "mobile",
+      "theme": "system",
+      "violations": []
+    },
+    {
+      "name": "zoom200",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "name": "zoom200",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "name": "zoom200",
+      "theme": "system",
+      "violations": []
+    }
+  ],
+  "layout": [
+    {
+      "name": "desktop",
+      "theme": "dark",
+      "hscroll": false,
+      "htmlClass": "dark",
+      "h1": 1,
+      "headerHeight": 77.9375
+    },
+    {
+      "name": "desktop",
+      "theme": "light",
+      "hscroll": false,
+      "htmlClass": "light",
+      "h1": 1,
+      "headerHeight": 77.9375
+    },
+    {
+      "name": "desktop",
+      "theme": "system",
+      "hscroll": false,
+      "htmlClass": "light",
+      "h1": 1,
+      "headerHeight": 77.9375
+    },
+    {
+      "name": "mobile",
+      "theme": "dark",
+      "hscroll": false,
+      "htmlClass": "dark",
+      "h1": 1,
+      "headerHeight": 66.046875
+    },
+    {
+      "name": "mobile",
+      "theme": "light",
+      "hscroll": false,
+      "htmlClass": "light",
+      "h1": 1,
+      "headerHeight": 66.046875
+    },
+    {
+      "name": "mobile",
+      "theme": "system",
+      "hscroll": false,
+      "htmlClass": "light",
+      "h1": 1,
+      "headerHeight": 66.046875
+    },
+    {
+      "name": "zoom200",
+      "theme": "dark",
+      "hscroll": false,
+      "htmlClass": "dark",
+      "h1": 1,
+      "headerHeight": 77.9375
+    },
+    {
+      "name": "zoom200",
+      "theme": "light",
+      "hscroll": false,
+      "htmlClass": "light",
+      "h1": 1,
+      "headerHeight": 77.9375
+    },
+    {
+      "name": "zoom200",
+      "theme": "system",
+      "hscroll": false,
+      "htmlClass": "light",
+      "h1": 1,
+      "headerHeight": 77.9375
+    }
+  ],
+  "sticky": {
+    "atTop": 0,
+    "scrolled": 1,
+    "headerTop": 0,
+    "backToTop": 0,
+    "mobileScrolled": 1,
+    "mobileHscroll": false
+  },
+  "journey": {
+    "frames": [
+      {
+        "t": 100,
+        "state": "static",
+        "colors": [
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)"
+        ],
+        "fills": [
+          "none",
+          "none",
+          "none",
+          "none"
+        ]
+      },
+      {
+        "t": 900,
+        "state": "playing",
+        "colors": [
+          "rgb(29, 95, 216)",
+          "rgb(67, 99, 149)",
+          "rgb(82, 100, 123)",
+          "rgb(82, 100, 123)",
+          "rgb(82, 100, 123)"
+        ],
+        "fills": [
+          "matrix(1, 0, 0, 1, 0, 0)",
+          "matrix(0.0854579, 0, 0, 1, 0, 0)",
+          "matrix(0, 0, 0, 1, 0, 0)",
+          "matrix(0, 0, 0, 1, 0, 0)"
+        ]
+      },
+      {
+        "t": 1700,
+        "state": "playing",
+        "colors": [
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(53, 97, 174)",
+          "rgb(82, 100, 123)",
+          "rgb(82, 100, 123)"
+        ],
+        "fills": [
+          "matrix(1, 0, 0, 1, 0, 0)",
+          "matrix(1, 0, 0, 1, 0, 0)",
+          "matrix(0.182037, 0, 0, 1, 0, 0)",
+          "matrix(0, 0, 0, 1, 0, 0)"
+        ]
+      },
+      {
+        "t": 2500,
+        "state": "playing",
+        "colors": [
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(42, 96, 193)",
+          "rgb(82, 100, 123)"
+        ],
+        "fills": [
+          "matrix(1, 0, 0, 1, 0, 0)",
+          "matrix(1, 0, 0, 1, 0, 0)",
+          "matrix(1, 0, 0, 1, 0, 0)",
+          "matrix(0.267563, 0, 0, 1, 0, 0)"
+        ]
+      },
+      {
+        "t": 3600,
+        "state": "playing",
+        "colors": [
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)"
+        ],
+        "fills": [
+          "matrix(1, 0, 0, 1, 0, 0)",
+          "matrix(1, 0, 0, 1, 0, 0)",
+          "matrix(1, 0, 0, 1, 0, 0)",
+          "matrix(1, 0, 0, 1, 0, 0)"
+        ]
+      },
+      {
+        "t": 5000,
+        "state": "playing",
+        "colors": [
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)",
+          "rgb(29, 95, 216)"
+        ],
+        "fills": [
+          "matrix(1, 0, 0, 1, 0, 0)",
+          "matrix(1, 0, 0, 1, 0, 0)",
+          "matrix(1, 0, 0, 1, 0, 0)",
+          "matrix(1, 0, 0, 1, 0, 0)"
+        ]
+      }
+    ],
+    "reduced": {
+      "state": "playing",
+      "colors": [
+        "rgb(29, 95, 216)",
+        "rgb(29, 95, 216)",
+        "rgb(29, 95, 216)",
+        "rgb(29, 95, 216)",
+        "rgb(29, 95, 216)"
+      ],
+      "fills": [
+        "none",
+        "none",
+        "none",
+        "none"
+      ],
+      "animations": 0
+    }
+  },
+  "video": {
+    "open": {
+      "open": true,
+      "modal": true,
+      "paused": false,
+      "muted": false,
+      "duration": 25.042,
+      "focus": "Close video"
+    },
+    "afterEscape": {
+      "open": false,
+      "paused": true,
+      "focus": "lp-play"
+    }
+  },
+  "appearance": {
+    "firstVisitClass": "dark",
+    "checked": "dark",
+    "focused": "dark",
+    "afterArrow": {
+      "cls": "light",
+      "stored": "light"
+    },
+    "focusAfterEscape": "Change appearance",
+    "afterReload": "light",
+    "systemDark": "dark",
+    "systemLightLive": "light"
+  },
+  "links": [
+    {
+      "text": "MoveBooks AI",
+      "href": "/",
+      "status": 200
+    },
+    {
+      "text": "Learn",
+      "href": "/learn",
+      "status": 200
+    },
+    {
+      "text": "Trust and Security",
+      "href": "/trust",
+      "status": 200
+    },
+    {
+      "text": "My Migration",
+      "href": "/workspace",
+      "status": 200
+    },
+    {
+      "text": "Explore Demo",
+      "href": "/simulator",
+      "status": 200
+    },
+    {
+      "text": "Try Your Data (Beta)",
+      "href": "/try-your-data",
+      "status": 200
+    },
+    {
+      "text": "Watch the MoveBooks AI Product Vision",
+      "href": "/media/movebooks-ai-product-vision.mp4",
+      "status": 200
+    },
+    {
+      "text": "Learn more",
+      "href": "/learn",
+      "status": 200
+    },
+    {
+      "text": "View Trust and Security",
+      "href": "/trust",
+      "status": 200
+    },
+    {
+      "text": "Contact",
+      "href": "/support",
+      "status": 200
+    }
+  ],
+  "errors": [
+    "console Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+}

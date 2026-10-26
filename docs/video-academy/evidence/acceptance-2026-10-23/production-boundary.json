@@ -1,0 +1,142 @@
+{
+  "mode": "local production build with review env flags deliberately set",
+  "media": [
+    {
+      "lesson": "01",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "lesson": "01",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "lesson": "01",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "lesson": "02",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "lesson": "02",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "lesson": "02",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "lesson": "03",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "lesson": "03",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "lesson": "03",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "lesson": "04",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "lesson": "04",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "lesson": "04",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "lesson": "05",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "lesson": "05",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "lesson": "05",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "lesson": "06",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "lesson": "06",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "lesson": "06",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "lesson": "07",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "lesson": "07",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "lesson": "07",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "lesson": "08",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "lesson": "08",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "lesson": "08",
+      "extension": "vtt",
+      "status": 404
+    },
+    {
+      "lesson": "09",
+      "extension": "mp4",
+      "status": 404
+    },
+    {
+      "lesson": "09",
+      "extension": "jpg",
+      "status": 404
+    },
+    {
+      "lesson": "09",
+      "extension": "vtt",
+      "status": 404
+    }
+  ],
+  "learnStatus": 200,
+  "result": "all media denied"
+}

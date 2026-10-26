@@ -1,0 +1,126 @@
+1
+00:00:02,610 --> 00:00:05,310
+A migration isn't finished
+when the records arrive.
+
+2
+00:00:05,830 --> 00:00:08,830
+It's finished when the business
+can do real work in the new books.
+
+3
+00:00:10,030 --> 00:00:12,490
+MoveBooks calls that first productive use.
+
+4
+00:00:13,090 --> 00:00:13,590
+In start,
+
+5
+00:00:14,190 --> 00:00:15,030
+finish the essentials,
+
+6
+00:00:15,630 --> 00:00:17,750
+then review a draft
+invoice to Cedar School.
+
+7
+00:00:18,270 --> 00:00:18,770
+One line,
+
+8
+00:00:19,570 --> 00:00:20,190
+catalog preparation,
+
+9
+00:00:20,890 --> 00:00:21,630
+for $100.
+
+10
+00:00:22,550 --> 00:00:25,490
+The sales tax code CA-SALES at
+
+11
+00:00:25,490 --> 00:00:29,690
+7.25% adds $7.25 for
+
+12
+00:00:29,690 --> 00:00:32,450
+a total of $107.25.
+
+13
+00:00:32,450 --> 00:00:34,810
+nothing posts on its own.
+
+14
+00:00:35,610 --> 00:00:39,710
+You approve the invoice terms and the
+screen records who approved them and
+
+15
+00:00:39,710 --> 00:00:40,210
+when.
+
+16
+00:00:40,850 --> 00:00:44,330
+Only then can you post it. Posting
+creates a balanced journal entry.
+
+17
+00:00:44,870 --> 00:00:47,530
+Accounts receivable is debited 107.25,
+
+18
+00:00:48,150 --> 00:00:52,350
+sales is credited 100 and
+tax payable is credited 7.25.
+
+19
+00:00:52,810 --> 00:00:55,090
+The rules confirm that
+debits equal credits.
+
+20
+00:00:55,650 --> 00:00:59,870
+If a connection drops and you post
+again, the retry reuses the original
+
+21
+00:00:59,870 --> 00:01:04,150
+key so The completed work is never
+repeated, and the invoice can't be posted
+
+22
+00:01:04,150 --> 00:01:04,650
+twice.
+
+23
+00:01:05,610 --> 00:01:06,930
+Then the rules verify it.
+
+24
+00:01:07,530 --> 00:01:08,230
+Posted and verified,
+
+25
+00:01:08,850 --> 00:01:12,830
+107.25 equals 100 plus 7.25 in tax.
+
+26
+00:01:13,410 --> 00:01:15,170
+Readiness shows 10 of 10 checks.
+
+27
+00:01:15,830 --> 00:01:19,950
+Invoice checks, 6 of 6, and the trial
+balance still shows no difference.
+
+28
+00:01:20,570 --> 00:01:22,010
+Harbor Light Books is ready to use.
+
+29
+00:01:22,010 --> 00:01:25,990
+Choose review verified evidence to keep
+the full record with the client file.

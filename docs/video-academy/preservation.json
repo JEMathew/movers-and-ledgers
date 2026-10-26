@@ -1,0 +1,42 @@
+[
+  {
+    "path": "apps/web/app/page.tsx",
+    "sha256": "9c5d0eaee34bf0cabd5416458da337358f21d330030b5ae9debaddff1ded6f1c",
+    "unchanged": true
+  },
+  {
+    "path": "apps/web/components/public-surfaces/content.ts",
+    "sha256": "e84b811f205e99d0a42ae9c37ddb1d4ff2bb60c38bd1d821ead89f91a7ee50dc",
+    "unchanged": true
+  },
+  {
+    "path": "apps/web/components/public-surfaces/HeroVideo.tsx",
+    "sha256": "27c131c9099b0bfedf937eac17bdf92ef07c5de5927cfc10d2bb17be649f09e9",
+    "unchanged": true
+  },
+  {
+    "path": "apps/web/components/public-surfaces/AnchoredDetails.tsx",
+    "sha256": "00aa9d6a76b51dc944f7cfbeeedbfa73efd5fd3119f6166c6ea918cad27d0060",
+    "unchanged": true
+  },
+  {
+    "path": "apps/web/components/public-surfaces/LearningReturn.tsx",
+    "sha256": "09646e9f6a799cc82772594ab1586bd9a0cd19cd228881cc5966e9d8b392616e",
+    "unchanged": true
+  },
+  {
+    "path": "apps/web/public/media/movebooks-ai-product-vision.mp4",
+    "sha256": "6ba11a2dfcdebe4f38750e0762349fc8d0ed766531ac6fc19b922d65abcc3ada",
+    "unchanged": true
+  },
+  {
+    "path": "apps/web/public/media/movebooks-ai-hero-desk-v2.webp",
+    "sha256": "b136ab9638f5c2b274657f91b2dd4d16c64092d3cdd81939451acc87cb984ce9",
+    "unchanged": true
+  },
+  {
+    "path": "apps/web/middleware.ts",
+    "sha256": "8a1bae64c4670354465c834e70dbf035b89aa09e915cdc4179e38664e8ce32ab",
+    "unchanged": true
+  }
+]

@@ -1,0 +1,96 @@
+{
+  "utc": "2026-10-22T21:17:01.604044+00:00",
+  "method": "read-only GET; MP4 requests bounded Range",
+  "rows": [
+    {
+      "url": "https://movebooks-si.web.app/learn?tab=videos",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "public, max-age=0, s-maxage=60, must-revalidate",
+      "bytesRead": 27133,
+      "bodySha256": "9a0ad6980a5fa16729570dbe9e97157d863c00324fc9da2d4bc062ac7ea3d487",
+      "academyVideoTabPresent": false
+    },
+    {
+      "url": "https://movebooks-si.web.app/api/academy-media/01/mp4",
+      "status": 404,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "bytesRead": 13772,
+      "bodySha256": "7e17861333c0c2c4b67381e86b43bab3bb7db3e2e3d20eeccf21a63d7b4a62d1",
+      "academyVideoTabPresent": null
+    },
+    {
+      "url": "https://movebooks-si.web.app/api/academy-media/02/mp4",
+      "status": 404,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "bytesRead": 13772,
+      "bodySha256": "7e17861333c0c2c4b67381e86b43bab3bb7db3e2e3d20eeccf21a63d7b4a62d1",
+      "academyVideoTabPresent": null
+    },
+    {
+      "url": "https://movebooks-si.web.app/api/academy-media/03/mp4",
+      "status": 404,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "bytesRead": 13772,
+      "bodySha256": "7e17861333c0c2c4b67381e86b43bab3bb7db3e2e3d20eeccf21a63d7b4a62d1",
+      "academyVideoTabPresent": null
+    },
+    {
+      "url": "https://movebooks-si.web.app/api/academy-media/04/mp4",
+      "status": 404,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "bytesRead": 13772,
+      "bodySha256": "7e17861333c0c2c4b67381e86b43bab3bb7db3e2e3d20eeccf21a63d7b4a62d1",
+      "academyVideoTabPresent": null
+    },
+    {
+      "url": "https://movebooks-si.web.app/api/academy-media/05/mp4",
+      "status": 404,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "bytesRead": 13772,
+      "bodySha256": "7e17861333c0c2c4b67381e86b43bab3bb7db3e2e3d20eeccf21a63d7b4a62d1",
+      "academyVideoTabPresent": null
+    },
+    {
+      "url": "https://movebooks-si.web.app/api/academy-media/06/mp4",
+      "status": 404,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "bytesRead": 13772,
+      "bodySha256": "7e17861333c0c2c4b67381e86b43bab3bb7db3e2e3d20eeccf21a63d7b4a62d1",
+      "academyVideoTabPresent": null
+    },
+    {
+      "url": "https://movebooks-si.web.app/api/academy-media/07/mp4",
+      "status": 404,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "bytesRead": 13772,
+      "bodySha256": "7e17861333c0c2c4b67381e86b43bab3bb7db3e2e3d20eeccf21a63d7b4a62d1",
+      "academyVideoTabPresent": null
+    },
+    {
+      "url": "https://movebooks-si.web.app/api/academy-media/08/mp4",
+      "status": 404,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "bytesRead": 13772,
+      "bodySha256": "7e17861333c0c2c4b67381e86b43bab3bb7db3e2e3d20eeccf21a63d7b4a62d1",
+      "academyVideoTabPresent": null
+    },
+    {
+      "url": "https://movebooks-si.web.app/api/academy-media/09/mp4",
+      "status": 404,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "bytesRead": 13772,
+      "bodySha256": "7e17861333c0c2c4b67381e86b43bab3bb7db3e2e3d20eeccf21a63d7b4a62d1",
+      "academyVideoTabPresent": null
+    }
+  ]
+}

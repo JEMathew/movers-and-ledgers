@@ -1,0 +1,58 @@
+{
+  "implementation": "partial",
+  "preview": "http://127.0.0.1:3107/learn",
+  "checks": {
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "productionBuild": "PASS",
+    "focusedTests": {
+      "files": 20,
+      "passed": 310
+    },
+    "browser": {
+      "desktop": {
+        "width": 1440,
+        "columns": 3,
+        "overflow": false
+      },
+      "tablet": {
+        "width": 768,
+        "columns": 2,
+        "overflow": false
+      },
+      "mobile": {
+        "width": 390,
+        "columns": 1,
+        "overflow": false
+      },
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "tabs": "PASS",
+      "conceptDisclosure": "PASS",
+      "keyboardTabs": "PASS",
+      "contextualLink": "PASS /assess -> /learn?tab=videos&stage=0#lesson-02",
+      "landing": "PASS preserved photo, overview and CTA source hashes",
+      "finalConsoleErrors": [],
+      "fullscreen": "PASS entry/exit on 01 and 07; NOT VERIFIED for the other four",
+      "inlineTabCleanup": "PASS: switching to Concepts removes player and preserves all ten topics",
+      "errorRetry": "PASS controlled 503 and recovery in actual browser",
+      "exactConceptCopy": "PASS all ten titles, bodies and questions matched baseline",
+      "sixPlayerControls": "PASS native Play/pause/resume and keyboard seek/mute/speed; volume range not certified",
+      "endState": "PASS all six uninterrupted from zero at 2x muted, ended=true/error=null; also separate seek-to-end tests"
+    },
+    "academyPlayback": "PASS six eligible originals progressed in real browser; 03 reached end",
+    "academyNarration": "Original AAC stereo audio enabled in browser and non-silent through full decode; human listening and Cillian identity not independently certified",
+    "academyCaptions": "BLOCKED original SRT inaccessible; no invented text or phantom tracks",
+    "hostedAuthIsolation": "Not rerun; no implementation changes",
+    "financialOutcomes": "Not rerun; no implementation changes",
+    "originalSourcePreservation": "PASS all nine SHA-256 unchanged; six preview MP4 copies byte-identical",
+    "httpRanges": "PASS six 206 responses; 04/05/09 404; see evidence/media-review/http-ranges.json"
+  },
+  "publication": "all unpublished; six available only with explicit development review flag; 04/05/09 hard denied",
+  "creditsSpent": 0,
+  "evidence": "evidence/media-review/ is current original-media preview; root evidence screenshots are historical UI-only preview",
+  "acceptanceReport": "ACCEPTANCE.md",
+  "recommendation": "NO-GO for production handoff"
+}

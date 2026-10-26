@@ -18,7 +18,7 @@
 .window i { background: linear-gradient(#8bb7bc 0 50%, #a3c4bf 50% 100%); }
 .clock { position: absolute; left: 42%; top: 18%; width: 8%; aspect-ratio: 1; background: #e7dfba; border: 4px solid #34514e; }
 .clock::after { content: ""; position: absolute; left: 45%; top: 18%; width: 3px; height: 40%; background: #34514e; box-shadow: 3px 9px #34514e; }
-.wallSign { position: absolute; top: 22%; left: 56%; font: 700 clamp(6px, .7vw, 11px)/1.6 ui-monospace, monospace; color: #e9e4c9; letter-spacing: .06em; }
+.wallSign { position: absolute; top: 22%; left: 56%; padding: 1px 5px; background: #2f4a47; font: 700 clamp(6px, .7vw, 11px)/1.6 ui-monospace, monospace; color: #e9e4c9; letter-spacing: .06em; }
 .wallSign b { color: #c1cfba; font-size: .72em; }
 .picture { position: absolute; left: 84%; top: 16%; width: 8%; height: 60%; background: linear-gradient(#99bdc1 0 55%, #5a8774 55% 70%, #cfbd87 70%); border: 5px solid #b7a278; }
 .rug { position: absolute; left: 18%; top: 58%; width: 40%; height: 28%; background: #5e827b; border: 6px solid #446c68; outline: 3px solid #cbad7a; box-shadow: inset 0 0 0 3px #96a48c, 4px 4px #5f543e22; background-image: repeating-linear-gradient(90deg, transparent 0 24px, #365d561a 24px 28px); }

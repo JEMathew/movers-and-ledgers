@@ -1,0 +1,120 @@
+ M apps/web/app/layout.tsx
+ M apps/web/app/page.tsx
+ M apps/web/components/AccountControls.tsx
+ M apps/web/components/Footer.tsx
+ M apps/web/components/IdentityEntry.tsx
+ M apps/web/components/MyMigration.tsx
+ M apps/web/components/Nav.tsx
+ M apps/web/components/journey/member-home.test.tsx
+D  apps/web/components/public-surfaces/ProductVision.test.tsx
+D  apps/web/components/public-surfaces/ProductVision.tsx
+ M apps/web/components/public-surfaces/content.ts
+ M apps/web/components/public-surfaces/surfaces.test.tsx
+ M apps/web/components/theme/ThemeProvider.tsx
+ M apps/web/components/v2/Attribution.test.tsx
+ M apps/web/components/v2/Attribution.tsx
+ M apps/web/test/account-shell.test.tsx
+ M apps/web/test/legacy-routes.test.tsx
+ M apps/web/test/ui-copy.test.tsx
+?? .claude/launch.json
+?? apps/web/app/v2-landing.css
+?? apps/web/components/public-surfaces/HeroVideo.test.tsx
+?? apps/web/components/public-surfaces/HeroVideo.tsx
+?? apps/web/components/public-surfaces/LandingJourney.tsx
+?? apps/web/components/public-surfaces/landing-motion.test.tsx
+?? apps/web/components/theme/AppearanceMenu.tsx
+?? apps/web/public/media/movebooks-ai-hero-desk-v2.webp
+?? docs/play/v1.1-design-change.md
+?? docs/ux/v2-landing-codex-handoff.md
+?? docs/ux/v2-landing-freeze-and-p0-handoff.md
+?? docs/ux/v2-landing-progress.md
+?? docs/v2-phase2/VISUAL-REFINEMENT-BRIEF.md
+?? docs/v2-phase2/evidence/codex-hero-refinement/acceptance.json
+?? docs/v2-phase2/evidence/codex-hero-refinement/after/after-desktop-dark-fold.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/after/after-desktop-dark-full.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/after/after-desktop-light-fold.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/after/after-desktop-light-full.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/after/after-mobile-dark-fold.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/after/after-mobile-dark-full.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/after/after-mobile-light-fold.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/after/after-mobile-light-full.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/approved-reference.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/before/before-desktop-dark-fold.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/before/before-desktop-dark-full.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/before/before-desktop-light-fold.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/before/before-desktop-light-full.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/before/before-mobile-dark-fold.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/before/before-mobile-dark-full.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/before/before-mobile-light-fold.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/before/before-mobile-light-full.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/comparison.html
+?? docs/v2-phase2/evidence/codex-hero-refinement/harness/codex-checks.cjs
+?? docs/v2-phase2/evidence/codex-hero-refinement/hero-generation-prompt.txt
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/appearance-desktop-dark.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/appearance-desktop-light.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/appearance-dropdown.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/codex-checks.json
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/journey-100ms.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/journey-1700ms.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/journey-2500ms.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/journey-3600ms.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/journey-5000ms.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/journey-900ms.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/menu-mobile-dark.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/menu-mobile-light.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/mobile-sticky-header.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/qa-report.json
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/sticky-desktop-720.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/sticky-desktop-900.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/sticky-header-scrolled.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/video-dialog.png
+?? docs/v2-phase2/evidence/codex-hero-refinement/qa/zoom200-dark-full.png
+?? docs/v2-phase2/evidence/freeze-readiness/browser-existing.json
+?? docs/v2-phase2/evidence/freeze-readiness/browser-extra.json
+?? docs/v2-phase2/evidence/freeze-readiness/checkpoint-inventory.json
+?? docs/v2-phase2/evidence/freeze-readiness/git-status.txt
+?? docs/v2-phase2/evidence/freeze-readiness/route-audit.json
+?? docs/v2-phase2/evidence/freeze-readiness/verification.json
+?? docs/v2-phase2/evidence/freeze-readiness/video-anchor-fix.json
+?? docs/v2-phase2/evidence/landing-final/after/after-desktop-dark-fold.png
+?? docs/v2-phase2/evidence/landing-final/after/after-desktop-dark-full.png
+?? docs/v2-phase2/evidence/landing-final/after/after-desktop-default-fold.png
+?? docs/v2-phase2/evidence/landing-final/after/after-desktop-default-full.png
+?? docs/v2-phase2/evidence/landing-final/after/after-desktop-light-fold.png
+?? docs/v2-phase2/evidence/landing-final/after/after-desktop-light-full.png
+?? docs/v2-phase2/evidence/landing-final/after/after-desktop-system-dark-fold.png
+?? docs/v2-phase2/evidence/landing-final/after/after-desktop-system-dark-full.png
+?? docs/v2-phase2/evidence/landing-final/after/after-desktop-system-light-fold.png
+?? docs/v2-phase2/evidence/landing-final/after/after-desktop-system-light-full.png
+?? docs/v2-phase2/evidence/landing-final/after/after-mobile-dark-fold.png
+?? docs/v2-phase2/evidence/landing-final/after/after-mobile-dark-full.png
+?? docs/v2-phase2/evidence/landing-final/after/after-mobile-default-fold.png
+?? docs/v2-phase2/evidence/landing-final/after/after-mobile-default-full.png
+?? docs/v2-phase2/evidence/landing-final/after/after-mobile-light-fold.png
+?? docs/v2-phase2/evidence/landing-final/after/after-mobile-light-full.png
+?? docs/v2-phase2/evidence/landing-final/after/after-mobile-system-dark-fold.png
+?? docs/v2-phase2/evidence/landing-final/after/after-mobile-system-dark-full.png
+?? docs/v2-phase2/evidence/landing-final/after/after-mobile-system-light-fold.png
+?? docs/v2-phase2/evidence/landing-final/after/after-mobile-system-light-full.png
+?? docs/v2-phase2/evidence/landing-final/before/before-desktop-dark-fold.png
+?? docs/v2-phase2/evidence/landing-final/before/before-desktop-dark-full.png
+?? docs/v2-phase2/evidence/landing-final/before/before-desktop-default-fold.png
+?? docs/v2-phase2/evidence/landing-final/before/before-desktop-default-full.png
+?? docs/v2-phase2/evidence/landing-final/before/before-mobile-dark-fold.png
+?? docs/v2-phase2/evidence/landing-final/before/before-mobile-dark-full.png
+?? docs/v2-phase2/evidence/landing-final/before/before-mobile-default-fold.png
+?? docs/v2-phase2/evidence/landing-final/before/before-mobile-default-full.png
+?? docs/v2-phase2/evidence/landing-final/harness/qa.mjs
+?? docs/v2-phase2/evidence/landing-final/harness/shots.mjs
+?? docs/v2-phase2/evidence/landing-final/qa/appearance-dropdown.png
+?? docs/v2-phase2/evidence/landing-final/qa/journey-100ms.png
+?? docs/v2-phase2/evidence/landing-final/qa/journey-1700ms.png
+?? docs/v2-phase2/evidence/landing-final/qa/journey-2500ms.png
+?? docs/v2-phase2/evidence/landing-final/qa/journey-3600ms.png
+?? docs/v2-phase2/evidence/landing-final/qa/journey-5000ms.png
+?? docs/v2-phase2/evidence/landing-final/qa/journey-900ms.png
+?? docs/v2-phase2/evidence/landing-final/qa/mobile-sticky-header.png
+?? docs/v2-phase2/evidence/landing-final/qa/qa-report.json
+?? docs/v2-phase2/evidence/landing-final/qa/sticky-header-scrolled.png
+?? docs/v2-phase2/evidence/landing-final/qa/video-dialog.png
+?? docs/v2-phase2/evidence/landing-final/qa/zoom200-dark-full.png

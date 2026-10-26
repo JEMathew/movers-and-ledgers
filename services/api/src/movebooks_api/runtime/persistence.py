@@ -59,6 +59,11 @@ def encode(session, *, explicit_nulls=False):
         payload["session"].pop("review_records")
     if not payload["session"]["reasoning_records"]:
         payload["session"].pop("reasoning_records")
+    for review in payload["session"].get("review_records", []):
+        if review["advisor_request_id"] is None:
+            review.pop("advisor_request_id")
+        if review["finding"] and review["finding"]["recommendation_outcome"] is None:
+            review["finding"].pop("recommendation_outcome")
     plan = payload["session"]["plan"]
     if plan and not explicit_nulls:
         for key in OPTIONAL_PLAN_FIELDS:

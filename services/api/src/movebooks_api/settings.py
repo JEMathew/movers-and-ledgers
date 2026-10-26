@@ -36,6 +36,10 @@ class Settings(BaseSettings):
 
     model_control_timeout_seconds: float = Field(default=2, ge=0.05, le=5)
     synthetic_beta_authorized: bool = False
+    synthetic_analysis_enabled: bool = False
+    # Accepted judge policy is opt-in and also requires pre-existing durable proof.
+    # Enabling this never provisions or starts a campaign.
+    judge_campaign_enabled: bool = False
     model_controls_backend: Literal["disabled", "firestore"] = "disabled"
     # Proposed isolated operational database; selecting it never provisions a database.
     firestore_database: str = Field(
@@ -55,6 +59,26 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def safe_modes(self):
         import os
+
+        if self.judge_campaign_enabled and (
+            self.env != "cloud-dev"
+            or self.model_provider_mode != "gemini-adk"
+            or not self.synthetic_analysis_enabled
+            or not self.synthetic_beta_authorized
+            or self.identity_mode != "firebase"
+            or self.model_controls_backend != "firestore"
+            or self.google_project != "movebooks-ai"
+            or self.reasoning_project != "movebooks-ai"
+            or self.reasoning_location != "global"
+            or self.reasoning_reservation_microusd != 40240
+            or self.reasoning_owner_daily_calls != 20
+            or self.reasoning_global_daily_calls != 100
+            or self.reasoning_global_daily_microusd != 1000000
+        ):
+            raise ValueError("Judge campaign requires the accepted synthetic control configuration")
+
+        if self.synthetic_analysis_enabled and self.env in {"staging", "production"}:
+            raise ValueError("Synthetic analysis is limited to dev/test environments")
 
         if self.model_provider_mode == "gemini-adk":
             import re

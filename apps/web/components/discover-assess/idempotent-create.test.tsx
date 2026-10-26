@@ -60,9 +60,9 @@ describe("starting an assessment is idempotent", () => {
 
     // The user starts Northstar; the server creates it but the response is lost.
     fireEvent.change(screen.getByRole("combobox", { name: "Sample business" }), { target: { value: "northstar-supplies" } });
-    fireEvent.click(screen.getByRole("button", { name: /Start a New Assessment/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Start a new assessment/ }));
     const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent("We Couldn't Confirm This Step");
+    expect(alert).toHaveTextContent("We couldn't confirm this step");
     expect(alert).not.toHaveTextContent(/not changed|Nothing was/);
     expect(api.sessions()).toBe(1);
     // Harbor is not shown or offered while the Northstar start is unconfirmed.
@@ -71,7 +71,7 @@ describe("starting an assessment is idempotent", () => {
 
     // Changing the selector afterwards does not change what Try Again continues.
     fireEvent.change(screen.getByRole("combobox", { name: "Sample business" }), { target: { value: "harbor-light-migrate-demo" } });
-    fireEvent.click(screen.getByRole("button", { name: "Try Again" }));
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
     expect(await screen.findByText(NORTHSTAR_OUTCOME)).toBeVisible();
 
     // The same key was replayed, the original Northstar migration was adopted, nothing was duplicated.
@@ -91,9 +91,11 @@ describe("starting an assessment is idempotent", () => {
     const api = server({ dropFirstCreate: true });
     vi.stubGlobal("fetch", api.fetch);
     render(<DiscoverAssessExperience />);
-    fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
+    // Harbor Light is now the default; these idempotency checks use the Northstar sample explicitly.
+    fireEvent.change(screen.getByRole("combobox", { name: "Sample business" }), { target: { value: "northstar-supplies" } });
+    fireEvent.click(screen.getByRole("button", { name: /Check if my books are ready to migrate/ }));
     await screen.findByRole("alert");
-    fireEvent.click(screen.getByRole("button", { name: "Try Again" }));
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
     expect(await screen.findByText(NORTHSTAR_OUTCOME)).toBeVisible();
     expect(api.keys[1]).toBe(api.keys[0]);
     expect(api.sessions()).toBe(1);
@@ -104,9 +106,11 @@ describe("starting an assessment is idempotent", () => {
     const api = server({ dropFirstCreate: false });
     vi.stubGlobal("fetch", api.fetch);
     render(<DiscoverAssessExperience />);
-    fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
+    // Harbor Light is now the default; these idempotency checks use the Northstar sample explicitly.
+    fireEvent.change(screen.getByRole("combobox", { name: "Sample business" }), { target: { value: "northstar-supplies" } });
+    fireEvent.click(screen.getByRole("button", { name: /Check if my books are ready to migrate/ }));
     expect(await screen.findByText(NORTHSTAR_OUTCOME)).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: /Start a New Assessment/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Start a new assessment/ }));
     await screen.findByText(NORTHSTAR_OUTCOME);
     await vi.waitFor(() => expect(api.keys).toHaveLength(2));
     expect(api.keys[1]).not.toBe(api.keys[0]);

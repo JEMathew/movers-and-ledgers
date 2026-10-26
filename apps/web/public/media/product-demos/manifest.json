@@ -1,0 +1,26 @@
+[
+  {
+    "id": "complete-customer-journey",
+    "source": "Complete-Customer-Journey.mp4",
+    "sha256": "481902b3583283e7232f6d2e1d338df9f11f00c35a55439b4ce57ff5122847f3",
+    "bytes": 27623393
+  },
+  {
+    "id": "gemini-advisor-independent-reviewer",
+    "source": "Gemini-Advisor-Independent-Reviewer.mp4",
+    "sha256": "3b2bd101405b1f7e6f994b7e57ba37ea6d9ae95be3047d541a07ed0b9927e2b4",
+    "bytes": 7029085
+  },
+  {
+    "id": "assessment-preparation",
+    "source": "Assessment-Preparation.mp4",
+    "sha256": "872c60ee3e631363e212ccd9e352dd656fe84186782d35314413e5311e442809",
+    "bytes": 7582320
+  },
+  {
+    "id": "migration-verification-fpu",
+    "source": "Migration-Verification-FPU.mp4",
+    "sha256": "cfa04ac11fad07dd8ae97d421f03b2f39e6369d2736369d90a34a8e6bc367d27",
+    "bytes": 11343414
+  }
+]

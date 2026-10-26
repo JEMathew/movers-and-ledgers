@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import Learn from "@/app/learn/page";
+import { LearnContent as Learn } from "@/components/academy/LearnContent";
 import { ProductEntry } from "./ProductEntry";
 import ProductPage from "@/app/product/page";
 import TrustPage from "@/app/trust/page";
@@ -127,12 +127,12 @@ describe("public Trust and explicit evidence mode", () => {
     vi.spyOn(identityLib, "authHeaders").mockResolvedValue({ Authorization: "Bearer unit-test-owner" });
     const fetch = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify({ id, synthetic: true, workflow_status: "ASSESSED" })));
     const { rerender } = render(<Trust evidenceMode/>);
-    expect(await screen.findByRole("heading", { name: "Current journey stage: Understand" })).toBeVisible();
+    expect(await screen.findByRole("heading", { name: "Current stage: Understand" })).toBeVisible();
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch.mock.calls[0][1]?.method).toBeUndefined();
     state.identity = null;
     rerender(<Trust evidenceMode/>);
-    await waitFor(() => expect(screen.queryByRole("heading", { name: "Current journey stage: Understand" })).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByRole("heading", { name: "Current stage: Understand" })).not.toBeInTheDocument());
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Sign in to inspect your migration.");
   });
 });

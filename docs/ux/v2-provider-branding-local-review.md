@@ -1,0 +1,53 @@
+# Final attribution and UX release checkpoint
+
+20 October 2026. **Attribution DONE — BRANDING FROZEN. Production NO-GO.** This report and its machine summary preserve the validation snapshot before the subsequently authorized 19-file checkpoint. The local commit and committed-source reconciliation are recorded separately after staged verification. The owner-directed copy, assets, order and responsive units are fixed; do not reopen design, wording or logo selection. This freeze does not waive the existing publication/release gates.
+
+Preview: **http://127.0.0.1:3121/**, left running. [Four-layout gallery](../v2/release/evidence/ux-production-2026-10-20/branding-frozen/gallery.html). The production-mode local preview disables sign-in and uses synthetic demo/browser-local validation; no production API, customer workspace or model calls. The served build matches the browser-tested build.
+
+## Final implementation and acceptance
+
+Exactly: **Built on Google Cloud [Google Cloud logo] · Built with Google Gemini [Google Gemini logo]**. Each unchanged official image immediately follows its phrase. Two nonbreaking inline-flex units let the entire second unit wrap at narrow widths; the dot stays with the second unit. Homepage-only, exactly once. Original official bytes/provenance remain in [assets.json](../v2/release/evidence/ux-production-2026-10-20/provider-branding-local/assets.json). Option B, favicon, hero, video and CTA hierarchy are unchanged.
+
+A pre-existing desktop keyboard defect was reproduced on both previous and updated previews: content scroll clearance applied to focused sticky controls, scrolling the hero back into view and removing the focused Demo link. The owner separately approved the minimal correction. One conditional CSS rule removes that clearance only while a sticky-header control has focus. Content/fragment clearance remains in force outside header focus. No Nav logic or dimensions changed.
+
+Fresh final validation:
+
+- **113 focused tests / 4 files PASS**: exact attribution, phrase/logo order and original asset bytes, homepage-only treatment, surrounding content and unchanged AI-status restrictions.
+- **12 viewport/theme combinations, 24 initial/sticky header states PASS** at 320, 390, 700, 720, 1023 and 1440 px in Dark/Light. No clipping, horizontal overflow or obstructed header controls. All measured header heights match the prior preview. The already approved 390 px sticky height remains 83.09 px (initial 66.05 px).
+- **Four keyboard flows PASS**: mobile menu/escape, appearance controls, sticky CTA focus retention, real Tab navigation and Enter to `/simulator`. Focus scroll delta is zero. The original failure is preserved in `acceptance-before-focus-fix.json` and diagnostics; it was not relabeled PASS.
+- **Eight axe scans: zero violations. Thirty fragment checks: PASS.** Automated Chromium checks do not establish full WCAG, assistive-technology or real-device acceptance.
+- **Production-mode local build PASS**, including its type/lint stages; `git diff --check` PASS. No broad UX suite repeated. Four initial screenshot comparisons are pixel-identical below the header to the approved prior photo/video preview.
+
+[Raw final acceptance](../v2/release/evidence/ux-production-2026-10-20/branding-frozen/acceptance.json), [fragment checks](../v2/release/evidence/ux-production-2026-10-20/branding-frozen/anchor-check.json), [pixel comparison](../v2/release/evidence/ux-production-2026-10-20/branding-frozen/visual-comparison.json).
+
+## Source checkpoint and artifact
+
+Base HEAD remains `3e55d8871175ae9dd31e14c14143352da40b0625`, branch `feature/v2-landing-final`. The final candidate includes the explicit uncommitted UX overlay; it is **not yet a new source commit**. This turn changes only `Attribution.tsx`, `Attribution.test.tsx` and `v2-landing.css` in product/test source. Earlier scoped video/mobile-fragment/auth-test changes remain included; unrelated work remains preserved.
+
+The [exact 19-file checkpoint proposal](v2-final-ux-fixes-files.txt) contains 11 web source/test/assets and 8 documentation/evidence files. It excludes CI, backend, Gemini integration, local configuration, credentials and bulky screenshots/archives. All 497 previously excluded file hashes match. The index is empty. Product logo, favicon, hero photograph, original MP4 and AI-status constant match HEAD. Final web source hashes match the browser-build snapshot.
+
+**Final local container validation PASS.** The unchanged-source retry succeeded after the first emulated Next static-generation SIGSEGV (both attempts preserved). Source archive SHA-256: `e812af79bf20bf56c02bfc968fe48f6f63efbce9df17d5e705e41060e33b1b7a`. Local OCI index: `sha256:ce09c5e5f8bc7e4925fe44283664a84b0b36ef2254113aecc16b8d40933834b1`; linux/amd64 manifest: `sha256:65803e6156d970094968a0603ad9cc5eeeaa1320205f2d89c44a28c1517a7bcd`; configuration: `sha256:a4fd30793c3800734b905ca25a2f3dbfef0fe68f407155a697cd8a7661395b01`. These are local immutable identifiers, not a published registry reference.
+
+Fresh SBOM: **519 components**. Pinned Grype scan: **0 Critical / 0 High / 0 Medium**, using the retained valid same-day database built `2026-10-20T06:29:49Z` (age 10.75 hours). The runtime SBOM contains no `braces` component; the development-tool advisory remains independently OPEN. No dependency audit was rerun because the lockfile/manifests are unchanged.
+
+Final local HTTP smoke: **30/30 checks PASS**, 512 MiB, 1 CPU, non-root/read-only container, network disabled; 7,077,887 bytes, p95 1412 ms, no observed OOM. Both temporary test containers were stopped/removed by the smoke script. This is emulated local runtime evidence, **not native 256 MiB Cloud Run acceptance**. Do not transfer earlier native PASS to this changed image.
+
+[Selected compact evidence summary](../v2/release/evidence/ux-production-2026-10-20/branding-frozen/summary.json). Complete source archive, SBOM, scan, image archive and build/boot records are retained locally in `/Users/jincenmathew/Downloads/Intuit/movebooks-ux-release-artifacts/branding-frozen-final-20261020`. This artifact binds the reviewed web overlay, but the checkpoint is still uncommitted; reconcile against the eventual approved commit before release.
+
+No staging, commit, push, PR, image publication, cloud write, Gemini change or production promotion occurred. The earlier production/rollback verification remains historical: web/API `r16e31e9-1041` at 100% when last checked; no fresh cloud check or traffic change in this execution.
+
+## Remaining release gates — preserved scope
+
+| Gate / owner | Required acceptance and remaining effort | End-user safeguard; AI Builder evidence; Senior Staff PM relevance |
+|---|---|---|
+| Local checkpoint — product/release owner | Explicit authorization to stage exactly the 19 reviewed paths and create one local commit; about 10–15 minutes once approved. Then bind final source and artifact provenance. | Recoverable change; reproducible submission; disciplined scope/change control. |
+| Final artifact/native runtime — engineering/release owner | Final changed-image local build/SBOM/scan and bounded HTTP checks now pass. Exact committed source must still be reconciled. Native Cloud Run acceptance needs separately approved isolated deployment; earlier native PASS applies to a different image. Local checks complete; native execution is typically 30–60 minutes after authorization and preflight, bounded by its approved limits. | Availability within memory limits; measured rather than assumed runtime evidence; release and rollback judgment. |
+| Captions/media accessibility — owner/accessibility reviewer | Confirm uncertain narration, cue timing and meaningful sounds; approve captions/alternative, then validate changed artifact. Review estimate 30–60 minutes after correct wording is available. Remains blocking; no unapproved transcript published. | Accessible product explanation; honest demo evidence; inclusive product acceptance. |
+| Privacy/Terms — owner/legal reviewer | Approve complete disclosures, publication destinations and any legal obligations; publish only under explicit authorization. Timing depends on review. | Informed data choices; truthful submission/public claims; privacy and cross-functional governance. |
+| Public provider use/qualifying-use evidence — owner/legal and implementation owners | Existing requirement remains intact and locally frozen. Establish applicable authorization for the exact assets/placement and factual support for the Gemini claim before public publication. No design or wording alternative is proposed. External response timing unknown. | Avoid misleading affiliation/capability claims; evidence-backed AI attribution; compliance without silent scope changes. |
+| Hosted authentication/isolation — account/data and release owners | A/B remain UNVERIFIED until Google eligibility, distinct ownership and synthetic-only provenance are confirmed. Approve hosting exact candidate against an isolated authorized backend; human signs in. Execute read-only two-account checklist. About 30–60 minutes after prerequisites. | Prevent cross-account data exposure; credible end-to-end evidence; tenant isolation and onboarding quality. |
+| High dev-tool advisory — security owner | `GHSA-vfj7-8cjw-p6xm` / `CVE-2026-93687`, braces dev chain, remains OPEN. Prior unchanged-lock audit: five High dev-chain entries, zero production findings. Choose supported remediation or an explicit time-limited risk acceptance for trusted build inputs; no automatic waiver. Reviewer estimate 15–30 minutes. | Build supply-chain assurance; transparent scan limitations; security risk ownership. |
+| API replay — backend/product owner | Existing source-level repeat approval duplicates decision/audit/event records; proposed P1 audit-integrity risk. No demonstrated duplicate financial posting or foreign-owner bypass. Separate fix and verification, or explicit bounded disposition, required. Estimate depends on backend owner; no backend work here. | Trustworthy approval history; reliable human-control evidence; financial controls/idempotency ownership. |
+| Production promotion — release owner | All required gates accepted, fresh serving/configuration/rollback preflight, exact immutable release source/image, separate explicit traffic authorization. | Safe onboarding availability; reproducible final demo; operational launch accountability. |
+
+**NO-GO remains.** The 8 PM IST target has passed; no responsible production ETA is available until the human and deployment prerequisites close. Engineering completion of local branding is distinct from unverified release acceptance.

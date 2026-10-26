@@ -1,0 +1,119 @@
+1
+00:00:02,100 --> 00:00:05,440
+Move. Transfers your approved
+records into the new books.
+
+2
+00:00:05,860 --> 00:00:09,200
+It unlocks only when every mapping is
+decided and you've approved the plan.
+
+3
+00:00:10,480 --> 00:00:11,800
+Records move in eight ordered batches.
+
+4
+00:00:12,660 --> 00:00:15,560
+Accounts, customers, vendors,
+products, taxes, configuration,
+
+5
+00:00:16,120 --> 00:00:17,380
+invoices and transactions.
+
+6
+00:00:17,940 --> 00:00:20,420
+Each batch shows how many
+of its records have moved.
+
+7
+00:00:21,220 --> 00:00:25,340
+If a batch hits a problem, the move
+pauses there and batches already moved
+
+8
+00:00:25,340 --> 00:00:27,760
+stay moved. In the sample, batch two,
+
+9
+00:00:28,520 --> 00:00:30,560
+customers, pauses on a duplicate customer.
+
+10
+00:00:31,040 --> 00:00:34,240
+The card shows the cause, its
+code and the retries so far.
+
+11
+00:00:35,340 --> 00:00:36,700
+Choose review one migration issue.
+
+12
+00:00:37,080 --> 00:00:40,580
+The rules propose a reversible fix
+with its risk and its evidence.
+
+13
+00:00:41,060 --> 00:00:45,300
+Approve it, then choose retry failed
+batch to rerun it from its checkpoint.
+
+14
+00:00:45,900 --> 00:00:47,760
+Reject it and the batch stays blocked.
+
+15
+00:00:48,320 --> 00:00:50,900
+Retries are limited and nothing
+changes until you decide.
+
+16
+00:00:52,000 --> 00:00:55,420
+When every batch has moved verify
+compares your old and new books.
+
+17
+00:00:55,960 --> 00:01:00,200
+Harbor Light shows 17 of 17 checks
+matched, eight record counts and nine
+
+18
+00:01:00,200 --> 00:01:01,580
+balance and integrity checks.
+
+19
+00:01:02,560 --> 00:01:04,880
+The trial balance difference
+reads no difference.
+
+20
+00:01:05,340 --> 00:01:09,200
+A trial balance lists every account's
+balance and it must agree between the
+
+21
+00:01:09,200 --> 00:01:13,240
+old and new books in exact
+decimals with no tolerance and no
+
+22
+00:01:13,240 --> 00:01:17,260
+write-off. Open any check to see its
+source, target, difference and evidence,
+
+23
+00:01:17,760 --> 00:01:19,900
+then choose continue to configuration.
+
+24
+00:01:20,520 --> 00:01:24,180
+Settings that need a person are listed
+for your decision and each one records
+
+25
+00:01:24,180 --> 00:01:25,560
+who decided and when.
+
+26
+00:01:25,980 --> 00:01:27,540
+Next, put the new books to work.

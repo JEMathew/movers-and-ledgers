@@ -1,0 +1,641 @@
+{
+  "cases": [
+    {
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "metrics": {
+        "hscroll": false,
+        "header": "rgb(10, 21, 39)",
+        "hero": "rgb(10, 21, 39)",
+        "lower": "rgb(255, 255, 255)",
+        "lowerInk": "rgb(20, 32, 43)",
+        "imageLoaded": true,
+        "image": {
+          "x": 604.8125,
+          "y": 77.9375,
+          "width": 835.1875,
+          "height": 472,
+          "top": 77.9375,
+          "right": 1440,
+          "bottom": 549.9375,
+          "left": 604.8125
+        },
+        "play": {
+          "x": 872.0625,
+          "y": 462.75,
+          "width": 367.390625,
+          "height": 71.1875,
+          "top": 462.75,
+          "right": 1239.453125,
+          "bottom": 533.9375,
+          "left": 872.0625
+        },
+        "heroRect": {
+          "x": 0,
+          "y": 77.9375,
+          "width": 1440,
+          "height": 472,
+          "top": 77.9375,
+          "right": 1440,
+          "bottom": 549.9375,
+          "left": 0
+        },
+        "font": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+        "playCount": 1,
+        "reducedAnimations": 0
+      },
+      "axe": [],
+      "appearanceAxe": [],
+      "video": {
+        "open": true,
+        "playing": true,
+        "time": 0.016639
+      },
+      "closed": {
+        "closed": true,
+        "paused": true,
+        "focus": "lp-play"
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "metrics": {
+        "hscroll": false,
+        "header": "rgb(240, 244, 248)",
+        "hero": "rgb(240, 244, 248)",
+        "lower": "rgb(255, 255, 255)",
+        "lowerInk": "rgb(20, 32, 43)",
+        "imageLoaded": true,
+        "image": {
+          "x": 604.8125,
+          "y": 77.9375,
+          "width": 835.1875,
+          "height": 472,
+          "top": 77.9375,
+          "right": 1440,
+          "bottom": 549.9375,
+          "left": 604.8125
+        },
+        "play": {
+          "x": 872.0625,
+          "y": 462.75,
+          "width": 367.390625,
+          "height": 71.1875,
+          "top": 462.75,
+          "right": 1239.453125,
+          "bottom": 533.9375,
+          "left": 872.0625
+        },
+        "heroRect": {
+          "x": 0,
+          "y": 77.9375,
+          "width": 1440,
+          "height": 472,
+          "top": 77.9375,
+          "right": 1440,
+          "bottom": 549.9375,
+          "left": 0
+        },
+        "font": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+        "playCount": 1,
+        "reducedAnimations": 0
+      },
+      "axe": [],
+      "appearanceAxe": [],
+      "video": {
+        "open": true,
+        "playing": true,
+        "time": 0.003517
+      },
+      "closed": {
+        "closed": true,
+        "paused": true,
+        "focus": "lp-play"
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "metrics": {
+        "hscroll": false,
+        "header": "rgb(10, 21, 39)",
+        "hero": "rgb(10, 21, 39)",
+        "lower": "rgb(255, 255, 255)",
+        "lowerInk": "rgb(20, 32, 43)",
+        "imageLoaded": true,
+        "image": {
+          "x": 0,
+          "y": 591.578125,
+          "width": 390,
+          "height": 243.75,
+          "top": 591.578125,
+          "right": 390,
+          "bottom": 835.328125,
+          "left": 0
+        },
+        "play": {
+          "x": 16,
+          "y": 843.328125,
+          "width": 298.234375,
+          "height": 68,
+          "top": 843.328125,
+          "right": 314.234375,
+          "bottom": 911.328125,
+          "left": 16
+        },
+        "heroRect": {
+          "x": 0,
+          "y": 66.046875,
+          "width": 390,
+          "height": 861.28125,
+          "top": 66.046875,
+          "right": 390,
+          "bottom": 927.328125,
+          "left": 0
+        },
+        "font": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+        "playCount": 1,
+        "reducedAnimations": 0
+      },
+      "axe": [],
+      "menuAxe": [],
+      "appearanceAxe": [],
+      "appearanceFits": true,
+      "video": {
+        "open": true,
+        "playing": true,
+        "time": 0.007755
+      },
+      "closed": {
+        "closed": true,
+        "paused": true,
+        "focus": "lp-play"
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "metrics": {
+        "hscroll": false,
+        "header": "rgb(240, 244, 248)",
+        "hero": "rgb(240, 244, 248)",
+        "lower": "rgb(255, 255, 255)",
+        "lowerInk": "rgb(20, 32, 43)",
+        "imageLoaded": true,
+        "image": {
+          "x": 0,
+          "y": 591.578125,
+          "width": 390,
+          "height": 243.75,
+          "top": 591.578125,
+          "right": 390,
+          "bottom": 835.328125,
+          "left": 0
+        },
+        "play": {
+          "x": 16,
+          "y": 843.328125,
+          "width": 298.234375,
+          "height": 68,
+          "top": 843.328125,
+          "right": 314.234375,
+          "bottom": 911.328125,
+          "left": 16
+        },
+        "heroRect": {
+          "x": 0,
+          "y": 66.046875,
+          "width": 390,
+          "height": 861.28125,
+          "top": 66.046875,
+          "right": 390,
+          "bottom": 927.328125,
+          "left": 0
+        },
+        "font": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+        "playCount": 1,
+        "reducedAnimations": 0
+      },
+      "axe": [],
+      "menuAxe": [],
+      "appearanceAxe": [],
+      "appearanceFits": true,
+      "video": {
+        "open": true,
+        "playing": true,
+        "time": 0.004562
+      },
+      "closed": {
+        "closed": true,
+        "paused": true,
+        "focus": "lp-play"
+      }
+    },
+    {
+      "width": 720,
+      "height": 450,
+      "theme": "dark",
+      "metrics": {
+        "hscroll": false,
+        "header": "rgb(10, 21, 39)",
+        "hero": "rgb(10, 21, 39)",
+        "lower": "rgb(255, 255, 255)",
+        "lowerInk": "rgb(20, 32, 43)",
+        "imageLoaded": true,
+        "image": {
+          "x": 20,
+          "y": 449.4375,
+          "width": 680,
+          "height": 425,
+          "top": 449.4375,
+          "right": 700,
+          "bottom": 874.4375,
+          "left": 20
+        },
+        "play": {
+          "x": 36,
+          "y": 882.4375,
+          "width": 367.390625,
+          "height": 71.1875,
+          "top": 882.4375,
+          "right": 403.390625,
+          "bottom": 953.625,
+          "left": 36
+        },
+        "heroRect": {
+          "x": 0,
+          "y": 77.9375,
+          "width": 720,
+          "height": 891.6875,
+          "top": 77.9375,
+          "right": 720,
+          "bottom": 969.625,
+          "left": 0
+        },
+        "font": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+        "playCount": 1,
+        "reducedAnimations": 0
+      },
+      "axe": [],
+      "menuAxe": [],
+      "appearanceAxe": [],
+      "appearanceFits": false
+    },
+    {
+      "width": 720,
+      "height": 450,
+      "theme": "light",
+      "metrics": {
+        "hscroll": false,
+        "header": "rgb(240, 244, 248)",
+        "hero": "rgb(240, 244, 248)",
+        "lower": "rgb(255, 255, 255)",
+        "lowerInk": "rgb(20, 32, 43)",
+        "imageLoaded": true,
+        "image": {
+          "x": 20,
+          "y": 449.4375,
+          "width": 680,
+          "height": 425,
+          "top": 449.4375,
+          "right": 700,
+          "bottom": 874.4375,
+          "left": 20
+        },
+        "play": {
+          "x": 36,
+          "y": 882.4375,
+          "width": 367.390625,
+          "height": 71.1875,
+          "top": 882.4375,
+          "right": 403.390625,
+          "bottom": 953.625,
+          "left": 36
+        },
+        "heroRect": {
+          "x": 0,
+          "y": 77.9375,
+          "width": 720,
+          "height": 891.6875,
+          "top": 77.9375,
+          "right": 720,
+          "bottom": 969.625,
+          "left": 0
+        },
+        "font": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+        "playCount": 1,
+        "reducedAnimations": 0
+      },
+      "axe": [],
+      "menuAxe": [],
+      "appearanceAxe": [],
+      "appearanceFits": false
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "theme": "dark",
+      "metrics": {
+        "hscroll": false,
+        "header": "rgb(10, 21, 39)",
+        "hero": "rgb(10, 21, 39)",
+        "lower": "rgb(255, 255, 255)",
+        "lowerInk": "rgb(20, 32, 43)",
+        "imageLoaded": true,
+        "image": {
+          "x": 491.53125,
+          "y": 77.9375,
+          "width": 532.46875,
+          "height": 472,
+          "top": 77.9375,
+          "right": 1024,
+          "bottom": 549.9375,
+          "left": 491.53125
+        },
+        "play": {
+          "x": 661.90625,
+          "y": 435.90625,
+          "width": 346.078125,
+          "height": 98.03125,
+          "top": 435.90625,
+          "right": 1007.984375,
+          "bottom": 533.9375,
+          "left": 661.90625
+        },
+        "heroRect": {
+          "x": 0,
+          "y": 77.9375,
+          "width": 1024,
+          "height": 472,
+          "top": 77.9375,
+          "right": 1024,
+          "bottom": 549.9375,
+          "left": 0
+        },
+        "font": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+        "playCount": 1,
+        "reducedAnimations": 0
+      },
+      "axe": []
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "theme": "light",
+      "metrics": {
+        "hscroll": false,
+        "header": "rgb(240, 244, 248)",
+        "hero": "rgb(240, 244, 248)",
+        "lower": "rgb(255, 255, 255)",
+        "lowerInk": "rgb(20, 32, 43)",
+        "imageLoaded": true,
+        "image": {
+          "x": 491.53125,
+          "y": 77.9375,
+          "width": 532.46875,
+          "height": 472,
+          "top": 77.9375,
+          "right": 1024,
+          "bottom": 549.9375,
+          "left": 491.53125
+        },
+        "play": {
+          "x": 661.90625,
+          "y": 435.90625,
+          "width": 346.078125,
+          "height": 98.03125,
+          "top": 435.90625,
+          "right": 1007.984375,
+          "bottom": 533.9375,
+          "left": 661.90625
+        },
+        "heroRect": {
+          "x": 0,
+          "y": 77.9375,
+          "width": 1024,
+          "height": 472,
+          "top": 77.9375,
+          "right": 1024,
+          "bottom": 549.9375,
+          "left": 0
+        },
+        "font": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+        "playCount": 1,
+        "reducedAnimations": 0
+      },
+      "axe": []
+    },
+    {
+      "width": 1180,
+      "height": 900,
+      "theme": "dark",
+      "metrics": {
+        "hscroll": false,
+        "header": "rgb(10, 21, 39)",
+        "hero": "rgb(10, 21, 39)",
+        "lower": "rgb(255, 255, 255)",
+        "lowerInk": "rgb(20, 32, 43)",
+        "imageLoaded": true,
+        "image": {
+          "x": 566.40625,
+          "y": 77.9375,
+          "width": 613.59375,
+          "height": 472,
+          "top": 77.9375,
+          "right": 1180,
+          "bottom": 549.9375,
+          "left": 566.40625
+        },
+        "play": {
+          "x": 762.75,
+          "y": 462.75,
+          "width": 367.390625,
+          "height": 71.1875,
+          "top": 462.75,
+          "right": 1130.140625,
+          "bottom": 533.9375,
+          "left": 762.75
+        },
+        "heroRect": {
+          "x": 0,
+          "y": 77.9375,
+          "width": 1180,
+          "height": 472,
+          "top": 77.9375,
+          "right": 1180,
+          "bottom": 549.9375,
+          "left": 0
+        },
+        "font": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+        "playCount": 1,
+        "reducedAnimations": 0
+      },
+      "axe": []
+    },
+    {
+      "width": 1180,
+      "height": 900,
+      "theme": "light",
+      "metrics": {
+        "hscroll": false,
+        "header": "rgb(240, 244, 248)",
+        "hero": "rgb(240, 244, 248)",
+        "lower": "rgb(255, 255, 255)",
+        "lowerInk": "rgb(20, 32, 43)",
+        "imageLoaded": true,
+        "image": {
+          "x": 566.40625,
+          "y": 77.9375,
+          "width": 613.59375,
+          "height": 472,
+          "top": 77.9375,
+          "right": 1180,
+          "bottom": 549.9375,
+          "left": 566.40625
+        },
+        "play": {
+          "x": 762.75,
+          "y": 462.75,
+          "width": 367.390625,
+          "height": 71.1875,
+          "top": 462.75,
+          "right": 1130.140625,
+          "bottom": 533.9375,
+          "left": 762.75
+        },
+        "heroRect": {
+          "x": 0,
+          "y": 77.9375,
+          "width": 1180,
+          "height": 472,
+          "top": 77.9375,
+          "right": 1180,
+          "bottom": 549.9375,
+          "left": 0
+        },
+        "font": "\"Schibsted Grotesk\", ui-sans-serif, system-ui, sans-serif",
+        "playCount": 1,
+        "reducedAnimations": 0
+      },
+      "axe": []
+    }
+  ],
+  "sticky": [
+    {
+      "height": 900,
+      "atTop": {
+        "scroll": 0,
+        "maxScroll": 369,
+        "cta": {
+          "x": 72,
+          "y": 380.453125,
+          "width": 240.421875,
+          "height": 58,
+          "top": 380.453125,
+          "right": 312.421875,
+          "bottom": 438.453125,
+          "left": 72
+        },
+        "visible": 0
+      },
+      "bottom": {
+        "scroll": 369,
+        "maxScroll": 369,
+        "cta": {
+          "x": 72,
+          "y": 11.453125,
+          "width": 240.421875,
+          "height": 58,
+          "top": 11.453125,
+          "right": 312.421875,
+          "bottom": 69.453125,
+          "left": 72
+        },
+        "visible": 1
+      },
+      "return": {
+        "scroll": 0,
+        "maxScroll": 369,
+        "cta": {
+          "x": 72,
+          "y": 380.453125,
+          "width": 240.421875,
+          "height": 58,
+          "top": 380.453125,
+          "right": 312.421875,
+          "bottom": 438.453125,
+          "left": 72
+        },
+        "visible": 0
+      }
+    },
+    {
+      "height": 720,
+      "atTop": {
+        "scroll": 0,
+        "maxScroll": 549,
+        "cta": {
+          "x": 72,
+          "y": 380.453125,
+          "width": 240.421875,
+          "height": 58,
+          "top": 380.453125,
+          "right": 312.421875,
+          "bottom": 438.453125,
+          "left": 72
+        },
+        "visible": 0
+      },
+      "bottom": {
+        "scroll": 549,
+        "maxScroll": 549,
+        "cta": {
+          "x": 72,
+          "y": -168.546875,
+          "width": 240.421875,
+          "height": 58,
+          "top": -168.546875,
+          "right": 312.421875,
+          "bottom": -110.546875,
+          "left": 72
+        },
+        "visible": 1
+      },
+      "return": {
+        "scroll": 0,
+        "maxScroll": 549,
+        "cta": {
+          "x": 72,
+          "y": 380.453125,
+          "width": 240.421875,
+          "height": 58,
+          "top": 380.453125,
+          "right": 312.421875,
+          "bottom": 438.453125,
+          "left": 72
+        },
+        "visible": 0
+      }
+    }
+  ],
+  "routes": [
+    {
+      "path": "/simulator",
+      "landing": false,
+      "background": "rgb(15, 21, 28)",
+      "primary": "#46c48f"
+    },
+    {
+      "path": "/sign-in",
+      "landing": false,
+      "background": "rgb(15, 21, 28)",
+      "primary": "#46c48f"
+    }
+  ],
+  "errors": []
+}

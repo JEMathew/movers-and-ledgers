@@ -1,0 +1,86 @@
+[
+  {
+    "description": "Find your way around the demo and take your first step with synthetic books.",
+    "duration": "1:28",
+    "id": "lesson-01",
+    "label": "Local review only · unpublished",
+    "playable": true,
+    "poster": "/api/academy-media/01/jpg",
+    "posterWidth": 960,
+    "title": "Getting Started"
+  },
+  {
+    "description": "A guided overview from understanding your books to verified first use.",
+    "duration": "2:58",
+    "id": "lesson-09",
+    "label": "Not published · review cut",
+    "playable": false,
+    "title": "Three-Minute Journey"
+  },
+  {
+    "description": "Read the migration scope, source evidence and items that need attention.",
+    "duration": "1:10",
+    "id": "lesson-02",
+    "label": "Local review only · unpublished",
+    "playable": true,
+    "poster": "/api/academy-media/02/jpg",
+    "posterWidth": 960,
+    "title": "Understand Your Migration"
+  },
+  {
+    "description": "Review mappings and make informed decisions before your books move.",
+    "duration": "1:34",
+    "id": "lesson-03",
+    "label": "Local review only · unpublished",
+    "playable": true,
+    "poster": "/api/academy-media/03/jpg",
+    "posterWidth": 960,
+    "title": "Prepare and Approve"
+  },
+  {
+    "description": "Follow migration checkpoints, resolve blockers and inspect reconciliation.",
+    "duration": "1:31",
+    "id": "lesson-06",
+    "label": "Local review only · unpublished",
+    "playable": true,
+    "poster": "/api/academy-media/06/jpg",
+    "posterWidth": 960,
+    "title": "Move and Verify"
+  },
+  {
+    "description": "Complete your first synthetic task and check the evidence of readiness.",
+    "duration": "1:30",
+    "id": "lesson-07",
+    "label": "Local review only · unpublished",
+    "playable": true,
+    "poster": "/api/academy-media/07/jpg",
+    "posterWidth": 960,
+    "title": "First Productive Use"
+  },
+  {
+    "description": "Understand AI suggestions, their evidence and the decisions that stay yours.",
+    "duration": "1:46",
+    "id": "lesson-04",
+    "label": "Not published · review cut",
+    "playable": false,
+    "title": "Gemini Advisor"
+  },
+  {
+    "description": "See how independent review checks advice without replacing financial controls.",
+    "duration": "1:43",
+    "id": "lesson-05",
+    "label": "Not published · review cut",
+    "playable": false,
+    "title": "Independent Gemini Reviewer"
+  },
+  {
+    "description": "Understand safeguards, find evidence and return safely to a paused task.",
+    "duration": "1:30",
+    "id": "lesson-08",
+    "label": "Local review only · unpublished",
+    "playable": true,
+    "poster": "/api/academy-media/08/jpg",
+    "posterWidth": 960,
+    "title": "Trust and Troubleshooting"
+  }
+]

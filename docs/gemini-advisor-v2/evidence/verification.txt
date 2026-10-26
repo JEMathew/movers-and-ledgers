@@ -1,0 +1,44 @@
+Verification date: 2026-10-20, Asia/Kolkata
+All model responses in tests are offline doubles. No billable inference was performed.
+
+Repository root:
+python -m pytest tests/test_assisted_analysis.py tests/test_live_reasoning.py tests/test_independent_review.py tests/test_reasoning_configuration.py tests/test_model_controls.py tests/test_explicit_plan_approval.py tests/test_session_snapshot_compat.py tests/test_controls.py tests/test_onboard_fpu.py::test_modified_setup_revokes_invoice_approval_and_owner_boundary tests/test_onboard_fpu.py::test_versioned_api_auth_ownership_forged_events_and_end_to_end -q
+Result: 184 passed, zero skipped, existing Starlette/httpx deprecation warning.
+
+ruff check agents/reasoning/adk.py agents/reviewer/agent.py domain/reasoning/reviewer.py services/api/src/movebooks_api/analysis.py services/api/src/movebooks_api/reasoning.py services/api/src/movebooks_api/reviewer.py services/api/src/movebooks_api/settings.py services/api/src/movebooks_api/main.py services/api/src/movebooks_api/runtime/persistence.py scripts/gemini_analysis_eval.py tests/test_assisted_analysis.py
+Result: All checks passed.
+
+From apps/web:
+npm test -- --run components/plan-map-approve/AssistedAnalysis.test.tsx components/plan-map-approve/IndependentReview.test.tsx components/plan-map-approve/mapping-states.test.tsx lib/server/private-api-proxy.test.ts
+Result: 54 passed across four files.
+
+npm run typecheck
+Result: Pass.
+
+./node_modules/.bin/eslint components/plan-map-approve/AssistedAnalysis.tsx components/plan-map-approve/AssistedAnalysis.test.tsx components/plan-map-approve/MappingReview.tsx lib/server/proxy-policy.ts lib/server/private-api-proxy.ts lib/server/private-api-proxy.test.ts
+Result: Pass.
+
+git diff --check
+Result: Pass.
+
+Service evidence:
+python scripts/gemini_analysis_eval.py --out docs/gemini-advisor-v2/evidence/deterministic-service.json
+Result: deterministic fallback, zero model calls, business state unchanged.
+This command refuses to overwrite existing evidence. Use a new output filename to reproduce.
+
+Browser:
+Local API on 127.0.0.1:8012, local Next dev on port 3002, models deterministic-only.
+Normal demo sign-in -> Harbor Light sample -> assessment -> plan -> mappings -> Misc Clearing.
+Clicked Run AI-Assisted Analysis once. Separate Advisor and Reviewer results appeared.
+Both labeled deterministic fallback; model was not called.
+Evidence disclosure expanded/collapsed using keyboard Return.
+Recorded decisions stayed zero, mapping stayed Needs review.
+No mapping approval, migration or financial posting performed.
+Screenshots and accessibility tree saved. Both preview processes stopped.
+Mobile viewport, zoom, screen-reader speech and hosted Firebase acceptance were not exercised.
+
+Cloud read-only commands (no configuration changes):
+gcloud run services describe movebooks-beta-api --project=movebooks-ai --region=asia-southeast1 --format='value(spec.template.spec.serviceAccountName)'
+gcloud projects get-iam-policy movebooks-ai --flatten='bindings[].members' --filter='bindings.members:serviceAccount:movebooks-beta-api@movebooks-ai.iam.gserviceaccount.com' --format='json(bindings.role,bindings.condition)'
+gcloud services list --enabled --project=movebooks-ai --filter='config.name:(aiplatform.googleapis.com OR firestore.googleapis.com)' --format='value(config.name)'
+Results summarized in cloud-preflight.json. These do not establish a successful live model invocation.

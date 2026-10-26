@@ -31,7 +31,7 @@ describe("superseded Assess responses", () => {
     render(<DiscoverAssessExperience />);
 
     // While Harbor Light is still loading, the user starts a new Northstar assessment.
-    fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Check if my books are ready to migrate/ }));
     expect(await screen.findByText("Northstar Supplies has 1 blocker to fix before migration.")).toBeVisible();
 
     // The old Harbor Light response finally arrives, and must change nothing.

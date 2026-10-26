@@ -1,0 +1,162 @@
+1
+00:00:01,000 --> 00:00:04,613
+MoveBooks AI is built on Google Cloud and powered by Gemini AI.
+
+2
+00:00:04,793 --> 00:00:10,067
+It guides accounting migration from readiness assessment through
+verified first productive use.
+
+3
+00:00:10,247 --> 00:00:16,652
+Here, focus on a mapping that needs judgment, and the two
+genuine Gemini roles that help a person review it.
+
+4
+00:00:16,832 --> 00:00:20,816
+We are examining saved results, not making a new model call.
+
+5
+00:00:22,900 --> 00:00:29,263
+Start with the selected account twelve hundred, Misc Clearing,
+and the proposed destination, Other Current
+
+6
+00:00:29,263 --> 00:00:29,623
+Asset.
+
+7
+00:00:29,803 --> 00:00:33,028
+This saved production screen shows a recorded decision.
+
+8
+00:00:33,208 --> 00:00:38,500
+The editorial highlight directs attention to the mapping; it is
+not a new selection or approval.
+
+9
+00:00:42,261 --> 00:00:48,056
+These genuine production screenshots show previously generated
+Gemini results for the account twelve
+
+10
+00:00:48,056 --> 00:00:50,432
+hundred, Misc Clearing, ready for review.
+
+11
+00:00:50,592 --> 00:00:54,391
+Run AI-Assisted Analysis is visible, but we do not click it.
+
+12
+00:00:54,551 --> 00:00:58,361
+We are reviewing a saved response, not generating a new one.
+
+13
+00:01:01,400 --> 00:01:04,475
+The Advisor explains why this mapping needs judgment.
+
+14
+00:01:04,635 --> 00:01:07,233
+The proposed destination is Other Current Asset.
+
+15
+00:01:07,393 --> 00:01:13,840
+Its supplied candidate confidence is zero point seven six: a
+mapping input, not a guarantee of model
+
+16
+00:01:13,840 --> 00:01:14,420
+accuracy.
+
+17
+00:01:14,580 --> 00:01:17,713
+The source purpose and acceptance criteria are missing.
+
+18
+00:01:17,873 --> 00:01:23,830
+The recommendation is to escalate to a qualified human, grounded
+in the escalation flag and policy
+
+19
+00:01:23,830 --> 00:01:24,560
+constraints.
+
+20
+00:01:24,720 --> 00:01:29,188
+The explanation preserves uncertainty instead of inventing an
+accounting story.
+
+21
+00:01:31,367 --> 00:01:33,768
+The independent Reviewer returns QUESTION.
+
+22
+00:01:33,928 --> 00:01:37,704
+It challenges the recommendation against the supplied source
+facts.
+
+23
+00:01:37,864 --> 00:01:42,570
+A compatible account type does not establish a clearing
+account's business purpose.
+
+24
+00:01:42,730 --> 00:01:47,861
+The Reviewer highlights the missing purpose, confidence
+threshold and need for human review.
+
+25
+00:01:48,021 --> 00:01:50,776
+Accepting reasoning is never approval of the mapping.
+
+26
+00:01:50,936 --> 00:01:55,095
+Neither Advisor nor Reviewer can authorize a migration or post
+an invoice.
+
+27
+00:01:55,255 --> 00:01:57,192
+The human retains that authority.
+
+28
+00:01:59,367 --> 00:02:03,913
+Here, the saved explanation brings the mapping's supporting
+evidence into view.
+
+29
+00:02:04,900 --> 00:02:06,560
+Private details stay hidden.
+
+30
+00:02:06,732 --> 00:02:11,771
+Saved results belong to their mapping; switching context clears
+outdated analysis.
+
+31
+00:02:11,942 --> 00:02:15,242
+Reopening retrieves the existing explanation for review.
+
+32
+00:02:15,583 --> 00:02:16,770
+No model is called.
+
+33
+00:02:16,988 --> 00:02:19,749
+The reopening itself is not shown in this footage.
+
+34
+00:02:20,304 --> 00:02:25,505
+The saved snapshot informs a person; deterministic validation
+remains authoritative.
+
+35
+00:02:27,667 --> 00:02:28,633
+MoveBooks AI.
+
+36
+00:02:28,813 --> 00:02:29,756
+Move your books.
+
+37
+00:02:29,936 --> 00:02:31,203
+Keep your confidence.

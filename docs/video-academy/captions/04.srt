@@ -1,0 +1,96 @@
+1
+00:00:02,200 --> 00:00:05,720
+A Clearing account is a
+classic migration trap.
+
+2
+00:00:06,220 --> 00:00:08,940
+Its name doesn't tell you
+what the balance really is.
+
+3
+00:00:09,320 --> 00:00:10,620
+When a mapping like 1200,
+
+4
+00:00:11,260 --> 00:00:15,400
+Misc Clearing needs judgement, you
+can ask the Gemini advisor to explain
+
+5
+00:00:15,400 --> 00:00:18,080
+it. The advisor speaks only when you ask.
+
+6
+00:00:18,540 --> 00:00:19,100
+It explains.
+
+7
+00:00:19,740 --> 00:00:23,660
+It doesn't decide. It
+can't approve, retry, post
+
+8
+00:00:23,660 --> 00:00:25,000
+or verify anything.
+
+9
+00:00:25,540 --> 00:00:26,920
+And it can't change your books.
+
+10
+00:00:27,190 --> 00:00:27,690
+Next,
+
+11
+00:00:28,050 --> 00:00:28,870
+read the recommendation,
+
+12
+00:00:29,520 --> 00:00:31,300
+and the uncertainty it couldn't resolve.
+
+13
+00:00:31,890 --> 00:00:35,970
+Then open the evidence, and check
+every reference it cites against the
+
+14
+00:00:35,970 --> 00:00:37,150
+task in front of you.
+
+15
+00:00:37,810 --> 00:00:39,030
+Advice belongs to a snapshot.
+
+16
+00:00:39,590 --> 00:00:41,610
+If you switch workspaces mid-request,
+
+17
+00:00:42,190 --> 00:00:45,510
+the answer is discarded rather
+than shown against the wrong books.
+
+18
+00:00:45,640 --> 00:00:49,340
+If the advisor is unavailable, you carry
+on with the deterministic evidence,
+
+19
+00:00:49,720 --> 00:00:52,520
+and nothing is approved.
+The decision stays yours.
+
+20
+00:00:53,160 --> 00:00:57,160
+Weigh the advice against the evidence,
+then approve, change or reject the
+
+21
+00:00:57,160 --> 00:00:57,880
+mapping yourself.
+
+22
+00:00:58,440 --> 00:01:00,280
+Next, get an independent check.

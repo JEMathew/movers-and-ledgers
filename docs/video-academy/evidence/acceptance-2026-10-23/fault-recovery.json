@@ -1,0 +1,19 @@
+{
+  "fault": "temporary localhost proxy returned 503 only for lesson 01 MP4",
+  "errorText": "This video couldn’t load. Your migration is unchanged.Retry video",
+  "reloaded": {
+    "duration": 87.9,
+    "error": null,
+    "paused": false,
+    "ready": 4,
+    "time": 0.066997
+  },
+  "recovered": {
+    "duration": 87.9,
+    "error": null,
+    "paused": false,
+    "ready": 4,
+    "time": 14.683171
+  },
+  "alertRemoved": true
+}

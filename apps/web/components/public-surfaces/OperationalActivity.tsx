@@ -43,7 +43,7 @@ export function OperationalActivity() {
   }
   return <section id="ai-activity" aria-labelledby="operational-activity-title" className="card p-6">
     <h2 id="operational-activity-title" ref={heading} tabIndex={-1} className="type-section">AI activity</h2>
-    <p className="mt-2 text-secondary">What AI advice was reserved, used or replaced by rules for your account. Separate from the financial audit trail; it does not show whether your books are correct.</p>
+    <p className="mt-2 text-secondary">Optional model activity records for your account, when tracking is enabled. A record does not establish that live AI assistance is available in this Beta. Separate from the financial audit trail; it does not show whether your books are correct.</p>
     <Button className="mt-4" variant="secondary" disabled={busy} onClick={refresh}>{busy ? "Checking AI activity…" : "Check AI activity"}</Button>
     <div className="mt-4" aria-live="polite" aria-busy={busy}>
       {!result && !busy && !error && <p>Not checked yet. Choose Check AI activity to read your account snapshot.</p>}

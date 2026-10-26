@@ -1,0 +1,76 @@
+{
+  "recorded_at": "2026-10-21T01:23:02.866872+05:30",
+  "authority": "Owner reply in current conversation; complete security decision repeated in third response",
+  "risk_acceptance_owner": "Jincen Mathew \u2014 MoveBooks AI Product Owner",
+  "development_advisory": {
+    "status": "CONDITIONALLY APPROVED \u2014 artifact binding and fresh runtime scan pending",
+    "advisory": "GHSA-vfj7-8cjw-p6xm / CVE-2026-93687",
+    "chain": [
+      {
+        "name": "eslint-config-next",
+        "version": "15.5.27",
+        "dev": true
+      },
+      {
+        "name": "@next/eslint-plugin-next",
+        "version": "15.5.27",
+        "dev": true
+      },
+      {
+        "name": "fast-glob",
+        "version": "3.3.1",
+        "dev": true
+      },
+      {
+        "name": "micromatch",
+        "version": "4.0.8",
+        "dev": true
+      },
+      {
+        "name": "braces",
+        "version": "3.0.3",
+        "dev": true
+      }
+    ],
+    "exception_start": "2026-10-21T01:23:02.866872+05:30",
+    "exception_end_exclusive": "2026-10-28T01:23:02.866872+05:30",
+    "scope": "One reviewed disclosure-inclusive web-only MVP build and resulting artifact; trusted, pinned inputs only",
+    "conditions": [
+      "Fresh runtime image scan with no unresolved release-blocking findings",
+      "Reassess immediately if dependencies, build inputs, threat exposure or intended artifact change",
+      "No blanket waiver for future builds"
+    ],
+    "final_commit": null,
+    "final_image": null,
+    "remediation_owner": "OWNER UNASSIGNED",
+    "assignment_required": true
+  },
+  "api_replay": {
+    "status": "ACCEPTED WITH CONDITIONS \u2014 unchanged deterministic backend, synthetic MVP only",
+    "observed": "Local historical-source duplicate decisions/audit/events; no additional posting, ledger mutation or ownership bypass in reproduced fixtures",
+    "hosted_concurrency": "UNVERIFIED",
+    "exclusions": [
+      "Real financial records",
+      "New backend deployments",
+      "Autonomous actions",
+      "Altered approval permissions"
+    ],
+    "reassess_on": [
+      "Duplicate financial effects",
+      "Approval bypass",
+      "Cross-account access"
+    ],
+    "remediation": "Backend idempotency/audit-history issue remains OPEN",
+    "remediation_owner": "OWNER UNASSIGNED",
+    "assignment_required": true
+  },
+  "ab_accounts": {
+    "status": "UNKNOWN",
+    "authorization": "NOT GIVEN: third response repeats security disposition; does not supply manifest or approve setup/probes"
+  },
+  "approved_operations": "Local preparation only; no publication, deployment or promotion",
+  "reviewed_input_hashes": {
+    "apps/web/package.json": "2be82ebbd7bfbcc920498035d370e716ce6a782d2c78e64c20d97a7df93c9eb0",
+    "apps/web/package-lock.json": "649b6297596269acbfb9199e0f94797becbb4c60b1348090e90e72e69e1b68e4"
+  }
+}

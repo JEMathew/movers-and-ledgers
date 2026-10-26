@@ -1,0 +1,58 @@
+{
+  "note": "Seek-to-end completion, not six full uninterrupted browser viewings. Prior full FFmpeg decode evidence remains valid by SHA-256.",
+  "lessons": [
+    {
+      "id": "01",
+      "method": "keyboard seek to end",
+      "duration": 87.9,
+      "time": 87.9,
+      "ended": true,
+      "error": null
+    },
+    {
+      "id": "02",
+      "method": "keyboard seek to end",
+      "duration": 70,
+      "ended": true,
+      "error": null,
+      "paused": true,
+      "time": 70
+    },
+    {
+      "id": "03",
+      "method": "keyboard seek to end; final state re-read after seek settled",
+      "duration": 93.8,
+      "ended": true,
+      "error": null,
+      "paused": true,
+      "time": 93.8
+    },
+    {
+      "id": "06",
+      "method": "keyboard seek to end",
+      "duration": 91.1,
+      "ended": true,
+      "error": null,
+      "paused": true,
+      "time": 91.1
+    },
+    {
+      "id": "07",
+      "method": "keyboard seek to end",
+      "duration": 89.578,
+      "ended": true,
+      "error": null,
+      "paused": true,
+      "time": 89.578
+    },
+    {
+      "id": "08",
+      "method": "keyboard seek to end",
+      "duration": 89.578,
+      "ended": true,
+      "error": null,
+      "paused": true,
+      "time": 89.578
+    }
+  ]
+}

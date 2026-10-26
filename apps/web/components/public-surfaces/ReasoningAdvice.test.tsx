@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ReasoningAdvice } from "./ReasoningAdvice";
 
-vi.mock("@/lib/identity", () => ({ authHeaders: async () => ({}) }));
+vi.mock("@/lib/identity", () => ({ cloudIdentity: () => false, authHeaders: async () => ({}) }));
 vi.mock("next/navigation", () => ({ useSearchParams: () => new URLSearchParams(window.location.search) }));
 const id = "11111111-1111-4111-8111-111111111111";
 const advice = { observation: "Existing proposal", inference: "Review is necessary",

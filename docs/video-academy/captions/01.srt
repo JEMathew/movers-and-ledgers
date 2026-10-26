@@ -1,0 +1,115 @@
+1
+00:00:02,510 --> 00:00:06,430
+Moving your books off an old
+desktop system is a financial
+
+2
+00:00:06,430 --> 00:00:08,890
+trust problem, not a file copy.
+
+3
+00:00:09,650 --> 00:00:12,590
+MoveBooks AI guides that
+move in five stages.
+
+4
+00:00:13,470 --> 00:00:17,650
+Rules check every figure and every
+decision that matters stays with you.
+
+5
+00:00:18,130 --> 00:00:19,670
+Start on the MoveBooks home page.
+
+6
+00:00:20,230 --> 00:00:22,350
+You can explore the
+demo without signing in.
+
+7
+00:00:22,710 --> 00:00:26,910
+It runs on Harbor Light Books, a
+small sample bookshop, and every
+
+8
+00:00:26,910 --> 00:00:28,270
+record in it is synthetic.
+
+9
+00:00:28,270 --> 00:00:32,470
+This beta never connects to an
+accounting provider, so don't
+
+10
+00:00:32,470 --> 00:00:33,910
+bring real customer data.
+
+11
+00:00:34,510 --> 00:00:37,470
+To keep your progress,
+choose Enter demo workspace.
+
+12
+00:00:38,090 --> 00:00:40,470
+If you're new, you start
+with the sample business.
+
+13
+00:00:41,150 --> 00:00:44,430
+If you're returning, your migration
+resumes where you left off.
+
+14
+00:00:44,930 --> 00:00:46,670
+My migration is your home base.
+
+15
+00:00:47,270 --> 00:00:49,580
+The bar across the top
+shows the five stages.
+
+16
+00:00:51,050 --> 00:00:52,170
+Understand checks readiness.
+
+17
+00:00:52,790 --> 00:00:55,850
+Prepare maps every record
+and asks for your approval.
+
+18
+00:00:55,850 --> 00:00:58,350
+Move transfers records in batches.
+
+19
+00:00:59,350 --> 00:01:03,650
+Verify compares the old and new
+books to the cent and start posts and
+
+20
+00:01:03,650 --> 00:01:05,110
+verifies your first invoice.
+
+21
+00:01:05,750 --> 00:01:09,890
+Every screen shows what's
+done, what's waiting on you and
+
+22
+00:01:09,890 --> 00:01:13,970
+your one next step. Evidence
+and help are always a click away
+
+23
+00:01:13,970 --> 00:01:18,190
+and later stages stay locked
+until the one before is complete.
+
+24
+00:01:18,830 --> 00:01:20,370
+Begin where every move should.
+
+25
+00:01:20,910 --> 00:01:24,170
+Open, understand and check
+whether your books are ready.

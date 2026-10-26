@@ -1,0 +1,167 @@
+1
+00:00:01,000 --> 00:00:04,613
+MoveBooks AI is built on Google Cloud and powered by Gemini AI.
+
+2
+00:00:04,793 --> 00:00:10,067
+It guides accounting migration from readiness assessment through
+verified first productive use.
+
+3
+00:00:10,247 --> 00:00:16,873
+Here, examine an existing local synthetic journey through
+recovery, reconciliation and its first verified
+
+4
+00:00:16,873 --> 00:00:17,882
+accounting task.
+
+5
+00:00:18,062 --> 00:00:22,582
+No migration, approval or financial posting is performed for
+this video.
+
+6
+00:00:24,667 --> 00:00:28,055
+This completed workspace provides the outcome to inspect.
+
+7
+00:00:28,235 --> 00:00:34,418
+Next, we revisit its recorded checkpoints and the decisions that
+led to verified first productive use.
+
+8
+00:00:36,500 --> 00:00:38,592
+We review an existing local journey.
+
+9
+00:00:38,752 --> 00:00:44,915
+This is a different synthetic record from the Gemini analysis in
+this collection.
+
+10
+00:00:45,075 --> 00:00:50,175
+In Move, the recorded run encounters a controlled duplicate and
+pauses the affected work.
+
+11
+00:00:50,335 --> 00:00:54,062
+Completed checkpoints remain intact while the exception is
+reviewed.
+
+12
+00:00:54,222 --> 00:00:58,702
+The footage shows the existing recovery sequence and its human
+decision boundary.
+
+13
+00:00:58,862 --> 00:01:04,252
+It is historical playback, not a retry or migration executed
+during this recording.
+
+14
+00:01:04,412 --> 00:01:10,393
+The practical benefit is controlled recovery: resolve the
+permitted problem without replaying work that has
+
+15
+00:01:10,393 --> 00:01:11,399
+already completed.
+
+16
+00:01:13,567 --> 00:01:15,775
+Moving records is only part of the job.
+
+17
+00:01:15,935 --> 00:01:19,502
+Verify examines whether the result is financially consistent.
+
+18
+00:01:19,662 --> 00:01:25,781
+The accepted local run recorded seventeen deterministic
+validation checks, followed by review of
+
+19
+00:01:25,781 --> 00:01:27,056
+configuration areas.
+
+20
+00:01:27,216 --> 00:01:32,127
+These are rule-based checks, not generated opinions or AI
+confidence scores.
+
+21
+00:01:32,287 --> 00:01:36,446
+A failed financial check cannot be waived by a reassuring
+explanation.
+
+22
+00:01:36,606 --> 00:01:41,802
+Counts, relationships and financial results must satisfy their
+own contracts.
+
+23
+00:01:41,962 --> 00:01:45,888
+Configuration and sensitive approvals remain separate decisions.
+
+24
+00:01:46,048 --> 00:01:51,562
+The customer gains evidence of what was checked, rather than
+just a progress bar reaching the end.
+
+25
+00:01:53,733 --> 00:01:59,349
+Start asks a more useful question than whether the import
+finished: can the business complete its first
+
+26
+00:01:59,349 --> 00:02:00,712
+governed accounting task?
+
+27
+00:02:00,872 --> 00:02:07,169
+The archival run reviews onboarding and the invoice contract,
+then records the approved synthetic action and
+
+28
+00:02:07,169 --> 00:02:08,161
+its verification.
+
+29
+00:02:08,321 --> 00:02:10,274
+No invoice is being posted now.
+
+30
+00:02:10,434 --> 00:02:16,844
+For this local record, the invoice subtotal is one hundred US
+dollars, tax is seven dollars and twenty-five
+
+31
+00:02:16,844 --> 00:02:21,398
+cents, and the total is one hundred and seven dollars and
+twenty-five cents.
+
+32
+00:02:21,558 --> 00:02:24,783
+The screen confirms Verified First Productive Use.
+
+33
+00:02:24,943 --> 00:02:30,991
+Those figures belong to this recorded local journey; they are
+not totals from the separate Gemini migration
+
+34
+00:02:30,991 --> 00:02:32,800
+or a new production transaction.
+
+35
+00:02:34,967 --> 00:02:35,933
+MoveBooks AI.
+
+36
+00:02:36,113 --> 00:02:37,056
+Move your books.
+
+37
+00:02:37,236 --> 00:02:38,503
+Keep your confidence.

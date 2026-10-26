@@ -1,0 +1,44 @@
+{
+  "utc": "2026-10-22T21:17:20.357689+00:00",
+  "subtitleSources": {
+    "authorizedDownloadsFolder": "macOS Operation not permitted; ordinary and elevated read unsuccessful; do not retry unchanged access",
+    "accessibleMediaPackage": "nine MP4s; no SRT/VTT or matching narration transcript",
+    "localNarrationScripts": "final-demo/narration-script.md and narration-script-v2.md are a separate 175-second demo, not the nine Academy recordings; not reused",
+    "connectedCatalog": "MoveBooks project-name search returned none; five accessible ordinary projects contained only four September voice-change jobs, no Academy transcript/file assets",
+    "replacementCaptionsCreated": false
+  },
+  "restrictedFidelity": {
+    "04": {
+      "status": "FAIL",
+      "sampleSeconds": 53,
+      "observed": "Live Gemini capture pending; Second opinion planned; guidance FALLBACK; live_disabled"
+    },
+    "05": {
+      "status": "FAIL",
+      "sampleSeconds": 52,
+      "observed": "Live Gemini capture pending; Gemini Reviewer Planned; Review FALLBACK"
+    },
+    "09": {
+      "status": "FAIL",
+      "sampleSeconds": 90,
+      "observed": "Planned not available in the Beta; disabled Ask the Advisor/Reviewer; Example of planned behavior. Not live model output."
+    },
+    "releasedSourceStatus": "AI_ASSISTANCE_STATUS live; Live limited evaluation",
+    "limit": "Samples establish definite stale UI; they are not full narration, sensitive-content or synchronization certification. Original recordings remain unchanged."
+  },
+  "targetedChecks": {
+    "academyTests": 14,
+    "testFiles": 2,
+    "result": "PASS",
+    "startHereInActualBrowser": "PASS",
+    "priorPlaybackAndResponsiveEvidence": "reused; no player or layout changes"
+  },
+  "productionWrites": 0,
+  "generationCalls": 0,
+  "paidServices": 0,
+  "rollbackArtifact": "existing serving revision Ready=True; full digest found in Artifact Registry; no redeploy or rollback executed",
+  "nineVideoPackage": "BLOCKED",
+  "publicMediaDelivery": "STOP",
+  "frontendCompatibility": "PASS for source integration; public inference proof not asserted",
+  "rollback": "NOT READY: no final Academy image/revision or approved nine-video media bundle"
+}

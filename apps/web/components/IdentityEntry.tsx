@@ -5,19 +5,22 @@ import { Button } from "@/components/ui";
 import { useIdentity } from "./IdentityProvider";
 
 export function GoogleSignIn({ destination, compact = false }: { destination?: string; compact?: boolean }) {
-  const { ready, busy, identity, hasSession, error, signIn } = useIdentity();
+  const { ready, busy, identity, hasSession, error, localPreview, signIn } = useIdentity();
+  if (localPreview) return compact
+    ? <a className="button small header-sign-in" href="/sign-in">Sign In</a>
+    : <p role="status" className="mt-7">Google sign-in is disabled in this local UX preview. Explore Demo uses synthetic data; Try Your Data checks files in your browser. Account and workspace access require a separately approved hosted test.</p>;
   // The label is always the real action. Until the SDK is ready the button is disabled, never clickable,
   // so the first enabled click can open the popup synchronously (Safari). A failed start is not "busy".
   const preparing = !ready && !error;
-  if (identity) return compact ? null : <a className="button mt-7" href={safeDestination(destination ?? "/workspace")}>Go to My Migration</a>;
+  if (identity) return compact ? null : <a className="button mt-7" href={safeDestination(destination ?? "/workspace")}>Go to My migration</a>;
   if (hasSession) return compact ? null : <p role="status" className="mt-7">{!ready || busy ? "Verifying your account…" : "Your session needs attention. Use the account control above to sign out and try again."}</p>;
   // The page owns the primary authentication task; the header stays a utility.
-  return <Button className={compact ? undefined : "mt-7"} size={compact ? "small" : "default"} variant={compact ? "ghost" : "primary"}
+  return <Button className={compact ? "header-sign-in" : "mt-7"} size={compact ? "small" : "default"} variant="primary"
     aria-label={compact && !busy ? "Sign in with Google" : undefined}
     disabled={!ready || busy} aria-busy={preparing || undefined} title={preparing ? "Getting Google sign-in ready" : undefined} onClick={() => signIn(destination ?? (window.location.pathname === "/sign-in"
       ? new URLSearchParams(window.location.search).get("next") ?? "/workspace"
       : `${window.location.pathname}${window.location.search}`))}>
-    {busy ? "Signing in…" : compact ? "Sign in" : "Continue with Google"}
+    {busy ? "Signing in…" : compact ? "Sign In" : "Continue with Google"}
   </Button>;
 }
 
@@ -29,6 +32,6 @@ export function IdentityFeedback() {
 }
 
 export function IdentityEntry({ destination }: { destination: string }) {
-  return <>{cloudIdentity() ? <GoogleSignIn destination={destination} /> : demoEntry() ? <a className="button mt-7 w-full" href={`/api/auth/demo?next=${encodeURIComponent(safeDestination(destination))}`}>Enter Demo Workspace →</a> : <p role="status" className="mt-7">Sign-in is not configured. Demo access is disabled.</p>}
-    <p className="mt-4 text-xs text-muted">{cloudIdentity() ? "Bounded synthetic Beta · No production customer data" : "Synthetic Data Only"}</p></>;
+  return <>{cloudIdentity() ? <GoogleSignIn destination={destination} /> : demoEntry() ? <a className="button mt-7 w-full" href={`/api/auth/demo?next=${encodeURIComponent(safeDestination(destination))}`}>Enter demo workspace <span aria-hidden="true">→</span></a> : <p role="status" className="mt-7">Sign-in is not configured. Demo access is disabled.</p>}
+    <p className="entry-scope">{cloudIdentity() ? "Bounded synthetic Beta · No production customer data" : "Synthetic data only"}</p></>;
 }

@@ -85,22 +85,24 @@ describe("DiscoverAssessExperience", () => {
     vi.stubGlobal("fetch",fetchMock);
     render(<DiscoverAssessExperience />);
     fireEvent.change(screen.getByRole("combobox",{name:"Sample business"}),{target:{value:"harbor-light-migrate-demo"}});
-    fireEvent.click(screen.getByRole("button",{name:"Check If My Books Are Ready to Migrate"}));
-    await screen.findByRole("heading",{name:"Migration Readiness"});
+    fireEvent.click(screen.getByRole("button",{name:"Check if my books are ready to migrate"}));
+    await screen.findByRole("heading",{name:"Migration readiness"});
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({sample_company_id:"harbor-light-migrate-demo"});
     expect(fetchMock.mock.calls[0][0]).toMatch(/\/v1\/migration-sessions$/);
   });
   it("starts with a synthetic company and routes uploads through controlled intake", () => {
     render(<DiscoverAssessExperience />);
-    expect(screen.getByRole("heading", { name: "Understand Your Books" })).toBeVisible();
-    expect(screen.getByRole("combobox", { name: "Sample business" })).toHaveValue("northstar-supplies");
-    expect(screen.getByRole("link", { name: "Choose Test Files" })).toHaveAttribute("href", "/try-your-data");
+    expect(screen.getByRole("heading", { name: "Understand your books" })).toBeVisible();
+    // Harbor Light runs the full journey, so a fresh visitor starts there; Northstar is opt-in practice (FR4).
+    expect(screen.getByRole("combobox", { name: "Sample business" })).toHaveValue("harbor-light-migrate-demo");
+    expect(screen.getByRole("option", { name: "Northstar Supplies — Practice fixing data" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Choose test files" })).toHaveAttribute("href", "/try-your-data");
     const journey = screen.getByRole("list", { name: "Migration Journey" });
     expect(journey).not.toBeVisible();
-    expect(screen.getAllByRole("list", { name: "Five-phase migration journey" })[0]).toBeVisible();
+    expect(screen.getAllByRole("list", { name: "Five-stage migration journey" })[0]).toBeVisible();
     // A fresh user is at the start of a real journey, exactly as My Migration shows it.
-    expect(journey.querySelector('[aria-current="step"]')).toHaveTextContent("AssessCurrent");
-    expect(screen.getByText("1 of 5 · Understand · Current")).toBeVisible();
+    expect(journey.querySelector('[aria-current="step"]')).toHaveTextContent("AssessNow");
+    expect(screen.getByText("Understand, stage 1 of 5")).toBeVisible();
     expect(screen.queryByText(/Progress not confirmed|Progress unavailable/)).not.toBeInTheDocument();
   });
 
@@ -111,11 +113,26 @@ describe("DiscoverAssessExperience", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<DiscoverAssessExperience/>);
     await screen.findByText("Temporarily unavailable");
-    fireEvent.click(screen.getByRole("button", { name: "Try Again" }));
-    await screen.findByText("Current Workspace: Your Test Export");
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
+    await screen.findByText("Current workspace: your test export");
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(fetchMock.mock.calls.every(call => call[0].endsWith("/migration-sessions/upload-session") && !call[1]?.method)).toBe(true);
-    expect(screen.getByRole("combobox", {name: "Sample business"})).toHaveValue("northstar-supplies");
+    expect(screen.getByRole("combobox", {name: "Sample business"})).toHaveValue("harbor-light-migrate-demo");
+  });
+
+  it("still opens the Northstar practice sample when the link asks for it", () => {
+    window.history.replaceState(null, "", "/assess?sample=northstar-supplies");
+    render(<DiscoverAssessExperience />);
+    expect(screen.getByRole("combobox", { name: "Sample business" })).toHaveValue("northstar-supplies");
+    expect(screen.getByText(/Practice sample: a deliberately imperfect/)).toBeVisible();
+    window.history.replaceState(null, "", "/assess");
+  });
+
+  it("ignores an unknown sample in the link and keeps Harbor Light", () => {
+    window.history.replaceState(null, "", "/assess?sample=someone-elses-company");
+    render(<DiscoverAssessExperience />);
+    expect(screen.getByRole("combobox", { name: "Sample business" })).toHaveValue("harbor-light-migrate-demo");
+    window.history.replaceState(null, "", "/assess");
   });
 
   it.each([
@@ -132,14 +149,14 @@ describe("DiscoverAssessExperience", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<DiscoverAssessExperience />);
 
-    const resume = await screen.findByRole("button", { name: /Continue This Assessment/ });
+    const resume = await screen.findByRole("button", { name: /Continue this assessment/ });
     expect(resume).not.toHaveClass("secondary");
     // Starting over stays available, but only as a separate, secondary action.
-    expect(screen.getByRole("button", { name: /Start a New Assessment/ })).toHaveClass("secondary");
-    expect(screen.queryByRole("button", { name: /Check If My Books Are Ready to Migrate/ })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Start a new assessment/ })).toHaveClass("secondary");
+    expect(screen.queryByRole("button", { name: /Check if my books are ready to migrate/ })).not.toBeInTheDocument();
     fireEvent.click(resume);
 
-    expect(await screen.findByRole("heading", { name: "Migration Readiness" })).toBeVisible();
+    expect(await screen.findByRole("heading", { name: "Migration readiness" })).toBeVisible();
     const urls = fetchMock.mock.calls.map(call => String(call[0]));
     expect(urls.slice(1)).toEqual([
       expect.stringMatching(/\/v1\/migration-sessions\/session-777\/discovery$/),
@@ -149,7 +166,7 @@ describe("DiscoverAssessExperience", () => {
     expect(urls.some(url => url.endsWith("/v1/migration-sessions"))).toBe(false);
     expect(window.location.search).toBe("?session=session-777");
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe("session-777");
-    expect(screen.getByRole("link", { name: "Create My Migration Plan" })).toHaveAttribute("href", "/plan-map-approve?session=session-777");
+    expect(screen.getByRole("link", { name: "Create my migration plan" })).toHaveAttribute("href", "/plan-map-approve?session=session-777");
   });
 
   it("runs the API-backed journey and hands off to the governed planning workspace", async () => {
@@ -162,18 +179,18 @@ describe("DiscoverAssessExperience", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<DiscoverAssessExperience />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Check if my books are ready to migrate/ }));
 
-    expect(await screen.findByRole("heading", { name: "Migration Readiness" })).toBeVisible();
+    expect(await screen.findByRole("heading", { name: "Migration readiness" })).toBeVisible();
     expect(screen.getByText("Northstar Supplies can move forward. 1 item needs your review first.")).toBeVisible();
-    expect(screen.getAllByText("NEEDS ATTENTION").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Needs attention").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Potential duplicate customers need review").length).toBeGreaterThan(0);
     // Technical evidence is available but secondary.
     expect(screen.getByRole("heading", { name: "Activity and evidence" })).not.toBeVisible();
     fireEvent.click(screen.getByText("Show technical evidence"));
     expect(screen.getByRole("heading", { name: "Activity and evidence" })).toBeVisible();
 
-    const cta = screen.getByRole("link", { name: "Create My Migration Plan" });
+    const cta = screen.getByRole("link", { name: "Create my migration plan" });
     expect(cta).toHaveAttribute("href", "/plan-map-approve?session=session-001");
     cta.addEventListener("click", event => event.preventDefault());
     fireEvent.click(cta);
@@ -191,23 +208,23 @@ describe("DiscoverAssessExperience", () => {
       assessment: { ...assessment, readiness: "BLOCKED", blocker_count: 1 },
     })));
     render(<DiscoverAssessExperience />);
-    const readiness = await screen.findByRole("heading", { name: "Migration Readiness" });
+    const readiness = await screen.findByRole("heading", { name: "Migration readiness" });
     expect(screen.getByText("Northstar Supplies has 1 blocker to fix before migration.")).toBeVisible();
-    const issues = screen.getByRole("heading", { name: "What Needs Attention" });
-    const cta = screen.getByRole("link", { name: "Review 1 Readiness Issue" });
+    const issues = screen.getByRole("heading", { name: "What needs attention" });
+    const cta = screen.getByRole("link", { name: "Review 1 readiness issue" });
     const evidence = screen.getByText("Show technical evidence");
-    const source = screen.getByRole("heading", { name: "Check Another Business" });
+    const source = screen.getByRole("heading", { name: "Check another business" });
     const follows = (a: Element, b: Element) => Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
     expect(follows(readiness, cta) && follows(cta, issues) && follows(issues, evidence) && follows(evidence, source)).toBe(true);
     expect(cta).toHaveAttribute("href", "/plan-map-approve?session=session-002");
-    expect(within(screen.getByRole("region", { name: "What Needs Attention" })).getByText("Restore the customer or correct the invoice.")).toBeVisible();
+    expect(within(screen.getByRole("region", { name: "What needs attention" })).getByText("Restore the customer or correct the invoice.")).toBeVisible();
     // The CTA reviews blockers; it never claims a repair this product cannot perform.
     expect(screen.getByText(/Planning preserves these blockers; migration cannot start until source data is corrected/)).toBeVisible();
     expect(screen.queryByRole("link", { name: /^Resolve/ })).not.toBeInTheDocument();
     expect(screen.getByText(/Deterministic assessment/)).toBeVisible();
     expect(screen.getAllByRole("link").filter(link => link.classList.contains("button") && !link.classList.contains("secondary"))).toEqual([cta]);
-    expect(screen.getByRole("button", { name: /Start a New Assessment/ })).toHaveClass("secondary");
-    expect(screen.getByRole("list", { name: "Migration Journey" }).querySelector('[aria-current="step"]')).toHaveTextContent("PlanCurrent");
+    expect(screen.getByRole("button", { name: /Start a new assessment/ })).toHaveClass("secondary");
+    expect(screen.getByRole("list", { name: "Migration Journey" }).querySelector('[aria-current="step"]')).toHaveTextContent("PlanNow");
     // Readiness blockers keep Assess from reading as completed while planning goes on.
     const assess = within(screen.getByRole("list", { name: "Migration Journey" })).getAllByRole("listitem")[0];
     expect(assess).toHaveTextContent("AssessBlocked");
@@ -222,7 +239,7 @@ describe("DiscoverAssessExperience", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<DiscoverAssessExperience />);
     fireEvent.change(screen.getByRole("combobox", { name: "Sample business" }), { target: { value: sample } });
-    fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Check if my books are ready to migrate/ }));
     const alert = await screen.findByRole("alert");
     // Creating a migration may have succeeded with only the response lost: no rollback promise.
     expect(alert).toHaveTextContent("We couldn't confirm whether this step completed. Your request may have been received. Try again or check your migration status.");
@@ -231,7 +248,7 @@ describe("DiscoverAssessExperience", () => {
     // No progress is claimed after a failed start.
     expect(screen.getByRole("list", { name: "Migration Journey" }).querySelector(".is-complete")).toBeNull();
     // Nothing advanced: no result, no selected migration, no session in the address.
-    expect(screen.queryByRole("heading", { name: "Migration Readiness" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Migration readiness" })).not.toBeInTheDocument();
     expect(sessionStorage.getItem("movebooks-migration-session")).toBeNull();
     expect(window.location.search).toBe("");
     fetchMock
@@ -239,8 +256,8 @@ describe("DiscoverAssessExperience", () => {
       .mockResolvedValueOnce(jsonResponse(discovery))
       .mockResolvedValueOnce(jsonResponse(assessment))
       .mockResolvedValueOnce(jsonResponse(activity));
-    fireEvent.click(screen.getByRole("button", { name: "Try Again" }));
-    expect(await screen.findByRole("heading", { name: "Migration Readiness" })).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
+    expect(await screen.findByRole("heading", { name: "Migration readiness" })).toBeVisible();
     expect(JSON.parse(fetchMock.mock.calls[1][1].body).sample_company_id).toBe(sample);
   });
 
@@ -248,12 +265,12 @@ describe("DiscoverAssessExperience", () => {
     vi.stubGlobal("fetch", vi.fn());
     render(<DiscoverAssessExperience />);
     expect(screen.getByText("See what can move, what needs attention, and what to address before migration.")).toBeVisible();
-    expect(screen.getByRole("heading", { name: "Try a Sample Business" })).toBeVisible();
-    expect(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ })).toBeEnabled();
-    const exportPath = screen.getByLabelText("Use My Test Export");
+    expect(screen.getByRole("heading", { name: "Try a sample business" })).toBeVisible();
+    expect(screen.getByRole("button", { name: /Check if my books are ready to migrate/ })).toBeEnabled();
+    const exportPath = screen.getByLabelText("Use my test export");
     expect(exportPath).toHaveTextContent("Use supported de-identified accounting files to test the migration flow.");
-    expect(exportPath).toHaveTextContent("De-Identified Test Data Only");
-    expect(screen.getByRole("link", { name: "Choose Test Files" })).toHaveAttribute("href", "/try-your-data");
+    expect(exportPath).toHaveTextContent("De-identified test data only");
+    expect(screen.getByRole("link", { name: "Choose test files" })).toHaveAttribute("href", "/try-your-data");
     expect(document.body).not.toHaveTextContent(/target write|Upload your data|orchestrat/i);
   });
 
@@ -279,12 +296,27 @@ describe("DiscoverAssessExperience", () => {
   it("shows a recoverable error without inventing results", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ detail: "API unavailable" }, 503)));
     render(<DiscoverAssessExperience />);
-    fireEvent.click(screen.getByRole("button", { name: /Check If My Books Are Ready to Migrate/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Check if my books are ready to migrate/ }));
     // A server failure while starting may follow a committed create: never claim it did not happen.
     const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent("We Couldn't Confirm This Step");
+    expect(alert).toHaveTextContent("We couldn't confirm this step");
     expect(alert).toHaveTextContent("We couldn't confirm whether this step completed.");
-    expect(screen.queryByRole("heading", { name: "Migration Readiness" })).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Try Again" })).toBeEnabled();
+    expect(screen.queryByRole("heading", { name: "Migration readiness" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Try again" })).toBeEnabled();
+  });
+});
+
+describe("V2 Understand workflow pattern", () => {
+  it("shows the stage, a guide from the result, a recovery path for blockers, evidence and released AI status", async () => {
+    const blocker = { ...discovery.findings[0], id: "finding:003", category: "BLOCKER", title: "An invoice references a missing customer", recommended_action: "Restore the customer or correct the invoice." };
+    window.history.replaceState(null, "", "?session=session-003");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ id: "session-003", sample_company_id: "northstar-supplies", activity, discovery: { ...discovery, findings: [blocker] }, assessment: { ...assessment, readiness: "BLOCKED", blocker_count: 1, warning_count: 0 } })));
+    render(<DiscoverAssessExperience />);
+    await screen.findByRole("heading", { name: "Migration readiness" });
+    expect(screen.getByText(/stage 1 of 5 · check readiness/)).toBeVisible();
+    expect(screen.getByText("The rules found 1 blocker in the source books for Northstar Supplies. Fix it in the source, then check again; planning keeps every blocker visible.")).toBeVisible();
+    expect(within(screen.getByRole("region", { name: "How to recover" })).getByText(/nothing in MoveBooks can waive one/)).toBeVisible();
+    expect(screen.getByRole("link", { name: "Open evidence" })).toHaveAttribute("href", "/trust?view=evidence&session=session-003");
+    expect(within(screen.getByRole("region", { name: "Second opinions" })).getByText("Live · limited evaluation")).toBeVisible();
   });
 });

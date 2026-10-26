@@ -1,0 +1,1162 @@
+{
+  "utc": "2026-10-22T21:08:56.818347+00:00",
+  "gitBase": "b20ef668736a520387753dee4c8c19e4f66ae8da",
+  "releaseReceiptPath": "/Users/jincenmathew/Downloads/Intuit/movebooks-integrated-release/public-gemini-rc-20261023/production-execution-20261023/DEPLOYMENT-RECEIPT-PENDING-PUBLIC-PROOF.json",
+  "releaseReceiptSha256": "51ea506ebd6961405d647d34b3af6521d9be68dd8f0a664c9e8068380c286171",
+  "web": {
+    "revision": "movebooks-beta-web-b20-live-sdk1",
+    "traffic_percent": 100,
+    "index_digest": "sha256:c91ade5b13460f0d1bf4448b3afff85eaf77a91ce31e14fe15b3e7269b12aac7",
+    "serving_amd64_digest": "sha256:617b943f3abc4e1e32400b765d1867d173941308f494947097990defec52e0ad",
+    "private_overlay_excluded": true,
+    "Track_C_changes_excluded": true
+  },
+  "publicGenuineInference": "PENDING single explicit Account B click and authoritative telemetry, records, accounting",
+  "sourceFilesCompared": 228,
+  "deltaFromGitBase": [
+    "apps/web/components/v2/ai-status.ts"
+  ],
+  "allFiles": [
+    {
+      "path": "apps/web/Dockerfile",
+      "sha256": "0c7f031b74028b66ae93408894eb87d560773216e6ae754ba0ec0d7f9636f3ba",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/api/auth/demo/route.ts",
+      "sha256": "06fa14215b12afac201d16227b3a85fd56f24e077802c430a75a2bf8e25e9103",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/api/v1/[...path]/route.ts",
+      "sha256": "bf320e4ba0a7b123f0a4106c0549819c827a657533ad4dfb692f8e5391b7eed8",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/approvals/page.tsx",
+      "sha256": "03238d7c3f626d6d225a460c52033c19e0fb03d4d7c16f9d6481c2a18764cddc",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/assess/page.tsx",
+      "sha256": "8fa6d89d42b3a6eac604fa8a54672897a437bd2b70eb3ecfb53271368b361e99",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/design-system/page.tsx",
+      "sha256": "da44e4cb091f4002f3911a44e87df79c9e7c66024dca30ac895ee3229eacbdaf",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/feedback/page.tsx",
+      "sha256": "f5a82f1a1ee1ca8c52f5573a8f2b0ae29b4701f355e07c616c8d6610a3268156",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/globals.css",
+      "sha256": "3197498a571997abdccdbd256787191e85a760fb92155f90810f72532b3a6e9d",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/guide/page.tsx",
+      "sha256": "1cc4c712407227c4740eae8845a2954faf893a0a9ae15566dea61e7008d2803e",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/healthz/route.ts",
+      "sha256": "eb0937bb812974dbc96ae19f73ded88909131218c6caaca6dba6f9fad80adf21",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/icon.svg",
+      "sha256": "f934d33c7a9d71ca5291f9f62d49bbb130386168d8179e8a2c8b139059a11936",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/layout.tsx",
+      "sha256": "5f77b119993e2f1ad9a7e8267b48d7fb0aa95ea880a9698082340093afabaffe",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/learn/page.tsx",
+      "sha256": "c0e4c63bd645e0a74d62a27c7603f7e0bc1d1b2420c8bc3ff6ebb768e10b53d0",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/migrate-resolve/page.tsx",
+      "sha256": "1c941fcce51a2926885fd50e97011904b9a21fef1b441bc9f3af9b765edf06ee",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/onboard-fpu/page.tsx",
+      "sha256": "94ae94807538adc63bae7eb86b4a61c509fc6786fe0f9d507ba642a3401cb83f",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/page.tsx",
+      "sha256": "9c5d0eaee34bf0cabd5416458da337358f21d330030b5ae9debaddff1ded6f1c",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/plan-map-approve/page.tsx",
+      "sha256": "4d00cba3a3f3ac19f1185de8e86d85b7b550270fb471de805b0abb0c096042c5",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/play/page.tsx",
+      "sha256": "366216d947cece872083c1608082fd92c51ecd950a550f004608e916c570fc10",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/privacy/page.tsx",
+      "sha256": "ff2487868da9f62c5bb03eb977f81c80d9fa1ba2a4ac6fd249eb8cf6eccc77ec",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/product/page.tsx",
+      "sha256": "4220d50e4dd45cee13b8b98d67824a2746866ee4ad85b05adf766da9597dff6c",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/reports/page.tsx",
+      "sha256": "80eb568bff1db100bc723ed68460be3e0428ab9e2b8a4036aec87783c1404675",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/sign-in/page.tsx",
+      "sha256": "d7bf608c4d912446a5c35aef23ab53c9afa73ee9b665630fa451341db859ae35",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/simulator/page.tsx",
+      "sha256": "e133768723bc9bba09e3a2a6609a4929e2f02cc217236117e4bd2e7be5ba5adf",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/support/page.tsx",
+      "sha256": "b02f6d80ebbde1624ec5f8b21fb9e3ac76900a1143e43adbbd1c6691501f3f2c",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/terms/page.tsx",
+      "sha256": "1a1f2e55b7f1c11725af3a65fc8db7c55eb39b13f5f545450374b6b2433a8703",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/trust/page.tsx",
+      "sha256": "9a59520f2cc91b6859d265018b8743b1fd88324ddf17e8e2d204bb75201fcac3",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/try-your-data/page.tsx",
+      "sha256": "e221c3ad38b182ef37baa4bf942969c131701a3e32bddfc9a72348bb9e9acaaf",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/v2-journey.css",
+      "sha256": "ed6bd641000d15a08bd75c7e9941f7c6873ce7a626eb4134f6dd5b687c348703",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/v2-landing.css",
+      "sha256": "5ed9fa29f0e43887d599da0811834d4a622319493f72a3811a84ffc1d5e5d940",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/v2-stages.css",
+      "sha256": "b85aa5f6272c2b86fd57ceda3e6cd44f9775d61cf67f057cc9712f20212ea849",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/v2-surfaces.css",
+      "sha256": "52759988cbfdcac4ddeb2282e3f5de1bcca138e26741818a40311fd98883559e",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/v2-workflow.css",
+      "sha256": "70bdca80b59f80ece1fbfb918b28f8334b9544b988b69fafa61e1d5846c23a17",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/v2.css",
+      "sha256": "e704330fc801dec16b55e8d813624e06af0292974994b513543135a5813d9255",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/validate-configure/page.tsx",
+      "sha256": "9c948483bf57b43cbba2a1e0e0bd4889d3319698639e6b8e5ccf3970f9951a44",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/app/workspace/page.tsx",
+      "sha256": "c4e144d4114936a69139a848f586764b944bc766256f522ab1920f31c20f3ca1",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/AccountControls.tsx",
+      "sha256": "53f5fd73b1bc259d0f62b1a11222d9d94df9dd16680e07480eb1bc06fa950855",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/DesignSystemShowcase.tsx",
+      "sha256": "0182a1685d9cb6437f2c4d78af8d1061a14d8b2cddef70664dbae0094e772547",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/Footer.tsx",
+      "sha256": "f53d34e0d9b6099ed500e7f7775e13a5ffa1dc707954077abcde4252524b8199",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/IdentityEntry.tsx",
+      "sha256": "2f3d5df887342734b44203fe54aa440021b6046368adb3532c8936e4d1b685e8",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/IdentityProvider.tsx",
+      "sha256": "48e8740879fa3c3d86cd8c81fe0f5c9e909382de2d995e42ed5de71e71106cc7",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/MyMigration.test.tsx",
+      "sha256": "d2d352a3f2eed4afc0a01c416512a80b854f41a81ab439ff1c00e1010f1806d8",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/MyMigration.tsx",
+      "sha256": "e93ad2da2e67fb2089c138e064b6b0d41324e13f94149009176548d9241db8ac",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/Nav.tsx",
+      "sha256": "e8ee5c502267c84da968231cfd0e536d0a79c2b02b93bdff60ebb888593e48ac",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/RuntimeNotice.tsx",
+      "sha256": "aea40c90f12f2a8fbfe28a694a64525878856c49c8fc338d7c0b584e70a497c0",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/WorkspaceEntry.listing.test.tsx",
+      "sha256": "f62691101b5ce3b8e4bfe2aecf2097b506fc6222ac4db21fac679cf3a9b4e299",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/WorkspaceEntry.tsx",
+      "sha256": "4ff117a3a19ccf46a635edfc47a7f8f24eb4f20aa3c487d1395937d14c78162d",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/discover-assess/DiscoverAssessExperience.test.tsx",
+      "sha256": "3499a8ef353ea65946109c5655c4372e37820b07383fd3cdb4abc169fd6bc538",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/discover-assess/DiscoverAssessExperience.tsx",
+      "sha256": "1558735bcfd11b815560d7df32e72bf2a63fc2e25c746d43c54d7e31ea409f2c",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/discover-assess/idempotent-create.test.tsx",
+      "sha256": "917333b31e74e5366255b6e0e5a315c1ef581a376e69c87606e618df3b5837ec",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/discover-assess/stale-response.test.tsx",
+      "sha256": "e47e6d941837b69f8c29b3d0fb07a77eb18bf0b58a00d7a2e57366c0a2b1777a",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/discover-assess/types.ts",
+      "sha256": "b0cc1ac063a8994e3e2eb894d654d566b8c09bd27a63a2d5685ea3b3327ced58",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/ChecksTable.tsx",
+      "sha256": "0f247ed644e9c4a437b885e3c774e2edd38af17990e5c2c8b955a29260d12c8b",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/MemberProgress.tsx",
+      "sha256": "e2754699302953b4872aa420912300676088b065901fa80504792e05701ed548",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/MigrationJourney.tsx",
+      "sha256": "c881652397c1f025c795568792ce8781dca13995eeed65183891b05cfbd1d278",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/MigrationPicker.tsx",
+      "sha256": "d54e1247396f04e8fb75c2594d17237259cd073c5d31f183ecfe6051e3348a0c",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/MigrationSnapshot.tsx",
+      "sha256": "87895cc15c76f5fde33c29ac911ab084ddc6bf5cb8f45fde2c54d50995a5f8f0",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/NextAction.tsx",
+      "sha256": "2ce87ffd6f58cd9a5dabf12a88b7e90b89c5c7420c451c952ade4840ce72d1a1",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/PhaseProgress.test.tsx",
+      "sha256": "f6f5030a1f0e822295c46a574d3a9114fdeee9d30a3c74abe45be18e65e34fca",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/PhaseProgress.tsx",
+      "sha256": "6f1abe642604647833fd68485afa3be2edba7cff2560bcb38c2eba642f8b85d3",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/cross-page-parity.test.tsx",
+      "sha256": "22b44532f39c0b194ecf96716dd72a9fc745730921e17477ad6444b7f99d18e2",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/journey-parity.test.tsx",
+      "sha256": "4447233171498f0ab916035d2a71610f6cfa1ab369e3d037a039b0f557dd584f",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/journey.test.ts",
+      "sha256": "0a3ce5d11565fb886da7007b845794a35aa1de21c32857d9232eb06efa6a0490",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/journey.ts",
+      "sha256": "28faab0c204eb85f70c96776d434a97962dd4c710ce545044335fd0485fca73f",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/member-home.test.tsx",
+      "sha256": "4f9f8bcca75c81765967821a794b8e6e3952e7e4dea6e6fdf1c41a3de24b6fa1",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/member-home.ts",
+      "sha256": "ca572e75253eb1545d03e100f9916a46f7460f051e803aab8c8ffe67bf230364",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/processing.test.tsx",
+      "sha256": "2a24541194a7bcbb3c24a3535d5d2e3a6a0c71a685065ae1c54a55ce1beb4c28",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/journey/stage-progress.test.tsx",
+      "sha256": "e0042075db34f6c39ce99a0d715da76655ad249e80798ef03146efe2b345d293",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/migrate-resolve/MigrateResolveExperience.test.tsx",
+      "sha256": "76112c9dc183c534555131415e7f05e078b4035455d7cecd253d46fb69a643af",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/migrate-resolve/MigrateResolveExperience.tsx",
+      "sha256": "8653b22f08c53077701f87588489faf579af87a8b3c8b02b2446e234838e612e",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/migrate-resolve/MoveStates.test.tsx",
+      "sha256": "955b3967a24fddec345135e1d572cf77ab0e32f6e0e64d1104a5592498d6a93d",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/migrate-resolve/stage-kit.tsx",
+      "sha256": "832c3aa8fa77d468a12dd6cb1115ca5366982499674f1377f2607131d5b57094",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/migrate-resolve/types.ts",
+      "sha256": "090cefbbf12b430abb371819ac967b7af3ecf2543279e5c4b8a05c223526c929",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/onboard-fpu/InvoiceParts.tsx",
+      "sha256": "e1e2e28561009257d1505188030d77c88999b5c73f8ae43f8debea740eddba45",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/onboard-fpu/OnboardFpuExperience.test.tsx",
+      "sha256": "1135a538e9c88d46c55616f28d6f1a3a0da9ed10ff87cbc7e7e4e249456adaf1",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/onboard-fpu/OnboardFpuExperience.tsx",
+      "sha256": "40d5a180c868f2d8844d62cd777338b4546621e8db8a791f53505e16d24c78f3",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/onboard-fpu/StartStates.test.tsx",
+      "sha256": "de46763f3b2628187302311bb82ba7999879d48e96da069a25cb43b9bb121d20",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/onboard-fpu/VerifiedStart.tsx",
+      "sha256": "2343c460e5ce386a68be5e113363d0e91573dee9f4eb4102dc3f2b20a2142683",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/onboard-fpu/types.ts",
+      "sha256": "8b9563f3db37a2ee052812f4f49af225a72b3a6da83e16c026dce6e0f257b32f",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/ApprovalReview.tsx",
+      "sha256": "886d00c421b3a568183d3b11033a0a9ac72fd7da38d3a8164369eabed9e71f8f",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/AssistedAnalysis.test.tsx",
+      "sha256": "de918741cf0904ed6acc4c8be60618af5bd47bf6c55703ab8f9f9055b6e5349a",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/AssistedAnalysis.tsx",
+      "sha256": "94afd0e319ac1ef31b1a9fdffd8fec261b88aa172e3792c01f7a79beab125fe9",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/BulkApproval.tsx",
+      "sha256": "bc55ebdc6262f6b8df48c9029c56a569a44b50f13e5f4b117aa8598c0f8762ab",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/IndependentReview.test.tsx",
+      "sha256": "c804ed7f9a95fefb7b3cc934a1f2d2136d1c089d9ed33d5188ef586598c5d1b1",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/IndependentReview.tsx",
+      "sha256": "6eba857d282df7debc956d9a5894546dee9e0c419216060bff143619912be7e5",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/MappingEvidence.tsx",
+      "sha256": "e9456451b4f9317f1620cf865853d580edb0bfd254aff25ec95d5bf1423a8d8c",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/MappingReconsideration.test.tsx",
+      "sha256": "9ca0548118ccbd201d06eefff841d9889c447716e1c83e44e2b60b5d93c85207",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/MappingReconsideration.tsx",
+      "sha256": "bcc0b7a565a1eaa8ddcadbff7af3865f0e961836b16ac06f949fcb465907c199",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/MappingReview.tsx",
+      "sha256": "1a64b2e6674da6fbaa4879ff9c7415453c7e8f45028a20ec82037e2699b87e85",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/PlanMapApproveExperience.test.tsx",
+      "sha256": "9a9c9b58e7f91c662fa4ccedbb21f07e2bff3b35cc14fa8cc5f2105c2d456037",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/PlanMapApproveExperience.tsx",
+      "sha256": "6eba01338a6fecc2e052aacdce4e89c6f44a57532328a991cc0f1e0221e617b6",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/PlanSummary.tsx",
+      "sha256": "422569db333dbec0d3addc66f46fe6ffc5c6eec1de4fc9d0735556a5c30d24e3",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/analysis-contract.ts",
+      "sha256": "2f8b95fc19ab032d7f04777761e45258c6856a912160d515a03c8518e0377836",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/bulk-approval.test.tsx",
+      "sha256": "2b9493a4ec309329c4e7ca7ece27affcdc41ea211aec59f3e489c045d45db2bb",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/bulk-approval.ts",
+      "sha256": "40bef1fd66fcdcbfbef3f1b263a07945cbfd66cb064fe8c5bb01816119bf695f",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/mapping-groups.ts",
+      "sha256": "53334d8fb54cc2347243b2c5b431ffb32f348d18f88866ec0348f58750e3e110",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/mapping-states.test.tsx",
+      "sha256": "b522aab3efbf1ecda7a113a7fde7208470bbde78b9042b7778d44315c0f5295e",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/plan-map-approve/types.ts",
+      "sha256": "c3282b087fd756a0fbe937b52f44a18b7e5c0ac5dc72dc300ab7e3c7103c0db7",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/play/OfficeMission.module.css",
+      "sha256": "74e3f257d87750e456cad24c0facfa2468d576062e26f52a48656e74c66cc551",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/play/OfficeMission.test.tsx",
+      "sha256": "8217cc7e364d024c52107b42ac2bf35241f123f8e52efb834a6bc43b7b35b79f",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/play/OfficeMission.tsx",
+      "sha256": "140de3decbd73c93e002fcd5b183e572ebd8ca5ec46473bab920a1692f270267",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/play/engine.test.ts",
+      "sha256": "4a93a6e9ea8e912e33b034f97ec59aa0769e63e1f6895065be0cfb676739b273",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/play/engine.ts",
+      "sha256": "87e83ba3738c000bc723e3fc38536e235bf9e527611f2eeb26f2fc40cdcee8b3",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/policies/PolicyDocument.test.tsx",
+      "sha256": "6d578158ea46b7e5a03b6127210ca7f53e2c49e7bdefff04e7c1475feb822aeb",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/policies/PolicyDocument.tsx",
+      "sha256": "e4ebe08073a9e9fd22c6433c753ee4870585cb3c9f1246b107b231952424b659",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/policies/policy-content.json",
+      "sha256": "c67852618278f72bcea8e1a295a3a8d8de6a8d030811c0d8b399316358c273ba",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/AnchoredDetails.tsx",
+      "sha256": "00aa9d6a76b51dc944f7cfbeeedbfa73efd5fd3119f6166c6ea918cad27d0060",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/EvidenceRecords.tsx",
+      "sha256": "502cfdd33f9a46b810aa3d78dd49c9ea9b2dfbb92afbcc5163f42714505d4709",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/Feedback.tsx",
+      "sha256": "598b348c6a4219a91cc2d6ad1209dce4f8fa7da0c65bb15db48c6fe7fa0ff3ab",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/Guide.test.tsx",
+      "sha256": "4dc6dea076aa602ed4310768ae89bac73257e9a6caa0e0449bf86eaed30b781d",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/Guide.tsx",
+      "sha256": "b420db939f288496ffb3a046870c65251caee10e7ce4ce50a6b96d77b030cbaf",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/GuidedDemo.test.tsx",
+      "sha256": "8d47e12145f7d3e7d6eb44820a15f68a4a70eeabe6d6468ac25e5343dd72b466",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/GuidedDemo.tsx",
+      "sha256": "42981b08850ba098aec50ab2e9179802560044b8a2ba7c22cd8644accf1c65f6",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/HeroVideo.test.tsx",
+      "sha256": "57fa68b01056f0de74465b82229cd6ab87287e0af3a972cc8b8e578f2d82e567",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/HeroVideo.tsx",
+      "sha256": "27c131c9099b0bfedf937eac17bdf92ef07c5de5927cfc10d2bb17be649f09e9",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/LandingJourney.tsx",
+      "sha256": "cfcfc744adb22d20a496f1922bef359059fb211c76bf09ebd5bc7bfb1db9d21b",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/LearningReturn.tsx",
+      "sha256": "09646e9f6a799cc82772594ab1586bd9a0cd19cd228881cc5966e9d8b392616e",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/OperationalActivity.test.tsx",
+      "sha256": "f04581abc5aff0b1510cc59842995fea7827b00edf93f184b24d9366802074f4",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/OperationalActivity.tsx",
+      "sha256": "0528c7c1b4158eda5436a809d59cd03129c979df8d05cd6e68b825ac26646d73",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/Play.tsx",
+      "sha256": "0172245b46a50881d87d549af3b40e896bf388bab7f6d9b4d7001db0645026ed",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/ProductEntry.tsx",
+      "sha256": "5c94f01680a082d5232f011ad6dddf4f9a49d0d8e8c30a80635abe37bdab435b",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/ReasoningAdvice.test.tsx",
+      "sha256": "004287cc45858bed327483038213b8f12efbd0e4054b298480c50d9e0ae39511",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/ReasoningAdvice.tsx",
+      "sha256": "d4da88e6b1c4ccc2e699d052585e6f1380ca5f04baea3566b60501320584d569",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/Support.tsx",
+      "sha256": "6db6b97984d8cdfc5493dcdf6718f871f91c63270ac4a858f9dede11e03f7d0a",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/Surface.tsx",
+      "sha256": "f2f3b300f6c4cadf89731de132c2ccd15019bfa801b67c8ef0b357258156a748",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/Trust.tsx",
+      "sha256": "ed20c9908a894bdae5b912c3481d8c76601ef8a9e4ad6e789f49558a03d83ee5",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/WorkflowHelp.test.tsx",
+      "sha256": "474f296d569568070180cf923a41926322a76c48a786f5ca388626e9a0257f8a",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/WorkflowHelp.tsx",
+      "sha256": "019ab8c22ca32a0f5efa7ed22ea066f445a773e539a9198ef8639824352350d3",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/analytics.ts",
+      "sha256": "78730fc8ade9373e641b42acef22c6bb22f42ebddbf6c5cf6c2878795046c50a",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/content.ts",
+      "sha256": "e84b811f205e99d0a42ae9c37ddb1d4ff2bb60c38bd1d821ead89f91a7ee50dc",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/context.ts",
+      "sha256": "2cc23a805c6f14ec1fed828b4970094aefe52edd0467c479340a0b9bde90b710",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/demo-content.ts",
+      "sha256": "e1d716761f6675b7024ea03ea83653a0b0cf89c1e44865e0168fe102c3c795cb",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/evidence-labels.ts",
+      "sha256": "83053ec56568cb6d04a86f83c7cff562e8c0e3097eda94ae3545c736cc444a0d",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/evidence-recovery.test.tsx",
+      "sha256": "169398c52e084605e93602a4e567af493e83fc9e39d0dbf6e7be7ff091a3a629",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/help-content.ts",
+      "sha256": "66553791d12422c0b4e841983737bc4248940b1d2041a55681bed103b4ceb937",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/landing-motion.test.tsx",
+      "sha256": "8bbe835c00a31baddc96a319a92970d05946970adaec80c23f28e7667dae3b0b",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/public-content.test.tsx",
+      "sha256": "3132bd323fc72ef603fdcc6e445ae88f42f9ba247d0564538e63306a72efb6ff",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/session.test.ts",
+      "sha256": "a683d90fce2f6147023bc5aebdfe22d3bf9b4b71059b28a0ef48b35d45b89300",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/session.ts",
+      "sha256": "62f134c6be2039001c77e83e7fa1f9b0496dcb49907a7b7a7b5f1ffde13c130f",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/public-surfaces/surfaces.test.tsx",
+      "sha256": "cc255ecd608dfa047c0b966c75649c0324877a11c11bcd13d205b365517157d7",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/theme/AppearanceMenu.tsx",
+      "sha256": "75723264e8120be595bfcdb54e106efe9c1fb61b1795821d96bf68fd8aa68673",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/theme/ThemeProvider.tsx",
+      "sha256": "bf931c23a9752b1d867f5583c8b54f9ba85f2b38cfef61370c3f2ef4a077cf7d",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/theme/ThemeToggle.tsx",
+      "sha256": "6d89c5b718d30388962a934badfa6b3e6fa0c0bf33d46ea69a7edc2bc32af892",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/try-your-data/BrowserLocalValidation.test.tsx",
+      "sha256": "5d9627965c3888ddfdd17e64e3da9b4ea4fe94c3aa455dc61953ddb7aa8f8eb9",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/try-your-data/BrowserLocalValidation.tsx",
+      "sha256": "dddee90dfdb6c4e4ef5bf22e55e32150b9bdc61de53557c7a0ac518a4b6ff9e9",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/try-your-data/TryYourData.test.tsx",
+      "sha256": "463d6c026245560f6f20c8b38948f0a740b992d45fcd9725512244f32a2e9493",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/try-your-data/TryYourData.tsx",
+      "sha256": "47c48b54bbccc00f35b699da0ec19a82d58d330ea633b59d1fe3350f25381cd1",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/try-your-data/ValidationIssues.tsx",
+      "sha256": "e996e8ffc69c2d92142900151525e07b36f77b5b0c3737bf955de963edbcb270",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/try-your-data/browser-archive.ts",
+      "sha256": "6a96866590b6f86978de0fc985f39dcbb6325b0234912c464f40f8528b26ce61",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/try-your-data/browser-parser.ts",
+      "sha256": "7783639eba116ee8456c2f8ca8e63cce9a78d97babd46f4cb84ea063006342fd",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/try-your-data/browser-template.json",
+      "sha256": "45007dc2e409f0768acda7264fd482828d6fada3a020a6470634eb41867adbde",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/try-your-data/browser-validation.test.ts",
+      "sha256": "f22bb0cfa8976105891dae13b1d210ef343a0667a2166d81755ef496c4cabae9",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/try-your-data/browser-validation.ts",
+      "sha256": "71c3d7f7750a4e66078045c8b1d3b778bae6e2dcc9451eeca240bb9186815172",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/try-your-data/events.ts",
+      "sha256": "c7ef648b705f416f4ba4271e7125f3fdaf11535d6644cb4e2c05b83e9ccb4916",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/try-your-data/package-contract.json",
+      "sha256": "3dc8b95bb408e7656469e3a34c8ecb376539f6f792975dd38b6eca40b7c5e6b6",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/ui/README.md",
+      "sha256": "2adf07b4c23683678eafc29a62729f6028c7240bedda7ee0bb1c15e7edd74b20",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/ui/design-system.test.tsx",
+      "sha256": "42a7145b0bd7e31fa53088752a2350388bda1f9a929ffdf736f5c4629536756b",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/ui/dialog.test.tsx",
+      "sha256": "0148a95db8d006869f3dfa161c890a4ec4eca47997376a7461d0f9a84d2ba8b9",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/ui/dialog.tsx",
+      "sha256": "dc14a7da596280de9e55ba036aac4782702da476dbe3d8697d5d356ff919d270",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/ui/feedback.tsx",
+      "sha256": "15c87b2e36382ddfefb4317ada837ac192880b4c37af7e86bbe9ca3b4d68ba57",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/ui/forms.tsx",
+      "sha256": "6dc90ff24c091f1d8655f36a31d1b0dd1678046aff40ca8e8b33087ca20a4b20",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/ui/icons.ts",
+      "sha256": "98b55c80a8d8a445169202ac5dc164af862cb7ee23e0dfdef1c8bc01ae1f7ccf",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/ui/index.ts",
+      "sha256": "2de449c5b450c224198e46b1ee4f474d9f3473071d91050b252d2497dc0d4470",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/ui/navigation.tsx",
+      "sha256": "386a720231df7ca8a3f5c79efd30ad3802b616d72f71f4a50c31e6d313261b3c",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/ui/patterns.tsx",
+      "sha256": "a90dc8f27cef76fa142c4b4b5764f744e639b20a4a864950266d3f253ebeace8",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/ui/primitives.tsx",
+      "sha256": "9863c26c85c45164b65964f801bd4e088191470c156ee3fb829addb7f761a899",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/ui/status.tsx",
+      "sha256": "0d87c63fd1ba67534fd010069bcdf13f4de4448e665394970d188cddcb509004",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/ui/tiles.tsx",
+      "sha256": "ad8f0cb06cbd3e2e11f5177259e67cb7befbf5a3109f633cda19ec5eb73321e1",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/ui/utils.ts",
+      "sha256": "bb1b115661607a9821a6dadda357dd4019eceac69ca8691626e707252685c902",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/v2/Attribution.test.tsx",
+      "sha256": "0b2876da9ef993a286a393e84f7d651f17f9f6a378b48b4bcd81cb3fd46f938a",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/v2/Attribution.tsx",
+      "sha256": "82cc9a40cc5feb4b55cbe6fa6cd9645df79ac12fb6cda9dd60f78b249877d011",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/v2/StageBar.tsx",
+      "sha256": "7cd75266b91fa742c34b781d5744ff2762e7bc9cd12934d481c5ae465910c1da",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/v2/V2ComponentSheet.tsx",
+      "sha256": "d8aceddb876115a66f71015efceffc62b7b47363c3c3a8b7480fc0adab59f3ca",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/v2/Workflow.tsx",
+      "sha256": "39090fa60af6848d3750e77e05f99d5a0983afc207fc96a1c5c2424ea32581e6",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/v2/ai-copy.test.ts",
+      "sha256": "538c0fae0e04563a66201dce31117e5f056861e308201ff9a4290ae4c9e1eba2",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/v2/ai-status.ts",
+      "sha256": "054e621549ce2af1c486981bedab8b9e37cade16c82169a6f9e8868e330f3af8",
+      "matchesGitBase": false
+    },
+    {
+      "path": "apps/web/components/v2/index.ts",
+      "sha256": "0aec0c37757c28bdadfc6e85ce3cdde454d8e6fa528399bf1dca4c74197c5882",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/v2/mapping-status.ts",
+      "sha256": "a51bd995abd25482531ba3b0bbfb967b6a4e71e356de8a8b8d053f9731d978d0",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/v2/primitives.tsx",
+      "sha256": "c767da5f585dc241ad68b5e6ea84af55be1041c9127d865ff22558b54b23cd0c",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/v2/stages.ts",
+      "sha256": "bdb0eacd29eead75adb146b033761abe3cecd18b253a2cd02b665a69c8b516dd",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/v2/v2.test.tsx",
+      "sha256": "5ad79672fabebead5cf1e9b0201ba3c6347296cd3ad94ac23569838f2192c8f7",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/validate-configure/ValidateConfigureExperience.test.tsx",
+      "sha256": "b35a9bd6cd4174894d563ed8f175890c4b850a2ffd04256c6740a6c38a1d60fc",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/validate-configure/ValidateConfigureExperience.tsx",
+      "sha256": "3a52b9c495e217608c423f1e6ca4b1b9521cbc48a94a22766d29eb54dbb4212a",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/validate-configure/VerifyStates.test.tsx",
+      "sha256": "6a094fc5d6f6b6d91bd1d30324a7ffa288423b3ac4cee73f08d2f5505a9ea3be",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/components/validate-configure/types.ts",
+      "sha256": "b6a9ae189da96376c9cb389ade2b8ce5c712ecfb8e48d133ff14d9005a85be37",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/eslint.config.mjs",
+      "sha256": "fc48f19f3529dc9c9d4fc22bcd26481afa2c4f7bffa4a2505342d1ab6e198055",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/lib/demo-creation.test.ts",
+      "sha256": "fd5cf489dbfcce916946b5a8a48722fdde9a51b21e237ffb573ab150f90e8b4f",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/lib/demo-creation.ts",
+      "sha256": "ad65c93c0accc18ff78c2bd1c1835b0f950fd5d4b72b3abd5964c6fd285dcfba",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/lib/features.ts",
+      "sha256": "ba9005a8cca3499f3d67623bcb5164b1bdd2b4c8944a926a751d6a6389971b2a",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/lib/identity.ts",
+      "sha256": "4eb07e8dc8a5c05da13f0760da890abfcb215cddc8ad81ad5ba14361b8ac1740",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/lib/reach.test.ts",
+      "sha256": "792491e73983045cc5ade4217723c6d1d93aa8d858d1ab499d82e7930dc424a2",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/lib/reach.ts",
+      "sha256": "c33bcf07b82e6e118f340e35a034ab3651dc6c79be81aae611818ba0ffa27b78",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/lib/server/private-api-proxy.test.ts",
+      "sha256": "1e652d6905f9446af3a6661a8f9020a10441a4db1cf69c91268b377bb00ac681",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/lib/server/private-api-proxy.ts",
+      "sha256": "1f029ad698478e3a659396d07adfad451020f8fca73fd213bd7662bb4d934bee",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/lib/server/proxy-auth.test.ts",
+      "sha256": "b4e5188d13458f75abb451bd8fab43ca38f0066cac28ac37896716788ddfe4e5",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/lib/server/proxy-auth.ts",
+      "sha256": "413f33c311b039b98e95cc15d52f5f0838295954a1a7c28493ba13b9f6a78163",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/lib/server/proxy-policy.ts",
+      "sha256": "c332b52e87a102315671aec40d9dddd7cdb579cd3a259c701ce857ed0f3500e2",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/lib/use-advisory-request.test.ts",
+      "sha256": "ca8ce8ded4ba4b006609eaf30375c47008c155fe33b7f9255c8c29cd435ac349",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/lib/use-advisory-request.ts",
+      "sha256": "7445ea3fe64e0a54f821cf190c9eec9bd7131018695c914f3f095bce5a1cba10",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/middleware.ts",
+      "sha256": "8a1bae64c4670354465c834e70dbf035b89aa09e915cdc4179e38664e8ce32ab",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/next-env.d.ts",
+      "sha256": "85ae5aee75f011967cf2d25cbc342f62d69314e9d925f7f4aa3456fc2cffcca6",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/next.config.ts",
+      "sha256": "414eba3012a3dc1ce31a52cbf78da6bed47990addbdb074961c21fcdd6124172",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/package-lock.json",
+      "sha256": "649b6297596269acbfb9199e0f94797becbb4c60b1348090e90e72e69e1b68e4",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/package.json",
+      "sha256": "2be82ebbd7bfbcc920498035d370e716ce6a782d2c78e64c20d97a7df93c9eb0",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/postcss.config.mjs",
+      "sha256": "b783348d5618047d0f37e12acd15c5a2c5f02809d8711e0764c9cea52750346c",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/public/brand/google-cloud-official.png",
+      "sha256": "a90b4e56cf87bc04be1438f7a34b99f653f1f3be1a0456d3ac32f66ec5378053",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/public/brand/google-gemini-official.png",
+      "sha256": "b6306682f0dca297c4fa94ea359eee760d04435fc2d39256d98f6e4281f690be",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/public/media/movebooks-ai-hero-desk-v2.webp",
+      "sha256": "b136ab9638f5c2b274657f91b2dd4d16c64092d3cdd81939451acc87cb984ce9",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/public/media/movebooks-ai-product-vision-poster.webp",
+      "sha256": "6b96ca4ee684c653a6de9fb58add5877021d653937b021efa8b3b219905e08e7",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/public/media/movebooks-ai-product-vision.mp4",
+      "sha256": "6ba11a2dfcdebe4f38750e0762349fc8d0ed766531ac6fc19b922d65abcc3ada",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/account-shell.test.tsx",
+      "sha256": "66bf1c31a04a6cc9aea86e26dc275037cec2f276072a5f78fea498307faef9d7",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/demo-loader-retry.test.tsx",
+      "sha256": "b045793e19a4d1148b0465d60fed8c5f1f70a1acc1ea8ee8c1e67e2ea65be98d",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/google-identity-runtime.test.ts",
+      "sha256": "4f785ddc0a4450f68c83e5508488f5cc4517f03fcd7d4a142ef445afadaa0f51",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/google-sign-in.test.tsx",
+      "sha256": "e86db75545d66883f4f58954f42fab4e5b201d16f56bb1ece580a98bb86029c7",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/hosting-origin.test.ts",
+      "sha256": "671d72ec9b0813b5d194ed0dec0febb5729e3e2bbb1920e1a6a6832d31e4d042",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/html-cache.test.ts",
+      "sha256": "5eb0737347c235a8bbea04e22304b7c62f5066b200d02256ae5c147379655442",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/legacy-routes.test.tsx",
+      "sha256": "173f0d166a7de33e3f74c73657528dd2a4306d78bac96f4d64ea0defa5e9c4b3",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/member-home-continuity.test.tsx",
+      "sha256": "5f897334f2f7f8cc0dee5d32bf5d801d1b500bad99c3b1233fc55ebf52dde249",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/motion.test.ts",
+      "sha256": "ea66adc5e35ce2789491723a924c1dc5555516379e71d8307648f65e850af311",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/next-config.test.ts",
+      "sha256": "e4edff7eb74c0f5833d77b49f21487b07a34dbdf54abadfbacd3395b337d70cf",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/no-motion-copy.test.ts",
+      "sha256": "31f78c3767fd07d334304df5467ca8bdda7f7b5d399fd576df039937791bca7a",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/page-titles.test.ts",
+      "sha256": "9b94a7bbd1aa4058028a5bc90ab76de819a125f4dc28b1fa0f005ae0943fdb77",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/public-routing.test.ts",
+      "sha256": "3b2ffd11e25020415c04f105134f3c1ba5fe32746093ca6fba05b008720fb888",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/runtime-identity.test.tsx",
+      "sha256": "d10754443269aaba2fdf9aa27e35f18c41e4ca5eb7804b36c5f0234a54910494",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/server-client-boundary.test.ts",
+      "sha256": "eef6bdfe4e7c9216b39183df78bea6247b7b8ec239ad8cd91c488503150a1bdd",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/setup.ts",
+      "sha256": "7be3a475324935a7908330ed1767a818d9abe77227808805e5f43266fdbf9adf",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/test/ui-copy.test.tsx",
+      "sha256": "53f1392506c73a35af183279c942184046b82b5a6eba74903689d2841130a729",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "sha256": "99c50befad47bb4a21c8b1af677a5156561d65806d2a5d5c5727baa3d14d8d4b",
+      "matchesGitBase": true
+    },
+    {
+      "path": "apps/web/vitest.config.ts",
+      "sha256": "4b2cf8b6880ccd58fc031d9f7367d45007c6c92d6959cd136de2b95bc162c7d7",
+      "matchesGitBase": true
+    }
+  ],
+  "integration": "Track C existing isolated branch with exact released status file; no other worktree changed"
+}
