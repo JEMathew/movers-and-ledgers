@@ -7,9 +7,7 @@ reconciliation and **Verified First Productive Use**. Gemini explains uncertain 
 independent Reviewer challenges the recommendation. Humans approve consequential decisions,
 and deterministic checks remain authoritative.
 
-**Non-commercial MVP for approved hackathon judges and interview panelists.** All four agreed
-functional P0 requirements have passed acceptance. This is not commercial production readiness,
-a real accounting-provider integration or an unrestricted AI service.
+This is not commercial production readiness, a real accounting-provider integration or an unrestricted AI service.
 
 [**Launch MoveBooks AI**](https://movebooks-si.web.app/) ·
 [**Explore the read-only demo**](https://movebooks-si.web.app/simulator) ·
