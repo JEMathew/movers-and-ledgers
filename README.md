@@ -15,7 +15,7 @@ People approve consequential decisions; deterministic checks verify the financia
 [**Open My Migration**](https://movebooks-si.web.app/workspace) ·
 [Getting Started Guide](https://movebooks-si.web.app/guide)
 
-**Non-commercial, synthetic-data-only MVP for approved evaluation.** Do not enter real customer or production
+**Non-commercial, synthetic-data-only accounting migration MVP with restricted approved access.** Do not enter real customer or production
 provider data. Account access and AI assistance are restricted; this is not a live accounting-provider
 integration, unrestricted AI service or commercial-readiness claim.
 
@@ -58,6 +58,8 @@ Review recorded recovery checkpoints, deterministic reconciliation and a verifie
 [**Watch · 2:41**](https://movebooks-si.web.app/learn?tab=demos#demo-migration-verification-fpu) · [English captions](docs/product-demos/migration-verification-fpu.vtt) · [Transcript](docs/product-demos/migration-verification-fpu.txt) · [Chapters](docs/product-demos/migration-verification-fpu.chapters.txt)
 
 ## Verified MVP Capabilities
+
+**Authorized workspace access:** approved users access their authenticated workspace; ownership and account-isolation controls remain in force.
 
 | Stage | Customer outcome | Safeguard |
 | --- | --- | --- |
