@@ -1,13 +1,13 @@
 {
   "privacy": {
     "title": "Privacy Policy",
-    "intro": "How the current MoveBooks AI hackathon MVP handles information.",
+    "intro": "How the current MoveBooks AI synthetic-data-only accounting migration MVP handles information.",
     "sections": [
       {
         "id": "scope",
         "title": "Scope and operator",
         "paragraphs": [
-          "MoveBooks AI is an independent, non-commercial hackathon MVP operated by Jincen Mathew, Independent Developer — MoveBooks AI, based in India. Movers & Ledgers is the project name, not a representation of an incorporated company. The English-language prototype is intended for a global audience, including AI Builder Cup judges, interview panelists and authorized evaluators. The operator’s location does not restrict users to India.",
+          "MoveBooks AI is an independent, non-commercial, synthetic-data-only accounting migration MVP operated by Jincen Mathew, Independent Developer — MoveBooks AI, based in India. Movers & Ledgers is the project name, not a representation of an incorporated company. The English-language prototype is intended for a global audience with access restricted to approved users. The operator’s location does not restrict users to India.",
           "Public demonstrations use synthetic data. No production accounting integrations are intended for this release. Do not submit real customer or production accounting records, passwords, access tokens, account numbers or tax identifiers."
         ]
       },
@@ -54,7 +54,7 @@
         "id": "guidance",
         "title": "Guidance in this release",
         "paragraphs": [
-          "Live Gemini Advisor and independent Reviewer analysis is available only to approved synthetic evaluation accounts when an eligible user explicitly requests analysis. The Advisor and Reviewer use separate model runs; the Reviewer examines the recommendation against independently selected source facts. Selected synthetic mapping facts and the recommendation needed for review are processed by Gemini on Google Cloud Vertex AI using its global endpoint. This processing is not restricted to Singapore. Raw uploads, customer records, balances and credentials are excluded from the model context. Do not submit real accounting data. Recommendations and Reviewer findings are retained with the migration workspace; bounded usage, timing and request-reference metadata support operation and audit. The retention limitations below still apply. Offline Judge and any explicitly labeled deterministic fallback do not call Gemini. Provider attribution does not imply Google endorsement."
+          "Live Gemini Advisor and independent Reviewer analysis is available only to approved synthetic evaluation accounts when an eligible user explicitly requests analysis. The Advisor and Reviewer use separate model runs; the Reviewer examines the recommendation against independently selected source facts. Selected synthetic mapping facts and the recommendation needed for review are processed by Gemini on Google Cloud Vertex AI using its global endpoint. This processing is not restricted to Singapore. Raw uploads, customer records, balances and credentials are excluded from the model context. Do not submit real accounting data. Recommendations and Reviewer findings are retained with the migration workspace; bounded usage, timing and request-reference metadata support operation and audit. The retention limitations below still apply. Offline evaluation and any explicitly labeled deterministic fallback do not call Gemini. Provider attribution does not imply Google endorsement."
         ]
       },
       {
@@ -78,7 +78,7 @@
         "id": "purpose",
         "title": "Purpose and audience",
         "paragraphs": [
-          "MoveBooks AI is an independent, non-commercial hackathon MVP operated by Jincen Mathew, Independent Developer — MoveBooks AI, based in India, under the Movers & Ledgers project name. It is intended for a global audience, including AI Builder Cup judges, interview panelists and authorized evaluators. The initial language is English. India identifies the operator’s location, not a geographic restriction on users.",
+          "MoveBooks AI is an independent, non-commercial, synthetic-data-only accounting migration MVP operated by Jincen Mathew, Independent Developer — MoveBooks AI, based in India, under the Movers & Ledgers project name. It is intended for a global audience with access restricted to approved users. The initial language is English. India identifies the operator’s location, not a geographic restriction on users.",
           "You must be at least 18 years old to use the MVP.",
           "The MVP is a demonstration prototype for guided accounting-migration workflows using synthetic data. It is not a commercial accounting or financial advisory service. Synthetic results do not certify a real business’s books, regulatory compliance or readiness to operate."
         ]
@@ -96,7 +96,7 @@
         "title": "Accounts, guidance and decisions",
         "paragraphs": [
           "Review your signed-in account before acting. You remain responsible for decisions you make during evaluation. Follow the workflow’s approval and validation requirements; a suggestion or synthetic demonstration is not permission to bypass a failed check.",
-          "Live Gemini analysis is limited to approved synthetic evaluation accounts and requires an explicit user request. When a live analysis completes, Advisor recommendations and independent Reviewer findings appear separately. They may be incomplete or incorrect and do not approve a mapping, correct financial records or execute a migration. Review the evidence and uncertainty and make any permitted approval or rejection yourself. Offline Judge and explicitly labeled deterministic fallback are rule-based, not live Gemini responses. Missing-evidence guidance does not create or send a source-evidence request. Provider logos and attribution do not imply endorsement, sponsorship or a formal partnership.",
+          "Live Gemini analysis is limited to approved synthetic evaluation accounts and requires an explicit user request. When a live analysis completes, Advisor recommendations and independent Reviewer findings appear separately. They may be incomplete or incorrect and do not approve a mapping, correct financial records or execute a migration. Review the evidence and uncertainty and make any permitted approval or rejection yourself. Offline evaluation and explicitly labeled deterministic fallback are rule-based, not live Gemini responses. Missing-evidence guidance does not create or send a source-evidence request. Provider logos and attribution do not imply endorsement, sponsorship or a formal partnership.",
           "The MVP does not provide accounting, tax or legal advice. Do not use its synthetic demonstrations to carry out real financial transactions."
         ]
       },

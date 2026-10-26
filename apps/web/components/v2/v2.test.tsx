@@ -12,7 +12,7 @@ describe("V2 AI status rule", () => {
   it("preserves the exact status selected by the released Gemini web revision", () => {
     expect(AI_ASSISTANCE_STATUS).toBe("live");
     render(<AiStatusBadge withDetail />);
-    expect(screen.getByText("Live · limited evaluation · Gemini for approved synthetic accounts; Offline Judge stays deterministic")).toBeVisible();
+    expect(screen.getByText("Live · limited evaluation · Gemini for approved synthetic accounts; Offline evaluation stays deterministic")).toBeVisible();
   });
 });
 
@@ -99,6 +99,6 @@ describe("V2 component sheet", () => {
     expect(screen.getByText("First invoice (sample)")).toBeVisible();
     expect(screen.getByText("Not available")).toBeVisible();
     expect(screen.getByText("Example of planned behaviour. Not live model output.")).toBeVisible();
-    expect(within(sheet).getByText("Live · limited evaluation · Gemini for approved synthetic accounts; Offline Judge stays deterministic")).toHaveAttribute("data-ai-status", "live");
+    expect(within(sheet).getByText("Live · limited evaluation · Gemini for approved synthetic accounts; Offline evaluation stays deterministic")).toHaveAttribute("data-ai-status", "live");
   });
 });

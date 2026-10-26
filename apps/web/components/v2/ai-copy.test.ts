@@ -67,9 +67,9 @@ describe("AI status in product copy", () => {
 
   it("retains the exact released limited-evaluation labels", () => {
     expect(AI_STATUS_LABEL.live).toBe("Live · limited evaluation");
-    expect(AI_STATUS_DETAIL.live).toBe("Gemini for approved synthetic accounts; Offline Judge stays deterministic");
+    expect(AI_STATUS_DETAIL.live).toBe("Gemini for approved synthetic accounts; Offline evaluation stays deterministic");
     expect(AI_STATUS_LABEL[AI_ASSISTANCE_STATUS]).toBe("Live · limited evaluation");
-    expect(AI_STATUS_DETAIL[AI_ASSISTANCE_STATUS]).toBe("Gemini for approved synthetic accounts; Offline Judge stays deterministic");
+    expect(AI_STATUS_DETAIL[AI_ASSISTANCE_STATUS]).toBe("Gemini for approved synthetic accounts; Offline evaluation stays deterministic");
   });
 
   it.each(files)("%s claims no AI advice that is running today", (file) => {

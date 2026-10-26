@@ -16,5 +16,5 @@ export const AI_STATUS_LABEL: Record<AiAssistanceStatus, string> = {
 export const AI_STATUS_DETAIL: Record<AiAssistanceStatus, string> = {
   planned: "not available in the Beta",
   prototype: "scripted example, not live model output",
-  live: "Gemini for approved synthetic accounts; Offline Judge stays deterministic",
+  live: "Gemini for approved synthetic accounts; Offline evaluation stays deterministic",
 };

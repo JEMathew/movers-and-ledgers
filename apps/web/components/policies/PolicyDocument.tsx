@@ -7,7 +7,7 @@ export function PolicyDocument({ kind }: { kind: "privacy" | "terms" }) {
   return <main id="main-content" className="shell public-content">
     <article className="max-w-3xl [overflow-wrap:anywhere]" aria-labelledby="policy-title">
       <header className="v2-surface-header">
-        <p className="v2-surface-eyebrow">MoveBooks AI · Hackathon MVP</p>
+        <p className="v2-surface-eyebrow">MoveBooks AI — Built on Google Cloud and powered by Gemini AI.</p>
         <h1 id="policy-title" className="type-page mt-2">{policy.title}</h1>
         <p className="mt-3 leading-7 text-secondary">{policy.intro}</p>
         <p className="mt-3 leading-7 text-secondary">{content.effectiveDate}</p>
