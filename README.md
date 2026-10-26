@@ -47,11 +47,11 @@ of eligible journeys reaching Verified First Productive Use.
 [Product constitution](docs/PRODUCT_CONSTITUTION.md) · [FPU contract](docs/architecture/onboard-fpu.md) ·
 [User guide](https://movebooks-si.web.app/guide).
 
-## Released and accepted — 25 October 2026
+## Released and accepted — October 2026
 
 | Functional requirement | Accepted evidence |
 | --- | --- |
-| **P0-01 — Judge access: PASS** | Approved Account B accessed its authenticated workspace; previously accepted evidence retained. |
+| **P0-01 —  Access: PASS** | Approved Account B accessed its authenticated workspace; previously accepted evidence retained. |
 | **P0-03 — Five-stage migration: PASS** | Existing synthetic migration, reconciliation and First Productive Use previously accepted. |
 | **P0-04 — Gemini Advisor + independent Reviewer: PASS** | Owner visually verified saved production Advisor explanation, Reviewer **QUESTION** assessment, grounding and uncertainty on the correct existing mapping. The panel states: “Historical analysis restored. No model was called.” |
 | **P0-05 — Isolation and financial safeguards: PASS** | Previously accepted ownership, isolation and human-approval evidence retained. |
