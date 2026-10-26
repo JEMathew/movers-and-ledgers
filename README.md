@@ -18,7 +18,7 @@ This is not commercial production readiness, a real accounting-provider integrat
 
 [![Genuine public guided demo showing Prepare and sample mapping evidence, captured 24 October 2026](docs/showcase/assets/demo-public-20261024.jpg)](https://movebooks-si.web.app/simulator)
 
-*Public signed-out capture, 24 October 2026 IST: sample demo evidence, not an executed migration
+*Public signed-out capture: sample demo evidence, not an executed migration
 or a Gemini output. [Screenshot provenance](docs/showcase/README.md#05-prototype-showcase).*
 
 ## A three-minute review
@@ -98,7 +98,7 @@ presented as deployed capabilities. Editable sources, attribution and original i
 
 ## Video Academy
 
-[![Genuine public Academy capture from 24 October 2026 showing published lesson collections](docs/showcase/assets/academy-public-20261024.jpg)](https://movebooks-si.web.app/learn?tab=videos)
+[![Genuine public Academy capture showing published lesson collections](docs/showcase/assets/academy-public-20261024.jpg)](https://movebooks-si.web.app/learn?tab=videos)
 
 **Nine published modules with English captions**, from Getting Started through Three-Minute Journey.
 [Exact titles, measured durations and all video/caption links](docs/video-academy/README.md).
