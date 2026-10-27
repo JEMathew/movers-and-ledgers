@@ -51,6 +51,9 @@ export type ResolutionProposal = {
   human_approval_required: boolean;
   escalation_rule: string;
   state: "PROPOSED" | "AWAITING_APPROVAL" | "APPROVED" | "APPLIED" | "REJECTED" | "ESCALATED";
+  /** Server audit actor and time, present once a person has decided. */
+  decided_by?: string | null;
+  decided_at?: string | null;
 };
 
 export type MigrationExecution = {

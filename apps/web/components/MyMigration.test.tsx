@@ -11,7 +11,7 @@ const evidence = {
 };
 const main = () => screen.getByRole("main");
 const primary = () => main().querySelectorAll("a.button:not(.secondary), button.button:not(.secondary)");
-const phases = () => main().querySelector("ol[aria-label='Five-phase migration journey']")!;
+const phases = () => main().querySelector("ol[aria-label='Five-stage migration journey']")!;
 afterEach(() => vi.restoreAllMocks());
 
 describe("state-aware migration home", () => {
@@ -19,12 +19,12 @@ describe("state-aware migration home", () => {
     const fetch = vi.spyOn(globalThis, "fetch"); render(<MyMigration/>);
     expect(await screen.findByRole("link", { name: "Start a sample migration" })).toHaveAttribute("href", "/assess?sample=harbor-light-migrate-demo");
     expect(primary()).toHaveLength(1); expect(fetch).not.toHaveBeenCalled();
-    expect(screen.queryByRole("list", { name: "Five-phase migration journey" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("list", { name: "Five-stage migration journey" })).not.toBeInTheDocument();
     expect(screen.getByText(/Bounded synthetic Beta/)).toBeVisible();
   });
   it.each([
     ["CREATED",0,"Finish readiness check","/assess"], ["DISCOVERED",0,"Finish readiness check","/assess"],
-    ["ASSESSED",1,"Prepare migration","/plan-map-approve"], ["PLANNED",1,"Review Mappings","/plan-map-approve"], ["MAPPING",1,"Review Mappings","/plan-map-approve"],
+    ["ASSESSED",1,"Prepare migration","/plan-map-approve"], ["PLANNED",1,"Review mappings","/plan-map-approve"], ["MAPPING",1,"Review mappings","/plan-map-approve"],
     ["AWAITING_APPROVAL",1,"Review plan","/plan-map-approve"], ["APPROVED",2,"Continue to Move","/migrate-resolve"], ["MIGRATION_READY",2,"Continue to Move","/migrate-resolve"],
     ["MIGRATING",2,"View migration progress","/migrate-resolve"], ["MIGRATION_PAUSED",2,"Review recovery","/migrate-resolve"], ["RESOLVING",2,"Review recovery","/migrate-resolve"], ["RETRY_PENDING",2,"Continue recovery","/migrate-resolve"], ["MIGRATION_BLOCKED",2,"Review migration issue","/migrate-resolve"],
     ["MIGRATION_COMPLETE",3,"Verify migrated books","/validate-configure"], ["VALIDATING",3,"View verification","/validate-configure"], ["VALIDATION_BLOCKED",3,"Review financial difference","/validate-configure"], ["VALIDATED",3,"Review settings","/validate-configure"], ["CONFIGURING",3,"Review settings","/validate-configure"], ["CONFIGURATION_REVIEW_REQUIRED",3,"Review settings","/validate-configure"],
@@ -46,7 +46,7 @@ describe("state-aware migration home", () => {
     expect(within(screen.getByRole("navigation", { name: "Task help" })).getByRole("link", { name: "Help with this task" })).toHaveAttribute("href", `/support?session=${id}&stage=${phase}`);
     const shortcuts = within(screen.getByRole("navigation", { name: "Task help" }));
     expect(shortcuts.getByRole("link", { name: "AI activity" })).toHaveAttribute("href", `/trust?view=evidence&session=${id}#ai-activity`);
-    expect(shortcuts.getByRole("link", { name: "Evidence & Results" })).toHaveAttribute("href", `/trust?view=evidence&session=${id}`);
+    expect(shortcuts.getByRole("link", { name: "Open evidence" })).toHaveAttribute("href", `/trust?view=evidence&session=${id}`);
     expect(screen.getAllByRole("navigation", { name: /Task help|Migration details/ })).toHaveLength(1);
     expect(screen.queryByRole("link", { name: "MoveBooks Play" })).not.toBeInTheDocument();
     expect(screen.getAllByText("Details")).toHaveLength(1);
@@ -55,14 +55,14 @@ describe("state-aware migration home", () => {
   it.each([undefined, null, { pending:0 }, { total:0,pending:0 }, { total:2,pending:3 }])("does not infer eligible plan consent from missing/inconsistent mapping count %s", async review => {
     const fetch = vi.spyOn(globalThis, "fetch").mockImplementation(() => json({ ...evidence, workflow_status:"AWAITING_APPROVAL", mapping_review: review }));
     render(<MyMigration reference={id}/>);
-    expect(await screen.findByRole("link", { name:"Review Mappings" })).toBeVisible();
+    expect(await screen.findByRole("link", { name:"Review mappings" })).toBeVisible();
     expect(screen.queryByRole("link",{name:"Review plan"})).not.toBeInTheDocument();
     expect(screen.getByText(/Mapping review count unavailable/)).toBeVisible(); expect(fetch).toHaveBeenCalledTimes(1);
   });
   it("retains readiness blocker and safe mapping review, without labeling Understand complete", async () => {
     vi.spyOn(globalThis,"fetch").mockImplementation(()=>json({...evidence,workflow_status:"AWAITING_APPROVAL",discovery:{findings:[{category:"BLOCKER",title:"Required source field"}]}}));
     render(<MyMigration reference={id}/>);
-    expect(await screen.findByRole("link",{name:"Review 1 Readiness Issue"})).toBeVisible();
+    expect(await screen.findByRole("link",{name:"Review 1 readiness issue"})).toBeVisible();
     expect(phases().firstElementChild).toHaveAttribute("data-state","Blocked"); expect(screen.queryByRole("link",{name:"Review plan"})).not.toBeInTheDocument();
   });
   it.each([403,404,500])("read failure %s preserves the selected reference and offers only refresh",async status=>{
@@ -83,13 +83,13 @@ describe("state-aware migration home", () => {
     const fetch=vi.spyOn(globalThis,"fetch");render(<MyMigration reference={reference}/>);expect(await screen.findByText(/Invalid session reference/)).toBeVisible();expect(fetch).not.toHaveBeenCalled();expect(screen.queryByRole("link",{name:"Start a sample migration"})).not.toBeInTheDocument();
   });
   it("unknown/mismatched/non-synthetic projections assume no progress and no new sample",async()=>{
-    vi.spyOn(globalThis,"fetch").mockImplementation(()=>json({...evidence,workflow_status:"FUTURE_STATE"}));render(<MyMigration reference={id}/>);expect(await screen.findByText(/Unsupported session evidence/)).toBeVisible();expect(screen.getByRole("link",{name:"Read original workflow"})).toHaveAttribute("href",`/assess?session=${id}`);expect(screen.queryByRole("list",{name:"Five-phase migration journey"})).not.toBeInTheDocument();
+    vi.spyOn(globalThis,"fetch").mockImplementation(()=>json({...evidence,workflow_status:"FUTURE_STATE"}));render(<MyMigration reference={id}/>);expect(await screen.findByText(/Unsupported session evidence/)).toBeVisible();expect(screen.getByRole("link",{name:"Read original workflow"})).toHaveAttribute("href",`/assess?session=${id}`);expect(screen.queryByRole("list",{name:"Five-stage migration journey"})).not.toBeInTheDocument();
   });
   it("missing attention evidence stays unknown, never zero or completed",async()=>{
     vi.spyOn(globalThis,"fetch").mockImplementation(()=>json({id,synthetic:true,workflow_status:"ASSESSED"}));render(<MyMigration reference={id}/>);expect(await screen.findByRole("link",{name:"Review readiness and plan"})).toBeVisible();expect(screen.getByText(/Attention details are incomplete/)).toBeVisible();expect(phases().firstElementChild).toHaveAttribute("data-state","Earlier phase");fireEvent.click(screen.getByText("Operational steps"));expect(screen.getByRole("list",{name:"Migration Journey"}).querySelector(".is-complete")).toBeNull();
   });
   it("shows only three attention previews with the actual supplied total",async()=>{
-    vi.spyOn(globalThis,"fetch").mockImplementation(()=>json({...evidence,execution:{failures:Array.from({length:5},()=>({code:"MB-DUPLICATE_CUSTOMER",resolved:false}))}}));render(<MyMigration reference={id}/>);await screen.findByRole("link",{name:"Review recovery"});expect(within(screen.getByRole("region",{name:"Next task"})).getAllByRole("listitem")).toHaveLength(4);expect(screen.getByText("and 2 more in the task")).toBeVisible();expect(screen.queryByRole("region",{name:"Needs attention"})).toBeNull();
+    vi.spyOn(globalThis,"fetch").mockImplementation(()=>json({...evidence,execution:{failures:Array.from({length:5},()=>({code:"MB-DUPLICATE_CUSTOMER",resolved:false}))}}));render(<MyMigration reference={id}/>);await screen.findByRole("link",{name:"Review recovery"});expect(within(screen.getByRole("region",{name:"How to recover"})).getAllByRole("listitem")).toHaveLength(4);expect(screen.getByText("and 2 more in the task")).toBeVisible();expect(screen.queryByRole("region",{name:"Waiting on you"})).toBeNull();
   });
   it("adopts only authorized deep links, restores them on return, and clears old view while refreshing",async()=>{
     const fetch=vi.spyOn(globalThis,"fetch").mockImplementation(()=>json(evidence));const first=render(<MyMigration reference={id}/>);await screen.findByRole("link",{name:"Review recovery"});expect(sessionStorage.getItem("movebooks-migration-session")).toBe(id);first.unmount();render(<MyMigration/>);await screen.findByRole("link",{name:"Review recovery"});expect(fetch).toHaveBeenCalledTimes(2);

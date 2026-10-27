@@ -60,26 +60,27 @@ const label = (status: string) => status === "VERIFIED_FIRST_PRODUCTIVE_USE" ? [
 const dateText = (iso: string) => new Date(iso).toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 
 export function MigrationPicker({ list, loadMore, more, failure }: { list: MigrationList; loadMore: () => void; more: boolean; failure?: Failure }) {
-  return <main id="main-content" className="shell member-home" aria-labelledby="picker-title">
-    <header><p className="eyebrow">My Migration</p><h1 id="picker-title" className="type-page">Choose a migration</h1></header>
-    <ul className="migration-list" aria-label="Your migrations">{list.items.map(item => { const [text, tone, Icon] = label(item.status); return <li key={item.id}><a href={`/workspace?session=${item.id}`}>
-      <span className="migration-name">{item.company}</span>
+  return <main id="main-content" className="shell mm" aria-labelledby="picker-title">
+    <header className="mm-header"><p className="mm-eyebrow"><strong>My migration</strong></p><h1 id="picker-title" className="mm-title">Choose a migration</h1>
+      <p className="mm-meta">Each migration keeps its own decisions and evidence. Opening one changes nothing.</p></header>
+    <ul className="mm-pick" aria-label="Your migrations">{list.items.map(item => { const [text, tone, Icon] = label(item.status); return <li key={item.id}><a href={`/workspace?session=${item.id}`}>
+      <span className="mm-pick-name">{item.company}</span>
       <span className="status-text" data-tone={tone}><Icon size={16} aria-hidden="true"/>{text}</span>
-      <span className="migration-meta">Started {dateText(item.created)} · …{item.id.slice(-4)}</span></a></li>; })}</ul>
-    {list.incomplete && <p className="member-notice" role="status" data-tone="warning"><AlertTriangle size={16} aria-hidden="true"/>History may be incomplete. Some older migrations are not shown. Open one with its saved link or reference.</p>}
-    {list.skipped > 0 && <p className="member-notice" role="status">{list.skipped} stored {list.skipped === 1 ? "migration" : "migrations"} could not be read and {list.skipped === 1 ? "is" : "are"} not shown.</p>}
-    {failure && <p className="member-notice" role="alert" data-tone="warning">More migrations could not be loaded. Try again.</p>}
-    <nav className="member-actions" aria-label="Migration actions">
-      {list.next && <button className="member-text-button" onClick={loadMore} disabled={more}>{more ? <Loader2 size={16} aria-hidden="true"/> : null}Show more migrations</button>}
-      <a href="/assess?sample=harbor-light-migrate-demo"><Plus size={18} aria-hidden="true"/>Start a new sample migration</a>
+      <span className="mm-pick-meta">Started {dateText(item.created)} · …{item.id.slice(-4)}</span></a></li>; })}</ul>
+    {list.incomplete && <p className="mm-notice" role="status" data-tone="warning"><AlertTriangle size={16} aria-hidden="true"/>History may be incomplete. Some older migrations are not shown. Open one with its saved link or reference.</p>}
+    {list.skipped > 0 && <p className="mm-notice" role="status">{list.skipped} stored {list.skipped === 1 ? "migration" : "migrations"} could not be read and {list.skipped === 1 ? "is" : "are"} not shown.</p>}
+    {failure && <p className="mm-notice" role="alert" data-tone="warning">More migrations could not be loaded. Try again.</p>}
+    <nav className="mm-actions" aria-label="Migration actions">
+      {list.next && <button type="button" className="mm-text-button" onClick={loadMore} disabled={more}>{more ? <Loader2 size={16} aria-hidden="true"/> : null}Show more migrations</button>}
+      <a className="button secondary" href="/assess?sample=harbor-light-migrate-demo"><Plus size={18} aria-hidden="true"/>Start a new sample migration</a>
     </nav>
-    <details className="member-details"><summary>Open a migration by reference</summary><form action="/workspace" method="get"><label className="field-label">Migration reference<input className="field-control" name="session" required pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" placeholder="UUID from your migration link"/></label><Button variant="secondary" type="submit">Open reference</Button></form></details>
+    <details className="mm-details"><summary>Open a migration by reference</summary><form action="/workspace" method="get"><label className="field-label">Migration reference<input className="field-control" name="session" required pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" placeholder="UUID from your migration link"/></label><Button variant="secondary" type="submit">Open reference</Button></form></details>
   </main>;
 }
 
 export function ListProblem({ failure, retry }: { failure: Failure; retry: () => void }) {
-  return <main id="main-content" className="shell member-home"><header><p className="eyebrow">My Migration</p><h1 className="type-page">Your migrations could not be checked</h1></header>
-    <section className="member-task" data-tone="warning" aria-label="Problem"><p className="member-kicker"><AlertTriangle size={16} aria-hidden="true"/>Nothing was started</p>
-      <p>{failure === "identity" ? "Your access needs verification. Sign in again to see your migrations." : "We could not read your saved migrations. This is not the same as having none. Check your connection and try again."}</p>
-      <button className="button primary" onClick={retry}>Try again</button></section></main>;
+  return <main id="main-content" className="shell mm"><header className="mm-header"><p className="mm-eyebrow"><strong>My migration</strong></p><h1 className="mm-title">Your migrations could not be checked</h1></header>
+    <section className="mm-card mm-problem" aria-label="Problem"><p>Nothing was started</p>
+      <p className="mm-meta">{failure === "identity" ? "Your access needs verification. Sign in again to see your migrations." : "We could not read your saved migrations. This is not the same as having none. Check your connection and try again."}</p>
+      <div className="mm-actions"><button type="button" className="button" onClick={retry}>Try again</button></div></section></main>;
 }

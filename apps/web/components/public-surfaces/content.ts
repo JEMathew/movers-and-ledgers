@@ -15,14 +15,35 @@ export const topics = [
   { id: "evidence", title: "What evidence means", body: "Evidence connects a finding to source facts, a rule result or an attributable decision. Explanations help you understand the evidence; they cannot replace it.", question: "Can I trace this recommendation to a fact or check?", phase: 0 },
   { id: "financial-truth", title: "Why financial truth is deterministic", body: "The same inputs and versioned rules must produce the same accounting result. Models may explain or suggest; exact calculations, reconciliation and approval controls decide whether work can proceed.", question: "Is this a suggestion or a verified result?", phase: 3 },
   { id: "recovery", title: "What happens when migration fails", body: "Work pauses at a safe boundary, preserving completed checkpoints and failure evidence. Review the proposed remedy. Consequential recovery needs your approval; retry only when the workflow permits it.", question: "What completed, what failed, and what will retry do?", phase: 2 },
-  { id: "business-ready", title: "What Business Ready · Verified means", body: "Required data, setup, access and onboarding checks pass, then an authorized user completes an agreed task with verified evidence. In this Beta that is a synthetic invoice—not proof of production readiness.", question: "Has the productive task been verified, not merely posted?", phase: 4 },
+  { id: "business-ready", title: "What Business ready · verified means", body: "Required data, setup, access and onboarding checks pass, then an authorized user completes an agreed task with verified evidence. In this Beta that is a synthetic invoice—not proof of production readiness.", question: "Has the productive task been verified, not merely posted?", phase: 4 },
 ] as const;
 // Signed-out navigation. Route paths are unchanged for compatibility; labels are customer-facing.
-export const publicLinks = [["Explore Demo", "/simulator"], ["Play", "/play"], ["Learn", "/learn"], ["Trust", "/trust"]] as const;
+export const publicLinks = [["How it works", "/guide"], ["Explore demo", "/simulator"], ["Learn", "/learn"], ["Trust and security", "/trust"], ["Play", "/play"]] as const;
 // Signed-in navigation replaces the public marketing links. Account is the identity menu itself.
-export const memberLinks = [["My Migration", "/workspace"], ["Play", "/play"]] as const;
-export const exploreLinks = [["Product Overview", "/"], ["Explore Demo", "/simulator"], ["Learn", "/learn"], ["Trust", "/trust"], ["Getting Started Guide", "/guide"]] as const;
-export const footerLinks = [["Getting Started Guide", "/guide"], ["Help", "/support"], ["Feedback", "/feedback"], ["Beta Limitations", "/trust#beta-limitations"]] as const;
+export const memberLinks = [["My migration", "/workspace"], ["Play", "/play"]] as const;
+export const exploreLinks = [["Product overview", "/"], ["Explore demo", "/simulator"], ["Learn", "/learn"], ["Trust and security", "/trust"], ["How it works", "/guide"]] as const;
+export const footerLinks = [["How it works", "/guide"], ["Help", "/support"], ["Send feedback", "/feedback"], ["Beta limitations", "/trust#beta-limitations"]] as const;
 export const startMigrationHref = "/workspace";
 export const sampleEntry = "/assess?sample=harbor-light-migrate-demo";
 export const scope = "Synthetic Data · Public Reference · Beta. No live provider migration or production readiness claim.";
+
+/** Navigation links with flagged entries removed (Play is off by default; see lib/features.ts). */
+export function visibleLinks<T extends readonly (readonly [string, string])[]>(links: T, showPlay: boolean) {
+  return links.filter(([, href]) => showPlay || href !== "/play");
+}
+
+/**
+ * The Harbor Light Books sample outcome shown on the public landing page, labelled "Sample result".
+ * Public marketing only: product screens read every figure from the API (docs/v2/phase1/contract-reconciliation.md).
+ * Values are the synthetic sample's verified outcome: invoice 1 × 100.00 + 7.25% CA tax; 17 of 17 checks.
+ */
+export const sampleOutcome = {
+  company: "Harbor Light Books",
+  currency: "USD",
+  /** Worded as the product shows the trial-balance rule result ("None" from the API). */
+  trialBalanceResult: "No difference",
+  firstInvoiceTotal: "107.25",
+  checksMatched: 17,
+  checksTotal: 17,
+  highlights: ["Trial balance, per account", "Opening balances", "Open customer invoices", "Record counts, 8 types"],
+} as const;

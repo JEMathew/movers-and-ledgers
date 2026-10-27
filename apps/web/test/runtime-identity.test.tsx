@@ -37,7 +37,7 @@ describe("truthful runtime identity", () => {
     expect(document.body).not.toHaveTextContent(/Preparing Google sign-in/);
     expect(screen.queryByRole("link", {name:/Enter Demo Workspace/i})).not.toBeInTheDocument();
     expect(screen.getByRole("complementary", {name:"Beta scope"})).toHaveTextContent(/safely using synthetic data/);
-    expect(screen.getByRole("link", {name:"Beta Limitations"})).toHaveAttribute("href", "/trust#beta-limitations");
+    expect(screen.getByRole("link", {name:"Beta limitations"})).toHaveAttribute("href", "/trust#beta-limitations");
   });
   it.each(["/", "/product", "/workspace", "/sign-in", "/simulator", "/guide", "/learn", "/trust", "/support", "/feedback", "/try-your-data"])("does not duplicate the scope note on %s", path => {
     route.path = path;

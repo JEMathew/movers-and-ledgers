@@ -1,0 +1,392 @@
+[
+ {
+  "step": "start a sample migration",
+  "ok": true,
+  "url": "http://localhost:3000/assess"
+ },
+ {
+  "step": "assess",
+  "ok": true,
+  "url": "http://localhost:3000/assess?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "create plan",
+  "ok": true,
+  "url": "http://localhost:3000/plan-map-approve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "create plan (plan page)",
+  "ok": true,
+  "url": "http://localhost:3000/plan-map-approve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "open mappings",
+  "ok": true,
+  "url": "http://localhost:3000/plan-map-approve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "mappings",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "mappings screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/plan-map-approve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "bulk facts",
+  "ok": true,
+  "facts": {
+   "rows_inspected": 6,
+   "submit_disabled_before_consent": true,
+   "bulk_approved": 6,
+   "labels": [
+    "Cedar School",
+    "Maple Library",
+    "Independent Press Distribution",
+    "Catalog preparation",
+    "base_currency",
+    "fiscal_calendar"
+   ],
+   "actors": [
+    "demo-user"
+   ],
+   "comments": [
+    "Bulk approval set 4e9321cc: reviewed 6 low-risk mappings"
+   ],
+   "risks": [
+    "LOW"
+   ],
+   "areas": [
+    "customers",
+    "general_configuration",
+    "products_services",
+    "vendors"
+   ],
+   "decisions_recorded": 6
+  }
+ },
+ {
+  "step": "approve the low-risk set together (batch)",
+  "ok": true,
+  "url": "http://localhost:3000/plan-map-approve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "bulk",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "bulk screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/plan-map-approve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "approve the remaining mappings one by one",
+  "ok": true,
+  "url": "http://localhost:3000/plan-map-approve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "review plan",
+  "ok": true,
+  "url": "http://localhost:3000/plan-map-approve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "approve plan",
+  "ok": true,
+  "url": "http://localhost:3000/plan-map-approve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "confirm plan approval",
+  "ok": true,
+  "url": "http://localhost:3000/plan-map-approve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "continue to Move",
+  "ok": true,
+  "url": "http://localhost:3000/migrate-resolve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "move-ready",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "move ready screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/migrate-resolve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "start migration",
+  "ok": true,
+  "url": "http://localhost:3000/migrate-resolve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "wait for exception",
+  "ok": true,
+  "url": "http://localhost:3000/migrate-resolve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "move-exception",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "move exception screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/migrate-resolve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "approve the proposed resolution",
+  "ok": true,
+  "url": "http://localhost:3000/migrate-resolve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "move-retry",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "move retry screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/migrate-resolve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "retry the failed batch",
+  "ok": true,
+  "url": "http://localhost:3000/migrate-resolve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "wait for completion",
+  "ok": true,
+  "url": "http://localhost:3000/migrate-resolve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "move-complete",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "move complete screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/migrate-resolve?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "go to Verify",
+  "ok": true,
+  "url": "http://localhost:3000/validate-configure?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "run verification",
+  "ok": true,
+  "url": "http://localhost:3000/validate-configure?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "wait",
+  "ok": true,
+  "url": "http://localhost:3000/validate-configure?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "verify",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "verification screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/validate-configure?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "continue to configuration",
+  "ok": true,
+  "url": "http://localhost:3000/validate-configure?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "settings-review",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "settings review screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/validate-configure?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "approve the settings that need approval",
+  "ok": true,
+  "url": "http://localhost:3000/validate-configure?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "settings",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "settings screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/validate-configure?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "apply configuration",
+  "ok": true,
+  "url": "http://localhost:3000/validate-configure?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "wait applied",
+  "ok": true,
+  "url": "http://localhost:3000/validate-configure?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "configured",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "configured screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/validate-configure?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "wait",
+  "ok": true,
+  "url": "http://localhost:3000/validate-configure?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "go to Start",
+  "ok": true,
+  "url": "http://localhost:3000/onboard-fpu?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "start onboarding",
+  "ok": true,
+  "url": "http://localhost:3000/onboard-fpu?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "essentials-start",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "essentials start screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/onboard-fpu?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "approve onboarding essentials",
+  "ok": true,
+  "url": "http://localhost:3000/onboard-fpu?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "essentials",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "essentials screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/onboard-fpu?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "prepare invoice",
+  "ok": true,
+  "url": "http://localhost:3000/onboard-fpu?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "invoice-prepared",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "invoice prepared screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/onboard-fpu?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "approve invoice",
+  "ok": true,
+  "url": "http://localhost:3000/onboard-fpu?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "invoice-approved",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "invoice approved screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/onboard-fpu?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "post and verify",
+  "ok": true,
+  "url": "http://localhost:3000/onboard-fpu?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "wait for verified",
+  "ok": true,
+  "url": "http://localhost:3000/onboard-fpu?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "shot": "verified",
+  "axe": [],
+  "hscroll": false
+ },
+ {
+  "step": "final screenshot",
+  "ok": true,
+  "url": "http://localhost:3000/onboard-fpu?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "step": "api facts",
+  "ok": true,
+  "facts": {
+   "workflow_status": "VERIFIED_FIRST_PRODUCTIVE_USE",
+   "company": "Harbor Light Books",
+   "invoice_total_107_25": true,
+   "checks_verified": 17,
+   "checks_total": 17
+  }
+ },
+ {
+  "step": "API confirms verified result",
+  "ok": true,
+  "url": "http://localhost:3000/onboard-fpu?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62"
+ },
+ {
+  "end": {
+   "url": "http://localhost:3000/onboard-fpu?session=bb740f38-4116-5b0a-bf41-9702c3dd7c62",
+   "headings": [
+    "Harbor Light Books is ready to use",
+    "HL-FPU-08f22821-bde4-435f-9898-7fc1f66ba855",
+    "Verify: 17 of 17 checks matched",
+    "Start: ready for daily use",
+    "Decisions by demo-user"
+   ],
+   "buttons": [
+    ""
+   ],
+   "links": [
+    "MoveBooks AI",
+    "Evidence",
+    "AI activity",
+    "Help",
+    "Understand Done",
+    "Prepare Done",
+    "Move Done",
+    "Verify Done",
+    "Start Done",
+    "Review verified evidence",
+    "Back to my migrations",
+    "See the invoice and journal",
+    "See all checks",
+    "How it works",
+    "Help",
+    "Send feedback",
+    "Beta limitations"
+   ]
+  },
+  "page_errors": [],
+  "status": "complete"
+ }
+]

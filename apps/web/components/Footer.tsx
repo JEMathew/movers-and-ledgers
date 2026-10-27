@@ -8,7 +8,7 @@ export function Footer() {
     </nav>
     <div className="shell flex flex-col justify-between gap-3 sm:flex-row">
       <p>© 2026 Movers & Ledgers · An independent synthetic product concept.</p>
-      <p>Provider-neutral by design · Financial truth verified by rules</p>
+      <p>Rules verify every financial result. You approve every change.</p>
     </div>
   </footer>;
 }

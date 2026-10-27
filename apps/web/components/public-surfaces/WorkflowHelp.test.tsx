@@ -11,7 +11,7 @@ describe("context after a same-page new assessment", () => {
     render(<WorkflowHelp/>);
     window.history.replaceState(null, "", `/assess?session=${newId}`);
     fireEvent.click(screen.getByText("Help for Understand"));
-    const link = screen.getByRole("link", { name: "Evidence & Results" });
+    const link = screen.getByRole("link", { name: "Evidence & results" });
     // Stop actual navigation while exercising the real React click handler.
     link.addEventListener("click", event => event.preventDefault());
     fireEvent.click(link);
@@ -31,7 +31,7 @@ it.each(phaseCases)("offers canonical guidance for %s without a request", (name,
   render(<WorkflowHelp/>);
   fireEvent.click(screen.getByText(`Help for ${name}`));
   expect(screen.getByRole("link", { name: "Task instructions" })).toHaveAttribute("href", `/guide#${guide}`);
-  const link = screen.getByRole("link", { name: "Evidence & Results" });
+  const link = screen.getByRole("link", { name: "Evidence & results" });
   link.addEventListener("click", event => event.preventDefault()); fireEvent.click(link);
   expect(link.getAttribute("href")).not.toContain("session=");
   expect(fetch).not.toHaveBeenCalled();

@@ -1,16 +1,22 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { Guide, guideSections } from "./Guide";
+import { Guide, guideSections, visibleGuideSections } from "./Guide";
 import { phases } from "./content";
 
 describe("compact task guide", () => {
-  it("retains twelve stable instructions as keyboard-reachable native disclosures", () => {
+  it("keeps MoveBooks Play out of the guide while its navigation flag is off", () => {
+    render(<Guide/>);
+    expect(document.getElementById("play")).toBeNull();
+    expect(document.querySelector('a[href="/play"]')).toBeNull();
+    expect(visibleGuideSections().map(section => section.id)).not.toContain("play");
+  });
+  it("retains the stable instructions as keyboard-reachable native disclosures", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     render(<Guide/>);
     expect(guideSections).toHaveLength(12);
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getByRole("link", { name: "Start a sample migration" })).toHaveAttribute("href", "/workspace");
-    for (const section of guideSections) {
+    for (const section of visibleGuideSections()) {
       const details = document.getElementById(section.id)!;
       expect(details.tagName).toBe("DETAILS");
       expect(details).not.toHaveAttribute("open");
@@ -20,7 +26,7 @@ describe("compact task guide", () => {
     expect(fetch).not.toHaveBeenCalled();
     fetch.mockRestore();
   });
-  it.each(guideSections)("opens and focuses legacy #$id without any workflow request", ({ id }) => {
+  it.each(visibleGuideSections())("opens and focuses legacy #$id without any workflow request", ({ id }) => {
     window.history.replaceState(null, "", `/guide#${id}`);
     render(<Guide/>);
     const details = document.getElementById(id)!;
@@ -30,7 +36,7 @@ describe("compact task guide", () => {
   });
   it("keeps phase destinations, reconsideration controls and local limits accessible", () => {
     render(<Guide/>);
-    fireEvent.click(screen.getByText("The five-phase journey"));
+    fireEvent.click(screen.getByText("The five-stage journey"));
     for (const phase of phases) expect(screen.getByRole("link", { name: `Learn more about ${phase.name}` })).toHaveAttribute("href", `/learn#${phase.topic}`);
     fireEvent.click(screen.getByText("Reconsidering a decision"));
     for (const copy of [/before migration starts/, /enter a reason/, /original rejection, actor, timestamp, reason and evidence/, /The request itself approves nothing/, /Only the authenticated owner/, /never overwrites the original rejection or bypasses/]) expect(screen.getByText(copy)).toBeVisible();

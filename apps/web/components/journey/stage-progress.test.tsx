@@ -18,7 +18,7 @@ describe("failed deep links", () => {
   const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status });
   const assertUnconfirmed = () => {
     expect(steps().some(step => step.hasAttribute("aria-current") || step.classList.contains("is-complete"))).toBe(false);
-    expect(screen.getAllByText(/^(Checking your progress…|Progress unavailable · nothing is assumed)$/)[0]).toBeVisible();
+    expect(screen.getAllByText(/^(Checking your progress…|Progress unavailable. Nothing is assumed.)$/)[0]).toBeVisible();
   };
 
   it.each([404, 500])("keeps the selected migration and prevents Plan advances after a failed read (%s)", async status => {
@@ -29,7 +29,7 @@ describe("failed deep links", () => {
       .mockImplementationOnce(() => new Promise<Response>(resolve => { finishRead = resolve; }))
       .mockResolvedValue(json({ id, synthetic: true, workflow_status: "ASSESSED" }));
     const plan = render(<PlanMapApproveExperience />);
-    const advance = screen.getByRole("button", { name: "Create My Migration Plan" });
+    const advance = screen.getByRole("button", { name: "Create my migration plan" });
     assertUnconfirmed();
     expect(advance).toBeDisabled();
     await waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
@@ -58,7 +58,7 @@ describe("failed deep links", () => {
     render(<PlanMapApproveExperience />);
     expect(await screen.findByRole("alert")).toHaveTextContent("Unsupported session evidence");
     expect(sessionStorage.getItem("movebooks-migration-session")).toBe(id);
-    expect(screen.getByRole("button", { name: "Create My Migration Plan" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Create my migration plan" })).toBeDisabled();
     assertUnconfirmed();
   });
 
@@ -68,7 +68,7 @@ describe("failed deep links", () => {
       .mockResolvedValueOnce(json({ id, synthetic: true, workflow_status: "ASSESSED", mappings: [], activity: [] }))
       .mockResolvedValueOnce(json({ detail: "Plan unavailable" }, 500));
     render(<PlanMapApproveExperience />);
-    const advance = screen.getByRole("button", { name: "Create My Migration Plan" });
+    const advance = screen.getByRole("button", { name: "Create my migration plan" });
     await waitFor(() => expect(advance).toBeEnabled());
     // Another navigation may have selected a different valid migration since the read.
     sessionStorage.setItem("movebooks-migration-session", expired);
@@ -105,7 +105,7 @@ describe.each([
     render(<Stage />);
     const assertNoProgress = () => {
       expect(steps().some(step => step.hasAttribute("aria-current") || step.classList.contains("is-complete"))).toBe(false);
-      expect(screen.getAllByText(/^(Checking your progress…|Progress unavailable · nothing is assumed)$/)[0]).toBeVisible();
+      expect(screen.getAllByText(/^(Checking your progress…|Progress unavailable. Nothing is assumed.)$/)[0]).toBeVisible();
     };
     assertNoProgress();
     await waitFor(() => expect(fetch).toHaveBeenCalled());

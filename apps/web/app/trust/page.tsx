@@ -1,4 +1,7 @@
 import { Trust } from "@/components/public-surfaces/Trust";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Trust and security" };
 export default async function Page({ searchParams }: { searchParams: Promise<{ session?: string | string[]; view?: string | string[] }> }) {
   const query = await searchParams;
   // Explicit mode follows URL navigation, including same-page public/evidence transitions.

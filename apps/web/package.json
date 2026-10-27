@@ -12,6 +12,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@fontsource/schibsted-grotesk": "^5.3.0",
     "@tailwindcss/postcss": "^4.1.0",
     "firebase": "^12.19.0",
     "google-auth-library": "^11.1.0",

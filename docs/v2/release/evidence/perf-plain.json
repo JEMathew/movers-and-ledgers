@@ -1,0 +1,184 @@
+{
+ "main": {
+  "/": {
+   "ttfb": 8.0,
+   "dcl": 57.0,
+   "load": 168,
+   "lcp": 144,
+   "cls": 0.021,
+   "js": 177,
+   "css": 17,
+   "font": 0,
+   "requests": 29
+  },
+  "/sign-in": {
+   "ttfb": 15.0,
+   "dcl": 46.0,
+   "load": 135.0,
+   "lcp": 108,
+   "cls": 0.016,
+   "js": 183,
+   "css": 17,
+   "font": 0,
+   "requests": 29
+  },
+  "/workspace": {
+   "ttfb": 17.0,
+   "dcl": 44.0,
+   "load": 144.0,
+   "lcp": 100,
+   "cls": 0.01,
+   "js": 193,
+   "css": 17,
+   "font": 0,
+   "requests": 30
+  },
+  "/assess": {
+   "ttfb": 7.0,
+   "dcl": 38.0,
+   "load": 136.0,
+   "lcp": 104,
+   "cls": 0.016,
+   "js": 194,
+   "css": 17,
+   "font": 0,
+   "requests": 28
+  },
+  "/plan-map-approve": {
+   "ttfb": 7.0,
+   "dcl": 71,
+   "load": 133.0,
+   "lcp": 100,
+   "cls": 0.029,
+   "js": 186,
+   "css": 17,
+   "font": 0,
+   "requests": 26
+  },
+  "/onboard-fpu": {
+   "ttfb": 5.0,
+   "dcl": 34.0,
+   "load": 122.0,
+   "lcp": 88,
+   "cls": 0.019,
+   "js": 189,
+   "css": 17,
+   "font": 0,
+   "requests": 30
+  },
+  "/trust": {
+   "ttfb": 15.0,
+   "dcl": 53.0,
+   "load": 144.0,
+   "lcp": 108,
+   "cls": 0.017,
+   "js": 188,
+   "css": 17,
+   "font": 0,
+   "requests": 29
+  },
+  "/simulator": {
+   "ttfb": 6.0,
+   "dcl": 30.0,
+   "load": 126.0,
+   "lcp": 88,
+   "cls": 0.013,
+   "js": 188,
+   "css": 17,
+   "font": 0,
+   "requests": 30
+  },
+  "transition / -> /guide (ms)": 22
+ },
+ "v2": {
+  "/": {
+   "ttfb": 15.0,
+   "dcl": 64.0,
+   "load": 198.0,
+   "lcp": 164,
+   "cls": 0.021,
+   "js": 160,
+   "css": 23,
+   "font": 74,
+   "requests": 27
+  },
+  "/sign-in": {
+   "ttfb": 16.0,
+   "dcl": 64.0,
+   "load": 160.0,
+   "lcp": 124,
+   "cls": 0.017,
+   "js": 170,
+   "css": 23,
+   "font": 74,
+   "requests": 29
+  },
+  "/workspace": {
+   "ttfb": 15.0,
+   "dcl": 49.0,
+   "load": 166.0,
+   "lcp": 124,
+   "cls": 0.017,
+   "js": 183,
+   "css": 23,
+   "font": 74,
+   "requests": 30
+  },
+  "/assess": {
+   "ttfb": 10.0,
+   "dcl": 45.0,
+   "load": 163.0,
+   "lcp": 128,
+   "cls": 0.017,
+   "js": 187,
+   "css": 23,
+   "font": 99,
+   "requests": 31
+  },
+  "/plan-map-approve": {
+   "ttfb": 8,
+   "dcl": 57.0,
+   "load": 166.0,
+   "lcp": 128,
+   "cls": 0.034,
+   "js": 184,
+   "css": 23,
+   "font": 99,
+   "requests": 29
+  },
+  "/onboard-fpu": {
+   "ttfb": 9.0,
+   "dcl": 56.0,
+   "load": 183.0,
+   "lcp": 136,
+   "cls": 0.021,
+   "js": 185,
+   "css": 23,
+   "font": 99,
+   "requests": 32
+  },
+  "/trust": {
+   "ttfb": 14.0,
+   "dcl": 86,
+   "load": 168.0,
+   "lcp": 132,
+   "cls": 0.017,
+   "js": 182,
+   "css": 23,
+   "font": 74,
+   "requests": 30
+  },
+  "/simulator": {
+   "ttfb": 7.0,
+   "dcl": 51.0,
+   "load": 152.0,
+   "lcp": 120,
+   "cls": 0.013,
+   "js": 179,
+   "css": 23,
+   "font": 74,
+   "requests": 30
+  },
+  "transition / -> /guide (ms)": 18
+ }
+}

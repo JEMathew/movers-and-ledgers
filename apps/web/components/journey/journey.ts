@@ -8,9 +8,9 @@ export const journeySteps = [
   { label: "Migrate", route: "/migrate-resolve", summary: "Move your approved data" },
   { label: "Resolve", route: "/migrate-resolve", summary: "Fix items needing attention" },
   { label: "Validate", route: "/validate-configure", summary: "Confirm balances and accuracy" },
-  { label: "Set Up", route: "/validate-configure", summary: "Complete your business setup" },
+  { label: "Set up", route: "/validate-configure", summary: "Complete your business setup" },
   // Internally this is First Productive Use (FPU); customers see Start Using.
-  { label: "Start Using", route: "/onboard-fpu", summary: "Start working in your migrated books" },
+  { label: "Start using", route: "/onboard-fpu", summary: "Start working in your migrated books" },
 ] as const;
 /** Index meaning every step is complete. */
 export const JOURNEY_COMPLETE = journeySteps.length;
@@ -147,42 +147,53 @@ const sampleEntry = "/assess?sample=harbor-light-migrate-demo";
 /** The single dominant next action for a journey state. It is a navigation hint; every
  *  destination still enforces ownership, approvals and deterministic checks. */
 export function nextActionFor(state?: JourneyState): NextAction {
-  if (!state) return { heading: "See If Your Books Are Ready to Migrate", detail: "We'll review your accounting data and identify anything that could block or complicate the migration.", label: "Check If My Books Are Ready to Migrate", href: sampleEntry };
+  if (!state) return { heading: "See if your books are ready to migrate", detail: "We'll review your accounting data and identify anything that could block or complicate the migration.", label: "Check if my books are ready to migrate", href: sampleEntry };
   const at = (route: string) => withSession(route, state.id);
   const { status, readinessIssues: ready, migrationIssues: migrate, verificationIssues: verify } = state;
   switch (status) {
     case "CREATED": case "DISCOVERED":
-      return { heading: "Finish Checking If Your Books Are Ready", detail: "Finish the check to see what can move, what needs attention, and what to address before migration.", label: "Check If My Books Are Ready to Migrate", href: at("/assess") };
+      return { heading: "Finish checking if your books are ready", detail: "Finish the check to see what can move, what needs attention, and what to address before migration.", label: "Check if my books are ready to migrate", href: at("/assess") };
     case "ASSESSED":
       return ready
         // Readiness blockers are source-data problems this product cannot repair, so the action is a review.
-        ? { heading: "Review Readiness Blockers", detail: "Planning keeps each blocker visible beside your plan. Migration stays blocked until the source data is corrected; nothing here can waive a blocker.", label: `Review ${count(ready, "Readiness Issue")}`, href: at("/plan-map-approve") }
-        : { heading: "Plan Your Migration", detail: "Your readiness check is complete. Create the plan and review how your records map.", label: "Create My Migration Plan", href: at("/plan-map-approve") };
+        ? { heading: "Review readiness blockers", detail: "Planning keeps each blocker visible beside your plan. Migration stays blocked until the source data is corrected; nothing here can waive a blocker.", label: `Review ${count(ready, "readiness issue")}`, href: at("/plan-map-approve") }
+        : { heading: "Plan your migration", detail: "Your readiness check is complete. Create the plan and review how your records map.", label: "Create my migration plan", href: at("/plan-map-approve") };
     case "PLANNED": case "MAPPING":
-      return { heading: "Review Your Mappings", detail: "Check where each record goes. Approve, change or reject each recommendation.", label: "Review Mappings", href: at("/plan-map-approve") };
+      return { heading: "Review your mappings", detail: "Check where each record goes. Approve, change or reject each recommendation.", label: "Review mappings", href: at("/plan-map-approve") };
     case "AWAITING_APPROVAL":
-      if (state.mappingIssues !== 0) return { heading: "Review Your Mappings", detail: "Review every source-to-destination recommendation before approving the complete plan.", label: state.mappingIssues ? `Review ${count(state.mappingIssues, "Mapping")}` : "Review Mappings", href: at("/plan-map-approve") };
-      if (ready) return { heading: "Review Readiness Blockers", detail: "Mapping review cannot waive source-data blockers. Migration remains stopped.", label: `Review ${count(ready, "Readiness Issue")}`, href: at("/plan-map-approve") };
-      return { heading: "Approve Your Migration Plan", detail: "Nothing moves until you approve. Review the evidence for each decision.", label: "Approve Migration Plan", href: at("/plan-map-approve") };
+      if (state.mappingIssues !== 0) return { heading: "Review your mappings", detail: "Review every source-to-destination recommendation before approving the complete plan.", label: state.mappingIssues ? `Review ${count(state.mappingIssues, "mapping")}` : "Review mappings", href: at("/plan-map-approve") };
+      if (ready) return { heading: "Review readiness blockers", detail: "Mapping review cannot waive source-data blockers. Migration remains stopped.", label: `Review ${count(ready, "readiness issue")}`, href: at("/plan-map-approve") };
+      return { heading: "Approve your migration plan", detail: "Nothing moves until you approve. Review the evidence for each decision.", label: "Approve migration plan", href: at("/plan-map-approve") };
     case "APPROVED": case "MIGRATION_READY":
-      return { heading: "Start Your Migration", detail: "Your plan is approved. The migration runs in safe, checkpointed batches.", label: "Start Migration", href: at("/migrate-resolve") };
+      return { heading: "Start your migration", detail: "Your plan is approved. The migration runs in safe, checkpointed batches.", label: "Start migration", href: at("/migrate-resolve") };
     case "MIGRATING":
-      return { heading: "Migration in Progress", detail: "Batches are moving. Follow progress and step in if anything pauses.", label: "Follow Migration Progress", href: at("/migrate-resolve") };
+      return { heading: "Migration in progress", detail: "Batches are moving. Follow progress and step in if anything pauses.", label: "Follow migration progress", href: at("/migrate-resolve") };
     case "MIGRATION_PAUSED": case "RESOLVING": case "RETRY_PENDING": case "MIGRATION_BLOCKED":
-      return { heading: "Review Migration Issues", detail: "The migration paused safely. Completed work is kept. Review each proposed fix before it runs.", label: migrate ? `Review ${count(migrate, "Migration Issue")}` : "Review Migration Issues", href: at("/migrate-resolve") };
+      return { heading: "Review migration issues", detail: "The migration paused safely. Completed work is kept. Review each proposed fix before it runs.", label: migrate ? `Review ${count(migrate, "migration issue")}` : "Review migration issues", href: at("/migrate-resolve") };
     case "MIGRATION_COMPLETE": case "VALIDATING":
-      return { heading: "Verify Your Books", detail: "Compare your migrated books with the source. Every total must match.", label: "Verify My Books", href: at("/validate-configure") };
+      return { heading: "Verify your books", detail: "Compare your migrated books with the source. Every total must match.", label: "Verify my books", href: at("/validate-configure") };
     case "VALIDATION_BLOCKED":
-      return { heading: "Review Verification Issues", detail: "A check did not match. Review the difference and any permitted repair, then verify again.", label: verify ? `Review ${count(verify, "Verification Issue")}` : "Verify My Books", href: at("/validate-configure") };
+      return { heading: "Review verification issues", detail: "A check did not match. Review the difference and any permitted repair, then verify again.", label: verify ? `Review ${count(verify, "verification issue")}` : "Verify my books", href: at("/validate-configure") };
     case "VALIDATED": case "CONFIGURING": case "CONFIGURATION_REVIEW_REQUIRED":
-      return { heading: "Complete Your Setup", detail: "Your books match. Review the settings that shape your new environment.", label: "Complete Setup", href: at("/validate-configure") };
+      return { heading: "Complete your setup", detail: "Your books match. Review the settings that shape your new environment.", label: "Complete setup", href: at("/validate-configure") };
     case "CONFIGURED": case "ONBOARDING": case "ONBOARDING_BLOCKED":
-      return { heading: "Complete Your Setup", detail: "Finish the essentials so your team can start working.", label: "Complete Setup", href: at("/onboard-fpu") };
+      return { heading: "Complete your setup", detail: "Finish the essentials so your team can start working.", label: "Complete setup", href: at("/onboard-fpu") };
     case "READY_FOR_FIRST_PRODUCTIVE_USE": case "FIRST_PRODUCTIVE_USE_IN_PROGRESS": case "FIRST_PRODUCTIVE_USE_BLOCKED":
-      return { heading: "Start Your First Task", detail: "Create and verify your first customer invoice in the new environment.", label: "Start My First Task", href: at("/onboard-fpu") };
+      return { heading: "Start your first task", detail: "Create and verify your first customer invoice in the new environment.", label: "Start my first task", href: at("/onboard-fpu") };
     case "VERIFIED_FIRST_PRODUCTIVE_USE":
-      return { heading: "Business Ready · Verified", detail: "Your first productive task is verified in the synthetic environment.", label: "Review Verified Evidence", href: at("/trust") };
+      return { heading: "Business ready · verified", detail: "Your first productive task is verified in the synthetic environment.", label: "Review verified evidence", href: at("/trust") };
     default:
-      return { heading: "See If Your Books Are Ready to Migrate", detail: "This migration's status is not recognised, so no progress is assumed.", label: "Check If My Books Are Ready to Migrate", href: sampleEntry };
+      return { heading: "See if your books are ready to migrate", detail: "This migration's status is not recognised, so no progress is assumed.", label: "Check if my books are ready to migrate", href: sampleEntry };
   }
+}
+
+/** The customer-facing phase (0 Understand … 4 Start) for an operational step. Single rule shared by the
+ *  V1 phase rail and the V2 stage bar so the two can never disagree. Null when the step is unknown. */
+export function phaseIndexFor(current: number | null, status?: string | null): number | null {
+  if (current === null) return null;
+  if (current >= 8 || ["CONFIGURED", "ONBOARDING", "ONBOARDING_BLOCKED"].includes(status ?? "")) return 4;
+  if (current >= 6) return 3;
+  if (current >= 4) return 2;
+  if (current >= 1) return 1;
+  return 0;
 }

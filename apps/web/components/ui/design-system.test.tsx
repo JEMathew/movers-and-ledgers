@@ -6,7 +6,7 @@ import { AgentActivityItem, Button, EmptyState, Progress, Select, StatusBadge, S
 describe("design-system accessibility contracts", () => {
   it("renders status with icon-independent text", () => {
     render(<StatusBadge status="REQUIRES APPROVAL" />);
-    expect(screen.getByText("REQUIRES APPROVAL")).toBeVisible();
+    expect(screen.getByText("Requires approval")).toBeVisible();
   });
 
   it("exposes numeric progress to assistive technology", () => {

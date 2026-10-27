@@ -29,7 +29,7 @@ describe("global account and settings shell", () => {
     const banner = screen.getByRole("banner");
     expect(within(banner).queryByRole("button", { name: "Sign in with Google" })).not.toBeInTheDocument();
     expect(within(banner).queryByRole("link", { name: "Start My Migration" })).not.toBeInTheDocument();
-    expect(within(banner).getByRole("link", { name: "My Migration" })).toHaveAttribute("href", "/workspace");
+    expect(within(banner).getByRole("link", { name: "My migration" })).toHaveAttribute("href", "/workspace");
   });
   it("keeps sign-in and appearance utilities without a competing header launch", () => {
     render(shell());
@@ -147,8 +147,9 @@ describe("global account and settings shell", () => {
     expect(screen.getByRole("button", { name: "Change appearance" })).toHaveAttribute("aria-expanded", "true");
     const options = within(dialog).getAllByRole("radio");
     expect(options.map(option => (option as HTMLInputElement).value)).toEqual(["system", "light", "dark"]);
-    expect(within(dialog).getByRole("radio", { name: "System" })).toBeChecked();
-    expect(within(dialog).getByRole("radio", { name: "System" })).toHaveFocus();
+    // V2 opens in the light theme the design was approved in; System and Dark stay one click away.
+    expect(within(dialog).getByRole("radio", { name: "Light" })).toBeChecked();
+    expect(within(dialog).getByRole("radio", { name: "Light" })).toHaveFocus();
     expect(dialog).toHaveAttribute("aria-modal", "false");
     expect(dialog).toHaveClass("settings-panel");
     fireEvent.click(within(dialog).getByRole("radio", { name: "Dark" }));
@@ -231,16 +232,14 @@ describe("global account and settings shell", () => {
   });
   it("explains migration reasons and the three concrete customer questions", () => {
     render(<Home />);
-    fireEvent.click(screen.getByText("Why businesses migrate").closest("summary")!);
     expect(screen.getByRole("heading", { name: "Why businesses migrate" })).toBeVisible();
     for (const copy of [
-      "Outgrown systems, fragmented data, manual processes and limited visibility can make everyday accounting harder to operate and scale.",
+      "Outgrown systems, fragmented data, manual processes and limited visibility make everyday accounting harder to run and to scale. A move is a financial-trust problem, not a file copy.",
       "Support growth without adding manual work.", "Work securely from anywhere.",
       "Reduce disconnected tools and duplicate processes.", "Improve reporting and operational visibility.",
-      "Customers, vendors, accounts, transactions and configuration need to arrive complete and usable.",
-      "Balances, totals and reconciliation must match before migration is considered successful.",
-      "Configuration, access and onboarding must work before the migration is truly complete.",
-      "Migration is more than moving files. It is a financial-trust and business-readiness problem.",
+      "Customers, vendors, accounts, transactions and settings need to arrive complete and usable.",
+      "Balances, totals and reconciliation must match before the move counts as a success.",
+      "Settings, access and onboarding must work before the move is truly complete.",
     ]) expect(screen.getByText(copy)).toBeVisible();
     for (const question of ["Will all my data move correctly?", "Will my numbers still be right?", "Will my business be ready to operate?"]) expect(screen.getByRole("heading", { name: question })).toBeVisible();
     expect(screen.queryByText("Will everything move?")).not.toBeInTheDocument();
@@ -256,19 +255,18 @@ describe("global account and settings shell", () => {
     const fetch = vi.spyOn(globalThis, "fetch");
     const view = render(shell());
     const primary = () => screen.getByRole("navigation", { name: "Primary navigation" });
-    expect(within(primary()).queryByRole("link", { name: "My Migration" })).not.toBeInTheDocument();
-    expect(within(primary()).getByRole("link", { name: "Explore Demo" })).toHaveAttribute("href", "/simulator");
+    expect(within(primary()).queryByRole("link", { name: "My migration" })).not.toBeInTheDocument();
+    expect(within(primary()).getByRole("link", { name: "Explore demo" })).toHaveAttribute("href", "/simulator");
     session.hasSession = true; session.ready = false; view.rerender(shell());
-    expect(within(primary()).queryByRole("link", { name: "My Migration" })).not.toBeInTheDocument();
+    expect(within(primary()).queryByRole("link", { name: "My migration" })).not.toBeInTheDocument();
     signedIn(); session.ready = true; view.rerender(shell());
-    expect(within(primary()).getAllByRole("link").map(a => a.textContent)).toEqual(["My Migration", "Play"]);
-    expect(within(primary()).getByRole("link", { name: "My Migration" })).toHaveAttribute("href", "/workspace");
-    expect(within(primary()).getByRole("link", { name: "Play" })).toHaveAttribute("href", "/play");
-    expect(within(primary()).getByRole("link", { name: "Play" })).toHaveAttribute("aria-current", "page");
-    expect(screen.getByRole("link", { name: "MoveBooks AI My Migration" })).toHaveAttribute("href", "/workspace");
+    // Play stays reachable at /play but is out of navigation while its flag is off.
+    expect(within(primary()).getAllByRole("link").map(a => a.textContent)).toEqual(["My migration"]);
+    expect(within(primary()).getByRole("link", { name: "My migration" })).toHaveAttribute("href", "/workspace");
+    expect(screen.getByRole("link", { name: "MoveBooks AI, my migration" })).toHaveAttribute("href", "/workspace");
     fireEvent.click(account());
     const explore = screen.getByRole("navigation", { name: "Explore MoveBooks" });
-    for (const [name, href] of [["Product Overview", "/"], ["Explore Demo", "/simulator"], ["Learn", "/learn"], ["Trust", "/trust"], ["Getting Started Guide", "/guide"]]) {
+    for (const [name, href] of [["Product overview", "/"], ["Explore demo", "/simulator"], ["Learn", "/learn"], ["Trust and security", "/trust"], ["How it works", "/guide"]]) {
       expect(within(explore).getByRole("link", { name })).toHaveAttribute("href", href);
     }
     expect(session.signIn).not.toHaveBeenCalled();
@@ -281,7 +279,7 @@ describe("global account and settings shell", () => {
     const menu = screen.getByRole("button", { name: "Open navigation" });
     fireEvent.click(menu);
     expect(menu).toHaveAttribute("aria-expanded", "true");
-    const demo = within(screen.getByRole("navigation", { name: "Primary navigation" })).getByRole("link", { name: "Explore Demo" });
+    const demo = within(screen.getByRole("navigation", { name: "Primary navigation" })).getByRole("link", { name: "How it works" });
     expect(demo).toHaveFocus();
     fireEvent.keyDown(demo, { key: "Escape" });
     expect(menu).toHaveAttribute("aria-expanded", "false");
@@ -298,7 +296,7 @@ describe("global account and settings shell", () => {
   it("closes navigation on selection, outside pointer and focus exit", () => {
     render(shell());
     const menu = screen.getByRole("button", { name: "Open navigation" });
-    const demo = within(screen.getByRole("navigation", { name: "Primary navigation" })).getByRole("link", { name: "Explore Demo" });
+    const demo = within(screen.getByRole("navigation", { name: "Primary navigation" })).getByRole("link", { name: "Explore demo" });
     demo.addEventListener("click", event => event.preventDefault());
     fireEvent.click(menu); fireEvent.click(demo);
     expect(menu).toHaveAttribute("aria-expanded", "false");

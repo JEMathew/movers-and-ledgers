@@ -48,7 +48,9 @@ export function AccountControls() {
   }, [open]);
   useEffect(() => {
     if (!settingsOpen) return;
-    preferences.current?.querySelector<HTMLElement>("select, input[type=radio]:checked, input[type=radio]")?.focus();
+    const panel = preferences.current;
+    // A radio group takes focus on its checked option; querySelector with a list would return the first in document order.
+    (panel?.querySelector<HTMLElement>("select") ?? panel?.querySelector<HTMLElement>("input[type=radio]:checked") ?? panel?.querySelector<HTMLElement>("input[type=radio]"))?.focus();
     const outside = (event: PointerEvent) => {
       if (event.target instanceof Node && !controls.current?.contains(event.target)) setSettingsOpen(false);
     };
@@ -87,7 +89,7 @@ export function AccountControls() {
           <button type="button" className="button secondary small mt-2 w-full" disabled={session.busy} onClick={() => { setOpenFor(null); session.signOut(); }}>Sign Out</button>
         </div>}
       </div> : <GoogleSignIn compact />}
-    {!cloud && !session.hasSession && <Link className="nav-link" href="/workspace">My Migration</Link>}
+    {!cloud && !session.hasSession && <Link className="nav-link" href="/workspace">My migration</Link>}
     {!session.hasSession && <button ref={settingsTrigger} type="button" className="button ghost small appearance-trigger" aria-label="Change appearance" title="Change appearance"
       onClick={() => settingsOpen ? closeSettings() : showSettings()} aria-haspopup="dialog" aria-expanded={settingsOpen} aria-controls={settingsId}>
       <SunMoon size={18} aria-hidden="true" />

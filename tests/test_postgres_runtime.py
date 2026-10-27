@@ -432,3 +432,50 @@ def test_demo_configuration_replays_do_not_duplicate_audit(postgres, monkeypatch
     saved = repository.get(sid, owner)
     assert client.post(root + "/configuration/apply").status_code == 200
     assert repository.get(sid, owner) == saved
+
+
+def test_invoice_approval_replay_and_race_record_one_decision(postgres, monkeypatch):
+    from agents.orchestrator.onboard_fpu import OnboardFpuOrchestrator
+    from domain.onboarding_fpu.models import DecisionInput
+    from tools.onboarding.checks import TASKS
+
+    repository, _ = postgres
+    owner = f"demo-invoice-{uuid4()}"
+    monkeypatch.setattr(service, "repository", repository)
+    monkeypatch.setitem(app.dependency_overrides, require_principal, lambda: Principal(owner, ""))
+    client = TestClient(app)
+    response = client.post("/v1/onboarding-demo-sessions", json={"scenario": "clean"})
+    assert response.status_code == 201, response.text
+    sid = UUID(response.json()["session_id"])
+    root = f"/v1/migration-sessions/{sid}"
+    for key, (_, choices) in TASKS.items():
+        if choices:
+            path = f"{root}/onboarding/tasks/{key}/decision"
+            assert client.post(path, json={"action": "approve"}).status_code == 200
+    invoice = {"customer_id": "customer-001", "product_id": "product-001"}
+    assert client.post(root + "/fpu/task", json=invoice).status_code == 200
+
+    # Two identical approvals racing on the same snapshot: exactly one commits.
+    original = repository.get(sid, owner)
+    fixture = service.source_for(original)
+    flow, barrier = OnboardFpuOrchestrator(), Barrier(2)
+
+    def approve():
+        updated = original.model_copy(deep=True)
+        flow.decide_fpu(updated, fixture, DecisionInput(action="approve"), owner)
+        barrier.wait(timeout=5)
+        try:
+            repository.put_if_unchanged(original, updated)
+            return True
+        except ValueError:
+            return False
+
+    with ThreadPoolExecutor(2) as pool:
+        assert sorted(pool.map(lambda _: approve(), range(2))) == [False, True]
+    saved = repository.get(sid, owner)
+    assert len(saved.onboarding.fpu.decisions) == 1
+    # A sequential replay through the API changes nothing in the stored snapshot.
+    assert client.post(root + "/fpu/decision", json={"action": "approve"}).status_code == 200
+    assert repository.get(sid, owner) == saved
+    audit = [d for d in saved.human_decisions if d.stage == "first_productive_use"]
+    assert len(audit) == 1 and sum(e.name == "fpu_decision" for e in saved.events) == 1

@@ -1,0 +1,25 @@
+PASS  landing 200
+PASS  V2 landing served (not a cached V1 page)
+PASS  attribution shows Planned while AI status is planned
+PASS  no live-Gemini claim
+PASS  Play hidden from navigation (flag off)
+PASS  static HTML cached at most 60s
+PASS  landing stylesheet resolves
+PASS  hashed stylesheet immutable
+PASS  route /sign-in (200)
+PASS  route /workspace (200)
+PASS  route /assess (200)
+PASS  route /plan-map-approve (200)
+PASS  route /migrate-resolve (200)
+PASS  route /validate-configure (200)
+PASS  route /onboard-fpu (200)
+PASS  route /trust (200)
+PASS  route /learn (200)
+PASS  route /guide (200)
+PASS  route /simulator (200)
+PASS  route /support (200)
+PASS  route /feedback (200)
+PASS  route /try-your-data (200)
+PASS  route /play (200)
+PASS  dynamic HTML stays private, no-store
+RESULT: 24 passed, 0 failed

@@ -19,7 +19,7 @@ export function ProductVision() {
       {!playing && <button type="button" className="vision-play" onClick={() => { void video.current?.play(); }}><Play size={22} aria-hidden="true" fill="currentColor"/><span>Play the vision</span></button>}
     </div>
     <details className="vision-transcript"><summary>Video description</summary>
-      <p>The video shows the MoveBooks AI title with the line &ldquo;From Migration Uncertainty to Business-Ready Accounting.&rdquo; Five stages light up in turn: Understand (Discover + Assess), Prepare (Plan, Map &amp; Approve), Move (Migrate + Resolve), Verify (Validate + Configure) and Start (Onboard + First Real Task). Beneath them are three statements: &ldquo;You approve key decisions,&rdquo; &ldquo;We resolve blockers before moving forward&rdquo; and &ldquo;We verify your numbers.&rdquo; It ends on &ldquo;Business Ready · Verified.&rdquo; This describes the on-screen visuals only; spoken captions are not provided yet.</p>
+      <p>The video shows the MoveBooks AI title with the line &ldquo;From Migration Uncertainty to Business-Ready Accounting.&rdquo; Five stages light up in turn: Understand (Discover + Assess), Prepare (Plan, Map &amp; Approve), Move (Migrate + Resolve), Verify (Validate + Configure) and Start (Onboard + First Real Task). Beneath them are three statements: &ldquo;You approve key decisions,&rdquo; &ldquo;We resolve blockers before moving forward&rdquo; and &ldquo;We verify your numbers.&rdquo; It ends on &ldquo;Business ready · verified.&rdquo; This describes the on-screen visuals only; spoken captions are not provided yet.</p>
     </details>
   </section>;
 }
